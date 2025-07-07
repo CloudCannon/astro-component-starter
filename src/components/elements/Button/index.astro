@@ -6,8 +6,7 @@ import { buttonSchema } from "./schema";
 const { label, link, iconName, iconPosition, hideText, variant, size, ...restProps } =
   buttonSchema.parse(Astro.props);
 
-// Filter out props that start with underscore
-const htmlAttributes = Object.fromEntries(
+const { class: extraClass, ...htmlAttributes } = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 
@@ -17,8 +16,12 @@ const classNames = clsx(
   `variant-${variant}`,
   hideText && "icon-only",
   iconPosition === "after" && "icon-after",
-  htmlAttributes.class as string | undefined
+  extraClass
 );
+
+if (hideText && !htmlAttributes["aria-label"]) {
+  htmlAttributes["aria-label"] = label;
+}
 
 const Tag = link ? "a" : "button";
 const elementProps = {
@@ -33,14 +36,12 @@ const elementProps = {
 </Tag>
 
 <style>
-  @import "./theme.pcss";
-
   .button {
     align-items: center;
-    background-color: var(--button-ghost-bg);
-    border: 1px solid var(--button-ghost-border);
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
-    color: var(--button-ghost-color);
+    color: var(--color-text-strong);
     display: inline-flex;
     font-weight: var(--font-weight-medium);
     gap: 0.15em;
@@ -58,11 +59,11 @@ const elementProps = {
 
     &:hover,
     &:focus {
-      background-color: var(--button-ghost-hover-backgroundColor);
-      border-color: var(--button-ghost-hover-borderColor);
-      color: var(--button-ghost-hover-fontColor);
+      background-color: var(--color-bg-muted);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-strong);
       cursor: pointer;
-      outline-color: var(--color-focus-ring);
+      outline: var(--color-focus-ring);
       outline-offset: 4px;
     }
 
@@ -77,54 +78,54 @@ const elementProps = {
 
   .variant {
     &-primary {
-      background-color: var(--button-primary-bg);
-      border-color: var(--button-primary-border);
-      color: var(--button-primary-text);
+      background-color: var(--color-bg-brand);
+      border-color: transparent;
+      color: var(--color-text-on-brand);
 
       &:hover,
       &:focus {
-        background-color: var(--button-primary-hover-bg);
-        border-color: var(--button-primary-hover-border);
-        color: var(--button-primary-hover-text);
+        background-color: var(--color-bg-brand-muted);
+        border-color: transparent;
+        color: var(--color-text-on-brand);
       }
     }
 
     &-secondary {
-      background-color: var(--button-secondary-bg);
-      border-color: var(--button-secondary-border);
-      color: var(--button-secondary-text);
+      background-color: var(--color-bg-muted);
+      border-color: transparent;
+      color: var(--color-text-strong);
 
       &:hover,
       &:focus {
-        background-color: var(--button-secondary-hover-bg);
-        border-color: var(--button-secondary-hover-border);
-        color: var(--button-secondary-hover-text);
+        background-color: var(--color-bg-strong);
+        border-color: transparent;
+        color: var(--color-text-strong);
       }
     }
 
     &-tertiary {
-      background-color: var(--button-tertiary-bg);
-      border-color: var(--button-tertiary-border);
-      color: var(--button-tertiary-text);
+      background-color: transparent;
+      border-color: var(--color-border-strong);
+      color: var(--color-text-strong);
 
       &:hover,
       &:focus {
-        background-color: var(--button-tertiary-hover-bg);
-        border-color: var(--button-tertiary-hover-border);
-        color: var(--button-tertiary-hover-text);
+        background-color: var(--color-state-hover);
+        border-color: var(--color-border-strong);
+        color: var(--color-text-strong);
       }
     }
 
     &-ghost {
-      background-color: var(--button-ghost-bg);
-      border-color: var(--button-ghost-border);
-      color: var(--button-ghost-text);
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--color-text-strong);
 
       &:hover,
       &:focus {
-        background-color: var(--button-ghost-hover-bg);
-        border-color: var(--button-ghost-hover-border);
-        color: var(--button-ghost-hover-text);
+        background-color: var(--color-bg-muted);
+        border-color: transparent;
+        color: var(--color-text-strong);
       }
     }
   }

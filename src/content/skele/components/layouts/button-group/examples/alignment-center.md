@@ -1,18 +1,18 @@
 ---
-title: Start Alignment
-description: Buttons aligned to the start of the container
+title: Alignment - Center
 spacing: "all"
 blocks:
   _bookshop_name: "layouts/button-group"
   direction: "row"
-  align: "start"
+  align: "center"
   button_blocks:
     - _bookshop_name: "elements/button"
-      label: "Start"
-      variant: "primary"
-      size: "md"
-    - _bookshop_name: "elements/button"
-      label: "Aligned"
+      label: "Button A"
       variant: "secondary"
-      size: "md"
+    - _bookshop_name: "elements/button"
+      label: "Button B"
+      variant: "secondary"
+    - _bookshop_name: "elements/button"
+      label: "Button C"
+      variant: "secondary"
 ---

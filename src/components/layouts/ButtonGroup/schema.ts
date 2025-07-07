@@ -20,9 +20,8 @@ export const buttonGroupSchema = z
       .array(z.any())
       .meta({ description: "Array of button components to render within the group." })
       .optional(),
-
-    // Remove id, className, and customStyle from schema since they'll come from HTMLAttributes
   })
+  .catchall(z.any())
   .meta({
     title: "ButtonGroup",
     description: "A container for grouping multiple buttons with consistent spacing and alignment.",

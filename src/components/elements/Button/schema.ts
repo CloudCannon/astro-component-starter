@@ -32,13 +32,12 @@ export const buttonSchema = z
 
     size: z.enum(["sm", "md", "lg"]).meta({ description: "The size of the button." }).default("md"),
   })
+  .catchall(z.any())
   .meta({
     title: "Button",
     description:
       "A clickable element that navigates to another page or triggers an action within the current page.",
   });
 
-// Export a combined type that includes both our custom props and HTML attributes
-// The component can be either a button or anchor, so we need to handle both
 export type ButtonProps = z.infer<typeof buttonSchema> &
   (ButtonHTMLAttributes | AnchorHTMLAttributes);

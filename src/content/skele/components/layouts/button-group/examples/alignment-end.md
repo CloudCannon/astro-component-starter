@@ -1,22 +1,18 @@
 ---
-title: Row Direction
-description: Buttons arranged horizontally
+title: Alignment - End
 spacing: "all"
 blocks:
   _bookshop_name: "layouts/button-group"
   direction: "row"
-  align: "start"
+  align: "end"
   button_blocks:
     - _bookshop_name: "elements/button"
-      label: "Left"
-      variant: "primary"
-      size: "md"
-    - _bookshop_name: "elements/button"
-      label: "Center"
+      label: "Button A"
       variant: "secondary"
-      size: "md"
     - _bookshop_name: "elements/button"
-      label: "Right"
-      variant: "ghost"
-      size: "md"
+      label: "Button B"
+      variant: "secondary"
+    - _bookshop_name: "elements/button"
+      label: "Button C"
+      variant: "secondary"
 ---
