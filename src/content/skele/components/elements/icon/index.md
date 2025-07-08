@@ -1,6 +1,6 @@
 ---
 title: Icon
-component_path: "elements/Icon"
+component_path: "elements/icon"
 primary_size: sm
 examples:
   - title: Sizes

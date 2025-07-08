@@ -35,7 +35,7 @@ function formatBlocksYaml(blocks: any): string {
   }
 }
 
-const componentModules = import.meta.glob("../../../components/**/index.astro", {
+const componentModules = import.meta.glob("../../../components/**/*.astro", {
   eager: true,
 });
 
@@ -43,7 +43,8 @@ const componentMap: Record<string, any> = {};
 
 Object.entries(componentModules).forEach(([filePath, module]) => {
   const pathParts = filePath.split("/");
-  const componentName = pathParts[pathParts.length - 2];
+  const fileName = pathParts[pathParts.length - 1];
+  const componentName = fileName.replace(".astro", "");
 
   if (componentName && componentName !== "components") {
     componentMap[componentName] = module;
@@ -54,18 +55,7 @@ function inferComponentName(componentKey: string): string {
   const parts = componentKey.split("/");
   const componentName = parts[parts.length - 1];
 
-  // Convert kebab-case to camelCase (e.g., "button-group" -> "ButtonGroup")
-  const inferredName = componentName
-    .split("-")
-    .map((part, index) => {
-      if (index === 0) {
-        return part.charAt(0).toUpperCase() + part.slice(1);
-      }
-      return part.charAt(0).toUpperCase() + part.slice(1);
-    })
-    .join("");
-
-  return inferredName;
+  return componentName;
 }
 
 async function loadComponent(componentName: string) {

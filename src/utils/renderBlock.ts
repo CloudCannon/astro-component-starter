@@ -4,7 +4,7 @@ declare global {
   }
 }
 
-const componentModules = import.meta.glob("../components/**/index.astro", {
+const componentModules = import.meta.glob("../components/**/*.astro", {
   eager: true,
 }) as Record<string, { default: any }>;
 
@@ -13,7 +13,17 @@ const componentMap: Record<string, any> = {};
 Object.entries(componentModules).forEach(([filePath, module]) => {
   const pathParts = filePath.split("/");
   const category = pathParts[pathParts.length - 3];
-  const componentName = pathParts[pathParts.length - 2];
+  const fileName = pathParts[pathParts.length - 1];
+  const componentName = fileName.replace(".astro", "");
+
+  if (!category || category === "components" || pathParts.length < 3) {
+    return;
+  }
+
+  // Only include elements, not layouts (to avoid circular dependencies)
+  if (category !== "elements") {
+    return;
+  }
 
   const kebabName = componentName
     .replace(/([A-Z])/g, "-$1")
