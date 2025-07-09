@@ -2,7 +2,7 @@
 import { Icon as AstroIcon } from "astro-icon/components";
 import clsx from "clsx";
 
-const { name, size, background, ...restProps } = Astro.props;
+const { name, size, background, className, ...restProps } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
