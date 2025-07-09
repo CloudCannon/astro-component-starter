@@ -3,13 +3,19 @@ title: Skele Library
 content_blocks:
   - _bookshop_name: elements/button
     label: Welcome to Skele
-    type: primary
-    size: lg
     link: /components/elements/button
+    iconName:
+    iconPosition: before
+    hideText: false
+    variant: primary
+    size: lg
 
   - _bookshop_name: elements/button
     label: View Components
-    type: secondary
-    size: md
     link: /components
+    iconName:
+    iconPosition: before
+    hideText: false
+    variant: secondary
+    size: md
 ---
