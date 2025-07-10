@@ -2,10 +2,9 @@
 import clsx from "clsx";
 import { getProviderForUrl } from "unpic";
 import AstroImage from "./astro-image.astro";
-import { ImageSchema } from "./schema";
 import UnpicImage from "./unpic-image.astro";
 
-const { src, alt, class: className, ...restProps } = ImageSchema.parse(Astro.props);
+const { src, alt, class: className, ...restProps } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
