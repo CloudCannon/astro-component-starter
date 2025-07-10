@@ -1,0 +1,43 @@
+---
+import { z } from "zod/v4";
+import "../../styles/skele.pcss";
+import "../styles/skele-docs.pcss";
+
+const libraryLayoutSchema = z.object({
+  frontmatter: z
+    .object({
+      title: z.string().optional(),
+      content_blocks: z.array(z.any()).optional(),
+    })
+    .optional(),
+});
+
+import Section from "../../components/layouts/section/section.astro";
+import NavLayout from "./NavLayout.astro";
+const props = libraryLayoutSchema.parse(Astro.props);
+const pageTitle = props.frontmatter?.title || "Skele Library";
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{pageTitle}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <Section
+      maxContentWidth="2xl"
+      padding={{ horizontal: "md", vertical: "sm" }}
+      contentClassName="flex"
+    >
+      <NavLayout />
+      <main>
+        <slot />
+      </main>
+    </Section>
+  </body>
+</html>

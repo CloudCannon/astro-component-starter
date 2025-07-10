@@ -1,0 +1,110 @@
+---
+import { getCollection } from "astro:content";
+import NavItem from "../../components/navigation/nav-item/nav-item.astro";
+import NavList from "../../components/navigation/nav-list/nav-list.astro";
+import Nav from "../../components/navigation/nav/nav.astro";
+import navData from "../data/nav.json";
+
+const layout = "sidebar";
+
+const allComponents = await getCollection("docs/components");
+
+const componentsByCategory: Record<string, Array<{ name: string; path: string }>> = {};
+
+allComponents.forEach((component: any) => {
+  const slug = component.slug.replace(/^components\//, "").replace(/\/index$/, "");
+  const parts = slug.split("/").filter(Boolean);
+
+  if (
+    slug.includes("/examples/") ||
+    slug.includes("bookshop") ||
+    (!component.data.title && !component.data.name)
+  ) {
+    return;
+  }
+
+  if (parts.length >= 1) {
+    const category = parts[0];
+    const componentName = parts.length > 1 ? parts[1] : parts[0];
+
+    if (!componentsByCategory[category]) {
+      componentsByCategory[category] = [];
+    }
+
+    componentsByCategory[category].push({
+      name: component.data.title || componentName,
+      path: `/skele/components/${category}/${componentName}`,
+    });
+  }
+});
+
+// Populate nav.json structure with component collection data
+const populatedNavData = navData.map((section) => {
+  if (section.group) {
+    const category = section.group.toLowerCase();
+    const items = componentsByCategory[category] || [];
+
+    // Check if any child item is the current page
+    const currentPath = Astro.url.pathname;
+    const hasActiveChild = items.some((item) => item.path === currentPath);
+
+    return {
+      ...section,
+      items,
+      defaultOpen: hasActiveChild,
+    };
+  }
+
+  return section;
+});
+---
+
+<Nav layout={layout}>
+  <img
+    src="/assets/images/skele-light.svg"
+    alt="Logo"
+    height="32"
+    width="110"
+    slot="brand"
+    style=" margin-inline-start: var(--spacing-lg);margin-bottom: var(--spacing-md);"
+  />
+  <NavList slot="menu" layout={layout}>
+    {
+      populatedNavData
+        .map((section, index) => {
+          try {
+            if (section.group && section.items && Array.isArray(section.items)) {
+              return (
+                <NavItem
+                  label={section.group}
+                  defaultOpen={(section as any).defaultOpen || false}
+                  layout={layout}
+                >
+                  <NavList layout={layout}>
+                    {section.items.map((item, itemIndex) => {
+                      try {
+                        return <NavItem href={item.path} label={item.name} layout={layout} />;
+                      } catch (itemError) {
+                        console.error(`Error rendering navigation item ${itemIndex}:`, itemError);
+                        return null;
+                      }
+                    })}
+                  </NavList>
+                </NavItem>
+              );
+            }
+
+            if (section.path) {
+              return <NavItem href={section.path} label={section.name} layout={layout} />;
+            }
+
+            return null;
+          } catch (sectionError) {
+            console.error(`Error rendering navigation section ${index}:`, sectionError);
+            return null;
+          }
+        })
+        .filter(Boolean)
+    }
+  </NavList>
+</Nav>

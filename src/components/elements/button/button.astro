@@ -30,7 +30,11 @@ const elementProps = {
 ---
 
 <Tag {...elementProps as any} class:list={classNames}>
-  {iconName && <Icon name={iconName} buttonIcon size="none" class="button-icon" />}
+  {
+    iconName && iconName.trim() && (
+      <Icon name={iconName} buttonIcon size="none" class="button-icon" />
+    )
+  }
   {label && <span class:list={hideText ? "sr-only" : "label"}>{label}</span>}
 </Tag>
 

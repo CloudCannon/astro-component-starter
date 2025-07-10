@@ -1,0 +1,80 @@
+---
+import ComponentProperties from "../components/ComponentProperties/index.astro";
+import ComponentViewer from "../components/ComponentViewer/index.astro";
+import LibraryLayout from "./LibraryLayout.astro";
+
+const { frontmatter, schema, examples = [], componentKey = "" } = Astro.props;
+const meta = schema?.meta?.() || {
+  description: "No description available",
+};
+
+const primaryExample = examples.find((example: any) => example.slug.includes("/primary"));
+
+const frontmatterExamples = frontmatter.examples || [];
+
+const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
+  const matchingExamples = examples.filter((example: any) =>
+    exampleConfig.slugs.some((slug: string) => example.slug.endsWith(`/${slug}`))
+  );
+
+  const sortedExamples = matchingExamples.sort((a: any, b: any) => {
+    const aIndex = exampleConfig.slugs.findIndex((slug: string) => a.slug.endsWith(`/${slug}`));
+    const bIndex = exampleConfig.slugs.findIndex((slug: string) => b.slug.endsWith(`/${slug}`));
+
+    if (aIndex === bIndex) {
+      return 0;
+    }
+
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+
+    return aIndex - bIndex;
+  });
+
+  return {
+    title: exampleConfig.title,
+    examples: sortedExamples,
+    size: exampleConfig.size,
+  };
+});
+const primarySize = frontmatter.primary_size || "md";
+---
+
+<LibraryLayout frontmatter={frontmatter}>
+  <h1>{frontmatter.title}</h1>
+  <p>{meta.description}</p>
+
+  {
+    primaryExample && (
+      <ComponentViewer
+        component_examples={[primaryExample]}
+        title={meta.title}
+        size={primarySize}
+        componentKey={componentKey}
+      />
+    )
+  }
+
+  <h2>Properties</h2>
+  <ComponentProperties shape={schema?.shape} />
+
+  {processedExamples.length > 0 && <h2>Examples</h2>}
+
+  {
+    processedExamples.map((exampleGroup: any) => (
+      <>
+        <h3>{exampleGroup.title}</h3>
+        {exampleGroup.examples.length > 0 && (
+          <ComponentViewer
+            component_examples={exampleGroup.examples}
+            title={exampleGroup.title}
+            size={exampleGroup.size}
+            componentKey={componentKey}
+          />
+        )}
+      </>
+    ))
+  }
+
+  <slot />
+</LibraryLayout>

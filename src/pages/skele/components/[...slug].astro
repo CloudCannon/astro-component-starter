@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import ComponentLayout from "../../../skele-docs/layouts/ComponentLayout.astro";
+
+export async function getStaticPaths() {
+  const schemaFiles = import.meta.glob("../../../components/**/schema.ts", {
+    eager: true,
+  });
+
+  const components = await getCollection("docs/components");
+
+  const componentEntries = components.filter((entry) => {
+    // Exclude files that are in examples directories
+    return !entry.slug.includes("/examples/");
+  });
+
+  return componentEntries.map((entry) => {
+    const slug = entry.slug.replace(/^components\//, "").replace(/\/index$/, "");
+    const parts = slug.split("/").filter(Boolean);
+    const componentKey = parts.slice(-2).join("/");
+
+    let schema = null;
+
+    // Convert kebab-case to camelCase for path matching
+    const camelCaseKey = componentKey
+      .split("-")
+      .map((part, index) => {
+        if (index === 0) {
+          return part.charAt(0).toUpperCase() + part.slice(1);
+        }
+        return part.charAt(0).toUpperCase() + part.slice(1);
+      })
+      .join("");
+
+    for (const [path, mod] of Object.entries(schemaFiles)) {
+      if (path.toLowerCase().includes(`/${camelCaseKey.toLowerCase()}/`)) {
+        const module = mod as { [key: string]: { meta?: () => { description?: string } } };
+        const schemaName = Object.keys(module).find((key) => key.endsWith("Schema"));
+
+        if (schemaName) {
+          schema = module[schemaName];
+        }
+        break;
+      }
+    }
+
+    return {
+      params: { slug: componentKey },
+      props: { page: entry, schema },
+    };
+  });
+}
+
+const { page, schema } = Astro.props;
+const { Content } = await page.render();
+const frontmatter = page.data;
+
+const slugParts = page.slug
+  .replace(/^components\//, "")
+  .replace(/\/index$/, "")
+  .split("/")
+  .filter(Boolean);
+
+const componentKey = slugParts.slice(-2).join("/");
+
+const searchPattern = `${componentKey}/examples/`.toLowerCase();
+
+const examples = await getCollection("docs/components", ({ slug }) => {
+  return slug.toLowerCase().startsWith(searchPattern);
+});
+---
+
+<ComponentLayout
+  frontmatter={frontmatter}
+  schema={schema}
+  examples={examples}
+  componentKey={componentKey}
+>
+  <Content />
+</ComponentLayout>

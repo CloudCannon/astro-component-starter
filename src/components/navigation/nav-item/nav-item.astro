@@ -36,7 +36,7 @@ const isCurrentPage = props.href === Astro.url.pathname;
           {props.label}
           <slot name="label" />
           <span class="nav-item-icon">
-            <Icon name="hero/chevron-right" size="none" aria-hidden="true" />
+            <Icon name="chevron-right" size="none" aria-hidden="true" />
           </span>
         </label>
         <div id={contentId} role="region" aria-label={`${props.label} submenu`}>

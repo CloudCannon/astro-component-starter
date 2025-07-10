@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Home",
+    "path": "/skele/"
+  },
+  {
+    "group": "Blocks",
+    "items": []
+  },
+  {
+    "group": "Elements",
+    "items": []
+  },
+  {
+    "group": "Layouts",
+    "items": []
+  },
+  {
+    "group": "Navigation",
+    "items": []
+  }
+]

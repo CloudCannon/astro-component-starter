@@ -4,6 +4,12 @@ import clsx from "clsx";
 
 const { name, size, background, className, ...restProps } = Astro.props;
 
+const isValidName = name && name.trim();
+
+if (!isValidName) {
+  console.warn("Icon component received empty or invalid name:", name);
+}
+
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
@@ -17,7 +23,7 @@ const classNames = clsx(
 );
 ---
 
-<AstroIcon name={name} class:list={classNames} {...htmlAttributes} />
+{isValidName && <AstroIcon name={name} class:list={classNames} {...htmlAttributes} />}
 
 <style>
   .icon {
