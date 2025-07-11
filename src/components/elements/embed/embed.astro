@@ -1,0 +1,70 @@
+---
+import clsx from "clsx";
+
+const { src, title, className, id, ariaLabel, aspect_ratio } = Astro.props;
+
+const classAttr = clsx("embed", className, `ratio__${aspect_ratio}`);
+---
+
+<iframe
+  class={classAttr}
+  src={src}
+  title={title}
+  allowfullscreen
+  loading="lazy"
+  {...id ? { id } : {}}
+  {...ariaLabel ? { "aria-label": ariaLabel } : {}}></iframe>
+
+<style>
+  .embed {
+    width: 100%;
+    height: auto;
+    border: none;
+    border-radius: 10px;
+    /* background-color: #fff; */
+  }
+
+  .ratio__square {
+    aspect-ratio: 1 / 1;
+  }
+
+  .ratio__landscape {
+    aspect-ratio: 4 / 3;
+  }
+
+  .ratio__portrait {
+    aspect-ratio: 3 / 4;
+  }
+
+  .ratio__widescreen {
+    aspect-ratio: 16 / 9;
+  }
+
+  .ratio__ultrawide {
+    aspect-ratio: 21 / 9;
+  }
+
+  .ratio__golden {
+    aspect-ratio: 1.618 / 1;
+  }
+
+  @media (max-width: 768px) {
+    .ratio__square {
+      aspect-ratio: 4 / 5;
+    }
+
+    .ratio__landscape {
+      aspect-ratio: 16 / 10;
+    }
+
+    .ratio__golden {
+      aspect-ratio: 4 / 5;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .ratio__square {
+      aspect-ratio: 3 / 4;
+    }
+  }
+</style>

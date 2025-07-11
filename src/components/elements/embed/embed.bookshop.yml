@@ -1,0 +1,33 @@
+spec:
+  structures:
+    - content_blocks
+  label: Embed
+  description: Embed content from other sources
+  icon: data_object
+  tags:
+
+blueprint:
+  src: 
+  title:
+  aspect_ratio: golden
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  aspect_ratio:
+    comment: The aspect ratio of the embed
+    type: select
+    options:
+      values:
+        - square
+        - landscape
+        - portrait
+        - widescreen
+        - ultrawide
+        - golden
+  src: 
+    comment: The url source for the iframe 
+    type: url
+  
