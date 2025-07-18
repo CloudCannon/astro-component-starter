@@ -1,0 +1,28 @@
+spec:
+  structures:
+    - content_blocks
+  label: Embed
+  description: "Embed content from other sources."
+  icon: data_object
+  tags: []
+
+blueprint:
+  src:
+  title:
+  aspect_ratio: landscape
+
+preview:
+
+_inputs:
+  src:
+    comment: The url source for the iframe
+  aspect_ratio:
+    comment: The aspect ratio of the embed
+    type: select
+    options:
+      values:
+        - square
+        - landscape
+        - portrait
+        - widescreen
+        - golden
