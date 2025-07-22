@@ -28,7 +28,7 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
     <title>{pageTitle}</title>
     <slot name="head" />
   </head>
-  <body>
+  <body class="animations-disabled">
     <Section
       maxContentWidth="2xl"
       padding={{ horizontal: "md", vertical: "sm" }}
@@ -39,5 +39,10 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
         <slot />
       </main>
     </Section>
+    <script>
+      setTimeout(() => {
+        document.body.classList.remove("animations-disabled");
+      }, 1000);
+    </script>
   </body>
 </html>

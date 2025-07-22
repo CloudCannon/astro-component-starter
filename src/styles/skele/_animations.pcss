@@ -1,7 +1,7 @@
 :where(:root) {
-  body.preload * {
-    transition: none !important;
+  body.animations-disabled * {
     animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
   }
 
   @keyframes grow-out {
