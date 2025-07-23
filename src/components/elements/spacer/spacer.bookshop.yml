@@ -20,9 +20,9 @@ _inputs:
     options:
       values:
         - xs
-        - s
-        - m
-        - l
+        - sm
+        - md
+        - lg
         - xl
         - 2xl
         - 3xl

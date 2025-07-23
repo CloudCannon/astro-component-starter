@@ -1,7 +1,7 @@
 ---
 import clsx from "clsx";
 
-const { height = "small", class: className, ...rest } = Astro.props;
+const { height = "md", class: className, ...rest } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
@@ -17,31 +17,31 @@ const classNames = clsx("spacer", className, `height-${height}`);
     height: 0;
 
     &.height-xs {
-      height: 0.5rem;
+      height: var(--spacing-xs);
     }
 
-    &.height-s {
-      height: 1rem;
+    &.height-sm {
+      height: var(--spacing-sm);
     }
 
-    &.height-m {
-      height: 1.5rem;
+    &.height-md {
+      height: var(--spacing-md);
     }
 
-    &.height-l {
-      height: 2rem;
+    &.height-lg {
+      height: var(--spacing-lg);
     }
 
     &.height-xl {
-      height: 3rem;
+      height: var(--spacing-xl);
     }
 
     &.height-2xl {
-      height: 4rem;
+      height: var(--spacing-2xl);
     }
 
     &.height-3xl {
-      height: 5rem;
+      height: var(--spacing-3xl);
     }
   }
 </style>
