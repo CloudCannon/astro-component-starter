@@ -2,7 +2,7 @@ spec:
   structures:
     - content_blocks
   label: Spacer
-  description: Gives (or removes) space between content
+  description: Gives space between content
   icon: space_bar
   tags:
 
