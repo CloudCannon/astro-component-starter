@@ -1,0 +1,47 @@
+---
+import clsx from "clsx";
+
+const { height = "small", class: className, ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx("spacer", className, `height-${height}`);
+---
+
+<div class:list={classNames} {...htmlAttributes} aria-hidden="true"></div>
+
+<style>
+  .spacer {
+    height: 0;
+
+    &.height-xs {
+      height: 0.5rem;
+    }
+
+    &.height-s {
+      height: 1rem;
+    }
+
+    &.height-m {
+      height: 1.5rem;
+    }
+
+    &.height-l {
+      height: 2rem;
+    }
+
+    &.height-xl {
+      height: 3rem;
+    }
+
+    &.height-2xl {
+      height: 4rem;
+    }
+
+    &.height-3xl {
+      height: 5rem;
+    }
+  }
+</style>
