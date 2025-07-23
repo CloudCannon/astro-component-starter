@@ -35,46 +35,22 @@ function formatBlocksYaml(blocks: any): string {
   }
 }
 
-const componentModules = import.meta.glob("../../../components/**/*.astro", {
+// Load all components dynamically
+const components: Record<string, Function> = {};
+const componentImports = import.meta.glob("../../../components/**/*.astro", {
   eager: true,
 });
 
-const componentMap: Record<string, any> = {};
+Object.entries(componentImports).forEach(([path, obj]) => {
+  const parts = path.replace("../../../components/", "").split(".")[0].split("/");
 
-Object.entries(componentModules).forEach(([filePath, module]) => {
-  const pathParts = filePath.split("/");
-  const fileName = pathParts[pathParts.length - 1];
-  const componentName = fileName.replace(".astro", "");
-
-  if (componentName && componentName !== "components") {
-    componentMap[componentName] = module;
+  if (parts.length > 1 && parts[parts.length - 1] === parts[parts.length - 2]) {
+    parts.pop();
   }
+  const bookshopName = parts.join("/");
+
+  components[bookshopName] = (obj as any).default;
 });
-
-function inferComponentName(componentKey: string): string {
-  const parts = componentKey.split("/");
-  const componentName = parts[parts.length - 1];
-
-  return componentName;
-}
-
-async function loadComponent(componentName: string) {
-  try {
-    const module = componentMap[componentName];
-
-    if (!module) {
-      console.warn(
-        `Component ${componentName} not found. Available components: ${Object.keys(componentMap).join(", ")}`
-      );
-      return null;
-    }
-
-    return module.default;
-  } catch (error) {
-    console.error(`Failed to load component ${componentName}:`, error);
-    return null;
-  }
-}
 ---
 
 <div class:list={["component-viewer", size && `viewer-size-${size}`]}>
@@ -85,21 +61,25 @@ async function loadComponent(componentName: string) {
         const exampleName = example.data.title;
         const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
 
-        const componentName =
-          example.data.component || (componentKey ? inferComponentName(componentKey) : null);
-
-        const Component = componentName ? await loadComponent(componentName) : null;
-        const blocks = example.data.blocks || {};
+        const blocks = example.data.blocks || [];
 
         return (
           <>
             <div id={exampleId} class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}>
               <div class="container" style={bodyPadding}>
-                {Component && Array.isArray(blocks) ? (
-                  blocks.map((block: any) => <Component {...block} />)
-                ) : (
-                  <Component {...blocks} />
-                )}
+                {Array.isArray(blocks)
+                  ? blocks.map((block, i) => {
+                      const Component = components[block._bookshop_name];
+
+                      if (!Component) {
+                        console.warn(
+                          `Component not found for _bookshop_name: ${block._bookshop_name}`
+                        );
+                        return null;
+                      }
+                      return <Component {...block} />;
+                    })
+                  : null}
               </div>
             </div>
 
