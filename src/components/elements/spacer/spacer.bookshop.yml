@@ -1,0 +1,28 @@
+spec:
+  structures:
+    - content_blocks
+  label: Spacer
+  description: Gives (or removes) space between content
+  icon: space_bar
+  tags:
+
+blueprint:
+  height:
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  height:
+    comment: The amount of space to add
+    type: select
+    options:
+      values:
+        - xs
+        - s
+        - m
+        - l
+        - xl
+        - 2xl
+        - 3xl
