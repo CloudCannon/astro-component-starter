@@ -19,7 +19,7 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="default">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -31,8 +31,9 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
   <body class="animations-disabled">
     <Section
       maxContentWidth="2xl"
-      padding={{ horizontal: "md", vertical: "sm" }}
-      contentClassName="library-section"
+      paddingHorizontal="md"
+      paddingVertical="sm"
+      class="library-section"
     >
       <NavLayout />
       <main>

@@ -1,258 +1,257 @@
 ---
 import clsx from "clsx";
-import { sectionSchema } from "./schema";
+import Image from "../../elements/image/image.astro";
+import Component from "../../utils/renderBlock.astro";
 
-const props = sectionSchema.parse(Astro.props);
+const {
+  label,
+  content_blocks,
+  maxContentWidth,
+  paddingHorizontal = "md",
+  paddingVertical = "md",
+  colorScheme,
+  backgroundColor,
+  backgroundImage,
+  class: className,
 
-const mainSectionClasses = clsx(
-  "section",
-  props.className,
-  props.shape?.type && `shape-${props.shape.type}`,
-  props.shape?.reverse && "reverse",
-  props.alignment?.vertical && `spacing-${props.alignment.vertical}`,
-  props.margin?.top && `margin-top-${props.margin.top}`,
-  props.margin?.bottom && `margin-bottom-${props.margin.bottom}`,
-  props.alignment?.text && `text-${props.alignment.text}`
+  ...rest
+} = Astro.props;
+
+const {
+  source = "",
+  alt = "",
+  positionVertical = "top",
+  positionHorizontal = "center",
+} = backgroundImage || {};
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const backgroundDivClasses = clsx(
-  "background",
-  props.border?.width && `border-${props.border.width}`,
-  props.border?.type && `border-${props.border.type}`,
-  props.border?.color && `border-${props.border.color}`,
-  (props.border?.width || props.border?.type || props.border?.color) && "border",
-  props.background?.color && `bg-${props.background.color}`,
-  props.background?.shadow && `shadow-${props.background.shadow}`
+const mainSectionClasses = clsx("section", className);
+
+const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgroundColor}`);
+
+const backgroundImageClasses = clsx(
+  "background-image",
+  backgroundImage?.fixed && "fixed",
+  backgroundImage?.positionVertical &&
+    backgroundImage?.positionHorizontal &&
+    `${backgroundImage.positionVertical}-${backgroundImage.positionHorizontal}`
 );
 
 const contentSectionClasses = clsx(
-  "section-content",
-  props.contentClassName,
-  props.padding?.vertical && `pad-y-${props.padding.vertical}`,
-  props.padding?.horizontal && `pad-x-${props.padding.horizontal}`,
-  props.alignment?.horizontal === "start" && "margin-inline-end",
-  props.alignment?.horizontal === "center" && "margin-inline-auto",
-  props.alignment?.horizontal === "end" && "margin-inline-start",
-  props.maxContentWidth && `max-width-${props.maxContentWidth}`
-);
-
-// --- Calculate styles ---
-let mainSectionStyleAttribute: string | undefined = undefined;
-
-if (props.customStyle) {
-  mainSectionStyleAttribute = props.customStyle.endsWith(";")
-    ? props.customStyle
-    : `${props.customStyle};`;
-}
-
-const backgroundDivStyles: string[] = [];
-
-if (props.background?.imageSrc && props.background?.imageRepeat) {
-  backgroundDivStyles.push(`background-image: url('${props.background.imageSrc}');`);
-  if (props.background?.imageFixed) {
-    backgroundDivStyles.push("background-attachment: fixed;");
-  }
-}
-
-const transformOperations: string[] = [];
-
-if (props.background?.transformScale)
-  transformOperations.push(`scale(${props.background.transformScale})`);
-if (props.background?.transformTranslateX)
-  transformOperations.push(`translateX(${props.background.transformTranslateX}px)`);
-if (props.background?.transformTranslateY)
-  transformOperations.push(`translateY(${props.background.transformTranslateY}px)`);
-
-if (transformOperations.length > 0) {
-  backgroundDivStyles.push(`transform: \${transformOperations.join(' ')}`);
-}
-
-if (props.background?.transformBlur) {
-  backgroundDivStyles.push(`filter: blur(${props.background.transformBlur}px);`);
-}
-if (props.background?.transformOpacity) {
-  backgroundDivStyles.push(`opacity: ${props.background.transformOpacity};`);
-}
-const backgroundDivStyleAttribute = backgroundDivStyles.join(" ").trim() || undefined;
-
-let dataThemeAttribute: null | string = null;
-
-if (props.background?.scheme) {
-  dataThemeAttribute = props.background.scheme;
-}
-
-const shouldRenderImageAsElement = !!(props.background?.imageSrc && !props.background?.imageRepeat);
-const imageProps =
-  shouldRenderImageAsElement && props.background
-    ? {
-        src: props.background.imageSrc,
-        alt: props.background.imageAlt,
-        opacity: props.background.imageOpacity,
-        rounded: props.background.imageRounded,
-        fit: props.background.imageFit,
-      }
-    : undefined;
-
-const renderBackgroundDiv = !!(
-  backgroundDivClasses.replace("background", "").trim() || backgroundDivStyleAttribute
+  "content",
+  paddingHorizontal && `pad-x-${paddingHorizontal}`,
+  paddingVertical && `pad-y-${paddingVertical}`,
+  maxContentWidth && `max-width-${maxContentWidth}`
 );
 ---
 
-<section
-  id={props.id}
-  class:list={mainSectionClasses}
-  style={mainSectionStyleAttribute}
-  data-theme={dataThemeAttribute}
-  aria-label={props.ariaLabel}
->
-  <!-- {
-    shouldRenderImageAsElement && !props.background?.imageAboveBackground && imageProps && (
-      <ImageComponent {...imageProps} />
-    )
-  } -->
+<section class:list={mainSectionClasses} data-theme={colorScheme} {...htmlAttributes}>
+  {source && <Image class:list={backgroundImageClasses} src={source} alt={alt} />}
+  {backgroundColor && <div class:list={backgroundDivClasses} />}
 
-  {
-    renderBackgroundDiv && (
-      <div class:list={backgroundDivClasses} style={backgroundDivStyleAttribute} />
-    )
-  }
-
-  <!-- {
-    shouldRenderImageAsElement && props.background?.imageAboveBackground && imageProps && (
-      <ImageComponent {...imageProps} />
-    )
-  } -->
-
-  <div class="section-outer-content">
+  <div class="outer-content">
     <div class:list={contentSectionClasses}>
       <slot />
+      <Component contentBlocks={content_blocks} />
     </div>
   </div>
-
-  {
-    props.link && (
-      <a
-        href={props.link}
-        class="section-background-link"
-        aria-label={props.label || "Go to page"}
-      />
-    )
-  }
 </section>
 
 <style>
   .section {
-    background-repeat: repeat;
+    position: relative;
     isolation: isolate;
-    position: relative;
-    z-index: var(--layer-2);
 
-    :where(&:has(.image-fixed)) {
-      clip-path: inset(0);
-    }
-  }
-
-  .background-link {
-    cursor: pointer;
-    display: block;
-    inset: 0;
-    position: absolute;
-    z-index: var(--layer-3);
-  }
-
-  .section:has(> .background-link) {
-    &:hover {
-      transform: scale(1.05);
-      transition: transform 0.3s ease;
-    }
-  }
-
-  .outer-content {
-    height: 100%;
-  }
-
-  .background {
-    inset: 0;
-    position: absolute;
-  }
-
-  .content {
-    height: 100%;
-    position: relative;
-    z-index: var(--layer-1);
-  }
-
-  .spacing-between > .outer-content > .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  .spacing-center > .outer-content > .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .spacing-top > .outer-content > .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-  }
-
-  .spacing-bottom > .outer-content > .content {
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
-  }
-
-  .shape-diagonal-bottom {
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - min(5vw, 50px)), 0 100%);
-
-    .outer-content {
-      padding-bottom: 5vw;
+    > .outer-content {
+      height: 100%;
     }
 
-    &.reverse {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - min(5vw, 50px)));
-    }
-  }
-
-  .shape-diagonal-top {
-    clip-path: polygon(0 calc(min(5vw, 50px)), 100% 0, 100% 100%, 0 100%);
-
-    .outer-content {
-      padding-top: 5vw;
+    > .outer-content > .content {
+      height: 100%;
+      position: relative;
+      z-index: var(--layer-1);
+      margin-inline: auto;
     }
 
-    &.reverse {
-      clip-path: polygon(0 0, 100% calc(min(5vw, 50px)), 100% 100%, 0 100%);
-    }
-  }
-
-  .shape-diagonal {
-    clip-path: polygon(0 calc(min(5vw, 50px)), 100% 0, 100% calc(100% - min(5vw, 50px)), 0 100%);
-
-    .outer-content {
-      padding-bottom: 5vw;
-      padding-top: 5vw;
+    > .background {
+      inset: 0;
+      position: absolute;
     }
 
-    &.reverse {
-      clip-path: polygon(0 0, 100% calc(min(5vw, 50px)), 100% 100%, 0 calc(100% - min(5vw, 50px)));
+    > .background-image {
+      inset: 0;
+      position: absolute;
+
+      object-position: center;
+
+      > :global(img) {
+        object-fit: cover;
+        height: 100%;
+        width: 100%;
+      }
+
+      &.fixed > :global(img) {
+        position: fixed;
+      }
+
+      &.top-left > :global(img) {
+        object-position: top left;
+      }
+
+      &.top-center > :global(img) {
+        object-position: top center;
+      }
+
+      &.top-right > :global(img) {
+        object-position: top right;
+      }
+
+      &.center-left > :global(img) {
+        object-position: center left;
+      }
+
+      &.center-center > :global(img) {
+        object-position: center center;
+      }
+
+      &.center-right > :global(img) {
+        object-position: center right;
+      }
+
+      &.bottom-left > :global(img) {
+        object-position: bottom left;
+      }
+
+      &.bottom-center > :global(img) {
+        object-position: bottom center;
+      }
+
+      &.bottom-right > :global(img) {
+        object-position: bottom right;
+      }
     }
-  }
 
-  .shape-wedge {
-    clip-path: polygon(0 0, 100% calc(min(5vw, 50px)), 100% calc(100% - min(5vw, 50px)), 0 100%);
-
-    .outer-content {
-      padding-bottom: 5vw;
-      padding-top: 5vw;
+    > .bg-surface {
+      background-color: var(--color-bg-surface);
     }
 
-    &.reverse {
-      clip-path: polygon(0 calc(min(5vw, 50px)), 0 calc(100% - min(5vw, 50px)), 100% 100%, 100% 0);
+    > .bg-accent {
+      background-color: var(--color-bg-accent);
+    }
+
+    > .bg-highlight {
+      background-color: var(--color-bg-highlight);
+    }
+
+    &.pad-x-xs {
+      padding-inline: var(--spacing-xs);
+    }
+
+    &.pad-x-sm {
+      padding-inline: var(--spacing-sm);
+    }
+
+    &.pad-x-md {
+      padding-inline: var(--spacing-md);
+    }
+
+    &.pad-x-lg {
+      padding-inline: var(--spacing-lg);
+    }
+
+    &.pad-x-xl {
+      padding-inline: var(--spacing-xl);
+    }
+
+    &.pad-x-2xl {
+      padding-inline: var(--spacing-2xl);
+    }
+
+    &.pad-x-3xl {
+      padding-inline: var(--spacing-3xl);
+    }
+
+    &.pad-x-4xl {
+      padding-inline: var(--spacing-4xl);
+    }
+
+    &.pad-x-5xl {
+      padding-inline: var(--spacing-5xl);
+    }
+
+    &.pad-x-6xl {
+      padding-inline: var(--spacing-6xl);
+    }
+
+    &.pad-y-xs {
+      padding-block: var(--spacing-xs);
+    }
+
+    &.pad-y-sm {
+      padding-block: var(--spacing-sm);
+    }
+
+    &.pad-y-md {
+      padding-block: var(--spacing-md);
+    }
+
+    &.pad-y-lg {
+      padding-block: var(--spacing-lg);
+    }
+
+    &.pad-y-xl {
+      padding-block: var(--spacing-xl);
+    }
+
+    &.pad-y-2xl {
+      padding-block: var(--spacing-2xl);
+    }
+
+    &.pad-y-3xl {
+      padding-block: var(--spacing-3xl);
+    }
+
+    &.pad-y-4xl {
+      padding-block: var(--spacing-4xl);
+    }
+
+    &.pad-y-5xl {
+      padding-block: var(--spacing-5xl);
+    }
+
+    &.pad-y-6xl {
+      padding-block: var(--spacing-6xl);
+    }
+
+    &.max-width-xs {
+      max-width: var(--content-width-xs);
+    }
+
+    &.max-width-sm {
+      max-width: var(--content-width-sm);
+    }
+
+    &.max-width-md {
+      max-width: var(--content-width-md);
+    }
+
+    &.max-width-lg {
+      max-width: var(--content-width-lg);
+    }
+
+    &.max-width-xl {
+      max-width: var(--content-width-xl);
+    }
+
+    &.max-width-2xl {
+      max-width: var(--content-width-2xl);
+    }
+
+    &.max-width-3xl {
+      max-width: var(--content-width-3xl);
     }
   }
 </style>

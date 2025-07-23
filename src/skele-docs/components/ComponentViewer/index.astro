@@ -42,11 +42,14 @@ const componentImports = import.meta.glob("../../../components/**/*.astro", {
 });
 
 Object.entries(componentImports).forEach(([path, obj]) => {
-  const parts = path.replace("../../../components/", "").split(".")[0].split("/");
+  const relativePath = path.replace("../../../components/", "").replace(/\.astro$/, "");
+  const parts = relativePath.split("/");
 
+  // Remove duplicate directory names (e.g., rich-text/rich-text -> rich-text)
   if (parts.length > 1 && parts[parts.length - 1] === parts[parts.length - 2]) {
     parts.pop();
   }
+
   const bookshopName = parts.join("/");
 
   components[bookshopName] = (obj as any).default;
@@ -62,24 +65,17 @@ Object.entries(componentImports).forEach(([path, obj]) => {
         const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
 
         const blocks = example.data.blocks || [];
+        const blocksArray = Array.isArray(blocks) ? blocks : [blocks];
 
         return (
           <>
             <div id={exampleId} class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}>
               <div class="container" style={bodyPadding}>
-                {Array.isArray(blocks)
-                  ? blocks.map((block, i) => {
-                      const Component = components[block._bookshop_name];
+                {blocksArray.map((block) => {
+                  const Component = components[block._bookshop_name];
 
-                      if (!Component) {
-                        console.warn(
-                          `Component not found for _bookshop_name: ${block._bookshop_name}`
-                        );
-                        return null;
-                      }
-                      return <Component {...block} />;
-                    })
-                  : null}
+                  return Component ? <Component {...block} /> : null;
+                })}
               </div>
             </div>
 

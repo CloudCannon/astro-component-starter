@@ -7,7 +7,7 @@ const ariaProps = props.ariaLabel ? { "aria-label": props.ariaLabel } : {};
 ---
 
 <style is:global>
-  [data-theme="light"] {
+  [data-theme="default"] {
     --nav-sidebar-link-fontColor: var(--gray-11);
     --nav-sidebar-link-iconColor: var(--gray-5);
     --nav-sidebar-linkHover-fontColor: var(--gray-11);
@@ -17,7 +17,7 @@ const ariaProps = props.ariaLabel ? { "aria-label": props.ariaLabel } : {};
   }
 
   /* Dark theme variables */
-  [data-theme="dark"] {
+  [data-theme="contrast"] {
     --nav-link-color: var(--gray-2);
     --nav-link-hover-backgroundColor: var(--gray-10);
     --nav-dropdown-backgroundColor: var(--gray-12);
