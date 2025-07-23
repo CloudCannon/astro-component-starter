@@ -1,0 +1,117 @@
+spec:
+  structures:
+    - content_blocks
+  label: Section
+  description: "A container component that provides layout structure with background options, padding, and content width controls."
+  icon: rectangle-stack
+  tags: []
+
+blueprint:
+  label: ""
+  content_blocks: []
+  maxContentWidth: md
+  paddingHorizontal: md
+  paddingVertical: md
+  colorScheme: "default"
+  backgroundColor:
+  backgroundImage:
+    source: ""
+    alt: ""
+    positionVertical: top
+    positionHorizontal: center
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  label:
+    comment: Optional label for the section to help identify it in the editor.
+    type: text
+  content_blocks:
+    comment: Array of content blocks to render within the section.
+    type: array
+  maxContentWidth:
+    comment: Maximum width constraint for the content.
+    type: select
+    options:
+      values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+  paddingHorizontal:
+    comment: Horizontal padding applied to the section content.
+    type: select
+    options:
+      values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - 4xl
+        - 5xl
+        - 6xl
+  paddingVertical:
+    comment: Vertical padding applied to the section content.
+    type: select
+    options:
+      values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - 4xl
+        - 5xl
+        - 6xl
+  colorScheme:
+    comment: Color scheme theme for the section.
+    type: select
+    options:
+      values:
+        - default
+        - contrast
+  backgroundColor:
+    comment: Background color for the section.
+    type: select
+    options:
+      values:
+        - base
+        - surface
+        - accent
+        - highlight
+  backgroundImage:
+    comment: Background image configuration for the section.
+    type: object
+    _inputs:
+      source:
+        comment: URL or path to the background image.
+        type: text
+      alt:
+        comment: Alt text for the background image.
+        type: text
+      positionVertical:
+        comment: Vertical position of the background image.
+        type: select
+        options:
+          values:
+            - top
+            - center
+            - bottom
+      positionHorizontal:
+        comment: Horizontal position of the background image.
+        type: select
+        options:
+          values:
+            - left
+            - center
+            - right

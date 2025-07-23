@@ -34,7 +34,6 @@ const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgro
 
 const backgroundImageClasses = clsx(
   "background-image",
-  backgroundImage?.fixed && "fixed",
   backgroundImage?.positionVertical &&
     backgroundImage?.positionHorizontal &&
     `${backgroundImage.positionVertical}-${backgroundImage.positionHorizontal}`
@@ -91,10 +90,6 @@ const contentSectionClasses = clsx(
         object-fit: cover;
         height: 100%;
         width: 100%;
-      }
-
-      &.fixed > :global(img) {
-        position: fixed;
       }
 
       &.top-left > :global(img) {
