@@ -3,8 +3,10 @@ import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const {
-  first,
-  last,
+  firstColumnContentBlocks = [],
+  firstColumnMinWidth = null,
+  secondColumnContentBlocks = [],
+  secondColumnMinWidth = null,
   distributionMode = "half",
   fixedWidth = null,
   verticalAlignment = "top",
@@ -16,9 +18,6 @@ const {
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const firstCol = reverse ? last : first;
-const lastCol = reverse ? first : last;
 
 // Define distribution combinations
 const distributionModes = {
@@ -89,22 +88,24 @@ if (reverse) {
   [firstMode, lastMode] = [lastMode, firstMode];
 }
 
-// Get minWidth from the respective column configurations
-const firstMinWidth = firstCol?.minWidth || null;
-const lastMinWidth = lastCol?.minWidth || null;
+// Get content blocks and minWidth based on reverse setting
+const firstContentBlocks = reverse ? secondColumnContentBlocks : firstColumnContentBlocks;
+const secondContentBlocks = reverse ? firstColumnContentBlocks : secondColumnContentBlocks;
+const firstMinWidth = reverse ? secondColumnMinWidth : firstColumnMinWidth;
+const secondMinWidth = reverse ? firstColumnMinWidth : secondColumnMinWidth;
 
 const firstStyles = calculateDistributionStyles(firstMode, true, fixedWidth, firstMinWidth);
-const lastStyles = calculateDistributionStyles(lastMode, false, fixedWidth, lastMinWidth);
+const secondStyles = calculateDistributionStyles(lastMode, false, fixedWidth, secondMinWidth);
 
 const splitClasses = clsx("split", `align-${verticalAlignment}`, className);
 ---
 
 <section class:list={splitClasses} {...htmlAttributes}>
   <div class="pane first" style={firstStyles}>
-    <Component contentBlocks={firstCol?.content_blocks || []} />
+    <Component contentBlocks={firstContentBlocks} />
   </div>
-  <div class="pane last" style={lastStyles}>
-    <Component contentBlocks={lastCol?.content_blocks || []} />
+  <div class="pane second" style={secondStyles}>
+    <Component contentBlocks={secondContentBlocks} />
   </div>
 </section>
 

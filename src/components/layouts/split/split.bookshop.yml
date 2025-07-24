@@ -7,12 +7,10 @@ spec:
   tags: []
 
 blueprint:
-  first:
-    content_blocks: []
-    minWidth: null
-  last:
-    content_blocks: []
-    minWidth: null
+  firstColumnContentBlocks: []
+  firstColumnMinWidth: null
+  secondColumnContentBlocks: []
+  secondColumnMinWidth: null
   distributionMode: "half"
   fixedWidth: null
   verticalAlignment: "top"
@@ -26,6 +24,18 @@ _inputs:
   label:
     comment: Optional label for the split to help identify it in the editor.
     type: text
+  firstColumnContentBlocks:
+    comment: Array of content blocks to render in the first column.
+    type: array
+  firstColumnMinWidth:
+    comment: Minimum width in pixels for the first column.
+    type: number
+  secondColumnContentBlocks:
+    comment: Array of content blocks to render in the second column.
+    type: array
+  secondColumnMinWidth:
+    comment: Minimum width in pixels for the second column.
+    type: number
   distributionMode:
     comment: Predefined distribution mode for both columns.
     type: select
@@ -41,26 +51,6 @@ _inputs:
   fixedWidth:
     comment: Fixed width in pixels (used when distribution mode includes 'fixed').
     type: number
-  first:
-    comment: Configuration for the first column.
-    type: object
-    _inputs:
-      content_blocks:
-        comment: Array of content blocks to render in the first column.
-        type: array
-      minWidth:
-        comment: Minimum width in pixels for the first column.
-        type: number
-  last:
-    comment: Configuration for the last column.
-    type: object
-    _inputs:
-      content_blocks:
-        comment: Array of content blocks to render in the last column.
-        type: array
-      minWidth:
-        comment: Minimum width in pixels for the last column.
-        type: number
   verticalAlignment:
     comment: Vertical alignment of the columns.
     type: select

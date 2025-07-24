@@ -3,28 +3,26 @@ title: Quarter-Three Quarters
 spacing:
 blocks:
   _bookshop_name: "layouts/split"
-  first:
-    content_blocks:
-      - _bookshop_name: "layouts/section"
-        backgroundColor: "accent"
-        content_blocks:
-          - _bookshop_name: "elements/rich-text"
-            text: |-
-              ## Quarter Column
+  firstColumnContentBlocks:
+    - _bookshop_name: "layouts/section"
+      backgroundColor: "accent"
+      content_blocks:
+        - _bookshop_name: "elements/rich-text"
+          text: |-
+            ## Quarter Column
 
-              This column takes up 25% of the available space.
-    minWidth: null
-  last:
-    content_blocks:
-      - _bookshop_name: "layouts/section"
-        backgroundColor: "highlight"
-        content_blocks:
-          - _bookshop_name: "elements/rich-text"
-            text: |-
-              ## Three Quarters Column
+            This column takes up 25% of the available space.
+  firstColumnMinWidth: null
+  secondColumnContentBlocks:
+    - _bookshop_name: "layouts/section"
+      backgroundColor: "highlight"
+      content_blocks:
+        - _bookshop_name: "elements/rich-text"
+          text: |-
+            ## Three Quarters Column
 
-              This column takes up 75% of the available space.
-    minWidth: null
+            This column takes up 75% of the available space.
+  secondColumnMinWidth: null
   distributionMode: "quarter-three-quarters"
   fixedWidth: null
   verticalAlignment: "top"
