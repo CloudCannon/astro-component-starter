@@ -2,52 +2,19 @@ spec:
   structures:
     - content_blocks
   label: Accordion
-  description: A way to hide content behind an expandable menu.
+  description: Hides content behind an expandable menu.
   icon: expand_all
   tags:
 
 blueprint:
   items:
-  open_first: false
-  heading:
-    level: h2
-    size: m
-  
+  openFirst: false
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
 preview:
 
 # Any extra CloudCannon inputs configuration to apply to the blueprint
 _inputs:
-  heading:
-    comment: The heading properties for each item.
-  level:
-    comment: The heading level for each item.
-    type: select
-    options:
-      values:
-        - h1
-        - h2
-        - h3
-        - h4
-        - h5
-        - h6
-      
-  size:
-    comment: The size of each heading.
-    type: select
-    options:
-      values:
-        - xs
-        - s
-        - m
-        - l
-        - xl
-        - 2xl
-        - 3xl
-        - 4xl
-        - 5xl
-        - 6xl
   items:
     comment: The items to display in the accordion.
     type: array
@@ -55,7 +22,7 @@ _inputs:
   title:
     comment: The title of the accordion item.
     type: text
-  open_first:
+  openFirst:
     comment: "If true, the first item will be open by default."
     type: checkbox
 

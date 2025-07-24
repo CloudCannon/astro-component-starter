@@ -2,7 +2,7 @@ spec:
   structures:
     - content_blocks
   label: Button Group
-  description: "A clickable element that navigates to another page or triggers an action within the current page."
+  description: "Controls the alignment and direction of buttons."
   icon: rectangle
   tags: []
 

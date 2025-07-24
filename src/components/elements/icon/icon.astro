@@ -2,7 +2,7 @@
 import { Icon as AstroIcon } from "astro-icon/components";
 import clsx from "clsx";
 
-const { name, size, background, className, ...rest } = Astro.props;
+const { name, size = "lg", background, className, ...rest } = Astro.props;
 
 const isValidName = name && name.trim();
 

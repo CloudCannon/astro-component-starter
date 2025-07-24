@@ -1,274 +1,85 @@
 ---
+import clsx from "clsx";
+import Icon from "../../elements/icon/icon.astro";
 import RenderBlock from "../../utils/renderBlock.astro";
 
-const { items, open_first, heading, className, id, ariaLabel, ariaDescribedby, customStyle } =
-  Astro.props;
+const { items, openFirst, ...rest } = Astro.props;
 
-const extraClasses = className || "";
-let classAttr = "accordion";
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
 
-if (extraClasses) {
-  classAttr += ` ${extraClasses}`;
-}
-
-let headingExtraClasses = "";
-
-if (heading && heading.size) {
-  headingExtraClasses += ` text--${heading.size}`;
-}
-
-const uniqueId = crypto.randomUUID();
+const classNames = clsx("accordion");
 ---
 
-<div
-  class:list={classAttr}
-  {...customStyle ? { style: customStyle } : {}}
-  {...id ? { id } : {}}
-  {...ariaLabel ? { "aria-label": ariaLabel } : {}}
-  {...ariaDescribedby ? { "aria-describedby": ariaDescribedby } : {}}
->
+<div class:list={classNames} {...htmlAttributes}>
   {
     items.map((item: any, index: number) => {
-      const isFirst = index === 0 && open_first;
-      const HeadingTag = heading?.level || "h2";
-      const itemId = `${uniqueId}-${index + 1}`;
+      const isFirst = index === 0 && openFirst;
 
       return (
-        <div class="accordion__item dropdown">
-          <HeadingTag class:list={`accordion__heading${headingExtraClasses}`}>
-            <button
-              id={`accordion-header-${itemId}`}
-              class="accordion__button dropdown__header"
-              aria-expanded={isFirst ? "true" : "false"}
-              aria-controls={`accordion-panel-${itemId}`}
-            >
-              {item.title}
-            </button>
-          </HeadingTag>
-          <section
-            id={`accordion-panel-${itemId}`}
-            aria-labelledby={`accordion-header-${itemId}`}
-            class="dropdown__body accordion__panel"
-          >
+        <details name="test" class="item" open={isFirst}>
+          <summary class="title">
+            <span class="text">{item.title}</span>
+            <Icon name="chevron-up" size="none" />
+          </summary>
+          <div class="detail">
             <RenderBlock contentBlocks={item.content_blocks} />
-          </section>
-        </div>
+          </div>
+        </details>
       );
     })
   }
 </div>
 
-<script is:inline>
-  function setupAccordion() {
-    const dropdownToggles = document.querySelectorAll(".dropdown");
-
-    function toggleDropdown(event) {
-      event.stopPropagation();
-
-      const currentButton = event.currentTarget;
-      if (!currentButton) return;
-
-      const isExpanded = currentButton.getAttribute("aria-expanded") === "true";
-
-      currentButton.setAttribute("aria-expanded", (!isExpanded).toString());
-
-      const dropdownId = currentButton.getAttribute("aria-controls");
-      if (!dropdownId) return;
-
-      const dropdownMenu = document.getElementById(dropdownId);
-
-      if (dropdownMenu) {
-        dropdownMenu.setAttribute("aria-hidden", isExpanded ? "true" : "false");
-      }
-    }
-
-    dropdownToggles.forEach((toggle) => {
-      const button = toggle.querySelector("button.dropdown__header");
-
-      if (button) {
-        button.addEventListener("click", toggleDropdown);
-
-        const dropdownId = button.getAttribute("aria-controls");
-        if (!dropdownId) return;
-
-        const dropdownMenu = document.getElementById(dropdownId);
-        const isExpanded = button.getAttribute("aria-expanded") === "true";
-
-        if (dropdownMenu) {
-          dropdownMenu.setAttribute("aria-hidden", isExpanded ? "false" : "true");
-        }
-      }
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupAccordion);
-  } else {
-    setupAccordion();
-  }
-</script>
-
 <style>
   .accordion {
-    --accordion-border-color: transparent;
-    --accordion-border-radius: 0;
-    --accordion-spacing: 0;
-    --accordion-heading-background: transparent;
-    --accordion-heading-hover-background: transparent;
-    --accordion-content-background: transparent;
-    --accordion-content-padding: 1rem 1rem 1rem 3rem;
-    --accordion-icon-color: #ffffff;
-    --accordion-icon-background: #1e5a7a;
-  }
+    > .item {
+      border-bottom: 1px solid var(--color-border-subtle);
 
-  .accordion__item {
-    border: none;
-    border-bottom: 1px solid #e5e7eb;
-    border-radius: 0;
-    overflow: visible;
-  }
+      > .title {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        padding: var(--space-md);
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        transition: background-color var(--animation-normal) ease-out;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
-  .accordion__item:last-child {
-    border-bottom: none;
-  }
+        &:first-of-type {
+          list-style-type: none;
+        }
 
-  .accordion__item + .accordion__item {
-    margin-top: 0;
-  }
+        &:hover {
+          background-color: var(--color-bg-surface);
+        }
 
-  .accordion__heading {
-    margin: 0;
-    font-size: inherit;
-    font-weight: inherit;
-  }
+        &::-webkit-details-marker {
+          display: none;
+        }
 
-  .accordion__button {
-    width: 100%;
-    padding: 1.25rem 0;
-    background: var(--accordion-heading-background);
-    border: none;
-    text-align: left;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #374151;
-    cursor: pointer;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1rem;
-    position: relative;
-  }
+        .icon {
+          transition: transform var(--animation-normal) ease-out;
+        }
+      }
 
-  .accordion__button:hover {
-    background: var(--accordion-heading-hover-background);
-  }
-
-  .accordion__button:focus {
-    outline: 2px solid var(--accordion-icon-background);
-    outline-offset: -2px;
-  }
-
-  .accordion__button::before {
-    content: "+";
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: var(--accordion-icon-background);
-    color: var(--accordion-icon-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: bold;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-  }
-
-  .accordion__button[aria-expanded="true"]::before {
-    content: "−";
-  }
-
-  .accordion__panel {
-    background: var(--accordion-content-background);
-    padding: var(--accordion-content-padding);
-    color: #4b5563;
-    line-height: 1.6;
-  }
-
-  .content-block {
-    margin: 0.5rem 0;
-  }
-
-  .content-block > * + * {
-    margin-top: 1rem;
-  }
-
-  .text--xs {
-    font-size: 0.75rem;
-  }
-  .text--s {
-    font-size: 0.875rem;
-  }
-  .text--m {
-    font-size: 1rem;
-  }
-  .text--l {
-    font-size: 1.125rem;
-  }
-  .text--xl {
-    font-size: 1.25rem;
-  }
-  .text--2xl {
-    font-size: 1.5rem;
-  }
-  .text--3xl {
-    font-size: 1.875rem;
-  }
-  .text--4xl {
-    font-size: 2.25rem;
-  }
-  .text--5xl {
-    font-size: 3rem;
-  }
-  .text--6xl {
-    font-size: 3.75rem;
-  }
-
-  .dropdown {
-    position: relative;
-  }
-
-  .dropdown__header {
-    position: relative;
-  }
-
-  .dropdown__body {
-    position: relative;
-  }
-
-  .dropdown__body[aria-hidden="true"] {
-    display: none;
-  }
-
-  .dropdown__body[aria-hidden="false"] {
-    display: block;
-  }
-
-  @keyframes growOut {
-    0% {
-      opacity: 0.3;
+      > .detail {
+        padding-inline: var(--space-md);
+      }
     }
-    100% {
-      opacity: 1;
+
+    > .item[open] {
+      > .title .icon {
+        transform: rotate(180deg);
+      }
+
+      > .detail {
+        animation: grow-out 300ms ease-out;
+      }
     }
-  }
-
-  .dropdown__body {
-    display: none;
-  }
-
-  .accordion__heading:has(.dropdown__header[aria-expanded="true"]) + .dropdown__body {
-    display: block;
-    animation: growOut 0.3s ease-in-out;
   }
 </style>
