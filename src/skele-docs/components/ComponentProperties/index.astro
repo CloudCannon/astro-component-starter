@@ -74,7 +74,18 @@ function formatDefaultValue(value: any, inputConfig: any): string {
 
 function getEnumValues(inputConfig: any): string[] | undefined {
   if (inputConfig?.type === "select" && inputConfig.options?.values) {
-    return Array.isArray(inputConfig.options.values) ? inputConfig.options.values : undefined;
+    if (Array.isArray(inputConfig.options.values)) {
+      // Handle objects with name/value properties
+      if (
+        inputConfig.options.values.length > 0 &&
+        typeof inputConfig.options.values[0] === "object" &&
+        inputConfig.options.values[0].hasOwnProperty("value")
+      ) {
+        return inputConfig.options.values.map((item: any) => item.value);
+      }
+      // Handle simple string values
+      return inputConfig.options.values;
+    }
   }
   return undefined;
 }
