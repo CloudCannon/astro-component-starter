@@ -1,0 +1,82 @@
+---
+import clsx from "clsx";
+import MarkdownIt from "markdown-it";
+
+const { text, size, align = "start", decoration = "none", class: className, ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const md = MarkdownIt({ html: true });
+const MarkdownText = text ? md.renderInline(text) : "";
+
+const classNames = clsx(
+  "paragraph",
+  size && `size-${size}`,
+  decoration === "glow" && `text-glow`,
+  `align-${align}`,
+  className
+);
+---
+
+<p class:list={classNames} {...htmlAttributes} set:html={MarkdownText} />
+
+<style>
+  .paragraph {
+    &.size-xs {
+      font-size: var(--font-size-xs);
+    }
+
+    &.size-sm {
+      font-size: var(--font-size-sm);
+    }
+
+    &.size-md {
+      font-size: var(--font-size-md);
+    }
+
+    &.size-lg {
+      font-size: var(--font-size-lg);
+    }
+
+    &.size-xl {
+      font-size: var(--font-size-xl);
+    }
+
+    &.size-2xl {
+      font-size: var(--font-size-2xl);
+    }
+
+    &.size-3xl {
+      font-size: var(--font-size-3xl);
+    }
+
+    &.size-4xl {
+      font-size: var(--font-size-4xl);
+    }
+
+    &.size-5xl {
+      font-size: var(--font-size-5xl);
+    }
+
+    &.size-6xl {
+      font-size: var(--font-size-6xl);
+    }
+
+    &.align-start {
+      text-align: start;
+    }
+
+    &.align-center {
+      text-align: center;
+    }
+
+    &.align-end {
+      text-align: end;
+    }
+    &.text-glow {
+      text-shadow: 2px 2px 5px var(--color-glow-textShadowColor);
+    }
+  }
+</style>

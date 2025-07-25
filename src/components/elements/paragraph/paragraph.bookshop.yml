@@ -1,0 +1,76 @@
+spec:
+  structures:
+    - content_blocks
+  label: Paragraph
+  description: "Displays blocks of text for content sections with options for alignment, size and decoration."
+  icon: view_headline
+  tags: []
+
+blueprint:
+  text:
+  align: start
+  size: m
+  decoration: none
+
+preview:
+
+_inputs:
+  text:
+    comment: The text content of the paragraph.
+    type: markdown
+    options:
+      bold: true
+      italic: true
+      link: true
+      strike: true
+      subscript: true
+      superscript: true
+      underline: true
+      undo: true
+      redo: true
+      removeformat: true
+      copyformatting: true
+  align:
+    comment: The alignment of the text.
+    type: select
+    options:
+      values:
+        - start
+        - center
+        - end
+  size:
+    type: select
+    comment: The font size of the text.
+    options:
+      values:
+        - name: Extra Small
+          value: xs
+        - name: Small
+          value: s
+        - name: Medium
+          value: m
+        - name: Large
+          value: l
+        - name: Extra Large
+          value: xl
+        - name: 2xl
+          value: 2xl
+        - name: 3xl
+          value: 3xl
+        - name: 4xl
+          value: 4xl
+        - name: 5xl
+          value: 5xl
+        - name: 6xl
+          value: 6xl
+      value_key: value
+      preview:
+        text:
+          - key: name
+  decoration:
+    type: select
+    comment: Text decoration style.
+    options:
+      values:
+        - none
+        - glow
