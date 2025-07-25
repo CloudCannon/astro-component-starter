@@ -6,6 +6,4 @@ examples:
       - align
   - slugs:
       - sizes
-  - slugs:
-      - glow
 ---

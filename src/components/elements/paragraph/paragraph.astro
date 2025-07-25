@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import MarkdownIt from "markdown-it";
 
-const { text, size, align = "start", decoration = "none", class: className, ...rest } = Astro.props;
+const { text, size, align = "start", class: className, ...rest } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
@@ -11,13 +11,7 @@ const htmlAttributes = Object.fromEntries(
 const md = MarkdownIt({ html: true });
 const MarkdownText = text ? md.renderInline(text) : "";
 
-const classNames = clsx(
-  "paragraph",
-  size && `size-${size}`,
-  decoration === "glow" && `text-glow`,
-  `align-${align}`,
-  className
-);
+const classNames = clsx("paragraph", size && `size-${size}`, `align-${align}`, className);
 ---
 
 <p class:list={classNames} {...htmlAttributes} set:html={MarkdownText} />
@@ -74,9 +68,6 @@ const classNames = clsx(
 
     &.align-end {
       text-align: end;
-    }
-    &.text-glow {
-      text-shadow: 2px 2px 5px var(--color-glow-textShadowColor);
     }
   }
 </style>
