@@ -1,0 +1,145 @@
+---
+import clsx from "clsx";
+import Component from "../../utils/renderBlock.astro";
+
+const {
+  firstColumnContentBlocks = [],
+  firstColumnMinWidth = null,
+  secondColumnContentBlocks = [],
+  secondColumnMinWidth = null,
+  distributionMode = "half",
+  fixedWidth = null,
+  verticalAlignment = "top",
+  reverse = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+// Define distribution combinations
+const distributionModes = {
+  "quarter-three-quarters": { first: "quarter", last: "three-quarters" },
+  "third-two-thirds": { first: "third", last: "two-thirds" },
+  half: { first: "half", last: "half" },
+  "two-thirds-third": { first: "two-thirds", last: "third" },
+  "three-quarters-quarter": { first: "three-quarters", last: "quarter" },
+  "fixed-flexible": { first: "fixed", last: "flexible" },
+  "flexible-fixed": { first: "flexible", last: "fixed" },
+};
+
+function calculateDistributionStyles(
+  mode: string,
+  isFirst: boolean,
+  fixedWidth: number | null,
+  minWidth: number | null
+): string {
+  if (!mode) return "";
+
+  const percentages: Record<string, number> = {
+    quarter: 25,
+    third: 33.3333,
+    half: 50,
+    "two-thirds": 66.6666,
+    "three-quarters": 75,
+  };
+
+  if (mode === "fixed" && fixedWidth) {
+    return `flex: 0 1 ${fixedWidth}px; min-width: calc(min(100%, ${fixedWidth}px)); max-width: ${fixedWidth}px;`;
+  }
+
+  if (percentages[mode]) {
+    const percentage = percentages[mode];
+    const basis = `(${percentage}% - var(--gap-size))`;
+
+    if (minWidth) {
+      return `flex: 1 0 calc(${basis}); min-width: calc(min(100%, ${minWidth}px));`;
+    } else {
+      return `flex: 1 1 calc(${basis});`;
+    }
+  }
+
+  // Flexible mode
+  const minWidthStyle = minWidth ? `${minWidth}px` : "";
+
+  return `flex: 1 1 auto; max-width: 100%; min-width: calc(min(100%, ${minWidthStyle}));`;
+}
+
+// Get the distribution configuration for each column
+const distribution =
+  distributionModes[distributionMode as keyof typeof distributionModes] ||
+  distributionModes["half"];
+
+if (
+  (distributionMode === "fixed-flexible" || distributionMode === "flexible-fixed") &&
+  !fixedWidth
+) {
+  console.warn(
+    `Split component: fixedWidth is required when using distributionMode "${distributionMode}"`
+  );
+}
+let firstMode = distribution.first;
+let lastMode = distribution.last;
+
+// Reverse the distribution modes if reverse is true
+if (reverse) {
+  [firstMode, lastMode] = [lastMode, firstMode];
+}
+
+// Get content blocks and minWidth based on reverse setting
+const firstContentBlocks = reverse ? secondColumnContentBlocks : firstColumnContentBlocks;
+const secondContentBlocks = reverse ? firstColumnContentBlocks : secondColumnContentBlocks;
+const firstMinWidth = reverse ? secondColumnMinWidth : firstColumnMinWidth;
+const secondMinWidth = reverse ? firstColumnMinWidth : secondColumnMinWidth;
+
+const firstStyles = calculateDistributionStyles(firstMode, true, fixedWidth, firstMinWidth);
+const secondStyles = calculateDistributionStyles(lastMode, false, fixedWidth, secondMinWidth);
+
+const splitClasses = clsx("split", `align-${verticalAlignment}`, className);
+---
+
+<section class:list={splitClasses} {...htmlAttributes}>
+  <div class="pane first" style={firstStyles}>
+    <Component contentBlocks={firstContentBlocks} />
+  </div>
+  <div class="pane second" style={secondStyles}>
+    <Component contentBlocks={secondContentBlocks} />
+  </div>
+</section>
+
+<style>
+  .split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    --gap-size: var(--spacing-lg);
+
+    /* Vertical alignment options */
+    &.align-top {
+      align-items: flex-start;
+    }
+
+    &.align-center {
+      align-items: center;
+    }
+
+    &.align-bottom {
+      align-items: flex-end;
+    }
+
+    &.align-stretch {
+      align-items: stretch;
+
+      > .pane > :global(*:only-child) {
+        height: 100%;
+      }
+    }
+
+    .pane {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+  }
+</style>

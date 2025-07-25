@@ -12,10 +12,10 @@ function parseBookshopProperties(bookshopData: any): PropertyMeta[] {
         name: key,
         type: getPropertyType(inputConfig),
         optional: false,
-        default: value !== undefined && value !== null ? String(value) : "",
+        default: formatDefaultValue(value, inputConfig),
         enumValues: getEnumValues(inputConfig),
         description: inputConfig?.comment || "",
-        nestedProperties: undefined,
+        nestedProperties: getNestedProperties(inputConfig),
       });
     });
   }
@@ -32,6 +32,7 @@ function getPropertyType(inputConfig: any): string {
     case "text":
     case "url":
       return "string";
+    case "checkbox":
     case "switch":
       return "boolean";
     case "select":
@@ -40,9 +41,35 @@ function getPropertyType(inputConfig: any): string {
       return "number";
     case "array":
       return "array";
+    case "object":
+      return "object";
     default:
       return "string";
   }
+}
+
+function formatDefaultValue(value: any, inputConfig: any): string {
+  if (value === undefined || value === null) {
+    return "";
+  }
+
+  // Handle object types
+  if (inputConfig?.type === "object" || (typeof value === "object" && !Array.isArray(value))) {
+    return "object";
+  }
+
+  // Handle arrays
+  if (Array.isArray(value)) {
+    return value.length > 0 ? `array(${value.length})` : "array";
+  }
+
+  // Handle booleans
+  if (typeof value === "boolean") {
+    return value.toString();
+  }
+
+  // Handle other types
+  return String(value);
 }
 
 function getEnumValues(inputConfig: any): string[] | undefined {
@@ -60,6 +87,28 @@ function getEnumValues(inputConfig: any): string[] | undefined {
       return inputConfig.options.values;
     }
   }
+  return undefined;
+}
+
+function getNestedProperties(inputConfig: any): PropertyMeta[] | undefined {
+  if (inputConfig?.type === "object" && inputConfig._inputs) {
+    const nestedProperties: PropertyMeta[] = [];
+
+    Object.entries(inputConfig._inputs).forEach(([key, nestedInput]: [string, any]) => {
+      nestedProperties.push({
+        name: key,
+        type: getPropertyType(nestedInput),
+        optional: false,
+        default: formatDefaultValue(nestedInput.default, nestedInput),
+        enumValues: getEnumValues(nestedInput),
+        description: nestedInput?.comment || "",
+        nestedProperties: getNestedProperties(nestedInput),
+      });
+    });
+
+    return nestedProperties;
+  }
+
   return undefined;
 }
 
@@ -87,7 +136,7 @@ const properties: PropertyMeta[] = bookshopData ? parseBookshopProperties(booksh
                 {prop.name}{" "}
                 <span class="property-type">
                   {prop.type}
-                  {prop.default && ` | default: ${prop.default}`}
+                  {prop.default && prop.type !== "object" && ` | default: ${prop.default}`}
                 </span>
               </h3>
               {prop.description && <p>{prop.description}</p>}

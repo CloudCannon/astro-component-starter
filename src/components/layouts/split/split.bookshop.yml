@@ -1,0 +1,65 @@
+spec:
+  structures:
+    - content_blocks
+  label: Split
+  description: Arranges content in two columns.
+  icon: columns
+  tags: []
+
+blueprint:
+  firstColumnContentBlocks: []
+  firstColumnMinWidth: null
+  secondColumnContentBlocks: []
+  secondColumnMinWidth: null
+  distributionMode: "half"
+  fixedWidth: null
+  verticalAlignment: "top"
+  reverse: false
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  label:
+    comment: Optional label for the split to help identify it in the editor.
+    type: text
+  firstColumnContentBlocks:
+    comment: Array of content blocks to render in the first column.
+    type: array
+  firstColumnMinWidth:
+    comment: Minimum width in pixels for the first column.
+    type: number
+  secondColumnContentBlocks:
+    comment: Array of content blocks to render in the second column.
+    type: array
+  secondColumnMinWidth:
+    comment: Minimum width in pixels for the second column.
+    type: number
+  distributionMode:
+    comment: Predefined distribution mode for both columns.
+    type: select
+    options:
+      values:
+        - quarter-three-quarters
+        - third-two-thirds
+        - half
+        - two-thirds-third
+        - three-quarters-quarter
+        - fixed-flexible
+        - flexible-fixed
+  fixedWidth:
+    comment: Fixed width in pixels (used when distribution mode includes 'fixed').
+    type: number
+  verticalAlignment:
+    comment: Vertical alignment of the columns.
+    type: select
+    options:
+      values:
+        - top
+        - center
+        - bottom
+        - stretch
+  reverse:
+    comment: "Swaps the order of the columns."
+    type: checkbox
