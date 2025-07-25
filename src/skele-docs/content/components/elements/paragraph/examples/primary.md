@@ -6,6 +6,5 @@ blocks:
   text: |-
     This is a paragraph with **bold** and *italic* text.
   align: start
-  size: m
-  decoration: none
+  size: md
 ---

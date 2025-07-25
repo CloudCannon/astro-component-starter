@@ -9,8 +9,7 @@ spec:
 blueprint:
   text:
   align: start
-  size: m
-  decoration: none
+  size: md
 
 preview:
 
@@ -46,11 +45,11 @@ _inputs:
         - name: Extra Small
           value: xs
         - name: Small
-          value: s
+          value: sm
         - name: Medium
-          value: m
+          value: md
         - name: Large
-          value: l
+          value: lg
         - name: Extra Large
           value: xl
         - name: 2xl
@@ -67,10 +66,3 @@ _inputs:
       preview:
         text:
           - key: name
-  decoration:
-    type: select
-    comment: Text decoration style.
-    options:
-      values:
-        - none
-        - glow
