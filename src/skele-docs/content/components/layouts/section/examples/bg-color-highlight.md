@@ -1,5 +1,5 @@
 ---
-title: Background color - Highlight
+title: Highlight background color
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

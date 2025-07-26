@@ -1,5 +1,5 @@
 ---
-title: Direction - Row
+title: Row direction
 spacing: "all"
 blocks:
   _bookshop_name: "layouts/button-group"

@@ -1,5 +1,5 @@
 ---
-title: "Source - White-listed Remote"
+title: Whitelisted remote source
 spacing: "all"
 blocks:
   _bookshop_name: "elements/image"

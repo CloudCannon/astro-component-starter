@@ -1,5 +1,5 @@
 ---
-title: Alignment - Start
+title: Start alignment
 spacing: "all"
 blocks:
   _bookshop_name: "layouts/button-group"

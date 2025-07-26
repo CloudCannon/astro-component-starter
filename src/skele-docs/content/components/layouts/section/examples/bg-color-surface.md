@@ -1,5 +1,5 @@
 ---
-title: Background color - Surface
+title: Surface background color
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

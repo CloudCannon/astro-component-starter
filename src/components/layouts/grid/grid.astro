@@ -1,0 +1,63 @@
+---
+import clsx from "clsx";
+import Component from "../../utils/renderBlock.astro";
+
+const {
+  minItemWidth = 250,
+  items = [],
+  verticalAlignment = "top",
+  class: className,
+  style: userStyle,
+  ...rest
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const gridClasses = clsx("grid", `align-${verticalAlignment}`, className);
+const gridStyles = `--min-item-width: ${minItemWidth}px;${userStyle ? ` ${userStyle}` : ""}`;
+---
+
+<div class:list={gridClasses} style={gridStyles} {...htmlAttributes}>
+  {
+    items?.map((item: any, index: number) => (
+      <div class="grid-item">
+        <Component contentBlocks={item.contentBlocks} />
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fit, minmax(var(--min-item-width), 1fr));
+
+    /* Vertical alignment options */
+    &.align-top {
+      align-items: start;
+    }
+
+    &.align-center {
+      align-items: center;
+    }
+
+    &.align-bottom {
+      align-items: end;
+    }
+
+    &.align-stretch {
+      align-items: stretch;
+
+      > .grid-item > :global(*:only-child) {
+        height: 100%;
+      }
+    }
+
+    .grid-item {
+      min-width: 0;
+    }
+  }
+</style>

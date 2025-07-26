@@ -1,5 +1,5 @@
 ---
-title: Color Scheme - Default
+title: Default color scheme
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

@@ -1,5 +1,5 @@
 ---
-title: Align - Center
+title: Center Alignment
 spacing:
 blocks:
   _bookshop_name: "layouts/split"

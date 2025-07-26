@@ -1,0 +1,36 @@
+spec:
+  structures:
+    - content_blocks
+  label: Grid
+  description: "A responsive grid layout component that displays items in a customizable grid with configurable columns and minimum item width."
+  icon: squares-2x2
+  tags: []
+
+blueprint:
+  minItemWidth: 250
+  verticalAlignment: "top"
+  items:
+    - contentBlocks:
+
+preview:
+
+_inputs:
+  minItemWidth:
+    comment: The minimum width for each grid item in pixels.
+    type: number
+  verticalAlignment:
+    comment: The vertical alignment of grid items.
+    type: select
+    options:
+      values:
+        - top
+        - center
+        - bottom
+        - stretch
+  items:
+    comment: Array of grid items, each containing content blocks to render.
+    type: array
+    _inputs:
+      contentBlocks:
+        comment: Content blocks to render within this grid item.
+        type: array

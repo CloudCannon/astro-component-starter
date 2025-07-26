@@ -60,7 +60,7 @@ function formatDefaultValue(value: any, inputConfig: any): string {
 
   // Handle arrays
   if (Array.isArray(value)) {
-    return value.length > 0 ? `array(${value.length})` : "array";
+    return "array";
   }
 
   // Handle booleans

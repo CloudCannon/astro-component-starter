@@ -1,5 +1,5 @@
 ---
-title: Padding - lg
+title: lg padding
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

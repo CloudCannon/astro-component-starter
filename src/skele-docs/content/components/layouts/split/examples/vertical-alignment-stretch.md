@@ -1,5 +1,5 @@
 ---
-title: Align - Stretch
+title: Stretch Alignment
 spacing:
 blocks:
   _bookshop_name: "layouts/split"

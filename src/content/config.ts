@@ -38,7 +38,8 @@ const docsComponentSchema = z.object({
         title:
           example.title ||
           (example.slugs?.[0]
-            ? example.slugs[0].charAt(0).toUpperCase() + example.slugs[0].slice(1)
+            ? example.slugs[0].replace(/-/g, " ").charAt(0).toUpperCase() +
+              example.slugs[0].replace(/-/g, " ").slice(1)
             : "Example"),
         slugs: example.slugs,
         size: example.size ?? "md",

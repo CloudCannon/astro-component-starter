@@ -1,5 +1,5 @@
 ---
-title: "Ratio - Golden"
+title: Golden ratio
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/embed"

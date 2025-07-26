@@ -1,5 +1,5 @@
 ---
-title: Padding - 3xl
+title: 3xl padding
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

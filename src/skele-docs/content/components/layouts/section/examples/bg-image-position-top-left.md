@@ -1,5 +1,5 @@
 ---
-title: Background image - Top Left
+title: Top left background image
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

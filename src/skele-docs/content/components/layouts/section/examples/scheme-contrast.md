@@ -1,5 +1,5 @@
 ---
-title: Color scheme - Contrast
+title: Contrast color scheme
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

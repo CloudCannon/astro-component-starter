@@ -1,5 +1,5 @@
 ---
-title: Direction - Column
+title: Column direction
 spacing: "all"
 blocks:
   _bookshop_name: "layouts/button-group"

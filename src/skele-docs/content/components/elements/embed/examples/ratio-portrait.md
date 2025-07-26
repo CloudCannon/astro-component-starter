@@ -1,5 +1,5 @@
 ---
-title: "Ratio - Portrait"
+title: Portrait ratio
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/embed"

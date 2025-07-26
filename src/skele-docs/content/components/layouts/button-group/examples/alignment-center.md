@@ -1,5 +1,5 @@
 ---
-title: Alignment - Center
+title: Center alignment
 spacing: "all"
 blocks:
   _bookshop_name: "layouts/button-group"

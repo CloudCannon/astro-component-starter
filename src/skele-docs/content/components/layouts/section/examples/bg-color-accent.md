@@ -1,5 +1,5 @@
 ---
-title: Background color - Accent
+title: Accent background color
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

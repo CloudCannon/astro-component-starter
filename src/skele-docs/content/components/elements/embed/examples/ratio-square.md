@@ -1,5 +1,5 @@
 ---
-title: "Ratio - Square"
+title: Square ratio
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/embed"

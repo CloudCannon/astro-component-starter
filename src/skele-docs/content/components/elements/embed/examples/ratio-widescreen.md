@@ -1,5 +1,5 @@
 ---
-title: "Ratio - Widescreen"
+title: Widescreen ratio
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/embed"

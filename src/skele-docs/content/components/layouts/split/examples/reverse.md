@@ -1,5 +1,5 @@
 ---
-title: Reverse
+title: Reversed
 spacing:
 blocks:
   _bookshop_name: "layouts/split"

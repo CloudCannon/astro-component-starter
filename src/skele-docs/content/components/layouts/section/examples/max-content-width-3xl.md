@@ -1,5 +1,5 @@
 ---
-title: Max Content Width - 3xl
+title: 3xl max content width
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

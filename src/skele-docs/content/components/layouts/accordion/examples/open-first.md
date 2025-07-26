@@ -1,5 +1,5 @@
 ---
-title: Accordion - Open
+title: Open accordion
 spacing:
 blocks:
   _bookshop_name: "layouts/accordion"

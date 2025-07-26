@@ -1,5 +1,5 @@
 ---
-title: "Ratio - Landscape"
+title: Landscape ratio
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/embed"

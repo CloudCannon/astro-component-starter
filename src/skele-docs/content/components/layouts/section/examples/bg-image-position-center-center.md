@@ -1,5 +1,5 @@
 ---
-title: Background image - Center Center
+title: Center center background image
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

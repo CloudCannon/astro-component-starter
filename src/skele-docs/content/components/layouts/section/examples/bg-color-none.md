@@ -1,5 +1,5 @@
 ---
-title: Background color - None
+title: No background color
 spacing:
 blocks:
   _bookshop_name: "layouts/section"

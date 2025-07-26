@@ -32,7 +32,7 @@ allComponents.forEach((component: any) => {
     }
 
     componentsByCategory[category].push({
-      name: component.data.title || componentName,
+      name: component.data.title || componentName.replace(/-/g, " "),
       path: `/skele/components/${category}/${componentName}`,
     });
   }
