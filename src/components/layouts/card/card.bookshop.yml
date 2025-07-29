@@ -1,0 +1,108 @@
+spec:
+  structures:
+    - content_blocks
+  label: Card
+  description: "A container component that provides card layout with background options and padding controls."
+  icon: rectangle-stack
+  tags: []
+
+blueprint:
+  label: ""
+  contentBlocks: []
+  paddingHorizontal: sm
+  paddingVertical: sm
+  colorScheme: "default"
+  backgroundColor:
+  backgroundImage:
+    source: ""
+    alt: ""
+    positionVertical: top
+    positionHorizontal: center
+  link: ""
+  rounded: false
+  border: false
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  label:
+    comment: Optional label for the card to help identify it in the editor.
+    type: text
+  contentBlocks:
+    comment: Array of content blocks to render within the card.
+    type: array
+  paddingHorizontal:
+    comment: Horizontal padding applied to the card content.
+    type: select
+    options:
+      values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+  paddingVertical:
+    comment: Vertical padding applied to the card content.
+    type: select
+    options:
+      values:
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+  colorScheme:
+    comment: Color scheme theme for the card.
+    type: select
+    options:
+      values:
+        - default
+        - contrast
+  backgroundColor:
+    comment: Background color for the card.
+    type: select
+    options:
+      values:
+        - base
+        - surface
+        - accent
+        - highlight
+  backgroundImage:
+    comment: Background image configuration for the card.
+    type: object
+    _inputs:
+      source:
+        comment: URL or path to the background image.
+        type: text
+      alt:
+        comment: Alt text for the background image.
+        type: text
+      positionVertical:
+        comment: Vertical position of the background image.
+        type: select
+        options:
+          values:
+            - top
+            - center
+            - bottom
+      positionHorizontal:
+        comment: Horizontal position of the background image.
+        type: select
+        options:
+          values:
+            - left
+            - center
+            - right
+  link:
+    comment: URL to make the entire card clickable. Leave empty for a non-clickable card.
+    type: text
+  rounded:
+    comment: Whether to apply rounded corners to the card.
+    type: boolean
+  border:
+    comment: Whether to apply a border to the card.
+    type: boolean

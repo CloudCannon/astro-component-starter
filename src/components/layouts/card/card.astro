@@ -1,17 +1,19 @@
 ---
 import clsx from "clsx";
-import Image from "../../elements/image/image.astro";
+import Image from "../../elements/Image/image.astro";
 import Component from "../../utils/renderBlock.astro";
 
 const {
   label,
-  content_blocks,
-  maxContentWidth,
-  paddingHorizontal = "md",
-  paddingVertical = "md",
+  contentBlocks,
+  paddingHorizontal = "sm",
+  paddingVertical = "sm",
   colorScheme,
   backgroundColor,
   backgroundImage,
+  link,
+  rounded = false,
+  border = false,
   class: className,
 
   ...rest
@@ -28,7 +30,7 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const mainSectionClasses = clsx("section", className);
+const mainCardClasses = clsx("card", rounded && "rounded", border && "border", className);
 
 const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgroundColor}`);
 
@@ -37,30 +39,54 @@ const backgroundImageClasses = clsx(
   positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`
 );
 
-const contentSectionClasses = clsx(
+const contentCardClasses = clsx(
   "content",
   paddingHorizontal && `pad-x-${paddingHorizontal}`,
-  paddingVertical && `pad-y-${paddingVertical}`,
-  maxContentWidth && `max-width-${maxContentWidth}`
+  paddingVertical && `pad-y-${paddingVertical}`
 );
+
+const Tag = link ? "a" : "div";
 ---
 
-<section class:list={mainSectionClasses} data-theme={colorScheme} {...htmlAttributes}>
+<Tag
+  {...htmlAttributes}
+  {...link && { href: link }}
+  class:list={mainCardClasses}
+  data-theme={colorScheme}
+>
   {source && <Image class:list={backgroundImageClasses} src={source} alt={alt} />}
   {backgroundColor && <div class:list={backgroundDivClasses} />}
 
   <div class="outer-content">
-    <div class:list={contentSectionClasses}>
+    <div class:list={contentCardClasses}>
       <slot />
-      <Component contentBlocks={content_blocks} />
+      <Component contentBlocks={contentBlocks} />
     </div>
   </div>
-</section>
+</Tag>
 
 <style>
-  .section {
+  a.card:hover {
+    transform: scale(1.02);
+  }
+
+  .card {
     position: relative;
-    isolation: isolate;
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    overflow: hidden;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &.rounded {
+      border-radius: var(--radius-md);
+    }
+
+    &.border {
+      border: 1px solid var(--color-border);
+    }
 
     > .outer-content {
       height: 100%;
@@ -70,7 +96,6 @@ const contentSectionClasses = clsx(
       height: 100%;
       position: relative;
       z-index: var(--layer-1);
-      margin-inline: auto;
     }
 
     > .background {
@@ -163,22 +188,6 @@ const contentSectionClasses = clsx(
       padding-inline: var(--spacing-2xl);
     }
 
-    &.pad-x-3xl {
-      padding-inline: var(--spacing-3xl);
-    }
-
-    &.pad-x-4xl {
-      padding-inline: var(--spacing-4xl);
-    }
-
-    &.pad-x-5xl {
-      padding-inline: var(--spacing-5xl);
-    }
-
-    &.pad-x-6xl {
-      padding-inline: var(--spacing-6xl);
-    }
-
     &.pad-y-xs {
       padding-block: var(--spacing-xs);
     }
@@ -201,50 +210,6 @@ const contentSectionClasses = clsx(
 
     &.pad-y-2xl {
       padding-block: var(--spacing-2xl);
-    }
-
-    &.pad-y-3xl {
-      padding-block: var(--spacing-3xl);
-    }
-
-    &.pad-y-4xl {
-      padding-block: var(--spacing-4xl);
-    }
-
-    &.pad-y-5xl {
-      padding-block: var(--spacing-5xl);
-    }
-
-    &.pad-y-6xl {
-      padding-block: var(--spacing-6xl);
-    }
-
-    &.max-width-xs {
-      max-width: var(--content-width-xs);
-    }
-
-    &.max-width-sm {
-      max-width: var(--content-width-sm);
-    }
-
-    &.max-width-md {
-      max-width: var(--content-width-md);
-    }
-
-    &.max-width-lg {
-      max-width: var(--content-width-lg);
-    }
-
-    &.max-width-xl {
-      max-width: var(--content-width-xl);
-    }
-
-    &.max-width-2xl {
-      max-width: var(--content-width-2xl);
-    }
-
-    &.max-width-3xl {
-      max-width: var(--content-width-3xl);
     }
   }
 </style>
