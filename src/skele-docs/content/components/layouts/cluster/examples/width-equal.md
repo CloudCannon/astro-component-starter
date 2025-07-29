@@ -6,6 +6,7 @@ blocks:
   minItemWidth: 100
   maxItemWidth: 300
   equalWidth: true
+  verticalAlignment: "stretch"
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"

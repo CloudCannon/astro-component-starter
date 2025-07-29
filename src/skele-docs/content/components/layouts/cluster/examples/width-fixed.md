@@ -6,6 +6,7 @@ blocks:
   minItemWidth: 270
   maxItemWidth: 270
   equalWidth: true
+  verticalAlignment: "stretch"
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"
@@ -15,7 +16,7 @@ blocks:
               text: "Fixed Width"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "All items have exactly the same width (150px) regardless of content length. This creates a rigid, uniform grid."
+              text: "All items have exactly the same width regardless of content length. This creates a rigid, uniform grid."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
