@@ -1,0 +1,80 @@
+---
+import clsx from "clsx";
+import Component from "../../utils/renderBlock.astro";
+
+const {
+  minItemWidth = 200,
+  maxItemWidth = 320,
+  verticalAlignment = "start",
+  equalWidth = true,
+  class: className,
+  style: userStyle,
+  items = [],
+  ...rest
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const clusterClasses = clsx(
+  "cluster",
+  `align-${verticalAlignment}`,
+  !equalWidth && "non-equal",
+  className
+);
+
+const clusterStyles = [
+  equalWidth && `--min-width: ${minItemWidth}px`,
+  equalWidth && `--max-width: ${maxItemWidth}px`,
+  userStyle,
+]
+  .filter(Boolean)
+  .join("; ");
+---
+
+<div class:list={clusterClasses} style={clusterStyles} {...htmlAttributes}>
+  {
+    items.map((item: any, index: number) => (
+      <div class="cluster-item" key={index}>
+        <Component contentBlocks={item.contentBlocks} />
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* ✨ always centred ✨ */
+    width: 100%;
+    gap: var(--spacing-md);
+
+    &.align-start {
+      align-items: flex-start;
+    }
+    &.align-center {
+      align-items: center;
+    }
+    &.align-end {
+      align-items: flex-end;
+    }
+    &.align-stretch {
+      align-items: stretch;
+
+      > .cluster-item > :global(*:only-child) {
+        height: 100%;
+      }
+    }
+
+    &:not(.non-equal) > .cluster-item {
+      flex: 1 1 var(--min-width, 200px);
+      max-width: var(--max-width, 320px);
+    }
+
+    &.non-equal > .cluster-item {
+      flex: 0 0 auto;
+    }
+  }
+</style>
