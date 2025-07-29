@@ -1,0 +1,53 @@
+---
+import clsx from "clsx";
+
+const { padding = "md", class: className, ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx("divider", className, `padding-y-${padding}`);
+---
+
+<div class:list={classNames} {...htmlAttributes} aria-hidden="true">
+  <hr class="border" />
+</div>
+
+<style>
+  .divider {
+    &.padding-y-none {
+      padding: 0;
+    }
+
+    &.padding-y-xs {
+      padding: var(--spacing-xs) 0;
+    }
+
+    &.padding-y-sm {
+      padding: var(--spacing-sm) 0;
+    }
+
+    &.padding-y-md {
+      padding: var(--spacing-md) 0;
+    }
+
+    &.padding-y-lg {
+      padding: var(--spacing-lg) 0;
+    }
+
+    &.padding-y-xl {
+      padding: var(--spacing-xl) 0;
+    }
+
+    &.padding-y-2xl {
+      padding: var(--spacing-2xl) 0;
+    }
+
+    &.padding-y-3xl {
+      padding: var(--spacing-3xl) 0;
+    }
+
+    &>hr{ margin:0 }
+  }
+</style>
