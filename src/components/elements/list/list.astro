@@ -5,10 +5,11 @@ import clsx from "clsx";
 
 const {
   items,
-  gap = "sm",
+  item_gap = "sm",
   direction = "vertical",
   alignment = "start",
   size = "md",
+  icon_gap = "sm",
   icon_color = "font-color",
   icon_background = "none",
   class: className,
@@ -21,12 +22,12 @@ const htmlAttributes = Object.fromEntries(
 
 const classNames = clsx(
   "list",
-  `gap-${gap}`,
+  `gap-${item_gap}`,
   `direction-${direction}`,
   `alignment-${alignment}`,
   className
 );
-const itemClassNames = clsx("item", `size-${size}`);
+const itemClassNames = clsx("item", `gap-${icon_gap}`);
 ---
 
 <ul class:list={classNames} {...htmlAttributes}>
@@ -34,7 +35,7 @@ const itemClassNames = clsx("item", `size-${size}`);
     items.map((item: any) => {
       return (
         <li class:list={itemClassNames}>
-          <Icon name={item.icon} size={size} />
+          <Icon name={item.icon} size={size} background={icon_background} />
           <Paragraph text={item.text} size={size} align={alignment} class="list-item-text" />
         </li>
       );
@@ -44,13 +45,69 @@ const itemClassNames = clsx("item", `size-${size}`);
 
 <style>
   .list {
+    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
     list-style-type: none;
     margin: 0;
     padding: 0;
+    &.gap-xs {
+      gap: var(--space-xs);
+    }
+    &.gap-sm {
+      gap: var(--space-sm);
+    }
+    &.gap-md {
+      gap: var(--space-md);
+    }
+    &.gap-lg {
+      gap: var(--space-lg);
+    }
+    &.gap-xl {
+      gap: var(--space-xl);
+    }
+    &.gap-2xl {
+      gap: var(--space-2xl);
+    }
+
+    &.direction-horizontal {
+      flex-direction: row;
+    }
+
+    &.alignment-end {
+      align-items: end;
+      justify-content: end;
+    }
+    &.alignment-center {
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .item {
+    align-items: start;
     display: flex;
+    gap: 0;
+
+    &.gap-xs {
+      gap: var(--space-xs);
+    }
+    &.gap-sm {
+      gap: var(--space-sm);
+    }
+    &.gap-md {
+      gap: var(--space-md);
+    }
+    &.gap-lg {
+      gap: var(--space-lg);
+    }
+    &.gap-xl {
+      gap: var(--space-xl);
+    }
+    &.gap-2xl {
+      gap: var(--space-2xl);
+    }
   }
 
   .list-item-text {

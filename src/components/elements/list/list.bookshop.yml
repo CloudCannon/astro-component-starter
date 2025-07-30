@@ -8,11 +8,11 @@ spec:
 
 blueprint:
   items:
-  gap: sm
+  item_gap: sm
   direction: vertical
   alignment: start
   size: md
-  icon_color: font-color
+  icon_gap: sm
   icon_background: none
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
@@ -24,8 +24,9 @@ _inputs:
     type: array
     options:
       structures: _structures.item
-  gap:
+  item_gap:
     type: select
+    comment: Contol the gap between list items
     options:
       values:
         - name: Extra Small
@@ -85,34 +86,6 @@ _inputs:
       preview:
         text:
           - key: name
-  icon_color:
-    type: select
-    options:
-      values:
-        - value: font-color
-          name: Font Color
-        - value: gray
-          name: Gray
-        - value: red
-          name: Red
-        - value: orange
-          name: Orange
-        - value: yellow
-          name: Yellow
-        - value: green
-          name: Green
-        - value: cyan
-          name: Cyan
-        - value: blue
-          name: Blue
-        - value: purple
-          name: Purple
-        - value: pink
-          name: Pink
-      value_key: value
-      preview:
-        text:
-          - key: name
   icon_background:
     type: select
     options:
@@ -126,6 +99,27 @@ _inputs:
         text:
           - key: name
     comment: The background style for the icon
+  icon_gap:
+    comment: Control the gap between the icon and the text
+    type: select
+    options:
+      values:
+        - name: Extra Small
+          value: xs
+        - name: Small
+          value: sm
+        - name: Medium
+          value: md
+        - name: Large
+          value: lg
+        - name: Extra Large
+          value: xl
+        - name: 2xl
+          value: 2xl
+      value_key: value
+      preview:
+        text:
+          - key: name
 
 _structures:
   item:
