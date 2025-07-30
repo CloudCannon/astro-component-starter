@@ -1,0 +1,60 @@
+---
+import Icon from "@skele/components/elements/icon/icon.astro";
+import Paragraph from "@skele/components/elements/paragraph/paragraph.astro";
+import clsx from "clsx";
+
+const {
+  items,
+  gap = "sm",
+  direction = "vertical",
+  alignment = "start",
+  size = "md",
+  icon_color = "font-color",
+  icon_background = "none",
+  class: className,
+  ...restProps
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx(
+  "list",
+  `gap-${gap}`,
+  `direction-${direction}`,
+  `alignment-${alignment}`,
+  className
+);
+const itemClassNames = clsx("item", `size-${size}`);
+---
+
+<ul class:list={classNames} {...htmlAttributes}>
+  {
+    items.map((item: any) => {
+      return (
+        <li class:list={itemClassNames}>
+          <Icon name={item.icon} size={size} />
+          <Paragraph text={item.text} size={size} align={alignment} class="list-item-text" />
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .item {
+    display: flex;
+  }
+
+  .list-item-text {
+    display: inline;
+    margin: 0;
+  }
+</style>
