@@ -20,70 +20,33 @@ importers:
       '@bookshop/generate':
         specifier: 3.16.3
         version: 3.16.3
-      astro:
-        specifier: ^5.8.0
-        version: 5.10.1(@types/node@24.0.4)(rollup@4.44.1)(sass@1.89.2)(typescript@5.8.3)(yaml@2.8.0)
-      astro-icon:
-        specifier: ^1.1.5
-        version: 1.1.5
-      js-yaml:
-        specifier: ^4.1.0
-        version: 4.1.0
-      markdown-it:
-        specifier: ^14.1.0
-        version: 14.1.0
-      probe-image-size:
-        specifier: ^7.2.3
-        version: 7.2.3
-      sharp:
-        specifier: ^0.34.2
-        version: 0.34.3
-      shiki:
-        specifier: ^3.7.0
-        version: 3.7.0
-      unpic:
-        specifier: ^4.1.2
-        version: 4.1.3
-    devDependencies:
       '@csstools/postcss-global-data':
         specifier: ^3.0.0
         version: 3.0.0(postcss@8.5.6)
       '@types/js-yaml':
         specifier: ^4.0.9
         version: 4.0.9
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.33.1
-        version: 8.35.0(@typescript-eslint/parser@8.35.0(eslint@9.29.0)(typescript@5.8.3))(eslint@9.29.0)(typescript@5.8.3)
-      '@typescript-eslint/parser':
-        specifier: ^8.33.1
-        version: 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      astro:
+        specifier: ^5.8.0
+        version: 5.10.1(@types/node@24.0.4)(rollup@4.44.1)(sass@1.89.2)(typescript@5.8.3)(yaml@2.8.0)
+      astro-icon:
+        specifier: ^1.1.5
+        version: 1.1.5
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.6)
-      class-variance-authority:
-        specifier: ^0.7.1
-        version: 0.7.1
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
-      eslint:
-        specifier: ^9.28.0
-        version: 9.29.0
-      eslint-plugin-astro:
-        specifier: ^1.3.1
-        version: 1.3.1(eslint@9.29.0)
-      eslint-plugin-jsonc:
-        specifier: ^2.20.1
-        version: 2.20.1(eslint@9.29.0)
-      eslint-plugin-jsx-a11y:
-        specifier: ^6.10.2
-        version: 6.10.2(eslint@9.29.0)
       glob:
         specifier: ^11.0.2
         version: 11.0.3
-      jsonc-eslint-parser:
-        specifier: ^2.4.0
-        version: 2.4.0
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.0
+      markdown-it:
+        specifier: ^14.1.0
+        version: 14.1.0
       postcss:
         specifier: ^8.5.3
         version: 8.5.6
@@ -102,6 +65,43 @@ importers:
       postcss-nested:
         specifier: ^7.0.2
         version: 7.0.2(postcss@8.5.6)
+      probe-image-size:
+        specifier: ^7.2.3
+        version: 7.2.3
+      sharp:
+        specifier: ^0.34.2
+        version: 0.34.3
+      shiki:
+        specifier: ^3.7.0
+        version: 3.7.0
+      unpic:
+        specifier: ^4.1.2
+        version: 4.1.3
+      zod:
+        specifier: ^4.0.14
+        version: 4.0.14
+    devDependencies:
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.33.1
+        version: 8.35.0(@typescript-eslint/parser@8.35.0(eslint@9.29.0)(typescript@5.8.3))(eslint@9.29.0)(typescript@5.8.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.33.1
+        version: 8.35.0(eslint@9.29.0)(typescript@5.8.3)
+      eslint:
+        specifier: ^9.28.0
+        version: 9.29.0
+      eslint-plugin-astro:
+        specifier: ^1.3.1
+        version: 1.3.1(eslint@9.29.0)
+      eslint-plugin-jsonc:
+        specifier: ^2.20.1
+        version: 2.20.1(eslint@9.29.0)
+      eslint-plugin-jsx-a11y:
+        specifier: ^6.10.2
+        version: 6.10.2(eslint@9.29.0)
+      jsonc-eslint-parser:
+        specifier: ^2.4.0
+        version: 2.4.0
       prettier:
         specifier: ^3.5.3
         version: 3.6.1
@@ -117,9 +117,6 @@ importers:
       stylelint-order:
         specifier: ^7.0.0
         version: 7.0.0(stylelint@16.21.0(typescript@5.8.3))
-      zod:
-        specifier: ^3.25.36
-        version: 3.25.67
 
   packages/library:
     dependencies:
@@ -1992,9 +1989,6 @@ packages:
   ci-info@4.2.0:
     resolution: {integrity: sha512-cYY9mypksY8NRqgDB1XD1RiJL338v/551niynFTGkZOO2LHuB2OmOYxDIe/ttN9AHwrqdum1360G3ald0W9kCg==}
     engines: {node: '>=8'}
-
-  class-variance-authority@0.7.1:
-    resolution: {integrity: sha512-Ka+9Trutv7G8M6WT6SeiRWz792K5qEqIGEGzXKhAE6xOWAY6pPH8U+9IY3oCMv6kqTmLsv7Xh/2w2RigkePMsg==}
 
   cli-boxes@3.0.0:
     resolution: {integrity: sha512-/lzGpEWL/8PfI0BmBOPRwp0c/wFNX1RdUML3jK/RcSBA9T8mZDdQpqYBKtCFTOfQbwPqWEOpjqW+Fnayc0969g==}
@@ -4764,6 +4758,9 @@ packages:
   zod@3.25.67:
     resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
+  zod@4.0.14:
+    resolution: {integrity: sha512-nGFJTnJN6cM2v9kXL+SOBq3AtjQby3Mv5ySGFof5UGRHrRioSJ5iG680cYNjE/yWk671nROcpPj4hAS8nyLhSw==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -6688,10 +6685,6 @@ snapshots:
   chownr@2.0.0: {}
 
   ci-info@4.2.0: {}
-
-  class-variance-authority@0.7.1:
-    dependencies:
-      clsx: 2.1.1
 
   cli-boxes@3.0.0: {}
 
@@ -9961,5 +9954,7 @@ snapshots:
       zod: 3.25.67
 
   zod@3.25.67: {}
+
+  zod@4.0.14: {}
 
   zwitch@2.0.4: {}
