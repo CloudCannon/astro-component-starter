@@ -2,8 +2,8 @@
   "ssg": "astro",
   "mode": "hosted",
   "build": {
-    "install_command": "npm install",
-    "build_command": "npm run build",
+    "install_command": "pnpm install",
+    "build_command": "pnpm run build",
     "output_path": "dist",
     "preserved_paths": "node_modules",
     "preserveOutput": true,
