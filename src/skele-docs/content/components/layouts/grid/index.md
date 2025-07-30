@@ -1,14 +1,26 @@
 ---
 title: Grid
-description: A responsive grid layout component that displays items in a customizable grid with configurable columns and minimum item width.
+description: A flexible grid layout component that displays items in a centered, responsive grid with configurable item widths and alignment options.
 examples:
   - slugs:
-      - many-columns
+      - width-equal
+      - width-fixed
+      - width-non-equal
+    size: lg
   - title: "Vertical Alignment Options"
     slugs:
-      - align-top
+      - align-start
       - align-center
-      - align-bottom
+      - align-end
       - align-stretch
+    size: lg
+  - title: "Horizontal Alignment Options"
+    slugs:
+      - horizontal-align-start
+      - horizontal-align-center
+      - horizontal-align-end
+      - horizontal-align-space-around
+      - horizontal-align-space-between
+      - horizontal-align-space-evenly
     size: lg
 ---

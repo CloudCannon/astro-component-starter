@@ -1,38 +1,44 @@
 ---
-title: Equal width items
+title: Non equal width items
 spacing:
 blocks:
-  _bookshop_name: "layouts/cluster"
-  minItemWidth: 100
-  maxItemWidth: 300
-  equalWidth: true
-  verticalAlignment: "stretch"
+  _bookshop_name: "layouts/grid"
+  equalWidth: false
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Equal Width"
+              text: "Short"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "All items have the same width regardless of content length. This creates a uniform, grid-like appearance."
+              text: "Short content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Consistent Layout"
+              text: "Medium Length Content"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "Perfect for displaying cards, features, or any content that should have consistent sizing."
+              text: "This item has medium length content that determines its natural width."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Responsive Design"
+              text: "Longer Content Title"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "Items automatically wrap and adjust based on available space while maintaining equal widths."
+              text: "This item has significantly more content and will be wider."
+    - contentBlocks:
+        - _bookshop_name: "layouts/section"
+          backgroundColor: "surface"
+          content_blocks:
+            - _bookshop_name: "elements/heading"
+              text: "Tiny"
+              level: h3
+            - _bookshop_name: "elements/paragraph"
+              text: "Small."
 ---

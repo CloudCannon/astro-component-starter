@@ -3,11 +3,14 @@ import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const {
-  minItemWidth = 250,
-  items = [],
-  verticalAlignment = "top",
+  minItemWidth = 200,
+  maxItemWidth = 320,
+  verticalAlignment = "start",
+  horizontalAlignment = "center",
+  equalWidth = true,
   class: className,
   style: userStyle,
+  items = [],
   ...rest
 } = Astro.props;
 
@@ -15,13 +18,27 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const gridClasses = clsx("grid", `align-${verticalAlignment}`, className);
-const gridStyles = `--min-item-width: ${minItemWidth}px;${userStyle ? ` ${userStyle}` : ""}`;
+const gridClasses = clsx(
+  "grid",
+  `align-${verticalAlignment}`,
+  `justify-${horizontalAlignment}`,
+  !equalWidth && "non-equal",
+  className
+);
+
+const gridStyles = [
+  equalWidth && `--min-width: ${minItemWidth}px`,
+  equalWidth && `--max-width: ${maxItemWidth}px`,
+  `--justify-content: ${horizontalAlignment}`,
+  userStyle,
+]
+  .filter(Boolean)
+  .join("; ");
 ---
 
 <div class:list={gridClasses} style={gridStyles} {...htmlAttributes}>
   {
-    items?.map((item: any, index: number) => (
+    items.map((item: any, index: number) => (
       <div class="grid-item">
         <Component contentBlocks={item.contentBlocks} />
       </div>
@@ -31,23 +48,21 @@ const gridStyles = `--min-item-width: ${minItemWidth}px;${userStyle ? ` ${userSt
 
 <style>
   .grid {
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: var(--justify-content, center);
+    width: 100%;
     gap: var(--spacing-md);
-    grid-template-columns: repeat(auto-fit, minmax(var(--min-item-width), 1fr));
 
-    /* Vertical alignment options */
-    &.align-top {
-      align-items: start;
+    &.align-start {
+      align-items: flex-start;
     }
-
     &.align-center {
       align-items: center;
     }
-
-    &.align-bottom {
-      align-items: end;
+    &.align-end {
+      align-items: flex-end;
     }
-
     &.align-stretch {
       align-items: stretch;
 
@@ -56,8 +71,13 @@ const gridStyles = `--min-item-width: ${minItemWidth}px;${userStyle ? ` ${userSt
       }
     }
 
-    .grid-item {
-      min-width: 0;
+    &:not(.non-equal) > .grid-item {
+      flex: 1 1 var(--min-width, 200px);
+      max-width: var(--max-width, 320px);
+    }
+
+    &.non-equal > .grid-item {
+      flex: 0 0 auto;
     }
   }
 </style>

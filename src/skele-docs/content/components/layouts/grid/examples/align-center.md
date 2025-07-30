@@ -3,8 +3,10 @@ title: Center Alignment
 spacing:
 blocks:
   _bookshop_name: "layouts/grid"
-  minItemWidth: 250
+  minItemWidth: 200
+  maxItemWidth: 250
   verticalAlignment: "center"
+  equalWidth: true
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"
@@ -24,8 +26,6 @@ blocks:
               level: h3
             - _bookshop_name: "elements/paragraph"
               text: "This grid item has more content and will be taller than the others. It demonstrates how items align to the center when using center alignment."
-            - _bookshop_name: "elements/paragraph"
-              text: "Additional paragraph to make this item even taller."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"

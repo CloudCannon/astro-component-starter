@@ -1,38 +1,38 @@
 ---
-title: Stretch Alignment
+title: Fixed width items
 spacing:
 blocks:
   _bookshop_name: "layouts/grid"
-  minItemWidth: 200
-  maxItemWidth: 250
-  verticalAlignment: "stretch"
+  minItemWidth: 270
+  maxItemWidth: 270
   equalWidth: true
+  verticalAlignment: "stretch"
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Short Item"
+              text: "Fixed Width"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This is a short grid item that will stretch to match the height of the tallest item."
+              text: "All items have exactly the same width regardless of content length. This creates a rigid, uniform grid."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Taller Item"
+              text: "Rigid Layout"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This grid item has more content and will be taller than the others. All items will stretch to match this height."
+              text: "Perfect for displaying cards or features that need to be exactly the same size."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Medium Item"
+              text: "Predictable Sizing"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This item has medium height content but will stretch to match the tallest item."
+              text: "Items maintain their exact width and wrap to new rows when needed."
 ---

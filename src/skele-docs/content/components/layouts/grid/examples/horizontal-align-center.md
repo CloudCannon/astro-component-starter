@@ -1,38 +1,38 @@
 ---
-title: Top Alignment
+title: Horizontal Alignment - Center
 spacing:
 blocks:
   _bookshop_name: "layouts/grid"
-  minItemWidth: 250
-  verticalAlignment: "top"
+  minItemWidth: 200
+  maxItemWidth: 250
+  horizontalAlignment: "center"
+  equalWidth: true
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Short Item"
+              text: "Item 1"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This is a short grid item."
+              text: "This is a grid item with sample content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Taller Item"
+              text: "Item 2"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This grid item has more content and will be taller than the others. It demonstrates how items align to the top when using top alignment."
-            - _bookshop_name: "elements/paragraph"
-              text: "Additional paragraph to make this item even taller."
+              text: "This is a grid item with sample content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Medium Item"
+              text: "Item 3"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This item has medium height content."
+              text: "This is a grid item with sample content."
 ---

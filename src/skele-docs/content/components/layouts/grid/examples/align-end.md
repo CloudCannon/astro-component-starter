@@ -1,44 +1,38 @@
 ---
-title: Non equal width items
+title: Bottom Alignment
 spacing:
 blocks:
-  _bookshop_name: "layouts/cluster"
-  equalWidth: false
+  _bookshop_name: "layouts/grid"
+  minItemWidth: 200
+  maxItemWidth: 250
+  verticalAlignment: "end"
+  equalWidth: true
   items:
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Short"
+              text: "Short Item"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "Short content."
+              text: "This is a short grid item."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Medium Length Content"
+              text: "Taller Item"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This item has medium length content that determines its natural width."
+              text: "This grid item has more content and will be taller than the others. It demonstrates how items align to the bottom when using end alignment."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Longer Content Title"
+              text: "Medium Item"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This item has significantly more content and will be wider."
-    - contentBlocks:
-        - _bookshop_name: "layouts/section"
-          backgroundColor: "surface"
-          content_blocks:
-            - _bookshop_name: "elements/heading"
-              text: "Tiny"
-              level: h3
-            - _bookshop_name: "elements/paragraph"
-              text: "Small."
+              text: "This item has medium height content."
 ---

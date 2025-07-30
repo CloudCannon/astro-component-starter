@@ -1,11 +1,11 @@
 ---
-title: Stretch Alignment
+title: Horizontal Alignment - Space Evenly
 spacing:
 blocks:
   _bookshop_name: "layouts/grid"
   minItemWidth: 200
   maxItemWidth: 250
-  verticalAlignment: "stretch"
+  horizontalAlignment: "space-evenly"
   equalWidth: true
   items:
     - contentBlocks:
@@ -13,26 +13,26 @@ blocks:
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Short Item"
+              text: "Item 1"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This is a short grid item that will stretch to match the height of the tallest item."
+              text: "This is a grid item with sample content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Taller Item"
+              text: "Item 2"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This grid item has more content and will be taller than the others. All items will stretch to match this height."
+              text: "This is a grid item with sample content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Medium Item"
+              text: "Item 3"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This item has medium height content but will stretch to match the tallest item."
+              text: "This is a grid item with sample content."
 ---

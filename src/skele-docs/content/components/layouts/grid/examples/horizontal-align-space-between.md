@@ -1,11 +1,11 @@
 ---
-title: Bottom Alignment
+title: Horizontal Alignment - Space Between
 spacing:
 blocks:
-  _bookshop_name: "layouts/cluster"
+  _bookshop_name: "layouts/grid"
   minItemWidth: 200
   maxItemWidth: 250
-  verticalAlignment: "end"
+  horizontalAlignment: "space-between"
   equalWidth: true
   items:
     - contentBlocks:
@@ -13,26 +13,26 @@ blocks:
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Short Item"
+              text: "Item 1"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This is a short cluster item."
+              text: "This is a grid item with sample content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Taller Item"
+              text: "Item 2"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This cluster item has more content and will be taller than the others. It demonstrates how items align to the bottom when using end alignment."
+              text: "This is a grid item with sample content."
     - contentBlocks:
         - _bookshop_name: "layouts/section"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
-              text: "Medium Item"
+              text: "Item 3"
               level: h3
             - _bookshop_name: "elements/paragraph"
-              text: "This item has medium height content."
+              text: "This is a grid item with sample content."
 ---
