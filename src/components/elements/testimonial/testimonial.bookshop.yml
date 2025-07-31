@@ -8,10 +8,11 @@ spec:
 
 blueprint:
   quote:
-  attribution:
-    name:
-    description:
-
+  quote_size: lg
+  author_name:
+  author_description:
+  gap: sm
+  alignment: start
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
 preview:
@@ -19,10 +20,76 @@ preview:
 # Any extra CloudCannon inputs configuration to apply to the blueprint
 _inputs:
   quote:
-    type: textarea
-  name:
-    comment: The author of the quote.
-    type: text
+    type: markdown
+    comment: Quotation marks will be added around the text.
+    options:
+      bold: true
+      italic: true
+      link: true
+      strike: true
+      subscript: true
+      superscript: true
+      underline: true
+      undo: true
+      redo: true
+      removeformat: true
+      copyformatting: true
   description:
-    comment: The description of the author.
     type: textarea
+  quote_size:
+    type: select
+    options:
+      values:
+        - name: Large
+          value: lg
+        - name: Extra Large
+          value: xl
+        - name: 2xl
+          value: 2xl
+        - name: 3xl
+          value: 3xl
+        - name: 4xl
+          value: 4xl
+        - name: 5xl
+          value: 5xl
+        - name: 6xl
+          value: 6xl
+      value_key: value
+      preview:
+        text:
+          - key: name
+  gap:
+    comment: Control the gap between the quote and author
+    type: select
+    options:
+      values:
+        - name: Extra Small
+          value: xs
+        - name: Small
+          value: sm
+        - name: Medium
+          value: md
+        - name: Large
+          value: lg
+        - name: Extra Large
+          value: xl
+        - name: 2xl
+          value: 2xl
+      value_key: value
+      preview:
+        text:
+          - key: name
+  alignment:
+    type: select
+    options:
+      values:
+        - value: start
+          name: Start
+        - value: center
+          name: Center
+        - value: end
+          name: End
+      value_key: value
+      preview:
+        text:
+          - key: name

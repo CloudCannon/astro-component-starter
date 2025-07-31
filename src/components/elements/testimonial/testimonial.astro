@@ -1,68 +1,74 @@
 ---
 import clsx from "clsx";
+import Paragraph from "../paragraph/paragraph.astro";
 
-const { quote, attribution, className, id, ariaLabel, customStyle } = Astro.props;
+const {
+  quote,
+  quote_size = "lg",
+  author_name,
+  author_description,
+  gap = "sm",
+  alignment = "center",
+  class: className,
+  ...restProps
+} = Astro.props;
 
-const classAttr = clsx("testimonial", className);
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx("testimonial", `gap-${gap}`, `alignment-${alignment}`, className);
 ---
 
-<blockquote
-  class:list={classAttr}
-  {...customStyle ? { style: customStyle } : {}}
-  {...id ? { id } : {}}
-  {...ariaLabel ? { "aria-label": ariaLabel } : {}}
->
-  <p class="testimonial__quote">
-    "{quote}"
-  </p>
-  <cite class="testimonial__author">
-    <strong class="testimonial__name">
-      {attribution.name}
+<blockquote class:list={classNames} {...htmlAttributes}>
+  <Paragraph text={`“${quote}”`} size={quote_size} class="quote" />
+  <cite class="author">
+    <strong class="name">
+      {author_name}
     </strong>
-    {
-      attribution.description && (
-        <span class="testimonial__description">{attribution.description}</span>
-      )
-    }
+    {author_description && <span class="description">- {author_description}</span>}
   </cite>
 </blockquote>
 
 <style>
   .testimonial {
+    display: flex;
+    flex-direction: column;
     margin: 0;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    font-family:
-      system-ui,
-      -apple-system,
-      sans-serif;
+
+    &.gap-xs {
+      gap: var(--space-xs);
+    }
+    &.gap-sm {
+      gap: var(--space-sm);
+    }
+    &.gap-md {
+      gap: var(--space-md);
+    }
+    &.gap-lg {
+      gap: var(--space-lg);
+    }
+    &.gap-xl {
+      gap: var(--space-xl);
+    }
+    &.gap-2xl {
+      gap: var(--space-2xl);
+    }
+
+    &.alignment-end {
+      align-items: end;
+      justify-content: end;
+    }
+    &.alignment-center {
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .quote {
+    margin: 0;
   }
 
-  .testimonial__quote {
-    margin: 0 0 1rem 0;
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: #111827;
-    font-style: italic;
-  }
-
-  .testimonial__author {
-    display: block;
+  .author {
     font-style: normal;
-    color: #374151;
-    font-size: 0.875rem;
-  }
-
-  .testimonial__name {
-    display: block;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 0.25rem;
-  }
-
-  .testimonial__description {
-    display: block;
-    font-size: 0.8125rem;
-    color: #6b7280;
   }
 </style>
