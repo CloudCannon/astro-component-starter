@@ -3,8 +3,9 @@ title: Definition List
 primary_size: md
 examples:
   - slugs:
-      - gap-horizontal-xl
-      - gap-vertical-xl
-    title: Gaps
+      - alignment-start
+      - alignment-center
+      - alignment-end
+    title: Alignments
     size: md
 ---

@@ -3,8 +3,7 @@ import clsx from "clsx";
 
 const {
   items,
-  horizontal_gap = "sm",
-  vertical_gap = "sm",
+  horizontalAlignment = "start",
   class: className,
   ...restProps
 } = Astro.props;
@@ -13,14 +12,14 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 
-const classNames = clsx("definition-list", `gap-vertical-${vertical_gap}`, `gap-horizontal-${horizontal_gap}`, className);
+const classNames = clsx("definition-list", `alignment-${horizontalAlignment}`, className);
 ---
 
 <dl class:list={classNames} {...htmlAttributes}>
   {
     items.map((item: any) => {
       return (
-        <dt class="title">{item.title}</dt>
+        <dt class="title"><strong>{item.title}</strong></dt>
         <dd class="content">{item.content}</dd>
       );
     })
@@ -30,47 +29,32 @@ const classNames = clsx("definition-list", `gap-vertical-${vertical_gap}`, `gap-
 <style>
   .definition-list {
     display: grid;
+    gap: var(--space-em-sm) var(--space-em-sm);
     grid-template-columns: auto 1fr;
-
-    &.gap-vertical-xs {
-      row-gap: var(--space-xs);
-    }
-    &.gap-vertical-sm {
-      row-gap: var(--space-sm);
-    }
-    &.gap-vertical-md {
-      row-gap: var(--space-md);
-    }
-    &.gap-vertical-lg {
-      row-gap: var(--space-lg);
-    }
-    &.gap-vertical-xl {
-      row-gap: var(--space-xl);
-    }
-    &.gap-vertical-2xl {
-      row-gap: var(--space-2xl);
-    }
-    &.gap-horizontal-xs {
-      row-gap: var(--space-xs);
-    }
-    &.gap-horizontal-sm {
-      column-gap: var(--space-sm);
-    }
-    &.gap-horizontal-md {
-      column-gap: var(--space-md);
-    }
-    &.gap-horizontal-lg {
-      column-gap: var(--space-lg);
-    }
-    &.gap-horizontal-xl {
-      column-gap: var(--space-xl);
-    }
-    &.gap-horizontal-2xl {
-      column-gap: var(--space-2xl);
-    }
-  }
-
-  .content {
     margin: 0;
+
+    &.alignment-end {
+      align-items: end;
+      grid-template-columns: auto auto;
+      justify-content: end;
+      > .title {
+        text-align: left;
+      }
+      > .content {
+        text-align: right;
+      }
+    }
+    &.alignment-center {
+      align-items: center;
+      grid-template-columns: 1fr 1fr;
+      justify-content: center;
+
+      > .title {
+        text-align: right;
+      }
+    }
+    > .content {
+      margin: 0;
+    }
   }
 </style>

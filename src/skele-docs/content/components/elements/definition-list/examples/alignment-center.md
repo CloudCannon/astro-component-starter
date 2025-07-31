@@ -1,5 +1,5 @@
 ---
-title: "Definition List"
+title: "Center Alignment"
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/definition-list"
@@ -18,5 +18,5 @@ blocks:
         content: Not open
       - title: Sunday
         content: Not open
-    horizontalAlignment: start
+    horizontalAlignment: center
 ---

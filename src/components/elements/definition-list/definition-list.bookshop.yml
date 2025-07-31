@@ -8,8 +8,7 @@ spec:
 
 blueprint:
   items:
-  horizontal_gap: sm
-  vertical_gap: sm
+  horizontalAlignment: start
 
 preview:
 
@@ -18,50 +17,6 @@ _inputs:
     type: array
     options:
       structures: _structures.item
-  vertical_gap:
-    type: select
-    options:
-      values:
-        - name: None
-          value: none
-        - name: Extra Small
-          value: xs
-        - name: Small
-          value: sm
-        - name: Medium
-          value: md
-        - name: Large
-          value: lg
-        - name: Extra Large
-          value: xl
-        - name: 2xl
-          value: 2xl
-      value_key: value
-      preview:
-        text:
-          - key: name
-  horizontal_gap:
-    type: select
-    options:
-      values:
-        - name: None
-          value: none
-        - name: Extra Small
-          value: xs
-        - name: Small
-          value: sm
-        - name: Medium
-          value: md
-        - name: Large
-          value: lg
-        - name: Extra Large
-          value: xl
-        - name: 2xl
-          value: 2xl
-      value_key: value
-      preview:
-        text:
-          - key: name
 
 _structures:
   item:

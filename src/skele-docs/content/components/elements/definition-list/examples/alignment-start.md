@@ -1,5 +1,5 @@
 ---
-title: "Vertical Gap - XL"
+title: "Start Alignment"
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/definition-list"
@@ -18,6 +18,5 @@ blocks:
         content: Not open
       - title: Sunday
         content: Not open
-    horizontal_gap: sm
-    vertical_gap: xl
+    horizontalAlignment: start
 ---
