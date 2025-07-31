@@ -8,10 +8,9 @@ spec:
 
 blueprint:
   quote:
-  attribution:
-    name:
-    description:
-
+  authorName:
+  authorDescription:
+  horizontalAlignment: start
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
 preview:
@@ -19,10 +18,33 @@ preview:
 # Any extra CloudCannon inputs configuration to apply to the blueprint
 _inputs:
   quote:
+    type: markdown
+    comment: Quotation marks will be added around the text.
+    options:
+      bold: true
+      italic: true
+      link: true
+      strike: true
+      subscript: true
+      superscript: true
+      underline: true
+      undo: true
+      redo: true
+      removeformat: true
+      copyformatting: true
+  authorDescription:
     type: textarea
-  name:
-    comment: The author of the quote.
-    type: text
-  description:
-    comment: The description of the author.
-    type: textarea
+  horizontalAlignment:
+    type: select
+    options:
+      values:
+        - value: start
+          name: Start
+        - value: center
+          name: Center
+        - value: end
+          name: End
+      value_key: value
+      preview:
+        text:
+          - key: name
