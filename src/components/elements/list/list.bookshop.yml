@@ -1,0 +1,99 @@
+spec:
+  structures:
+    - content_blocks
+  label: List
+  description: Displays items in a list with icons as markers
+  icon: list
+  tags:
+
+blueprint:
+  items:
+  direction: vertical
+  horizontalAlignment: start
+  size: md
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  items:
+    type: array
+    options:
+      structures: _structures.item
+  direction:
+    type: select
+    options:
+      values:
+        - value: horizontal
+          name: Horizontal
+        - value: vertical
+          name: Vertical
+      value_key: value
+      preview:
+        text:
+          - key: name
+  horizontalAlignment:
+    type: select
+    options:
+      values:
+        - value: start
+          name: Start
+        - value: center
+          name: Center
+        - value: end
+          name: End
+      value_key: value
+      preview:
+        text:
+          - key: name
+  size:
+    comment: Controls the size of the icon and text
+    type: select
+    options:
+      values:
+        - value: xs
+          name: Extra Small
+        - value: sm
+          name: Small
+        - value: md
+          name: Medium
+        - value: lg
+          name: Large
+        - value: xl
+          name: Extra Large
+        - value: 2xl
+          name: 2XL
+      value_key: value
+      preview:
+        text:
+          - key: name
+
+_structures:
+  item:
+    values:
+      - label: List item
+        icon: text_fields
+        value:
+          text: ""
+          icon:
+        _inputs:
+          text:
+            type: markdown
+            options:
+              bold: true
+              italic: true
+              link: true
+              strike: true
+              subscript: true
+              superscript: true
+              underline: true
+              undo: true
+              redo: true
+              removeformat: true
+              copyformatting: true
+          icon:
+            type: select
+            options:
+              values: _select_data.icons
+            comment: The name of the icon to display from the icon library
