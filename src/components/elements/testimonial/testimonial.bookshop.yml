@@ -22,7 +22,7 @@ _inputs:
     comment: Quotation marks will be added around the text.
     options:
       bold: true
-      italic: true
+      italic: false
       link: true
       strike: true
       subscript: true

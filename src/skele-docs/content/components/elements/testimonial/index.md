@@ -8,4 +8,7 @@ examples:
       - alignment-end
     size: sm
     title: Horizontal Alignment
+  - slugs:
+      - author-description
+    size: sm
 ---
