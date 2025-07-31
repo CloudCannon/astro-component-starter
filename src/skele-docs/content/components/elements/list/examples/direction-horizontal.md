@@ -1,20 +1,16 @@
 ---
-title: "Direction - Horizontal"
+title: "Horizontal direction"
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/list"
     items:
       - text: First horizontal list item
-        icon: check-circle
+        icon: bolt
       - text: Second horizontal list item
-        icon: check-circle
+        icon: bolt
       - text: Third horizontal list item
-        icon: check-circle
-    item_gap: xl
+        icon: bolt
     direction: horizontal
-    alignment: start
+    horizontalAlignment: start
     size: md
-    icon_gap: sm
-    icon_color: font-color
-    icon_background: none
 ---

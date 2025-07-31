@@ -8,12 +8,9 @@ spec:
 
 blueprint:
   items:
-  item_gap: sm
   direction: vertical
-  alignment: start
+  horizontalAlignment: start
   size: md
-  icon_gap: sm
-  icon_background: none
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
 preview:
@@ -24,27 +21,6 @@ _inputs:
     type: array
     options:
       structures: _structures.item
-  item_gap:
-    type: select
-    comment: Contol the gap between list items
-    options:
-      values:
-        - name: Extra Small
-          value: xs
-        - name: Small
-          value: sm
-        - name: Medium
-          value: md
-        - name: Large
-          value: lg
-        - name: Extra Large
-          value: xl
-        - name: 2xl
-          value: 2xl
-      value_key: value
-      preview:
-        text:
-          - key: name
   direction:
     type: select
     options:
@@ -57,7 +33,7 @@ _inputs:
       preview:
         text:
           - key: name
-  alignment:
+  horizontalAlignment:
     type: select
     options:
       values:
@@ -76,46 +52,18 @@ _inputs:
     type: select
     options:
       values:
+        - value: xs
+          name: Extra Small
         - value: sm
           name: Small
         - value: md
           name: Medium
         - value: lg
           name: Large
-      value_key: value
-      preview:
-        text:
-          - key: name
-  icon_background:
-    type: select
-    options:
-      values:
-        - value: none
-          name: None
-        - value: subtle
-          name: Subtle
-      value_key: value
-      preview:
-        text:
-          - key: name
-    comment: The background style for the icon
-  icon_gap:
-    comment: Control the gap between the icon and the text
-    type: select
-    options:
-      values:
-        - name: Extra Small
-          value: xs
-        - name: Small
-          value: sm
-        - name: Medium
-          value: md
-        - name: Large
-          value: lg
-        - name: Extra Large
-          value: xl
-        - name: 2xl
-          value: 2xl
+        - value: xl
+          name: Extra Large
+        - value: 2xl
+          name: 2XL
       value_key: value
       preview:
         text:

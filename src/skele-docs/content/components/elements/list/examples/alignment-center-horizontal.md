@@ -1,5 +1,5 @@
 ---
-title: "Alignment - Center with Direction Horizontal"
+title: "Center alignment with horizontal direction"
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/list"
@@ -10,11 +10,7 @@ blocks:
         icon: check-circle
       - text: Third list item
         icon: check-circle
-    item_gap: sm
     direction: horizontal
-    alignment: center
+    horizontalAlignment: center
     size: md
-    icon_gap: sm
-    icon_color: font-color
-    icon_background: none
 ---
