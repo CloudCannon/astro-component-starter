@@ -7,5 +7,5 @@ examples:
       - alignment-center
       - alignment-end
     size: sm
-    title: Alignment
+    title: Horizontal Alignment
 ---

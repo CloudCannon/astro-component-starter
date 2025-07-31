@@ -32,7 +32,7 @@ _inputs:
       redo: true
       removeformat: true
       copyformatting: true
-  description:
+  authorDescription:
     type: textarea
   horizontalAlignment:
     type: select

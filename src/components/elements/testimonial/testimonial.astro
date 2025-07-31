@@ -1,12 +1,12 @@
 ---
 import clsx from "clsx";
-import Paragraph from "../paragraph/paragraph.astro";
+import MarkdownIt from "markdown-it";
 
 const {
   quote,
   authorName,
   authorDescription,
-  alignment = "center",
+  horizontalAlignment = "center",
   class: className,
   ...restProps
 } = Astro.props;
@@ -15,11 +15,14 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 
-const classNames = clsx("testimonial", `alignment-${alignment}`, className);
+const md = MarkdownIt({ html: true });
+const MarkdownText = quote ? md.renderInline(quote) : "";
+
+const classNames = clsx("testimonial", `alignment-${horizontalAlignment}`, className);
 ---
 
 <blockquote class:list={classNames} {...htmlAttributes}>
-  <Paragraph text={`“${quote}”`} size="xl" class="quote" />
+  <q class="quote" set:html={MarkdownText} />
   <cite class="author">
     <strong class="name">
       {authorName}
@@ -45,6 +48,15 @@ const classNames = clsx("testimonial", `alignment-${alignment}`, className);
     }
     > .quote {
       margin: 0;
+      font-size: var(--font-size-xl);
+
+      &::before {
+        content: "“";
+      }
+
+      &::after {
+        content: "”";
+      }
     }
 
     > .author {
