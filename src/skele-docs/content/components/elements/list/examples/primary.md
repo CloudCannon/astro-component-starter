@@ -10,11 +10,7 @@ blocks:
       icon: lock-closed
     - text: Lists can include formatting like **bold** or *italic text*.
       icon: briefcase
-  item_gap: sm
   direction: vertical
-  alignment: start
+  horizontalAlignment: start
   size: md
-  icon_gap: sm
-  icon_color: font-color
-  icon_background: none
 ---

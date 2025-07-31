@@ -3,13 +3,8 @@ title: List
 primary_size: md
 examples:
   - slugs:
-      - icon-gap
-      - item-gap
-    size: md
-    title: Gaps
-  - slugs:
-      - direction-horizontal
       - direction-vertical
+      - direction-horizontal
     title: Directions
     size: md
   - slugs:
@@ -19,12 +14,15 @@ examples:
       - alignment-start-horizontal
       - alignment-center-horizontal
       - alignment-end-horizontal
-    title: Alignments
-    size: sm
+    title: Horizontal Alignments
+    size: md
   - slugs:
-      - sizes
+      - size-xs
+      - size-sm
+      - size-md
+      - size-lg
+      - size-xl
+      - size-2xl
     size: sm
-  - slugs:
-      - icon-backgrounds
-    size: sm
+    title: Sizes
 ---
