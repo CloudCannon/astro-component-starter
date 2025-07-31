@@ -8,11 +8,9 @@ spec:
 
 blueprint:
   quote:
-  quote_size: lg
-  author_name:
-  author_description:
-  gap: sm
-  alignment: start
+  authorName:
+  authorDescription:
+  horizontalAlignment: start
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
 preview:
@@ -36,50 +34,7 @@ _inputs:
       copyformatting: true
   description:
     type: textarea
-  quote_size:
-    type: select
-    options:
-      values:
-        - name: Large
-          value: lg
-        - name: Extra Large
-          value: xl
-        - name: 2xl
-          value: 2xl
-        - name: 3xl
-          value: 3xl
-        - name: 4xl
-          value: 4xl
-        - name: 5xl
-          value: 5xl
-        - name: 6xl
-          value: 6xl
-      value_key: value
-      preview:
-        text:
-          - key: name
-  gap:
-    comment: Control the gap between the quote and author
-    type: select
-    options:
-      values:
-        - name: Extra Small
-          value: xs
-        - name: Small
-          value: sm
-        - name: Medium
-          value: md
-        - name: Large
-          value: lg
-        - name: Extra Large
-          value: xl
-        - name: 2xl
-          value: 2xl
-      value_key: value
-      preview:
-        text:
-          - key: name
-  alignment:
+  horizontalAlignment:
     type: select
     options:
       values:

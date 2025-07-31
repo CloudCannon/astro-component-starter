@@ -4,10 +4,8 @@ import Paragraph from "../paragraph/paragraph.astro";
 
 const {
   quote,
-  quote_size = "lg",
-  author_name,
-  author_description,
-  gap = "sm",
+  authorName,
+  authorDescription,
   alignment = "center",
   class: className,
   ...restProps
@@ -17,16 +15,16 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 
-const classNames = clsx("testimonial", `gap-${gap}`, `alignment-${alignment}`, className);
+const classNames = clsx("testimonial", `alignment-${alignment}`, className);
 ---
 
 <blockquote class:list={classNames} {...htmlAttributes}>
-  <Paragraph text={`“${quote}”`} size={quote_size} class="quote" />
+  <Paragraph text={`“${quote}”`} size="xl" class="quote" />
   <cite class="author">
     <strong class="name">
-      {author_name}
+      {authorName}
     </strong>
-    {author_description && <span class="description">- {author_description}</span>}
+    {authorDescription && <span class="description">- {authorDescription}</span>}
   </cite>
 </blockquote>
 
@@ -34,26 +32,8 @@ const classNames = clsx("testimonial", `gap-${gap}`, `alignment-${alignment}`, c
   .testimonial {
     display: flex;
     flex-direction: column;
+    gap: var(--space-em-sm);
     margin: 0;
-
-    &.gap-xs {
-      gap: var(--space-xs);
-    }
-    &.gap-sm {
-      gap: var(--space-sm);
-    }
-    &.gap-md {
-      gap: var(--space-md);
-    }
-    &.gap-lg {
-      gap: var(--space-lg);
-    }
-    &.gap-xl {
-      gap: var(--space-xl);
-    }
-    &.gap-2xl {
-      gap: var(--space-2xl);
-    }
 
     &.alignment-end {
       align-items: end;
@@ -63,12 +43,12 @@ const classNames = clsx("testimonial", `gap-${gap}`, `alignment-${alignment}`, c
       align-items: center;
       justify-content: center;
     }
-  }
-  .quote {
-    margin: 0;
-  }
+    > .quote {
+      margin: 0;
+    }
 
-  .author {
-    font-style: normal;
+    > .author {
+      font-style: normal;
+    }
   }
 </style>
