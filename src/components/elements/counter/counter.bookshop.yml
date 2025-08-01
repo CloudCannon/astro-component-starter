@@ -1,0 +1,102 @@
+spec:
+  structures:
+    - content_blocks
+  label: Counter
+  description: Animated number that counts up when visible.
+  icon: speed
+  tags:
+
+blueprint:
+  number: 0
+  startNumber: 0
+  duration: 500
+  prefix:
+  suffix:
+  horizontalAlignment: start
+  size: md
+  weight: normal
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  number:
+    comment: The number to count to.
+    type: number
+    options:
+      min: 0
+      step: 1
+  startNumber:
+    comment: The number to start the count from.
+    type: number
+    options:
+      min: 0
+      step: 1
+  duration:
+    comment: Milliseconds to run count animation
+    type: number
+    options:
+      min: 100
+      step: 10
+  prefix:
+    comment: Text to go before the number.
+  suffix:
+    comment: Text to go after the number.
+  horizontalAlignment:
+    type: select
+    options:
+      values:
+        - value: start
+          name: Start
+        - value: center
+          name: Center
+        - value: end
+          name: End
+      value_key: value
+      preview:
+        text:
+          - key: name
+  size:
+    comment: Controls the size of the text.
+    type: select
+    options:
+      values:
+        - value: xs
+          name: Extra Small
+        - value: sm
+          name: Small
+        - value: md
+          name: Medium
+        - value: lg
+          name: Large
+        - value: xl
+          name: Extra Large
+        - value: 2xl
+          name: 2XL
+        - value: 3xl
+          name: 3XL
+        - value: 4xl
+          name: 4XL
+        - value: 5xl
+          name: 5XL
+        - value: 6xl
+          name: 6XL
+      value_key: value
+      preview:
+        text:
+          - key: name
+  weight:
+    comment: Font weight style.
+    options:
+      values:
+        - value: normal
+          name: Normal
+        - value: medium
+          name: Medium
+        - value: bold
+          name: Bold
+      value_key: value
+      preview:
+        text:
+          - key: name
