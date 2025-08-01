@@ -1,0 +1,141 @@
+---
+import clsx from "clsx";
+
+const {
+  number = 0,
+  startNumber = 0,
+  duration = 500,
+  prefix,
+  suffix,
+  horizontalAlignment = "start",
+  size = "md",
+  weight = "normal",
+  class: className,
+  ...restProps
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx(
+  "counter",
+  `size-${size}`,
+  `weight-${weight}`,
+  `alignment-${horizontalAlignment}`,
+  className
+);
+---
+
+<div class:list={classNames} {...htmlAttributes}>
+  {prefix && <span class="prefix">{prefix}</span>}
+  <span
+    class="number"
+    data-target=`${number}`
+    data-start=`${startNumber}`
+    data-duration=`${duration}`
+    aria-live="off">{number}</span
+  >
+  {suffix && <span class="suffix">{suffix}</span>}
+</div>
+
+<style>
+  .counter {
+    align-items: start;
+    display: flex;
+
+    &.alignment-end {
+      justify-content: end;
+    }
+    &.alignment-center {
+      justify-content: center;
+    }
+
+    &.size-xs {
+      font-size: var(--font-size-xs);
+    }
+    &.size-sm {
+      font-size: var(--font-size-sm);
+    }
+    &.size-md {
+      font-size: var(--font-size-md);
+    }
+    &.size-lg {
+      font-size: var(--font-size-lg);
+    }
+    &.size-xl {
+      font-size: var(--font-size-xl);
+    }
+    &.size-2xl {
+      font-size: var(--font-size-2xl);
+    }
+    &.size-3xl {
+      font-size: var(--font-size-3xl);
+    }
+    &.size-4xl {
+      font-size: var(--font-size-4xl);
+    }
+    &.size-5xl {
+      font-size: var(--font-size-5xl);
+    }
+    &.size-6xl {
+      font-size: var(--font-size-6xl);
+    }
+
+    &.weight-medium {
+      font-weight: var(--font-weight-medium);
+    }
+    &.weight-bold {
+      font-weight: var(--font-weight-bold);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll(".counter > .number");
+    if (!counters.length) return;
+
+    counters.forEach((el) => el.setAttribute("data-js-enabled", "true"));
+
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animateCounter(entry.target);
+              obs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.6 }
+      );
+
+      counters.forEach((el) => io.observe(el));
+    } else {
+      // Fallback for very old browsers
+      counters.forEach(animateCounter);
+    }
+
+    function animateCounter(el: any) {
+      if (el.dataset.hasRun) return;
+      el.dataset.hasRun = "true";
+
+      const start = parseFloat(el.dataset.start) || 0;
+      const target = parseFloat(el.dataset.target ?? el.textContent.replace(/[^0-9.\-]/g, "")) || 0;
+      const duration = parseInt(el.dataset.duration, 10) || 2000;
+
+      let startTime: number | null = null;
+
+      function step(ts: number) {
+        if (!startTime) startTime = ts;
+        const progress = Math.min((ts - startTime) / duration, 1);
+        const value = start + (target - start) * progress;
+        el.textContent = Math.floor(value).toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+  });
+</script>
