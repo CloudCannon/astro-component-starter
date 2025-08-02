@@ -4,19 +4,19 @@ spacing: "all"
 blocks:
   - _bookshop_name: "elements/definition-list"
     items:
-      - title: Monday
-        content: 8am - 5pm
-      - title: Tuesday
-        content: 8am - 5pm
-      - title: Wednesday
-        content: 8am - 4.30pm
-      - title: Thursday
-        content: 9am - 4.45pm
-      - title: Friday
-        content: 9am - 5pm
-      - title: Saturday
-        content: Not open
-      - title: Sunday
-        content: Not open
+      - title: Brand
+        content: TechCorp
+      - title: Model
+        content: ProBook X1
+      - title: Color
+        content: Space Gray
+      - title: Weight
+        content: 2.8 lbs
+      - title: Dimensions
+        content: 13.3" x 9.2" x 0.6"
+      - title: Warranty
+        content: 2 years
+      - title: SKU
+        content: TB-X1-2024
     horizontalAlignment: start
 ---

@@ -19,8 +19,8 @@ const classNames = clsx("definition-list", `alignment-${horizontalAlignment}`, c
   {
     items.map((item: any) => {
       return (
-        <dt class="title"><strong>{item.title}</strong></dt>
-        <dd class="content">{item.content}</dd>
+        <dt class="title" role="term"><strong>{item.title}</strong></dt>
+        <dd class="content" role="definition">{item.content}</dd>
       );
     })
   }
@@ -29,30 +29,34 @@ const classNames = clsx("definition-list", `alignment-${horizontalAlignment}`, c
 <style>
   .definition-list {
     display: grid;
-    gap: var(--space-em-sm) var(--space-em-sm);
+    gap: var(--space-em-sm) var(--space-em-md);
     grid-template-columns: auto 1fr;
     margin: 0;
 
-    &.alignment-end {
-      align-items: end;
-      grid-template-columns: auto auto;
-      justify-content: end;
-      > .title {
-        text-align: left;
-      }
-      > .content {
-        text-align: right;
-      }
-    }
     &.alignment-center {
       align-items: center;
       grid-template-columns: 1fr 1fr;
       justify-content: center;
 
       > .title {
-        text-align: right;
+        text-align: end;
       }
     }
+
+    &.alignment-end {
+      align-items: end;
+      grid-template-columns: auto auto;
+      justify-content: end;
+
+      > .title {
+        text-align: start;
+      }
+
+      > .content {
+        text-align: end;
+      }
+    }
+
     > .content {
       margin: 0;
     }
