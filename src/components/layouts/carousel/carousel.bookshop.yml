@@ -1,0 +1,43 @@
+spec:
+  structures:
+    - content_blocks
+  label: Carousel
+  description: "A carousel component for displaying slides with navigation controls"
+  icon: image
+  tags: []
+
+blueprint:
+  label: ""
+  slides: []
+  autoPlay: false
+  autoScroll: false
+  slideWidthPercent: "100%"
+  minSlideWidth: 0
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  label:
+    comment: Optional label for the carousel to help identify it in the editor.
+    type: text
+  slides:
+    comment: Array of slides to display in the carousel.
+    type: array
+    _inputs:
+      content_blocks:
+        comment: The content blocks to display in this slide.
+        type: array
+  autoPlay:
+    comment: Enable auto-play functionality.
+    type: boolean
+  autoScroll:
+    comment: Enable auto-scroll functionality.
+    type: boolean
+  slideWidthPercent:
+    comment: Width of each slide as a percentage (e.g., "33%", "50%", "100%").
+    type: text
+  minSlideWidth:
+    comment: Minimum width of slides in pixels. Prevents slides from getting too small.
+    type: number

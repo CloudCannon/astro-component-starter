@@ -4,7 +4,7 @@ spacing:
 blocks:
   _bookshop_name: "layouts/section"
   backgroundImage:
-    source: /images/dunedin-cliff.jpg
+    source: /images/skele-docs/dunedin-cliff.jpg
     alt: "Dunedin cliffside"
     positionVertical: top
     positionHorizontal: left
