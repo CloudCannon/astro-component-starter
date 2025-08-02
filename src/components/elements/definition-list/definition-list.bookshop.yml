@@ -1,0 +1,28 @@
+spec:
+  structures:
+    - content_blocks
+  label: Definition List
+  description: "Useful for displaying key-value pairs, ideal for glossaries, opening times, etc."
+  icon: dns
+  tags: []
+
+blueprint:
+  items:
+  horizontalAlignment: start
+
+preview:
+
+_inputs:
+  items:
+    type: array
+    options:
+      structures: _structures.item
+
+_structures:
+  item:
+    values:
+      - label: Definition List Item
+        icon: title
+        value:
+          title:
+          content:
