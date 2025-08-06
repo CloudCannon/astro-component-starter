@@ -1,0 +1,92 @@
+---
+import clsx from "clsx";
+
+const {
+  number = 0,
+  prefix,
+  suffix,
+  horizontalAlignment = "start",
+  class: className,
+  ...restProps
+} = Astro.props;
+
+const startNumber = Math.floor(number * 0.2);
+const duration = 500;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx("counter", `alignment-${horizontalAlignment}`, className);
+---
+
+<div class:list={classNames} {...htmlAttributes}>
+  {prefix && <span class="prefix">{prefix}</span>}
+  <span
+    class="number"
+    data-target={`${number}`}
+    data-start={`${startNumber}`}
+    data-duration={`${duration}`}
+    aria-live="off">{number}</span
+  >
+  {suffix && <span class="suffix">{suffix}</span>}
+</div>
+
+<style>
+  .counter {
+    align-items: start;
+    display: flex;
+    font-size: var(--font-size-6xl);
+    font-weight: var(--font-weight-bold);
+
+    &.alignment-end {
+      justify-content: end;
+    }
+    &.alignment-center {
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll(".counter > .number");
+    if (!counters.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    counters.forEach((el) => io.observe(el));
+
+    function animateCounter(el: Element) {
+      const element = el as HTMLElement;
+      if (element.dataset.hasRun) return;
+      element.dataset.hasRun = "true";
+
+      const start = parseFloat(element.dataset.start || "0");
+      const target = parseFloat(element.dataset.target || "0");
+      const duration = parseInt(element.dataset.duration || "2000", 10);
+
+      let startTime: number | null = null;
+
+      function step(ts: number) {
+        if (!startTime) startTime = ts;
+        const progress = Math.min((ts - startTime) / duration, 1);
+        const value = start + (target - start) * progress;
+        element.textContent = Math.floor(value).toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+      }
+
+      requestAnimationFrame(step);
+    }
+  });
+</script>

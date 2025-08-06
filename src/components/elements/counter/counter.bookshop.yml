@@ -1,0 +1,43 @@
+spec:
+  structures:
+    - content_blocks
+  label: Counter
+  description: Animated number that counts up when visible.
+  icon: speed
+  tags:
+
+blueprint:
+  number: 100
+  prefix:
+  suffix:
+  horizontalAlignment: start
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  number:
+    comment: The number to count to.
+    type: number
+    options:
+      min: 0
+      step: 1
+  prefix:
+    comment: Text to go before the number.
+  suffix:
+    comment: Text to go after the number.
+  horizontalAlignment:
+    type: select
+    options:
+      values:
+        - value: start
+          name: Start
+        - value: center
+          name: Center
+        - value: end
+          name: End
+      value_key: value
+      preview:
+        text:
+          - key: name
