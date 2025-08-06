@@ -1,11 +1,11 @@
 ---
-title: Surface background color
+title: Primary Container
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: Surface background color
+      text: This is a heading inside a container
       level: h2
 ---

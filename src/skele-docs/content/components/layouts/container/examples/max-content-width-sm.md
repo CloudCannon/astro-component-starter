@@ -2,7 +2,7 @@
 title: sm max content width
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
   maxContentWidth: sm
   paddingHorizontal: null

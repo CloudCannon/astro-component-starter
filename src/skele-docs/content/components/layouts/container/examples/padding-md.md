@@ -1,11 +1,13 @@
 ---
-title: Default color scheme
+title: md padding
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
+  paddingHorizontal: md
+  paddingVertical: md
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: This is a heading inside a section
+      text: md padding
       level: h2
 ---

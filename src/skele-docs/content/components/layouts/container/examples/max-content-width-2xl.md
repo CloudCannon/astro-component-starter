@@ -1,14 +1,14 @@
 ---
-title: lg max content width
+title: 2xl max content width
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
-  maxContentWidth: lg
+  maxContentWidth: 2xl
   paddingHorizontal: null
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: lg max content width
+      text: 2xl max content width
       level: h2
       align: center
       style: "border: 1px solid var(--color-border)"

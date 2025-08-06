@@ -9,7 +9,7 @@ blocks:
   equalWidth: true
   items:
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -18,7 +18,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This is a short grid item that will stretch to match the height of the tallest item."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -27,7 +27,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This grid item has more content and will be taller than the others. All items will stretch to match this height."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"

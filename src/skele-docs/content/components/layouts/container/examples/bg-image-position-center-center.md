@@ -2,7 +2,7 @@
 title: Center center background image
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundImage:
     source: /images/skele-docs/dunedin-cliff.jpg
     alt: "Dunedin cliffside"

@@ -1,11 +1,11 @@
 ---
-title: No background color
+title: Base background color
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "base"
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: No background color (transparent)
+      text: Base background color (page background color)
       level: h2
 ---

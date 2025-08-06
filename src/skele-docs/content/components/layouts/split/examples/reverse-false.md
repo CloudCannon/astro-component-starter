@@ -4,7 +4,7 @@ spacing:
 blocks:
   _bookshop_name: "layouts/split"
   firstColumnContentBlocks:
-    - _bookshop_name: "layouts/section"
+    - _bookshop_name: "layouts/container"
       backgroundColor: "accent"
       content_blocks:
         - _bookshop_name: "elements/rich-text"
@@ -14,7 +14,7 @@ blocks:
             This is content for the side A
   firstColumnMinWidth: null
   secondColumnContentBlocks:
-    - _bookshop_name: "layouts/section"
+    - _bookshop_name: "layouts/container"
       backgroundColor: "highlight"
       content_blocks:
         - _bookshop_name: "elements/rich-text"

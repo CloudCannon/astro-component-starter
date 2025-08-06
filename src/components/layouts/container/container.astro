@@ -28,7 +28,7 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const mainSectionClasses = clsx("section", className);
+const mainContainerClasses = clsx("container", className);
 
 const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgroundColor}`);
 
@@ -37,7 +37,7 @@ const backgroundImageClasses = clsx(
   positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`
 );
 
-const contentSectionClasses = clsx(
+const contentContainerClasses = clsx(
   "content",
   paddingHorizontal && `pad-x-${paddingHorizontal}`,
   paddingVertical && `pad-y-${paddingVertical}`,
@@ -45,12 +45,12 @@ const contentSectionClasses = clsx(
 );
 ---
 
-<section class:list={mainSectionClasses} data-theme={colorScheme} {...htmlAttributes}>
+<section class:list={mainContainerClasses} data-theme={colorScheme} {...htmlAttributes}>
   {source && <Image class:list={backgroundImageClasses} src={source} alt={alt} />}
   {backgroundColor && <div class:list={backgroundDivClasses} />}
 
   <div class="outer-content">
-    <div class:list={contentSectionClasses}>
+    <div class:list={contentContainerClasses}>
       <slot />
       <Component contentBlocks={content_blocks} />
     </div>
@@ -58,7 +58,7 @@ const contentSectionClasses = clsx(
 </section>
 
 <style>
-  .section {
+  .container {
     position: relative;
     isolation: isolate;
 
@@ -248,3 +248,4 @@ const contentSectionClasses = clsx(
     }
   }
 </style>
+

@@ -2,11 +2,11 @@
 title: Contrast color scheme
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
   colorScheme: contrast
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: This is a heading inside a section
+      text: This is a heading inside a container
       level: h2
 ---

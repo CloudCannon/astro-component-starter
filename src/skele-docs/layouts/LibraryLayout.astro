@@ -12,7 +12,7 @@ const libraryLayoutSchema = z.object({
     .optional(),
 });
 
-import Section from "../../components/layouts/section/section.astro";
+import Container from "../../components/layouts/container/container.astro";
 import NavLayout from "./NavLayout.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Skele Library";
@@ -29,17 +29,17 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
     <slot name="head" />
   </head>
   <body class="animations-disabled">
-    <Section
+    <Container
       maxContentWidth="2xl"
       paddingHorizontal="md"
       paddingVertical="sm"
-      class="library-section"
+      class="library-container"
     >
       <NavLayout />
       <main>
         <slot />
       </main>
-    </Section>
+    </Container>
     <script>
       setTimeout(() => {
         document.body.classList.remove("animations-disabled");

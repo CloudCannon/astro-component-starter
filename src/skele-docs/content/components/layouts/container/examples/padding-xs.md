@@ -1,13 +1,13 @@
 ---
-title: md padding
+title: xs padding
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
-  paddingHorizontal: md
-  paddingVertical: md
+  paddingHorizontal: xs
+  paddingVertical: xs
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: md padding
+      text: xs padding
       level: h2
 ---

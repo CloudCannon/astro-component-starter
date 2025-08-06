@@ -1,14 +1,14 @@
 ---
-title: md max content width
+title: 3xl max content width
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
-  maxContentWidth: md
+  maxContentWidth: 3xl
   paddingHorizontal: null
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: md max content width
+      text: 3xl max content width
       level: h2
       align: center
       style: "border: 1px solid var(--color-border)"

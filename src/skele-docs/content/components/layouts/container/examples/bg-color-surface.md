@@ -1,13 +1,11 @@
 ---
-title: 2xl padding
+title: Surface background color
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
-  paddingHorizontal: 2xl
-  paddingVertical: 2xl
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: 2xl padding
+      text: Surface background color
       level: h2
 ---

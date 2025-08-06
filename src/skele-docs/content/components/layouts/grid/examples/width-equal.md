@@ -9,7 +9,7 @@ blocks:
   verticalAlignment: "stretch"
   items:
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -18,7 +18,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "All items have the same width regardless of content length. This creates a uniform, grid-like appearance."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -27,7 +27,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "Perfect for displaying cards, features, or any content that should have consistent sizing."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"

@@ -6,7 +6,7 @@ blocks:
   equalWidth: false
   items:
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -15,7 +15,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "Short content."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -24,7 +24,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This item has medium length content that determines its natural width."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -33,7 +33,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This item has significantly more content and will be wider."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"

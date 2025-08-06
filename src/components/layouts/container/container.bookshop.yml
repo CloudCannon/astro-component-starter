@@ -1,7 +1,7 @@
 spec:
   structures:
     - content_blocks
-  label: Section
+  label: Container
   description: "A container component that provides layout structure with background options, padding, and content width controls."
   icon: rectangle-stack
   tags: []
@@ -26,10 +26,10 @@ preview:
 # Any extra CloudCannon inputs configuration to apply to the blueprint
 _inputs:
   label:
-    comment: Optional label for the section to help identify it in the editor.
+    comment: Optional label for the container to help identify it in the editor.
     type: text
   content_blocks:
-    comment: Array of content blocks to render within the section.
+    comment: Array of content blocks to render within the container.
     type: array
   maxContentWidth:
     comment: Maximum width constraint for the content.
@@ -44,7 +44,7 @@ _inputs:
         - 2xl
         - 3xl
   paddingHorizontal:
-    comment: Horizontal padding applied to the section content.
+    comment: Horizontal padding applied to the container content.
     type: select
     options:
       values:
@@ -59,7 +59,7 @@ _inputs:
         - 5xl
         - 6xl
   paddingVertical:
-    comment: Vertical padding applied to the section content.
+    comment: Vertical padding applied to the container content.
     type: select
     options:
       values:
@@ -74,14 +74,14 @@ _inputs:
         - 5xl
         - 6xl
   colorScheme:
-    comment: Color scheme theme for the section.
+    comment: Color scheme theme for the container.
     type: select
     options:
       values:
         - default
         - contrast
   backgroundColor:
-    comment: Background color for the section.
+    comment: Background color for the container.
     type: select
     options:
       values:
@@ -90,7 +90,7 @@ _inputs:
         - accent
         - highlight
   backgroundImage:
-    comment: Background image configuration for the section.
+    comment: Background image configuration for the container.
     type: object
     _inputs:
       source:

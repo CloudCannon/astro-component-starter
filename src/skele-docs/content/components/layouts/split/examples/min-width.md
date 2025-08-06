@@ -4,7 +4,7 @@ spacing:
 blocks:
   _bookshop_name: "layouts/split"
   firstColumnContentBlocks:
-    - _bookshop_name: "layouts/section"
+    - _bookshop_name: "layouts/container"
       backgroundColor: "accent"
       content_blocks:
         - _bookshop_name: "elements/rich-text"
@@ -14,7 +14,7 @@ blocks:
             This column will take up the available space and can shrink as needed.
   firstColumnMinWidth: null
   secondColumnContentBlocks:
-    - _bookshop_name: "layouts/section"
+    - _bookshop_name: "layouts/container"
       backgroundColor: "highlight"
       content_blocks:
         - _bookshop_name: "elements/rich-text"

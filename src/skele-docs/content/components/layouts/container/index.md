@@ -1,5 +1,5 @@
 ---
-title: Section
+title: Container
 primary_size: md
 examples:
   - title: Background color
@@ -11,7 +11,6 @@ examples:
       - bg-color-none
   - title: Background image
     slugs:
-      - bg-image
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right

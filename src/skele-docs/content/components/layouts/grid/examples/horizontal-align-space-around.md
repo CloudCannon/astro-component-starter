@@ -9,7 +9,7 @@ blocks:
   equalWidth: true
   items:
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -18,7 +18,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This is a grid item with sample content."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -27,7 +27,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This is a grid item with sample content."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"

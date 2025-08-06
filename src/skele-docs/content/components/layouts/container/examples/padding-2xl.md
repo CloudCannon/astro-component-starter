@@ -1,13 +1,13 @@
 ---
-title: lg padding
+title: 2xl padding
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
-  paddingHorizontal: lg
-  paddingVertical: lg
+  paddingHorizontal: 2xl
+  paddingVertical: 2xl
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: lg padding
+      text: 2xl padding
       level: h2
 ---

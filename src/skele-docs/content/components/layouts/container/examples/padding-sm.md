@@ -1,11 +1,13 @@
 ---
-title: Primary Section
+title: sm padding
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "surface"
+  paddingHorizontal: sm
+  paddingVertical: sm
   content_blocks:
     - _bookshop_name: "elements/heading"
-      text: This is a heading inside a section
+      text: sm padding
       level: h2
 ---

@@ -2,7 +2,7 @@
 title: Accent background color
 spacing:
 blocks:
-  _bookshop_name: "layouts/section"
+  _bookshop_name: "layouts/container"
   backgroundColor: "accent"
   content_blocks:
     - _bookshop_name: "elements/heading"

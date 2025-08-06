@@ -9,7 +9,7 @@ blocks:
   equalWidth: true
   items:
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "surface"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -18,7 +18,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This is a short grid item."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "accent"
           content_blocks:
             - _bookshop_name: "elements/heading"
@@ -27,7 +27,7 @@ blocks:
             - _bookshop_name: "elements/paragraph"
               text: "This grid item has more content and will be taller than the others. It demonstrates how items align to the center when using center alignment."
     - contentBlocks:
-        - _bookshop_name: "layouts/section"
+        - _bookshop_name: "layouts/container"
           backgroundColor: "highlight"
           content_blocks:
             - _bookshop_name: "elements/heading"
