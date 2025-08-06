@@ -3,19 +3,15 @@ title: Counter
 primary_size: sm
 examples:
   - slugs:
-      - durations
-    size: md
-    title: Durations
-  - slugs:
-      - alignments
+      - alignment-start
+      - alignment-center
+      - alignment-end
     title: Horizontal Alignments
-    size: md
+    size: sm
   - slugs:
-      - sizes
-    size: lg
-    title: Sizes
+      - prefix
+    size: sm
   - slugs:
-      - weights
-    size: md
-    title: Weights
+      - suffix
+    size: sm
 ---

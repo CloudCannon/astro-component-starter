@@ -1,10 +1,10 @@
 ---
-title: "Primary Counter"
+title: "Center Alignment"
 spacing: "all"
 blocks:
   _bookshop_name: "elements/counter"
-  number: 100
-  prefix: $
-  suffix: +
+  number: 50000
+  prefix:
+  suffix: "+"
   horizontalAlignment: center
 ---

@@ -1,10 +1,10 @@
 ---
-title: "Primary Counter"
+title: "Prefix Only"
 spacing: "all"
 blocks:
   _bookshop_name: "elements/counter"
-  number: 100
-  prefix: $
-  suffix: +
+  number: 1000
+  prefix: "$"
+  suffix:
   horizontalAlignment: center
 ---
