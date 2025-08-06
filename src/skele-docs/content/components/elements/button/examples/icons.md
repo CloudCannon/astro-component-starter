@@ -7,13 +7,16 @@ blocks:
     label: "Cake"
     hideText: true
     variant: tertiary
+    style: "margin-inline-end: var(--space-sm);"
   - _bookshop_name: "elements/button"
     iconName: check
     label: "Find out more"
     variant: tertiary
+    style: "margin-inline-end: var(--space-sm);"
   - _bookshop_name: "elements/button"
     iconName: arrow-down-right
     iconPosition: after
     label: "Everything you need"
     variant: tertiary
+    style: "margin-inline-end: var(--space-sm);"
 ---

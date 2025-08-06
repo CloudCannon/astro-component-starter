@@ -1,5 +1,6 @@
 ---
 import { navSchema } from "./schema";
+import "./nav.pcss";
 
 const props = navSchema.parse(Astro.props);
 
@@ -36,28 +37,6 @@ const ariaProps = props.ariaLabel ? { "aria-label": props.ariaLabel } : {};
     --nav-sidebar-linkHover-iconColor: var(--gray-3);
     --nav-sidebar-active-textDecorationColor: var(--gray-3);
     --nav-sidebar-linkHover-backgroundColor: var(--gray-10);
-  }
-</style>
-
-<style>
-  .nav {
-    --nav-width: 100%;
-    width: var(--nav-width);
-  }
-
-  .nav.sidebar {
-    --nav-width: 250px;
-
-    > .inner {
-      align-items: flex-start;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-  }
-
-  ::slotted([slot="brand"]) {
-    display: flex;
-    flex-shrink: 0;
   }
 </style>
 

@@ -1,5 +1,6 @@
 ---
 import clsx from "clsx";
+import "./counter.pcss";
 
 const {
   number = 0,
@@ -31,22 +32,6 @@ const classNames = clsx("counter", `alignment-${horizontalAlignment}`, className
   >
   {suffix && <span class="suffix">{suffix}</span>}
 </div>
-
-<style>
-  .counter {
-    align-items: start;
-    display: flex;
-    font-size: var(--font-size-6xl);
-    font-weight: var(--font-weight-bold);
-
-    &.alignment-end {
-      justify-content: end;
-    }
-    &.alignment-center {
-      justify-content: center;
-    }
-  }
-</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

@@ -1,6 +1,7 @@
 ---
 import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
+import "./button-group.pcss";
 
 const { direction, align, button_blocks, class: className, ...rest } = Astro.props;
 
@@ -28,45 +29,3 @@ const classNames = clsx(
   <slot />
   <Component contentBlocks={button_blocks} />
 </div>
-
-<style>
-  .button-group {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    position: relative;
-
-    &.column {
-      flex-direction: column;
-
-      &.align-start {
-        align-items: flex-start;
-      }
-
-      &.align-center {
-        align-items: center;
-      }
-
-      &.align-end {
-        align-items: flex-end;
-      }
-    }
-
-    &.row {
-      flex-direction: row;
-    }
-
-    &.align-center {
-      justify-content: center;
-    }
-
-    &.align-end {
-      justify-content: flex-end;
-    }
-
-    &.align-start {
-      justify-content: flex-start;
-    }
-  }
-</style>

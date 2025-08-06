@@ -1,5 +1,6 @@
 ---
 import clsx from "clsx";
+import "./definition-list.pcss";
 
 const {
   items,
@@ -25,40 +26,3 @@ const classNames = clsx("definition-list", `alignment-${horizontalAlignment}`, c
     })
   }
 </dl>
-
-<style>
-  .definition-list {
-    display: grid;
-    gap: var(--space-em-sm) var(--space-em-md);
-    grid-template-columns: auto 1fr;
-    margin: 0;
-
-    &.alignment-center {
-      align-items: center;
-      grid-template-columns: 1fr 1fr;
-      justify-content: center;
-
-      > .title {
-        text-align: end;
-      }
-    }
-
-    &.alignment-end {
-      align-items: end;
-      grid-template-columns: auto auto;
-      justify-content: end;
-
-      > .title {
-        text-align: start;
-      }
-
-      > .content {
-        text-align: end;
-      }
-    }
-
-    > .content {
-      margin: 0;
-    }
-  }
-</style>

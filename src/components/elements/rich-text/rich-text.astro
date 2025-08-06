@@ -2,6 +2,7 @@
 import clsx from "clsx";
 // @ts-ignore
 import markdownit from "markdown-it";
+import "./rich-text.pcss";
 
 const md = markdownit({ html: true });
 
@@ -17,19 +18,3 @@ const classNames = clsx("rich-text", className, `align-${align}`);
 ---
 
 <div class:list={classNames} {...htmlAttributes} set:html={markdownContent} />
-
-<style>
-  .rich-text {
-    &.align-start {
-      text-align: start;
-    }
-
-    &.align-center {
-      text-align: center;
-    }
-
-    &.align-end {
-      text-align: end;
-    }
-  }
-</style>
