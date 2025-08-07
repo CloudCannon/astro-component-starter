@@ -1,4 +1,5 @@
 ---
+import { inferRemoteSize } from "astro:assets";
 import { transformUrl } from "unpic";
 
 const { src, alt, class: className, sizes, widths, width, height, ...htmlAttributes } = Astro.props;
@@ -6,21 +7,19 @@ const { src, alt, class: className, sizes, widths, width, height, ...htmlAttribu
 let imageWidth = width;
 let imageHeight = height;
 
-// Only try to probe image dimensions in Node.js environment
-if (typeof process !== "undefined" && process.versions && process.versions.node) {
+// Try to infer remote image dimensions using Astro's built-in function
+if (!imageWidth || !imageHeight) {
   try {
-    // @ts-ignore - probe-image-size is only available in Node.js and may not be available in browser
-    const probe = await import("probe-image-size");
-    // @ts-ignore - probe-image-size types may not be available
-    const dimensions = await probe.default(src);
+    const dimensions = await inferRemoteSize(src);
 
     if (dimensions && dimensions.width && dimensions.height) {
       imageWidth = imageWidth || dimensions.width;
       imageHeight = imageHeight || dimensions.height;
-      console.log(`Detected dimensions with probe-image-size: ${imageWidth}x${imageHeight}`);
+      console.log(`Detected dimensions with inferRemoteSize: ${imageWidth}x${imageHeight}`);
     }
   } catch (error) {
     console.warn(`Could not detect image dimensions for: ${src}`, error);
+    // Don't throw - just continue with fallback dimensions
   }
 }
 
