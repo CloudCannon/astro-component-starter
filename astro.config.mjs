@@ -52,5 +52,77 @@ export default defineConfig({
         "@skele/plugins": path.resolve(__dirname, "src/plugins"),
       },
     },
+    define: {
+      global: "globalThis",
+    },
+    optimizeDeps: {
+      exclude: [
+        "@bookshop/astro-engine",
+        "probe-image-size",
+        "needle",
+        "stream-parser",
+        "iconv-lite",
+        "sax",
+      ],
+    },
+    ssr: {
+      noExternal: ["@bookshop/astro-engine"],
+    },
+    build: {
+      rollupOptions: {
+        external: [
+          "fs",
+          "path",
+          "crypto",
+          "stream",
+          "util",
+          "assert",
+          "querystring",
+          "string_decoder",
+          "http",
+          "https",
+          "url",
+        ],
+      },
+    },
+    plugins: [
+      {
+        name: "node-polyfills",
+        resolveId(id) {
+          if (
+            id === "fs" ||
+            id === "path" ||
+            id === "crypto" ||
+            id === "stream" ||
+            id === "util" ||
+            id === "assert" ||
+            id === "querystring" ||
+            id === "string_decoder" ||
+            id === "http" ||
+            id === "https" ||
+            id === "url"
+          ) {
+            return id;
+          }
+        },
+        load(id) {
+          if (
+            id === "fs" ||
+            id === "path" ||
+            id === "crypto" ||
+            id === "stream" ||
+            id === "util" ||
+            id === "assert" ||
+            id === "querystring" ||
+            id === "string_decoder" ||
+            id === "http" ||
+            id === "https" ||
+            id === "url"
+          ) {
+            return "export default {};";
+          }
+        },
+      },
+    ],
   },
 });

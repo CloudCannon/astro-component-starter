@@ -7,11 +7,16 @@ let imageWidth = width;
 let imageHeight = height;
 
 // Only try to probe image dimensions in Node.js environment
-if (typeof process !== "undefined" && process.versions && process.versions.node) {
+const isNodeEnvironment =
+  typeof process !== "undefined" &&
+  process.versions &&
+  process.versions.node &&
+  typeof window === "undefined";
+
+if (isNodeEnvironment) {
   try {
-    // @ts-ignore - probe-image-size is only available in Node.js and may not be available in browser
+    // @ts-ignore - probe-image-size is only available in Node.js
     const probe = await import("probe-image-size");
-    // @ts-ignore - probe-image-size types may not be available
     const dimensions = await probe.default(src);
 
     if (dimensions && dimensions.width && dimensions.height) {
