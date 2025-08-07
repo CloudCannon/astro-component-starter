@@ -1,0 +1,33 @@
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: var(--justify-content, center);
+  width: 100%;
+  gap: var(--spacing-md);
+
+  &.align-start {
+    align-items: flex-start;
+  }
+  &.align-center {
+    align-items: center;
+  }
+  &.align-end {
+    align-items: flex-end;
+  }
+  &.align-stretch {
+    align-items: stretch;
+
+    > .grid-item > *:only-child {
+      height: 100%;
+    }
+  }
+
+  &:not(.non-equal) > .grid-item {
+    flex: 1 1 var(--min-width, 200px);
+    max-width: var(--max-width, 320px);
+  }
+
+  &.non-equal > .grid-item {
+    flex: 0 0 auto;
+  }
+}

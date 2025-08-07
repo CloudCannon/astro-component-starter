@@ -1,0 +1,39 @@
+:where(:root) {
+  html,
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    padding: 0;
+    width: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+  }
+
+  main {
+    width: 100%;
+  }
+
+  code[class*="language-"],
+  pre[class*="language-"] {
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-md);
+  }
+
+  .astro-code {
+    white-space: break-spaces;
+  }
+
+  p,
+  ul,
+  ol {
+    code {
+      background: var(--color-bg);
+      border-radius: 0.25rem;
+      padding: 0.1rem 0.2rem;
+    }
+  }
+}

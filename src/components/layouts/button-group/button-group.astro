@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const { direction, align, button_blocks, class: className, ...rest } = Astro.props;
@@ -15,58 +14,12 @@ const alignMap = {
 } as const;
 
 const alignClass = alignMap[align as keyof typeof alignMap] ?? "align-start";
-
-const classNames = clsx(
-  "button-group",
-  direction === "column" ? "column" : "row",
-  alignClass,
-  className
-);
 ---
 
-<div class:list={classNames} {...htmlAttributes}>
+<div
+  class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
+  {...htmlAttributes}
+>
   <slot />
   <Component contentBlocks={button_blocks} />
 </div>
-
-<style>
-  .button-group {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-sm);
-    position: relative;
-
-    &.column {
-      flex-direction: column;
-
-      &.align-start {
-        align-items: flex-start;
-      }
-
-      &.align-center {
-        align-items: center;
-      }
-
-      &.align-end {
-        align-items: flex-end;
-      }
-    }
-
-    &.row {
-      flex-direction: row;
-    }
-
-    &.align-center {
-      justify-content: center;
-    }
-
-    &.align-end {
-      justify-content: flex-end;
-    }
-
-    &.align-start {
-      justify-content: flex-start;
-    }
-  }
-</style>

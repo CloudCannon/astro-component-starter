@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Image from "../../elements/image/image.astro";
 import Component from "../../utils/renderBlock.astro";
 
@@ -30,186 +29,43 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const mainCardClasses = clsx("card", rounded && "rounded", border && "border", className);
-
-const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgroundColor}`);
-
-const backgroundImageClasses = clsx(
-  "background-image",
-  positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`
-);
-
-const contentCardClasses = clsx(
-  "content",
-  paddingHorizontal && `pad-x-${paddingHorizontal}`,
-  paddingVertical && `pad-y-${paddingVertical}`
-);
-
 const Tag = link ? "a" : "div";
 ---
 
 <Tag
   {...htmlAttributes}
   {...link && { href: link }}
-  class:list={mainCardClasses}
+  class:list={["card", rounded && "rounded", border && "border", className]}
   data-theme={colorScheme}
 >
-  {source && <Image class:list={backgroundImageClasses} src={source} alt={alt} />}
-  {backgroundColor && <div class:list={backgroundDivClasses} />}
+  {
+    source && (
+      <Image
+        class:list={[
+          "background-image",
+          positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`,
+        ]}
+        src={source}
+        alt={alt}
+      />
+    )
+  }
+  {
+    backgroundColor && (
+      <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
+    )
+  }
 
   <div class="outer-content">
-    <div class:list={contentCardClasses}>
+    <div
+      class:list={[
+        "content",
+        paddingHorizontal && `pad-x-${paddingHorizontal}`,
+        paddingVertical && `pad-y-${paddingVertical}`,
+      ]}
+    >
       <slot />
       <Component contentBlocks={contentBlocks} />
     </div>
   </div>
 </Tag>
-
-<style>
-  a.card:hover {
-    transform: scale(1.02);
-  }
-
-  .card {
-    position: relative;
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    overflow: hidden;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-
-    &.rounded {
-      border-radius: var(--radius-md);
-    }
-
-    &.border {
-      border: 1px solid var(--color-border);
-    }
-
-    > .outer-content {
-      height: 100%;
-    }
-
-    > .outer-content > .content {
-      height: 100%;
-      position: relative;
-      z-index: var(--layer-1);
-    }
-
-    > .background {
-      inset: 0;
-      position: absolute;
-    }
-
-    > .background-image {
-      inset: 0;
-      position: absolute;
-
-      object-position: center;
-
-      > :global(img) {
-        object-fit: cover;
-        height: 100%;
-        width: 100%;
-      }
-
-      &.top-left > :global(img) {
-        object-position: top left;
-      }
-
-      &.top-center > :global(img) {
-        object-position: top center;
-      }
-
-      &.top-right > :global(img) {
-        object-position: top right;
-      }
-
-      &.center-left > :global(img) {
-        object-position: center left;
-      }
-
-      &.center-center > :global(img) {
-        object-position: center center;
-      }
-
-      &.center-right > :global(img) {
-        object-position: center right;
-      }
-
-      &.bottom-left > :global(img) {
-        object-position: bottom left;
-      }
-
-      &.bottom-center > :global(img) {
-        object-position: bottom center;
-      }
-
-      &.bottom-right > :global(img) {
-        object-position: bottom right;
-      }
-    }
-
-    > .bg-surface {
-      background-color: var(--color-bg-surface);
-    }
-
-    > .bg-accent {
-      background-color: var(--color-bg-accent);
-    }
-
-    > .bg-highlight {
-      background-color: var(--color-bg-highlight);
-    }
-
-    &.pad-x-xs {
-      padding-inline: var(--spacing-xs);
-    }
-
-    &.pad-x-sm {
-      padding-inline: var(--spacing-sm);
-    }
-
-    &.pad-x-md {
-      padding-inline: var(--spacing-md);
-    }
-
-    &.pad-x-lg {
-      padding-inline: var(--spacing-lg);
-    }
-
-    &.pad-x-xl {
-      padding-inline: var(--spacing-xl);
-    }
-
-    &.pad-x-2xl {
-      padding-inline: var(--spacing-2xl);
-    }
-
-    &.pad-y-xs {
-      padding-block: var(--spacing-xs);
-    }
-
-    &.pad-y-sm {
-      padding-block: var(--spacing-sm);
-    }
-
-    &.pad-y-md {
-      padding-block: var(--spacing-md);
-    }
-
-    &.pad-y-lg {
-      padding-block: var(--spacing-lg);
-    }
-
-    &.pad-y-xl {
-      padding-block: var(--spacing-xl);
-    }
-
-    &.pad-y-2xl {
-      padding-block: var(--spacing-2xl);
-    }
-  }
-</style>

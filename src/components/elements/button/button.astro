@@ -1,30 +1,20 @@
 ---
-import clsx from "clsx";
 import Icon from "../icon/icon.astro";
 
 const {
   label,
-  link,
   iconName,
-  iconPosition,
-  hideText,
-  variant = "ghost",
-  size,
+  iconPosition = "before",
+  hideText = false,
+  variant = "primary",
+  size = "md",
+  link,
   class: className,
-  ...restProps
+  ...rest
 } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
-  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
-);
-
-const classNames = clsx(
-  "button",
-  `size-${size}`,
-  `variant-${variant}`,
-  hideText && "icon-only",
-  iconPosition === "after" && "icon-after",
-  className
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
 if (hideText && !htmlAttributes["aria-label"]) {
@@ -32,130 +22,22 @@ if (hideText && !htmlAttributes["aria-label"]) {
 }
 
 const Tag = link ? "a" : "button";
-const elementProps = {
-  ...htmlAttributes,
-  ...(link ? { href: link, role: "button" } : { type: "button" }),
-};
+const tagProps = link ? { href: link } : { type: "button" };
 ---
 
-<Tag {...elementProps as any} class:list={classNames}>
-  {
-    iconName && iconName.trim() && (
-      <Icon
-        name={iconName}
-        buttonIcon
-        size="none"
-        class="button-icon"
-        aria-hidden="true"
-        role="presentation"
-      />
-    )
-  }
-  {label && <span class:list={hideText ? "sr-only" : "label"}>{label}</span>}
+<Tag
+  class:list={[
+    "button",
+    `variant-${variant}`,
+    `size-${size}`,
+    iconPosition === "after" && "icon-after",
+    hideText && "icon-only",
+    className,
+  ]}
+  {...tagProps}
+  {...htmlAttributes}
+>
+  {iconName && iconPosition !== "after" && <Icon name={iconName} size="none" />}
+  {!hideText && label && <span>{label}</span>}
+  {iconName && iconPosition === "after" && <Icon name={iconName} size="none" />}
 </Tag>
-
-<style>
-  .button {
-    align-items: center;
-    background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xs);
-    color: var(--color-text-strong);
-    display: inline-flex;
-    font-weight: var(--font-weight-medium);
-    gap: 0.15em;
-    justify-content: center;
-    min-height: 10px;
-    min-width: 10px;
-    padding-block: var(--space-em-sm);
-    padding-inline: var(--space-em-sm);
-    text-align: center;
-    text-decoration: none;
-    transition-duration: var(--animation-normal);
-    transition-property: background-color, color, border-color;
-    transition-timing-function: ease-in-out;
-    vertical-align: middle;
-
-    &:hover,
-    &:focus {
-      background-color: var(--color-bg-muted);
-      border-color: var(--color-border-strong);
-      color: var(--color-text-strong);
-      cursor: pointer;
-      outline: var(--color-focus-ring);
-      outline-offset: 4px;
-    }
-
-    &.icon-only {
-      padding: var(--space-em-xs);
-    }
-
-    &.icon-after {
-      flex-direction: row-reverse;
-    }
-
-    &.variant-primary {
-      background-color: var(--color-bg-brand);
-      border-color: transparent;
-      color: var(--color-text-on-brand);
-
-      &:hover,
-      &:focus {
-        background-color: var(--color-bg-brand-muted);
-        border-color: transparent;
-        color: var(--color-text-on-brand);
-      }
-    }
-
-    &.variant-secondary {
-      background-color: var(--color-bg-muted);
-      border-color: transparent;
-      color: var(--color-text-strong);
-
-      &:hover,
-      &:focus {
-        background-color: var(--color-bg-strong);
-        border-color: transparent;
-        color: var(--color-text-strong);
-      }
-    }
-
-    &.variant-tertiary {
-      background-color: transparent;
-      border-color: var(--color-border-strong);
-      color: var(--color-text-strong);
-
-      &:hover,
-      &:focus {
-        background-color: var(--color-bg-surface);
-        border-color: var(--color-border-strong);
-        color: var(--color-text-strong);
-      }
-    }
-
-    &.variant-ghost {
-      background-color: transparent;
-      border-color: transparent;
-      color: var(--color-text-strong);
-
-      &:hover,
-      &:focus {
-        background-color: var(--color-bg-muted);
-        border-color: transparent;
-        color: var(--color-text-strong);
-      }
-    }
-
-    &.size-sm {
-      font-size: var(--font-size-xs);
-    }
-
-    &.size-md {
-      font-size: var(--font-size-md);
-    }
-
-    &.size-lg {
-      font-size: var(--font-size-xl);
-    }
-  }
-</style>

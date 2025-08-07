@@ -39,28 +39,6 @@ const ariaProps = props.ariaLabel ? { "aria-label": props.ariaLabel } : {};
   }
 </style>
 
-<style>
-  .nav {
-    --nav-width: 100%;
-    width: var(--nav-width);
-  }
-
-  .nav.sidebar {
-    --nav-width: 250px;
-
-    > .inner {
-      align-items: flex-start;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-  }
-
-  ::slotted([slot="brand"]) {
-    display: flex;
-    flex-shrink: 0;
-  }
-</style>
-
 <nav
   class:list={["nav", props.layout, props.className]}
   role="navigation"

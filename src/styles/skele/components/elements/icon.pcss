@@ -1,0 +1,39 @@
+.icon {
+  border-radius: var(--radius-xs);
+  color: var(--color-text-on-muted);
+  display: inline-block;
+  line-height: 0;
+  vertical-align: middle;
+
+  &.flip-rtl {
+    transform: scaleX(-1);
+  }
+
+  &.background-subtle {
+    padding: var(--spacing-em-xs);
+  }
+
+  &.background-subtle {
+    background-color: var(--color-bg-surface);
+  }
+
+  &.fill {
+    fill: currentcolor;
+  }
+
+  &.size-sm {
+    font-size: var(--font-size-sm);
+  }
+
+  &.size-md {
+    font-size: var(--font-size-xl);
+  }
+
+  &.size-lg {
+    font-size: var(--font-size-3xl);
+  }
+
+  svg {
+    max-height: 100%;
+  }
+}
