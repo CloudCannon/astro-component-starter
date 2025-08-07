@@ -17,6 +17,10 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
+if (hideText && !htmlAttributes["aria-label"]) {
+  htmlAttributes["aria-label"] = label;
+}
+
 const Tag = link ? "a" : "button";
 const tagProps = link ? { href: link } : { type: "button" };
 ---

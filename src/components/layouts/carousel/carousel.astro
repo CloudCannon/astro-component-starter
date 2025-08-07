@@ -4,26 +4,66 @@ import Component from "../../utils/renderBlock.astro";
 
 const {
   slides = [],
-  showArrows = true,
-  showIndicators = true,
   autoPlay = false,
   autoScroll = false,
-  class: className,
+  slideWidthPercent = "100%",
+  minSlideWidth = 0,
+  style = "",
   ...rest
 } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
+
+const dataAttributes: Record<string, string> = {};
+
+// These are hardcoded variables that could be configured to be set
+// by the editor.
+
+// Shows the indicators dots.
+dataAttributes["data-show-indicators"] = "true";
+
+// Shows the navigational arrows.
+dataAttributes["data-show-arrows"] = "true";
+
+// If false, the carousel will stop at the last slide.
+dataAttributes["data-loop"] = "true";
+
+// Positions the slides in the viewport.
+dataAttributes["data-align"] = "center";
+
+// Allows the carousel to scroll a specific number of
+// slides at a time.
+dataAttributes["data-slides-to-scroll"] = "auto";
+
+if (autoPlay) {
+  dataAttributes["data-autoplay"] = "3";
+}
+
+if (autoScroll) {
+  dataAttributes["data-autoscroll"] = "1";
+  dataAttributes["data-show-indicators"] = "false";
+  dataAttributes["data-show-arrows"] = "false";
+}
+
+const carouselClasses = "carousel";
+
+// Build the style attribute, merging custom styles with CSS variables
+const carouselStyles = `
+  --slide-width: ${slideWidthPercent};
+  --min-slide-width: ${minSlideWidth}px;
+  ${style}
+`.trim();
 ---
 
 <section
-  class:list={["carousel", className]}
-  data-show-arrows={showArrows}
-  data-show-indicators={showIndicators}
-  data-auto-play={autoPlay}
-  data-auto-scroll={autoScroll}
+  class:list={carouselClasses}
+  role="region"
+  aria-label="Carousel"
+  style={carouselStyles}
   {...htmlAttributes}
+  {...dataAttributes}
 >
   <div class="viewport">
     <div class="track">
@@ -69,7 +109,6 @@ const htmlAttributes = Object.fromEntries(
     const carousels = document.querySelectorAll(".carousel");
 
     carousels.forEach((carousel) => {
-      // Check if this carousel has already been initialized
       if (carousel.hasAttribute("data-embla-initialized")) {
         return;
       }
@@ -77,8 +116,6 @@ const htmlAttributes = Object.fromEntries(
       const viewport = carousel.querySelector(".viewport") as HTMLElement;
       const track = viewport?.querySelector(".track") as HTMLElement;
       const slides = track?.querySelectorAll(".slide") as NodeListOf<HTMLElement>;
-      const prevButton = carousel.querySelector(".prev") as HTMLButtonElement;
-      const nextButton = carousel.querySelector(".next") as HTMLButtonElement;
       const indicatorsContainer = carousel.querySelector(".indicators") as HTMLElement;
 
       if (!viewport || !track || !slides.length) {
@@ -86,57 +123,86 @@ const htmlAttributes = Object.fromEntries(
         return;
       }
 
-      const options: any = {
-        align: "start",
-        containScroll: "trimSnaps",
+      const loop = carousel.hasAttribute("data-loop");
+      const slidesToScroll = carousel.hasAttribute("data-slides-to-scroll")
+        ? Number(carousel.getAttribute("data-slides-to-scroll")) || "auto"
+        : "auto";
+      const align = (carousel.getAttribute("data-align") || "start") as "start" | "center" | "end";
+
+      const plugins = [];
+      if (carousel.hasAttribute("data-autoplay")) {
+        const autoplayInterval = Number(carousel.getAttribute("data-autoplay")) * 1000 || 3000;
+        plugins.push(Autoplay({ delay: autoplayInterval, stopOnInteraction: false }));
+      }
+
+      let watchDrag = true;
+      if (carousel.hasAttribute("data-autoscroll")) {
+        const scrollValue = parseFloat(carousel.getAttribute("data-autoscroll") || "1");
+        const speed = isNaN(scrollValue) ? 1 : scrollValue;
+        plugins.push(AutoScroll({ speed }));
+        watchDrag = false;
+      }
+
+      const embla = EmblaCarousel(
+        viewport,
+        {
+          loop,
+          slidesToScroll,
+          align,
+          watchDrag,
+          duration: 20,
+          startIndex: 0,
+          skipSnaps: false,
+          inViewThreshold: 0.7,
+        },
+        plugins
+      );
+
+      // Mark this carousel as initialized
+      carousel.setAttribute("data-embla-initialized", "true");
+
+      // Navigation
+      const prevButton = carousel.querySelector(".prev") as HTMLButtonElement;
+      const nextButton = carousel.querySelector(".next") as HTMLButtonElement;
+
+      const updateButtons = () => {
+        if (prevButton) prevButton.disabled = !embla.canScrollPrev();
+        if (nextButton) nextButton.disabled = !embla.canScrollNext();
       };
 
-      const plugins: any[] = [];
-
-      // Add auto-scroll plugin if enabled
-      if (carousel.getAttribute("data-auto-scroll") === "true") {
-        plugins.push(AutoScroll());
-      }
-
-      // Add autoplay plugin if enabled
-      if (carousel.getAttribute("data-auto-play") === "true") {
-        plugins.push(Autoplay({ delay: 4000, stopOnInteraction: false }));
-      }
-
-      const embla = EmblaCarousel(viewport, options, plugins);
-
-      // Setup navigation buttons
-      if (prevButton && nextButton) {
-        prevButton.addEventListener("click", () => embla.scrollPrev());
-        nextButton.addEventListener("click", () => embla.scrollNext());
-      }
+      updateButtons();
+      embla.on("select", updateButtons);
+      if (prevButton) prevButton.addEventListener("click", () => embla.scrollPrev());
+      if (nextButton) nextButton.addEventListener("click", () => embla.scrollNext());
 
       // Setup indicators
-      if (indicatorsContainer && slides.length > 1) {
-        const indicators = Array.from(slides).map((_, index) => {
-          const button = document.createElement("button");
-          button.className = "indicator";
-          button.setAttribute("aria-label", `Go to slide ${index + 1}`);
-          button.addEventListener("click", () => embla.scrollTo(index));
-          return button;
-        });
-
-        indicators.forEach((indicator) => indicatorsContainer.appendChild(indicator));
-
-        // Update indicators on scroll
-        embla.on("select", () => {
-          const selectedIndex = embla.selectedScrollSnap();
-          indicators.forEach((indicator, index) => {
-            indicator.setAttribute("data-selected", index === selectedIndex ? "true" : "false");
+      if (indicatorsContainer) {
+        const renderDots = () => {
+          indicatorsContainer.innerHTML = "";
+          embla.scrollSnapList().forEach((_, index) => {
+            const dot = document.createElement("button");
+            dot.className = "indicator";
+            dot.setAttribute("type", "button");
+            dot.setAttribute("aria-label", `Go to position ${index + 1}`);
+            dot.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
+            dot.setAttribute("aria-selected", (index === embla.selectedScrollSnap()).toString());
+            dot.addEventListener("click", () => embla.scrollTo(index));
+            indicatorsContainer.appendChild(dot);
           });
-        });
+        };
 
-        // Set initial state
-        indicators[embla.selectedScrollSnap()]?.setAttribute("data-selected", "true");
+        const updateSelectedDot = () => {
+          indicatorsContainer.querySelectorAll(".indicator").forEach((dot, index) => {
+            const isSelected = index === embla.selectedScrollSnap();
+            dot.setAttribute("data-selected", isSelected.toString());
+            dot.setAttribute("aria-selected", isSelected.toString());
+          });
+        };
+
+        embla.on("select", updateSelectedDot);
+        embla.on("reInit", renderDots);
+        renderDots();
       }
-
-      // Mark as initialized
-      carousel.setAttribute("data-embla-initialized", "true");
     });
   }
 
@@ -146,7 +212,5 @@ const htmlAttributes = Object.fromEntries(
   } else {
     setupCarousels();
   }
-
-  // Re-initialize carousels when new content is loaded (for SPA-like behavior)
   document.addEventListener("astro:page-load", setupCarousels);
 </script>

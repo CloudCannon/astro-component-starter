@@ -1,29 +1,5 @@
 @import url("elements/_forms.pcss");
 
-/* Component Styles */
-@import url("components/elements/button.pcss");
-@import url("components/elements/heading.pcss");
-@import url("components/elements/list.pcss");
-@import url("components/elements/divider.pcss");
-@import url("components/elements/testimonial.pcss");
-@import url("components/elements/rich-text.pcss");
-@import url("components/elements/counter.pcss");
-@import url("components/elements/icon.pcss");
-@import url("components/elements/definition-list.pcss");
-@import url("components/elements/image.pcss");
-
-@import url("components/layouts/split.pcss");
-@import url("components/layouts/card.pcss");
-@import url("components/layouts/accordion.pcss");
-@import url("components/layouts/carousel.pcss");
-@import url("components/layouts/container.pcss");
-@import url("components/layouts/button-group.pcss");
-@import url("components/layouts/grid.pcss");
-
-@import url("components/navigation/nav.pcss");
-@import url("components/navigation/nav-item.pcss");
-@import url("components/navigation/nav-list.pcss");
-
 :where(:root) {
   html,
   body {
@@ -34,16 +10,16 @@
   }
 
   body {
-    background-color: var(--element-body-backgroundColor);
-    color: var(--element-body-fontColor);
+    background-color: var(--color-bg);
+    color: var(--color-text);
     min-height: 100vh;
   }
 
   a {
-    color: var(--element-link-fontColor);
+    color: var(--color-link);
 
     &:hover {
-      color: var(--element-link-hover-fontColor);
+      color: var(--color-link-hover);
     }
   }
 
@@ -53,15 +29,19 @@
 
   code[class*="language-"],
   pre[class*="language-"] {
-    border-radius: var(--radius-2);
+    border-radius: var(--radius-sm);
     font-size: var(--font-size-0);
+  }
+
+  .astro-code {
+    white-space: break-spaces;
   }
 
   p,
   ul,
   ol {
     code {
-      background: var(--element-code-backgroundColor);
+      background: var(--color-bg);
       border-radius: 0.25rem;
       padding: 0.1rem 0.2rem;
     }
@@ -116,14 +96,6 @@
           border-bottom-right-radius: var(--radius-2);
         }
       }
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation: none !important;
-      transition: none !important;
-      scroll-behavior: auto !important;
     }
   }
 }
