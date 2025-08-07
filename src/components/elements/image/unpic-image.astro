@@ -15,7 +15,6 @@ if (!imageWidth || !imageHeight) {
     if (dimensions && dimensions.width && dimensions.height) {
       imageWidth = imageWidth || dimensions.width;
       imageHeight = imageHeight || dimensions.height;
-      console.log(`Detected dimensions with inferRemoteSize: ${imageWidth}x${imageHeight}`);
     }
   } catch (error) {
     console.warn(`Could not detect image dimensions for: ${src}`, error);

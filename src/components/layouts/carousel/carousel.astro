@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Button from "../../elements/button/button.astro";
 import Component from "../../utils/renderBlock.astro";
 
@@ -16,12 +15,10 @@ const {
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const carouselClasses = clsx("carousel", className);
 ---
 
 <section
-  class:list={carouselClasses}
+  class:list={["carousel", className]}
   data-show-arrows={showArrows}
   data-show-indicators={showIndicators}
   data-auto-play={autoPlay}
@@ -116,7 +113,7 @@ const carouselClasses = clsx("carousel", className);
 
       // Setup indicators
       if (indicatorsContainer && slides.length > 1) {
-        const indicators = slides.map((_, index) => {
+        const indicators = Array.from(slides).map((_, index) => {
           const button = document.createElement("button");
           button.className = "indicator";
           button.setAttribute("aria-label", `Go to slide ${index + 1}`);

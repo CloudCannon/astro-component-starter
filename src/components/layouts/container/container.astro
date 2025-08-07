@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Image from "../../elements/image/image.astro";
 import Component from "../../utils/renderBlock.astro";
 
@@ -27,30 +26,36 @@ const {
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const mainContainerClasses = clsx("container", className);
-
-const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgroundColor}`);
-
-const backgroundImageClasses = clsx(
-  "background-image",
-  positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`
-);
-
-const contentContainerClasses = clsx(
-  "content",
-  paddingHorizontal && `pad-x-${paddingHorizontal}`,
-  paddingVertical && `pad-y-${paddingVertical}`,
-  maxContentWidth && `max-width-${maxContentWidth}`
-);
 ---
 
-<section class:list={mainContainerClasses} data-theme={colorScheme} {...htmlAttributes}>
-  {source && <Image class:list={backgroundImageClasses} src={source} alt={alt} />}
-  {backgroundColor && <div class:list={backgroundDivClasses} />}
+<section class:list={["container", className]} data-theme={colorScheme} {...htmlAttributes}>
+  {
+    source && (
+      <Image
+        class:list={[
+          "background-image",
+          positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`,
+        ]}
+        src={source}
+        alt={alt}
+      />
+    )
+  }
+  {
+    backgroundColor && (
+      <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
+    )
+  }
 
   <div class="outer-content">
-    <div class:list={contentContainerClasses}>
+    <div
+      class:list={[
+        "content",
+        paddingHorizontal && `pad-x-${paddingHorizontal}`,
+        paddingVertical && `pad-y-${paddingVertical}`,
+        maxContentWidth && `max-width-${maxContentWidth}`,
+      ]}
+    >
       <slot />
       <Component contentBlocks={content_blocks} />
     </div>

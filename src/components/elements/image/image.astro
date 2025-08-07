@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import { getProviderForUrl } from "unpic";
 import AstroImage from "./astro-image.astro";
 import UnpicImage from "./unpic-image.astro";
@@ -17,18 +16,14 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const classNames = clsx("image", className);
-
 const provider = getProviderForUrl(src);
 const isExternalCDN = provider !== false;
 
 const commonProps = {
   alt: alt || "",
-  class: classNames,
+  class: ["image", className].join(" "),
   ...htmlAttributes,
 };
-
-console.log(commonProps);
 ---
 
 {

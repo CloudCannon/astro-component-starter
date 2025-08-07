@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const {
@@ -99,11 +98,9 @@ const secondMinWidth = reverse ? firstColumnMinWidth : secondColumnMinWidth;
 
 const firstStyles = calculateDistributionStyles(firstMode, true, fixedWidth, firstMinWidth);
 const secondStyles = calculateDistributionStyles(lastMode, false, fixedWidth, secondMinWidth);
-
-const splitClasses = clsx("split", `align-${verticalAlignment}`, className);
 ---
 
-<section class:list={splitClasses} {...htmlAttributes}>
+<section class:list={["split", `align-${verticalAlignment}`, className]} {...htmlAttributes}>
   <div class="pane first" style={firstStyles}>
     <Component contentBlocks={firstContentBlocks} />
   </div>

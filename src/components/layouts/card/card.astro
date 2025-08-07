@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Image from "../../elements/image/image.astro";
 import Component from "../../utils/renderBlock.astro";
 
@@ -30,35 +29,41 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const mainCardClasses = clsx("card", rounded && "rounded", border && "border", className);
-
-const backgroundDivClasses = clsx("background", backgroundColor && `bg-${backgroundColor}`);
-
-const backgroundImageClasses = clsx(
-  "background-image",
-  positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`
-);
-
-const contentCardClasses = clsx(
-  "content",
-  paddingHorizontal && `pad-x-${paddingHorizontal}`,
-  paddingVertical && `pad-y-${paddingVertical}`
-);
-
 const Tag = link ? "a" : "div";
 ---
 
 <Tag
   {...htmlAttributes}
   {...link && { href: link }}
-  class:list={mainCardClasses}
+  class:list={["card", rounded && "rounded", border && "border", className]}
   data-theme={colorScheme}
 >
-  {source && <Image class:list={backgroundImageClasses} src={source} alt={alt} />}
-  {backgroundColor && <div class:list={backgroundDivClasses} />}
+  {
+    source && (
+      <Image
+        class:list={[
+          "background-image",
+          positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`,
+        ]}
+        src={source}
+        alt={alt}
+      />
+    )
+  }
+  {
+    backgroundColor && (
+      <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
+    )
+  }
 
   <div class="outer-content">
-    <div class:list={contentCardClasses}>
+    <div
+      class:list={[
+        "content",
+        paddingHorizontal && `pad-x-${paddingHorizontal}`,
+        paddingVertical && `pad-y-${paddingVertical}`,
+      ]}
+    >
       <slot />
       <Component contentBlocks={contentBlocks} />
     </div>

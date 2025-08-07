@@ -1,6 +1,5 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
-import clsx from "clsx";
 
 const { name, size = "lg", background, className, ...rest } = Astro.props;
 
@@ -13,14 +12,20 @@ if (!isValidName) {
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const classNames = clsx(
-  "icon",
-  `size-${size}`,
-  background && `background-${background}`,
-  name?.includes("social/") && "fill",
-  className
-);
 ---
 
-{isValidName && <AstroIcon name={name} class:list={classNames} {...htmlAttributes} />}
+{
+  isValidName && (
+    <AstroIcon
+      name={name}
+      class:list={[
+        "icon",
+        `size-${size}`,
+        background && `background-${background}`,
+        name?.includes("social/") && "fill",
+        className,
+      ]}
+      {...htmlAttributes}
+    />
+  )
+}

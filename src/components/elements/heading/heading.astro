@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Icon from "../icon/icon.astro";
 // @ts-ignore
 import MarkdownIt from "markdown-it";
@@ -22,12 +21,13 @@ const htmlAttributes = Object.fromEntries(
 const md = MarkdownIt({ html: true });
 const MarkdownText = text ? md.renderInline(text) : "";
 
-const classNames = clsx("heading", size && `size-${size}`, `align-${align}`, className);
-
 const Tag = level;
 ---
 
-<Tag class:list={classNames} {...htmlAttributes}>
+<Tag
+  class:list={["heading", size && `size-${size}`, `align-${align}`, className]}
+  {...htmlAttributes}
+>
   {
     iconName && iconPosition == "before" && (
       <Icon

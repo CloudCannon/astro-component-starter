@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Icon from "../icon/icon.astro";
 
 const {
@@ -18,20 +17,22 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const buttonClasses = clsx(
-  "button",
-  `variant-${variant}`,
-  `size-${size}`,
-  iconPosition === "after" && "icon-after",
-  hideText && "icon-only",
-  className
-);
-
 const Tag = link ? "a" : "button";
 const tagProps = link ? { href: link } : { type: "button" };
 ---
 
-<Tag class:list={buttonClasses} {...tagProps} {...htmlAttributes}>
+<Tag
+  class:list={[
+    "button",
+    `variant-${variant}`,
+    `size-${size}`,
+    iconPosition === "after" && "icon-after",
+    hideText && "icon-only",
+    className,
+  ]}
+  {...tagProps}
+  {...htmlAttributes}
+>
   {iconName && iconPosition !== "after" && <Icon name={iconName} size="none" />}
   {!hideText && label && <span>{label}</span>}
   {iconName && iconPosition === "after" && <Icon name={iconName} size="none" />}

@@ -1,15 +1,15 @@
 ---
-import clsx from "clsx";
-
 const { padding = "md", class: className, ...rest } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const classNames = clsx("divider", className, `padding-y-${padding}`);
 ---
 
-<div class:list={classNames} {...htmlAttributes} aria-hidden="true">
+<div
+  class:list={["divider", className, `padding-y-${padding}`]}
+  {...htmlAttributes}
+  aria-hidden="true"
+>
   <hr class="border" />
 </div>

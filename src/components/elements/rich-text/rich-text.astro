@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 // @ts-ignore
 import markdownit from "markdown-it";
 
@@ -12,8 +11,10 @@ const htmlAttributes = Object.fromEntries(
 );
 
 const markdownContent = text ? md.render(text) : "";
-
-const classNames = clsx("rich-text", className, `align-${align}`);
 ---
 
-<div class:list={classNames} {...htmlAttributes} set:html={markdownContent} />
+<div
+  class:list={["rich-text", className, `align-${align}`]}
+  {...htmlAttributes}
+  set:html={markdownContent}
+/>

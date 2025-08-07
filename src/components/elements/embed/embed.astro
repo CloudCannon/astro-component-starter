@@ -1,6 +1,4 @@
 ---
-import clsx from "clsx";
-
 const {
   src,
   title = "Embedded Content",
@@ -12,12 +10,10 @@ const {
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
-
-const classNames = clsx("embed", `ratio-${aspect_ratio}`, className);
 ---
 
 <iframe
-  class:list={classNames}
+  class:list={["embed", `ratio-${aspect_ratio}`, className]}
   src={src}
   frameborder="0"
   allowfullscreen="true"

@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const {
@@ -18,14 +17,6 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const gridClasses = clsx(
-  "grid",
-  `align-${verticalAlignment}`,
-  `justify-${horizontalAlignment}`,
-  !equalWidth && "non-equal",
-  className
-);
-
 const gridStyles = [
   equalWidth && `--min-width: ${minItemWidth}px`,
   equalWidth && `--max-width: ${maxItemWidth}px`,
@@ -36,7 +27,17 @@ const gridStyles = [
   .join("; ");
 ---
 
-<div class:list={gridClasses} style={gridStyles} {...htmlAttributes}>
+<div
+  class:list={[
+    "grid",
+    `align-${verticalAlignment}`,
+    `justify-${horizontalAlignment}`,
+    !equalWidth && "non-equal",
+    className,
+  ]}
+  style={gridStyles}
+  {...htmlAttributes}
+>
   {
     items.map((item: any, index: number) => (
       <div class="grid-item">

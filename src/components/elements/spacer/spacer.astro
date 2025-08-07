@@ -1,16 +1,13 @@
 ---
-import clsx from "clsx";
-
 const { height = "md", class: className, ...rest } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const classNames = clsx("spacer", className, `height-${height}`);
 ---
 
-<div class:list={classNames} {...htmlAttributes} aria-hidden="true"></div>
+<div class:list={["spacer", className, `height-${height}`]} {...htmlAttributes} aria-hidden="true">
+</div>
 
 <style>
   .spacer {
