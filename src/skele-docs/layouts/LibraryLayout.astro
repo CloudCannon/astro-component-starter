@@ -28,7 +28,7 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
     <title>{pageTitle}</title>
     <slot name="head" />
   </head>
-  <body class="animations-disabled">
+  <body class="animations-disabled skele-docs">
     <Container
       maxContentWidth="2xl"
       paddingHorizontal="md"
@@ -36,7 +36,7 @@ const pageTitle = props.frontmatter?.title || "Skele Library";
       class="library-container"
     >
       <NavLayout />
-      <main>
+      <main class="main">
         <slot />
       </main>
     </Container>

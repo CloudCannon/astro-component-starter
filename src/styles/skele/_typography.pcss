@@ -14,7 +14,7 @@
   h5,
   h6 {
     color: var(--color-text-strong);
-    font-weight: bold;
+    font-weight: var(--font-weight-bold);
     margin-bottom: 0.5em;
     margin-top: 0.8em;
 
@@ -23,7 +23,7 @@
       background-clip: text;
       color: transparent;
       font-style: normal;
-      font-weight: bold;
+      font-weight: var(--font-weight-bold);
 
       &::selection {
         background: var(--element-selection-backgroundColor);
@@ -72,8 +72,12 @@
   ul,
   ol {
     color: var(--color-text);
-    font-size: var(--text-size-body);
+    font-size: var(--font-size-md);
     line-height: 1.6;
+  }
+
+  strong {
+    font-weight: var(--font-weight-bold);
   }
 
   h1,
