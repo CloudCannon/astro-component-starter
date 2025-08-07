@@ -18,86 +18,86 @@
   transition-property: background-color, color, border-color;
   transition-timing-function: ease-in-out;
   vertical-align: middle;
-}
 
-.button:hover,
-.button:focus {
-  background-color: var(--color-bg-muted);
-  border-color: var(--color-border-strong);
-  color: var(--color-text-strong);
-  cursor: pointer;
-  outline: var(--color-focus-ring);
-  outline-offset: 4px;
-}
+  &:hover,
+  &:focus {
+    background-color: var(--color-bg-muted);
+    border-color: var(--color-border-strong);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    outline: var(--color-focus-ring);
+    outline-offset: 4px;
+  }
 
-.button.icon-only {
-  padding: var(--spacing-em-xs);
-}
+  &.icon-only {
+    padding: var(--spacing-em-xs);
+  }
 
-.button.icon-after {
-  flex-direction: row-reverse;
-}
+  &.icon-after {
+    flex-direction: row-reverse;
+  }
 
-.button.variant-primary {
-  background-color: var(--color-bg-brand);
-  border-color: transparent;
-  color: var(--color-text-on-brand);
-}
+  &.variant-primary {
+    background-color: var(--color-bg-brand);
+    border-color: transparent;
+    color: var(--color-text-on-brand);
 
-.button.variant-primary:hover,
-.button.variant-primary:focus {
-  background-color: var(--color-bg-brand-muted);
-  border-color: transparent;
-  color: var(--color-text-on-brand);
-}
+    &:hover,
+    &:focus {
+      background-color: var(--color-bg-brand-muted);
+      border-color: transparent;
+      color: var(--color-text-on-brand);
+    }
+  }
 
-.button.variant-secondary {
-  background-color: var(--color-bg-muted);
-  border-color: transparent;
-  color: var(--color-text-strong);
-}
+  &.variant-secondary {
+    background-color: var(--color-bg-muted);
+    border-color: transparent;
+    color: var(--color-text-strong);
 
-.button.variant-secondary:hover,
-.button.variant-secondary:focus {
-  background-color: var(--color-bg-strong);
-  border-color: transparent;
-  color: var(--color-text-strong);
-}
+    &:hover,
+    &:focus {
+      background-color: var(--color-bg-strong);
+      border-color: transparent;
+      color: var(--color-text-strong);
+    }
+  }
 
-.button.variant-tertiary {
-  background-color: transparent;
-  border-color: var(--color-border-strong);
-  color: var(--color-text-strong);
-}
+  &.variant-tertiary {
+    background-color: transparent;
+    border-color: var(--color-border-strong);
+    color: var(--color-text-strong);
 
-.button.variant-tertiary:hover,
-.button.variant-tertiary:focus {
-  background-color: var(--color-bg-surface);
-  border-color: var(--color-border-strong);
-  color: var(--color-text-strong);
-}
+    &:hover,
+    &:focus {
+      background-color: var(--color-bg-surface);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-strong);
+    }
+  }
 
-.button.variant-ghost {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--color-text-strong);
-}
+  &.variant-ghost {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--color-text-strong);
 
-.button.variant-ghost:hover,
-.button.variant-ghost:focus {
-  background-color: var(--color-bg-muted);
-  border-color: transparent;
-  color: var(--color-text-strong);
-}
+    &:hover,
+    &:focus {
+      background-color: var(--color-bg-muted);
+      border-color: transparent;
+      color: var(--color-text-strong);
+    }
+  }
 
-.button.size-sm {
-  font-size: var(--font-size-xs);
-}
+  &.size-sm {
+    font-size: var(--font-size-xs);
+  }
 
-.button.size-md {
-  font-size: var(--font-size-md);
-}
+  &.size-md {
+    font-size: var(--font-size-md);
+  }
 
-.button.size-lg {
-  font-size: var(--font-size-xl);
+  &.size-lg {
+    font-size: var(--font-size-xl);
+  }
 }

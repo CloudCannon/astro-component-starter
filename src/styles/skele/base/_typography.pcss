@@ -1,10 +1,6 @@
 :where(:root) {
   body {
     font-family: var(--font-primary);
-
-    ::selection {
-      background-color: var(--element-selection-backgroundColor);
-    }
   }
 
   h1,
@@ -17,19 +13,6 @@
     font-weight: var(--font-weight-bold);
     margin-bottom: 0.5em;
     margin-top: 0.8em;
-
-    em {
-      background: var(--element-heading-emphasis-backgroundColor);
-      background-clip: text;
-      color: transparent;
-      font-style: normal;
-      font-weight: var(--font-weight-bold);
-
-      &::selection {
-        background: var(--element-selection-backgroundColor);
-        color: var(--color-text-strong);
-      }
-    }
   }
 
   h1 {
@@ -78,6 +61,14 @@
 
   strong {
     font-weight: var(--font-weight-bold);
+  }
+
+  a {
+    color: var(--color-link);
+
+    &:hover {
+      color: var(--color-link-hover);
+    }
   }
 
   h1,
