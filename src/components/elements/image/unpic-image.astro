@@ -1,5 +1,4 @@
 ---
-import probe from "probe-image-size";
 import { transformUrl } from "unpic";
 
 const { src, alt, class: className, sizes, widths, width, height, ...htmlAttributes } = Astro.props;
@@ -7,9 +6,13 @@ const { src, alt, class: className, sizes, widths, width, height, ...htmlAttribu
 let imageWidth = width;
 let imageHeight = height;
 
-if (!imageWidth || !imageHeight) {
+// Only try to probe image dimensions in Node.js environment
+if (typeof process !== "undefined" && process.versions && process.versions.node) {
   try {
-    const dimensions = await probe(src);
+    // @ts-ignore - probe-image-size is only available in Node.js and may not be available in browser
+    const probe = await import("probe-image-size");
+    // @ts-ignore - probe-image-size types may not be available
+    const dimensions = await probe.default(src);
 
     if (dimensions && dimensions.width && dimensions.height) {
       imageWidth = imageWidth || dimensions.width;
@@ -21,6 +24,7 @@ if (!imageWidth || !imageHeight) {
   }
 }
 
+// Fallback dimensions if not provided or detected
 const fallbackWidth = imageWidth || Math.min(...widths);
 const fallbackHeight = imageHeight || Math.round(fallbackWidth * 0.75);
 const aspectRatio = imageWidth && imageHeight ? imageHeight / imageWidth : 0.75;
