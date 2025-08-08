@@ -1,6 +1,5 @@
 ---
 import Heading from "@skele/components/elements/heading/heading.astro";
-import clsx from "clsx";
 import RenderBlock from "../../utils/renderBlock.astro";
 
 const { items, navigationPosition = "start", class: className, ...restProps } = Astro.props;
@@ -9,17 +8,20 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 
-const classNames = clsx("content-selector", `nav-${navigationPosition}`, className);
-let unique_id = `${crypto.randomUUID()}`;
+const uniqueId = crypto.randomUUID();
 ---
 
-<section class:list={classNames} {...htmlAttributes}>
+<section
+  class:list={["content-selector", `nav-${navigationPosition}`, className]}
+  data-uid={uniqueId}
+  {...htmlAttributes}
+>
   {
     items.map((item: any, index: number) => (
       <input
         type="radio"
-        name={`tabs-${unique_id}`}
-        id={`tab-${unique_id}-${index}`}
+        name={`tabs-${uniqueId}`}
+        id={`tab-${uniqueId}-${index}`}
         class="input"
         hidden
         checked={index === 0}
@@ -27,28 +29,19 @@ let unique_id = `${crypto.randomUUID()}`;
     ))
   }
 
-  <div class="tabs">
+  <div class="tabs" role="tablist">
     {
       items.map((item: any, index: number) => (
         <label
           class="tab"
-          for={`tab-${unique_id}-${index}`}
+          id={`tablabel-${uniqueId}-${index}`}
+          for={`tab-${uniqueId}-${index}`}
           role="tab"
-          aria-controls={`panel-${unique_id}-${index}`}
+          aria-controls={`panel-${uniqueId}-${index}`}
           tabindex="0"
           aria-selected={index === 0}
         >
-          <Heading
-            text={item.title}
-            level="h2"
-            size="h2"
-            align="start"
-            iconName={`${item.icon_name}`}
-            iconPosition="before"
-            class="tab-heading"
-          />
-
-          {item.sub_text && <div class="subtext">{item.sub_text}</div>}
+          <Heading text={item.title} level="h3" size="h3" align="start" class="tab-heading" />
         </label>
       ))
     }
@@ -57,124 +50,50 @@ let unique_id = `${crypto.randomUUID()}`;
   <div class="panels">
     {
       items.map((item: any, index: number) => (
-        <div class="panel" id={`panel-${unique_id}-${index}`} role="tabpanel">
+        <div
+          class="panel"
+          id={`panel-${uniqueId}-${index}`}
+          role="tabpanel"
+          aria-labelledby={`tablabel-${uniqueId}-${index}`}
+          aria-hidden={index !== 0}
+        >
           <RenderBlock contentBlocks={item.content_blocks} />
         </div>
       ))
     }
   </div>
+
+  <script>
+    function updateContentSelectorAria(el: HTMLElement) {
+      const inputs = Array.from(el.querySelectorAll<HTMLInputElement>('input.input[type="radio"]'));
+      const tabs = Array.from(el.querySelectorAll<HTMLElement>('[role="tab"]'));
+      const panels = Array.from(el.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+      const checked = el.querySelector<HTMLInputElement>('input.input[type="radio"]:checked');
+      const checkedIndex = checked ? inputs.indexOf(checked) : 0;
+      tabs.forEach((tab: HTMLElement, i: number) =>
+        tab.setAttribute("aria-selected", i === checkedIndex ? "true" : "false")
+      );
+      panels.forEach((panel: HTMLElement, i: number) =>
+        panel.setAttribute("aria-hidden", i !== checkedIndex ? "true" : "false")
+      );
+    }
+
+    function setupContentSelectors() {
+      document.querySelectorAll("section.content-selector").forEach((node) => {
+        if (!(node instanceof HTMLElement)) return;
+        const el: HTMLElement = node;
+        const inputs = el.querySelectorAll<HTMLInputElement>('input.input[type="radio"]');
+        inputs.forEach((input) => {
+          input.addEventListener("change", () => updateContentSelectorAria(el));
+        });
+        updateContentSelectorAria(el);
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", setupContentSelectors);
+    } else {
+      setupContentSelectors();
+    }
+  </script>
 </section>
-
-<style>
-  .content-selector {
-    &.nav-start {
-      display: flex;
-      gap: var(--spacing-em-xl);
-
-      > .tabs {
-        border-inline-start: 1px solid var(--color-bg-muted);
-        max-width: 20rem;
-        min-width: 10rem;
-        width: fit-content;
-
-        > .tab {
-          &::before {
-            width: 1px;
-          }
-        }
-      }
-    }
-
-    &.nav-top {
-      display: flex;
-      flex-direction: column;
-
-      > .tabs {
-        border-inline-start: none;
-        border-bottom: 1px solid var(--color-bg-muted);
-        display: flex;
-
-        > .tab {
-          &::before {
-            height: 1px;
-            inset-block: 100%;
-            width: 100%;
-          }
-        }
-      }
-    }
-
-    > .input {
-      display: none;
-    }
-
-    .tab {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      display: block;
-      padding: var(--spacing-md);
-      position: relative;
-      text-align: left;
-      transition: background-color var(--animation-normal) cubic-bezier(0.25, 0, 0.5, 1);
-      width: 100%;
-
-      &::before {
-        background: transparent;
-        content: "";
-        inset-block: 0;
-        inset-inline-start: -1px;
-        position: absolute;
-        transition:
-          transform var(--animation-normal),
-          background var(--animation-normal);
-      }
-
-      &:hover {
-        background: #efefef;
-      }
-      > .tab-heading {
-        margin: 0;
-      }
-
-      > .subtext {
-        color: var(--color-text-muted);
-        font-size: 0.875rem;
-        overflow: hidden;
-      }
-    }
-
-    .input:checked .tab {
-      background-color: var(--color-bg);
-      font-weight: bold;
-    }
-
-    > .panels {
-      flex: 1;
-      width: 100%;
-
-      > .panel {
-        animation: grow-out var(--animation-normal) ease-in-out forwards;
-        display: none;
-        padding: 0 var(--spacing-md);
-        transform-origin: top center;
-      }
-    }
-
-    @each $i in 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 {
-      .input:nth-of-type($i):checked {
-        & ~ .tabs {
-          & > .tab:nth-of-type($i) {
-            &::before {
-              background: var(--color-bg-accent);
-            }
-          }
-        }
-
-        & ~ .panels > .panel:nth-of-type($i) {
-          display: block;
-        }
-      }
-    }
-  }
-</style>
