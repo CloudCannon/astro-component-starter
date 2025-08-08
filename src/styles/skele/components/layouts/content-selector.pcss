@@ -1,0 +1,95 @@
+.content-selector {
+  --content-selector-border-width: 2px;
+  display: flex;
+
+  > .input {
+    display: none;
+  }
+
+  > .tabs {
+    border: 0px solid var(--color-bg-muted);
+  }
+
+  > .tabs > .tab {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: block;
+    padding: var(--spacing-md);
+    position: relative;
+    transition: background-color var(--animation-normal) ease-in-out;
+    width: 100%;
+
+    &::before {
+      background: transparent;
+      content: "";
+      inset-block: 0;
+      inset-inline-start: calc(var(--content-selector-border-width) * -1);
+      position: absolute;
+      transition:
+        transform var(--animation-normal),
+        background var(--animation-normal);
+    }
+
+    &:hover {
+      background: var(--color-state-hover);
+    }
+  }
+
+  > .tabs > .tab > .tab-heading {
+    margin: 0;
+  }
+
+  > .panels {
+    flex: 1;
+    width: 100%;
+  }
+
+  > .panels > .panel {
+    animation: fade-in var(--animation-slow) ease-in-out forwards;
+    display: none;
+    padding: 0 var(--spacing-md);
+  }
+
+  @each $i in 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 {
+    .input:nth-of-type($i):checked ~ .tabs > .tab:nth-of-type($i)::before {
+      background: var(--color-border-strong);
+    }
+
+    .input:nth-of-type($i):checked ~ .panels > .panel:nth-of-type($i) {
+      display: revert;
+    }
+  }
+}
+
+.content-selector.nav-start {
+  gap: var(--spacing-em-lg);
+
+  > .tabs {
+    border-inline-start-width: var(--content-selector-border-width);
+    max-width: 20rem;
+    min-width: 10rem;
+    width: fit-content;
+  }
+
+  > .tabs > .tab {
+    &::before {
+      width: var(--content-selector-border-width);
+    }
+  }
+}
+
+.content-selector.nav-top {
+  flex-direction: column;
+
+  > .tabs {
+    border-bottom-width: var(--content-selector-border-width);
+    display: flex;
+  }
+
+  > .tabs > .tab::before {
+    height: var(--content-selector-border-width);
+    inset-block: 100%;
+    width: 100%;
+  }
+}
