@@ -1,35 +1,33 @@
 .nav-item {
   position: relative;
-}
 
-.nav-item-toggle {
-  display: none;
-
-  &:checked ~ div[role="region"] {
-    animation: grow-out 300ms ease-out;
-    display: revert;
-  }
-
-  & ~ div[role="region"] {
+  .nav-item-toggle {
     display: none;
+
+    &:checked ~ div[role="region"] {
+      animation: grow-out 300ms ease-out;
+      display: revert;
+    }
+
+    & ~ div[role="region"] {
+      display: none;
+    }
   }
-}
 
-.nav-item-icon {
-  align-items: center;
-  display: inline-flex;
-  transition: transform var(--animation-normal) ease-in-out;
-}
+  .nav-item-icon {
+    align-items: center;
+    display: inline-flex;
+    transition: transform var(--animation-normal) ease-in-out;
+  }
 
-.nav-item .nav-item-toggle:checked ~ .nav-item-trigger > .nav-item-icon {
-  transform: rotate(90deg);
-}
+  .nav-item-toggle:checked ~ .nav-item-trigger > .nav-item-icon {
+    transform: rotate(90deg);
+  }
 
-.nav-item.sidebar {
   > a,
   > .nav-item-trigger {
     border-radius: var(--radius-sm);
-    color: var(--nav-sidebar-link-fontColor);
+    color: var(--color-text-strong);
     cursor: pointer;
     display: block;
     font-weight: 600;
@@ -41,13 +39,13 @@
 
     &[aria-current="page"] {
       text-decoration: underline dotted;
-      text-decoration-color: var(--nav-sidebar-active-textDecorationColor);
+      text-decoration-color: var(--color-text-muted);
       text-underline-offset: 3px;
     }
 
     &:hover {
-      background: var(--nav-sidebar-linkHover-backgroundColor);
-      color: var(--nav-sidebar-linkHover-fontColor);
+      background: var(--color-state-hover);
+      color: var(--color-text-strong);
     }
   }
 
@@ -57,20 +55,19 @@
     display: flex;
     gap: var(--spacing-xs);
     justify-content: space-between;
+
+    .nav-item-icon {
+      color: var(--color-text-muted);
+      transition:
+        color var(--animation-normal) ease-in-out,
+        transform var(--animation-normal) ease-in-out;
+    }
+
+    &:hover .nav-item-icon {
+      color: var(--color-text-strong);
+    }
   }
 
-  > .nav-item-trigger .nav-item-icon {
-    color: var(--nav-sidebar-link-iconColor);
-    transition:
-      color var(--animation-normal) ease-in-out,
-      transform var(--animation-normal) ease-in-out;
-  }
-
-  > .nav-item-trigger:hover .nav-item-icon {
-    color: var(--nav-sidebar-linkHover-iconColor);
-  }
-
-  /* Nested within nav-item in sidebar */
   .nav-item {
     > a,
     > .nav-item-trigger {

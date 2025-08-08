@@ -1,0 +1,29 @@
+# Metadata about this component, to be used in the CMS
+spec:
+  structures:
+    - nav_blocks
+  label: Nav Root
+  description: Navigation root component
+  icon: navigation
+  tags: []
+
+# Defines the structure of this component, as well as the default values
+blueprint:
+  variant: ""
+  navBlocks: []
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+  variant: ""
+  navBlocks: []
+
+_inputs:
+  variant:
+    type: select
+    label: Variant
+    comment: The variant style of the navigation.
+    options:
+      - label: Bar
+        value: "bar"
+      - label: Sidebar
+        value: "sidebar"

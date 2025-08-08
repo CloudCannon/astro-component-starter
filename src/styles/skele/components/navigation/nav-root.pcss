@@ -1,0 +1,15 @@
+.nav-root {
+  --nav-root-width: 100%;
+  background: var(--color-bg);
+  width: var(--nav-root-width);
+  padding: var(--spacing-md);
+
+  &.sidebar {
+    --nav-root-width: 250px;
+    height: 100%;
+    max-height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+}

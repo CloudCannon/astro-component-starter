@@ -2,10 +2,10 @@
 import { getCollection } from "astro:content";
 import NavItem from "../../components/navigation/nav-item/nav-item.astro";
 import NavList from "../../components/navigation/nav-list/nav-list.astro";
-import Nav from "../../components/navigation/nav/nav.astro";
+import NavRoot from "../../components/navigation/nav-root/nav-root.astro";
 import navData from "../data/nav.json";
 
-const layout = "sidebar";
+const variant = "sidebar";
 
 const allComponents = await getCollection("docs-components");
 
@@ -33,7 +33,7 @@ allComponents.forEach((component: any) => {
 
     componentsByCategory[category].push({
       name: component.data.title || componentName.replace(/-/g, " "),
-      path: `/skele/components/${category}/${componentName}`,
+      path: `/skele/components/${category}/${componentName}/`,
     });
   }
 });
@@ -61,31 +61,26 @@ const populatedNavData = navData.map((section) => {
 });
 ---
 
-<Nav layout={layout}>
+<NavRoot variant={variant}>
   <img
     src="/assets/images/skele-light.svg"
     alt="Logo"
     height="32"
     width="110"
-    slot="brand"
     style=" margin-inline-start: var(--spacing-lg);margin-bottom: var(--spacing-md);"
   />
-  <NavList slot="menu" layout={layout}>
+  <NavList>
     {
       populatedNavData
         .map((section, index) => {
           try {
             if (section.group && section.items && Array.isArray(section.items)) {
               return (
-                <NavItem
-                  label={section.group}
-                  defaultOpen={(section as any).defaultOpen || false}
-                  layout={layout}
-                >
-                  <NavList layout={layout}>
+                <NavItem label={section.group} defaultOpen={(section as any).defaultOpen || false}>
+                  <NavList>
                     {section.items.map((item, itemIndex) => {
                       try {
-                        return <NavItem href={item.path} label={item.name} layout={layout} />;
+                        return <NavItem href={item.path} label={item.name} />;
                       } catch (itemError) {
                         console.error(`Error rendering navigation item ${itemIndex}:`, itemError);
                         return null;
@@ -97,7 +92,7 @@ const populatedNavData = navData.map((section) => {
             }
 
             if (section.path) {
-              return <NavItem href={section.path} label={section.name} layout={layout} />;
+              return <NavItem href={section.path} label={section.name} />;
             }
 
             return null;
@@ -109,4 +104,4 @@ const populatedNavData = navData.map((section) => {
         .filter(Boolean)
     }
   </NavList>
-</Nav>
+</NavRoot>

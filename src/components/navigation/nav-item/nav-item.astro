@@ -1,20 +1,20 @@
 ---
 import Icon from "../../elements/icon/icon.astro";
-import { navItemSchema } from "../nav-item-list-schema";
+import RenderBlock from "../../utils/renderBlock.astro";
 
-const props = navItemSchema.parse(Astro.props);
+const { href, label, class: className, defaultOpen = false, navBlocks = [], ...rest } = Astro.props;
 
-const hasChildren = Astro.slots.has("default");
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const hasChildren = Astro.slots.has("default") || navBlocks.length > 0;
 const dropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
 const contentId = `dropdown-content-${crypto.randomUUID()}`;
-const isCurrentPage = props.href === Astro.url.pathname;
+const isCurrentPage = href === Astro.url.pathname;
 ---
 
-<li
-  class:list={["nav-item", props.layout, props.className, hasChildren ? "has-children" : null]}
-  id={props.id}
-  style={props.customStyle}
->
+<li class:list={["nav-item", className, hasChildren ? "has-children" : null]} {...htmlAttributes}>
   {
     hasChildren ? (
       <>
@@ -22,35 +22,77 @@ const isCurrentPage = props.href === Astro.url.pathname;
           type="checkbox"
           id={dropdownId}
           class="nav-item-toggle"
-          aria-expanded={props.defaultOpen ? "true" : "false"}
+          aria-expanded={defaultOpen ? "true" : "false"}
           aria-controls={contentId}
-          checked={props.defaultOpen}
+          checked={defaultOpen}
         />
         <label
           for={dropdownId}
           class="nav-item-trigger"
           role="button"
-          aria-expanded={props.defaultOpen ? "true" : "false"}
+          aria-expanded={defaultOpen ? "true" : "false"}
           aria-controls={contentId}
           tabindex="0"
         >
-          {props.label}
+          {label}
           <slot name="label" />
           <span class="nav-item-icon">
             <Icon name="chevron-right" size="none" aria-hidden="true" />
           </span>
         </label>
-        <div id={contentId} role="region" aria-label={`${props.label} submenu`}>
+        <div id={contentId} role="region" aria-label={`${label} submenu`}>
           <slot />
+          <RenderBlock contentBlocks={navBlocks} />
         </div>
       </>
     ) : (
-      <a href={props.href} aria-current={isCurrentPage ? "page" : undefined}>
-        {props.label}
+      <a href={href} aria-current={isCurrentPage ? "page" : undefined}>
+        {label}
         <slot name="label" />
       </a>
     )
   }
 </li>
 
-<!-- <script src="./nav-item.ts"></script> -->
+<script>
+  function closeAllDropdownsInParent(navItem: HTMLElement) {
+    const navRoot = navItem.closest(".nav-root");
+    if (!navRoot) return;
+
+    navRoot.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+      if (toggle instanceof HTMLInputElement) {
+        toggle.checked = false;
+        const label = document.querySelector(`label[for="${toggle.id}"]`);
+        if (label) {
+          label.setAttribute("aria-expanded", "false");
+        }
+      }
+    });
+  }
+
+  function setupDropdowns() {
+    document.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+      toggle.addEventListener("change", (e) => {
+        const target = e.target as HTMLInputElement;
+        const label = document.querySelector(`label[for="${target.id}"]`);
+        const navItem = target.closest(".nav-item") as HTMLElement;
+
+        if (label) {
+          label.setAttribute("aria-expanded", String(target.checked));
+        }
+
+        if (target.checked) {
+          closeAllDropdownsInParent(navItem);
+          target.checked = true;
+          label?.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupDropdowns);
+  } else {
+    setupDropdowns();
+  }
+</script>
