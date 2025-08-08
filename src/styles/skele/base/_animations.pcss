@@ -1,0 +1,26 @@
+:where(:root) {
+  body.animations-disabled * {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+
+  @keyframes grow-out {
+    0% {
+      opacity: 0.3;
+      transform: translateY(-5%);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

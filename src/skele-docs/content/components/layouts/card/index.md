@@ -15,7 +15,7 @@ examples:
       - padding-lg
       - padding-xl
       - padding-2xl
-    size: lg
+    size: md
   - title: "Background Options"
     slugs:
       - background-accent
@@ -23,16 +23,16 @@ examples:
       - background-surface
       - background-base
       - background-none
-    size: lg
+    size: md
   - title: "Corner Options"
     slugs:
       - rounded
       - rounded-none
-    size: lg
+    size: md
   - title: "Background image"
     slugs:
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right
-    size: lg
+    size: md
 ---

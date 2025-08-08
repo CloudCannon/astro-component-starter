@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import MarkdownIt from "markdown-it";
 
 const { text, size, align = "start", class: className, ...rest } = Astro.props;
@@ -10,11 +9,13 @@ const htmlAttributes = Object.fromEntries(
 
 const md = MarkdownIt({ html: true });
 const MarkdownText = text ? md.renderInline(text) : "";
-
-const classNames = clsx("paragraph", size && `size-${size}`, `align-${align}`, className);
 ---
 
-<p class:list={classNames} {...htmlAttributes} set:html={MarkdownText} />
+<p
+  class:list={["paragraph", size && `size-${size}`, `align-${align}`, className]}
+  {...htmlAttributes}
+  set:html={MarkdownText}
+/>
 
 <style>
   .paragraph {

@@ -1,27 +1,28 @@
 ---
-import probe from "probe-image-size";
+import { inferRemoteSize } from "astro:assets";
 import { transformUrl } from "unpic";
-import "./styles.pcss";
 
 const { src, alt, class: className, sizes, widths, width, height, ...htmlAttributes } = Astro.props;
 
 let imageWidth = width;
 let imageHeight = height;
 
+// Try to infer remote image dimensions using Astro's built-in function
 if (!imageWidth || !imageHeight) {
   try {
-    const dimensions = await probe(src);
+    const dimensions = await inferRemoteSize(src);
 
     if (dimensions && dimensions.width && dimensions.height) {
       imageWidth = imageWidth || dimensions.width;
       imageHeight = imageHeight || dimensions.height;
-      console.log(`Detected dimensions with probe-image-size: ${imageWidth}x${imageHeight}`);
     }
   } catch (error) {
     console.warn(`Could not detect image dimensions for: ${src}`, error);
+    // Don't throw - just continue with fallback dimensions
   }
 }
 
+// Fallback dimensions if not provided or detected
 const fallbackWidth = imageWidth || Math.min(...widths);
 const fallbackHeight = imageHeight || Math.round(fallbackWidth * 0.75);
 const aspectRatio = imageWidth && imageHeight ? imageHeight / imageWidth : 0.75;

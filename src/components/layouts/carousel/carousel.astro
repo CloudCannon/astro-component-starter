@@ -1,10 +1,9 @@
 ---
-import clsx from "clsx";
 import Button from "../../elements/button/button.astro";
 import Component from "../../utils/renderBlock.astro";
 
 const {
-  slides,
+  slides = [],
   autoPlay = false,
   autoScroll = false,
   slideWidthPercent = "100%",
@@ -48,7 +47,7 @@ if (autoScroll) {
   dataAttributes["data-show-arrows"] = "false";
 }
 
-const carouselClasses = clsx("carousel");
+const carouselClasses = "carousel";
 
 // Build the style attribute, merging custom styles with CSS variables
 const carouselStyles = `
@@ -101,90 +100,6 @@ const carouselStyles = `
   <div class="indicators"></div>
 </section>
 
-<style>
-  .carousel {
-    position: relative;
-    width: 100%;
-    --slide-width: 100%;
-    --min-slide-width: 0px;
-
-    > .viewport {
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-    }
-
-    > .viewport > .track {
-      display: flex;
-      flex-wrap: nowrap;
-    }
-
-    > .viewport > .track > .slide {
-      flex-shrink: 0;
-      flex-basis: calc(max(var(--slide-width), var(--min-slide-width)));
-    }
-
-    > .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: absolute;
-      top: 50%;
-      left: var(--spacing-md);
-      right: var(--spacing-md);
-      transform: translateY(-50%);
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    > .controls > .prev,
-    > .controls > .next {
-      pointer-events: auto;
-      border-radius: var(--radius-full);
-      background-color: var(--color-bg);
-
-      &:hover {
-        background-color: var(--color-bg-surface);
-      }
-    }
-
-    > .indicators {
-      display: flex;
-      justify-content: center;
-      margin-top: var(--spacing-sm);
-    }
-
-    > .indicators > :global(.indicator) {
-      border-radius: var(--radius-full);
-      width: 8px;
-      height: 8px;
-      margin: 0 var(--spacing-xs);
-      transition:
-        transform var(--animation-normal) ease,
-        background-color var(--animation-normal) ease;
-      border: none;
-      cursor: pointer;
-
-      &[data-selected="true"] {
-        background-color: var(--color-brand-muted);
-        transform: scale(1.2);
-      }
-    }
-
-    &[data-show-indicators="false"] {
-      > .indicators {
-        display: none;
-      }
-    }
-
-    &[data-show-arrows="false"] {
-      > .controls {
-        display: none;
-      }
-    }
-  }
-</style>
-
 <script>
   import EmblaCarousel from "embla-carousel";
   import AutoScroll from "embla-carousel-auto-scroll";
@@ -194,15 +109,19 @@ const carouselStyles = `
     const carousels = document.querySelectorAll(".carousel");
 
     carousels.forEach((carousel) => {
-      // Check if this carousel has already been initialized
       if (carousel.hasAttribute("data-embla-initialized")) {
         return;
       }
 
       const viewport = carousel.querySelector(".viewport") as HTMLElement;
-      const track = carousel.querySelector(".track") as HTMLElement;
+      const track = viewport?.querySelector(".track") as HTMLElement;
+      const slides = track?.querySelectorAll(".slide") as NodeListOf<HTMLElement>;
+      const indicatorsContainer = carousel.querySelector(".indicators") as HTMLElement;
 
-      if (!viewport || !track) return;
+      if (!viewport || !track || !slides.length) {
+        console.warn("Carousel: Missing required elements");
+        return;
+      }
 
       const loop = carousel.hasAttribute("data-loop");
       const slidesToScroll = carousel.hasAttribute("data-slides-to-scroll")
@@ -231,7 +150,7 @@ const carouselStyles = `
           slidesToScroll,
           align,
           watchDrag,
-          duration: 20, // Faster scroll duration
+          duration: 20,
           startIndex: 0,
           skipSnaps: false,
           inViewThreshold: 0.7,
@@ -256,21 +175,15 @@ const carouselStyles = `
       if (prevButton) prevButton.addEventListener("click", () => embla.scrollPrev());
       if (nextButton) nextButton.addEventListener("click", () => embla.scrollNext());
 
-      // Indicators
-      const indicatorsContainer = carousel.querySelector(".indicators") as HTMLElement;
-
-      let renderDots = () => {};
-      let updateSelectedDot = () => {};
-
+      // Setup indicators
       if (indicatorsContainer) {
-        renderDots = () => {
+        const renderDots = () => {
           indicatorsContainer.innerHTML = "";
-
           embla.scrollSnapList().forEach((_, index) => {
             const dot = document.createElement("button");
             dot.className = "indicator";
             dot.setAttribute("type", "button");
-            dot.setAttribute("aria-label", `Go to slide ${index + 1}`);
+            dot.setAttribute("aria-label", `Go to position ${index + 1}`);
             dot.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
             dot.setAttribute("aria-selected", (index === embla.selectedScrollSnap()).toString());
             dot.addEventListener("click", () => embla.scrollTo(index));
@@ -278,9 +191,8 @@ const carouselStyles = `
           });
         };
 
-        updateSelectedDot = () => {
-          const dots = indicatorsContainer.querySelectorAll(".indicator");
-          dots.forEach((dot, index) => {
+        const updateSelectedDot = () => {
+          indicatorsContainer.querySelectorAll(".indicator").forEach((dot, index) => {
             const isSelected = index === embla.selectedScrollSnap();
             dot.setAttribute("data-selected", isSelected.toString());
             dot.setAttribute("aria-selected", isSelected.toString());
@@ -288,14 +200,17 @@ const carouselStyles = `
         };
 
         embla.on("select", updateSelectedDot);
+        embla.on("reInit", renderDots);
         renderDots();
       }
     });
   }
 
+  // Initialize carousels when the page loads
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", setupCarousels);
   } else {
     setupCarousels();
   }
+  document.addEventListener("astro:page-load", setupCarousels);
 </script>

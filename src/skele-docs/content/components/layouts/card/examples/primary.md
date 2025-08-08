@@ -1,6 +1,6 @@
 ---
 title: Primary Card
-spacing:
+spacing: all
 blocks:
   _bookshop_name: "layouts/card"
   border: true

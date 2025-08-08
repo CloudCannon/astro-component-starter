@@ -1,0 +1,34 @@
+.definition-list {
+  display: grid;
+  gap: var(--spacing-em-sm) var(--spacing-em-md);
+  grid-template-columns: auto 1fr;
+  margin: 0;
+
+  &.alignment-center {
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    justify-content: center;
+
+    > .title {
+      text-align: end;
+    }
+  }
+
+  &.alignment-end {
+    align-items: end;
+    grid-template-columns: auto auto;
+    justify-content: end;
+
+    > .title {
+      text-align: start;
+    }
+
+    > .content {
+      text-align: end;
+    }
+  }
+
+  > .content {
+    margin: 0;
+  }
+}

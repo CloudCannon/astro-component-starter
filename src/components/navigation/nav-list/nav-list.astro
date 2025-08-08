@@ -1,27 +1,10 @@
 ---
-import { navListSchema } from "../nav-item-list-schema";
-const props = navListSchema.parse(Astro.props);
+import RenderBlock from "../../utils/renderBlock.astro";
+
+const { navBlocks = [] } = Astro.props;
 ---
 
-<style>
-  .nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
-
-  .nav-list.sidebar {
-    font-size: var(--font-size-md);
-    padding-inline-start: var(--spacing-md);
-  }
-</style>
-
-<ul
-  class:list={["nav-list", props.layout, props.className]}
-  id={props.id}
-  style={props.customStyle}
-  role="menu"
->
+<ul class="nav-list">
   <slot />
+  <RenderBlock contentBlocks={navBlocks} />
 </ul>

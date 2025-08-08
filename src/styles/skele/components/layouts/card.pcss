@@ -1,0 +1,146 @@
+a.card:hover {
+  transform: scale(1.02);
+}
+
+.card {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &.rounded {
+    border-radius: var(--radius-md);
+  }
+
+  &.border {
+    border: 1px solid var(--color-border);
+  }
+
+  > .outer-content {
+    height: 100%;
+  }
+
+  > .outer-content > .content {
+    height: 100%;
+    position: relative;
+    z-index: var(--layer-1);
+
+    &.pad-x-xs {
+      padding-inline: var(--spacing-xs);
+    }
+
+    &.pad-x-sm {
+      padding-inline: var(--spacing-sm);
+    }
+
+    &.pad-x-md {
+      padding-inline: var(--spacing-md);
+    }
+
+    &.pad-x-lg {
+      padding-inline: var(--spacing-lg);
+    }
+
+    &.pad-x-xl {
+      padding-inline: var(--spacing-xl);
+    }
+
+    &.pad-x-2xl {
+      padding-inline: var(--spacing-2xl);
+    }
+
+    &.pad-y-xs {
+      padding-block: var(--spacing-xs);
+    }
+
+    &.pad-y-sm {
+      padding-block: var(--spacing-sm);
+    }
+
+    &.pad-y-md {
+      padding-block: var(--spacing-md);
+    }
+
+    &.pad-y-lg {
+      padding-block: var(--spacing-lg);
+    }
+
+    &.pad-y-xl {
+      padding-block: var(--spacing-xl);
+    }
+
+    &.pad-y-2xl {
+      padding-block: var(--spacing-2xl);
+    }
+  }
+
+  > .background {
+    inset: 0;
+    position: absolute;
+  }
+
+  > .background-image {
+    inset: 0;
+    position: absolute;
+
+    object-position: center;
+
+    > img {
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+    }
+
+    &.top-left > img {
+      object-position: top left;
+    }
+
+    &.top-center > img {
+      object-position: top center;
+    }
+
+    &.top-right > img {
+      object-position: top right;
+    }
+
+    &.center-left > img {
+      object-position: center left;
+    }
+
+    &.center-center > img {
+      object-position: center center;
+    }
+
+    &.center-right > img {
+      object-position: center right;
+    }
+
+    &.bottom-left > img {
+      object-position: bottom left;
+    }
+
+    &.bottom-center > img {
+      object-position: bottom center;
+    }
+
+    &.bottom-right > img {
+      object-position: bottom right;
+    }
+  }
+
+  > .bg-surface {
+    background-color: var(--color-bg-surface);
+  }
+
+  > .bg-accent {
+    background-color: var(--color-bg-accent);
+  }
+
+  > .bg-highlight {
+    background-color: var(--color-bg-highlight);
+  }
+}

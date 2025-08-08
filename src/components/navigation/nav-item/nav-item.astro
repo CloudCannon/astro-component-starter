@@ -1,19 +1,20 @@
 ---
 import Icon from "../../elements/icon/icon.astro";
-import { navItemSchema } from "../nav-item-list-schema";
-const props = navItemSchema.parse(Astro.props);
+import RenderBlock from "../../utils/renderBlock.astro";
 
-const hasChildren = Astro.slots.has("default");
+const { href, label, class: className, defaultOpen = false, navBlocks = [], ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+
+const hasChildren = Astro.slots.has("default") || navBlocks.length > 0;
 const dropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
 const contentId = `dropdown-content-${crypto.randomUUID()}`;
-const isCurrentPage = props.href === Astro.url.pathname;
+const isCurrentPage = href === Astro.url.pathname;
 ---
 
-<li
-  class:list={["nav-item", props.layout, props.className, hasChildren ? "has-children" : null]}
-  id={props.id}
-  style={props.customStyle}
->
+<li class:list={["nav-item", className, hasChildren ? "has-children" : null]} {...htmlAttributes}>
   {
     hasChildren ? (
       <>
@@ -21,124 +22,77 @@ const isCurrentPage = props.href === Astro.url.pathname;
           type="checkbox"
           id={dropdownId}
           class="nav-item-toggle"
-          aria-expanded={props.defaultOpen ? "true" : "false"}
+          aria-expanded={defaultOpen ? "true" : "false"}
           aria-controls={contentId}
-          checked={props.defaultOpen}
+          checked={defaultOpen}
         />
         <label
           for={dropdownId}
           class="nav-item-trigger"
           role="button"
-          aria-expanded={props.defaultOpen ? "true" : "false"}
+          aria-expanded={defaultOpen ? "true" : "false"}
           aria-controls={contentId}
           tabindex="0"
         >
-          {props.label}
+          {label}
           <slot name="label" />
           <span class="nav-item-icon">
             <Icon name="chevron-right" size="none" aria-hidden="true" />
           </span>
         </label>
-        <div id={contentId} role="region" aria-label={`${props.label} submenu`}>
+        <div id={contentId} role="region" aria-label={`${label} submenu`}>
           <slot />
+          <RenderBlock contentBlocks={navBlocks} />
         </div>
       </>
     ) : (
-      <a href={props.href} aria-current={isCurrentPage ? "page" : undefined}>
-        {props.label}
+      <a href={href} aria-current={isCurrentPage ? "page" : undefined}>
+        {label}
         <slot name="label" />
       </a>
     )
   }
 </li>
 
-<!-- <script src="./nav-item.ts"></script> -->
+<script>
+  function closeAllDropdownsInParent(navItem: HTMLElement) {
+    const navRoot = navItem.closest(".nav-root");
+    if (!navRoot) return;
 
-<style>
-  .nav-item {
-    position: relative;
-  }
-
-  .nav-item-toggle {
-    display: none;
-
-    &:checked ~ div[role="region"] {
-      animation: grow-out 300ms ease-out;
-      display: revert;
-    }
-
-    & ~ div[role="region"] {
-      display: none;
-    }
-  }
-
-  .nav-item-icon {
-    align-items: center;
-    display: inline-flex;
-    transition: transform var(--animation-normal) ease-in-out;
-  }
-
-  .nav-item .nav-item-toggle:checked ~ .nav-item-trigger > .nav-item-icon {
-    transform: rotate(90deg);
-  }
-
-  .nav-item.sidebar {
-    > a,
-    > .nav-item-trigger {
-      border-radius: var(--radius-sm);
-      color: var(--nav-sidebar-link-fontColor);
-      cursor: pointer;
-      display: block;
-      font-weight: 600;
-      padding: var(--spacing-sm) var(--spacing-md);
-      text-decoration: none;
-      transition: background var(--animation-normal) ease-in-out;
-      user-select: none;
-      width: 100%;
-
-      &[aria-current="page"] {
-        text-decoration: underline dotted;
-        text-decoration-color: var(--nav-sidebar-active-textDecorationColor);
-        text-underline-offset: 3px;
+    navRoot.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+      if (toggle instanceof HTMLInputElement) {
+        toggle.checked = false;
+        const label = document.querySelector(`label[for="${toggle.id}"]`);
+        if (label) {
+          label.setAttribute("aria-expanded", "false");
+        }
       }
-
-      &:hover {
-        background: var(--nav-sidebar-linkHover-backgroundColor);
-        color: var(--nav-sidebar-linkHover-fontColor);
-      }
-    }
-
-    > .nav-item-trigger {
-      align-items: center;
-      cursor: pointer;
-      display: flex;
-      gap: var(--space-xs);
-      justify-content: space-between;
-    }
-
-    > .nav-item-trigger .nav-item-icon {
-      color: var(--nav-sidebar-link-iconColor);
-      transition:
-        color var(--animation-normal) ease-in-out,
-        transform var(--animation-normal) ease-in-out;
-    }
-
-    > .nav-item-trigger:hover .nav-item-icon {
-      color: var(--nav-sidebar-linkHover-iconColor);
-    }
-
-    /* Nested within nav-item in sidebar */
-    .nav-item {
-      > a,
-      > .nav-item-trigger {
-        font-weight: 500;
-      }
-
-      > a {
-        align-items: center;
-        display: inline-flex;
-        gap: var(--space-xs);
-      }
-    }
+    });
   }
-</style>
+
+  function setupDropdowns() {
+    document.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+      toggle.addEventListener("change", (e) => {
+        const target = e.target as HTMLInputElement;
+        const label = document.querySelector(`label[for="${target.id}"]`);
+        const navItem = target.closest(".nav-item") as HTMLElement;
+
+        if (label) {
+          label.setAttribute("aria-expanded", String(target.checked));
+        }
+
+        if (target.checked) {
+          closeAllDropdownsInParent(navItem);
+          target.checked = true;
+          label?.setAttribute("aria-expanded", "true");
+        }
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupDropdowns);
+  } else {
+    setupDropdowns();
+  }
+</script>

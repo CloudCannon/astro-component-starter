@@ -9,11 +9,11 @@ import yaml from "js-yaml";
 function getBodyPadding(spacing: string): string {
   switch (spacing) {
     case "all":
-      return "padding: var(--space-md";
+      return "padding: var(--spacing-md)";
     case "top":
-      return "padding-top: var(--space-md)";
+      return "padding-top: var(--spacing-md)";
     case "sides":
-      return "padding-left: var(--space-md); padding-right: var(--space-md);";
+      return "padding-left: var(--spacing-md); padding-right: var(--spacing-md);";
     default:
       return "";
   }
@@ -70,7 +70,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
         return (
           <>
             <div id={exampleId} class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}>
-              <div class="container" style={bodyPadding}>
+              <div class="examples" style={bodyPadding}>
                 {blocksArray.map((block) => {
                   const Component = components[block._bookshop_name];
 
@@ -83,7 +83,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
               <Code
                 lang="yaml"
                 code={formatBlocksYaml(example.data.blocks)}
-                style="height: 100%; padding: var(--space-sm);"
+                style="height: 100%; padding: var(--spacing-sm);"
               />
             </div>
           </>
@@ -114,7 +114,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
         </div>
         <div>
           <Button
-            type="ghost"
+            variant="ghost"
             label="View Code"
             size="lg"
             iconName="code-bracket"
@@ -122,7 +122,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
             data-action="view-code"
           />
           <Button
-            type="ghost"
+            variant="ghost"
             label="View Component"
             size="lg"
             iconName="computer-desktop"
@@ -241,12 +241,16 @@ Object.entries(componentImports).forEach(([path, obj]) => {
 
 <style>
   .component-viewer {
-    border: 1px solid var(--border-subtle-borderColor);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+  }
+
+  .hide {
+    display: none;
   }
 
   .previews {
@@ -285,11 +289,11 @@ Object.entries(componentImports).forEach(([path, obj]) => {
 
   .controls {
     align-items: center;
-    background: var(--color-faint-backgroundColor);
-    border-top: 1px solid var(--border-subtle-borderColor);
+    background: var(--color-bg-surface);
+    border-top: 1px solid var(--color-border-subtle);
     display: flex;
     justify-content: space-between;
-    padding: var(--space-sm);
+    padding: var(--spacing-sm);
 
     > * {
       line-height: 0;

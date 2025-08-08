@@ -1,16 +1,15 @@
 ---
-import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const {
   firstColumnContentBlocks = [],
-  firstColumnMinWidth = null,
   secondColumnContentBlocks = [],
-  secondColumnMinWidth = null,
+  firstColumnMinWidth,
+  secondColumnMinWidth,
   distributionMode = "half",
-  fixedWidth = null,
   verticalAlignment = "top",
   reverse = false,
+  fixedWidth,
   class: className,
   ...rest
 } = Astro.props;
@@ -19,32 +18,35 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-// Define distribution combinations
+// Distribution mode configurations
 const distributionModes = {
-  "quarter-three-quarters": { first: "quarter", last: "three-quarters" },
-  "third-two-thirds": { first: "third", last: "two-thirds" },
   half: { first: "half", last: "half" },
+  "third-two-thirds": { first: "third", last: "two-thirds" },
   "two-thirds-third": { first: "two-thirds", last: "third" },
+  "quarter-three-quarters": { first: "quarter", last: "three-quarters" },
   "three-quarters-quarter": { first: "three-quarters", last: "quarter" },
   "fixed-flexible": { first: "fixed", last: "flexible" },
   "flexible-fixed": { first: "flexible", last: "fixed" },
-};
+} as const;
+
+// Percentage-based distribution modes
+const percentages = {
+  half: 50,
+  third: 33.333,
+  "two-thirds": 66.667,
+  quarter: 25,
+  "three-quarters": 75,
+} as const;
 
 function calculateDistributionStyles(
   mode: string,
   isFirst: boolean,
-  fixedWidth: number | null,
-  minWidth: number | null
+  fixedWidth?: number,
+  minWidth?: number
 ): string {
-  if (!mode) return "";
-
-  const percentages: Record<string, number> = {
-    quarter: 25,
-    third: 33.3333,
-    half: 50,
-    "two-thirds": 66.6666,
-    "three-quarters": 75,
-  };
+  if (mode === "flexible") {
+    return `flex: 1 1 auto; max-width: 100%; min-width: calc(min(100%, ${minWidth || 0}px));`;
+  }
 
   if (mode === "fixed" && fixedWidth) {
     return `flex: 0 1 ${fixedWidth}px; min-width: calc(min(100%, ${fixedWidth}px)); max-width: ${fixedWidth}px;`;
@@ -96,11 +98,9 @@ const secondMinWidth = reverse ? firstColumnMinWidth : secondColumnMinWidth;
 
 const firstStyles = calculateDistributionStyles(firstMode, true, fixedWidth, firstMinWidth);
 const secondStyles = calculateDistributionStyles(lastMode, false, fixedWidth, secondMinWidth);
-
-const splitClasses = clsx("split", `align-${verticalAlignment}`, className);
 ---
 
-<section class:list={splitClasses} {...htmlAttributes}>
+<section class:list={["split", `align-${verticalAlignment}`, className]} {...htmlAttributes}>
   <div class="pane first" style={firstStyles}>
     <Component contentBlocks={firstContentBlocks} />
   </div>
@@ -108,38 +108,3 @@ const splitClasses = clsx("split", `align-${verticalAlignment}`, className);
     <Component contentBlocks={secondContentBlocks} />
   </div>
 </section>
-
-<style>
-  .split {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-lg);
-    --gap-size: var(--spacing-lg);
-
-    /* Vertical alignment options */
-    &.align-top {
-      align-items: flex-start;
-    }
-
-    &.align-center {
-      align-items: center;
-    }
-
-    &.align-bottom {
-      align-items: flex-end;
-    }
-
-    &.align-stretch {
-      align-items: stretch;
-
-      > .pane > :global(*:only-child) {
-        height: 100%;
-      }
-    }
-
-    .pane {
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
-  }
-</style>

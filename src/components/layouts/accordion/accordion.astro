@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Icon from "../../elements/icon/icon.astro";
 import RenderBlock from "../../utils/renderBlock.astro";
 
@@ -8,11 +7,9 @@ const { items, openFirst, ...rest } = Astro.props;
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
-
-const classNames = clsx("accordion");
 ---
 
-<div class:list={classNames} {...htmlAttributes}>
+<div class:list={["accordion"]} {...htmlAttributes}>
   {
     items.map((item: any, index: number) => {
       const isFirst = index === 0 && openFirst;
@@ -31,55 +28,3 @@ const classNames = clsx("accordion");
     })
   }
 </div>
-
-<style>
-  .accordion {
-    > .item {
-      border-bottom: 1px solid var(--color-border-subtle);
-
-      > .title {
-        align-items: center;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        padding: var(--space-md);
-        font-size: var(--font-size-xl);
-        font-weight: var(--font-weight-bold);
-        transition: background-color var(--animation-normal) ease-out;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-
-        &:first-of-type {
-          list-style-type: none;
-        }
-
-        &:hover {
-          background-color: var(--color-bg-surface);
-        }
-
-        &::-webkit-details-marker {
-          display: none;
-        }
-
-        .icon {
-          transition: transform var(--animation-normal) ease-out;
-        }
-      }
-
-      > .detail {
-        padding-inline: var(--space-md);
-      }
-    }
-
-    > .item[open] {
-      > .title .icon {
-        transform: rotate(180deg);
-      }
-
-      > .detail {
-        animation: grow-out 300ms ease-out;
-      }
-    }
-  }
-</style>

@@ -3,6 +3,7 @@ title: Bottom right background image
 spacing:
 blocks:
   _bookshop_name: "layouts/container"
+  colorScheme: contrast
   backgroundImage:
     source: /images/skele-docs/dunedin-cliff.jpg
     alt: "Dunedin cliffside"

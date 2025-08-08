@@ -1,0 +1,10 @@
+---
+import RenderBlock from "../../utils/renderBlock.astro";
+
+const { variant = "sidebar", navBlocks = [] } = Astro.props;
+---
+
+<nav class:list={["nav-root", variant]}>
+  <slot />
+  <RenderBlock contentBlocks={navBlocks} />
+</nav>

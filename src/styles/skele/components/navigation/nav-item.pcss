@@ -1,0 +1,83 @@
+.nav-item {
+  position: relative;
+
+  .nav-item-toggle {
+    display: none;
+
+    &:checked ~ div[role="region"] {
+      animation: grow-out 300ms ease-out;
+      display: revert;
+    }
+
+    & ~ div[role="region"] {
+      display: none;
+    }
+  }
+
+  .nav-item-icon {
+    align-items: center;
+    display: inline-flex;
+    transition: transform var(--animation-normal) ease-in-out;
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-trigger > .nav-item-icon {
+    transform: rotate(90deg);
+  }
+
+  > a,
+  > .nav-item-trigger {
+    border-radius: var(--radius-sm);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    display: block;
+    font-weight: 600;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-decoration: none;
+    transition: background var(--animation-normal) ease-in-out;
+    user-select: none;
+    width: 100%;
+
+    &[aria-current="page"] {
+      text-decoration: underline dotted;
+      text-decoration-color: var(--color-text-muted);
+      text-underline-offset: 3px;
+    }
+
+    &:hover {
+      background: var(--color-state-hover);
+      color: var(--color-text-strong);
+    }
+  }
+
+  > .nav-item-trigger {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    gap: var(--spacing-xs);
+    justify-content: space-between;
+
+    .nav-item-icon {
+      color: var(--color-text-muted);
+      transition:
+        color var(--animation-normal) ease-in-out,
+        transform var(--animation-normal) ease-in-out;
+    }
+
+    &:hover .nav-item-icon {
+      color: var(--color-text-strong);
+    }
+  }
+
+  .nav-item {
+    > a,
+    > .nav-item-trigger {
+      font-weight: 500;
+    }
+
+    > a {
+      align-items: center;
+      display: inline-flex;
+      gap: var(--spacing-xs);
+    }
+  }
+}

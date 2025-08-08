@@ -1,6 +1,5 @@
 ---
 import Icon from "@skele/components/elements/icon/icon.astro";
-import clsx from "clsx";
 import MarkdownIt from "markdown-it";
 
 const {
@@ -16,18 +15,20 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 
-const classNames = clsx(
-  "list",
-  `size-${size}`,
-  `direction-${direction}`,
-  `alignment-${horizontalAlignment}`,
-  className
-);
-
 const md = new MarkdownIt({ html: true });
 ---
 
-<ul class:list={classNames} role="list" {...htmlAttributes}>
+<ul
+  class:list={[
+    "list",
+    `size-${size}`,
+    `direction-${direction}`,
+    `alignment-${horizontalAlignment}`,
+    className,
+  ]}
+  role="list"
+  {...htmlAttributes}
+>
   {
     items.map((item: any) => {
       return (
@@ -39,60 +40,3 @@ const md = new MarkdownIt({ html: true });
     })
   }
 </ul>
-
-<style>
-  .list {
-    align-items: start;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-em-sm);
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-
-    &.direction-horizontal {
-      flex-direction: row;
-      gap: var(--space-em-md);
-      flex-wrap: wrap;
-    }
-
-    &.alignment-end {
-      align-items: end;
-      justify-content: end;
-    }
-    &.alignment-center {
-      align-items: center;
-      justify-content: center;
-    }
-
-    &.size-xs {
-      font-size: var(--font-size-xs);
-    }
-    &.size-sm {
-      font-size: var(--font-size-sm);
-    }
-    &.size-md {
-      font-size: var(--font-size-md);
-    }
-    &.size-lg {
-      font-size: var(--font-size-lg);
-    }
-    &.size-xl {
-      font-size: var(--font-size-xl);
-    }
-    &.size-2xl {
-      font-size: var(--font-size-2xl);
-    }
-
-    > .item {
-      gap: var(--space-em-xs);
-      display: inline-flex;
-      align-items: flex-start;
-
-      > .list-icon {
-        flex-shrink: 0;
-        margin-top: 0.3em;
-      }
-    }
-  }
-</style>

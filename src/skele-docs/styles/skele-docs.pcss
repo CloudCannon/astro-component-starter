@@ -1,7 +1,14 @@
-main {
-  margin-inline-start: var(--responsive-md);
-}
+.skele-docs {
+  .library-container > .outer-content > .content {
+    display: flex;
 
-.library-container > .outer-content > .content {
-  display: flex;
+    > .nav-root {
+      flex-shrink: 0;
+    }
+
+    > .main {
+      padding-inline-start: var(--spacing-em-lg);
+      border-left: 1px solid var(--color-border-subtle);
+    }
+  }
 }

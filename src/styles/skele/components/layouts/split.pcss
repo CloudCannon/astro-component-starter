@@ -1,0 +1,32 @@
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  --gap-size: var(--spacing-lg);
+
+  /* Vertical alignment options */
+  &.align-top {
+    align-items: flex-start;
+  }
+
+  &.align-center {
+    align-items: center;
+  }
+
+  &.align-bottom {
+    align-items: flex-end;
+  }
+
+  &.align-stretch {
+    align-items: stretch;
+
+    > .pane > *:only-child {
+      height: 100%;
+    }
+  }
+
+  .pane {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+}

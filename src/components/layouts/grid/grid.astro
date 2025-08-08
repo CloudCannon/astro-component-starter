@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import Component from "../../utils/renderBlock.astro";
 
 const {
@@ -18,14 +17,6 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const gridClasses = clsx(
-  "grid",
-  `align-${verticalAlignment}`,
-  `justify-${horizontalAlignment}`,
-  !equalWidth && "non-equal",
-  className
-);
-
 const gridStyles = [
   equalWidth && `--min-width: ${minItemWidth}px`,
   equalWidth && `--max-width: ${maxItemWidth}px`,
@@ -36,7 +27,17 @@ const gridStyles = [
   .join("; ");
 ---
 
-<div class:list={gridClasses} style={gridStyles} {...htmlAttributes}>
+<div
+  class:list={[
+    "grid",
+    `align-${verticalAlignment}`,
+    `justify-${horizontalAlignment}`,
+    !equalWidth && "non-equal",
+    className,
+  ]}
+  style={gridStyles}
+  {...htmlAttributes}
+>
   {
     items.map((item: any, index: number) => (
       <div class="grid-item">
@@ -45,39 +46,3 @@ const gridStyles = [
     ))
   }
 </div>
-
-<style>
-  .grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: var(--justify-content, center);
-    width: 100%;
-    gap: var(--spacing-md);
-
-    &.align-start {
-      align-items: flex-start;
-    }
-    &.align-center {
-      align-items: center;
-    }
-    &.align-end {
-      align-items: flex-end;
-    }
-    &.align-stretch {
-      align-items: stretch;
-
-      > .grid-item > :global(*:only-child) {
-        height: 100%;
-      }
-    }
-
-    &:not(.non-equal) > .grid-item {
-      flex: 1 1 var(--min-width, 200px);
-      max-width: var(--max-width, 320px);
-    }
-
-    &.non-equal > .grid-item {
-      flex: 0 0 auto;
-    }
-  }
-</style>

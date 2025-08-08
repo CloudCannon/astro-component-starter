@@ -1,0 +1,31 @@
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-em-sm);
+  margin: 0;
+
+  &.alignment-end {
+    align-items: end;
+    justify-content: end;
+  }
+  &.alignment-center {
+    align-items: center;
+    justify-content: center;
+  }
+  > .quote {
+    margin: 0;
+    font-size: var(--font-size-xl);
+
+    &::before {
+      content: "\201C";
+    }
+
+    &::after {
+      content: "\201D";
+    }
+  }
+
+  > .author {
+    font-style: normal;
+  }
+}

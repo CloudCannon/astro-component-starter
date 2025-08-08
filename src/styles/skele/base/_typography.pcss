@@ -1,0 +1,89 @@
+:where(:root) {
+  body {
+    font-family: var(--font-primary);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--color-text-strong);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 0.5em;
+    margin-top: 0.8em;
+  }
+
+  h1 {
+    font-size: var(--font-size-5xl);
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: var(--font-size-4xl);
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-size: var(--font-size-3xl);
+    line-height: 1.3;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-weight: normal;
+  }
+
+  h4 {
+    font-size: var(--font-size-2xl);
+    line-height: 1.35;
+  }
+
+  h5 {
+    font-size: var(--font-size-xl);
+    line-height: 1.4;
+  }
+
+  h6 {
+    font-size: var(--font-size-lg);
+    line-height: 1.45;
+  }
+
+  p,
+  ul,
+  ol {
+    color: var(--color-text);
+    font-size: var(--font-size-md);
+    line-height: 1.6;
+  }
+
+  strong {
+    font-weight: var(--font-weight-bold);
+  }
+
+  a {
+    color: var(--color-link);
+
+    &:hover {
+      color: var(--color-link-hover);
+    }
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  a,
+  td,
+  th,
+  pre,
+  code,
+  li {
+    overflow-wrap: break-word;
+  }
+}

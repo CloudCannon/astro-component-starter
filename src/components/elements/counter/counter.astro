@@ -1,6 +1,4 @@
 ---
-import clsx from "clsx";
-
 const {
   number = 0,
   prefix,
@@ -16,11 +14,9 @@ const duration = 500;
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
-
-const classNames = clsx("counter", `alignment-${horizontalAlignment}`, className);
 ---
 
-<div class:list={classNames} {...htmlAttributes}>
+<div class:list={["counter", `alignment-${horizontalAlignment}`, className]} {...htmlAttributes}>
   {prefix && <span class="prefix">{prefix}</span>}
   <span
     class="number"
@@ -31,22 +27,6 @@ const classNames = clsx("counter", `alignment-${horizontalAlignment}`, className
   >
   {suffix && <span class="suffix">{suffix}</span>}
 </div>
-
-<style>
-  .counter {
-    align-items: start;
-    display: flex;
-    font-size: var(--font-size-6xl);
-    font-weight: var(--font-weight-bold);
-
-    &.alignment-end {
-      justify-content: end;
-    }
-    &.alignment-center {
-      justify-content: center;
-    }
-  }
-</style>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {

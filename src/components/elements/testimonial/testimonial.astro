@@ -1,5 +1,4 @@
 ---
-import clsx from "clsx";
 import MarkdownIt from "markdown-it";
 
 const {
@@ -17,11 +16,12 @@ const htmlAttributes = Object.fromEntries(
 
 const md = MarkdownIt({ html: true });
 const MarkdownText = quote ? md.renderInline(quote) : "";
-
-const classNames = clsx("testimonial", `alignment-${horizontalAlignment}`, className);
 ---
 
-<blockquote class:list={classNames} {...htmlAttributes}>
+<blockquote
+  class:list={["testimonial", `alignment-${horizontalAlignment}`, className]}
+  {...htmlAttributes}
+>
   <q class="quote" set:html={MarkdownText} />
   <cite class="author">
     <strong class="name">
@@ -30,37 +30,3 @@ const classNames = clsx("testimonial", `alignment-${horizontalAlignment}`, class
     {authorDescription && <span class="description">- {authorDescription}</span>}
   </cite>
 </blockquote>
-
-<style>
-  .testimonial {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-em-sm);
-    margin: 0;
-
-    &.alignment-end {
-      align-items: end;
-      justify-content: end;
-    }
-    &.alignment-center {
-      align-items: center;
-      justify-content: center;
-    }
-    > .quote {
-      margin: 0;
-      font-size: var(--font-size-xl);
-
-      &::before {
-        content: "“";
-      }
-
-      &::after {
-        content: "”";
-      }
-    }
-
-    > .author {
-      font-style: normal;
-    }
-  }
-</style>

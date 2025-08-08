@@ -6,7 +6,4 @@ blocks:
   variant: "primary"
   size: "md"
   label: "Try it now!"
-  onclick: "alert('hi');"
-  id: hi
-  class: bye
 ---
