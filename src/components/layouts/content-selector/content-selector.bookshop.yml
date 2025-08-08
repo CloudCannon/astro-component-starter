@@ -1,0 +1,41 @@
+spec:
+  structures:
+    - content_blocks
+  label: Content Selector
+  description: Switches between related content panels using tab buttons.
+  icon: view_sidebar
+  tags:
+
+blueprint:
+  items:
+  navigationPosition: start
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  navigationPosition:
+    type: select
+    options:
+      values:
+        - start
+        - top
+
+_structures:
+  items:
+    values:
+      - label: Item
+        icon: place_item
+        value:
+          title:
+          sub_text:
+          icon_name:
+          content_blocks:
+        _inputs:
+          sub_text:
+            comment: Displays below the title in the selector tab
+          icon_name:
+            comment: An optional icon to the left of the text in the selector tab
+            options:
+              values: _select_data.icons
