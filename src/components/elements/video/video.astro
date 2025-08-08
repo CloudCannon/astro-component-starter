@@ -1,0 +1,51 @@
+---
+import clsx from "clsx";
+
+const {
+  uploadVideo = false,
+  videoType = "YouTube",
+  videoId,
+  videoSrc,
+  videoPoster,
+  title,
+  class: className,
+  ...restProps
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+
+const classNames = clsx("video", className);
+---
+
+{
+  uploadVideo ? (
+    <video
+      preload="none"
+      controls
+      poster={`${videoPoster}`}
+      class:list={classNames}
+      {...htmlAttributes}
+    >
+      <source src={`${videoSrc}`} type="video/mp4" />
+      Your browser does not support the HTML5 video element.
+    </video>
+  ) : videoType == "YouTube" ? (
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@justinribeiro/lite-youtube@1/lite-youtube.min.js"></script>
+    <lite-youtube videotitle={`${title}`} videoid={`${videoId}`}>
+      <a class="lite-youtube-fallback" href="https://www.youtube.com/watch?v=guJLfqTFfIw">Watch on YouTube: "{title}"</a>
+    </lite-youtube>
+  ) : (
+    <script src="https://cdn.jsdelivr.net/npm/@cshawaus/lite-vimeo/lib/index.js"></script>
+    <lite-vimeo videoid={`${videoId}`} videotitle={`${title}`} />
+  )
+}
+
+<style>
+  .video, .video-poster {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    width: 100%;
+  }
+</style>

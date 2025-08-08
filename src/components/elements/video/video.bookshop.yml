@@ -1,0 +1,45 @@
+spec:
+  structures:
+    - content_blocks
+  label: Video
+  description: "Play a video from YouTube, Vimeo, or your local files."
+  icon: data_object
+  tags: []
+
+blueprint:
+  uploadVideo: false
+  videoType: Youtube
+  videoId:
+  videoSrc:
+  videoPoster:
+  title:
+
+preview:
+
+_inputs:
+  uploadVideo:
+    type: checkbox
+    comment: Select if you want to upload a video, otherwise use a video from YouTube/Vimeo
+  videoType:
+    hidden: uploadVideo
+    type: select
+    options:
+      values:
+        - YouTube
+        - Vimeo
+  videoId:
+    comment: Enter a video ID from a public video on YouTube or Vimeo
+  videoSrc:
+    type: file
+    comment: Must be mp4 as this is supported by all modern browsers
+    options:
+      accepts_mime_types:
+        - video/mp4
+      paths:
+        uploads: /src/assets/videos/
+    hidden: "!uploadVideo"
+  videoPoster:
+    comment: The image displayed before the video plays or while it is loading.
+    hidden: "!uploadVideo"
+  autoplay:
+    comment: Play the video automatically on load without the user pressing play
