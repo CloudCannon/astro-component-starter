@@ -1,0 +1,45 @@
+---
+const {
+  videoType = "youtube",
+  videoId,
+  videoSrc,
+  videoPoster,
+  title,
+  class: className,
+  ...restProps
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+---
+
+{
+  videoType === "native" ? (
+    <video
+      preload="none"
+      controls
+      poster={`${videoPoster}`}
+      class:list={["video", className]}
+      {...htmlAttributes}
+    >
+      <source src={`${videoSrc}`} type="video/mp4" />
+      Your browser does not support the HTML5 video element.
+    </video>
+  ) : (
+    <script>
+      import '@justinribeiro/lite-youtube';
+    </script>
+    <lite-youtube
+      class:list={["video", className]}
+      videotitle={`${title}`}
+      videoid={`${videoId}`}
+      {...htmlAttributes}
+    >
+      <a class="lite-youtube-fallback" href={`https://www.youtube.com/watch?v=${videoId}`}>
+        Watch on YouTube: "{title}"
+      </a>
+    </lite-youtube>
+  )
+}
+

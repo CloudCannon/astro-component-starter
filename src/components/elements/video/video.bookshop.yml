@@ -1,0 +1,41 @@
+spec:
+  structures:
+    - content_blocks
+  label: Video
+  description: "Play a video from YouTube or your local files."
+  icon: data_object
+  tags: []
+
+blueprint:
+  videoType: youtube
+  videoId:
+  videoSrc:
+  videoPoster:
+  title:
+
+preview:
+
+_inputs:
+  videoType:
+    type: select
+    options:
+      values:
+        - youtube
+        - native
+      videoId:
+      comment: Enter a video ID from a public video on YouTube
+      hidden: 'videoType != "youtube"'
+    videoSrc:
+      type: file
+      comment: Must be mp4 as this is supported by all modern browsers
+      options:
+        accepts_mime_types:
+          - video/mp4
+        paths:
+          uploads: /src/assets/videos/
+      hidden: 'videoType != "native"'
+    videoPoster:
+      comment: The image displayed before the video plays or while it is loading.
+      hidden: 'videoType != "native"'
+    autoplay:
+      comment: Play the video automatically on load without the user pressing play
