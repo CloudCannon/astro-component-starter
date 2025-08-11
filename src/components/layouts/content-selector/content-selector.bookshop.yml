@@ -29,13 +29,4 @@ _structures:
         icon: place_item
         value:
           title:
-          sub_text:
-          icon_name:
           content_blocks:
-        _inputs:
-          sub_text:
-            comment: Displays below the title in the selector tab
-          icon_name:
-            comment: An optional icon to the left of the text in the selector tab
-            options:
-              values: _select_data.icons

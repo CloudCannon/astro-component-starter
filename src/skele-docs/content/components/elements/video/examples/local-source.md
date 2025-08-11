@@ -1,12 +1,12 @@
 ---
-title: "Video Type - Local"
+title: "HTML5 Video"
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/video"
-    uploadVideo: true
-    videoType: YouTube
+    videoType: native
     videoId:
-    videoSrc: /src/assets/videos/skele-docs/coffee-video.mp4
-    videoPoster: /src/assets/images/skele-docs/coffee-video-placeholder-image.png
-    title: Coffee shop video - by Ron Lach on pexels
+    videoSrc: https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4
+    videoPoster: /src/assets/images/skele-docs/bunny-video-placeholder.jpg
+    title: Big Buck Bunny
+    style: "max-width: 600px"
 ---

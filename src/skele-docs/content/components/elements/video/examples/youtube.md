@@ -1,12 +1,12 @@
 ---
-title: "Video Type - YouTube"
+title: "YouTube Source"
 spacing: "all"
 blocks:
   - _bookshop_name: "elements/video"
-    uploadVideo: false
-    videoType: YouTube
-    videoId: 5dXw2jaj2so
+    videoType: youtube
+    videoId: 4mB5KwenCzI
     videoSrc:
     videoPoster:
     title: Live visual editing in Astro with CloudCannon
+    style: "max-width: 600px"
 ---
