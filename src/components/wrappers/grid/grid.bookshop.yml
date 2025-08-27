@@ -3,7 +3,7 @@ spec:
     - contentBlocks
   label: Grid
   description: "Responsive, centered grid with configurable sizing."
-  icon: squares-2x2
+  icon: grid_on
   tags: []
 
 blueprint:

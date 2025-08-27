@@ -3,7 +3,7 @@ spec:
     - contentBlocks
   label: Container
   description: "A container component that provides layout structure with background options, padding, and content width controls."
-  icon: rectangle-stack
+  icon: width_full
   tags: []
 
 blueprint:

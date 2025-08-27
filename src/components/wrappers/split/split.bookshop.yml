@@ -3,7 +3,7 @@ spec:
     - contentBlocks
   label: Split
   description: Arranges content in two columns.
-  icon: columns
+  icon: vertical_split
   tags: []
 
 blueprint:
