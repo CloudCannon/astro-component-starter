@@ -64,53 +64,57 @@ const navId = `nav-${crypto.randomUUID()}`;
   }
 </nav>
 
-<script>
-  // Handle mobile navigation toggle changes
-  document.addEventListener("change", function (e) {
-    const toggle = e.target;
+{variant === "mobile" && (
+  <script>
+    // Handle mobile navigation toggle changes
+    document.addEventListener("change", function (e) {
+      const toggle = e.target;
 
-    // Only handle nav-toggle checkboxes
-    if (!toggle || !toggle.classList || !toggle.classList.contains("nav-toggle")) {
-      return;
-    }
-
-    // Find the nav and hamburger elements
-    const navId = toggle.id.replace("nav-toggle-", "");
-    const nav = document.getElementById(navId);
-    const hamburger = document.querySelector(`label[for="${toggle.id}"]`);
-
-    // Update aria attributes
-    if (nav && hamburger) {
-      const isExpanded = toggle.checked;
-
-      nav.setAttribute("aria-hidden", (!isExpanded).toString());
-
-      if (isExpanded) {
-        document.body.style.overflow = "hidden";
-        // Focus first focusable element when opening
-        const firstFocusable = nav.querySelector(
-          'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (firstFocusable) firstFocusable.focus();
-      } else {
-        document.body.style.overflow = "";
-        // Return focus to hamburger when closing
-        hamburger.focus();
+      // Only handle nav-toggle checkboxes
+      if (!toggle || !(toggle instanceof HTMLInputElement) || !toggle.classList.contains("nav-toggle")) {
+        return;
       }
-    }
-  });
 
-  // Close navs with Escape key
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-      const openNavs = document.querySelectorAll(".nav-toggle:checked");
-      if (openNavs.length > 0) {
-        openNavs.forEach((toggle) => {
-          toggle.checked = false;
-          toggle.dispatchEvent(new Event("change"));
-        });
-        document.body.style.overflow = "";
+      // Find the nav and hamburger elements
+      const navId = toggle.id.replace("nav-toggle-", "");
+      const nav = document.getElementById(navId);
+      const hamburger = document.querySelector(`label[for="${toggle.id}"]`);
+
+      // Update aria attributes
+      if (nav && hamburger) {
+        const isExpanded = toggle.checked;
+
+        nav.setAttribute("aria-hidden", (!isExpanded).toString());
+
+        if (isExpanded) {
+          document.body.style.overflow = "hidden";
+          // Focus first focusable element when opening
+          const firstFocusable = nav.querySelector(
+            'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          if (firstFocusable && firstFocusable instanceof HTMLElement) firstFocusable.focus();
+        } else {
+          document.body.style.overflow = "";
+          // Return focus to hamburger when closing
+          if (hamburger instanceof HTMLElement) hamburger.focus();
+        }
       }
-    }
-  });
-</script>
+    });
+
+    // Close navs with Escape key
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        const openNavs = document.querySelectorAll(".nav-toggle:checked");
+        if (openNavs.length > 0) {
+          openNavs.forEach((toggle) => {
+            if (toggle instanceof HTMLInputElement) {
+              toggle.checked = false;
+              toggle.dispatchEvent(new Event("change"));
+            }
+          });
+          document.body.style.overflow = "";
+        }
+      }
+    });
+  </script>
+)}

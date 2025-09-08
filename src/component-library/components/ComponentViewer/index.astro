@@ -1,5 +1,5 @@
 ---
-const { component_examples = [], title = "", size = "md", componentKey = "" } = Astro.props;
+const { component_examples = [], title = "", size = "md" } = Astro.props;
 
 import { Code } from "astro:components";
 import Button from "@components/primitives/button/button.astro";
@@ -19,16 +19,24 @@ function getBodyPadding(spacing: string): string {
   }
 }
 
-function formatBlocksYaml(blocks: any): string {
+function formatBlocksYaml(blocks: any, title: string, spacing: string): string {
   if (!blocks) return "";
 
   try {
-    return yaml.dump(blocks, {
+    const frontMatterData = {
+      title,
+      spacing,
+      blocks,
+    };
+
+    const yamlContent = yaml.dump(frontMatterData, {
       indent: 2,
       lineWidth: -1,
       noRefs: true,
       sortKeys: false,
     });
+
+    return `---\n${yamlContent}---`;
   } catch (error) {
     console.error("Error formatting YAML:", error);
     return "";
@@ -45,7 +53,6 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   const relativePath = path.replace("../../../components/", "").replace(/\.astro$/, "");
   const parts = relativePath.split("/");
 
-  // Remove duplicate directory names (e.g., rich-text/rich-text -> rich-text)
   if (parts.length > 1 && parts[parts.length - 1] === parts[parts.length - 2]) {
     parts.pop();
   }
@@ -80,9 +87,30 @@ Object.entries(componentImports).forEach(([path, obj]) => {
             </div>
 
             <div class="code" id={`code-${exampleId}`}>
+              <div class="code-header" data-theme="contrast">
+                <Button
+                  variant="primary"
+                  text="Copy Code"
+                  size="lg"
+                  iconName="document-duplicate"
+                  data-action="copy-code"
+                  hideText={true}
+                  data-code={formatBlocksYaml(
+                    example.data.blocks,
+                    example.data.title,
+                    example.data.spacing
+                  )}
+                  element="button"
+                  class="copy-button"
+                />
+              </div>
               <Code
                 lang="yaml"
-                code={formatBlocksYaml(example.data.blocks)}
+                code={formatBlocksYaml(
+                  example.data.blocks,
+                  example.data.title,
+                  example.data.spacing
+                )}
                 style="height: 100%; padding: var(--spacing-sm);"
               />
             </div>
@@ -241,6 +269,59 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   });
 </script>
 
+<!-- Separate script for copy button functionality -->
+<script is:inline>
+  // Global copy button handler
+  // Handles copying YAML code to clipboard and shows visual feedback
+  document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("click", async (event) => {
+      const button = event.target.closest('[data-action="copy-code"]');
+      if (!button) return;
+
+      event.stopPropagation();
+      const codeToCopy = button.getAttribute("data-code");
+
+      if (codeToCopy) {
+        try {
+          // Try modern clipboard API first
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(codeToCopy);
+          } else {
+            // Fallback for non-secure contexts
+            const textArea = document.createElement("textarea");
+            textArea.value = codeToCopy;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+              document.execCommand("copy");
+            } catch (fallbackErr) {
+              console.error("Fallback copy failed: ", fallbackErr);
+              return;
+            } finally {
+              document.body.removeChild(textArea);
+            }
+          }
+
+          button.classList.add("copied");
+          button.setAttribute("aria-label", "Copied!");
+
+          setTimeout(() => {
+            button.classList.remove("copied");
+            button.setAttribute("aria-label", "Copy Code");
+          }, 3000);
+        } catch (err) {
+          console.error("Failed to copy code: ", err);
+        }
+      }
+    });
+  });
+</script>
+
 <style>
   .component-viewer {
     border: 1px solid var(--color-border-subtle);
@@ -273,6 +354,18 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   .code {
     display: none;
     height: 100%;
+    position: relative;
+  }
+
+  .code-header {
+    position: absolute;
+    right: var(--spacing-lg);
+    top: var(--spacing-md);
+    z-index: 10;
+  }
+
+  .code-header .button {
+    position: relative;
   }
 
   .viewer-size {
@@ -297,8 +390,29 @@ Object.entries(componentImports).forEach(([path, obj]) => {
     justify-content: space-between;
     padding: var(--spacing-sm);
 
-    > * {
+    .select {
       line-height: 0;
     }
+  }
+
+  .button.copied::after {
+    animation: grow-out-centered var(--animation-normal) ease-in-out;
+    background: var(--color-bg-inverse);
+    border-radius: var(--radius-sm);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    color: var(--color-text-inverse);
+    content: "Copied!";
+    font-size: 0.875rem;
+    font-weight: 500;
+    left: 50%;
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    pointer-events: none;
+    position: absolute;
+    top: 100%;
+    transform: translateX(-50%);
+    z-index: 10;
   }
 </style>
