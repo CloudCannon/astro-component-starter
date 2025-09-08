@@ -31,9 +31,7 @@ const htmlAttributes = Object.fromEntries(
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const counters = document.querySelectorAll(".counter > .number");
-    if (!counters.length) {
-      return;
-    }
+    if (!counters.length) return;
 
     const io = new IntersectionObserver(
       (entries) => {
@@ -49,11 +47,9 @@ const htmlAttributes = Object.fromEntries(
 
     counters.forEach((el) => io.observe(el));
 
-    function animateCounter(el) {
-      const element = el;
-      if (element.dataset.hasRun) {
-        return;
-      }
+    function animateCounter(el: Element) {
+      const element = el as HTMLElement;
+      if (element.dataset.hasRun) return;
       element.dataset.hasRun = "true";
 
       const start = parseFloat(element.dataset.start || "0");
@@ -63,15 +59,11 @@ const htmlAttributes = Object.fromEntries(
       let startTime: number | null = null;
 
       function step(ts: number) {
-        if (!startTime) {
-          startTime = ts;
-        }
+        if (!startTime) startTime = ts;
         const progress = Math.min((ts - startTime) / duration, 1);
         const value = start + (target - start) * progress;
         element.textContent = Math.floor(value).toLocaleString();
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        }
+        if (progress < 1) requestAnimationFrame(step);
       }
 
       requestAnimationFrame(step);

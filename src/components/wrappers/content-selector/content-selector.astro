@@ -71,27 +71,25 @@ const uniqueId = crypto.randomUUID();
   </div>
 
   <script>
-    function updateContentSelectorAria(el) {
-      const inputs = Array.from(el.querySelectorAll('input.input[type="radio"]'));
-      const tabs = Array.from(el.querySelectorAll('[role="tab"]'));
-      const panels = Array.from(el.querySelectorAll('[role="tabpanel"]'));
-      const checked = el.querySelector('input.input[type="radio"]:checked');
+    function updateContentSelectorAria(el: HTMLElement) {
+      const inputs = Array.from(el.querySelectorAll<HTMLInputElement>('input.input[type="radio"]'));
+      const tabs = Array.from(el.querySelectorAll<HTMLElement>('[role="tab"]'));
+      const panels = Array.from(el.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
+      const checked = el.querySelector<HTMLInputElement>('input.input[type="radio"]:checked');
       const checkedIndex = checked ? inputs.indexOf(checked) : 0;
-      tabs.forEach((tab, i) =>
+      tabs.forEach((tab: HTMLElement, i: number) =>
         tab.setAttribute("aria-selected", i === checkedIndex ? "true" : "false")
       );
-      panels.forEach((panel, i) =>
+      panels.forEach((panel: HTMLElement, i: number) =>
         panel.setAttribute("aria-hidden", i !== checkedIndex ? "true" : "false")
       );
     }
 
     function setupContentSelectors() {
       document.querySelectorAll("section.content-selector").forEach((node) => {
-        if (!(node instanceof HTMLElement)) {
-          return;
-        }
-        const el = node;
-        const inputs = el.querySelectorAll('input.input[type="radio"]');
+        if (!(node instanceof HTMLElement)) return;
+        const el: HTMLElement = node;
+        const inputs = el.querySelectorAll<HTMLInputElement>('input.input[type="radio"]');
         inputs.forEach((input) => {
           input.addEventListener("change", () => updateContentSelectorAria(el));
         });

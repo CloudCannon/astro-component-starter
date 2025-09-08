@@ -16,7 +16,7 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const dataAttributes = {};
+const dataAttributes: Record<string, string> = {};
 
 // These are hardcoded variables that could be configured to be set
 // by the editor.
@@ -115,10 +115,10 @@ const carouselStyles = `
         return;
       }
 
-      const viewport = carousel.querySelector(".viewport");
-      const track = viewport?.querySelector(".track");
-      const slides = track?.querySelectorAll(".slide");
-      const indicatorsContainer = carousel.querySelector(".indicators");
+      const viewport = carousel.querySelector(".viewport") as HTMLElement;
+      const track = viewport?.querySelector(".track") as HTMLElement;
+      const slides = track?.querySelectorAll(".slide") as NodeListOf<HTMLElement>;
+      const indicatorsContainer = carousel.querySelector(".indicators") as HTMLElement;
 
       if (!viewport || !track || !slides.length) {
         console.warn("Carousel: Missing required elements");
@@ -164,26 +164,18 @@ const carouselStyles = `
       carousel.setAttribute("data-embla-initialized", "true");
 
       // Navigation
-      const prevButton = carousel.querySelector(".prev");
-      const nextButton = carousel.querySelector(".next");
+      const prevButton = carousel.querySelector(".prev") as HTMLButtonElement;
+      const nextButton = carousel.querySelector(".next") as HTMLButtonElement;
 
       const updateButtons = () => {
-        if (prevButton) {
-          prevButton.disabled = !embla.canScrollPrev();
-        }
-        if (nextButton) {
-          nextButton.disabled = !embla.canScrollNext();
-        }
+        if (prevButton) prevButton.disabled = !embla.canScrollPrev();
+        if (nextButton) nextButton.disabled = !embla.canScrollNext();
       };
 
       updateButtons();
       embla.on("select", updateButtons);
-      if (prevButton) {
-        prevButton.addEventListener("click", () => embla.scrollPrev());
-      }
-      if (nextButton) {
-        nextButton.addEventListener("click", () => embla.scrollNext());
-      }
+      if (prevButton) prevButton.addEventListener("click", () => embla.scrollPrev());
+      if (nextButton) nextButton.addEventListener("click", () => embla.scrollNext());
 
       // Setup indicators
       if (indicatorsContainer) {

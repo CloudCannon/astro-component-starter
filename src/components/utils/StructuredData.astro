@@ -1,4 +1,9 @@
 ---
+export interface Props {
+  type: string;
+  data: Record<string, any>;
+}
+
 const { type, data } = Astro.props;
 ---
 

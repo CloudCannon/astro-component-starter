@@ -98,9 +98,7 @@ const navId = `nav-${crypto.randomUUID()}`;
         } else {
           document.body.style.overflow = "";
           // Return focus to hamburger when closing
-          if (hamburger instanceof HTMLElement) {
-            hamburger.focus();
-          }
+          if (hamburger instanceof HTMLElement) hamburger.focus();
         }
       }
     });

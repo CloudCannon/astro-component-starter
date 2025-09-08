@@ -13,7 +13,7 @@ const isRemoteUrl =
 
 const imageFiles = import.meta.glob("/src/assets/images/**/*", {
   import: "default",
-});
+}) as Record<string, any>;
 
 if (typeof src === "string" && src.startsWith("/images/")) {
   const assetPath = src.replace("/images/", "");
@@ -23,12 +23,8 @@ if (typeof src === "string" && src.startsWith("/images/")) {
   if (imageKey && imageFiles[imageKey]) {
     imageSrc = await imageFiles[imageKey]();
 
-    if (!imageWidth) {
-      imageWidth = imageSrc.width;
-    }
-    if (!imageHeight) {
-      imageHeight = imageSrc.height;
-    }
+    if (!imageWidth) imageWidth = imageSrc.width;
+    if (!imageHeight) imageHeight = imageSrc.height;
   } else {
     console.warn(`Local image not found for path: ${src}`);
 
