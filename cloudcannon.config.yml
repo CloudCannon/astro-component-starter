@@ -24,6 +24,16 @@ collections_config:
         type: text
         comment: Controls the metadata title for the page.
 
+_inputs:
+  my_cool_svg:
+    type: select
+    options:
+      values: _select_data.icons
+      value_key: id
+      preview:
+        text:
+          - key: name
+
 collection_groups:
   - heading: Pages
     collections:
