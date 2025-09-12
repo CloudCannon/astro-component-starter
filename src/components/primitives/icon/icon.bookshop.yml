@@ -21,6 +21,10 @@ _inputs:
     comment: The name of the icon to display from the icon library
     options:
       values: _select_data.icons
+      value_key: id
+      preview:
+        text:
+          - key: name
   size:
     type: select
     options:
