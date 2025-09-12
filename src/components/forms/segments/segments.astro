@@ -1,10 +1,12 @@
 ---
+import Icon from "../../elements/icon/icon.astro";
+
 const {
   name,
   options = [],
   title,
-  orientation = "vertical",
   required = false,
+  iconOnly = false,
   multiple = false,
   class: className,
   ...rest
@@ -14,19 +16,19 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const groupId = htmlAttributes.id || `choice-group-${crypto.randomUUID()}`;
+const groupId = htmlAttributes.id || `segments-${crypto.randomUUID()}`;
 const inputType = multiple ? "checkbox" : "radio";
-const inputName = multiple ? `${name}[]` : name;
 ---
 
 <fieldset
-  class:list={["choice-group", `orientation-${orientation}`, multiple && "multiple", className]}
+  class:list={["segments", iconOnly && "icon-only", multiple && "multiple", className]}
   role={multiple ? "group" : "radiogroup"}
+  aria-labelledby={title ? `${groupId}-legend` : undefined}
   {...htmlAttributes}
 >
   {
     title && (
-      <legend class="legend">
+      <legend id={`${groupId}-legend`} class="legend">
         {title}
         {required && (
           <span class="required" aria-label="required">
@@ -36,20 +38,30 @@ const inputName = multiple ? `${name}[]` : name;
       </legend>
     )
   }
-  <div class="options">
+  <div class="options" role="presentation">
     {
       options.map((option, index) => (
         <label class="option">
           <input
             type={inputType}
-            name={inputName}
+            name={multiple ? `${name}[]` : name}
             value={option.value}
             checked={option.checked || false}
             required={required && index === 0}
             aria-required={required && index === 0}
             class="field"
           />
-          <span class="label-text">{option.label}</span>
+          <span
+            class="segment"
+            role="button"
+            tabindex="-1"
+            title={iconOnly && option.label ? option.label : undefined}
+          >
+            {option.icon && (
+              <Icon name={option.icon} size="none" class="segment-icon" aria-hidden="true" />
+            )}
+            {option.label && !iconOnly && <span class="segment-label">{option.label}</span>}
+          </span>
         </label>
       ))
     }

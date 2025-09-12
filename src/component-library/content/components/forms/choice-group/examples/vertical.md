@@ -3,10 +3,10 @@ title: "Vertical Choice Group"
 spacing: "all"
 blocks:
   _bookshop_name: "forms/choice-group"
-  type: "checkbox"
   name: "features"
   title: "Select Features"
   orientation: "vertical"
+  multiple: true
   options:
     - value: "analytics"
       label: "Analytics Dashboard"

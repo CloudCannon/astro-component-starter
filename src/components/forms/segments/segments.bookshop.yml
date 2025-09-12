@@ -1,0 +1,55 @@
+spec:
+  structures:
+    - formBlocks
+  label: Segments
+  description: "A segmented control component using radio buttons or checkboxes with optional icons."
+  icon: rectangle
+  tags: []
+
+blueprint:
+  name: segments
+  options:
+    - value: option1
+      label: Option 1
+      icon: star
+      iconSize: sm
+      iconBackground: none
+      checked: true
+    - value: option2
+      label: Option 2
+      icon: heart
+      iconSize: sm
+      iconBackground: none
+      checked: false
+    - value: option3
+      label: Option 3
+      icon: bookmark
+      iconSize: sm
+      iconBackground: none
+      checked: false
+  title:
+  required: false
+  iconOnly: false
+  multiple: false
+
+preview:
+
+_inputs:
+  name:
+    type: text
+    comment: The name attribute for the radio button group.
+  options:
+    type: blocks
+    comment: Array of segment options with value, label, icon, and checked state.
+  title:
+    type: text
+    comment: Optional title text for the fieldset.
+  required:
+    type: switch
+    comment: Whether the field is required.
+  iconOnly:
+    type: switch
+    comment: When true, labels are used as tooltips instead of being displayed as text.
+  multiple:
+    type: switch
+    comment: When true, uses checkboxes for multiple selection instead of radio buttons for single selection.

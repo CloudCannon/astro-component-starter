@@ -7,7 +7,6 @@ spec:
   tags: []
 
 blueprint:
-  type: checkbox
   name:
   options:
     - value: newsletter
@@ -19,17 +18,11 @@ blueprint:
   title:
   orientation: vertical
   required: false
+  multiple: true
 
 preview:
 
 _inputs:
-  type:
-    type: select
-    options:
-      values:
-        - checkbox
-        - radio
-    comment: The type of input - checkbox for multiple selections, radio for single selection.
   name:
     type: text
     comment: The name attribute for the input group.
@@ -49,3 +42,6 @@ _inputs:
   required:
     type: switch
     comment: Whether the field is required.
+  multiple:
+    type: switch
+    comment: When true, uses checkboxes for multiple selection. When false, uses radio buttons for single selection.

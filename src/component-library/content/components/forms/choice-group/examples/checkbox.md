@@ -3,9 +3,9 @@ title: "Checkbox Group"
 spacing: "all"
 blocks:
   _bookshop_name: "forms/choice-group"
-  type: "checkbox"
   name: "preferences"
   title: "Communication Preferences"
+  multiple: true
   options:
     - value: "newsletter"
       label: "Subscribe to newsletter"

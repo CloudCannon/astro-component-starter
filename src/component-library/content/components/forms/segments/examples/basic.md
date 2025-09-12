@@ -1,11 +1,10 @@
 ---
-title: "Radio Group"
+title: "Basic Segments"
 spacing: "all"
 blocks:
-  _bookshop_name: "forms/choice-group"
+  _bookshop_name: "forms/segments"
   name: "size"
   title: "Select Size"
-  multiple: false
   options:
     - value: "small"
       label: "Small"

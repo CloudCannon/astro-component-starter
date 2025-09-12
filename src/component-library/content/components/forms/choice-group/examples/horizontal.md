@@ -3,10 +3,10 @@ title: "Horizontal Choice Group"
 spacing: "all"
 blocks:
   _bookshop_name: "forms/choice-group"
-  type: "checkbox"
   name: "features"
   title: "Select Features"
   orientation: "horizontal"
+  multiple: true
   options:
     - value: "analytics"
       label: "Analytics Dashboard"

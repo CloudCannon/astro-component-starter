@@ -1,0 +1,106 @@
+.segments {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  .required {
+    color: red;
+    margin-inline-end: var(--spacing-em-xs);
+  }
+
+  .legend {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .options {
+    display: inline-flex;
+  }
+
+  .option {
+    align-items: center;
+    display: flex;
+    position: relative;
+
+    .field {
+      display: none;
+    }
+
+    .segment {
+      align-items: center;
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      cursor: pointer;
+      display: inline-flex;
+      flex: 1;
+      height: 100%;
+      justify-content: center;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      position: relative;
+      transition: background-color var(--animation-normal) ease;
+      vertical-align: middle;
+
+      &:hover {
+        background-color: var(--color-bg-surface);
+      }
+
+      .segment-icon {
+        flex-shrink: 0;
+        height: 1em;
+        width: 1em;
+      }
+
+      .segment-icon + .segment-label {
+        margin-inline-start: var(--spacing-em-xs);
+      }
+
+      .segment-label {
+        white-space: nowrap;
+      }
+    }
+
+    .field:checked + .segment {
+      background-color: var(--color-brand);
+      border-color: var(--color-brand);
+      color: var(--color-brand-on);
+      z-index: 1;
+
+      &:hover {
+        background-color: var(--color-brand-muted);
+      }
+
+      .segment-icon {
+        color: var(--color-brand-on);
+      }
+    }
+
+    .field:focus + .segment {
+      outline: 2px solid var(--color-focus-ring);
+      outline-offset: 2px;
+    }
+  }
+
+  .option:first-of-type .segment {
+    border-end-start-radius: var(--radius-sm);
+    border-start-start-radius: var(--radius-sm);
+  }
+
+  .option:last-of-type .segment {
+    border-end-end-radius: var(--radius-sm);
+    border-start-end-radius: var(--radius-sm);
+  }
+
+  .option:not(:last-of-type) .segment {
+    border-inline-end: none;
+  }
+
+  &.icon-only .option .segment .segment-icon {
+    height: 1.3em;
+    margin-block: var(--spacing-xs);
+    width: 1.3em;
+  }
+}

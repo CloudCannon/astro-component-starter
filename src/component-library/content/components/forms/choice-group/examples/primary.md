@@ -3,9 +3,9 @@ title: "Primary Choice Group"
 spacing: "all"
 blocks:
   _bookshop_name: "forms/choice-group"
-  type: "checkbox"
   name: "interests"
   title: "What are you interested in?"
+  multiple: true
   options:
     - value: "design"
       label: "Design"
