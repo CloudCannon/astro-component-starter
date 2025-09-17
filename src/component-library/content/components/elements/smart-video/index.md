@@ -1,5 +1,5 @@
 ---
-title: Video
+title: Smart Video
 order: 3
 examples:
   - slugs:

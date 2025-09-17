@@ -2,7 +2,7 @@
 title: "YouTube Source"
 spacing: "all"
 blocks:
-  - _bookshop_name: "elements/video"
+  - _bookshop_name: "elements/smart-video"
     type: youtube
     id: 4mB5KwenCzI
     src:

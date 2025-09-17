@@ -3,15 +3,15 @@ spec:
     - contentBlocks
     - firstContentBlocks
     - secondContentBlocks
-  label: Video
+  label: Smart Video
   description: "Play a video from YouTube, Vimeo, or your local files."
   icon: videocam
   tags: []
   preview:
     icon: videocam
     text:
-      - template: Video - {videoType}
-      - Video
+      - template: Smart Video - {videoType}
+      - Smart Video
     subtext:
       - key: title
       - key: videoSrc

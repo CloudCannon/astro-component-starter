@@ -2,7 +2,7 @@
 title: "Vimeo Video"
 spacing: "all"
 blocks:
-  - _bookshop_name: "elements/video"
+  - _bookshop_name: "elements/smart-video"
     type: vimeo
     id: 129371220
     src:

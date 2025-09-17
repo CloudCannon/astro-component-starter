@@ -1,8 +1,8 @@
 ---
-title: "Video"
+title: "Smart Video"
 spacing: "all"
 blocks:
-  - _bookshop_name: "elements/video"
+  - _bookshop_name: "elements/smart-video"
     type: youtube
     id: dsTXcSeAZq8
     src:
