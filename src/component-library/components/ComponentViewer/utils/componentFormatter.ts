@@ -23,7 +23,9 @@ export function formatComponentWithSlots(block: any, indentLevel: number = 0): s
   delete props.secondColumnContentBlocks;
   delete props.buttonBlocks;
   delete props.slides;
-  delete props.options;
+  if (!componentPath.includes("choice-group") && !componentPath.includes("segments")) {
+    delete props.options;
+  }
 
   // Check if this is a text component with text content
   const isTextComponent =
@@ -51,7 +53,12 @@ export function formatComponentWithSlots(block: any, indentLevel: number = 0): s
       } else if (typeof value === "number") {
         return `${key}={${value}}`;
       } else if (Array.isArray(value)) {
-        return `${key}={${JSON.stringify(value)}}`;
+        const formattedArray = JSON.stringify(value, null, 2)
+          .split("\n")
+          .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
+          .join("\n");
+
+        return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
       } else if (typeof value === "object" && value !== null) {
         return `${key}={${JSON.stringify(value)}}`;
       }
@@ -374,6 +381,11 @@ ${indent}  ${htmlContent}
 ${indent}</${componentName}>`;
     }
   } else {
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""} />`;
+    // Handle multi-line props formatting
+    if (propsString && propsString.includes("\n")) {
+      return `${indent}<${componentName}\n${propsString}\n${indent}/>`;
+    } else {
+      return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""} />`;
+    }
   }
 }
