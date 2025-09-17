@@ -6,7 +6,7 @@ const {
   slides = [],
   autoPlay = false,
   autoScroll = false,
-  slideWidthPercent = "100%",
+  slideWidthPercent = 100,
   minSlideWidth = 0,
   style = "",
   ...rest
@@ -51,7 +51,7 @@ const carouselClasses = "carousel";
 
 // Build the style attribute, merging custom styles with CSS variables
 const carouselStyles = `
-  --slide-width: ${slideWidthPercent};
+  --slide-width: ${slideWidthPercent}%;
   --min-slide-width: ${minSlideWidth}px;
   ${style}
 `.trim();

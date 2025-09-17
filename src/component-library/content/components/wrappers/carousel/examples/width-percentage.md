@@ -4,7 +4,7 @@ spacing:
 blocks:
   _bookshop_name: "wrappers/carousel"
   style: "max-width: 800px;margin-inline: auto;"
-  slideWidthPercent: "33%"
+  slideWidthPercent: 33
   minSlideWidth: 200
   slides:
     - contentBlocks:

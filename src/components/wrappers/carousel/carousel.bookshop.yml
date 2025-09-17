@@ -13,7 +13,7 @@ blueprint:
   slides: []
   autoPlay: false
   autoScroll: false
-  slideWidthPercent: "100%"
+  slideWidthPercent: 100
   minSlideWidth: 0
 
 # Overrides any fields in the blueprint when viewing this component in the component browser
@@ -36,8 +36,11 @@ _inputs:
     comment: Enable auto-scroll functionality.
     type: switch
   slideWidthPercent:
-    comment: Width of each slide as a percentage (e.g., "33%", "50%", "100%").
-    type: text
+    comment: Width of each slide as a percentage (e.g., 33, 50, 100).
+    type: range
+    min: 0
+    max: 100
+    step: 1
   minSlideWidth:
     comment: Minimum width of slides in pixels. Prevents slides from getting too small.
     type: number
