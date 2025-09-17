@@ -23,6 +23,7 @@ _inputs:
     type: array
     options:
       structures: _structures.item
+    comment: Array of list items. If empty, slot content will be used instead.
   direction:
     type: select
     options:

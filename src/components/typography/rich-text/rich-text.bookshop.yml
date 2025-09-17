@@ -4,7 +4,7 @@ spec:
     - firstContentBlocks
     - secondContentBlocks
   label: Rich text
-  description: A catch all for all content types. Can contain headings, paragraphs, images, bullets.
+  description: A catch all for all content types. Can contain headings, paragraphs, images, bullets. Use text prop for markdown content or slot for HTML content.
   icon: edit_note
   tags:
 
@@ -18,7 +18,7 @@ preview:
 # Any extra CloudCannon inputs configuration to apply to the blueprint
 _inputs:
   text:
-    comment: The content for the rich text component.
+    comment: The content for the rich text component (markdown format). Leave empty to use slot content instead.
     type: markdown
   align:
     type: select

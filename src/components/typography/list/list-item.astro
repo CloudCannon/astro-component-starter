@@ -1,0 +1,17 @@
+---
+import Icon from "@components/elements/icon/icon.astro";
+import MarkdownIt from "markdown-it";
+
+const { text = "", icon, class: className, ...restProps } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+
+const md = new MarkdownIt({ html: true });
+---
+
+<li class:list={["item", className]} {...htmlAttributes}>
+  <Icon name={icon} size="none" class="list-icon" aria-hidden="true" />
+  {text ? <span set:html={md.renderInline(text)} /> : <slot />}
+</li>

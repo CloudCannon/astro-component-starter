@@ -46,7 +46,7 @@ const Tag = getTag(type);
       />
     )
   }
-  <span class="heading-text" set:html={MarkdownText} />
+  {text ? <span class="heading-text" set:html={MarkdownText} /> : <slot />}
   {
     iconName && iconPosition === "after" && (
       <Icon

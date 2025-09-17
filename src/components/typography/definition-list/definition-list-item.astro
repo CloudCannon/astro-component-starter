@@ -1,0 +1,14 @@
+---
+const { title, text, class: className, ...restProps } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
+);
+---
+
+<dt class:list={["title", className]} role="term" {...htmlAttributes}>
+  {title ? <strong>{title}</strong> : <slot name="title" />}
+</dt>
+<dd class:list={["content", className]} role="definition" {...htmlAttributes}>
+  {text ? text : <slot />}
+</dd>

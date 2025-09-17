@@ -1,0 +1,12 @@
+---
+const { value = "", label = "", selected = false, disabled = false, ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+---
+
+<option value={value} selected={selected} disabled={disabled} {...htmlAttributes}>
+  {label}
+  <slot />
+</option>

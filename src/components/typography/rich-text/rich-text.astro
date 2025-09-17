@@ -13,8 +13,6 @@ const htmlAttributes = Object.fromEntries(
 const markdownContent = text ? md.render(text) : "";
 ---
 
-<div
-  class:list={["rich-text", className, `align-${align}`]}
-  {...htmlAttributes}
-  set:html={markdownContent}
-/>
+<div class:list={["rich-text", className, `align-${align}`]} {...htmlAttributes}>
+  {text ? <Fragment set:html={markdownContent} /> : <slot />}
+</div>

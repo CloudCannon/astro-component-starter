@@ -1,27 +1,22 @@
 ---
-const {
-  items,
-  horizontalAlignment = "start",
-  class: className,
-  ...restProps
-} = Astro.props;
+import DefinitionListItem from "./definition-list-item.astro";
+
+const { items, horizontalAlignment = "start", class: className, ...restProps } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
 ---
 
-<dl class:list={[
-  "definition-list", 
-  `alignment-${horizontalAlignment}`, 
-  className
-]} {...htmlAttributes}>
+<dl
+  class:list={["definition-list", `alignment-${horizontalAlignment}`, className]}
+  {...htmlAttributes}
+>
   {
-    items.map((item: any) => {
-      return (
-        <dt class="title" role="term"><strong>{item.title}</strong></dt>
-        <dd class="content" role="definition">{item.text}</dd>
-      );
-    })
+    items && items.length > 0 ? (
+      items.map((item: any) => <DefinitionListItem title={item.title} text={item.text} />)
+    ) : (
+      <slot />
+    )
   }
 </dl>

@@ -1,0 +1,132 @@
+.component-viewer {
+  border-radius: var(--radius-xs);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.hide {
+  display: none;
+}
+
+.previews {
+  max-height: 30rem;
+  min-height: 10rem;
+}
+
+.preview {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border-subtle);
+  border-bottom: 0;
+  border-radius: var(--radius-xs);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  display: none;
+  height: 100%;
+  max-height: inherit;
+  min-height: inherit;
+  overflow-y: auto;
+  transition: max-width var(--animation-slow) ease-in-out;
+}
+
+.component-viewer[data-device-size="mobile"] .preview {
+  max-width: var(--content-width-xs);
+}
+
+.component-viewer[data-device-size="tablet"] .preview {
+  max-width: var(--content-width-lg);
+}
+
+.component-viewer[data-device-size="desktop"] .preview {
+  max-width: 100%;
+}
+
+.preview.active {
+  display: block;
+}
+
+.code {
+  display: none;
+  height: 100%;
+  max-height: inherit;
+  min-height: inherit;
+  overflow-y: auto;
+  position: relative;
+
+  .astro-code {
+    overflow-y: scroll;
+  }
+}
+
+.code-header {
+  position: absolute;
+  right: var(--spacing-lg);
+  top: var(--spacing-sm);
+  z-index: 10;
+}
+
+.controls {
+  align-items: center;
+  background: var(--color-bg-surface);
+  border-top: 1px solid var(--color-border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  justify-content: space-between;
+  padding: var(--spacing-sm);
+
+  .example-select {
+    line-height: 0;
+  }
+
+  .end-segments {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+  }
+
+  .hidden-segments {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+    opacity: 0;
+    transition: opacity var(--animation-normal) ease;
+  }
+
+  &:hover .hidden-segments {
+    opacity: 1;
+  }
+
+  .device-size-segments,
+  .direction-segments,
+  .theme-segments,
+  .view-segments {
+    .options {
+      display: flex;
+      gap: 0;
+    }
+
+    .option {
+      margin: 0;
+    }
+
+    .segment {
+      min-width: auto;
+      padding: var(--spacing-xs);
+
+      .segment-icon {
+        height: 1rem;
+        width: 1rem;
+      }
+    }
+  }
+
+  .view-segments {
+    margin-right: 0;
+  }
+}

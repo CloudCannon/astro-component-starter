@@ -26,5 +26,6 @@ _structures:
       - label: Definition List Item
         icon: title
         value:
+          _component: definition-list-item
           title:
           text:

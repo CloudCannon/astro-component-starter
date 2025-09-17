@@ -68,11 +68,15 @@ const carouselStyles = `
   <div class="viewport">
     <div class="track">
       {
-        slides.map((slide: any, index: number) => (
-          <div class="slide" role="group" aria-label={`Slide ${index + 1} of ${slides.length}`}>
-            <Component contentBlocks={slide.contentBlocks} />
-          </div>
-        ))
+        slides.length > 0 ? (
+          slides.map((slide: any, index: number) => (
+            <div class="slide" role="group" aria-label={`Slide ${index + 1} of ${slides.length}`}>
+              <Component contentBlocks={slide.contentBlocks} />
+            </div>
+          ))
+        ) : (
+          <slot />
+        )
       }
     </div>
   </div>

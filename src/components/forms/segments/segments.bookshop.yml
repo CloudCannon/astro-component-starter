@@ -8,29 +8,12 @@ spec:
 
 blueprint:
   name: segments
-  options:
-    - value: option1
-      label: Option 1
-      icon: star
-      iconSize: sm
-      iconBackground: none
-      checked: true
-    - value: option2
-      label: Option 2
-      icon: heart
-      iconSize: sm
-      iconBackground: none
-      checked: false
-    - value: option3
-      label: Option 3
-      icon: bookmark
-      iconSize: sm
-      iconBackground: none
-      checked: false
+  options: []
   title:
   required: false
   iconOnly: false
   multiple: false
+  keepStateOnRefresh: true
 
 preview:
 
@@ -53,3 +36,6 @@ _inputs:
   multiple:
     type: switch
     comment: When true, uses checkboxes for multiple selection instead of radio buttons for single selection.
+  keepStateOnRefresh:
+    type: switch
+    comment: When true, sets autocomplete="on" to allow browser to remember state on page refresh. Defaults to false (autocomplete="off").

@@ -1,6 +1,5 @@
 ---
-import Icon from "@components/elements/icon/icon.astro";
-import MarkdownIt from "markdown-it";
+import ListItem from "./list-item.astro";
 
 const {
   items = [],
@@ -14,8 +13,6 @@ const {
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
 );
-
-const md = new MarkdownIt({ html: true });
 ---
 
 <ul
@@ -30,13 +27,12 @@ const md = new MarkdownIt({ html: true });
   {...htmlAttributes}
 >
   {
-    items.map((item: any) => {
-      return (
-        <li class="item">
-          <Icon name={item.icon} size="none" class="list-icon" aria-hidden="true" />
-          <span set:html={md.renderInline(item.text || "")} />
-        </li>
-      );
-    })
+    items.length > 0 ? (
+      items.map((item: any) => {
+        return <ListItem text={item.text} icon={item.icon} />;
+      })
+    ) : (
+      <slot />
+    )
   }
 </ul>

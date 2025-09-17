@@ -1,13 +1,5 @@
 ---
-const {
-  videoType = "youtube",
-  videoId,
-  videoSrc,
-  videoPoster,
-  title,
-  class: className,
-  ...restProps
-} = Astro.props;
+const { type = "youtube", id, src, poster, title, class: className, ...restProps } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => !key.startsWith("_"))
@@ -15,27 +7,27 @@ const htmlAttributes = Object.fromEntries(
 ---
 
 {
-  videoType === "native" ? (
+  type === "native" ? (
     <video
       preload="none"
       controls
-      poster={`${videoPoster}`}
+      poster={`${poster}`}
       class:list={["video", className]}
       {...htmlAttributes}
     >
-      <source src={`${videoSrc}`} type="video/mp4" />
+      <source src={`${src}`} type="video/mp4" />
       Your browser does not support the HTML5 video element.
     </video>
-  ) : videoType === "vimeo" ? (
+  ) : type === "vimeo" ? (
     <>
       <script>import '@choctawnationofoklahoma/lite-vimeo';</script>
       <lite-vimeo
         class:list={["video", className]}
         videotitle={`${title}`}
-        videoid={`${videoId}`}
+        videoid={`${id}`}
         {...htmlAttributes}
       >
-        <a class="lite-vimeo-fallback" href={`https://vimeo.com/${videoId}`}>
+        <a class="lite-vimeo-fallback" href={`https://vimeo.com/${id}`}>
           Watch on Vimeo: "{title}"
         </a>
       </lite-vimeo>
@@ -46,10 +38,10 @@ const htmlAttributes = Object.fromEntries(
       <lite-youtube
         class:list={["video", className]}
         videotitle={`${title}`}
-        videoid={`${videoId}`}
+        videoid={`${id}`}
         {...htmlAttributes}
       >
-        <a class="lite-youtube-fallback" href={`https://www.youtube.com/watch?v=${videoId}`}>
+        <a class="lite-youtube-fallback" href={`https://www.youtube.com/watch?v=${id}`}>
           Watch on YouTube: "{title}"
         </a>
       </lite-youtube>

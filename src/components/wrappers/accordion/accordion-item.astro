@@ -1,0 +1,20 @@
+---
+import Icon from "@components/elements/icon/icon.astro";
+import RenderBlock from "@components/utils/renderBlock.astro";
+
+const { title, contentBlocks, isOpen = false, accordionName, ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => !key.startsWith("_"))
+);
+---
+
+<details class="item" open={isOpen} name={accordionName} {...htmlAttributes}>
+  <summary class="title">
+    <span class="text">{title}</span>
+    <Icon name="chevron-up" size="none" />
+  </summary>
+  <div class="detail">
+    {contentBlocks ? <RenderBlock contentBlocks={contentBlocks} /> : <slot />}
+  </div>
+</details>

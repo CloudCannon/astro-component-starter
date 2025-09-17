@@ -1,6 +1,5 @@
 ---
-import Icon from "@components/elements/icon/icon.astro";
-import RenderBlock from "@components/utils/renderBlock.astro";
+import AccordionItem from "./accordion-item.astro";
 
 const { items, openFirst, singleOpen = false, ...rest } = Astro.props;
 
@@ -13,20 +12,21 @@ const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefine
 
 <div class:list={["accordion"]} {...htmlAttributes}>
   {
-    items.map((item: any, index: number) => {
-      const isFirst = index === 0 && openFirst;
+    items ? (
+      items.map((item: any, index: number) => {
+        const isFirst = index === 0 && openFirst;
 
-      return (
-        <details class="item" open={isFirst} name={accordionName}>
-          <summary class="title">
-            <span class="text">{item.title}</span>
-            <Icon name="chevron-up" size="none" />
-          </summary>
-          <div class="detail">
-            <RenderBlock contentBlocks={item.contentBlocks} />
-          </div>
-        </details>
-      );
-    })
+        return (
+          <AccordionItem
+            title={item.title}
+            contentBlocks={item.contentBlocks}
+            isOpen={isFirst}
+            accordionName={accordionName}
+          />
+        );
+      })
+    ) : (
+      <slot />
+    )
   }
 </div>

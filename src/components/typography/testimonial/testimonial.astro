@@ -22,7 +22,9 @@ const MarkdownText = text ? md.renderInline(text) : "";
   class:list={["testimonial", `alignment-${horizontalAlignment}`, className]}
   {...htmlAttributes}
 >
-  <q class="quote" set:html={MarkdownText} />
+  <q class="quote">
+    {text ? <Fragment set:html={MarkdownText} /> : <slot />}
+  </q>
   <cite class="author">
     <strong class="name">
       {authorName}

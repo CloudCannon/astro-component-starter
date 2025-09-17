@@ -14,7 +14,6 @@ const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => !key.startsWith("_"))
 );
 
-const groupId = htmlAttributes.id || `choice-group-${crypto.randomUUID()}`;
 const inputType = multiple ? "checkbox" : "radio";
 const inputName = multiple ? `${name}[]` : name;
 ---

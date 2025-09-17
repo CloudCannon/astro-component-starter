@@ -9,26 +9,26 @@ spec:
   tags: []
 
 blueprint:
-  videoType: youtube
-  videoId:
-  videoSrc:
-  videoPoster:
+  type: youtube
+  id:
+  src:
+  poster:
   title:
 
 preview:
 
 _inputs:
-  videoType:
+  type:
     type: select
     options:
       values:
         - youtube
         - vimeo
         - native
-    videoId:
+    id:
       comment: Enter a video ID from a public video on YouTube or Vimeo
-      hidden: 'videoType == "native"'
-    videoSrc:
+      hidden: 'type == "native"'
+    src:
       type: file
       comment: Must be mp4 as this is supported by all modern browsers
       options:
@@ -36,9 +36,9 @@ _inputs:
           - video/mp4
         paths:
           uploads: /src/assets/videos/
-      hidden: 'videoType != "native"'
-    videoPoster:
+      hidden: 'type != "native"'
+    poster:
       comment: The image displayed before the video plays or while it is loading.
-      hidden: 'videoType != "native"'
+      hidden: 'type != "native"'
     autoplay:
       comment: Play the video automatically on load without the user pressing play

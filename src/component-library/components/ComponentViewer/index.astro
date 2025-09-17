@@ -1,50 +1,14 @@
 ---
-const { component_examples = [], title = "", size = "md", componentKey = "" } = Astro.props;
+const { component_examples = [], title = "", size = "md" } = Astro.props;
 
-import { Code } from "astro:components";
 import Button from "@components/elements/button/button.astro";
 import Segments from "@components/forms/segments/segments.astro";
-// @ts-ignore
-import yaml from "js-yaml";
+import { Code } from "astro:components";
+import "./styles.css";
+import { formatBlocksAstro } from "./utils/astroFormatter";
+import { getBodyPadding } from "./utils/spacing";
+import { formatBlocksYaml } from "./utils/yamlFormatter";
 
-function getBodyPadding(spacing: string): string {
-  switch (spacing) {
-    case "all":
-      return "padding: var(--spacing-md)";
-    case "top":
-      return "padding-top: var(--spacing-md)";
-    case "sides":
-      return "padding-left: var(--spacing-md); padding-right: var(--spacing-md);";
-    default:
-      return "";
-  }
-}
-
-function formatBlocksYaml(blocks: any, title: string, spacing: string): string {
-  if (!blocks) return "";
-
-  try {
-    const frontMatterData = {
-      title,
-      spacing,
-      blocks,
-    };
-
-    const yamlContent = yaml.dump(frontMatterData, {
-      indent: 2,
-      lineWidth: -1,
-      noRefs: true,
-      sortKeys: false,
-    });
-
-    return `---\n${yamlContent}---`;
-  } catch (error) {
-    console.error("Error formatting YAML:", error);
-    return "";
-  }
-}
-
-// Load all components dynamically
 const components: Record<string, Function> = {};
 const componentImports = import.meta.glob("../../../components/**/*.astro", {
   eager: true,
@@ -63,9 +27,11 @@ Object.entries(componentImports).forEach(([path, obj]) => {
 
   components[bookshopName] = (obj as any).default;
 });
+
+const viewerId = title.toLowerCase().replace(/\s+/g, "-");
 ---
 
-<div class="component-viewer" data-viewer-id={title.toLowerCase().replace(/\s+/g, "-")}>
+<div class="component-viewer" data-viewer-id={viewerId}>
   <div class:list={["previews", size && `viewer-size-${size}`]}>
     {
       component_examples.map(async (example: any, idx: number) => {
@@ -88,11 +54,31 @@ Object.entries(componentImports).forEach(([path, obj]) => {
               </div>
             </div>
 
-            <div class="code" id={`code-${exampleId}`}>
+            <div class="code astro-code" id={`astro-code-${exampleId}`}>
               <div class="code-header" data-theme="contrast">
                 <Button
                   variant="primary"
-                  text="Copy Code"
+                  text="Copy Astro Code"
+                  size="lg"
+                  iconName="document-duplicate"
+                  data-action="copy-code"
+                  hideText={true}
+                  data-code={formatBlocksAstro(example.data.blocks)}
+                  element="button"
+                  class="copy-button"
+                />
+              </div>
+              <Code
+                lang="astro"
+                code={formatBlocksAstro(example.data.blocks)}
+                style="height: 100%; padding: var(--spacing-sm);"
+              />
+            </div>
+            <div class="code frontmatter-code" id={`frontmatter-code-${exampleId}`}>
+              <div class="code-header" data-theme="contrast">
+                <Button
+                  variant="primary"
+                  text="Copy Frontmatter Code"
                   size="lg"
                   iconName="document-duplicate"
                   data-action="copy-code"
@@ -128,13 +114,10 @@ Object.entries(componentImports).forEach(([path, obj]) => {
         <div>
           {component_examples.length > 1 && (
             <>
-              <label for={`${title.toLowerCase().replace(/\s+/g, "-")}-examples`} class="sr-only">
+              <label for={`${viewerId}-examples`} class="sr-only">
                 Examples:
               </label>
-              <select
-                class="example-select"
-                id={`${title.toLowerCase().replace(/\s+/g, "-")}-examples`}
-              >
+              <select class="example-select" id={`${viewerId}-examples`}>
                 {component_examples.map((example: any, idx: number) => {
                   const exampleName = example.data.title;
                   const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
@@ -148,7 +131,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
         <div class="end-segments">
           <div class="hidden-segments">
             <Segments
-              name={`device-size-${title.toLowerCase().replace(/\s+/g, "-")}`}
+              name={`device-size-${viewerId}`}
               options={[
                 {
                   value: "desktop",
@@ -174,7 +157,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
               data-action="device-size-toggle"
             />
             <Segments
-              name={`direction-mode-${title.toLowerCase().replace(/\s+/g, "-")}`}
+              name={`direction-mode-${viewerId}`}
               options={[
                 {
                   value: "ltr",
@@ -194,7 +177,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
               data-action="direction-toggle"
             />
             <Segments
-              name={`theme-mode-${title.toLowerCase().replace(/\s+/g, "-")}`}
+              name={`theme-mode-${viewerId}`}
               options={[
                 {
                   value: "default",
@@ -215,17 +198,24 @@ Object.entries(componentImports).forEach(([path, obj]) => {
             />
           </div>
           <Segments
-            name={`view-mode-${title.toLowerCase().replace(/\s+/g, "-")}`}
+            name={`view-mode-${viewerId}`}
+            keepStateOnRefresh={false}
             options={[
               {
                 value: "component",
-                label: "View Preview",
+                label: "Preview",
                 icon: "computer-desktop",
                 checked: true,
               },
               {
-                value: "code",
-                label: "View Code",
+                value: "frontmatter",
+                label: "Frontmatter Code",
+                icon: "document-text",
+                checked: false,
+              },
+              {
+                value: "astro",
+                label: "Astro Code",
                 icon: "code-bracket",
                 checked: false,
               },
@@ -240,264 +230,4 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   }
 </div>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    const componentViewers = document.querySelectorAll(".component-viewer");
-
-    componentViewers.forEach((viewer) => {
-      const segments = {
-        deviceSize: viewer.querySelector('[data-action="device-size-toggle"]'),
-        direction: viewer.querySelector('[data-action="direction-toggle"]'),
-        theme: viewer.querySelector('[data-action="theme-toggle"]'),
-        view: viewer.querySelector('[data-action="view-toggle"]'),
-      };
-      const previews = viewer.querySelectorAll(".preview");
-      const codeBlocks = viewer.querySelectorAll(".code");
-      const exampleSelect = viewer.querySelector(".example-select");
-      const previewsContainer = viewer.querySelector(".previews");
-      const viewerId = viewer.getAttribute("data-viewer-id");
-
-      const switchToExample = (exampleId) => {
-        previews.forEach((preview) => {
-          preview.classList.toggle("active", preview.id === exampleId);
-        });
-
-        const isCodeView =
-          segments.view?.querySelector(`input[name="view-mode-${viewerId}"]:checked`)?.value ===
-          "code";
-
-        if (isCodeView) {
-          previews.forEach((preview) => (preview.style.display = "none"));
-          codeBlocks.forEach((block) => {
-            block.style.display = block.id === `code-${exampleId}` ? "block" : "none";
-          });
-        } else {
-          previews.forEach((preview) => {
-            preview.style.display = preview.classList.contains("active") ? "block" : "none";
-          });
-          codeBlocks.forEach((block) => (block.style.display = "none"));
-        }
-      };
-
-      const initSegment = (segmentElement, name, callback) => {
-        if (!segmentElement) return;
-
-        const inputs = segmentElement.querySelectorAll(`input[name="${name}-${viewerId}"]`);
-        const checked = segmentElement.querySelector(`input[name="${name}-${viewerId}"]:checked`);
-
-        if (checked) callback(checked.value);
-
-        inputs.forEach((input) => {
-          input.addEventListener("change", (e) => callback(e.target.value));
-        });
-      };
-
-      if (exampleSelect) {
-        const activePreview = viewer.querySelector(".preview.active");
-        if (activePreview && exampleSelect.value !== activePreview.id) {
-          exampleSelect.value = activePreview.id;
-        }
-        exampleSelect.addEventListener("change", (e) => switchToExample(e.target.value));
-      }
-
-      initSegment(segments.view, "view-mode", () => {
-        const activePreview = viewer.querySelector(".preview.active");
-        if (activePreview) switchToExample(activePreview.id);
-      });
-
-      initSegment(segments.theme, "theme-mode", (value) => {
-        previews.forEach((preview) => preview.setAttribute("data-theme", value));
-      });
-
-      initSegment(segments.direction, "direction-mode", (value) => {
-        previews.forEach((preview) => preview.setAttribute("dir", value));
-      });
-
-      initSegment(segments.deviceSize, "device-size", (value) => {
-        viewer.setAttribute("data-device-size", value);
-      });
-    });
-  });
-</script>
-
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.addEventListener("click", async (event) => {
-      const button = event.target.closest('[data-action="copy-code"]');
-      if (!button) return;
-
-      event.stopPropagation();
-      const codeToCopy = button.getAttribute("data-code");
-
-      if (codeToCopy) {
-        try {
-          if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(codeToCopy);
-          } else {
-            const textArea = document.createElement("textarea");
-            textArea.value = codeToCopy;
-            Object.assign(textArea.style, {
-              position: "fixed",
-              left: "-999999px",
-              top: "-999999px",
-            });
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
-            try {
-              document.execCommand("copy");
-            } catch (fallbackErr) {
-              console.error("Fallback copy failed: ", fallbackErr);
-              return;
-            } finally {
-              document.body.removeChild(textArea);
-            }
-          }
-
-          button.classList.add("copied");
-          button.setAttribute("aria-label", "Copied!");
-
-          setTimeout(() => {
-            button.classList.remove("copied");
-            button.setAttribute("aria-label", "Copy Code");
-          }, 3000);
-        } catch (err) {
-          console.error("Failed to copy code: ", err);
-        }
-      }
-    });
-  });
-</script>
-
-<style>
-  .component-viewer {
-    border-radius: var(--radius-xs);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-  }
-
-  .hide {
-    display: none;
-  }
-
-  .previews {
-    height: 100%;
-  }
-
-  .previews.viewer-size-sm {
-    height: 10rem;
-  }
-
-  .previews.viewer-size-md {
-    height: 20rem;
-  }
-
-  .previews.viewer-size-lg {
-    height: 30rem;
-  }
-
-  .preview {
-    background-color: var(--color-bg);
-    border: 1px solid var(--color-border-subtle);
-    border-bottom: 0;
-    border-radius: var(--radius-xs);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    display: none;
-    height: 100%;
-    overflow-y: auto;
-    transition: max-width var(--animation-slow) ease-in-out;
-  }
-
-  .preview.active {
-    display: block;
-  }
-
-  .code {
-    display: none;
-    height: 100%;
-    overflow-x: auto;
-    position: relative;
-
-    > pre {
-      overflow: auto scroll;
-    }
-  }
-
-  .code-header {
-    position: absolute;
-    right: var(--spacing-lg);
-    top: var(--spacing-sm);
-    z-index: 10;
-  }
-
-  .controls {
-    align-items: center;
-    background: var(--color-bg-surface);
-    border-top: 1px solid var(--color-border-subtle);
-    display: flex;
-    justify-content: space-between;
-    padding: var(--spacing-sm);
-
-    .example-select {
-      line-height: 0;
-    }
-
-    .end-segments {
-      display: flex;
-      gap: var(--spacing-xs);
-    }
-
-    .hidden-segments {
-      display: flex;
-      gap: var(--spacing-xs);
-      opacity: 0;
-      transition: opacity var(--animation-normal) ease;
-    }
-
-    &:hover .hidden-segments {
-      opacity: 1;
-    }
-
-    .device-size-segments,
-    .direction-segments,
-    .theme-segments,
-    .view-segments {
-      margin-right: var(--spacing-sm);
-
-      .options {
-        display: flex;
-        gap: 0;
-      }
-
-      .option {
-        margin: 0;
-      }
-
-      .segment {
-        min-width: auto;
-        padding: var(--spacing-xs);
-
-        .segment-icon {
-          height: 1rem;
-          width: 1rem;
-        }
-      }
-    }
-
-    .view-segments {
-      margin-right: 0;
-    }
-  }
-
-  .component-viewer[data-device-size="mobile"] .preview {
-    max-width: var(--content-width-sm);
-  }
-
-  .component-viewer[data-device-size="tablet"] .preview {
-    max-width: var(--content-width-lg);
-  }
-</style>
+<script src="./script.js"></script>

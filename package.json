@@ -43,6 +43,7 @@
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
     "glob": "^11.0.3",
+    "js-beautify": "^1.15.4",
     "js-yaml": "^4.1.0",
     "markdown-it": "^14.1.0",
     "postcss": "^8.5.6",
@@ -59,6 +60,7 @@
     "zod": "^4.0.17"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
     "eslint": "^9.33.0",

@@ -1,4 +1,6 @@
 ---
+import SelectOption from "./select-option.astro";
+
 const {
   label,
   name,
@@ -46,11 +48,17 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
       )
     }
     {
-      options.map((option) => (
-        <option value={option.value} selected={option.value === value}>
-          {option.label}
-        </option>
-      ))
+      options.length > 0 ? (
+        options.map((option) => (
+          <SelectOption
+            value={option.value}
+            label={option.label}
+            selected={option.value === value}
+          />
+        ))
+      ) : (
+        <slot />
+      )
     }
   </select>
 </div>
