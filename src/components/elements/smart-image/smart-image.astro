@@ -47,9 +47,21 @@ const positionClass = `position-${positionVertical}-${positionHorizontal}`;
   {
     hasValidSrc ? (
       isExternalCDN ? (
-        <UnpicImage {...commonProps} src={source} sizes={sizes} widths={widths} priority={priority} />
+        <UnpicImage
+          {...commonProps}
+          source={source}
+          sizes={sizes}
+          widths={widths}
+          priority={priority}
+        />
       ) : (
-        <AstroImage {...commonProps} src={source} sizes={sizes} widths={widths} priority={priority} />
+        <AstroImage
+          {...commonProps}
+          source={source}
+          sizes={sizes}
+          widths={widths}
+          priority={priority}
+        />
       )
     ) : (
       <picture>

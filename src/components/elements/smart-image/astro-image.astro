@@ -1,23 +1,23 @@
 ---
 import { Picture } from "astro:assets";
 
-const { src, alt, sizes, widths, width, height, priority, ...htmlAttributes } = Astro.props;
+const { source, alt, sizes, widths, width, height, priority, ...htmlAttributes } = Astro.props;
 
-let imageSrc = src;
+let imageSrc = source;
 let imageWidth = width;
 let imageHeight = height;
 let useInferSize = false;
 let shouldRender = true;
 
 const isRemoteUrl =
-  typeof src === "string" && (src.startsWith("http://") || src.startsWith("https://"));
+  typeof source === "string" && (source.startsWith("http://") || source.startsWith("https://"));
 
 const imageFiles = import.meta.glob("/src/assets/images/**/*", {
   import: "default",
 }) as Record<string, any>;
 
-if (typeof src === "string" && src.startsWith("/images/")) {
-  const assetPath = src.replace("/images/", "");
+if (typeof source === "string" && source.startsWith("/images/")) {
+  const assetPath = source.replace("/images/", "");
 
   const imageKey = Object.keys(imageFiles).find((key) => key.endsWith(assetPath));
 
@@ -27,7 +27,7 @@ if (typeof src === "string" && src.startsWith("/images/")) {
     if (!imageWidth) imageWidth = imageSrc.width;
     if (!imageHeight) imageHeight = imageSrc.height;
   } else {
-    console.warn(`Local image not found for path: ${src}`);
+    console.warn(`Local image not found for path: ${source}`);
 
     imageWidth = imageWidth || 800;
     imageHeight = imageHeight || 450;
@@ -41,7 +41,7 @@ if (isRemoteUrl) {
     imageHeight = imageHeight || 450;
 
     try {
-      const response = await fetch(src, { method: "HEAD" });
+      const response = await fetch(source, { method: "HEAD" });
 
       if (response.ok) {
         const contentType = response.headers.get("content-type");
@@ -50,17 +50,17 @@ if (isRemoteUrl) {
         if (isValidImage) {
           useInferSize = true;
         } else {
-          console.warn(`Invalid content-type for image: ${src} (${contentType})`);
+          console.warn(`Invalid content-type for image: ${source} (${contentType})`);
           useInferSize = false;
           shouldRender = false;
         }
       } else {
-        console.warn(`Image not accessible: ${src} (${response.status})`);
+        console.warn(`Image not accessible: ${source} (${response.status})`);
         useInferSize = false;
         shouldRender = false;
       }
     } catch (error) {
-      console.warn(`Could not validate image URL: ${src}`, error);
+      console.warn(`Could not validate image URL: ${source}`, error);
       useInferSize = false;
       shouldRender = false;
     }
@@ -90,7 +90,7 @@ if (isRemoteUrl) {
     />
   ) : (
     <picture {...htmlAttributes}>
-      <img src={src} alt={alt || ""} />
+      <img src={source} alt={alt || ""} />
     </picture>
   )
 }
