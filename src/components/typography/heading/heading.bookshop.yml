@@ -100,6 +100,7 @@ _inputs:
   iconPosition:
     comment: The position of the icon relative to the text.
     type: select
+    hidden: '!iconName'
     options:
       values:
         - id: before

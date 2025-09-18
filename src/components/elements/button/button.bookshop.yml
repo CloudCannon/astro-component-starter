@@ -20,6 +20,7 @@ preview:
 _inputs:
   text:
     type: text
+    hidden: 'hideText'
     comment: The text that goes inside the button.
   link:
     type: url
@@ -31,7 +32,7 @@ _inputs:
       values: _select_data.icons
   iconPosition:
     type: select
-    hidden: 'iconName'
+    hidden: '!iconName'
     options:
       values:
         - id: before

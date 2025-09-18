@@ -21,6 +21,7 @@ _inputs:
   text:
     type: text
     comment: The text that goes inside the submit button.
+    hidden: 'hideText'
   variant:
     type: select
     options:
@@ -46,11 +47,12 @@ _inputs:
     comment: The name of the icon to display. See the Icon component documentation for more information.
   iconPosition:
     type: select
+    comment: The position of the icon relative to the text.
+    hidden: '!iconName'
     options:
       values:
         - before
         - after
-    comment: The position of the icon relative to the text.
   hideText:
     type: switch
     comment: Whether to hide the button text and show only the icon.
