@@ -65,15 +65,38 @@ const isCurrentPage = href === Astro?.url?.pathname;
     const navRoot = navItem.closest(".nav-root");
     if (!navRoot) return;
 
+    const currentNavItem = navItem as HTMLElement;
+    const currentLevel = getNavItemLevel(currentNavItem);
+
     navRoot.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
       if (
         toggle instanceof HTMLInputElement &&
         toggle !== navItem.querySelector(".nav-item-toggle")
       ) {
-        toggle.checked = false;
-        updateAriaStates(toggle, false);
+        const toggleNavItem = toggle.closest(".nav-item") as HTMLElement;
+        if (toggleNavItem) {
+          const toggleLevel = getNavItemLevel(toggleNavItem);
+          if (toggleLevel === currentLevel) {
+            toggle.checked = false;
+            updateAriaStates(toggle, false);
+          }
+        }
       }
     });
+  }
+
+  function getNavItemLevel(navItem: HTMLElement): number {
+    let level = 0;
+    let current = navItem;
+
+    while (current) {
+      if (current.classList.contains("nav-item-content")) {
+        level++;
+      }
+      current = current.parentElement as HTMLElement;
+    }
+
+    return level;
   }
 
   function updateAriaStates(toggle: HTMLInputElement, isExpanded: boolean) {

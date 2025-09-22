@@ -1,0 +1,50 @@
+# Metadata about this component, to be used in the CMS
+spec:
+  structures: []
+  label: Footer
+  description: "A footer component with logo, navigation links, social media links, and legal text."
+  icon: footer
+  tags: ["footer", "navigation", "social"]
+
+# Defines the structure of this component, as well as the default values
+blueprint:
+  logoSource: ""
+  logoAlt: "Logo"
+  links: []
+  socials: []
+  footerText: ""
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+
+# Any extra CloudCannon inputs configuration to apply to the blueprint
+_inputs:
+  logoSource:
+    type: image
+    comment: "Logo image source URL or path."
+  logoAlt:
+    type: text
+    comment: "Alt text for the logo image for accessibility."
+  links:
+    type: array
+    comment: "Array of navigation links to display in the footer."
+    _inputs:
+      name:
+        type: text
+        comment: "Display text for the navigation link."
+      path:
+        type: text
+        comment: "URL path for the navigation link."
+  socials:
+    type: array
+    comment: "Array of social media links to display in the footer."
+    _inputs:
+      icon:
+        type: text
+        comment: "Icon name for the social media platform."
+      link:
+        type: text
+        comment: "URL link to the social media profile."
+  footerText:
+    type: text
+    comment: "Legal text or copyright information to display at the bottom of the footer."

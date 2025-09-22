@@ -60,42 +60,42 @@ const mobileNavBlocks = [
   maxContentWidth="2xl"
   paddingHorizontal="md"
   paddingVertical="none"
-  class:list={["nav-bar", className]}
+  class:list={["main-nav", className]}
 >
   {logoSource && <SmartImage source={logoSource} alt={logoAlt} />}
-  <NavRoot variant="horizontal" class="desktop-nav-bar" navBlocks={navBlocks} />
+  <NavRoot variant="horizontal" class="desktop-main-nav" navBlocks={navBlocks} />
   <ButtonGroup
     direction="row"
     align="center"
     class="desktop-button-group"
     buttonBlocks={buttonBlocks}
   />
-  <NavRoot variant="mobile" class="mobile-nav-bar" navBlocks={mobileNavBlocks}>
+  <NavRoot variant="mobile" class="mobile-main-nav" navBlocks={mobileNavBlocks}>
     {logoSource && <SmartImage source={logoSource} alt={logoAlt} slot="logo" />}
   </NavRoot>
 </Container>
 
 <style>
-  :global(.desktop-nav-bar.nav-root.horizontal),
+  :global(.desktop-main-nav.nav-root.horizontal),
   :global(.desktop-button-group.button-group) {
     @container (max-width: 768px) {
       display: none;
     }
   }
 
-  :global(.mobile-nav-bar.nav-hamburger) {
+  :global(.mobile-main-nav.nav-hamburger) {
     @container (min-width: 769px) {
       display: none;
     }
   }
 
-  :global(.nav-bar .smart-image img) {
+  :global(.main-nav .smart-image img) {
     max-height: 3em;
     max-width: min(20em, 100%);
     width: auto;
   }
 
-  :global(.nav-bar > .outer-content > .content) {
+  :global(.main-nav > .outer-content > .content) {
     align-items: center;
     container-type: inline-size;
     display: flex;

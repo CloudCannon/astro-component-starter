@@ -1,0 +1,110 @@
+---
+import Button from "@components/elements/button/button.astro";
+import Divider from "@components/elements/divider/divider.astro";
+import SmartImage from "@components/elements/smart-image/smart-image.astro";
+import NavItem from "@components/navigation/nav-item/nav-item.astro";
+import NavList from "@components/navigation/nav-list/nav-list.astro";
+import NavRoot from "@components/navigation/nav-root/nav-root.astro";
+import SimpleText from "@components/typography/simple-text/simple-text.astro";
+import ButtonGroup from "@components/wrappers/button-group/button-group.astro";
+import Container from "@components/wrappers/container/container.astro";
+
+const { links = [], socials = [], footerText = "", logoSource, logoAlt } = Astro.props;
+---
+
+<footer class="footer">
+  <Container maxContentWidth="2xl" paddingHorizontal="md" paddingVertical="lg">
+    <div class="footer-content">
+      <div class="content-container">
+        <SmartImage source={logoSource} alt={logoAlt} class="footer-logo" />
+      </div>
+      <div class="content-container">
+        <NavRoot variant="horizontal">
+          <NavList>
+            {links.map((link: any) => <NavItem href={link.path} text={link.name} />)}
+          </NavList>
+        </NavRoot>
+      </div>
+    </div>
+
+    <Divider />
+
+    <div class="footer-content">
+      <div class="content-container">
+        <SimpleText class="footer-legal-text" text={footerText || ""} />
+      </div>
+      <div class="content-container">
+        <ButtonGroup>
+          {
+            socials.map((social: any) => (
+              <Button
+                variant="ghost"
+                size="lg"
+                iconName={social.icon}
+                link={social.link}
+                hideText="true"
+                aria-label={`Visit our ${social.icon} page`}
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            ))
+          }
+        </ButtonGroup>
+      </div>
+    </div>
+  </Container>
+</footer>
+
+<style>
+  .footer {
+    container-type: inline-size;
+
+    .button-group {
+      &.align-start {
+        @container (max-width: 499px) {
+          justify-content: center;
+        }
+      }
+    }
+  }
+
+  .footer-content {
+    @container (min-width: 500px) {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  }
+
+  :global(.footer .footer-legal-text.simple-text) {
+    color: var(--color-text-muted);
+    text-align: center;
+    @container (min-width: 500px) {
+      text-align: start;
+    }
+  }
+
+  :global(.footer-logo.smart-image) {
+    flex-shrink: 0;
+  }
+
+  :global(.footer-logo.smart-image img) {
+    margin-inline: auto;
+    margin-bottom: var(--spacing-md);
+    max-height: 2em;
+    max-width: min(20em, 100%);
+    width: auto;
+    @container (min-width: 500px) {
+      margin: 0;
+    }
+  }
+
+  :global(.footer .nav-root.horizontal .nav-list) {
+    flex-flow: column wrap;
+    @container (min-width: 500px) {
+      flex-direction: row;
+      justify-content: end;
+    }
+  }
+</style>

@@ -24,12 +24,11 @@ export async function getStaticPaths() {
     return componentEntries.map((entry) => {
       const slug = entry.id.replace(/^components\//, "").replace(/\/index$/, "");
       const parts = slug.split("/").filter(Boolean);
-      const componentKey = parts.slice(-2).join("/");
+      const componentKey = parts.join("/");
 
       let schema = null;
       let bookshopData = null;
 
-      // Convert kebab-case to camelCase for path matching
       const camelCaseKey = componentKey
         .split("-")
         .map((part, index) => {
@@ -86,7 +85,7 @@ const slugParts = page.id
   .split("/")
   .filter(Boolean);
 
-const componentKey = slugParts.slice(-2).join("/");
+const componentKey = slugParts.join("/");
 
 const searchPattern = `${componentKey}/examples/`.toLowerCase();
 

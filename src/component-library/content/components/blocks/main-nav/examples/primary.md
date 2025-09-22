@@ -1,8 +1,8 @@
 ---
-title: "Primary Nav Bar"
+title: "Primary Main Nav"
 spacing: "top"
 blocks:
-  _bookshop_name: "blocks/nav-bar"
+  _bookshop_name: "blocks/main-nav"
   logoSource: /component-library/images/logo.svg
   logoAlt: Logo
   navData:
