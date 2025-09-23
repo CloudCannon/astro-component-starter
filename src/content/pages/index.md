@@ -5,19 +5,33 @@ pageBlocks:
   - _bookshop_name: wrappers/container
     label: ''
     contentBlocks:
-      - _bookshop_name: typography/heading
-        text: Welcome to your CloudCannon Starter Component site
-        type: h1
-        size:
-        align: center
-        iconName:
-        iconPosition:
       - _bookshop_name: wrappers/split
-        firstColumnContentBlocks: []
-        secondColumnContentBlocks: []
-        distributionMode: half
+        firstColumnContentBlocks:
+          - _bookshop_name: typography/heading
+            text: A left right
+            type: h2
+            size:
+            align: start
+            iconName:
+            iconPosition: before
+          - _bookshop_name: typography/simple-text
+            text: >-
+              A piece of text to display in the left right. A piece of text to
+              display in the left right. A piece of text to display in the left
+              right.
+            align: start
+            size: md
+        secondColumnContentBlocks:
+          - _bookshop_name: elements/smart-image
+            source: /images/sheep.jpg
+            alt: A couple o sheep
+            rounded: true
+            aspectRatio: widescreen
+            positionVertical: bottom
+            positionHorizontal: center
+        distributionMode: third-Two-Thirds
         fixedWidth:
-        verticalAlignment: top
+        verticalAlignment: center
         reverse: false
       - _bookshop_name: wrappers/grid
         minItemWidth: 200
@@ -25,7 +39,181 @@ pageBlocks:
         verticalAlignment: start
         horizontalAlignment: center
         equalWidth: true
-        items: []
+        items:
+          - contentBlocks:
+              - _bookshop_name: wrappers/card
+                label: ''
+                contentBlocks:
+                  - _bookshop_name: typography/simple-text
+                    text: Some text in this here card.
+                    align: start
+                    size: md
+                headerContentBlocks:
+                  - _bookshop_name: typography/heading
+                    text: A card in a grid
+                    type: h2
+                    size:
+                    align: start
+                    iconName:
+                    iconPosition: before
+                footerContentBlocks: []
+                paddingHorizontal: md
+                paddingVertical: sm
+                colorScheme: default
+                backgroundColor: accent
+                backgroundImage:
+                  source: ''
+                  alt: ''
+                  positionVertical: top
+                  positionHorizontal: center
+                link: ''
+                rounded: true
+                border: false
+          - contentBlocks:
+              - _bookshop_name: wrappers/card
+                label: ''
+                contentBlocks:
+                  - _bookshop_name: typography/simple-text
+                    text: Some text in this here card.
+                    align: start
+                    size: md
+                headerContentBlocks:
+                  - _bookshop_name: typography/heading
+                    text: A card in a grid
+                    type: h2
+                    size:
+                    align: start
+                    iconName:
+                    iconPosition: before
+                footerContentBlocks: []
+                paddingHorizontal: md
+                paddingVertical: sm
+                colorScheme: default
+                backgroundColor: accent
+                backgroundImage:
+                  source: ''
+                  alt: ''
+                  positionVertical: top
+                  positionHorizontal: center
+                link: ''
+                rounded: true
+                border: false
+          - contentBlocks:
+              - _bookshop_name: wrappers/card
+                label: ''
+                contentBlocks:
+                  - _bookshop_name: typography/simple-text
+                    text: Some text in this here card.
+                    align: start
+                    size: md
+                headerContentBlocks:
+                  - _bookshop_name: typography/heading
+                    text: A card in a grid
+                    type: h2
+                    size:
+                    align: start
+                    iconName:
+                    iconPosition: before
+                footerContentBlocks: []
+                paddingHorizontal: md
+                paddingVertical: sm
+                colorScheme: default
+                backgroundColor: accent
+                backgroundImage:
+                  source: ''
+                  alt: ''
+                  positionVertical: top
+                  positionHorizontal: center
+                link: ''
+                rounded: true
+                border: false
+          - contentBlocks:
+              - _bookshop_name: wrappers/card
+                label: ''
+                contentBlocks:
+                  - _bookshop_name: typography/simple-text
+                    text: Some text in this here card.
+                    align: start
+                    size: md
+                headerContentBlocks:
+                  - _bookshop_name: typography/heading
+                    text: A card in a grid
+                    type: h2
+                    size:
+                    align: start
+                    iconName:
+                    iconPosition: before
+                footerContentBlocks: []
+                paddingHorizontal: md
+                paddingVertical: sm
+                colorScheme: default
+                backgroundColor: accent
+                backgroundImage:
+                  source: ''
+                  alt: ''
+                  positionVertical: top
+                  positionHorizontal: center
+                link: ''
+                rounded: true
+                border: false
+          - contentBlocks:
+              - _bookshop_name: wrappers/card
+                label: ''
+                contentBlocks:
+                  - _bookshop_name: typography/simple-text
+                    text: Some text in this here card.
+                    align: start
+                    size: md
+                headerContentBlocks:
+                  - _bookshop_name: typography/heading
+                    text: A card in a grid
+                    type: h2
+                    size:
+                    align: start
+                    iconName:
+                    iconPosition: before
+                footerContentBlocks: []
+                paddingHorizontal: md
+                paddingVertical: sm
+                colorScheme: default
+                backgroundColor: accent
+                backgroundImage:
+                  source: ''
+                  alt: ''
+                  positionVertical: top
+                  positionHorizontal: center
+                link: ''
+                rounded: true
+                border: false
+          - contentBlocks:
+              - _bookshop_name: wrappers/card
+                label: ''
+                contentBlocks:
+                  - _bookshop_name: typography/simple-text
+                    text: Some text in this here card.
+                    align: start
+                    size: md
+                headerContentBlocks:
+                  - _bookshop_name: typography/heading
+                    text: A card in a grid
+                    type: h2
+                    size:
+                    align: start
+                    iconName:
+                    iconPosition: before
+                footerContentBlocks: []
+                paddingHorizontal: md
+                paddingVertical: sm
+                colorScheme: default
+                backgroundColor: accent
+                backgroundImage:
+                  source: ''
+                  alt: ''
+                  positionVertical: top
+                  positionHorizontal: center
+                link: ''
+                rounded: true
+                border: false
       - _bookshop_name: wrappers/content-selector
         items:
         navigationPosition: start
@@ -55,6 +243,13 @@ pageBlocks:
             size: lg
         direction: row
         align: center
+      - _bookshop_name: typography/heading
+        text: Welcome to your CloudCannon Starter Component site
+        type: h1
+        size:
+        align: center
+        iconName:
+        iconPosition:
       - _bookshop_name: typography/counter
         number: 100
         prefix:
