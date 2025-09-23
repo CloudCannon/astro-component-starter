@@ -31,8 +31,8 @@ _inputs:
     comment: The URL or path to the image.
     options:
       paths:
-        uploads: src/assets/images
-        static: src/assets
+        uploads: src/assets/component-library/images
+        static: src/assets/component-library
   alt:
     type: textarea
     comment: Alternative text for accessibility.
