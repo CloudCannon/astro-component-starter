@@ -34,9 +34,9 @@ pageBlocks:
         verticalAlignment: center
         reverse: false
       - _bookshop_name: wrappers/grid
-        minItemWidth: 200
-        maxItemWidth: 320
-        verticalAlignment: start
+        minItemWidth: 350
+        maxItemWidth: 460
+        verticalAlignment:
         horizontalAlignment: center
         equalWidth: true
         items:
@@ -185,41 +185,39 @@ pageBlocks:
                 link: ''
                 rounded: true
                 border: false
-          - contentBlocks:
-              - _bookshop_name: wrappers/card
-                label: ''
-                contentBlocks:
-                  - _bookshop_name: typography/simple-text
-                    text: Some text in this here card.
-                    align: start
-                    size: md
-                headerContentBlocks:
-                  - _bookshop_name: typography/heading
-                    text: A card in a grid
-                    type: h2
-                    size:
-                    align: start
-                    iconName:
-                    iconPosition: before
-                footerContentBlocks: []
-                paddingHorizontal: md
-                paddingVertical: sm
-                colorScheme: default
-                backgroundColor: accent
-                backgroundImage:
-                  source: ''
-                  alt: ''
-                  positionVertical: top
-                  positionHorizontal: center
-                link: ''
-                rounded: true
-                border: false
       - _bookshop_name: wrappers/content-selector
         items:
+          - title: A content panel
+            contentBlocks:
+              - _bookshop_name: typography/definition-list
+                items:
+                  - _component: definition-list-item
+                    title: HOI
+                    text: HOI HOI HOI
+                  - _component: definition-list-item
+                    title: Another?
+                    text: Have it
+                  - _component: definition-list-item
+                    title: Another?
+                    text: Have it
+                  - _component: definition-list-item
+                    title: Another?
+                    text: Have it
+                horizontalAlignment: center
+          - title: Another panel
+            contentBlocks:
+              - _bookshop_name: elements/smart-image
+                source: /images/castle.jpg
+                alt: Larnach castle in Dunedin
+                rounded: true
+                aspectRatio: golden
+                positionVertical: center
+                positionHorizontal: center
         navigationPosition: start
       - _bookshop_name: wrappers/carousel
         label: ''
-        slides: []
+        slides:
+          - contentBlocks: []
         autoPlay: false
         autoScroll: false
         slideWidthPercent: 100
