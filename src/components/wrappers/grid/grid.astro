@@ -38,11 +38,7 @@ const gridStyles = [
   style={gridStyles}
   {...htmlAttributes}
 >
-  {
-    items &&
-      items.length > 0 &&
-      items.map((item: any, index: number) => <GridItem contentBlocks={item.contentBlocks} />)
-  }
+  {items?.map((item: any, index: number) => <GridItem contentBlocks={item.contentBlocks} />)}
 
   <slot />
 </div>
