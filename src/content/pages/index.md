@@ -23,7 +23,7 @@ pageBlocks:
             size: md
         secondColumnContentBlocks:
           - _bookshop_name: elements/smart-image
-            source: /images/sheep.jpg
+            source: /assets/images/component-library/sheep.jpg
             alt: A couple o sheep
             rounded: true
             aspectRatio: widescreen
@@ -305,7 +305,7 @@ pageBlocks:
           - title: Testing media
             contentBlocks:
               - _bookshop_name: elements/smart-image
-                source: /component-library/images/dunedin-cliff.jpg
+                source: /assets/images/component-library/dunedin-cliff.jpg
                 alt: Dunedin coastline
                 rounded: true
                 aspectRatio: landscape
