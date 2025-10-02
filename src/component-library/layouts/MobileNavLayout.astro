@@ -1,163 +1,22 @@
 ---
-import navData from "@component-library/data/nav.json";
 import Icon from "@components/elements/icon/icon.astro";
-import NavItem from "@components/navigation/nav-item/nav-item.astro";
-import NavList from "@components/navigation/nav-list/nav-list.astro";
-import NavRoot from "@components/navigation/nav-root/nav-root.astro";
-import { getCollection } from "astro:content";
+import Mobile from "@components/navigation/mobile/mobile.astro";
+import navData from "../data/nav.json";
+import { generateNavData } from "../utils/navGenerator.js";
 
-const allComponents = await getCollection("docs-components");
-
-const componentsByCategory: Record<
-  string,
-  Record<string, Array<{ name: string; path: string; order: number }>>
-> = {};
-
-allComponents.forEach((component: any) => {
-  const slug = component.id.replace(/^components\//, "").replace(/\/index$/, "");
-  const parts = slug.split("/").filter(Boolean);
-
-  if (
-    slug.includes("/examples/") ||
-    slug.includes("bookshop") ||
-    (!component.data.title && !component.data.name)
-  ) {
-    return;
-  }
-
-  if (parts.length >= 1) {
-    const category = parts[0];
-    let componentName: string;
-    let path: string;
-
-    componentName = parts.length > 1 ? parts[1] : parts[0];
-    path = `/component-library/components/${category}/${componentName}/`;
-
-    if (!componentsByCategory[category]) {
-      componentsByCategory[category] = {};
-    }
-
-    if (!componentsByCategory[category]["default"]) {
-      componentsByCategory[category]["default"] = [];
-    }
-
-    componentsByCategory[category]["default"].push({
-      name: component.data.title || componentName.replace(/-/g, " "),
-      path: path,
-      order: Number(component.data.order) || 999,
-    });
-  }
-});
-
-// Populate nav.json structure with component collection data
-const populatedNavData = navData.map((section) => {
-  if (section.group) {
-    const category = section.group.toLowerCase();
-    const categoryData = componentsByCategory[category] || {};
-
-    // Check if any child item is the current page
-    const currentPath = Astro.url.pathname;
-    let hasActiveChild = false;
-
-    // For blocks category, create nested structure
-    if (category === "blocks" && categoryData.navigation) {
-      const navigationItems = categoryData.navigation.sort((a, b) => {
-        if (a.order !== b.order) {
-          return a.order - b.order;
-        }
-        return a.name.localeCompare(b.name);
-      });
-
-      hasActiveChild = navigationItems.some((item) => item.path === currentPath);
-
-      return {
-        ...section,
-        items: [
-          {
-            name: "Navigation",
-            items: navigationItems,
-            defaultOpen: hasActiveChild,
-          },
-          // Add other subcategories here if needed
-          ...Object.entries(categoryData)
-            .filter(([key]) => key !== "navigation")
-            .map(([subcategory, items]) => ({
-              name: subcategory.charAt(0).toUpperCase() + subcategory.slice(1),
-              items: items.sort((a, b) => {
-                if (a.order !== b.order) {
-                  return a.order - b.order;
-                }
-                return a.name.localeCompare(b.name);
-              }),
-              defaultOpen: items.some((item) => item.path === currentPath),
-            })),
-        ],
-        defaultOpen: hasActiveChild,
-      };
-    } else {
-      // For other categories, use the default structure
-      const items = categoryData.default || [];
-      const sortedItems = items.sort((a, b) => {
-        if (a.order !== b.order) {
-          return a.order - b.order;
-        }
-        return a.name.localeCompare(b.name);
-      });
-
-      hasActiveChild = sortedItems.some((item) => item.path === currentPath);
-
-      return {
-        ...section,
-        items: sortedItems,
-        defaultOpen: hasActiveChild,
-      };
-    }
-  }
-
-  return section;
-});
+const mobileNavData = await generateNavData(navData);
 ---
 
 <div class="library-mobile-nav">
   <Icon name="library/logo" size="none" class="sidebar-logo" />
-  <NavRoot variant="mobile">
-    <NavList>
-      {
-        populatedNavData
-          .map((section, index) => {
-            if (section.group && section.items && Array.isArray(section.items)) {
-              return (
-                <NavItem text={section.group} defaultOpen={(section as any).defaultOpen || false}>
-                  <NavList>
-                    {section.items.map((item, itemIndex) => {
-                      // Handle nested items (like Navigation subcategory)
-                      if (item.items && Array.isArray(item.items)) {
-                        return (
-                          <NavItem text={item.name} defaultOpen={item.defaultOpen || false}>
-                            <NavList>
-                              {item.items.map((subItem, subItemIndex) => {
-                                return <NavItem href={subItem.path} text={subItem.name} />;
-                              })}
-                            </NavList>
-                          </NavItem>
-                        );
-                      }
-                      // Handle regular items
-                      return <NavItem href={item.path} text={item.name} />;
-                    })}
-                  </NavList>
-                </NavItem>
-              );
-            }
-
-            if (section.path) {
-              return <NavItem href={section.path} text={section.name} />;
-            }
-
-            return null;
-          })
-          .filter(Boolean)
-      }
-    </NavList>
-  </NavRoot>
+  <Mobile navData={mobileNavData}>
+    <span slot="logo">
+      <Icon
+        name="library/logo"
+        size="none"
+        class="sidebar-logo"
+        style="height: 35px; width: auto;"
+      />
+    </span>
+  </Mobile>
 </div>

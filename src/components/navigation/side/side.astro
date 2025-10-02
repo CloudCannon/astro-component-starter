@@ -1,0 +1,226 @@
+---
+import Icon from "@components/elements/icon/icon.astro";
+
+const { navData = [], class: className, ...rest } = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => key !== "_bookshop_name")
+);
+
+// Generate a unique ID for this navigation instance to scope radio buttons
+const navInstanceId = crypto.randomUUID();
+
+// Helper function to check if item is current page
+function isCurrentPage(item) {
+  return item.path && Astro.url.pathname === item.path;
+}
+
+// Helper function to check if any child is current page (recursive)
+function hasCurrentChild(item) {
+  if (isCurrentPage(item)) return true;
+  if (item.children && item.children.length > 0) {
+    return item.children.some((child) => hasCurrentChild(child));
+  }
+  return false;
+}
+---
+
+<nav class:list={["side", className]} {...htmlAttributes}>
+  <ul class="side-list">
+    {
+      navData.map((item) => {
+        const hasChildren = item.children && item.children.length > 0;
+        const dropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
+        const contentId = `dropdown-content-${crypto.randomUUID()}`;
+        const parentGroupId = `parent-${crypto.randomUUID()}`;
+        const isCurrent = isCurrentPage(item);
+        const hasCurrent = hasCurrentChild(item);
+
+        if (hasChildren) {
+          return (
+            <li class="nav-item has-children">
+              <input
+                type="radio"
+                name={`side-nav-top-${navInstanceId}`}
+                id={dropdownId}
+                class="nav-item-toggle"
+                aria-expanded={hasCurrent.toString()}
+                aria-controls={contentId}
+                autocomplete="off"
+                checked={hasCurrent}
+              />
+              <label
+                for={dropdownId}
+                class="nav-item-trigger"
+                role="button"
+                aria-controls={contentId}
+                tabindex="0"
+                aria-current={isCurrent ? "page" : undefined}
+              >
+                {item.name}
+                <span class="nav-item-icon">
+                  <Icon name="chevron-right" size="none" aria-hidden="true" />
+                </span>
+              </label>
+              <div
+                id={contentId}
+                class:list={["nav-item-content", hasCurrent && "nav-item-content-initial"]}
+                role="region"
+                aria-label={`${item.name} submenu`}
+                aria-hidden={(!hasCurrent).toString()}
+              >
+                <ul class="nav-list">
+                  {item.children.map((child) => {
+                    const childHasChildren = child.children && child.children.length > 0;
+                    const childDropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
+                    const childContentId = `dropdown-content-${crypto.randomUUID()}`;
+                    const childIsCurrent = isCurrentPage(child);
+                    const childHasCurrent = hasCurrentChild(child);
+
+                    if (childHasChildren) {
+                      return (
+                        <li class="nav-item has-children">
+                          <input
+                            type="radio"
+                            name={`side-nav-${parentGroupId}`}
+                            id={childDropdownId}
+                            class="nav-item-toggle"
+                            aria-expanded={childHasCurrent.toString()}
+                            aria-controls={childContentId}
+                            autocomplete="off"
+                            checked={childHasCurrent}
+                          />
+                          <label
+                            for={childDropdownId}
+                            class="nav-item-trigger"
+                            role="button"
+                            aria-controls={childContentId}
+                            tabindex="0"
+                            aria-current={childIsCurrent ? "page" : undefined}
+                          >
+                            {child.name}
+                            <span class="nav-item-icon">
+                              <Icon name="chevron-right" size="none" aria-hidden="true" />
+                            </span>
+                          </label>
+                          <div
+                            id={childContentId}
+                            class:list={[
+                              "nav-item-content",
+                              childHasCurrent && "nav-item-content-initial",
+                            ]}
+                            role="region"
+                            aria-label={`${child.name} submenu`}
+                            aria-hidden={(!childHasCurrent).toString()}
+                          >
+                            <ul class="nav-list">
+                              {child.children.map((grandChild) => (
+                                <li class="nav-item">
+                                  <a
+                                    href={grandChild.path}
+                                    aria-current={isCurrentPage(grandChild) ? "page" : undefined}
+                                  >
+                                    {grandChild.name}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </li>
+                      );
+                    } else {
+                      return (
+                        <li class="nav-item">
+                          <a href={child.path} aria-current={childIsCurrent ? "page" : undefined}>
+                            {child.name}
+                          </a>
+                        </li>
+                      );
+                    }
+                  })}
+                </ul>
+              </div>
+            </li>
+          );
+        } else {
+          return (
+            <li class="nav-item">
+              <a href={item.path} aria-current={isCurrent ? "page" : undefined}>
+                {item.name}
+              </a>
+            </li>
+          );
+        }
+      })
+    }
+  </ul>
+</nav>
+
+<script>
+  function setupSideNavigation() {
+    const sideNavs = document.querySelectorAll(".side");
+    if (!sideNavs.length) return;
+
+    sideNavs.forEach((sideNav) => {
+      // Handle radio button changes
+      sideNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+        toggle.addEventListener("change", (e) => {
+          const target = e.target;
+          const content = document.getElementById(target.getAttribute("aria-controls") || "");
+          const trigger = sideNav.querySelector(`label[for="${target.id}"]`);
+
+          if (content && trigger) {
+            const isOpen = target.checked;
+
+            // Update ARIA attributes
+            target.setAttribute("aria-expanded", isOpen.toString());
+            content.setAttribute("aria-hidden", (!isOpen).toString());
+
+            // Update trigger ARIA attributes
+            trigger.setAttribute("aria-expanded", isOpen.toString());
+          }
+        });
+      });
+
+      // Handle label interactions for toggling dropdowns
+      sideNav.querySelectorAll(".nav-item-trigger").forEach((trigger) => {
+        // Click handler
+        trigger.addEventListener("click", (e) => {
+          const label = e.currentTarget;
+          const toggleId = label.getAttribute("for");
+          const toggle = document.getElementById(toggleId || "");
+
+          if (toggle && toggle.checked) {
+            // If the item is already open, close it
+            e.preventDefault();
+            toggle.checked = false;
+            toggle.dispatchEvent(new Event("change"));
+          }
+        });
+
+        // Keyboard handler
+        trigger.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+            const label = e.currentTarget;
+            const toggleId = label.getAttribute("for");
+            const toggle = document.getElementById(toggleId || "");
+
+            if (toggle) {
+              if (toggle.checked) {
+                toggle.checked = false;
+              } else {
+                toggle.checked = true;
+              }
+              toggle.dispatchEvent(new Event("change"));
+            }
+          }
+        });
+      });
+    });
+  }
+
+  // Initialize side navigation
+  setupSideNavigation();
+</script>

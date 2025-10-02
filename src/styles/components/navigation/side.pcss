@@ -1,0 +1,94 @@
+/* Sidebar Navigation Styles */
+.side {
+  .side-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item {
+    list-style: none;
+    position: relative;
+
+    a,
+    .nav-item-trigger {
+      border-radius: var(--radius-xs);
+      color: inherit;
+      display: flex;
+      font-weight: var(--font-weight-bold);
+      padding: var(--spacing-sm) var(--spacing-md);
+      text-decoration: none;
+      transition: background-color var(--animation-normal) ease;
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--color-state-hover);
+        color: var(--color-text-strong);
+
+        .nav-item-icon {
+          color: var(--color-text-strong);
+        }
+      }
+
+      &[aria-current="page"] {
+        text-decoration: underline dotted;
+        text-decoration-color: var(--color-text-muted);
+        text-underline-offset: 3px;
+      }
+    }
+  }
+
+  .nav-item-toggle {
+    display: none;
+  }
+
+  .nav-item-content {
+    display: none;
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-content {
+    animation: grow-out var(--animation-normal) ease-out;
+    display: block;
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-content-initial {
+    animation: none;
+    display: block;
+  }
+
+  .nav-item-trigger {
+    align-items: center;
+    cursor: pointer;
+    flex-direction: row;
+    justify-content: space-between;
+    user-select: none;
+    width: 100%;
+  }
+
+  .nav-item-icon {
+    color: var(--color-text-muted);
+    display: inline-block;
+    transition: transform var(--animation-normal) ease;
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon {
+    transform: rotate(90deg);
+  }
+
+  .nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .nav-item a,
+    .nav-item .nav-item-trigger {
+      font-weight: var(--font-weight-normal);
+      padding-inline: var(--spacing-xl);
+    }
+
+    .nav-list .nav-item a,
+    .nav-list .nav-item .nav-item-trigger {
+      padding-inline-start: var(--spacing-2xl);
+    }
+  }
+}

@@ -2,9 +2,7 @@
 import Button from "@components/elements/button/button.astro";
 import Divider from "@components/elements/divider/divider.astro";
 import SmartImage from "@components/elements/smart-image/smart-image.astro";
-import NavItem from "@components/navigation/nav-item/nav-item.astro";
-import NavList from "@components/navigation/nav-list/nav-list.astro";
-import NavRoot from "@components/navigation/nav-root/nav-root.astro";
+import Bar from "@components/navigation/bar/bar.astro";
 import SimpleText from "@components/typography/simple-text/simple-text.astro";
 import ButtonGroup from "@components/wrappers/button-group/button-group.astro";
 import Container from "@components/wrappers/container/container.astro";
@@ -19,11 +17,7 @@ const { links = [], socials = [], footerText = "", logoSource, logoAlt } = Astro
         <SmartImage source={logoSource} alt={logoAlt} class="footer-logo" />
       </div>
       <div class="content-container">
-        <NavRoot variant="horizontal">
-          <NavList>
-            {links.map((link: any) => <NavItem href={link.path} text={link.name} />)}
-          </NavList>
-        </NavRoot>
+        <Bar navData={links} />
       </div>
     </div>
 
@@ -100,7 +94,7 @@ const { links = [], socials = [], footerText = "", logoSource, logoAlt } = Astro
     }
   }
 
-  :global(.footer .nav-root.horizontal .nav-list) {
+  :global(.footer .bar .bar-list) {
     flex-flow: column wrap;
     @container (min-width: 500px) {
       flex-direction: row;

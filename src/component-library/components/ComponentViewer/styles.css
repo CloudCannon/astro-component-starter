@@ -14,6 +14,7 @@
     gap: var(--spacing-sm);
     justify-content: space-between;
     padding: var(--spacing-sm);
+    position: relative;
 
     .example-select {
       line-height: 0;
@@ -68,6 +69,25 @@
     .view-segments {
       margin-right: 0;
     }
+
+    .resize-handle {
+      cursor: ns-resize;
+      height: 5px;
+      left: calc(var(--spacing-sm) * -1);
+      margin: 0 var(--spacing-sm);
+      position: absolute;
+      right: calc(var(--spacing-sm) * -1);
+      top: -1px;
+      transition: background-color var(--animation-normal) ease;
+
+      &:hover {
+        background: var(--color-border);
+      }
+
+      &.dragging {
+        background: var(--color-border-strong);
+      }
+    }
   }
 
   > .previews {
@@ -86,6 +106,7 @@
       max-height: inherit;
       min-height: inherit;
       overflow-y: auto;
+      position: relative;
       transition: max-width var(--animation-slow) ease-in-out;
     }
 

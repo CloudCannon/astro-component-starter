@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const exampleSelect = viewer.querySelector(".example-select");
     const viewerId = viewer.getAttribute("data-viewer-id");
 
+    const manuallyResized = new Map();
+
     const switchToExample = (exampleId) => {
       previews.forEach((preview) => {
         preview.classList.toggle("active", preview.id === exampleId);
@@ -45,14 +47,81 @@ document.addEventListener("DOMContentLoaded", () => {
       const activePreview = viewer.querySelector(".preview.active");
 
       if (activePreview && activePreview.offsetHeight > 0) {
+        if (manuallyResized.get(activePreview.id)) {
+          const previewHeight = activePreview.offsetHeight;
+
+          codeBlocks.forEach((block) => {
+            block.style.height = `${previewHeight}px`;
+          });
+
+          return;
+        }
         const previewHeight = activePreview.offsetHeight;
 
         codeBlocks.forEach((block) => {
           block.style.height = `${previewHeight}px`;
-          block.style.minHeight = `${previewHeight}px`;
         });
       }
     };
+
+    const resizeHandle = viewer.querySelector(".controls .resize-handle");
+
+    if (resizeHandle) {
+      let startY = 0;
+      let startHeight = 0;
+      let activePreview = null;
+
+      const onMouseDown = (e) => {
+        e.preventDefault();
+
+        activePreview = viewer.querySelector(".preview.active");
+        if (!activePreview) return;
+
+        startY = e.clientY;
+
+        const visibleElement = [...previews, ...codeBlocks].find((el) => el.offsetHeight > 0);
+
+        startHeight = visibleElement.offsetHeight;
+
+        resizeHandle.classList.add("dragging");
+        document.body.style.cursor = "ns-resize";
+        document.body.style.userSelect = "none";
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+      };
+
+      const onMouseMove = (e) => {
+        if (!activePreview) return;
+
+        const deltaY = e.clientY - startY;
+        const newHeight = startHeight + deltaY;
+        const maxHeight = window.innerHeight * 0.8;
+
+        const clampedHeight = Math.min(maxHeight, newHeight);
+
+        activePreview.style.height = `${clampedHeight}px`;
+        codeBlocks.forEach((block) => {
+          block.style.height = `${clampedHeight}px`;
+        });
+      };
+
+      const onMouseUp = () => {
+        if (!activePreview) return;
+
+        resizeHandle.classList.remove("dragging");
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+
+        manuallyResized.set(activePreview.id, true);
+        activePreview = null;
+      };
+
+      resizeHandle.addEventListener("mousedown", onMouseDown);
+    }
 
     const initSegment = (segmentElement, name, callback) => {
       if (!segmentElement) return;
@@ -81,14 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (activePreview) switchToExample(activePreview.id);
 
-      // Show/hide hidden segments based on view mode
       const hiddenSegments = viewer.querySelector(".hidden-segments");
 
       if (hiddenSegments) {
         hiddenSegments.style.display = value === "component" ? "flex" : "none";
       }
-
-      // Sync height after switching to code view
       setTimeout(syncCodeViewHeight, 50);
     });
 
@@ -105,7 +171,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(syncCodeViewHeight, 150);
     });
 
-    // Initialize hidden segments visibility on page load
     const hiddenSegments = viewer.querySelector(".hidden-segments");
 
     if (hiddenSegments) {
@@ -116,18 +181,17 @@ document.addEventListener("DOMContentLoaded", () => {
       hiddenSegments.style.display = initialViewMode === "component" ? "flex" : "none";
     }
 
-    // Set up ResizeObserver for dynamic height changes
-    const activePreview = viewer.querySelector(".preview.active");
+    previews.forEach((preview) => {
+      if (window.ResizeObserver) {
+        const resizeObserver = new ResizeObserver(() => {
+          if (preview.classList.contains("active")) {
+            syncCodeViewHeight();
+          }
+        });
 
-    if (activePreview && window.ResizeObserver) {
-      const resizeObserver = new ResizeObserver(() => {
-        syncCodeViewHeight();
-      });
-
-      resizeObserver.observe(activePreview);
-    }
-
-    // Initial height sync
+        resizeObserver.observe(preview);
+      }
+    });
     setTimeout(syncCodeViewHeight, 200);
   });
 });

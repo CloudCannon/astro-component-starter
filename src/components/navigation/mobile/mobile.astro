@@ -1,0 +1,343 @@
+---
+import Button from "@components/elements/button/button.astro";
+import Icon from "@components/elements/icon/icon.astro";
+import SmartImage from "@components/elements/smart-image/smart-image.astro";
+
+const { logoSource, logoAlt, navData = [], class: className, ...rest } = Astro.props as Props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => key !== "_bookshop_name")
+);
+
+const toggleId = `mobile-toggle-${crypto.randomUUID()}`;
+const navInstanceId = crypto.randomUUID();
+
+// Check if item is current page
+function isCurrentPage(item) {
+  return Boolean(item.path && Astro.url.pathname === item.path);
+}
+
+// Check if any child is current page (recursive)
+function hasCurrentChild(item) {
+  if (isCurrentPage(item)) return true;
+  return Boolean(item.children?.some((child) => hasCurrentChild(child)));
+}
+
+// Create navigation item data
+function createNavItemData(item, level, parentGroupId) {
+  const hasChildren = Boolean(item.children?.length);
+
+  return {
+    ...item,
+    hasChildren,
+    level,
+    dropdownId: `dropdown-toggle-${crypto.randomUUID()}`,
+    contentId: `dropdown-content-${crypto.randomUUID()}`,
+    isCurrent: isCurrentPage(item),
+    hasCurrent: hasCurrentChild(item),
+    groupName: level === "top" ? `mobile-nav-top-${navInstanceId}` : `mobile-nav-${parentGroupId}`,
+    parentGroupId: parentGroupId || crypto.randomUUID(),
+  };
+}
+---
+
+<input type="checkbox" id={toggleId} class="nav-toggle" autocomplete="off" />
+<label
+  for={toggleId}
+  class="nav-hamburger mobile-button"
+  aria-label="Toggle navigation menu"
+  tabindex="0"
+>
+  <Button
+    variant="tertiary"
+    size="lg"
+    element="div"
+    iconName="bars-3"
+    hideText="true"
+    class="mobile-nav-button"
+  />
+</label>
+
+<nav class:list={["mobile", className]} data-toggle-id={toggleId} {...htmlAttributes}>
+  <div class="mobile-header">
+    <div class="mobile-logo">
+      <slot name="logo">
+        {
+          logoSource && (
+            <SmartImage
+              source={logoSource}
+              alt={logoAlt || "Logo"}
+              width={120}
+              height={48}
+              class="mobile-logo-image"
+            />
+          )
+        }
+      </slot>
+    </div>
+    <label
+      for={toggleId}
+      class="mobile-close mobile-button"
+      aria-label="Close navigation menu"
+      tabindex="0"
+    >
+      <Button
+        variant="tertiary"
+        size="lg"
+        element="span"
+        iconName="x-mark"
+        hideText="true"
+        class="mobile-nav-close mobile-nav-button"
+      />
+    </label>
+  </div>
+
+  <div class="mobile-content">
+    <ul class="mobile-list">
+      {
+        navData.map((item) => {
+          const itemData = createNavItemData(item, "top");
+
+          if (!itemData.hasChildren) {
+            return (
+              <li class="nav-item">
+                <a href={itemData.path} aria-current={itemData.isCurrent ? "page" : undefined}>
+                  {itemData.name}
+                </a>
+              </li>
+            );
+          }
+
+          return (
+            <li class="nav-item has-children">
+              <input
+                type="radio"
+                name={itemData.groupName}
+                id={itemData.dropdownId}
+                class="nav-item-toggle"
+                aria-expanded={itemData.hasCurrent}
+                aria-controls={itemData.contentId}
+                autocomplete="off"
+                checked={itemData.hasCurrent}
+              />
+              <label
+                for={itemData.dropdownId}
+                class="nav-item-trigger"
+                role="button"
+                aria-controls={itemData.contentId}
+                tabindex="0"
+                aria-current={itemData.isCurrent ? "page" : undefined}
+              >
+                {itemData.name}
+                <span class="nav-item-icon">
+                  <Icon name="chevron-right" size="none" aria-hidden="true" />
+                </span>
+              </label>
+              <div
+                id={itemData.contentId}
+                class="nav-item-content"
+                role="region"
+                aria-label={`${itemData.name} submenu`}
+                aria-hidden={!itemData.hasCurrent}
+              >
+                <ul class="nav-list">
+                  {itemData.children!.map((child) => {
+                    const childData = createNavItemData(child, "child", itemData.parentGroupId);
+
+                    if (!childData.hasChildren) {
+                      return (
+                        <li class="nav-item">
+                          <a
+                            href={childData.path}
+                            aria-current={childData.isCurrent ? "page" : undefined}
+                          >
+                            {childData.name}
+                          </a>
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li class="nav-item has-children">
+                        <input
+                          type="radio"
+                          name={childData.groupName}
+                          id={childData.dropdownId}
+                          class="nav-item-toggle"
+                          aria-expanded={childData.hasCurrent}
+                          aria-controls={childData.contentId}
+                          autocomplete="off"
+                          checked={childData.hasCurrent}
+                        />
+                        <label
+                          for={childData.dropdownId}
+                          class="nav-item-trigger"
+                          role="button"
+                          aria-controls={childData.contentId}
+                          tabindex="0"
+                          aria-current={childData.isCurrent ? "page" : undefined}
+                        >
+                          {childData.name}
+                          <span class="nav-item-icon">
+                            <Icon name="chevron-right" size="none" aria-hidden="true" />
+                          </span>
+                        </label>
+                        <div
+                          id={childData.contentId}
+                          class="nav-item-content"
+                          role="region"
+                          aria-label={`${childData.name} submenu`}
+                          aria-hidden={!childData.hasCurrent}
+                        >
+                          <ul class="nav-list">
+                            {childData.children!.map((grandChild) => {
+                              const grandChildData = createNavItemData(
+                                grandChild,
+                                "child",
+                                childData.parentGroupId
+                              );
+
+                              return (
+                                <li class="nav-item">
+                                  <a
+                                    href={grandChildData.path}
+                                    aria-current={grandChildData.isCurrent ? "page" : undefined}
+                                  >
+                                    {grandChildData.name}
+                                  </a>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</nav>
+
+<script>
+  // Create overlays container for proper z-index stacking
+  function getOrCreateOverlaysContainer() {
+    let container = document.getElementById("overlays-container");
+    if (!container) {
+      container = document.createElement("div");
+      container.id = "overlays-container";
+      container.style.cssText = "position: relative; z-index: 9999;";
+      document.body.insertBefore(container, document.body.firstChild);
+    }
+    return container;
+  }
+
+  // Initialize mobile navigation instances
+  const allMobileNavs = document.querySelectorAll(".mobile");
+
+  allMobileNavs.forEach((nav) => {
+    // Add a class to indicate JS is available
+    nav.classList.add("js-enabled");
+
+    // Find the toggle for this specific nav instance
+    const toggleId = nav.getAttribute("data-toggle-id");
+    const toggle = document.getElementById(toggleId);
+    const hamburger = document.querySelector(`label[for="${toggleId}"].nav-hamburger`);
+
+    // Handle navigation toggle state and accessibility
+    function handleNavToggle(isOpen) {
+      if (isOpen) {
+        nav.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        nav.querySelector(".mobile-close")?.focus();
+      } else {
+        nav.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        hamburger?.focus();
+      }
+    }
+
+    // Handle hamburger button interactions
+    if (hamburger && toggle) {
+      const toggleHandler = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggle.checked = !toggle.checked;
+        handleNavToggle(toggle.checked);
+      };
+
+      hamburger.addEventListener("click", toggleHandler);
+      hamburger.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          toggleHandler(e);
+        }
+      });
+    }
+
+    // Handle close button interactions
+    const closeButton = nav.querySelector(".mobile-close");
+    if (closeButton && toggle) {
+      const closeHandler = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        toggle.checked = false;
+        handleNavToggle(false);
+      };
+
+      closeButton.addEventListener("click", closeHandler);
+      closeButton.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          closeHandler(e);
+        }
+      });
+    }
+
+    // Handle toggle state changes
+    if (toggle) {
+      toggle.addEventListener("change", (e) => {
+        handleNavToggle(e.target.checked);
+      });
+    }
+
+    // Handle dropdown interactions using event delegation
+    const handleDropdownToggle = (e) => {
+      const trigger = e.target?.closest(".nav-item-trigger");
+      if (!trigger) return;
+
+      const radioName = trigger.getAttribute("for");
+      let dropdownToggle = null;
+
+      if (radioName) {
+        dropdownToggle = document.getElementById(radioName);
+      } else {
+        const parent = trigger.closest(".nav-item");
+        dropdownToggle = parent?.querySelector(".nav-item-toggle");
+      }
+
+      if (dropdownToggle) {
+        e.preventDefault();
+        dropdownToggle.checked = !dropdownToggle.checked;
+        dropdownToggle.dispatchEvent(new Event("change"));
+      }
+    };
+
+    nav.addEventListener("click", handleDropdownToggle);
+    nav.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        handleDropdownToggle(e);
+      }
+    });
+
+    // Handle escape key to close navigation
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && toggle?.checked) {
+        toggle.checked = false;
+        handleNavToggle(false);
+      }
+    });
+  });
+</script>

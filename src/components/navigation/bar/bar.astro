@@ -1,0 +1,280 @@
+---
+import Icon from "@components/elements/icon/icon.astro";
+
+const { navData = [], class: className, ...rest } = Astro.props;
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => key !== "_bookshop_name")
+);
+
+const navInstanceId = crypto.randomUUID();
+
+function isCurrentPage(item) {
+  return Boolean(item.path && Astro.url.pathname === item.path);
+}
+
+function hasCurrentChild(item) {
+  if (isCurrentPage(item)) return true;
+  return Boolean(item.children?.some((child) => hasCurrentChild(child)));
+}
+
+// Helper function to create navigation item data
+function createNavItemData(item, level, parentGroupId) {
+  const hasChildren = Boolean(item.children?.length);
+
+  return {
+    ...item,
+    hasChildren,
+    level,
+    dropdownId: `dropdown-toggle-${crypto.randomUUID()}`,
+    contentId: `dropdown-content-${crypto.randomUUID()}`,
+    isCurrent: isCurrentPage(item),
+    hasCurrent: hasCurrentChild(item),
+    groupName: level === "top" ? `bar-nav-top-${navInstanceId}` : `bar-nav-${parentGroupId}`,
+    parentGroupId: parentGroupId || crypto.randomUUID(),
+  };
+}
+---
+
+<nav class:list={["bar", className]} {...htmlAttributes}>
+  <ul class="bar-list">
+    {
+      navData.map((item) => {
+        const itemData = createNavItemData(item, "top");
+
+        if (!itemData.hasChildren) {
+          return (
+            <li class="nav-item">
+              <a href={itemData.path} aria-current={itemData.isCurrent ? "page" : undefined}>
+                {itemData.name}
+              </a>
+            </li>
+          );
+        }
+
+        return (
+          <li class="nav-item has-children">
+            <input
+              type="radio"
+              name={itemData.groupName}
+              id={itemData.dropdownId}
+              class="nav-item-toggle"
+              aria-expanded={itemData.hasCurrent.toString()}
+              aria-controls={itemData.contentId}
+              autocomplete="off"
+              checked={itemData.hasCurrent}
+            />
+            <label
+              for={itemData.dropdownId}
+              class="nav-item-trigger"
+              role="button"
+              aria-controls={itemData.contentId}
+              tabindex="0"
+              aria-current={itemData.isCurrent ? "page" : undefined}
+            >
+              {itemData.name}
+              <span class="nav-item-icon">
+                <Icon name="chevron-right" size="none" aria-hidden="true" />
+              </span>
+            </label>
+            <div
+              id={itemData.contentId}
+              class="nav-item-content"
+              role="region"
+              aria-label={`${itemData.name} submenu`}
+              aria-hidden={(!itemData.hasCurrent).toString()}
+            >
+              <ul class="nav-list">
+                {itemData.children!.map((child) => {
+                  const childData = createNavItemData(child, "child", itemData.parentGroupId);
+
+                  if (!childData.hasChildren) {
+                    return (
+                      <li class="nav-item">
+                        <a
+                          href={childData.path}
+                          aria-current={childData.isCurrent ? "page" : undefined}
+                        >
+                          {childData.name}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li class="nav-item has-children">
+                      <input
+                        type="radio"
+                        name={childData.groupName}
+                        id={childData.dropdownId}
+                        class="nav-item-toggle"
+                        aria-expanded={childData.hasCurrent.toString()}
+                        aria-controls={childData.contentId}
+                        autocomplete="off"
+                        checked={childData.hasCurrent}
+                      />
+                      <label
+                        for={childData.dropdownId}
+                        class="nav-item-trigger"
+                        role="button"
+                        aria-controls={childData.contentId}
+                        tabindex="0"
+                        aria-current={childData.isCurrent ? "page" : undefined}
+                      >
+                        {childData.name}
+                        <span class="nav-item-icon">
+                          <Icon name="chevron-right" size="none" aria-hidden="true" />
+                        </span>
+                      </label>
+                      <div
+                        id={childData.contentId}
+                        class="nav-item-nested"
+                        role="region"
+                        aria-label={`${childData.name} submenu`}
+                        aria-hidden={(!childData.hasCurrent).toString()}
+                      >
+                        <ul class="nav-list">
+                          {childData.children!.map((grandChild) => {
+                            const grandChildData = createNavItemData(
+                              grandChild,
+                              "child",
+                              childData.parentGroupId
+                            );
+
+                            return (
+                              <li class="nav-item">
+                                <a
+                                  href={grandChildData.path}
+                                  aria-current={grandChildData.isCurrent ? "page" : undefined}
+                                >
+                                  {grandChildData.name}
+                                </a>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+
+<script>
+  // Update ARIA states for dropdown toggle
+  function updateAriaStates(toggle, isExpanded) {
+    const contentId = toggle.getAttribute("aria-controls");
+    const content = document.getElementById(contentId || "");
+    const triggerId = toggle.getAttribute("id");
+    const trigger = document.querySelector(`label[for="${triggerId}"]`);
+
+    toggle.setAttribute("aria-expanded", isExpanded.toString());
+
+    if (content) {
+      content.setAttribute("aria-hidden", (!isExpanded).toString());
+      content.querySelectorAll(".nav-item-nested").forEach((nested) => {
+        nested.setAttribute("aria-hidden", (!isExpanded).toString());
+      });
+    }
+
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", isExpanded.toString());
+    }
+  }
+
+  // Handle toggle change events
+  function handleToggleChange(e) {
+    const target = e.target;
+    const barNav = target.closest(".bar");
+
+    if (target.checked) {
+      updateAriaStates(target, true);
+      const radioName = target.getAttribute("name");
+      if (radioName && barNav) {
+        barNav.querySelectorAll(`input[name="${radioName}"]`).forEach((radio) => {
+          if (radio !== target) {
+            updateAriaStates(radio, false);
+          }
+        });
+      }
+    } else {
+      updateAriaStates(target, false);
+    }
+  }
+
+  // Handle trigger click events
+  function handleTriggerClick(e) {
+    const label = e.currentTarget;
+    const toggle = document.getElementById(label.getAttribute("for") || "");
+
+    if (toggle?.checked) {
+      e.preventDefault();
+      toggle.checked = false;
+      toggle.dispatchEvent(new Event("change"));
+    }
+  }
+
+  // Handle keyboard events
+  function handleKeydown(e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+
+    e.preventDefault();
+    const label = e.currentTarget;
+    const toggle = document.getElementById(label.getAttribute("for") || "");
+
+    if (toggle) {
+      toggle.checked = !toggle.checked;
+      toggle.dispatchEvent(new Event("change"));
+    }
+  }
+
+  // Initialize bar navigation
+  function initBarNavigation() {
+    // Handle clicks outside bar navigation to close dropdowns
+    document.addEventListener("click", (e) => {
+      const clickedBar = e.target.closest(".bar");
+      if (!clickedBar) {
+        document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
+          if (toggle.checked) {
+            toggle.checked = false;
+            updateAriaStates(toggle, false);
+          }
+        });
+      }
+    });
+
+    // Handle escape key to close all dropdowns
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
+          if (toggle.checked) {
+            toggle.checked = false;
+            updateAriaStates(toggle, false);
+          }
+        });
+      }
+    });
+
+    // Initialize all bar navigation instances
+    document.querySelectorAll(".bar").forEach((barNav) => {
+      barNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+        const isChecked = toggle.checked;
+        updateAriaStates(toggle, isChecked);
+        toggle.addEventListener("change", handleToggleChange);
+      });
+
+      barNav.querySelectorAll(".nav-item-trigger").forEach((trigger) => {
+        trigger.addEventListener("click", handleTriggerClick);
+        trigger.addEventListener("keydown", handleKeydown);
+      });
+    });
+  }
+
+  // Initialize bar navigation
+  initBarNavigation();
+</script>

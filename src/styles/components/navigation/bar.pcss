@@ -1,0 +1,114 @@
+.bar {
+  .bar-list {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-sm);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .nav-item > a,
+  .nav-item > .nav-item-trigger {
+    border-radius: var(--radius-xs);
+    color: var(--color-text-strong);
+    cursor: pointer;
+    display: block;
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-decoration: none;
+    transition: background var(--animation-normal) ease-in-out;
+    white-space: nowrap;
+
+    &[aria-current="page"] {
+      text-decoration: underline dotted;
+      text-decoration-color: var(--color-text-muted);
+      text-underline-offset: 3px;
+    }
+
+    &:hover {
+      background: var(--color-state-hover);
+      color: var(--color-text-strong);
+    }
+  }
+
+  .nav-item-trigger {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-xs);
+  }
+
+  .nav-item-icon {
+    color: var(--color-text-muted);
+    display: inline-block;
+    transition:
+      color var(--animation-normal) ease-in-out,
+      transform var(--animation-normal) ease-in-out;
+    width: 0.8rem;
+  }
+
+  .nav-item-trigger:hover .nav-item-icon {
+    color: var(--color-text-strong);
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon {
+    transform: rotate(90deg);
+  }
+
+  .nav-item-toggle {
+    display: none;
+  }
+
+  .nav-item-toggle ~ .nav-item-content,
+  .nav-item-toggle ~ .nav-item-nested {
+    display: none;
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-content {
+    animation: grow-out-centered var(--animation-normal) ease-out forwards;
+    display: block;
+  }
+
+  .nav-item-toggle:checked ~ .nav-item-nested {
+    animation: grow-out var(--animation-normal) ease-out forwards;
+    display: block;
+  }
+
+  .nav-item > .nav-item-content {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-xs);
+    left: 50%;
+    margin-top: var(--spacing-xs);
+    min-width: 200px;
+    position: absolute;
+    top: 100%;
+    transform: translateX(-50%);
+    width: max-content;
+    z-index: var(--layer-3);
+  }
+
+  .nav-item-content .nav-item {
+    display: block;
+  }
+
+  .nav-item-content .nav-item > a,
+  .nav-item-content .nav-item > .nav-item-trigger {
+    border-radius: 0;
+  }
+
+  .nav-item-nested .nav-item > a {
+    border-radius: 0;
+    padding-left: var(--spacing-xl);
+  }
+}

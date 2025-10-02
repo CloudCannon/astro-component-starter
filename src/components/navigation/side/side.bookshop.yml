@@ -1,0 +1,56 @@
+# Metadata about this component, to be used in the CMS
+spec:
+  label: Side Navigation
+  description: A vertical sidebar navigation with collapsible sections.
+  icon: sidebar
+  tags: []
+
+# Defines the structure of this component, as well as the default values
+blueprint:
+  navData:
+    - name: "Home"
+      path: "#"
+      children: []
+    - name: "Resources"
+      path: "#"
+      children:
+        - name: "Blog"
+          path: "#"
+          children: []
+        - name: "Documentation"
+          path: "#"
+          children: []
+        - name: "Support"
+          path: "#"
+          children: []
+    - name: "Contact"
+      path: "#"
+      children: []
+
+# Overrides any fields in the blueprint when viewing this component in the component browser
+preview:
+  navData:
+    - name: "Home"
+      path: "#"
+      children: []
+    - name: "Resources"
+      path: "#"
+      children:
+        - name: "Blog"
+          path: "#"
+          children: []
+        - name: "Documentation"
+          path: "#"
+          children: []
+        - name: "Support"
+          path: "#"
+          children: []
+    - name: "Contact"
+      path: "#"
+      children: []
+
+_inputs:
+  navData:
+    type: text
+    label: Navigation Data
+    comment: JSON structure defining the navigation items with name, path, and children.
