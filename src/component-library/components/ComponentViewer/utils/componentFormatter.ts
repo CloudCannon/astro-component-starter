@@ -42,29 +42,70 @@ export function formatComponentWithSlots(block: any, indentLevel: number = 0): s
     delete props.text;
   }
 
-  const propsString = Object.entries(props)
+  // Separate simple props from complex ones
+  const simpleProps: string[] = [];
+  const complexProps: string[] = [];
+
+  Object.entries(props)
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => {
+    .forEach(([key, value]) => {
       if (typeof value === "string") {
-        return `${key}="${value}"`;
+        simpleProps.push(`${key}="${value}"`);
       } else if (typeof value === "boolean") {
-        return value ? key : "";
+        if (value) simpleProps.push(key);
       } else if (typeof value === "number") {
-        return `${key}={${value}}`;
+        simpleProps.push(`${key}={${value}}`);
       } else if (Array.isArray(value)) {
         const formattedArray = JSON.stringify(value, null, 2)
           .split("\n")
           .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
           .join("\n");
 
-        return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
+        complexProps.push(`${key}={\n${indent}  ${formattedArray}\n${indent}}`);
       } else if (typeof value === "object" && value !== null) {
-        return `${key}={${JSON.stringify(value)}}`;
+        // Format objects as JavaScript object literals (not JSON)
+        const formatObjectLiteral = (obj: any, depth = 0): string => {
+          const objIndent = indent + "  ".repeat(depth + 1);
+          const nextIndent = indent + "  ".repeat(depth + 2);
+
+          const entries = Object.entries(obj)
+            .map(([k, v]) => {
+              if (typeof v === "string") {
+                return `${nextIndent}${k}: "${v}"`;
+              } else if (typeof v === "boolean" || typeof v === "number") {
+                return `${nextIndent}${k}: ${v}`;
+              } else if (typeof v === "object" && v !== null && !Array.isArray(v)) {
+                return `${nextIndent}${k}: ${formatObjectLiteral(v, depth + 1)}`;
+              } else if (Array.isArray(v)) {
+                return `${nextIndent}${k}: ${JSON.stringify(v)}`;
+              }
+
+              return `${nextIndent}${k}: ${JSON.stringify(v)}`;
+            })
+            .join(",\n");
+
+          return `{\n${entries}\n${objIndent}}`;
+        };
+
+        complexProps.push(`${key}=${formatObjectLiteral(value)}`);
+      } else {
+        simpleProps.push(`${key}="${String(value)}"`);
       }
-      return `${key}="${String(value)}"`;
-    })
-    .filter(Boolean)
-    .join(" ");
+    });
+
+  // Build props string with complex props on new lines
+  let propsString = "";
+
+  if (complexProps.length > 0) {
+    // If there are complex props, put each prop on its own line
+    const allProps = [...complexProps, ...simpleProps];
+
+    propsString = allProps.map((prop) => `${indent}  ${prop}`).join("\n");
+    propsString = `\n${propsString}\n${indent}`;
+  } else if (simpleProps.length > 0) {
+    // If only simple props, join them with spaces
+    propsString = ` ${simpleProps.join(" ")}`;
+  }
 
   const items = block.items;
 
@@ -74,10 +115,10 @@ export function formatComponentWithSlots(block: any, indentLevel: number = 0): s
   if (nestedBlocks) {
     const blocksArray = Array.isArray(nestedBlocks) ? nestedBlocks : [nestedBlocks];
     const nestedContent = blocksArray
-      .map((nestedBlock) => formatComponentWithSlots(nestedBlock, indentLevel + 1))
+      .map((nestedBlock: any) => formatComponentWithSlots(nestedBlock, indentLevel + 1))
       .join("\n");
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${nestedContent}
 ${indent}</${componentName}>`;
   } else if (
@@ -89,7 +130,7 @@ ${indent}</${componentName}>`;
           ? block.firstColumnContentBlocks
           : [block.firstColumnContentBlocks]
         )
-          .map((nestedBlock) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
+          .map((nestedBlock: any) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
           .join("\n")
       : "";
 
@@ -98,11 +139,11 @@ ${indent}</${componentName}>`;
           ? block.secondColumnContentBlocks
           : [block.secondColumnContentBlocks]
         )
-          .map((nestedBlock) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
+          .map((nestedBlock: any) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
           .join("\n")
       : "";
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${
   firstContent
     ? `${indent}  <Fragment slot="first">
@@ -166,7 +207,7 @@ ${indent}</${componentName}>`;
       })
       .join("\n");
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${itemsContent}
 ${indent}</${componentName}>`;
   } else if (items && componentPath.includes("grid")) {
@@ -197,7 +238,7 @@ ${indent}</${componentName}>`;
 
         const itemContent = item.contentBlocks
           ? (Array.isArray(item.contentBlocks) ? item.contentBlocks : [item.contentBlocks])
-              .map((nestedBlock) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
+              .map((nestedBlock: any) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
               .join("\n")
           : "";
 
@@ -207,7 +248,7 @@ ${indent}  </${itemComponentName}>`;
       })
       .join("\n");
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${itemsContent}
 ${indent}</${componentName}>`;
   } else if (items && componentPath.includes("accordion")) {
@@ -238,7 +279,7 @@ ${indent}</${componentName}>`;
 
         const itemContent = item.contentBlocks
           ? (Array.isArray(item.contentBlocks) ? item.contentBlocks : [item.contentBlocks])
-              .map((nestedBlock) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
+              .map((nestedBlock: any) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
               .join("\n")
           : "";
 
@@ -248,7 +289,7 @@ ${indent}  </${itemComponentName}>`;
       })
       .join("\n");
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${itemsContent}
 ${indent}</${componentName}>`;
   } else if (block.slides && componentPath.includes("carousel")) {
@@ -257,7 +298,7 @@ ${indent}</${componentName}>`;
     const slideComponentName = "CarouselSlide";
 
     const slidesContent = slidesArray
-      .map((slide) => {
+      .map((slide: any) => {
         const slideProps = { ...slide };
 
         delete slideProps.contentBlocks; // Remove contentBlocks from props since it goes in the slot
@@ -279,7 +320,7 @@ ${indent}</${componentName}>`;
 
         const slideContent = slide.contentBlocks
           ? (Array.isArray(slide.contentBlocks) ? slide.contentBlocks : [slide.contentBlocks])
-              .map((nestedBlock) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
+              .map((nestedBlock: any) => formatComponentWithSlots(nestedBlock, indentLevel + 2))
               .join("\n")
           : "";
 
@@ -289,7 +330,7 @@ ${indent}  </${slideComponentName}>`;
       })
       .join("\n");
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${slidesContent}
 ${indent}</${componentName}>`;
   } else if (block.options && componentPath.includes("select")) {
@@ -298,7 +339,7 @@ ${indent}</${componentName}>`;
     const optionComponentName = "SelectOption";
 
     const optionsContent = optionsArray
-      .map((option) => {
+      .map((option: any) => {
         const optionProps = { ...option };
 
         const optionPropsString = Object.entries(optionProps)
@@ -320,7 +361,7 @@ ${indent}</${componentName}>`;
       })
       .join("\n");
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+    return `${indent}<${componentName}${propsString}>
 ${optionsContent}
 ${indent}</${componentName}>`;
   } else if (textContent) {
@@ -366,23 +407,19 @@ ${indent}</${componentName}>`;
       // Add proper indentation to each line
       const indentedLines = formattedHtml
         .split("\n")
-        .map((line) => `${indent}  ${line}`)
+        .map((line: any) => `${indent}  ${line}`)
         .join("\n");
 
-      return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+      return `${indent}<${componentName}${propsString}>
 ${indentedLines}
 ${indent}</${componentName}>`;
     } else {
-      return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
+      return `${indent}<${componentName}${propsString}>
 ${indent}  ${htmlContent}
 ${indent}</${componentName}>`;
     }
   } else {
-    // Handle multi-line props formatting
-    if (propsString && propsString.includes("\n")) {
-      return `${indent}<${componentName}\n${propsString}\n${indent}/>`;
-    } else {
-      return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""} />`;
-    }
+    // Self-closing tag
+    return `${indent}<${componentName}${propsString}${propsString ? "" : " "}/>`;
   }
 }
