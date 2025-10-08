@@ -6,5 +6,5 @@ blocks:
   number: 1000
   prefix: "$"
   suffix:
-  horizontalAlignment: center
+  alignX: center
 ---

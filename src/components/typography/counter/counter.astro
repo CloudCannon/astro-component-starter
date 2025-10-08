@@ -3,7 +3,7 @@ const {
   number = 0,
   prefix,
   suffix,
-  horizontalAlignment = "start",
+  alignX = "start",
   class: className,
   ...restProps
 } = Astro.props;
@@ -16,7 +16,7 @@ const htmlAttributes = Object.fromEntries(
 );
 ---
 
-<div class:list={["counter", `alignment-${horizontalAlignment}`, className]} {...htmlAttributes}>
+<div class:list={["counter", `alignment-${alignX}`, className]} {...htmlAttributes}>
   {prefix && <span class="prefix">{prefix}</span>}
   <span
     class="number"
