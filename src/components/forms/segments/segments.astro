@@ -8,7 +8,7 @@ const {
   required = false,
   iconOnly = false,
   multiple = false,
-  keepStateOnRefresh = true,
+  keepStateOnRefresh = false,
   class: className,
   ...rest
 } = Astro.props;
@@ -47,7 +47,8 @@ const inputType = multiple ? "checkbox" : "radio";
             type={inputType}
             name={multiple ? `${name}[]` : name}
             value={option.value}
-            checked={option.checked || false}
+            checked={option.checked ? "checked" : undefined}
+            data-checked={option.checked}
             required={required && index === 0}
             aria-required={required && index === 0}
             autocomplete={keepStateOnRefresh ? "on" : "off"}

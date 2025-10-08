@@ -8,7 +8,6 @@ spec:
 blueprint:
   name:
   size: lg
-  background: none
 
 preview:
 
@@ -35,12 +34,3 @@ _inputs:
         - id: lg
           name: Large
     comment: The size of the icon.
-  background:
-    type: select
-    comment: The background style for the icon.
-    options:
-      values:
-        - id: none
-          name: None
-        - id: subtle
-          name: Subtle

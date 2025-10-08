@@ -5,17 +5,16 @@ blocks:
   - _bookshop_name: "elements/icon"
     size: "none"
     name: envelope
-    background: subtle
+    style: "margin-inline-end: .5rem;"
   - _bookshop_name: "elements/icon"
     size: "lg"
     name: envelope
-    background: subtle
+    style: "margin-inline-end: .5rem;"
   - _bookshop_name: "elements/icon"
     size: "md"
     name: envelope
-    background: subtle
+    style: "margin-inline-end: .5rem;"
   - _bookshop_name: "elements/icon"
     size: "sm"
     name: envelope
-    background: subtle
 ---

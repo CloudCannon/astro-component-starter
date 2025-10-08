@@ -13,7 +13,7 @@ blueprint:
   required: false
   iconOnly: false
   multiple: false
-  keepStateOnRefresh: true
+  keepStateOnRefresh: false
 
 preview:
 
@@ -22,8 +22,10 @@ _inputs:
     type: text
     comment: The name attribute for the radio button group.
   options:
-    type: blocks
+    type: array
     comment: Array of segment options with value, label, icon, and checked state.
+    options:
+      structures: _structures.option
   title:
     type: text
     comment: Optional title text for the fieldset.
@@ -38,4 +40,30 @@ _inputs:
     comment: When true, uses checkboxes for multiple selection instead of radio buttons for single selection.
   keepStateOnRefresh:
     type: switch
-    comment: When true, sets autocomplete="on" to allow browser to remember state on page refresh. Defaults to false (autocomplete="off").
+    comment: When true, allows the browser to remember state on page refresh.
+
+_structures:
+  option:
+    values:
+      - label: Segment Option
+        icon: list
+        value:
+          value:
+          label:
+          icon:
+          checked: false
+        _inputs:
+          value:
+            type: text
+            comment: The value attribute for this segment option (submitted with the form).
+          label:
+            type: text
+            comment: The display text for this segment option.
+          icon:
+            type: select
+            comment: Optional icon to display in the segment.
+            options:
+              values: _select_data.icons
+          checked:
+            type: switch
+            comment: Whether this option is checked by default.

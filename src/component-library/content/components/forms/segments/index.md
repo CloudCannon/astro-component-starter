@@ -4,9 +4,6 @@ examples:
   - title: Basic
     slugs:
       - basic
-  - title: Primary
-    slugs:
-      - primary
   - title: With Icons
     slugs:
       - with-icons

@@ -123,7 +123,7 @@ const carouselStyles = `
   import AutoScroll from "embla-carousel-auto-scroll";
   import Autoplay from "embla-carousel-autoplay";
 
-  export default function setupCarousels() {
+  function setupCarousels() {
     const carousels = document.querySelectorAll(".carousel");
 
     carousels.forEach((carousel) => {
@@ -131,10 +131,10 @@ const carouselStyles = `
         return;
       }
 
-      const viewport = carousel.querySelector(".viewport") as HTMLElement;
-      const track = viewport?.querySelector(".track") as HTMLElement;
-      const slides = track?.querySelectorAll(".slide") as NodeListOf<HTMLElement>;
-      const indicatorsContainer = carousel.querySelector(".indicators") as HTMLElement;
+      const viewport = carousel.querySelector(".viewport");
+      const track = viewport?.querySelector(".track");
+      const slides = track?.querySelectorAll(".slide");
+      const indicatorsContainer = carousel.querySelector(".indicators");
 
       if (!viewport || !track || !slides.length) {
         console.warn("Carousel: Missing required elements");
@@ -145,7 +145,7 @@ const carouselStyles = `
       const slidesToScroll = carousel.hasAttribute("data-slides-to-scroll")
         ? Number(carousel.getAttribute("data-slides-to-scroll")) || "auto"
         : "auto";
-      const align = (carousel.getAttribute("data-align") || "start") as "start" | "center" | "end";
+      const align = carousel.getAttribute("data-align") || "start";
 
       const plugins = [];
       if (carousel.hasAttribute("data-autoplay")) {
@@ -180,8 +180,8 @@ const carouselStyles = `
       carousel.setAttribute("data-embla-initialized", "true");
 
       // Navigation
-      const prevButton = carousel.querySelector(".prev") as HTMLButtonElement;
-      const nextButton = carousel.querySelector(".next") as HTMLButtonElement;
+      const prevButton = carousel.querySelector(".prev");
+      const nextButton = carousel.querySelector(".next");
 
       const updateButtons = () => {
         if (prevButton) prevButton.disabled = !embla.canScrollPrev();

@@ -3,7 +3,7 @@ title: "Primary Segments"
 spacing: "all"
 blocks:
   _bookshop_name: "forms/segments"
-  name: "theme"
+  name: "primary-demo-theme"
   title: "Theme"
   options:
     - value: "light"
