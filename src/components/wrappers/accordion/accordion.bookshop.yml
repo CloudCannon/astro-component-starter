@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Accordion
   description: Hides content behind an expandable menu.
   icon: expand_all

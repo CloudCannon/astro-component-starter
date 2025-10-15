@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Heading
   description: The main title or heading with levels (H1 to H6) to show hierarchy and structure for the page and sections.
   icon: title

@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Definition List
   description: "For displaying key-value pairs. Ideal for glossaries, opening times, etc."
   icon: dns

@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Form
   description: "A form element that groups related form controls and handles form submission."
   icon: checklist_rtl

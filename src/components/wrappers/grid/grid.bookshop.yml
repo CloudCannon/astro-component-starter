@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Grid
   description: "Responsive, centered grid with configurable sizing."
   icon: grid_on

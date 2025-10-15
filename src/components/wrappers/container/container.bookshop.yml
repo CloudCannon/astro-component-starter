@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
     - pageBlocks
   label: Container
   description: "A container component that provides layout structure with background options, padding, and content width controls."

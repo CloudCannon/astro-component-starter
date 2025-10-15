@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Content Selector
   description: Switches between related content panels using tab buttons.
   icon: view_sidebar

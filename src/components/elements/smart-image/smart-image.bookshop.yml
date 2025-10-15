@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Smart Image
   description: Displays an image optimized for performance with smart CDN detection.
   icon: image

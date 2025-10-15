@@ -1,8 +1,6 @@
 spec:
   structures:
     - contentBlocks
-    - firstContentBlocks
-    - secondContentBlocks
   label: Carousel
   description: "A carousel component for displaying slides with navigation controls"
   icon: image
