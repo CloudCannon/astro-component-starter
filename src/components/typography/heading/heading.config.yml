@@ -1,0 +1,113 @@
+# CloudCannon component configuration for Heading
+# This will be aggregated into _structures by the generator script
+
+component:
+  label: Heading
+  icon: title
+  description: "The main title or heading with levels (H1 to H6) to show hierarchy and structure for the page and sections."
+  structures:
+    - contentBlocks
+  value:
+    _component: typography/heading
+    text: ""
+    type: h2
+    size: ""
+    alignX: start
+    iconName: null
+    iconPosition: before
+  preview:
+    text:
+      - key: text
+      - Heading
+    icon: title
+  picker_preview:
+    text: Heading
+    subtext: "Main title or heading with levels (H1 to H6)"
+    icon: title
+
+_inputs:
+  text:
+    comment: The text content of the heading.
+    type: markdown
+    options:
+      bold: false
+      copyformatting: false
+      italic: true
+      link: true
+      redo: true
+      removeformat: true
+      strike: true
+      subscript: true
+      superscript: true
+      underline: true
+      undo: true
+      blockquote: false
+      bulletedlist: false
+      image: false
+      numberedlist: false
+      snippet: false
+  type:
+    comment: The heading type or level.
+    type: select
+    options:
+      values:
+        - h1
+        - h2
+        - h3
+        - h4
+        - h5
+        - h6
+        - eyebrow
+        - subtitle
+  size:
+    comment: The font size of the text.
+    type: select
+    options:
+      values:
+        - id: none
+          name: None
+        - id: xs
+          name: Extra Small
+        - id: sm
+          name: Small
+        - id: md
+          name: Medium
+        - id: lg
+          name: Large
+        - id: xl
+          name: Extra Large
+        - id: 2xl
+          name: 2xl
+        - id: 3xl
+          name: 3xl
+        - id: 4xl
+          name: 4xl
+        - id: 5xl
+          name: 5xl
+        - id: 6xl
+          name: 6xl
+  alignX:
+    comment: The horizontal alignment of the text.
+    type: select
+    options:
+      values:
+        - id: start
+          name: Start
+        - id: center
+          name: Center
+        - id: end
+          name: End
+  iconName:
+    comment: The name of the icon to display.
+    type: select
+    options:
+      values: _select_data.icons
+  iconPosition:
+    comment: The position of the icon relative to the text.
+    type: select
+    options:
+      values:
+        - id: before
+          name: Before
+        - id: after
+          name: After

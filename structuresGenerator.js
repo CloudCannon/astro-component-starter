@@ -107,6 +107,7 @@ async function generateStructures() {
       for (const structureName of expandedStructures) {
         if (!structures[structureName]) {
           structures[structureName] = {
+            id_key: "_component",
             values: [],
           };
         }

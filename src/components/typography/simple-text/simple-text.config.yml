@@ -5,7 +5,7 @@ component:
   structures:
     - contentBlocks
   value:
-    _type: simple-text
+    _component: typography/simple-text
     text: ""
     alignX: start
     size: md
