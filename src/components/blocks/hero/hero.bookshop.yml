@@ -6,6 +6,13 @@ spec:
   description: "A hero section component with heading, subtitle, call-to-action buttons, and feature image using a flexible split layout."
   icon: hero
   tags: ["hero", "banner", "cta", "split"]
+  preview:
+    text:
+      - key: heading
+      - Hero
+    subtext:
+      - key: subtitle
+      - Add content to the hero
 
 # Defines the structure of this component, as well as the default values
 blueprint:
