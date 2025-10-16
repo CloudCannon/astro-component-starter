@@ -1,6 +1,6 @@
 spec:
   structures:
-    - contentBlocks
+    - containerBlocks
     - cardBlocks
     - splitBlocks
     - gridItemBlocks

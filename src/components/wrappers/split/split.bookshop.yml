@@ -1,6 +1,6 @@
 spec:
   structures:
-    - contentBlocks
+    - containerBlocks
     - carouselBlocks
     - contentSelectorBlocks
   label: Split

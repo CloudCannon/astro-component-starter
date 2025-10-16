@@ -1,6 +1,6 @@
 spec:
   structures:
-    - contentBlocks
+    - containerBlocks
     - pageBlocks
   label: Container
   description: "A container component that provides layout structure with background options, padding, and content width controls."
@@ -13,7 +13,7 @@ blueprint:
   maxContentWidth: md
   paddingHorizontal: md
   paddingVertical: md
-  colorScheme: "default"
+  colorScheme: default
   backgroundColor:
   backgroundImage:
     source: ""
@@ -34,7 +34,7 @@ _inputs:
     type: array
     comment: Array of content blocks to render within the container.
     options:
-      structures: _structures.contentBlocks
+      structures: _structures.containerBlocks
   maxContentWidth:
     type: select
     comment: Maximum width constraint for the content.
