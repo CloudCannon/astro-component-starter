@@ -728,8 +728,7 @@ _select_data:
 _structures:
   contentBlocks:
     values:
-      - &ref_0
-        label: Simple Text
+      - label: Simple Text
         icon: view_headline
         description: Displays blocks of text for content sections with options for alignment, size and decoration.
         value:
@@ -798,9 +797,3 @@ _structures:
                   name: 5xl
                 - id: 6xl
                   name: 6xl
-  firstContentBlocks:
-    values:
-      - *ref_0
-  secondContentBlocks:
-    values:
-      - *ref_0
