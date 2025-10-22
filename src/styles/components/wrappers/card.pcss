@@ -29,11 +29,13 @@ a.card:hover {
     position: relative;
     z-index: var(--layer-1);
 
-    *:first-child {
+    > editable-array > editable-array-item:first-child > *:first-child,
+    > :not(editable-array):first-child {
       margin-top: 0;
     }
 
-    *:last-child {
+    > editable-array > editable-array-item:last-child > *:last-child,
+    > :not(editable-array):last-child {
       margin-bottom: 0;
     }
 

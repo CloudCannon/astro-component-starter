@@ -55,7 +55,7 @@ _inputs:
         - id: xl
           name: Extra Large
         - id: 2xl
-          name: 2XL
+          name: 2xl
         - id: 3xl
           name: 3xl
   paddingHorizontal:
@@ -79,12 +79,6 @@ _inputs:
           name: 2xl
         - id: 3xl
           name: 3xl
-        - id: 4xl
-          name: 4xl
-        - id: 5xl
-          name: 5xl
-        - id: 6xl
-          name: 6xl
   paddingVertical:
     type: select
     comment: Vertical padding applied to the container content.
@@ -106,12 +100,6 @@ _inputs:
           name: 2xl
         - id: 3xl
           name: 3xl
-        - id: 4xl
-          name: 4xl
-        - id: 5xl
-          name: 5xl
-        - id: 6xl
-          name: 6xl
   colorScheme:
     type: select
     comment: Color scheme theme for the container.

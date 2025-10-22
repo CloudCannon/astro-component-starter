@@ -78,11 +78,16 @@ const carouselStyles = `
   {...dataAttributes}
 >
   <div class="viewport">
-    <div class="track">
+    <div class="track" data-editable="array" data-prop="slides">
       {
         slides.length > 0 ? (
           slides.map((slide: any, index: number) => (
-            <div class="slide" role="group" aria-label={`Slide ${index + 1} of ${slides.length}`}>
+            <div
+              class="slide"
+              data-editable="array-item"
+              role="group"
+              aria-label={`Slide ${index + 1} of ${slides.length}`}
+            >
               <Component contentBlocks={slide.contentBlocks} />
             </div>
           ))

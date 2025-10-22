@@ -75,7 +75,7 @@ const Tag = link ? "a" : "div";
   {
     (beforeContentBlocks || Astro.slots.has("before")) && (
       <div class="before-content">
-        <Component contentBlocks={beforeContentBlocks} />
+        <Component contentBlocks={beforeContentBlocks} propName="beforeContentBlocks" />
         <slot name="before" />
       </div>
     )
@@ -90,14 +90,14 @@ const Tag = link ? "a" : "div";
       ]}
     >
       <slot />
-      <Component contentBlocks={contentBlocks} />
+      <Component contentBlocks={contentBlocks} propName="contentBlocks" />
     </div>
   </div>
 
   {
     (afterContentBlocks || Astro.slots.has("after")) && (
       <div class="after-content">
-        <Component contentBlocks={afterContentBlocks} />
+        <Component contentBlocks={afterContentBlocks} propName="afterContentBlocks" />
         <slot name="after" />
       </div>
     )

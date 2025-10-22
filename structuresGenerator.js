@@ -82,6 +82,7 @@ async function generateStructures() {
           if (!structures[structName]) {
             structures[structName] = {
               id_key: "_component",
+              style: "modal",
               ...structConfig,
             };
           }
@@ -107,6 +108,7 @@ async function generateStructures() {
         if (!structures[structureName]) {
           structures[structureName] = {
             id_key: "_component",
+            style: "modal",
             values: [],
           };
         }

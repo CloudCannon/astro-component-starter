@@ -85,7 +85,7 @@ _inputs:
         - id: xl
           name: Extra Large
         - id: 2xl
-          name: 2XL
+          name: 2xL
   colorScheme:
     type: select
     comment: Color scheme theme for the card.

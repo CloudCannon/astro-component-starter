@@ -62,12 +62,26 @@ const splitId = `split-${crypto.randomUUID()}`;
   {...htmlAttributes}
 >
   <div class="pane first">
-    <Component contentBlocks={firstSplitBlocks} />
-    {reverse ? <slot name="second" /> : <slot name="first" />}
+    {
+      firstSplitBlocks && firstSplitBlocks.length > 0 ? (
+        <Component contentBlocks={firstSplitBlocks} propName="firstColumnContentBlocks" />
+      ) : reverse ? (
+        <slot name="second" />
+      ) : (
+        <slot name="first" />
+      )
+    }
   </div>
   <div class="pane second">
-    <Component contentBlocks={secondSplitBlocks} />
-    {reverse ? <slot name="first" /> : <slot name="second" />}
+    {
+      secondSplitBlocks && secondSplitBlocks.length > 0 ? (
+        <Component contentBlocks={secondSplitBlocks} propName="secondColumnContentBlocks" />
+      ) : reverse ? (
+        <slot name="first" />
+      ) : (
+        <slot name="second" />
+      )
+    }
   </div>
 </section>
 

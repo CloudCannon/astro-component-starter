@@ -58,10 +58,9 @@ function createNavItemData(item, level, parentGroupId) {
               name={itemData.groupName}
               id={itemData.dropdownId}
               class="nav-item-toggle"
-              aria-expanded={itemData.hasCurrent.toString()}
+              aria-expanded="false"
               aria-controls={itemData.contentId}
               autocomplete="off"
-              checked={itemData.hasCurrent}
             />
             <label
               for={itemData.dropdownId}
@@ -81,7 +80,7 @@ function createNavItemData(item, level, parentGroupId) {
               class="nav-item-content"
               role="region"
               aria-label={`${itemData.name} submenu`}
-              aria-hidden={(!itemData.hasCurrent).toString()}
+              aria-hidden="true"
             >
               <ul class="nav-list">
                 {itemData.children!.map((child) => {
@@ -107,10 +106,9 @@ function createNavItemData(item, level, parentGroupId) {
                         name={childData.groupName}
                         id={childData.dropdownId}
                         class="nav-item-toggle"
-                        aria-expanded={childData.hasCurrent.toString()}
+                        aria-expanded="false"
                         aria-controls={childData.contentId}
                         autocomplete="off"
-                        checked={childData.hasCurrent}
                       />
                       <label
                         for={childData.dropdownId}
@@ -130,7 +128,7 @@ function createNavItemData(item, level, parentGroupId) {
                         class="nav-item-nested"
                         role="region"
                         aria-label={`${childData.name} submenu`}
-                        aria-hidden={(!childData.hasCurrent).toString()}
+                        aria-hidden="true"
                       >
                         <ul class="nav-list">
                           {childData.children!.map((grandChild) => {

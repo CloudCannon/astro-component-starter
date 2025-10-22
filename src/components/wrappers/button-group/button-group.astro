@@ -31,6 +31,11 @@ const alignClass = alignMap[alignX as keyof typeof alignMap] ?? "align-start";
   class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
   {...htmlAttributes}
 >
-  <slot />
-  <Component contentBlocks={buttonBlocks} propName="buttonBlocks" />
+  {
+    buttonBlocks && buttonBlocks.length > 0 ? (
+      <Component contentBlocks={buttonBlocks} propName="buttonBlocks" />
+    ) : (
+      <slot />
+    )
+  }
 </div>

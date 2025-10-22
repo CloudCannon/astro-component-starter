@@ -36,12 +36,20 @@ const gridStyles = [
   .join("; ");
 ---
 
-<div class:list={["grid", `layout-${layout}`, className]} style={gridStyles} {...htmlAttributes}>
+<div
+  data-editable="array"
+  data-prop="items"
+  class:list={["grid", `layout-${layout}`, className]}
+  style={gridStyles}
+  {...htmlAttributes}
+>
   {
-    items &&
-      items.length > 0 &&
-      items.map((item: any) => <GridItem contentBlocks={item.contentBlocks} />)
+    items && items.length > 0 ? (
+      items.map((item: any) => (
+        <GridItem data-editable="array-item" contentBlocks={item.contentBlocks} />
+      ))
+    ) : (
+      <slot />
+    )
   }
-
-  <slot />
 </div>

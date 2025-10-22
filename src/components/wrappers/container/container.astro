@@ -73,8 +73,13 @@ if (!htmlAttributes.id && label) {
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
     >
-      <slot />
-      <Component contentBlocks={contentBlocks} propName="contentBlocks" />
+      {
+        contentBlocks ? (
+          <Component contentBlocks={contentBlocks} propName="contentBlocks" />
+        ) : (
+          <slot />
+        )
+      }
     </div>
   </div>
 </section>

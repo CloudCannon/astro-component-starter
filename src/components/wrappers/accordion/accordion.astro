@@ -21,7 +21,7 @@ if (!htmlAttributes.id && label) {
 const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefined;
 ---
 
-<div class:list={["accordion"]} {...htmlAttributes}>
+<div class:list={["accordion"]} data-editable="array" data-prop="items" {...htmlAttributes}>
   {
     items ? (
       items.map((item: any, index: number) => {
@@ -29,6 +29,7 @@ const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefine
 
         return (
           <AccordionItem
+            data-editable="array-item"
             title={item.title}
             contentBlocks={item.contentBlocks}
             isOpen={isFirst}

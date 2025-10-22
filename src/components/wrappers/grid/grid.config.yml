@@ -29,7 +29,7 @@ _inputs:
     comment: Optional label for the grid to help identify it in the editor.
     type: text
   layout:
-    comment: Choose the layout style for your grid content.
+    comment: Defines how grid items are arranged. "features" creates evenly sized cards that stay centered, "flow" lets each item use its natural width, and "tiles" fills the full width with evenly sized cards that stay start aligned.
     type: select
     options:
       values:

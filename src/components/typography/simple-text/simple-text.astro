@@ -15,5 +15,5 @@ const MarkdownText = text ? md.renderInline(text) : "";
   class:list={["simple-text", size && `size-${size}`, `align-${alignX}`, className]}
   {...htmlAttributes}
 >
-  {text ? <span data-editable="text" data-prop="text" set:html={MarkdownText} /> : <slot />}
+  {text ? <span set:html={MarkdownText} /> : <slot />}
 </p>

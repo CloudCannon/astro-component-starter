@@ -11,6 +11,7 @@ const {
   navData = [],
   buttonBlocks = [],
   class: className,
+  ...rest
 } = Astro.props;
 
 const mobileNavData = [
@@ -28,6 +29,7 @@ const mobileNavData = [
   paddingHorizontal="md"
   paddingVertical="none"
   class:list={["main-nav", className]}
+  {...rest}
 >
   {logoSource && <SmartImage source={logoSource} alt={logoAlt} />}
   <Bar navData={navData} class="desktop-main-nav" />

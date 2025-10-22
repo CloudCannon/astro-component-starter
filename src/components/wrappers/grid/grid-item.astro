@@ -9,6 +9,11 @@ const htmlAttributes = Object.fromEntries(
 ---
 
 <div class:list={["grid-item", className]} {...htmlAttributes}>
-  <RenderBlock contentBlocks={contentBlocks} />
-  <slot />
+  {
+    contentBlocks && contentBlocks.length > 0 ? (
+      <RenderBlock contentBlocks={contentBlocks} propName="contentBlocks" />
+    ) : (
+      <slot />
+    )
+  }
 </div>

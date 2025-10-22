@@ -12,7 +12,8 @@
       flex: 1 1 min(var(--min-item-width), 100%);
       max-width: var(--max-item-width);
 
-      > *:only-child {
+      > editable-array > editable-array-item > *:only-child,
+      > :not(editable-array):only-child {
         height: 100%;
       }
     }
@@ -39,7 +40,8 @@
     grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
     justify-content: start;
 
-    > .grid-item > *:only-child {
+    > .grid-item > editable-array > editable-array-item > *:only-child,
+    > .grid-item > :not(editable-array):only-child {
       height: 100%;
     }
   }
