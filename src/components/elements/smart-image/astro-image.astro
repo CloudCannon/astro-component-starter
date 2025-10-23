@@ -80,13 +80,21 @@ if (isRemoteUrl) {
       fetchpriority={priority ? "high" : undefined}
       inferSize={useInferSize}
       data-editable="image"
+      data-prop-src="source"
+      data-prop-alt="alt"
       pictureAttributes={{
         ...htmlAttributes,
       }}
     />
   ) : (
     <picture {...htmlAttributes}>
-      <img data-editable="image" src={source} alt={alt || ""} />
+      <img
+        data-editable="image"
+        data-prop-src="source"
+        data-prop-alt="alt"
+        src={source}
+        alt={alt || ""}
+      />
     </picture>
   )
 }
