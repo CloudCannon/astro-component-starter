@@ -898,7 +898,7 @@ _structures:
                   name: Start
                 - id: top
                   name: Top
-      - &ref_19
+      - &ref_20
         label: Container
         icon: width_full
         description: Used to group and style large sections of a page.
@@ -1069,7 +1069,7 @@ _structures:
           rounded:
             type: switch
             comment: Whether to apply rounded corners to the container.
-      - &ref_18
+      - &ref_19
         label: Carousel
         icon: image
         description: Displays multiple items in a sliding gallery.
@@ -1117,6 +1117,208 @@ _structures:
             comment: Minimum width of slides in pixels. Prevents slides from getting too small.
             type: number
       - &ref_3
+        label: Card
+        icon: crop_square
+        description: Groups related content within a section.
+        value:
+          _component: wrappers/card
+          label: null
+          contentBlocks: []
+          paddingHorizontal: sm
+          paddingVertical: sm
+          colorScheme: default
+          backgroundColor: base
+          backgroundImage:
+            source: null
+            alt: null
+            positionVertical: top
+            positionHorizontal: center
+          link: null
+          rounded: false
+          border: false
+          showBeforeAfter: false
+          beforeContentBlocks: []
+          afterContentBlocks: []
+        preview:
+          text:
+            - key: label
+            - Card
+        picker_preview:
+          text: Card
+          subtext: A container component that provides card layout with background options and padding controls.
+          icon: crop_square
+        _inputs:
+          label:
+            type: text
+            comment: Optional label for the card to help identify it in the editor.
+          contentBlocks:
+            type: array
+            comment: Content inside the main area of the card, with padding.
+            options:
+              structures: _structures.cardBlocks
+          beforeContentBlocks:
+            type: array
+            comment: Content that appears above the main card area, without padding.
+            hidden: "!showBeforeAfter"
+            options:
+              structures: _structures.cardBlocks
+          afterContentBlocks:
+            type: array
+            comment: Content that appears below the main card area, without padding.
+            hidden: "!showBeforeAfter"
+            options:
+              structures: _structures.cardBlocks
+          showBeforeAfter:
+            type: switch
+            comment: Whether to show the before/after content blocks used to add content outside the card's padding.
+          paddingHorizontal:
+            type: select
+            comment: Horizontal padding applied to the card content.
+            options:
+              values:
+                - id: xs
+                  name: Extra Small
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xL
+          paddingVertical:
+            type: select
+            comment: Vertical padding applied to the card content.
+            options:
+              values:
+                - id: xs
+                  name: Extra Small
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xL
+          colorScheme:
+            type: select
+            comment: Color scheme theme for the card.
+            options:
+              values:
+                - id: default
+                  name: Default
+                - id: contrast
+                  name: Contrast
+          backgroundColor:
+            type: select
+            comment: Background color for the card.
+            options:
+              values:
+                - id: base
+                  name: Base
+                - id: surface
+                  name: Surface
+                - id: accent
+                  name: Accent
+                - id: highlight
+                  name: Highlight
+          backgroundImage:
+            type: object
+            comment: Background image configuration for the card.
+            options:
+              preview:
+                icon: image
+                text:
+                  - key: alt
+                  - Background Image
+                subtext:
+                  - key: source
+                  - Add an image source
+                image:
+                  - key: source
+          backgroundImage.source:
+            comment: URL or path to the background image.
+            type: image
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ""
+          backgroundImage.alt:
+            comment: Alt text for the background image.
+            type: text
+          backgroundImage.positionVertical:
+            comment: Vertical position of the background image.
+            type: select
+            options:
+              values:
+                - id: top
+                  name: Top
+                - id: center
+                  name: Center
+                - id: bottom
+                  name: Bottom
+          backgroundImage.positionHorizontal:
+            comment: Horizontal position of the background image.
+            type: select
+            options:
+              values:
+                - id: left
+                  name: Left
+                - id: center
+                  name: Center
+                - id: right
+                  name: Right
+          link:
+            type: url
+            comment: URL to make the entire card clickable. Leave empty for a non-clickable card.
+          rounded:
+            type: switch
+            comment: Whether to apply rounded corners to the card.
+          border:
+            type: switch
+            comment: Whether to apply a border to the card.
+      - &ref_4
+        label: Accordion
+        icon: expand_all
+        description: Interactive component for showing and hiding content panels.
+        value:
+          _component: wrappers/accordion
+          label: null
+          items: null
+          openFirst: false
+          singleOpen: false
+        preview:
+          text:
+            - key: label
+            - Accordion
+          subtext:
+            - template: An accordion containing {items|array_length} {"item"|pluralize=items}
+            - Add items to the accordion
+        picker_preview:
+          text: Accordion
+          subtext: Hides content behind an expandable menu.
+          icon: expand_all
+        _inputs:
+          label:
+            comment: Optional label for the accordion to help identify it in the editor.
+            type: text
+          items:
+            comment: The items to display in the accordion.
+            type: array
+            options:
+              structures: _structures.accordionItems
+          openFirst:
+            comment: Whether the first item will be open by default.
+            type: switch
+          singleOpen:
+            comment: Whether only one item can be open at a time within this accordion.
+            type: switch
+      - &ref_5
         label: Button Group
         icon: rectangle
         description: Arranges buttons side by side with consistent spacing.
@@ -1166,43 +1368,7 @@ _structures:
                   name: Center
                 - id: end
                   name: End
-      - &ref_4
-        label: Accordion
-        icon: expand_all
-        description: Interactive component for showing and hiding content panels.
-        value:
-          _component: wrappers/accordion
-          label: null
-          items: null
-          openFirst: false
-          singleOpen: false
-        preview:
-          text:
-            - key: label
-            - Accordion
-          subtext:
-            - template: An accordion containing {items|array_length} {"item"|pluralize=items}
-            - Add items to the accordion
-        picker_preview:
-          text: Accordion
-          subtext: Hides content behind an expandable menu.
-          icon: expand_all
-        _inputs:
-          label:
-            comment: Optional label for the accordion to help identify it in the editor.
-            type: text
-          items:
-            comment: The items to display in the accordion.
-            type: array
-            options:
-              structures: _structures.accordionItems
-          openFirst:
-            comment: Whether the first item will be open by default.
-            type: switch
-          singleOpen:
-            comment: Whether only one item can be open at a time within this accordion.
-            type: switch
-      - &ref_5
+      - &ref_6
         label: Testimonial
         icon: format_quote
         description: Displays customer quotes and reviews.
@@ -1256,7 +1422,7 @@ _structures:
                   name: Center
                 - id: end
                   name: End
-      - &ref_6
+      - &ref_7
         label: Simple Text
         icon: view_headline
         description: Paragraph for plain text content.
@@ -1316,7 +1482,7 @@ _structures:
                   name: 5xl
                 - id: 6xl
                   name: 6xl
-      - &ref_7
+      - &ref_8
         label: Rich text
         icon: edit_note
         description: Content component for markdown-formatted text.
@@ -1371,7 +1537,7 @@ _structures:
                 - id: end
                   name: End
             comment: The horizontal alignment of the rich text component.
-      - &ref_8
+      - &ref_9
         label: List
         icon: list
         description: Lists items with icons as markers.
@@ -1432,7 +1598,7 @@ _structures:
                   name: Extra Large
                 - id: 2xl
                   name: 2xl
-      - &ref_9
+      - &ref_10
         label: Heading
         icon: title
         description: Headings for content hierarchy.
@@ -1520,7 +1686,7 @@ _structures:
                   name: Before
                 - id: after
                   name: After
-      - &ref_10
+      - &ref_11
         label: Definition List
         icon: dns
         description: Lists term/definition pairs for structured content.
@@ -1553,7 +1719,7 @@ _structures:
                   name: Center
                 - id: end
                   name: End
-      - &ref_11
+      - &ref_12
         label: Counter
         icon: speed
         description: Animated counter for highlighting key stats or figures.
@@ -1593,7 +1759,7 @@ _structures:
                   name: Center
                 - id: end
                   name: End
-      - &ref_12
+      - &ref_13
         label: Form
         icon: checklist_rtl
         description: Groups form fields into one submission area.
@@ -1618,7 +1784,7 @@ _structures:
             comment: The form blocks to render inside the form.
             options:
               structures: _structures.formBlocks
-      - &ref_13
+      - &ref_14
         label: Spacer
         icon: space_bar
         description: Adds adjustable spacing between content sections.
@@ -1652,7 +1818,69 @@ _structures:
                   name: 2xl
                 - id: 3xl
                   name: 3xl
-      - &ref_14
+      - &ref_15
+        label: Smart Video
+        icon: videocam
+        description: Video component for YouTube, Vimeo, and HTML5 sources.
+        value:
+          _component: elements/smart-video
+          type: ""
+          id: ""
+          title: ""
+          source: ""
+          poster: ""
+        preview:
+          icon: videocam
+          text:
+            - template: Smart Video - {type}
+            - Smart Video
+          subtext:
+            - key: title
+            - key: source
+            - Add video
+        picker_preview:
+          text: Smart Video
+          subtext: Play a video from YouTube, Vimeo, or your local files.
+          icon: videocam
+        _inputs:
+          type:
+            type: select
+            options:
+              values:
+                - id: youtube
+                  name: YouTube
+                - id: vimeo
+                  name: Vimeo
+                - id: local-source
+                  name: Local Source
+          title:
+            type: text
+            comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
+          id:
+            type: text
+            comment: Used for externally hosted videos - Enter the YouTube or Vimeo id.
+          source:
+            type: file
+            label: Video Source
+            comment: Used for locally hosted videos - Must be mp4 as this is supported by all modern browsers.
+            options:
+              accepts_mime_types:
+                - video/mp4
+              paths:
+                uploads: public/videos
+                static: public
+          poster:
+            type: image
+            comment: Used for locally hosted videos - The image displayed before the video plays or while it is loading.
+            options:
+              accepts_mime_types:
+                - image/jpeg
+                - image/png
+                - image/webp
+              paths:
+                uploads: public/images
+                static: public
+      - &ref_16
         label: Smart Image
         icon: image
         description: Optimized image component for local and remote sources.
@@ -1726,69 +1954,7 @@ _structures:
                   name: Center
                 - id: right
                   name: Right
-      - &ref_15
-        label: Smart Video
-        icon: videocam
-        description: Video component for YouTube, Vimeo, and HTML5 sources.
-        value:
-          _component: elements/smart-video
-          type: ""
-          id: ""
-          title: ""
-          source: ""
-          poster: ""
-        preview:
-          icon: videocam
-          text:
-            - template: Smart Video - {type}
-            - Smart Video
-          subtext:
-            - key: title
-            - key: source
-            - Add video
-        picker_preview:
-          text: Smart Video
-          subtext: Play a video from YouTube, Vimeo, or your local files.
-          icon: videocam
-        _inputs:
-          type:
-            type: select
-            options:
-              values:
-                - id: youtube
-                  name: YouTube
-                - id: vimeo
-                  name: Vimeo
-                - id: local-source
-                  name: Local Source
-          title:
-            type: text
-            comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
-          id:
-            type: text
-            comment: Used for externally hosted videos - Enter the YouTube or Vimeo id.
-          source:
-            type: file
-            label: Video Source
-            comment: Used for locally hosted videos - Must be mp4 as this is supported by all modern browsers.
-            options:
-              accepts_mime_types:
-                - video/mp4
-              paths:
-                uploads: public/videos
-                static: public
-          poster:
-            type: image
-            comment: Used for locally hosted videos - The image displayed before the video plays or while it is loading.
-            options:
-              accepts_mime_types:
-                - image/jpeg
-                - image/png
-                - image/webp
-              paths:
-                uploads: public/images
-                static: public
-      - &ref_16
+      - &ref_17
         label: Embed
         icon: data_object
         description: Responsive wrapper for third-party embeds.
@@ -1833,7 +1999,7 @@ _structures:
                   name: Portrait (3:4)
                 - id: widescreen
                   name: Widescreen (16:9)
-      - &ref_17
+      - &ref_18
         label: Divider
         icon: horizontal_rule
         description: Visual separator for dividing content sections.
@@ -1894,13 +2060,14 @@ _structures:
       - *ref_15
       - *ref_16
       - *ref_17
+      - *ref_18
   contentSelectorBlocks:
     id_key: _component
     style: modal
     values:
       - *ref_0
       - *ref_1
-      - *ref_18
+      - *ref_19
       - *ref_3
       - *ref_4
       - *ref_5
@@ -1916,6 +2083,7 @@ _structures:
       - *ref_15
       - *ref_16
       - *ref_17
+      - *ref_18
   gridItems:
     id_key: _component
     style: modal
@@ -1941,7 +2109,7 @@ _structures:
     values:
       - *ref_1
       - *ref_2
-      - *ref_18
+      - *ref_19
       - *ref_3
       - *ref_4
       - *ref_5
@@ -1957,6 +2125,7 @@ _structures:
       - *ref_15
       - *ref_16
       - *ref_17
+      - *ref_18
   contentSelectorItems:
     id_key: _component
     style: modal
@@ -1985,7 +2154,7 @@ _structures:
     id_key: _component
     style: modal
     values:
-      - *ref_19
+      - *ref_20
   slides:
     id_key: _component
     style: modal
@@ -2004,25 +2173,6 @@ _structures:
           subtext:
             - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
             - Add one or more content blocks to the grid item
-  cardBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - *ref_3
-      - *ref_4
-      - *ref_5
-      - *ref_6
-      - *ref_7
-      - *ref_8
-      - *ref_9
-      - *ref_10
-      - *ref_11
-      - *ref_12
-      - *ref_13
-      - *ref_14
-      - *ref_15
-      - *ref_16
-      - *ref_17
   gridItemBlocks:
     id_key: _component
     style: modal
@@ -2042,24 +2192,7 @@ _structures:
       - *ref_15
       - *ref_16
       - *ref_17
-  accordionBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - *ref_3
-      - *ref_5
-      - *ref_6
-      - *ref_7
-      - *ref_8
-      - *ref_9
-      - *ref_10
-      - *ref_11
-      - *ref_12
-      - *ref_13
-      - *ref_14
-      - *ref_15
-      - *ref_16
-      - *ref_17
+      - *ref_18
   accordionItems:
     id_key: _component
     style: modal
@@ -2077,6 +2210,43 @@ _structures:
             type: array
             options:
               structures: _structures.accordionBlocks
+  cardBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - *ref_4
+      - *ref_5
+      - *ref_6
+      - *ref_7
+      - *ref_8
+      - *ref_9
+      - *ref_10
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+      - *ref_16
+      - *ref_17
+      - *ref_18
+  accordionBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - *ref_5
+      - *ref_6
+      - *ref_7
+      - *ref_8
+      - *ref_9
+      - *ref_10
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+      - *ref_16
+      - *ref_17
+      - *ref_18
   listItems:
     id_key: _component
     style: modal
@@ -2236,6 +2406,44 @@ _structures:
     id_key: _component
     style: modal
     values:
+      - label: Textarea
+        icon: text_ad
+        description: Form field for entering multi-line text.
+        value:
+          _component: forms/textarea
+          label: null
+          name: null
+          required: false
+          placeholder: null
+          value: null
+        preview:
+          subtext:
+            - key: label
+            - key: name
+            - Enter a name for the textarea input.
+        picker_preview:
+          text: Textarea
+          subtext: A multi-line text input field with an optional label.
+          icon: text_ad
+        _inputs:
+          label:
+            type: text
+            comment: The label text for the textarea field.
+          name:
+            type: text
+            comment: A unique name attribute for the textarea field.
+            options:
+              required: true
+              required_message: Only form elements with a name will have their values passed when submitting a form.
+          required:
+            type: switch
+            comment: Whether the field is required.
+          placeholder:
+            type: text
+            comment: Placeholder text for the textarea field.
+          value:
+            type: text
+            comment: The default value for the textarea field.
       - label: Submit
         icon: check
         description: Button for submitting a form.
@@ -2368,44 +2576,6 @@ _structures:
           value:
             type: text
             comment: The default selected value.
-      - label: Textarea
-        icon: text_ad
-        description: Form field for entering multi-line text.
-        value:
-          _component: forms/textarea
-          label: null
-          name: null
-          required: false
-          placeholder: null
-          value: null
-        preview:
-          subtext:
-            - key: label
-            - key: name
-            - Enter a name for the textarea input.
-        picker_preview:
-          text: Textarea
-          subtext: A multi-line text input field with an optional label.
-          icon: text_ad
-        _inputs:
-          label:
-            type: text
-            comment: The label text for the textarea field.
-          name:
-            type: text
-            comment: A unique name attribute for the textarea field.
-            options:
-              required: true
-              required_message: Only form elements with a name will have their values passed when submitting a form.
-          required:
-            type: switch
-            comment: Whether the field is required.
-          placeholder:
-            type: text
-            comment: Placeholder text for the textarea field.
-          value:
-            type: text
-            comment: The default value for the textarea field.
       - label: Segments
         icon: radio_button_partial
         description: Segmented control form field with connected buttons.
