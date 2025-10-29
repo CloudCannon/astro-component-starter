@@ -30,7 +30,7 @@ pageBlocks:
         positionVertical: center
         positionHorizontal: center
     maxContentWidth: 2xl
-    paddingHorizontal: lg
+    paddingHorizontal: xl
     paddingVertical: lg
     colorScheme: default
     backgroundColor: base
@@ -196,7 +196,7 @@ pageBlocks:
                 afterContentBlocks: []
         gap: md
     maxContentWidth: 2xl
-    paddingHorizontal: md
+    paddingHorizontal: xl
     paddingVertical: md
     colorScheme: default
     backgroundColor:
@@ -506,7 +506,7 @@ pageBlocks:
                 afterContentBlocks: []
         gap: md
     maxContentWidth: 2xl
-    paddingHorizontal: md
+    paddingHorizontal: xl
     paddingVertical: 3xl
     colorScheme: default
     backgroundColor: surface
@@ -710,8 +710,8 @@ pageBlocks:
             verticalAlignment: center
             reverse: false
         maxContentWidth: 2xl
-        paddingHorizontal: md
-        paddingVertical: md
+        paddingHorizontal: 2xl
+        paddingVertical: 2xl
         colorScheme: default
         backgroundColor: base
         backgroundImage:
@@ -721,8 +721,8 @@ pageBlocks:
           positionHorizontal: center
         rounded: true
     maxContentWidth: 2xl
-    paddingHorizontal: md
-    paddingVertical: md
+    paddingHorizontal: xl
+    paddingVertical: 2xl
     colorScheme: contrast
     backgroundColor: surface
     backgroundImage:
