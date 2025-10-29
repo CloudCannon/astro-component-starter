@@ -41,6 +41,8 @@ const gridStyles = [
 <div
   data-editable="array"
   data-prop="items"
+  data-component-key="_component"
+  data-id-key="_component"
   class:list={["grid", `layout-${layout}`, className]}
   style={gridStyles}
   {...htmlAttributes}
@@ -48,7 +50,12 @@ const gridStyles = [
   {
     items && items.length > 0 ? (
       items.map((item: any) => (
-        <GridItem data-editable="array-item" contentBlocks={item.contentBlocks} />
+        <GridItem
+          data-id={item._component}
+          data-component={item._component}
+          data-editable="array-item"
+          contentBlocks={item.contentBlocks}
+        />
       ))
     ) : (
       <slot />
