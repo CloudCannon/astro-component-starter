@@ -122,7 +122,7 @@ pageBlocks:
         distributionMode: half
         fixedWidth:
         minSplitWidth: 0
-        verticalAlignment: top
+        verticalAlignment: center
         reverse: false
       - _component: wrappers/split
         label: ''
@@ -154,7 +154,7 @@ pageBlocks:
         distributionMode: half
         fixedWidth:
         minSplitWidth: 0
-        verticalAlignment: top
+        verticalAlignment: center
         reverse: true
       - _component: typography/heading
         text: Maximum uptime. Zero drama.
@@ -397,7 +397,7 @@ pageBlocks:
             distributionMode: half
             fixedWidth:
             minSplitWidth: 0
-            verticalAlignment: top
+            verticalAlignment: center
             reverse: false
         maxContentWidth: 2xl
         paddingHorizontal: md
