@@ -65,6 +65,9 @@ function createNavItemData(item, level, parentGroupId) {
         {
           logoSource && (
             <SmartImage
+              data-editable="image"
+              data-prop-src="logoSource"
+              data-prop-alt="logoAlt"
               source={logoSource}
               alt={logoAlt || "Logo"}
               width={120}
