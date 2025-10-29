@@ -86,7 +86,7 @@ _structures:
             - Add one or more content blocks to the grid item
         _inputs:
           _component:
-            type: hidden
+            hidden: true
           contentBlocks:
             type: array
             comment: Content blocks to render within this grid item.
