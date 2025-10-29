@@ -18,6 +18,10 @@
       > :not(editable-array):only-child {
         height: 100%;
       }
+
+      > editable-array > editable-array-item {
+        height: 100%;
+      }
     }
   }
 
@@ -41,6 +45,10 @@
     > editable-array-item > .grid-item {
       > editable-array > editable-array-item:only-child > *,
       > :not(editable-array):only-child {
+        height: 100%;
+      }
+
+      > editable-array > editable-array-item {
         height: 100%;
       }
     }
