@@ -17,6 +17,7 @@
   }
 
   &.background {
+    background-color: var(--color-bg-surface);
     padding: var(--spacing-em-xs);
   }
 
@@ -110,17 +111,19 @@
 
   &.align-start {
     display: block;
-    text-align: start;
+    width: fit-content;
   }
 
   &.align-center {
     display: block;
-    text-align: center;
+    margin-inline: auto;
+    width: fit-content;
   }
 
   &.align-end {
     display: block;
-    text-align: end;
+    margin-inline-start: auto;
+    width: fit-content;
   }
 
   svg {

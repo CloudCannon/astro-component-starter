@@ -6,4 +6,6 @@ blocks:
     name: arrow-right
     size: lg
     alignX: end
+    color: blue
+    background: true
 ---

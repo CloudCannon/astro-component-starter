@@ -31,7 +31,7 @@ const htmlAttributes = Object.fromEntries(
         `size-${size}`,
         `color-${color}`,
         background && "background",
-        `align-${alignX}`,
+        alignX && `align-${alignX}`,
         name?.includes("social/") && "fill",
         className,
       ]}

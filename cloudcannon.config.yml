@@ -1786,39 +1786,30 @@ _structures:
                 - id: end
                   name: End
       - &ref_13
-        label: Spacer
-        icon: space_bar
-        description: Adds adjustable spacing between content sections.
+        label: Form
+        icon: checklist_rtl
+        description: Groups form fields into one submission area.
         value:
-          _component: elements/spacer
-          size: md
+          _component: forms/form
+          action: null
+          formBlocks: []
         preview:
-          text: Spacer
-          icon: space_bar
+          subtext:
+            - template: A form containing {formBlocks|array_length} {"item"|pluralize=formBlocks}
+            - Add items to the form
         picker_preview:
-          text: Spacer
-          subtext: Gives space between content.
-          icon: space_bar
+          text: Form
+          subtext: A form element that groups related form controls and handles form submission.
+          icon: checklist_rtl
         _inputs:
-          size:
-            type: select
-            comment: The amount of space to add.
+          action:
+            type: url
+            comment: Where to send the form-data when the form is submitted. The URL that processes the form submission.
+          formBlocks:
+            type: array
+            comment: The form blocks to render inside the form.
             options:
-              values:
-                - id: xs
-                  name: Extra Small
-                - id: sm
-                  name: Small
-                - id: md
-                  name: Medium
-                - id: lg
-                  name: Large
-                - id: xl
-                  name: Extra Large
-                - id: 2xl
-                  name: 2xl
-                - id: 3xl
-                  name: 3xl
+              structures: _structures.formBlocks
       - &ref_14
         label: Smart Video
         icon: videocam
@@ -1882,6 +1873,80 @@ _structures:
                 uploads: public/images
                 static: public
       - &ref_15
+        label: Smart Image
+        icon: image
+        description: Optimized image component for local and remote sources.
+        value:
+          _component: elements/smart-image
+          source: ""
+          alt: ""
+          rounded: false
+          aspectRatio: none
+          positionVertical: center
+          positionHorizontal: center
+        preview:
+          icon: image
+          text: Smart Image
+          subtext:
+            - key: alt
+            - key: source
+            - Add image source
+        picker_preview:
+          text: Smart Image
+          subtext: Optimized image with smart CDN detection.
+          icon: image
+        _inputs:
+          source:
+            type: image
+            comment: The URL or path to the image.
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ""
+          alt:
+            type: textarea
+            comment: Alternative text for accessibility.
+          rounded:
+            type: switch
+            comment: Whether to apply rounded corners to the image.
+          aspectRatio:
+            type: select
+            comment: Set a fixed aspect ratio for the image.
+            options:
+              values:
+                - id: none
+                  name: None
+                - id: square
+                  name: Square (1:1)
+                - id: landscape
+                  name: Landscape (4:3)
+                - id: portrait
+                  name: Portrait (3:4)
+                - id: widescreen
+                  name: Widescreen (16:9)
+          positionVertical:
+            type: select
+            comment: Vertical positioning of the image within the container (if aspect ratio is set).
+            options:
+              values:
+                - id: top
+                  name: Top
+                - id: center
+                  name: Center
+                - id: bottom
+                  name: Bottom
+          positionHorizontal:
+            type: select
+            comment: Horizontal positioning of the image within the container (if aspect ratio is set).
+            options:
+              values:
+                - id: left
+                  name: Left
+                - id: center
+                  name: Center
+                - id: right
+                  name: Right
+      - &ref_16
         label: Icon
         icon: star
         description: SVG icon component.
@@ -1969,81 +2034,41 @@ _structures:
                   name: Center
                 - id: end
                   name: End
-      - &ref_16
-        label: Smart Image
-        icon: image
-        description: Optimized image component for local and remote sources.
-        value:
-          _component: elements/smart-image
-          source: ""
-          alt: ""
-          rounded: false
-          aspectRatio: none
-          positionVertical: center
-          positionHorizontal: center
-        preview:
-          icon: image
-          text: Smart Image
-          subtext:
-            - key: alt
-            - key: source
-            - Add image source
-        picker_preview:
-          text: Smart Image
-          subtext: Optimized image with smart CDN detection.
-          icon: image
-        _inputs:
-          source:
-            type: image
-            comment: The URL or path to the image.
-            options:
-              paths:
-                uploads: src/assets/images
-                static: ""
-          alt:
-            type: textarea
-            comment: Alternative text for accessibility.
-          rounded:
-            type: switch
-            comment: Whether to apply rounded corners to the image.
-          aspectRatio:
-            type: select
-            comment: Set a fixed aspect ratio for the image.
-            options:
-              values:
-                - id: none
-                  name: None
-                - id: square
-                  name: Square (1:1)
-                - id: landscape
-                  name: Landscape (4:3)
-                - id: portrait
-                  name: Portrait (3:4)
-                - id: widescreen
-                  name: Widescreen (16:9)
-          positionVertical:
-            type: select
-            comment: Vertical positioning of the image within the container (if aspect ratio is set).
-            options:
-              values:
-                - id: top
-                  name: Top
-                - id: center
-                  name: Center
-                - id: bottom
-                  name: Bottom
-          positionHorizontal:
-            type: select
-            comment: Horizontal positioning of the image within the container (if aspect ratio is set).
-            options:
-              values:
-                - id: left
-                  name: Left
-                - id: center
-                  name: Center
-                - id: right
-                  name: Right
       - &ref_17
+        label: Spacer
+        icon: space_bar
+        description: Adds adjustable spacing between content sections.
+        value:
+          _component: elements/spacer
+          size: md
+        preview:
+          text: Spacer
+          icon: space_bar
+        picker_preview:
+          text: Spacer
+          subtext: Gives space between content.
+          icon: space_bar
+        _inputs:
+          size:
+            type: select
+            comment: The amount of space to add.
+            options:
+              values:
+                - id: xs
+                  name: Extra Small
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xl
+                - id: 3xl
+                  name: 3xl
+      - &ref_18
         label: Embed
         icon: data_object
         description: Responsive wrapper for third-party embeds.
@@ -2088,7 +2113,7 @@ _structures:
                   name: Portrait (3:4)
                 - id: widescreen
                   name: Widescreen (16:9)
-      - &ref_18
+      - &ref_19
         label: Divider
         icon: horizontal_rule
         description: Visual separator for dividing content sections.
@@ -2127,31 +2152,6 @@ _structures:
                   name: 2xl
                 - id: 3xl
                   name: 3xl
-      - &ref_19
-        label: Form
-        icon: checklist_rtl
-        description: Groups form fields into one submission area.
-        value:
-          _component: forms/form
-          action: null
-          formBlocks: []
-        preview:
-          subtext:
-            - template: A form containing {formBlocks|array_length} {"item"|pluralize=formBlocks}
-            - Add items to the form
-        picker_preview:
-          text: Form
-          subtext: A form element that groups related form controls and handles form submission.
-          icon: checklist_rtl
-        _inputs:
-          action:
-            type: url
-            comment: Where to send the form-data when the form is submitted. The URL that processes the form submission.
-          formBlocks:
-            type: array
-            comment: The form blocks to render inside the form.
-            options:
-              structures: _structures.formBlocks
   carouselBlocks:
     id_key: _component
     style: modal
@@ -2440,19 +2440,19 @@ _structures:
       - label: Navigation Item (Level 1)
         icon: link
         value:
-          name: null
-          path: null
-          children: null
+          name: ""
+          path: ""
+          children: []
         _inputs:
           name:
             type: text
-            comment: The display text for the navigation item.
+            comment: Display text for the navigation item.
           path:
             type: text
-            comment: The URL/path for the navigation item.
+            comment: URL path for the navigation item.
           children:
             type: array
-            comment: Optional nested navigation items (level 2).
+            comment: Child navigation items for dropdown menus.
             options:
               structures: _structures.navItemLevel2
   navItemLevel2:
@@ -2462,19 +2462,19 @@ _structures:
       - label: Navigation Item (Level 2)
         icon: link
         value:
-          name: null
-          path: null
-          children: null
+          name: ""
+          path: ""
+          children: []
         _inputs:
           name:
             type: text
-            comment: The display text for the navigation item.
+            comment: Display text for the child navigation item.
           path:
             type: text
-            comment: The URL/path for the navigation item.
+            comment: URL path for the child navigation item.
           children:
             type: array
-            comment: Optional nested navigation items (level 3, final level).
+            comment: Grandchild navigation items for nested dropdowns.
             options:
               structures: _structures.navItemLevel3
   navItemLevel3:
@@ -2484,15 +2484,15 @@ _structures:
       - label: Navigation Item (Level 3)
         icon: link
         value:
-          name: null
-          path: null
+          name: ""
+          path: ""
         _inputs:
           name:
             type: text
-            comment: The display text for the navigation item.
+            comment: Display text for the grandchild navigation item.
           path:
             type: text
-            comment: The URL/path for the navigation item.
+            comment: URL path for the grandchild navigation item.
   linkItems:
     id_key: _component
     style: modal
@@ -2525,97 +2525,48 @@ _structures:
           link:
             type: text
             comment: URL link to the social media profile.
-  buttonBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - label: Button
-        icon: variables
-        description: Clickable button for calls-to-action and navigation.
-        value:
-          _component: elements/button
-          text: My Button
-          link: ""
-          iconName: ""
-          iconPosition: before
-          hideText: false
-          variant: primary
-          size: md
-        preview:
-          icon: variables
-          text:
-            - key: text
-            - Button
-          subtext:
-            - key: link
-            - key: iconName
-            - Add button content
-        picker_preview:
-          text: Button
-          subtext: A clickable element that navigates to another page or triggers an action.
-          icon: variables
-        _inputs:
-          text:
-            type: text
-            comment: The text that goes inside the button.
-            hidden: hideText
-          link:
-            type: url
-            comment: The URL to which the button should link.
-          iconName:
-            type: select
-            comment: The name of the icon to display. See the Icon component documentation for more information.
-            options:
-              values: _select_data.icons
-              preview:
-                text:
-                  - key: name
-                image:
-                  - template: src/icons/{id}.svg
-          iconPosition:
-            type: select
-            comment: The position of the icon relative to the text.
-            hidden: "!iconName"
-            options:
-              values:
-                - id: before
-                  name: Before
-                - id: after
-                  name: After
-          hideText:
-            type: switch
-            hidden: "!iconName"
-            comment: Whether to hide the button text and show only the icon.
-          variant:
-            type: select
-            comment: The presentation of button.
-            options:
-              values:
-                - id: primary
-                  name: Primary
-                - id: secondary
-                  name: Secondary
-                - id: tertiary
-                  name: Tertiary
-                - id: ghost
-                  name: Ghost
-                - id: text
-                  name: Text
-          size:
-            type: select
-            comment: The size of the button.
-            options:
-              values:
-                - id: sm
-                  name: Small
-                - id: md
-                  name: Medium
-                - id: lg
-                  name: Large
   formBlocks:
     id_key: _component
     style: modal
     values:
+      - label: Textarea
+        icon: text_ad
+        description: Form field for entering multi-line text.
+        value:
+          _component: forms/textarea
+          label: null
+          name: null
+          required: false
+          placeholder: null
+          value: null
+        preview:
+          subtext:
+            - key: label
+            - key: name
+            - Enter a name for the textarea input.
+        picker_preview:
+          text: Textarea
+          subtext: A multi-line text input field with an optional label.
+          icon: text_ad
+        _inputs:
+          label:
+            type: text
+            comment: The label text for the textarea field.
+          name:
+            type: text
+            comment: A unique name attribute for the textarea field.
+            options:
+              required: true
+              required_message: Only form elements with a name will have their values passed when submitting a form.
+          required:
+            type: switch
+            comment: Whether the field is required.
+          placeholder:
+            type: text
+            comment: Placeholder text for the textarea field.
+          value:
+            type: text
+            comment: The default value for the textarea field.
       - label: Submit
         icon: check
         description: Button for submitting a form.
@@ -2696,44 +2647,6 @@ _structures:
           disabled:
             type: switch
             comment: Whether the submit button is disabled.
-      - label: Textarea
-        icon: text_ad
-        description: Form field for entering multi-line text.
-        value:
-          _component: forms/textarea
-          label: null
-          name: null
-          required: false
-          placeholder: null
-          value: null
-        preview:
-          subtext:
-            - key: label
-            - key: name
-            - Enter a name for the textarea input.
-        picker_preview:
-          text: Textarea
-          subtext: A multi-line text input field with an optional label.
-          icon: text_ad
-        _inputs:
-          label:
-            type: text
-            comment: The label text for the textarea field.
-          name:
-            type: text
-            comment: A unique name attribute for the textarea field.
-            options:
-              required: true
-              required_message: Only form elements with a name will have their values passed when submitting a form.
-          required:
-            type: switch
-            comment: Whether the field is required.
-          placeholder:
-            type: text
-            comment: Placeholder text for the textarea field.
-          value:
-            type: text
-            comment: The default value for the textarea field.
       - label: Select
         icon: view_list
         description: Form field for selecting one option from a list.
@@ -2943,45 +2856,6 @@ _structures:
           multiple:
             type: switch
             comment: Whether multiple files can be selected.
-      - label: Date
-        icon: calendar
-        description: Form field for selecting a date.
-        value:
-          _component: forms/date
-          label: null
-          name: null
-          required: false
-          value: null
-          min: null
-          max: null
-        preview:
-          text:
-            - key: label
-            - Date
-          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation
-        picker_preview:
-          text: Date
-          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation.
-          icon: calendar
-        _inputs:
-          label:
-            type: text
-            comment: The label text for the date field.
-          name:
-            type: text
-            comment: The name attribute for the date field.
-          required:
-            type: switch
-            comment: Whether the field is required.
-          value:
-            type: date
-            comment: The default value for the date field (ISO8601 format).
-          min:
-            type: date
-            comment: The minimum date allowed (ISO8601 format).
-          max:
-            type: date
-            comment: The maximum date allowed (ISO8601 format).
       - label: Choice Group
         icon: check_box
         description: Form field for selecting one or more options.
@@ -3041,6 +2915,45 @@ _structures:
           multiple:
             type: switch
             comment: When true, uses checkboxes for multiple selection. When false, uses radio buttons for single selection.
+      - label: Date
+        icon: calendar
+        description: Form field for selecting a date.
+        value:
+          _component: forms/date
+          label: null
+          name: null
+          required: false
+          value: null
+          min: null
+          max: null
+        preview:
+          text:
+            - key: label
+            - Date
+          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation
+        picker_preview:
+          text: Date
+          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation.
+          icon: calendar
+        _inputs:
+          label:
+            type: text
+            comment: The label text for the date field.
+          name:
+            type: text
+            comment: The name attribute for the date field.
+          required:
+            type: switch
+            comment: Whether the field is required.
+          value:
+            type: date
+            comment: The default value for the date field (ISO8601 format).
+          min:
+            type: date
+            comment: The minimum date allowed (ISO8601 format).
+          max:
+            type: date
+            comment: The maximum date allowed (ISO8601 format).
   selectOptions:
     id_key: _component
     style: modal
@@ -3128,3 +3041,90 @@ _structures:
           checked:
             type: switch
             comment: Whether the field is checked by default.
+  buttonBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - label: Button
+        icon: variables
+        description: Clickable button for calls-to-action and navigation.
+        value:
+          _component: elements/button
+          text: My Button
+          link: ""
+          iconName: ""
+          iconPosition: before
+          hideText: false
+          variant: primary
+          size: md
+        preview:
+          icon: variables
+          text:
+            - key: text
+            - Button
+          subtext:
+            - key: link
+            - key: iconName
+            - Add button content
+        picker_preview:
+          text: Button
+          subtext: A clickable element that navigates to another page or triggers an action.
+          icon: variables
+        _inputs:
+          text:
+            type: text
+            comment: The text that goes inside the button.
+            hidden: hideText
+          link:
+            type: url
+            comment: The URL to which the button should link.
+          iconName:
+            type: select
+            comment: The name of the icon to display. See the Icon component documentation for more information.
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+          iconPosition:
+            type: select
+            comment: The position of the icon relative to the text.
+            hidden: "!iconName"
+            options:
+              values:
+                - id: before
+                  name: Before
+                - id: after
+                  name: After
+          hideText:
+            type: switch
+            hidden: "!iconName"
+            comment: Whether to hide the button text and show only the icon.
+          variant:
+            type: select
+            comment: The presentation of button.
+            options:
+              values:
+                - id: primary
+                  name: Primary
+                - id: secondary
+                  name: Secondary
+                - id: tertiary
+                  name: Tertiary
+                - id: ghost
+                  name: Ghost
+                - id: text
+                  name: Text
+          size:
+            type: select
+            comment: The size of the button.
+            options:
+              values:
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
