@@ -64,6 +64,8 @@ pageBlocks:
         aspectRatio: none
         positionVertical: center
         positionHorizontal: center
+      - _component: elements/spacer
+        size: 3xl
       - _component: typography/testimonial
         text: >-
           I almost forgot that website maintenance was a thing.
@@ -77,7 +79,7 @@ pageBlocks:
         alignX: center
     maxContentWidth: 2xl
     paddingHorizontal: md
-    paddingVertical: md
+    paddingVertical: 3xl
     colorScheme: default
     backgroundColor: base
     backgroundImage:
@@ -178,6 +180,8 @@ pageBlocks:
         aspectRatio: none
         positionVertical: center
         positionHorizontal: center
+      - _component: elements/spacer
+        size: 3xl
       - _component: typography/testimonial
         text: >-
           The ability to manage all our websites from one central location has
@@ -192,7 +196,7 @@ pageBlocks:
         alignX: center
     maxContentWidth: 2xl
     paddingHorizontal: md
-    paddingVertical: md
+    paddingVertical: 3xl
     colorScheme: default
     backgroundColor: accent
     backgroundImage:
@@ -211,6 +215,8 @@ pageBlocks:
         alignX: center
         iconName:
         iconPosition: before
+      - _component: elements/spacer
+        size: xl
       - _component: wrappers/grid
         label: ''
         layout: center
@@ -346,6 +352,64 @@ pageBlocks:
                     positionHorizontal: center
                 afterContentBlocks: []
         gap: md
+      - _component: elements/spacer
+        size: xl
+      - _component: wrappers/container
+        label: ''
+        contentBlocks:
+          - _component: wrappers/split
+            label: ''
+            firstColumnContentBlocks:
+              - _component: typography/heading
+                text: Escape the updates
+                level: h2
+                size: 6xl
+                alignX: start
+                iconName:
+                iconPosition: before
+              - _component: typography/simple-text
+                text: >-
+                  See how CloudCannon lets you focus on building features that
+                  move the needle.
+                alignX: start
+                size: default
+              - _component: wrappers/button-group
+                label:
+                buttonBlocks:
+                  - _component: elements/button
+                    text: Free your team
+                    link: ''
+                    iconName: arrow-right
+                    iconPosition: after
+                    hideText: false
+                    variant: primary
+                    size: md
+                direction: row
+                alignX: start
+            secondColumnContentBlocks:
+              - _component: elements/smart-image
+                source: /src/assets/images/liv-portrait.png
+                alt: Liv
+                rounded: false
+                aspectRatio: none
+                positionVertical: center
+                positionHorizontal: center
+            distributionMode: half
+            fixedWidth:
+            minSplitWidth: 0
+            verticalAlignment: top
+            reverse: false
+        maxContentWidth: 2xl
+        paddingHorizontal: md
+        paddingVertical: md
+        colorScheme: default
+        backgroundColor: base
+        backgroundImage:
+          source: ''
+          alt: ''
+          positionVertical: top
+          positionHorizontal: center
+        rounded: true
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md
