@@ -12,6 +12,10 @@
     > .grid-item > :not(editable-array):only-child {
       height: 100%;
     }
+
+    > editable-array-item > .grid-item {
+      height: 100%;
+    }
   }
 
   &.layout-center {
@@ -20,7 +24,8 @@
     flex-wrap: wrap;
     justify-content: center;
 
-    > .grid-item {
+    > .grid-item,
+    > editable-array-item > .grid-item {
       flex: 1 1 min(var(--min-item-width), 100%);
       max-width: var(--max-item-width);
 
@@ -37,7 +42,8 @@
     flex-wrap: wrap;
     justify-content: center;
 
-    > .grid-item {
+    > .grid-item,
+    > editable-array-item > .grid-item {
       flex: 0 0 auto;
       max-width: var(--max-item-width);
       min-width: min(var(--min-item-width), 100%);
