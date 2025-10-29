@@ -39,7 +39,7 @@ const commonProps = {
 
 // Use custom data attributes if provided, otherwise use defaults
 const dataAttributes =
-  !editable || hasCustomDataAttributes
+  editable || hasCustomDataAttributes
     ? {
         "data-editable": customDataEditable || "image",
         "data-prop-src": customDataPropSrc || "source",
