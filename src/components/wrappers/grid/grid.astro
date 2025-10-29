@@ -50,12 +50,13 @@ const gridStyles = [
   {
     items && items.length > 0 ? (
       items.map((item: any) => (
-        <GridItem
-          data-editable="array-item"
+        <editable-array-item
           data-id={item._component}
           data-component={item._component}
-          contentBlocks={item.contentBlocks}
-        />
+          data-editable="array-item"
+        >
+          <GridItem contentBlocks={item.contentBlocks} />
+        </editable-array-item>
       ))
     ) : (
       <slot />
