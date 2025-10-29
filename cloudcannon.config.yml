@@ -918,7 +918,7 @@ _structures:
                   name: Start
                 - id: top
                   name: Top
-      - &ref_20
+      - &ref_21
         label: Container
         icon: width_full
         description: Used to group and style large sections of a page.
@@ -1091,7 +1091,7 @@ _structures:
           rounded:
             type: switch
             comment: Whether to apply rounded corners to the container.
-      - &ref_19
+      - &ref_20
         label: Carousel
         icon: image
         description: Displays multiple items in a sliding gallery.
@@ -1449,61 +1449,6 @@ _structures:
                 - id: center
                   name: Center
       - &ref_7
-        label: Rich text
-        icon: edit_note
-        description: Content component for markdown-formatted text.
-        value:
-          _component: typography/rich-text
-          text: ""
-          alignX: start
-        preview:
-          subtext:
-            - key: text
-            - Add text to block
-        picker_preview:
-          text: Rich text
-          subtext: A catch-all for all content types. Can contain headings, paragraphs, images, bullets.
-          icon: edit_note
-        _inputs:
-          text:
-            comment: The content for the rich text component (Markdown format). Leave empty to use slot content instead.
-            type: markdown
-            options:
-              bold: true
-              italic: true
-              link: true
-              strike: true
-              subscript: true
-              superscript: true
-              underline: true
-              undo: true
-              redo: true
-              format: p h1 h2 h3 h4 h5 h6
-              removeformat: true
-              copyformatting: true
-              bulletedlist: true
-              numberedlist: true
-              indent: true
-              outdent: true
-              join_above: true
-              join_below: true
-              code: true
-              embed: true
-              horizontalrule: true
-              image: true
-              table: true
-          alignX:
-            type: select
-            options:
-              values:
-                - id: start
-                  name: Start
-                - id: center
-                  name: Center
-                - id: end
-                  name: End
-            comment: The horizontal alignment of the rich text component.
-      - &ref_8
         label: Simple Text
         icon: view_headline
         description: Paragraph for plain text content.
@@ -1563,6 +1508,61 @@ _structures:
                   name: 5xl
                 - id: 6xl
                   name: 6xl
+      - &ref_8
+        label: Rich text
+        icon: edit_note
+        description: Content component for markdown-formatted text.
+        value:
+          _component: typography/rich-text
+          text: ""
+          alignX: start
+        preview:
+          subtext:
+            - key: text
+            - Add text to block
+        picker_preview:
+          text: Rich text
+          subtext: A catch-all for all content types. Can contain headings, paragraphs, images, bullets.
+          icon: edit_note
+        _inputs:
+          text:
+            comment: The content for the rich text component (Markdown format). Leave empty to use slot content instead.
+            type: markdown
+            options:
+              bold: true
+              italic: true
+              link: true
+              strike: true
+              subscript: true
+              superscript: true
+              underline: true
+              undo: true
+              redo: true
+              format: p h1 h2 h3 h4 h5 h6
+              removeformat: true
+              copyformatting: true
+              bulletedlist: true
+              numberedlist: true
+              indent: true
+              outdent: true
+              join_above: true
+              join_below: true
+              code: true
+              embed: true
+              horizontalrule: true
+              image: true
+              table: true
+          alignX:
+            type: select
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+            comment: The horizontal alignment of the rich text component.
       - &ref_9
         label: List
         icon: list
@@ -1981,6 +1981,94 @@ _structures:
                 - id: right
                   name: Right
       - &ref_17
+        label: Icon
+        icon: star
+        description: SVG icon component.
+        value:
+          _component: elements/icon
+          name: ""
+          size: lg
+          color: default
+          background: false
+          alignX: start
+        preview:
+          text: Icon
+          icon: star
+        picker_preview:
+          text: Icon
+          subtext: Displays an icon from your icon library.
+          icon: star
+        _inputs:
+          name:
+            type: select
+            comment: The name of the icon to display from the icon library.
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+          size:
+            type: select
+            comment: The size of the icon.
+            options:
+              values:
+                - id: none
+                  name: None
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xl Large
+                - id: 3xl
+                  name: 3xl Large
+          color:
+            type: select
+            comment: The color of the icon.
+            options:
+              values:
+                - id: default
+                  name: Default (inherit)
+                - id: blue
+                  name: Blue
+                - id: green
+                  name: Green
+                - id: yellow
+                  name: Yellow
+                - id: orange
+                  name: Orange
+                - id: red
+                  name: Red
+                - id: purple
+                  name: Purple
+                - id: pink
+                  name: Pink
+                - id: cyan
+                  name: Cyan
+          background:
+            type: switch
+            comment: Show a background behind the icon.
+          inline:
+            type: switch
+            comment: Display the icon inline instead of block.
+          alignX:
+            type: select
+            comment: Horizontal alignment of the icon.
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+      - &ref_18
         label: Embed
         icon: data_object
         description: Responsive wrapper for third-party embeds.
@@ -2025,7 +2113,7 @@ _structures:
                   name: Portrait (3:4)
                 - id: widescreen
                   name: Widescreen (16:9)
-      - &ref_18
+      - &ref_19
         label: Divider
         icon: horizontal_rule
         description: Visual separator for dividing content sections.
@@ -2087,13 +2175,14 @@ _structures:
       - *ref_16
       - *ref_17
       - *ref_18
+      - *ref_19
   contentSelectorBlocks:
     id_key: _component
     style: modal
     values:
       - *ref_0
       - *ref_1
-      - *ref_19
+      - *ref_20
       - *ref_3
       - *ref_4
       - *ref_5
@@ -2110,6 +2199,7 @@ _structures:
       - *ref_16
       - *ref_17
       - *ref_18
+      - *ref_19
   gridItems:
     id_key: _component
     style: modal
@@ -2138,7 +2228,7 @@ _structures:
     values:
       - *ref_1
       - *ref_2
-      - *ref_19
+      - *ref_20
       - *ref_3
       - *ref_4
       - *ref_5
@@ -2155,6 +2245,7 @@ _structures:
       - *ref_16
       - *ref_17
       - *ref_18
+      - *ref_19
   contentSelectorItems:
     id_key: _component
     style: modal
@@ -2183,7 +2274,7 @@ _structures:
     id_key: _component
     style: modal
     values:
-      - *ref_20
+      - *ref_21
   slides:
     id_key: _component
     style: modal
@@ -2222,6 +2313,7 @@ _structures:
       - *ref_16
       - *ref_17
       - *ref_18
+      - *ref_19
   cardBlocks:
     id_key: _component
     style: modal
@@ -2241,6 +2333,7 @@ _structures:
       - *ref_16
       - *ref_17
       - *ref_18
+      - *ref_19
   accordionBlocks:
     id_key: _component
     style: modal
@@ -2259,6 +2352,7 @@ _structures:
       - *ref_16
       - *ref_17
       - *ref_18
+      - *ref_19
   accordionItems:
     id_key: _component
     style: modal
@@ -2435,6 +2529,44 @@ _structures:
     id_key: _component
     style: modal
     values:
+      - label: Textarea
+        icon: text_ad
+        description: Form field for entering multi-line text.
+        value:
+          _component: forms/textarea
+          label: null
+          name: null
+          required: false
+          placeholder: null
+          value: null
+        preview:
+          subtext:
+            - key: label
+            - key: name
+            - Enter a name for the textarea input.
+        picker_preview:
+          text: Textarea
+          subtext: A multi-line text input field with an optional label.
+          icon: text_ad
+        _inputs:
+          label:
+            type: text
+            comment: The label text for the textarea field.
+          name:
+            type: text
+            comment: A unique name attribute for the textarea field.
+            options:
+              required: true
+              required_message: Only form elements with a name will have their values passed when submitting a form.
+          required:
+            type: switch
+            comment: Whether the field is required.
+          placeholder:
+            type: text
+            comment: Placeholder text for the textarea field.
+          value:
+            type: text
+            comment: The default value for the textarea field.
       - label: Submit
         icon: check
         description: Button for submitting a form.
@@ -2567,44 +2699,6 @@ _structures:
           value:
             type: text
             comment: The default selected value.
-      - label: Textarea
-        icon: text_ad
-        description: Form field for entering multi-line text.
-        value:
-          _component: forms/textarea
-          label: null
-          name: null
-          required: false
-          placeholder: null
-          value: null
-        preview:
-          subtext:
-            - key: label
-            - key: name
-            - Enter a name for the textarea input.
-        picker_preview:
-          text: Textarea
-          subtext: A multi-line text input field with an optional label.
-          icon: text_ad
-        _inputs:
-          label:
-            type: text
-            comment: The label text for the textarea field.
-          name:
-            type: text
-            comment: A unique name attribute for the textarea field.
-            options:
-              required: true
-              required_message: Only form elements with a name will have their values passed when submitting a form.
-          required:
-            type: switch
-            comment: Whether the field is required.
-          placeholder:
-            type: text
-            comment: Placeholder text for the textarea field.
-          value:
-            type: text
-            comment: The default value for the textarea field.
       - label: Segments
         icon: radio_button_partial
         description: Segmented control form field with connected buttons.
