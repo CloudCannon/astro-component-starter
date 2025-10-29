@@ -8,9 +8,16 @@
     grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
     justify-content: start;
 
-    > .grid-item > editable-array > editable-array-item:only-child > *,
-    > .grid-item > :not(editable-array):only-child {
+    > editable-array-item > .grid-item {
       height: 100%;
+    }
+
+    > .grid-item,
+    > editable-array-item > .grid-item {
+      > editable-array > editable-array-item:only-child > *,
+      > :not(editable-array):only-child {
+        height: 100%;
+      }
     }
   }
 
@@ -20,10 +27,18 @@
     flex-wrap: wrap;
     justify-content: center;
 
-    > .grid-item {
+    > .grid-item,
+    > editable-array-item {
       flex: 1 1 min(var(--min-item-width), 100%);
       max-width: var(--max-item-width);
+    }
 
+    > editable-array-item > .grid-item {
+      height: 100%;
+    }
+
+    > .grid-item,
+    > editable-array-item > .grid-item {
       > editable-array > editable-array-item:only-child > *,
       > :not(editable-array):only-child {
         height: 100%;
@@ -37,7 +52,8 @@
     flex-wrap: wrap;
     justify-content: center;
 
-    > .grid-item {
+    > .grid-item,
+    > editable-array-item {
       flex: 0 0 auto;
       max-width: var(--max-item-width);
       min-width: min(var(--min-item-width), 100%);

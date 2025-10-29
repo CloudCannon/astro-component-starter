@@ -13,7 +13,7 @@ value:
   distributionMode: half
   fixedWidth: null
   minSplitWidth: 0
-  verticalAlignment: top
+  verticalAlignment: center
   reverse: false
 preview:
   text:
