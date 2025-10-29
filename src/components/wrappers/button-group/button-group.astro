@@ -1,7 +1,15 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
 
-const { direction, alignX, buttonBlocks, class: className, label, ...rest } = Astro.props;
+const {
+  direction,
+  alignX,
+  buttonBlocks,
+  class: className,
+  label,
+  editable = true,
+  ...rest
+} = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(rest).filter(([key]) => key !== "_component")
@@ -33,7 +41,7 @@ const alignClass = alignMap[alignX as keyof typeof alignMap] ?? "align-start";
 >
   {
     buttonBlocks && buttonBlocks.length > 0 ? (
-      <Component contentBlocks={buttonBlocks} propName="buttonBlocks" />
+      <Component contentBlocks={buttonBlocks} propName="buttonBlocks" editable={editable} />
     ) : (
       <slot />
     )
