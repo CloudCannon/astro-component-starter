@@ -9,7 +9,7 @@ structures:
 value:
   _component: wrappers/grid
   label: ""
-  layout: center-aligned
+  layout: center
   minItemWidth: 280
   maxItemWidth: 400
   items: []
@@ -34,9 +34,9 @@ _inputs:
     type: select
     options:
       values:
-        - id: start-aligned
+        - id: start
           name: Left Aligned
-        - id: center-aligned
+        - id: center
           name: Center Aligned
         - id: uneven-columns
           name: Uneven Columns
