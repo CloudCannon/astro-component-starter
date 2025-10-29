@@ -49,6 +49,7 @@ pageBlocks:
           hadn't even added fresh content yet.
         authorName: Roy Gabriel
         authorDescription: Gabriel Maggio Construction
+        authorImage: /src/assets/images/roy-gabriel-gm-construction.png
         alignX: center
       - _component: elements/spacer
         size: 2xl
@@ -682,7 +683,7 @@ pageBlocks:
     paddingHorizontal: md
     paddingVertical: md
     colorScheme: contrast
-    backgroundColor: highlight
+    backgroundColor: surface
     backgroundImage:
       source: ""
       alt: ""
