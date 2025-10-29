@@ -39,7 +39,7 @@ pageBlocks:
             text: Start with a trial
             link: ''
             iconName: arrow-right
-            iconPosition: before
+            iconPosition: after
             hideText: false
             variant: tertiary
             size: md
