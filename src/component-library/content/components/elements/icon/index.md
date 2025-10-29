@@ -7,4 +7,15 @@ examples:
       - sizes
   - slugs:
       - types
+  - slugs:
+      - colors
+      - fill-colors
+  - slugs:
+      - backgrounds
+      - fill-backgrounds
+  - title: Alignment
+    slugs:
+      - alignment-start
+      - alignment-center
+      - alignment-end
 ---

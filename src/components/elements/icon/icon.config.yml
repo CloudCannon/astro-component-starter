@@ -1,11 +1,21 @@
 label: Icon
 icon: star
 description: "SVG icon component."
-structures: []
+structures:
+  - containerBlocks
+  - cardBlocks
+  - splitBlocks
+  - gridItemBlocks
+  - accordionBlocks
+  - carouselBlocks
+  - contentSelectorBlocks
 value:
   _component: elements/icon
   name: ""
   size: lg
+  color: default
+  background: false
+  alignX: start
 preview:
   text: Icon
   icon: star
@@ -38,3 +48,49 @@ _inputs:
           name: Medium
         - id: lg
           name: Large
+        - id: xl
+          name: Extra Large
+        - id: 2xl
+          name: 2xl Large
+        - id: 3xl
+          name: 3xl Large
+  color:
+    type: select
+    comment: The color of the icon.
+    options:
+      values:
+        - id: default
+          name: Default (inherit)
+        - id: blue
+          name: Blue
+        - id: green
+          name: Green
+        - id: yellow
+          name: Yellow
+        - id: orange
+          name: Orange
+        - id: red
+          name: Red
+        - id: purple
+          name: Purple
+        - id: pink
+          name: Pink
+        - id: cyan
+          name: Cyan
+  background:
+    type: switch
+    comment: Show a background behind the icon.
+  inline:
+    type: switch
+    comment: Display the icon inline instead of block.
+  alignX:
+    type: select
+    comment: Horizontal alignment of the icon.
+    options:
+      values:
+        - id: start
+          name: Start
+        - id: center
+          name: Center
+        - id: end
+          name: End

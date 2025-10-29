@@ -1,7 +1,16 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
 
-const { name, size = "lg", className, ...rest } = Astro.props;
+const props = Astro.props as any;
+const {
+  name,
+  size = "lg",
+  color = "default",
+  background = false,
+  alignX = "",
+  class: className,
+  ...rest
+} = props;
 
 const isValidName = name && name.trim();
 
@@ -16,10 +25,19 @@ const htmlAttributes = Object.fromEntries(
 
 {
   isValidName && (
-    <AstroIcon
-      name={name}
-      class:list={["icon", `size-${size}`, name?.includes("social/") && "fill", className]}
-      {...htmlAttributes}
-    />
+    <div
+      class:list={[
+        "icon",
+        `size-${size}`,
+        `color-${color}`,
+        background && "background",
+        `align-${alignX}`,
+        name?.includes("social/") && "fill",
+        className,
+      ]}
+      {...(htmlAttributes as any)}
+    >
+      <AstroIcon name={name} />
+    </div>
   )
 }
