@@ -3,7 +3,7 @@ title: Start Aligned Layout
 spacing:
 blocks:
   _component: "wrappers/grid"
-  layout: start-aligned
+  layout: start
   minItemWidth: 200
   maxItemWidth: 300
   items:

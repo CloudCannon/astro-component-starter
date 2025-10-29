@@ -2,7 +2,7 @@
   gap: var(--grid-spacing, --spacing-md);
   width: 100%;
 
-  &.layout-start-aligned {
+  &.layout-start {
     align-items: stretch;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
@@ -14,7 +14,7 @@
     }
   }
 
-  &.layout-center-aligned {
+  &.layout-center {
     align-items: stretch;
     display: flex;
     flex-wrap: wrap;
@@ -31,7 +31,7 @@
     }
   }
 
-  &.layout-uneven-columns {
+  &.layout-uneven {
     align-items: center;
     display: flex;
     flex-wrap: wrap;

@@ -1,6 +1,9 @@
 ---
 import StructuredData from "@components/utils/StructuredData.astro";
+import MainNav from "@components/navigation/main-nav/main-nav.astro";
 import seoData from "@data/seo.json";
+import Button from "@components/elements/button/button.astro";
+import Footer from "@components/navigation/footer/footer.astro";
 import "@styles/style.pcss";
 import { SEO } from "astro-seo";
 
@@ -63,8 +66,115 @@ const pageImage = props.image || seoData.defaultSeo.image;
     <slot name="head" />
   </head>
   <body>
+    <MainNav
+      logoAlt="Logo"
+      logoSource="/src/assets/images/cc-logo.svg"
+      navData={[
+        {
+          name: "Features",
+          path: "#",
+          children: [
+            {
+              name: "Performance",
+              path: "/performance/",
+              children: [],
+            },
+            {           
+              name: "Low Maintenance",
+              path: "/low-maintenance/",
+              children: [],
+            },
+          ],
+        },
+        {
+          name: "Solutions",
+          path: "#",
+          children: [],
+        },
+        {
+          name: "Support",
+          path: "#",
+          children: [],
+        },
+        {
+          name: "Resources",
+          path: "#",
+          children: [],
+        },
+        {
+          name: "Pricing",
+          path: "#",
+          children: [],
+        },
+      ]}
+      buttonBlocks={[
+        {
+          _component: "elements/button",
+          link: "#",
+          variant: "ghost",
+          size: "lg",
+          text: "Search",
+          iconName: "magnifying-glass",
+          hideText: true,
+        },
+      ]}
+      style="margin-block: 1rem; z-index: 50;"
+    />
     <main>
       <slot />
     </main>
+    <Footer
+      logoSource="/src/assets/images/cc-logo.svg"
+      logoAlt="Logo"
+      links={[
+        {
+          name: "Home",
+          path: "#",
+        },
+        {
+          name: "Features",
+          path: "#",
+        },
+        {
+          name: "Solutions",
+          path: "#",
+        },
+        {
+          name: "Support",
+          path: "#",
+        },
+        {
+          name: "Resources",
+          path: "#",
+        },
+        {
+          name: "Pricing",
+          path: "#",
+        },
+      ]}
+      socials={[
+        {
+          icon: "social/facebook",
+          link: "#",
+        },
+        {
+          icon: "social/x",
+          link: "#",
+        },
+        {
+          icon: "social/instagram",
+          link: "#",
+        },
+        {
+          icon: "social/linkedin",
+          link: "#",
+        },
+        {
+          icon: "social/youtube",
+          link: "#",
+        },
+      ]}
+      footerText="© 2025 CloudCannon. All rights reserved."
+    />
   </body>
 </html>

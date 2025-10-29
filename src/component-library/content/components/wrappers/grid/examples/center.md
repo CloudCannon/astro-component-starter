@@ -3,7 +3,7 @@ title: Center Aligned Layout
 spacing:
 blocks:
   _component: "wrappers/grid"
-  layout: center-aligned
+  layout: center
   minItemWidth: 350
   maxItemWidth: 350
   items:

@@ -3,7 +3,7 @@ title: Uneven Columns Layout
 spacing:
 blocks:
   _component: "wrappers/grid"
-  layout: uneven-columns
+  layout: uneven
   minItemWidth: 0
   maxItemWidth: 320
   items:

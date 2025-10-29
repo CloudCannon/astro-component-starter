@@ -94,7 +94,7 @@ const splitId = `split-${crypto.randomUUID()}`;
       set:html={`
     @container (max-width: ${minSplitWidth}px) {
       .split[data-split-id="${splitId}"] {
-        grid-template-columns: var(--split-columns-mobile);
+        --split-columns: var(--split-columns-mobile);
       }
     }
   `}
