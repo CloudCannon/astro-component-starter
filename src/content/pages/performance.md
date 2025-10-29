@@ -714,7 +714,7 @@ pageBlocks:
                   - _component: elements/button
                     text: Discover the difference
                     link: '#'
-                    iconName: arrow-down-right
+                    iconName: arrow-right
                     iconPosition: after
                     hideText: false
                     variant: primary
