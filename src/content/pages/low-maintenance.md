@@ -232,7 +232,7 @@ pageBlocks:
                     text: Developers
                     level: h2
                     size: default
-                    alignX: center
+                    alignX: start
                     iconName:
                     iconPosition: before
                   - _component: typography/rich-text
@@ -275,7 +275,7 @@ pageBlocks:
                     text: Digital agencies
                     level: h2
                     size: default
-                    alignX: center
+                    alignX: start
                     iconName:
                     iconPosition: before
                   - _component: typography/rich-text
@@ -318,7 +318,7 @@ pageBlocks:
                     text: Internal teams
                     level: h2
                     size: default
-                    alignX: center
+                    alignX: start
                     iconName:
                     iconPosition: before
                   - _component: typography/rich-text
