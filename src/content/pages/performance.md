@@ -7,12 +7,12 @@ pageBlocks:
     contentBlocks:
       - _component: typography/simple-text
         text: Performance
-        size: ""
         alignX: center
+        size: ''
       - _component: typography/heading
         text: Load instantly. Rank higher.
         level: h1
-        size: ""
+        size: ''
         alignX: center
         iconPosition: before
       - _component: typography/simple-text
@@ -20,8 +20,8 @@ pageBlocks:
           Fast sites win: deliver structured content that makes your visitors
           (and Google) smile. CloudCannon's optional hosting gives you speed
           that scales.
-        size: ""
         alignX: center
+        size: ''
       - _component: elements/smart-image
         source: /src/assets/images/performance-dashboard.png
         alt: Performance Dashboard
@@ -33,9 +33,10 @@ pageBlocks:
     paddingHorizontal: lg
     paddingVertical: lg
     colorScheme: default
+    backgroundColor: base
     backgroundImage:
-      source: ""
-      alt: ""
+      source: ''
+      alt: ''
       positionVertical: top
       positionHorizontal: center
     rounded: false
@@ -54,26 +55,33 @@ pageBlocks:
       - _component: elements/spacer
         size: 2xl
       - _component: wrappers/grid
-        label: ""
+        label: ''
         layout: center
         minItemWidth: 280
         maxItemWidth: 400
         items:
-          - contentBlocks:
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
+                  - _component: elements/icon
+                    name: arrow-trending-up
+                    size: xl
+                    color: green
+                    background: true
+                    alignX: start
                   - _component: typography/heading
                     text: From 50 to 90+
                     level: h4
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
                   - _component: typography/heading
                     text: PageSpeed scores
                     level: h5
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -81,8 +89,6 @@ pageBlocks:
                     text: Fast load times turn visitors into customers.
                     alignX: start
                     size: md
-                beforeContentBlocks: []
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -95,21 +101,31 @@ pageBlocks:
                 link:
                 rounded: true
                 border: true
-          - contentBlocks:
+                showBeforeAfter: false
+                beforeContentBlocks: []
+                afterContentBlocks: []
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
+                  - _component: elements/icon
+                    name: currency-dollar
+                    size: xl
+                    color: orange
+                    background: true
+                    alignX: start
                   - _component: typography/heading
                     text: $4000 monthly savings
                     level: h4
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
                   - _component: typography/heading
                     text: On lead gen and maintenance
                     level: h5
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -117,8 +133,6 @@ pageBlocks:
                     text: More leads, less spending, zero headaches.
                     alignX: start
                     size: md
-                beforeContentBlocks: []
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -131,21 +145,31 @@ pageBlocks:
                 link:
                 rounded: true
                 border: true
-          - contentBlocks:
+                showBeforeAfter: false
+                beforeContentBlocks: []
+                afterContentBlocks: []
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
+                  - _component: elements/icon
+                    name: chart-bar
+                    size: xl
+                    color: blue
+                    background: true
+                    alignX: start
                   - _component: typography/heading
                     text: Front page search results
                     level: h4
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
                   - _component: typography/heading
                     text: Improved ranking on Google
                     level: h5
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -155,8 +179,6 @@ pageBlocks:
                       →](https://cloudcannon.com/customers/gabriel-maggio-construction/)
                     alignX: start
                     size: md
-                beforeContentBlocks: []
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -169,14 +191,18 @@ pageBlocks:
                 link:
                 rounded: true
                 border: true
+                showBeforeAfter: false
+                beforeContentBlocks: []
+                afterContentBlocks: []
+        gap: md
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md
     colorScheme: default
     backgroundColor:
     backgroundImage:
-      source: ""
-      alt: ""
+      source: ''
+      alt: ''
       positionVertical: top
       positionHorizontal: center
     rounded: false
@@ -184,12 +210,12 @@ pageBlocks:
     label: Main Block
     contentBlocks:
       - _component: wrappers/split
-        label: ""
+        label: ''
         firstColumnContentBlocks:
           - _component: typography/heading
             text: SEO built in, not bolted on
             level: h2
-            size: ""
+            size: ''
             alignX: start
             iconName:
             iconPosition: before
@@ -216,11 +242,11 @@ pageBlocks:
       - _component: elements/spacer
         size: 2xl
       - _component: wrappers/split
-        label: ""
+        label: ''
         firstColumnContentBlocks:
           - _component: elements/smart-image
             source: /src/assets/images/accessibility-dots-final.png
-            alt: ""
+            alt: ''
             rounded: false
             aspectRatio:
             positionVertical: center
@@ -229,7 +255,7 @@ pageBlocks:
           - _component: typography/heading
             text: Build features, not fixes
             level: h3
-            size: ""
+            size: ''
             alignX: start
             iconName:
             iconPosition: before
@@ -251,7 +277,7 @@ pageBlocks:
         label: Case study
         contentBlocks:
           - _component: wrappers/split
-            label: ""
+            label: ''
             firstColumnContentBlocks:
               - _component: elements/smart-image
                 source: /src/assets/images/abi-noda-transparent-bg.png
@@ -268,6 +294,7 @@ pageBlocks:
                   because our developers can a lot more productive.
                 authorName: Abi Noda
                 authorDescription: CEO
+                authorImage: ''
                 alignX: start
               - _component: elements/spacer
                 size: xl
@@ -276,7 +303,7 @@ pageBlocks:
                 buttonBlocks:
                   - _component: elements/button
                     text: Read case study
-                    link: "#"
+                    link: '#'
                     iconName: arrow-right
                     iconPosition: after
                     hideText: false
@@ -295,8 +322,8 @@ pageBlocks:
         colorScheme: default
         backgroundColor: base
         backgroundImage:
-          source: ""
-          alt: ""
+          source: ''
+          alt: ''
           positionVertical: top
           positionHorizontal: center
         rounded: true
@@ -308,7 +335,7 @@ pageBlocks:
           - _component: typography/heading
             text: Global speed. Zero setup.
             level: h2
-            size: ""
+            size: ''
             alignX: center
             iconName:
             iconPosition: before
@@ -326,27 +353,28 @@ pageBlocks:
         colorScheme: default
         backgroundColor:
         backgroundImage:
-          source: ""
-          alt: ""
+          source: ''
+          alt: ''
           positionVertical: top
           positionHorizontal: center
         rounded: false
       - _component: elements/spacer
         size: 2xl
       - _component: wrappers/grid
-        label: ""
+        label: ''
         layout: center
         minItemWidth: 200
         maxItemWidth: 400
         items:
-          - contentBlocks:
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
                   - _component: typography/heading
                     text: The rise of static-first websites
                     level: h3
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -361,7 +389,7 @@ pageBlocks:
                     buttonBlocks:
                       - _component: elements/button
                         text: Learn more
-                        link: "#"
+                        link: '#'
                         iconName: arrow-right
                         iconPosition: after
                         hideText: false
@@ -369,8 +397,6 @@ pageBlocks:
                         size: md
                     direction: row
                     alignX: start
-                beforeContentBlocks: []
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -383,14 +409,18 @@ pageBlocks:
                 link:
                 rounded: true
                 border: false
-          - contentBlocks:
+                showBeforeAfter: false
+                beforeContentBlocks: []
+                afterContentBlocks: []
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
                   - _component: typography/heading
                     text: Improving your Core Web Vitals
                     level: h3
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -405,7 +435,7 @@ pageBlocks:
                     buttonBlocks:
                       - _component: elements/button
                         text: Learn more
-                        link: "#"
+                        link: '#'
                         iconName: arrow-right
                         iconPosition: after
                         hideText: false
@@ -413,8 +443,6 @@ pageBlocks:
                         size: md
                     direction: row
                     alignX: start
-                beforeContentBlocks: []
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -427,14 +455,18 @@ pageBlocks:
                 link:
                 rounded: true
                 border: false
-          - contentBlocks:
+                showBeforeAfter: false
+                beforeContentBlocks: []
+                afterContentBlocks: []
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
                   - _component: typography/heading
                     text: No time to migrate? We're here to help.
                     level: h3
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -449,7 +481,7 @@ pageBlocks:
                     buttonBlocks:
                       - _component: elements/button
                         text: Learn more
-                        link: "#"
+                        link: '#'
                         iconName: arrow-right
                         iconPosition: after
                         hideText: false
@@ -457,8 +489,6 @@ pageBlocks:
                         size: md
                     direction: row
                     alignX: start
-                beforeContentBlocks: []
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -471,14 +501,18 @@ pageBlocks:
                 link:
                 rounded: true
                 border: false
+                showBeforeAfter: false
+                beforeContentBlocks: []
+                afterContentBlocks: []
+        gap: md
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: 3xl
     colorScheme: default
     backgroundColor: surface
     backgroundImage:
-      source: ""
-      alt: ""
+      source: ''
+      alt: ''
       positionVertical: top
       positionHorizontal: center
     rounded: false
@@ -488,24 +522,25 @@ pageBlocks:
       - _component: typography/heading
         text: For teams who want to ship, not suffer
         level: h2
-        size: ""
+        size: ''
         alignX: center
         iconName:
         iconPosition: before
       - _component: wrappers/grid
-        label: ""
+        label: ''
         layout: center
         minItemWidth: 280
         maxItemWidth: 400
         items:
-          - contentBlocks:
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
                   - _component: typography/heading
                     text: Developers
                     level: h3
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -518,15 +553,6 @@ pageBlocks:
                       →](https://cloudcannon.com/for-developers/ "For
                       developers")
                     alignX: start
-                beforeContentBlocks:
-                  - _component: elements/smart-image
-                    source: /src/assets/images/devs-greydots.png
-                    alt: Dev
-                    rounded: false
-                    aspectRatio: widescreen
-                    positionVertical: center
-                    positionHorizontal: center
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -539,14 +565,25 @@ pageBlocks:
                 link:
                 rounded: true
                 border: false
-          - contentBlocks:
+                showBeforeAfter: false
+                beforeContentBlocks:
+                  - _component: elements/smart-image
+                    source: /src/assets/images/devs-greydots.png
+                    alt: Dev
+                    rounded: false
+                    aspectRatio: widescreen
+                    positionVertical: center
+                    positionHorizontal: center
+                afterContentBlocks: []
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
                   - _component: typography/heading
                     text: Digital agencies
                     level: h3
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -559,15 +596,6 @@ pageBlocks:
                       [Join the Partner Program
                       →](https://cloudcannon.com/partner-program/)
                     alignX: start
-                beforeContentBlocks:
-                  - _component: elements/smart-image
-                    source: /src/assets/images/agency-card-final.png
-                    alt: Dev
-                    rounded: false
-                    aspectRatio: widescreen
-                    positionVertical: center
-                    positionHorizontal: center
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -580,14 +608,25 @@ pageBlocks:
                 link:
                 rounded: true
                 border: false
-          - contentBlocks:
+                showBeforeAfter: false
+                beforeContentBlocks:
+                  - _component: elements/smart-image
+                    source: /src/assets/images/agency-card-final.png
+                    alt: Dev
+                    rounded: false
+                    aspectRatio: widescreen
+                    positionVertical: center
+                    positionHorizontal: center
+                afterContentBlocks: []
+          - _component: wrappers/grid/grid-item
+            contentBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
                   - _component: typography/heading
                     text: Internal teams
                     level: h3
-                    size: ""
+                    size: ''
                     alignX: start
                     iconName:
                     iconPosition: before
@@ -600,15 +639,6 @@ pageBlocks:
                       [Manage content at scale
                       →](https://cloudcannon.com/enterprise/)
                     alignX: start
-                beforeContentBlocks:
-                  - _component: elements/smart-image
-                    source: /src/assets/images/inhouse-blue.png
-                    alt: inhouse-blue
-                    rounded: false
-                    aspectRatio: widescreen
-                    positionVertical: center
-                    positionHorizontal: center
-                afterContentBlocks: []
                 paddingHorizontal: md
                 paddingVertical: md
                 colorScheme: default
@@ -621,13 +651,24 @@ pageBlocks:
                 link:
                 rounded: true
                 border: false
+                showBeforeAfter: false
+                beforeContentBlocks:
+                  - _component: elements/smart-image
+                    source: /src/assets/images/inhouse-blue.png
+                    alt: inhouse-blue
+                    rounded: false
+                    aspectRatio: widescreen
+                    positionVertical: center
+                    positionHorizontal: center
+                afterContentBlocks: []
+        gap: md
       - _component: elements/spacer
         size: 2xl
       - _component: wrappers/container
-        label: ""
+        label: ''
         contentBlocks:
           - _component: wrappers/split
-            label: ""
+            label: ''
             firstColumnContentBlocks:
               - _component: typography/heading
                 text: Leave slow sites behind
@@ -647,7 +688,7 @@ pageBlocks:
                 buttonBlocks:
                   - _component: elements/button
                     text: Discover the difference
-                    link: "#"
+                    link: '#'
                     iconName: arrow-down-right
                     iconPosition: after
                     hideText: false
@@ -674,8 +715,8 @@ pageBlocks:
         colorScheme: default
         backgroundColor: base
         backgroundImage:
-          source: ""
-          alt: ""
+          source: ''
+          alt: ''
           positionVertical: top
           positionHorizontal: center
         rounded: true
@@ -685,8 +726,8 @@ pageBlocks:
     colorScheme: contrast
     backgroundColor: surface
     backgroundImage:
-      source: ""
-      alt: ""
+      source: ''
+      alt: ''
       positionVertical: top
       positionHorizontal: center
     rounded: false
