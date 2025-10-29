@@ -31,18 +31,7 @@ const mobileNavData = [
   class:list={["main-nav", className]}
   {...rest}
 >
-  {
-    logoSource && (
-      <SmartImage
-        data-editable="image"
-        data-prop-src="logoSource"
-        data-prop-alt="logoAlt"
-        source={logoSource}
-        alt={logoAlt}
-        editable={false}
-      />
-    )
-  }
+  {logoSource && <SmartImage source={logoSource} alt={logoAlt} editable={false} />}
   <div style=" align-items: center;display: flex;">
     <Bar navData={navData} class="desktop-main-nav" />
 

@@ -14,15 +14,7 @@ const { links = [], socials = [], footerText = "", logoSource, logoAlt } = Astro
   <Container maxContentWidth="2xl" paddingHorizontal="md" paddingVertical="lg">
     <div class="footer-content">
       <div class="content-container">
-        <SmartImage
-          data-editable="image"
-          data-prop-src="logoSource"
-          data-prop-alt="logoAlt"
-          source={logoSource}
-          alt={logoAlt}
-          class="footer-logo"
-          editable={false}
-        />
+        <SmartImage source={logoSource} alt={logoAlt} class="footer-logo" editable={false} />
       </div>
       <div class="content-container">
         <Bar navData={links} />
