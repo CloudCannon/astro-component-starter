@@ -820,7 +820,7 @@ _structures:
         value:
           _component: wrappers/grid
           label: ""
-          layout: center-aligned
+          layout: center
           minItemWidth: 280
           maxItemWidth: 400
           items: []
@@ -845,9 +845,9 @@ _structures:
             type: select
             options:
               values:
-                - id: start-aligned
+                - id: start
                   name: Left Aligned
-                - id: center-aligned
+                - id: center
                   name: Center Aligned
                 - id: uneven-columns
                   name: Uneven Columns
@@ -942,7 +942,7 @@ _structures:
             - key: label
             - Container
           subtext:
-            - template: A container containing {contentBlocks|array_length} content {"block"|pluralize=slides}
+            - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
             - Add content blocks to the container
         picker_preview:
           text: Container
@@ -1139,6 +1139,92 @@ _structures:
             comment: Minimum width of slides in pixels. Prevents slides from getting too small.
             type: number
       - &ref_3
+        label: Button Group
+        icon: rectangle
+        description: Arranges buttons side by side with consistent spacing.
+        value:
+          _component: wrappers/button-group
+          label: null
+          buttonBlocks: []
+          direction: row
+          alignX: start
+        preview:
+          text:
+            - key: label
+            - Button Group
+          subtext:
+            - template: A button group containing {buttonBlocks|array_length} {"button"|pluralize=buttonBlocks}
+            - Add one or more buttons to the button group
+        picker_preview:
+          text: Button Group
+          subtext: Controls the alignment and direction of buttons.
+          icon: rectangle
+        _inputs:
+          label:
+            comment: Optional label for the button group to help identify it in the editor.
+            type: text
+          buttonBlocks:
+            type: array
+            comment: Array of button components to render within the group.
+            options:
+              structures: _structures.buttonBlocks
+          direction:
+            comment: Direction of button layout.
+            type: select
+            options:
+              values:
+                - id: row
+                  name: Row
+                - id: column
+                  name: Column
+          alignX:
+            comment: The horizontal alignment of the buttons within the group.
+            type: select
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+      - &ref_4
+        label: Accordion
+        icon: expand_all
+        description: Interactive component for showing and hiding content panels.
+        value:
+          _component: wrappers/accordion
+          label: null
+          items: null
+          openFirst: false
+          singleOpen: false
+        preview:
+          text:
+            - key: label
+            - Accordion
+          subtext:
+            - template: An accordion containing {items|array_length} {"item"|pluralize=items}
+            - Add items to the accordion
+        picker_preview:
+          text: Accordion
+          subtext: Hides content behind an expandable menu.
+          icon: expand_all
+        _inputs:
+          label:
+            comment: Optional label for the accordion to help identify it in the editor.
+            type: text
+          items:
+            comment: The items to display in the accordion.
+            type: array
+            options:
+              structures: _structures.accordionItems
+          openFirst:
+            comment: Whether the first item will be open by default.
+            type: switch
+          singleOpen:
+            comment: Whether only one item can be open at a time within this accordion.
+            type: switch
+      - &ref_5
         label: Card
         icon: crop_square
         description: Groups related content within a section.
@@ -1306,93 +1392,261 @@ _structures:
           border:
             type: switch
             comment: Whether to apply a border to the card.
-      - &ref_4
-        label: Accordion
-        icon: expand_all
-        description: Interactive component for showing and hiding content panels.
+      - &ref_6
+        label: Spacer
+        icon: space_bar
+        description: Adds adjustable spacing between content sections.
         value:
-          _component: wrappers/accordion
-          label: null
-          items: null
-          openFirst: false
-          singleOpen: false
+          _component: elements/spacer
+          size: md
         preview:
-          text:
-            - key: label
-            - Accordion
-          subtext:
-            - template: An accordion containing {items|array_length} {"item"|pluralize=items}
-            - Add items to the accordion
+          text: Spacer
+          icon: space_bar
         picker_preview:
-          text: Accordion
-          subtext: Hides content behind an expandable menu.
-          icon: expand_all
+          text: Spacer
+          subtext: Gives space between content.
+          icon: space_bar
         _inputs:
-          label:
-            comment: Optional label for the accordion to help identify it in the editor.
-            type: text
-          items:
-            comment: The items to display in the accordion.
-            type: array
-            options:
-              structures: _structures.accordionItems
-          openFirst:
-            comment: Whether the first item will be open by default.
-            type: switch
-          singleOpen:
-            comment: Whether only one item can be open at a time within this accordion.
-            type: switch
-      - &ref_5
-        label: Button Group
-        icon: rectangle
-        description: Arranges buttons side by side with consistent spacing.
-        value:
-          _component: wrappers/button-group
-          label: null
-          buttonBlocks: []
-          direction: row
-          alignX: start
-        preview:
-          text:
-            - key: label
-            - Button Group
-          subtext:
-            - template: A button group containing {buttonBlocks|array_length} {"button"|pluralize=buttonBlocks}
-            - Add one or more buttons to the button group
-        picker_preview:
-          text: Button Group
-          subtext: Controls the alignment and direction of buttons.
-          icon: rectangle
-        _inputs:
-          label:
-            comment: Optional label for the button group to help identify it in the editor.
-            type: text
-          buttonBlocks:
-            type: array
-            comment: Array of button components to render within the group.
-            options:
-              structures: _structures.buttonBlocks
-          direction:
-            comment: Direction of button layout.
+          size:
             type: select
+            comment: The amount of space to add.
             options:
               values:
-                - id: row
-                  name: Row
-                - id: column
-                  name: Column
-          alignX:
-            comment: The horizontal alignment of the buttons within the group.
+                - id: xs
+                  name: Extra Small
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xl
+                - id: 3xl
+                  name: 3xl
+      - &ref_7
+        label: Smart Image
+        icon: image
+        description: Optimized image component for local and remote sources.
+        value:
+          _component: elements/smart-image
+          source: ""
+          alt: ""
+          rounded: false
+          aspectRatio: none
+          positionVertical: center
+          positionHorizontal: center
+        preview:
+          icon: image
+          text: Smart Image
+          subtext:
+            - key: alt
+            - key: source
+            - Add image source
+        picker_preview:
+          text: Smart Image
+          subtext: Optimized image with smart CDN detection.
+          icon: image
+        _inputs:
+          source:
+            type: image
+            comment: The URL or path to the image.
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ""
+          alt:
+            type: textarea
+            comment: Alternative text for accessibility.
+          rounded:
+            type: switch
+            comment: Whether to apply rounded corners to the image.
+          aspectRatio:
             type: select
+            comment: Set a fixed aspect ratio for the image.
             options:
               values:
-                - id: start
-                  name: Start
+                - id: none
+                  name: None
+                - id: square
+                  name: Square (1:1)
+                - id: landscape
+                  name: Landscape (4:3)
+                - id: portrait
+                  name: Portrait (3:4)
+                - id: widescreen
+                  name: Widescreen (16:9)
+          positionVertical:
+            type: select
+            comment: Vertical positioning of the image within the container (if aspect ratio is set).
+            options:
+              values:
+                - id: top
+                  name: Top
                 - id: center
                   name: Center
-                - id: end
-                  name: End
-      - &ref_6
+                - id: bottom
+                  name: Bottom
+          positionHorizontal:
+            type: select
+            comment: Horizontal positioning of the image within the container (if aspect ratio is set).
+            options:
+              values:
+                - id: left
+                  name: Left
+                - id: center
+                  name: Center
+                - id: right
+                  name: Right
+      - &ref_8
+        label: Smart Video
+        icon: videocam
+        description: Video component for YouTube, Vimeo, and HTML5 sources.
+        value:
+          _component: elements/smart-video
+          type: ""
+          id: ""
+          title: ""
+          source: ""
+          poster: ""
+        preview:
+          icon: videocam
+          text:
+            - template: Smart Video - {type}
+            - Smart Video
+          subtext:
+            - key: title
+            - key: source
+            - Add video
+        picker_preview:
+          text: Smart Video
+          subtext: Play a video from YouTube, Vimeo, or your local files.
+          icon: videocam
+        _inputs:
+          type:
+            type: select
+            options:
+              values:
+                - id: youtube
+                  name: YouTube
+                - id: vimeo
+                  name: Vimeo
+                - id: local-source
+                  name: Local Source
+          title:
+            type: text
+            comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
+          id:
+            type: text
+            comment: Used for externally hosted videos - Enter the YouTube or Vimeo id.
+          source:
+            type: file
+            label: Video Source
+            comment: Used for locally hosted videos - Must be mp4 as this is supported by all modern browsers.
+            options:
+              accepts_mime_types:
+                - video/mp4
+              paths:
+                uploads: public/videos
+                static: public
+          poster:
+            type: image
+            comment: Used for locally hosted videos - The image displayed before the video plays or while it is loading.
+            options:
+              accepts_mime_types:
+                - image/jpeg
+                - image/png
+                - image/webp
+              paths:
+                uploads: public/images
+                static: public
+      - &ref_9
+        label: Embed
+        icon: data_object
+        description: Responsive wrapper for third-party embeds.
+        value:
+          _component: elements/embed
+          source: ""
+          title: ""
+          aspectRatio: landscape
+        preview:
+          icon: data_object
+          text: Embed
+          subtext:
+            - key: title
+            - key: source
+            - Add embed source
+        picker_preview:
+          text: Embed
+          subtext: Embed content from other sources.
+          icon: data_object
+        _inputs:
+          source:
+            type: url
+            comment: The url source for the iframe.
+            options:
+              disable_upload_file: true
+              disable_direct_input: false
+              disable_upload_file_in_file_browser: true
+              hide_link_to_file: true
+              hide_link_to_page: false
+              hide_link_to_email_address: true
+              hide_link_to_telephone: true
+          aspectRatio:
+            type: select
+            comment: The aspect ratio of the embed.
+            options:
+              values:
+                - id: square
+                  name: Square (1:1)
+                - id: landscape
+                  name: Landscape (4:3)
+                - id: portrait
+                  name: Portrait (3:4)
+                - id: widescreen
+                  name: Widescreen (16:9)
+      - &ref_10
+        label: Divider
+        icon: horizontal_rule
+        description: Visual separator for dividing content sections.
+        value:
+          _component: elements/divider
+          paddingVertical: lg
+        preview:
+          text: Divider
+          subtext:
+            - key: paddingVertical
+            - Add a padding value
+          icon: horizontal_rule
+        picker_preview:
+          text: Divider
+          subtext: A horizontal line to separate content.
+          icon: horizontal_rule
+        _inputs:
+          paddingVertical:
+            comment: The space on the top and bottom of the horizontal line.
+            type: select
+            options:
+              values:
+                - id: none
+                  name: None
+                - id: xs
+                  name: Extra Small
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xl
+                - id: 3xl
+                  name: 3xl
+      - &ref_11
         label: Testimonial
         icon: format_quote
         description: Displays customer quotes and reviews.
@@ -1448,7 +1702,7 @@ _structures:
                   name: Start
                 - id: center
                   name: Center
-      - &ref_7
+      - &ref_12
         label: Simple Text
         icon: view_headline
         description: Paragraph for plain text content.
@@ -1508,7 +1762,7 @@ _structures:
                   name: 5xl
                 - id: 6xl
                   name: 6xl
-      - &ref_8
+      - &ref_13
         label: Rich text
         icon: edit_note
         description: Content component for markdown-formatted text.
@@ -1563,141 +1817,7 @@ _structures:
                 - id: end
                   name: End
             comment: The horizontal alignment of the rich text component.
-      - &ref_9
-        label: List
-        icon: list
-        description: Lists items with icons as markers.
-        value:
-          _component: typography/list
-          items: []
-          direction: vertical
-          alignX: start
-          size: md
-        preview:
-          subtext:
-            - template: Contains {items|array_length} list {'item'|pluralize=items}
-            - Add list items
-        picker_preview:
-          text: List
-          subtext: Displays items in a list with icons as markers.
-          icon: list
-        _inputs:
-          items:
-            type: array
-            options:
-              structures: _structures.listItems
-            comment: Array of list items.
-          direction:
-            type: select
-            options:
-              values:
-                - id: horizontal
-                  name: Horizontal
-                - id: vertical
-                  name: Vertical
-            comment: The direction in which list items are arranged.
-          alignX:
-            type: select
-            comment: The horizontal alignment of the list items.
-            options:
-              values:
-                - id: start
-                  name: Start
-                - id: center
-                  name: Center
-                - id: end
-                  name: End
-          size:
-            comment: Controls the size of the icon and text.
-            type: select
-            options:
-              values:
-                - id: xs
-                  name: Extra Small
-                - id: sm
-                  name: Small
-                - id: md
-                  name: Medium
-                - id: lg
-                  name: Large
-                - id: xl
-                  name: Extra Large
-                - id: 2xl
-                  name: 2xl
-      - &ref_10
-        label: Definition List
-        icon: dns
-        description: Lists term/definition pairs for structured content.
-        value:
-          _component: typography/definition-list
-          items: []
-          alignX: start
-        preview:
-          subtext:
-            - template: Contains {items|array_length} list {'item'|pluralize=items}
-            - Add definition list items
-        picker_preview:
-          text: Definition List
-          subtext: For displaying key-value pairs. Ideal for glossaries, opening times, etc.
-          icon: dns
-        _inputs:
-          items:
-            type: array
-            label: List Items
-            options:
-              structures: _structures.definitionListItems
-          alignX:
-            type: select
-            comment: The horizontal alignment of the definition list items.
-            options:
-              values:
-                - id: start
-                  name: Start
-                - id: center
-                  name: Center
-                - id: end
-                  name: End
-      - &ref_11
-        label: Counter
-        icon: speed
-        description: Animated counter for highlighting key stats or figures.
-        value:
-          _component: typography/counter
-          number: ""
-          prefix: ""
-          suffix: ""
-          alignX: start
-        preview:
-          subtext:
-            - template: "{prefix}{number}{suffix}"
-            - Add counter details
-        picker_preview:
-          text: Counter
-          subtext: Animated number that counts up when visible.
-          icon: speed
-        _inputs:
-          number:
-            type: number
-            comment: The number to count to.
-            options:
-              min: 0
-              step: 1
-          prefix:
-            comment: Text immediately before the number.
-          suffix:
-            comment: Text immediately after the number.
-          alignX:
-            comment: The horizontal alignment of the counter.
-            type: select
-            options:
-              values:
-                - id: start
-                  name: Start
-                - id: center
-                  name: Center
-                - id: end
-                  name: End
-      - &ref_12
+      - &ref_14
         label: Heading
         icon: title
         description: Headings for content hierarchy.
@@ -1785,7 +1905,141 @@ _structures:
                   name: Before
                 - id: after
                   name: After
-      - &ref_13
+      - &ref_15
+        label: List
+        icon: list
+        description: Lists items with icons as markers.
+        value:
+          _component: typography/list
+          items: []
+          direction: vertical
+          alignX: start
+          size: md
+        preview:
+          subtext:
+            - template: Contains {items|array_length} list {'item'|pluralize=items}
+            - Add list items
+        picker_preview:
+          text: List
+          subtext: Displays items in a list with icons as markers.
+          icon: list
+        _inputs:
+          items:
+            type: array
+            options:
+              structures: _structures.listItems
+            comment: Array of list items.
+          direction:
+            type: select
+            options:
+              values:
+                - id: horizontal
+                  name: Horizontal
+                - id: vertical
+                  name: Vertical
+            comment: The direction in which list items are arranged.
+          alignX:
+            type: select
+            comment: The horizontal alignment of the list items.
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+          size:
+            comment: Controls the size of the icon and text.
+            type: select
+            options:
+              values:
+                - id: xs
+                  name: Extra Small
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+                - id: xl
+                  name: Extra Large
+                - id: 2xl
+                  name: 2xl
+      - &ref_16
+        label: Definition List
+        icon: dns
+        description: Lists term/definition pairs for structured content.
+        value:
+          _component: typography/definition-list
+          items: []
+          alignX: start
+        preview:
+          subtext:
+            - template: Contains {items|array_length} list {'item'|pluralize=items}
+            - Add definition list items
+        picker_preview:
+          text: Definition List
+          subtext: For displaying key-value pairs. Ideal for glossaries, opening times, etc.
+          icon: dns
+        _inputs:
+          items:
+            type: array
+            label: List Items
+            options:
+              structures: _structures.definitionListItems
+          alignX:
+            type: select
+            comment: The horizontal alignment of the definition list items.
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+      - &ref_17
+        label: Counter
+        icon: speed
+        description: Animated counter for highlighting key stats or figures.
+        value:
+          _component: typography/counter
+          number: ""
+          prefix: ""
+          suffix: ""
+          alignX: start
+        preview:
+          subtext:
+            - template: "{prefix}{number}{suffix}"
+            - Add counter details
+        picker_preview:
+          text: Counter
+          subtext: Animated number that counts up when visible.
+          icon: speed
+        _inputs:
+          number:
+            type: number
+            comment: The number to count to.
+            options:
+              min: 0
+              step: 1
+          prefix:
+            comment: Text immediately before the number.
+          suffix:
+            comment: Text immediately after the number.
+          alignX:
+            comment: The horizontal alignment of the counter.
+            type: select
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+      - &ref_18
         label: Form
         icon: checklist_rtl
         description: Groups form fields into one submission area.
@@ -1810,260 +2064,6 @@ _structures:
             comment: The form blocks to render inside the form.
             options:
               structures: _structures.formBlocks
-      - &ref_14
-        label: Spacer
-        icon: space_bar
-        description: Adds adjustable spacing between content sections.
-        value:
-          _component: elements/spacer
-          size: md
-        preview:
-          text: Spacer
-          icon: space_bar
-        picker_preview:
-          text: Spacer
-          subtext: Gives space between content.
-          icon: space_bar
-        _inputs:
-          size:
-            type: select
-            comment: The amount of space to add.
-            options:
-              values:
-                - id: xs
-                  name: Extra Small
-                - id: sm
-                  name: Small
-                - id: md
-                  name: Medium
-                - id: lg
-                  name: Large
-                - id: xl
-                  name: Extra Large
-                - id: 2xl
-                  name: 2xl
-                - id: 3xl
-                  name: 3xl
-      - &ref_15
-        label: Smart Image
-        icon: image
-        description: Optimized image component for local and remote sources.
-        value:
-          _component: elements/smart-image
-          source: ""
-          alt: ""
-          rounded: false
-          aspectRatio: none
-          positionVertical: center
-          positionHorizontal: center
-        preview:
-          icon: image
-          text: Smart Image
-          subtext:
-            - key: alt
-            - key: source
-            - Add image source
-        picker_preview:
-          text: Smart Image
-          subtext: Optimized image with smart CDN detection.
-          icon: image
-        _inputs:
-          source:
-            type: image
-            comment: The URL or path to the image.
-            options:
-              paths:
-                uploads: src/assets/images
-                static: ""
-          alt:
-            type: textarea
-            comment: Alternative text for accessibility.
-          rounded:
-            type: switch
-            comment: Whether to apply rounded corners to the image.
-          aspectRatio:
-            type: select
-            comment: Set a fixed aspect ratio for the image.
-            options:
-              values:
-                - id: none
-                  name: None
-                - id: square
-                  name: Square (1:1)
-                - id: landscape
-                  name: Landscape (4:3)
-                - id: portrait
-                  name: Portrait (3:4)
-                - id: widescreen
-                  name: Widescreen (16:9)
-          positionVertical:
-            type: select
-            comment: Vertical positioning of the image within the container (if aspect ratio is set).
-            options:
-              values:
-                - id: top
-                  name: Top
-                - id: center
-                  name: Center
-                - id: bottom
-                  name: Bottom
-          positionHorizontal:
-            type: select
-            comment: Horizontal positioning of the image within the container (if aspect ratio is set).
-            options:
-              values:
-                - id: left
-                  name: Left
-                - id: center
-                  name: Center
-                - id: right
-                  name: Right
-      - &ref_16
-        label: Smart Video
-        icon: videocam
-        description: Video component for YouTube, Vimeo, and HTML5 sources.
-        value:
-          _component: elements/smart-video
-          type: ""
-          id: ""
-          title: ""
-          source: ""
-          poster: ""
-        preview:
-          icon: videocam
-          text:
-            - template: Smart Video - {type}
-            - Smart Video
-          subtext:
-            - key: title
-            - key: source
-            - Add video
-        picker_preview:
-          text: Smart Video
-          subtext: Play a video from YouTube, Vimeo, or your local files.
-          icon: videocam
-        _inputs:
-          type:
-            type: select
-            options:
-              values:
-                - id: youtube
-                  name: YouTube
-                - id: vimeo
-                  name: Vimeo
-                - id: local-source
-                  name: Local Source
-          title:
-            type: text
-            comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
-          id:
-            type: text
-            comment: Used for externally hosted videos - Enter the YouTube or Vimeo id.
-          source:
-            type: file
-            label: Video Source
-            comment: Used for locally hosted videos - Must be mp4 as this is supported by all modern browsers.
-            options:
-              accepts_mime_types:
-                - video/mp4
-              paths:
-                uploads: public/videos
-                static: public
-          poster:
-            type: image
-            comment: Used for locally hosted videos - The image displayed before the video plays or while it is loading.
-            options:
-              accepts_mime_types:
-                - image/jpeg
-                - image/png
-                - image/webp
-              paths:
-                uploads: public/images
-                static: public
-      - &ref_17
-        label: Embed
-        icon: data_object
-        description: Responsive wrapper for third-party embeds.
-        value:
-          _component: elements/embed
-          source: ""
-          title: ""
-          aspectRatio: landscape
-        preview:
-          icon: data_object
-          text: Embed
-          subtext:
-            - key: title
-            - key: source
-            - Add embed source
-        picker_preview:
-          text: Embed
-          subtext: Embed content from other sources.
-          icon: data_object
-        _inputs:
-          source:
-            type: url
-            comment: The url source for the iframe.
-            options:
-              disable_upload_file: true
-              disable_direct_input: false
-              disable_upload_file_in_file_browser: true
-              hide_link_to_file: true
-              hide_link_to_page: false
-              hide_link_to_email_address: true
-              hide_link_to_telephone: true
-          aspectRatio:
-            type: select
-            comment: The aspect ratio of the embed.
-            options:
-              values:
-                - id: square
-                  name: Square (1:1)
-                - id: landscape
-                  name: Landscape (4:3)
-                - id: portrait
-                  name: Portrait (3:4)
-                - id: widescreen
-                  name: Widescreen (16:9)
-      - &ref_18
-        label: Divider
-        icon: horizontal_rule
-        description: Visual separator for dividing content sections.
-        value:
-          _component: elements/divider
-          paddingVertical: lg
-        preview:
-          text: Divider
-          subtext:
-            - key: paddingVertical
-            - Add a padding value
-          icon: horizontal_rule
-        picker_preview:
-          text: Divider
-          subtext: A horizontal line to separate content.
-          icon: horizontal_rule
-        _inputs:
-          paddingVertical:
-            comment: The space on the top and bottom of the horizontal line.
-            type: select
-            options:
-              values:
-                - id: none
-                  name: None
-                - id: xs
-                  name: Extra Small
-                - id: sm
-                  name: Small
-                - id: md
-                  name: Medium
-                - id: lg
-                  name: Large
-                - id: xl
-                  name: Extra Large
-                - id: 2xl
-                  name: 2xl
-                - id: 3xl
-                  name: 3xl
   carouselBlocks:
     id_key: _component
     style: modal
@@ -2116,6 +2116,7 @@ _structures:
     values:
       - label: Grid Item
         value:
+          _component: wrappers/grid/grid-item
           contentBlocks: []
         preview:
           icon: grid_view
@@ -2124,6 +2125,8 @@ _structures:
             - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
             - Add one or more content blocks to the grid item
         _inputs:
+          _component:
+            hidden: true
           contentBlocks:
             type: array
             comment: Content blocks to render within this grid item.
@@ -2199,6 +2202,25 @@ _structures:
           subtext:
             - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
             - Add one or more content blocks to the grid item
+  cardBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - *ref_3
+      - *ref_4
+      - *ref_6
+      - *ref_7
+      - *ref_8
+      - *ref_9
+      - *ref_10
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+      - *ref_16
+      - *ref_17
+      - *ref_18
   gridItemBlocks:
     id_key: _component
     style: modal
@@ -2206,6 +2228,24 @@ _structures:
       - *ref_3
       - *ref_4
       - *ref_5
+      - *ref_6
+      - *ref_7
+      - *ref_8
+      - *ref_9
+      - *ref_10
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+      - *ref_16
+      - *ref_17
+      - *ref_18
+  accordionBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - *ref_3
       - *ref_6
       - *ref_7
       - *ref_8
@@ -2236,106 +2276,6 @@ _structures:
             type: array
             options:
               structures: _structures.accordionBlocks
-  cardBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - *ref_4
-      - *ref_5
-      - *ref_6
-      - *ref_7
-      - *ref_8
-      - *ref_9
-      - *ref_10
-      - *ref_11
-      - *ref_12
-      - *ref_13
-      - *ref_14
-      - *ref_15
-      - *ref_16
-      - *ref_17
-      - *ref_18
-  accordionBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - *ref_5
-      - *ref_6
-      - *ref_7
-      - *ref_8
-      - *ref_9
-      - *ref_10
-      - *ref_11
-      - *ref_12
-      - *ref_13
-      - *ref_14
-      - *ref_15
-      - *ref_16
-      - *ref_17
-      - *ref_18
-  listItems:
-    id_key: _component
-    style: modal
-    values:
-      - label: List Item
-        value:
-          text: ""
-          icon: ""
-        preview:
-          icon: text_fields
-          image:
-            - template: src/icons/{icon}.svg
-        _inputs:
-          text:
-            type: markdown
-            comment: The text to display in the list item.
-            options:
-              bold: true
-              italic: true
-              link: true
-              strike: true
-              subscript: true
-              superscript: true
-              underline: true
-              undo: true
-              redo: true
-              removeformat: true
-              copyformatting: true
-          icon:
-            type: select
-            comment: The name of the icon to display from the icon library.
-            options:
-              values: _select_data.icons
-              preview:
-                text:
-                  - key: name
-                image:
-                  - template: src/icons/{id}.svg
-  definitionListItems:
-    id_key: _component
-    style: modal
-    values:
-      - label: Definition List Item
-        value:
-          title: ""
-          text: ""
-        preview:
-          icon: list
-          text:
-            - key: title
-            - Definition List Item
-          subtext:
-            - key: text
-        _inputs:
-          title:
-            type: text
-            comment: A bolded title for the list item.
-            options:
-              required: true
-              required_message: List item must contain a title.
-          text:
-            type: textarea
-            comment: The text content of the list item.
   navItemLevel1:
     id_key: _component
     style: modal
@@ -2428,6 +2368,156 @@ _structures:
           link:
             type: text
             comment: URL link to the social media profile.
+  buttonBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - label: Button
+        icon: variables
+        description: Clickable button for calls-to-action and navigation.
+        value:
+          _component: elements/button
+          text: My Button
+          link: ""
+          iconName: ""
+          iconPosition: before
+          hideText: false
+          variant: primary
+          size: md
+        preview:
+          icon: variables
+          text:
+            - key: text
+            - Button
+          subtext:
+            - key: link
+            - key: iconName
+            - Add button content
+        picker_preview:
+          text: Button
+          subtext: A clickable element that navigates to another page or triggers an action.
+          icon: variables
+        _inputs:
+          text:
+            type: text
+            comment: The text that goes inside the button.
+            hidden: hideText
+          link:
+            type: url
+            comment: The URL to which the button should link.
+          iconName:
+            type: select
+            comment: The name of the icon to display. See the Icon component documentation for more information.
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+          iconPosition:
+            type: select
+            comment: The position of the icon relative to the text.
+            hidden: "!iconName"
+            options:
+              values:
+                - id: before
+                  name: Before
+                - id: after
+                  name: After
+          hideText:
+            type: switch
+            hidden: "!iconName"
+            comment: Whether to hide the button text and show only the icon.
+          variant:
+            type: select
+            comment: The presentation of button.
+            options:
+              values:
+                - id: primary
+                  name: Primary
+                - id: secondary
+                  name: Secondary
+                - id: tertiary
+                  name: Tertiary
+                - id: ghost
+                  name: Ghost
+                - id: text
+                  name: Text
+          size:
+            type: select
+            comment: The size of the button.
+            options:
+              values:
+                - id: sm
+                  name: Small
+                - id: md
+                  name: Medium
+                - id: lg
+                  name: Large
+  listItems:
+    id_key: _component
+    style: modal
+    values:
+      - label: List Item
+        value:
+          text: ""
+          icon: ""
+        preview:
+          icon: text_fields
+          image:
+            - template: src/icons/{icon}.svg
+        _inputs:
+          text:
+            type: markdown
+            comment: The text to display in the list item.
+            options:
+              bold: true
+              italic: true
+              link: true
+              strike: true
+              subscript: true
+              superscript: true
+              underline: true
+              undo: true
+              redo: true
+              removeformat: true
+              copyformatting: true
+          icon:
+            type: select
+            comment: The name of the icon to display from the icon library.
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+  definitionListItems:
+    id_key: _component
+    style: modal
+    values:
+      - label: Definition List Item
+        value:
+          title: ""
+          text: ""
+        preview:
+          icon: list
+          text:
+            - key: title
+            - Definition List Item
+          subtext:
+            - key: text
+        _inputs:
+          title:
+            type: text
+            comment: A bolded title for the list item.
+            options:
+              required: true
+              required_message: List item must contain a title.
+          text:
+            type: textarea
+            comment: The text content of the list item.
   formBlocks:
     id_key: _component
     style: modal
@@ -2944,90 +3034,3 @@ _structures:
           checked:
             type: switch
             comment: Whether the field is checked by default.
-  buttonBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - label: Button
-        icon: variables
-        description: Clickable button for calls-to-action and navigation.
-        value:
-          _component: elements/button
-          text: ""
-          link: ""
-          iconName: ""
-          iconPosition: before
-          hideText: false
-          variant: primary
-          size: md
-        preview:
-          icon: variables
-          text:
-            - key: text
-            - Button
-          subtext:
-            - key: link
-            - key: iconName
-            - Add button content
-        picker_preview:
-          text: Button
-          subtext: A clickable element that navigates to another page or triggers an action.
-          icon: variables
-        _inputs:
-          text:
-            type: text
-            comment: The text that goes inside the button.
-            hidden: hideText
-          link:
-            type: url
-            comment: The URL to which the button should link.
-          iconName:
-            type: select
-            comment: The name of the icon to display. See the Icon component documentation for more information.
-            options:
-              values: _select_data.icons
-              preview:
-                text:
-                  - key: name
-                image:
-                  - template: src/icons/{id}.svg
-          iconPosition:
-            type: select
-            comment: The position of the icon relative to the text.
-            hidden: "!iconName"
-            options:
-              values:
-                - id: before
-                  name: Before
-                - id: after
-                  name: After
-          hideText:
-            type: switch
-            hidden: "!iconName"
-            comment: Whether to hide the button text and show only the icon.
-          variant:
-            type: select
-            comment: The presentation of button.
-            options:
-              values:
-                - id: primary
-                  name: Primary
-                - id: secondary
-                  name: Secondary
-                - id: tertiary
-                  name: Tertiary
-                - id: ghost
-                  name: Ghost
-                - id: text
-                  name: Text
-          size:
-            type: select
-            comment: The size of the button.
-            options:
-              values:
-                - id: sm
-                  name: Small
-                - id: md
-                  name: Medium
-                - id: lg
-                  name: Large
