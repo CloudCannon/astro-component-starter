@@ -22,6 +22,31 @@ pageBlocks:
           that scales.
         alignX: center
         size: ''
+      - _component: elements/spacer
+        size: 2xl
+      - _component: wrappers/button-group
+        label:
+        buttonBlocks:
+          - _component: elements/button
+            text: Demo CloudCannon
+            link: ''
+            iconName: ''
+            iconPosition: before
+            hideText: false
+            variant: primary
+            size: md
+          - _component: elements/button
+            text: Start with a trial
+            link: ''
+            iconName: arrow-right
+            iconPosition: before
+            hideText: false
+            variant: tertiary
+            size: md
+        direction: row
+        alignX: center
+      - _component: elements/spacer
+        size: 2xl
       - _component: elements/smart-image
         source: /src/assets/images/performance-dashboard.png
         alt: Performance Dashboard
