@@ -1139,6 +1139,92 @@ _structures:
             comment: Minimum width of slides in pixels. Prevents slides from getting too small.
             type: number
       - &ref_3
+        label: Button Group
+        icon: rectangle
+        description: Arranges buttons side by side with consistent spacing.
+        value:
+          _component: wrappers/button-group
+          label: null
+          buttonBlocks: []
+          direction: row
+          alignX: start
+        preview:
+          text:
+            - key: label
+            - Button Group
+          subtext:
+            - template: A button group containing {buttonBlocks|array_length} {"button"|pluralize=buttonBlocks}
+            - Add one or more buttons to the button group
+        picker_preview:
+          text: Button Group
+          subtext: Controls the alignment and direction of buttons.
+          icon: rectangle
+        _inputs:
+          label:
+            comment: Optional label for the button group to help identify it in the editor.
+            type: text
+          buttonBlocks:
+            type: array
+            comment: Array of button components to render within the group.
+            options:
+              structures: _structures.buttonBlocks
+          direction:
+            comment: Direction of button layout.
+            type: select
+            options:
+              values:
+                - id: row
+                  name: Row
+                - id: column
+                  name: Column
+          alignX:
+            comment: The horizontal alignment of the buttons within the group.
+            type: select
+            options:
+              values:
+                - id: start
+                  name: Start
+                - id: center
+                  name: Center
+                - id: end
+                  name: End
+      - &ref_4
+        label: Accordion
+        icon: expand_all
+        description: Interactive component for showing and hiding content panels.
+        value:
+          _component: wrappers/accordion
+          label: null
+          items: null
+          openFirst: false
+          singleOpen: false
+        preview:
+          text:
+            - key: label
+            - Accordion
+          subtext:
+            - template: An accordion containing {items|array_length} {"item"|pluralize=items}
+            - Add items to the accordion
+        picker_preview:
+          text: Accordion
+          subtext: Hides content behind an expandable menu.
+          icon: expand_all
+        _inputs:
+          label:
+            comment: Optional label for the accordion to help identify it in the editor.
+            type: text
+          items:
+            comment: The items to display in the accordion.
+            type: array
+            options:
+              structures: _structures.accordionItems
+          openFirst:
+            comment: Whether the first item will be open by default.
+            type: switch
+          singleOpen:
+            comment: Whether only one item can be open at a time within this accordion.
+            type: switch
+      - &ref_5
         label: Card
         icon: crop_square
         description: Groups related content within a section.
@@ -1306,92 +1392,6 @@ _structures:
           border:
             type: switch
             comment: Whether to apply a border to the card.
-      - &ref_4
-        label: Button Group
-        icon: rectangle
-        description: Arranges buttons side by side with consistent spacing.
-        value:
-          _component: wrappers/button-group
-          label: null
-          buttonBlocks: []
-          direction: row
-          alignX: start
-        preview:
-          text:
-            - key: label
-            - Button Group
-          subtext:
-            - template: A button group containing {buttonBlocks|array_length} {"button"|pluralize=buttonBlocks}
-            - Add one or more buttons to the button group
-        picker_preview:
-          text: Button Group
-          subtext: Controls the alignment and direction of buttons.
-          icon: rectangle
-        _inputs:
-          label:
-            comment: Optional label for the button group to help identify it in the editor.
-            type: text
-          buttonBlocks:
-            type: array
-            comment: Array of button components to render within the group.
-            options:
-              structures: _structures.buttonBlocks
-          direction:
-            comment: Direction of button layout.
-            type: select
-            options:
-              values:
-                - id: row
-                  name: Row
-                - id: column
-                  name: Column
-          alignX:
-            comment: The horizontal alignment of the buttons within the group.
-            type: select
-            options:
-              values:
-                - id: start
-                  name: Start
-                - id: center
-                  name: Center
-                - id: end
-                  name: End
-      - &ref_5
-        label: Accordion
-        icon: expand_all
-        description: Interactive component for showing and hiding content panels.
-        value:
-          _component: wrappers/accordion
-          label: null
-          items: null
-          openFirst: false
-          singleOpen: false
-        preview:
-          text:
-            - key: label
-            - Accordion
-          subtext:
-            - template: An accordion containing {items|array_length} {"item"|pluralize=items}
-            - Add items to the accordion
-        picker_preview:
-          text: Accordion
-          subtext: Hides content behind an expandable menu.
-          icon: expand_all
-        _inputs:
-          label:
-            comment: Optional label for the accordion to help identify it in the editor.
-            type: text
-          items:
-            comment: The items to display in the accordion.
-            type: array
-            options:
-              structures: _structures.accordionItems
-          openFirst:
-            comment: Whether the first item will be open by default.
-            type: switch
-          singleOpen:
-            comment: Whether only one item can be open at a time within this accordion.
-            type: switch
       - &ref_6
         label: Testimonial
         icon: format_quote
@@ -2152,6 +2152,43 @@ _structures:
                   name: 2xl
                 - id: 3xl
                   name: 3xl
+      - label: Feature
+        icon: feature
+        description: A two-column feature section with heading, subtitle, and image.
+        value:
+          _component: blocks/feature
+          heading: ""
+          subtitle: ""
+          image: ""
+          reverse: false
+        preview:
+          text:
+            - key: heading
+            - Feature
+          subtext:
+            - key: subtitle
+            - Add content to the feature
+        picker_preview:
+          text: Feature
+          subtext: A feature section with heading, subtitle, and image in a two-column layout.
+          icon: feature
+        _inputs:
+          heading:
+            type: text
+            comment: Main heading text for the feature section.
+          subtitle:
+            type: text
+            comment: Subtitle text displayed below the main heading.
+          image:
+            type: image
+            comment: Feature image to display alongside the content.
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ""
+          reverse:
+            type: switch
+            comment: Whether to reverse the order of content and image (image first, content second).
   carouselBlocks:
     id_key: _component
     style: modal
@@ -2377,6 +2414,26 @@ _structures:
           subtext:
             - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
             - Add one or more content blocks to the grid item
+  cardBlocks:
+    id_key: _component
+    style: modal
+    values:
+      - *ref_3
+      - *ref_4
+      - *ref_6
+      - *ref_7
+      - *ref_8
+      - *ref_9
+      - *ref_10
+      - *ref_11
+      - *ref_12
+      - *ref_13
+      - *ref_14
+      - *ref_15
+      - *ref_16
+      - *ref_17
+      - *ref_18
+      - *ref_19
   gridItemBlocks:
     id_key: _component
     style: modal
@@ -2398,31 +2455,11 @@ _structures:
       - *ref_17
       - *ref_18
       - *ref_19
-  cardBlocks:
-    id_key: _component
-    style: modal
-    values:
-      - *ref_4
-      - *ref_5
-      - *ref_6
-      - *ref_7
-      - *ref_8
-      - *ref_9
-      - *ref_10
-      - *ref_11
-      - *ref_12
-      - *ref_13
-      - *ref_14
-      - *ref_15
-      - *ref_16
-      - *ref_17
-      - *ref_18
-      - *ref_19
   accordionBlocks:
     id_key: _component
     style: modal
     values:
-      - *ref_4
+      - *ref_3
       - *ref_6
       - *ref_7
       - *ref_8
@@ -2940,45 +2977,6 @@ _structures:
           multiple:
             type: switch
             comment: Whether multiple files can be selected.
-      - label: Date
-        icon: calendar
-        description: Form field for selecting a date.
-        value:
-          _component: forms/date
-          label: null
-          name: null
-          required: false
-          value: null
-          min: null
-          max: null
-        preview:
-          text:
-            - key: label
-            - Date
-          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation
-        picker_preview:
-          text: Date
-          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation.
-          icon: calendar
-        _inputs:
-          label:
-            type: text
-            comment: The label text for the date field.
-          name:
-            type: text
-            comment: The name attribute for the date field.
-          required:
-            type: switch
-            comment: Whether the field is required.
-          value:
-            type: date
-            comment: The default value for the date field (ISO8601 format).
-          min:
-            type: date
-            comment: The minimum date allowed (ISO8601 format).
-          max:
-            type: date
-            comment: The maximum date allowed (ISO8601 format).
       - label: Choice Group
         icon: check_box
         description: Form field for selecting one or more options.
@@ -3038,6 +3036,45 @@ _structures:
           multiple:
             type: switch
             comment: When true, uses checkboxes for multiple selection. When false, uses radio buttons for single selection.
+      - label: Date
+        icon: calendar
+        description: Form field for selecting a date.
+        value:
+          _component: forms/date
+          label: null
+          name: null
+          required: false
+          value: null
+          min: null
+          max: null
+        preview:
+          text:
+            - key: label
+            - Date
+          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation
+        picker_preview:
+          text: Date
+          subtext: A date input field with an optional label, date constraints, and ISO8601 format validation.
+          icon: calendar
+        _inputs:
+          label:
+            type: text
+            comment: The label text for the date field.
+          name:
+            type: text
+            comment: The name attribute for the date field.
+          required:
+            type: switch
+            comment: Whether the field is required.
+          value:
+            type: date
+            comment: The default value for the date field (ISO8601 format).
+          min:
+            type: date
+            comment: The minimum date allowed (ISO8601 format).
+          max:
+            type: date
+            comment: The maximum date allowed (ISO8601 format).
   selectOptions:
     id_key: _component
     style: modal
