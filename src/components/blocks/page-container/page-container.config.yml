@@ -8,7 +8,6 @@ value:
   contentBlocks: []
   backgroundColor: base
   colorScheme: default
-  class: ""
 preview:
   text:
     - key: class
@@ -26,7 +25,7 @@ _inputs:
     type: array
     comment: "Array of content blocks to render within the page container."
     options:
-      structures: _structures.pageBlocks
+      structures: _structures.containerBlocks
   backgroundColor:
     type: select
     comment: "Background color for the page container."
