@@ -2,64 +2,35 @@
 _schema: default
 title: Low Maintenance
 pageBlocks:
-  - _component: wrappers/container
-    label: hero
-    contentBlocks:
-      - _component: typography/simple-text
-        text: LOW MAINTENANCE WEBSITES
-        alignX: center
-        size: default
-      - _component: typography/heading
-        text: Maintain less. Build more.
-        level: h1
-        size: default
-        alignX: center
-        iconName:
+  - _component: blocks/main-hero
+    eyebrow: LOW MAINTENANCE WEBSITES
+    heading: Maintain less. Build more.
+    subtitle: >-
+      Shift your dev time from maintenance to growth, with no forced updates
+      or database headaches.
+    buttonBlocks:
+      - _component: elements/button
+        text: Demo CloudCannon
+        link: ""
+        iconName: ""
         iconPosition: before
-      - _component: typography/simple-text
-        text: >-
-          Shift your dev time from maintenance to growth, with no forced updates
-          or database headaches.
-        alignX: center
-        size: default
-      - _component: wrappers/button-group
-        label:
-        buttonBlocks:
-          - _component: elements/button
-            text: Demo CloudCannon
-            link: ''
-            iconName: ''
-            iconPosition: before
-            hideText: false
-            variant: primary
-            size: md
-          - _component: elements/button
-            text: Start with a trial
-            link: ''
-            iconName: arrow-right
-            iconPosition: after
-            hideText: false
-            variant: tertiary
-            size: md
-        direction: row
-        alignX: center
-    maxContentWidth: 2xl
-    paddingHorizontal: 2xl
-    paddingVertical: md
-    colorScheme: default
-    backgroundColor: base
-    backgroundImage:
-      source: ''
-      alt: ''
-      positionVertical: top
-      positionHorizontal: center
-    rounded: false
+        hideText: false
+        variant: primary
+        size: md
+      - _component: elements/button
+        text: Start with a trial
+        link: ""
+        iconName: arrow-right
+        iconPosition: after
+        hideText: false
+        variant: tertiary
+        size: md
   - _component: wrappers/container
     label: Below hero
     contentBlocks:
       - _component: elements/smart-image
         source: /src/assets/images/enterprise-hero-1.png
-        alt: ''
+        alt: ""
         rounded: false
         aspectRatio: none
         positionVertical: center
@@ -83,8 +54,8 @@ pageBlocks:
     colorScheme: default
     backgroundColor: base
     backgroundImage:
-      source: ''
-      alt: ''
+      source: ""
+      alt: ""
       positionVertical: top
       positionHorizontal: center
     rounded: false
@@ -92,7 +63,7 @@ pageBlocks:
     label: Features
     contentBlocks:
       - _component: wrappers/split
-        label: ''
+        label: ""
         firstColumnContentBlocks:
           - _component: typography/heading
             text: Set it and forget it
@@ -125,7 +96,7 @@ pageBlocks:
         verticalAlignment: center
         reverse: false
       - _component: wrappers/split
-        label: ''
+        label: ""
         firstColumnContentBlocks:
           - _component: typography/heading
             text: New site? No problem.
@@ -200,13 +171,13 @@ pageBlocks:
     colorScheme: default
     backgroundColor: accent
     backgroundImage:
-      source: ''
-      alt: ''
+      source: ""
+      alt: ""
       positionVertical: top
       positionHorizontal: center
     rounded: false
   - _component: wrappers/container
-    label: ''
+    label: ""
     contentBlocks:
       - _component: typography/heading
         text: For teams tired of digital babysitting
@@ -218,7 +189,7 @@ pageBlocks:
       - _component: elements/spacer
         size: xl
       - _component: wrappers/grid
-        label: ''
+        label: ""
         layout: center
         minItemWidth: 280
         maxItemWidth: 400
@@ -260,7 +231,7 @@ pageBlocks:
                 beforeContentBlocks:
                   - _component: elements/smart-image
                     source: /src/assets/images/devs-greydots-1.png
-                    alt: ''
+                    alt: ""
                     rounded: false
                     aspectRatio: none
                     positionVertical: center
@@ -303,7 +274,7 @@ pageBlocks:
                 beforeContentBlocks:
                   - _component: elements/smart-image
                     source: /src/assets/images/agency-card-final-1.png
-                    alt: ''
+                    alt: ""
                     rounded: false
                     aspectRatio: none
                     positionVertical: center
@@ -345,7 +316,7 @@ pageBlocks:
                 beforeContentBlocks:
                   - _component: elements/smart-image
                     source: /src/assets/images/agency-card-final-1.png
-                    alt: ''
+                    alt: ""
                     rounded: false
                     aspectRatio: none
                     positionVertical: center
@@ -355,10 +326,10 @@ pageBlocks:
       - _component: elements/spacer
         size: xl
       - _component: wrappers/container
-        label: ''
+        label: ""
         contentBlocks:
           - _component: wrappers/split
-            label: ''
+            label: ""
             firstColumnContentBlocks:
               - _component: typography/heading
                 text: Escape the updates
@@ -378,7 +349,7 @@ pageBlocks:
                 buttonBlocks:
                   - _component: elements/button
                     text: Free your team
-                    link: ''
+                    link: ""
                     iconName: arrow-right
                     iconPosition: after
                     hideText: false
@@ -405,8 +376,8 @@ pageBlocks:
         colorScheme: default
         backgroundColor: base
         backgroundImage:
-          source: ''
-          alt: ''
+          source: ""
+          alt: ""
           positionVertical: top
           positionHorizontal: center
         rounded: true
@@ -416,8 +387,8 @@ pageBlocks:
     colorScheme: contrast
     backgroundColor: base
     backgroundImage:
-      source: ''
-      alt: ''
+      source: ""
+      alt: ""
       positionVertical: top
       positionHorizontal: center
     rounded: false

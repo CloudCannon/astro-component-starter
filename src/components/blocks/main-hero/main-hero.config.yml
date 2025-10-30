@@ -1,0 +1,37 @@
+label: Main Hero
+icon: hero
+description: "Main hero section for landing pages."
+structures: [pageBlocks]
+value:
+  _component: blocks/main-hero
+  eyebrow: ""
+  heading: ""
+  subtitle: ""
+  buttonBlocks: []
+preview:
+  text:
+    - key: heading
+    - Main Hero
+  subtext:
+    - key: subtitle
+    - Add content to the main hero
+picker_preview:
+  text: Main Hero
+  subtext: "Main hero section with eyebrow, heading, subtitle, and CTA buttons."
+  icon: hero
+
+_inputs:
+  eyebrow:
+    type: text
+    comment: "Eyebrow text displayed above the main heading."
+  heading:
+    type: text
+    comment: "Main heading text for the hero section."
+  subtitle:
+    type: text
+    comment: "Subtitle text displayed below the main heading."
+  buttonBlocks:
+    type: array
+    comment: "Array of button components for call-to-action buttons. See the Button component documentation for more information."
+    options:
+      structures: _structures.buttonBlocks
