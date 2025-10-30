@@ -11,15 +11,15 @@ pageBlocks:
     buttonBlocks:
       - _component: elements/button
         text: Demo CloudCannon
-        link: ""
-        iconName: ""
+        link: ''
+        iconName: ''
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: elements/button
         text: Start with a trial
-        link: ""
+        link: ''
         iconName: arrow-right
         iconPosition: after
         hideText: false
@@ -87,7 +87,7 @@ pageBlocks:
         size: default
       - _component: elements/smart-image
         source: /src/assets/images/launchasfast-final.png
-        alt: ""
+        alt: ''
         rounded: false
         aspectRatio: none
         positionVertical: center
@@ -106,229 +106,15 @@ pageBlocks:
         alignX: center
     backgroundColor: accent
     colorScheme: default
-  - _component: wrappers/container
-    label: ""
-    contentBlocks:
-      - _component: typography/heading
-        text: For teams tired of digital babysitting
-        level: h2
-        size: default
-        alignX: center
-        iconName:
-        iconPosition: before
-      - _component: elements/spacer
-        size: xl
-      - _component: wrappers/grid
-        label: ""
-        layout: center
-        minItemWidth: 280
-        maxItemWidth: 400
-        items:
-          - _component: wrappers/grid/grid-item
-            contentBlocks:
-              - _component: wrappers/card
-                label:
-                contentBlocks:
-                  - _component: typography/heading
-                    text: Developers
-                    level: h2
-                    size: default
-                    alignX: start
-                    iconName:
-                    iconPosition: before
-                  - _component: typography/rich-text
-                    text: >-
-                      Focus on building features, not emergency fixes.
-
-
-                      [Build features, not fixes
-                      →](https://cloudcannon.com/for-developers/ "For
-                      developers")
-                    alignX: start
-                paddingHorizontal: md
-                paddingVertical: md
-                colorScheme: default
-                backgroundColor: base
-                backgroundImage:
-                  source:
-                  alt:
-                  positionVertical: top
-                  positionHorizontal: center
-                link:
-                rounded: true
-                border: false
-                showBeforeAfter: true
-                beforeContentBlocks:
-                  - _component: elements/smart-image
-                    source: /src/assets/images/devs-greydots-1.png
-                    alt: ""
-                    rounded: false
-                    aspectRatio: none
-                    positionVertical: center
-                    positionHorizontal: center
-                afterContentBlocks: []
-          - _component: wrappers/grid/grid-item
-            contentBlocks:
-              - _component: wrappers/card
-                label:
-                contentBlocks:
-                  - _component: typography/heading
-                    text: Digital agencies
-                    level: h2
-                    size: default
-                    alignX: start
-                    iconName:
-                    iconPosition: before
-                  - _component: typography/rich-text
-                    text: >-
-                      Your client sites stay healthy — without emergency
-                      interventions.
-
-
-                      [Join the Partner Program
-                      →](https://cloudcannon.com/partner-program/)
-                    alignX: start
-                paddingHorizontal: md
-                paddingVertical: md
-                colorScheme: default
-                backgroundColor: base
-                backgroundImage:
-                  source:
-                  alt:
-                  positionVertical: top
-                  positionHorizontal: center
-                link:
-                rounded: true
-                border: false
-                showBeforeAfter: true
-                beforeContentBlocks:
-                  - _component: elements/smart-image
-                    source: /src/assets/images/agency-card-final-1.png
-                    alt: ""
-                    rounded: false
-                    aspectRatio: none
-                    positionVertical: center
-                    positionHorizontal: center
-                afterContentBlocks: []
-          - _component: wrappers/grid/grid-item
-            contentBlocks:
-              - _component: wrappers/card
-                label:
-                contentBlocks:
-                  - _component: typography/heading
-                    text: Internal teams
-                    level: h2
-                    size: default
-                    alignX: start
-                    iconName:
-                    iconPosition: before
-                  - _component: typography/rich-text
-                    text: >-
-                      Your web portfolio can scale without scaling the cost.
-
-
-                      [Manage content at scale
-                      →](https://cloudcannon.com/enterprise/)
-                    alignX: start
-                paddingHorizontal: md
-                paddingVertical: md
-                colorScheme: default
-                backgroundColor: base
-                backgroundImage:
-                  source:
-                  alt:
-                  positionVertical: top
-                  positionHorizontal: center
-                link:
-                rounded: true
-                border: false
-                showBeforeAfter: true
-                beforeContentBlocks:
-                  - _component: elements/smart-image
-                    source: /src/assets/images/agency-card-final-1.png
-                    alt: ""
-                    rounded: false
-                    aspectRatio: none
-                    positionVertical: center
-                    positionHorizontal: center
-                afterContentBlocks: []
-        gap: md
-      - _component: elements/spacer
-        size: xl
-      - _component: wrappers/container
-        label: ""
-        contentBlocks:
-          - _component: wrappers/split
-            label: ""
-            firstColumnContentBlocks:
-              - _component: typography/heading
-                text: Escape the updates
-                level: h2
-                size: 6xl
-                alignX: start
-                iconName:
-                iconPosition: before
-              - _component: typography/simple-text
-                text: >-
-                  See how CloudCannon lets you focus on building features that
-                  move the needle.
-                alignX: start
-                size: default
-              - _component: wrappers/button-group
-                label:
-                buttonBlocks:
-                  - _component: elements/button
-                    text: Free your team
-                    link: ""
-                    iconName: arrow-right
-                    iconPosition: after
-                    hideText: false
-                    variant: primary
-                    size: md
-                direction: row
-                alignX: start
-            secondColumnContentBlocks:
-              - _component: elements/smart-image
-                source: /src/assets/images/liv-portrait.png
-                alt: Liv
-                rounded: false
-                aspectRatio: none
-                positionVertical: center
-                positionHorizontal: center
-            distributionMode: half
-            fixedWidth:
-            minSplitWidth: 0
-            verticalAlignment: center
-            reverse: false
-        maxContentWidth: 2xl
-        paddingHorizontal: 2xl
-        paddingVertical: 2xl
-        colorScheme: default
-        backgroundColor: base
-        backgroundImage:
-          source: ""
-          alt: ""
-          positionVertical: top
-          positionHorizontal: center
-        rounded: true
-    maxContentWidth: 2xl
-    paddingHorizontal: xl
-    paddingVertical: md
-    colorScheme: contrast
-    backgroundColor: base
-    backgroundImage:
-      source: ""
-      alt: ""
-      positionVertical: top
-      positionHorizontal: center
-    rounded: false
   - _component: blocks/page-container
     label: CTA
     contentBlocks:
       - _component: typography/heading
         text: For teams tired of digital babysitting
         level: h2
+        size: default
         alignX: center
+        iconPosition: before
       - _component: blocks/persona-cta
         colorScheme: default
       - _component: elements/spacer
@@ -336,14 +122,20 @@ pageBlocks:
       - _component: blocks/cta
         heading: Escape the updates
         colorScheme: default
-        text: See how CloudCannon lets you focus on building features that move the needle.
+        text: >-
+          See how CloudCannon lets you focus on building features that move the
+          needle.
         image: /src/assets/images/liv-portrait.png
         alt: Liv
         buttonBlocks:
-          - _component: "elements/button"
+          - _component: elements/button
             text: Free your team
-            iconName: "arrow-right"
+            link: ''
+            iconName: arrow-right
             iconPosition: after
+            hideText: false
+            variant: primary
+            size: md
     backgroundColor: surface
     colorScheme: contrast
 ---
