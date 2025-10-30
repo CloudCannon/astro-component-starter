@@ -8,6 +8,8 @@ import GridItem from "@components/wrappers/grid/grid-item.astro";
 import Grid from "@components/wrappers/grid/grid.astro";
 import personaCtaData from "../../../data/persona-cta.json";
 
+const { colorScheme = "default" } = Astro.props;
+
 interface Persona {
   image: string;
   alt: string;
@@ -26,7 +28,7 @@ interface Persona {
       <GridItem>
         <Card
           editable={false}
-          colorScheme="default"
+          colorScheme={colorScheme}
           backgroundColor="base"
           rounded={true}
           paddingHorizontal="lg"

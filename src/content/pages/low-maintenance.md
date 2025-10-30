@@ -330,6 +330,7 @@ pageBlocks:
         level: h2
         alignX: center
       - _component: blocks/persona-cta
+        colorScheme: default
       - _component: elements/spacer
         size: 2xl
       - _component: blocks/cta

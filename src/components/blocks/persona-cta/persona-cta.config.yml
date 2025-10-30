@@ -1,0 +1,30 @@
+label: Persona CTA
+icon: users
+description: "Persona-based call-to-action section with cards for different user types."
+structures:
+  - containerBlocks
+value:
+  _component: blocks/persona-cta
+  colorScheme: "default"
+preview:
+  text:
+    - Persona CTA
+  subtext:
+    - key: personas
+    - Add persona cards
+picker_preview:
+  text: Persona CTA
+  subtext: "Persona-based call-to-action section with cards for different user types."
+  icon: users
+
+_inputs:
+  colorScheme:
+    type: select
+    comment: "Color scheme for the persona CTA section."
+    options:
+      values:
+        - id: default
+          name: Default
+        - id: contrast
+          name: Contrast
+    default: default
