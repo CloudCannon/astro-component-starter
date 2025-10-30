@@ -10,6 +10,7 @@ const {
   items = [],
   label,
   gap = "md",
+  editable = false,
   ...rest
 } = Astro.props;
 
@@ -39,21 +40,27 @@ const gridStyles = [
 ---
 
 <div
-  data-editable="array"
-  data-prop="items"
-  data-component-key="_component"
-  data-id-key="_component"
+  {...editable && {
+    "data-editable": "array",
+    "data-prop": "items",
+    "data-component-key": "_component",
+    "data-id-key": "_component",
+  }}
   class:list={["grid", `layout-${layout}`, className]}
   style={gridStyles}
   {...htmlAttributes}
 >
   {
     items && items.length > 0 ? (
-      items.map((item: any) => (
-        <editable-array-item data-id={item._component} data-component={item._component}>
-          <GridItem contentBlocks={item.contentBlocks} />
-        </editable-array-item>
-      ))
+      items.map((item: any) =>
+        editable ? (
+          <editable-array-item data-id={item._component} data-component={item._component}>
+            <GridItem contentBlocks={item.contentBlocks} />
+          </editable-array-item>
+        ) : (
+          <GridItem contentBlocks={item.contentBlocks} editable={editable} />
+        )
+      )
     ) : (
       <slot />
     )
