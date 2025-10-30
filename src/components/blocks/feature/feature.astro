@@ -13,6 +13,12 @@ const { heading = "", subtitle = "", image = "", reverse = false } = Astro.props
     <SimpleText text={subtitle} />
   </Fragment>
   <Fragment slot="second">
-    <SmartImage source={image} alt={heading} />
+    <SmartImage
+      data-prop-src="image"
+      data-prop-alt="heading"
+      data-editable="image"
+      source={image}
+      alt={heading}
+    />
   </Fragment>
 </Split>
