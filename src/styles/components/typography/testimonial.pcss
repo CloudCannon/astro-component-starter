@@ -1,11 +1,11 @@
 .testimonial {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-em-sm);
   margin: 0;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-md);
+  padding: var(--spacing-xl);
 
   &.alignment-center {
     align-items: center;
@@ -13,6 +13,7 @@
     text-align: center;
   }
   > .quote {
+    font-weight: var(--font-weight-bold);
     margin: 0;
 
     * {
@@ -37,8 +38,8 @@
   }
 
   > .author {
-    display: flex;
     align-items: center;
+    display: flex;
     gap: var(--spacing-md);
     margin-top: var(--spacing-md);
 
@@ -50,9 +51,9 @@
     > .author-image {
       aspect-ratio: var(--ratio-square);
       border-radius: var(--radius-full);
+      height: 80px;
       overflow: hidden;
       width: 80px;
-      height: 80px;
     }
   }
 }

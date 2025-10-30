@@ -1,5 +1,6 @@
 ---
 import PageContainer from "@components/blocks/page-container/page-container.astro";
+import Spacer from "@components/elements/spacer/spacer.astro";
 import Heading from "@components/typography/heading/heading.astro";
 import SimpleText from "@components/typography/simple-text/simple-text.astro";
 import ButtonGroup from "@components/wrappers/button-group/button-group.astro";
@@ -18,9 +19,23 @@ const htmlAttributes = Object.fromEntries(
 );
 ---
 
-<PageContainer {...htmlAttributes} class:list={["main-hero", className]}>
-  <SimpleText text={eyebrow} alignX="center" />
-  <Heading text={heading} level="h1" alignX="center" />
-  <SimpleText text={subtitle} alignX="center" />
+<PageContainer
+  {...htmlAttributes}
+  class:list={["main-hero", className]}
+  style="padding-top: var(--spacing-2xl);"
+>
+  <SimpleText
+    text={eyebrow}
+    alignX="center"
+    style=" letter-spacing: 0.05em;text-transform: uppercase;"
+  />
+  <Heading text={heading} level="h1" size="6xl" alignX="center" style="margin-top: 0;" />
+  <SimpleText
+    text={subtitle}
+    size="lg"
+    alignX="center"
+    style="margin-inline: auto; max-width: 700px;"
+  />
+  <Spacer size="lg" />
   <ButtonGroup buttonBlocks={buttonBlocks} alignX="center" />
 </PageContainer>

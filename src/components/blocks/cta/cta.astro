@@ -25,24 +25,22 @@ const htmlAttributes = Object.fromEntries(
   class:list={["cta", className]}
   backgroundColor="none"
   colorScheme={colorScheme}
-  backgroundColor="base"
+  backgroundColor="surface"
   rounded={true}
-  paddingHorizontal="2xl"
-  paddingVertical="2xl"
   {...htmlAttributes}
+  style="border-radius: 0; border-top-left-radius: var(--radius-4xl); border-top-right-radius: var(--radius-4xl);"
 >
   <Split distributionMode="half" verticalAlignment="center">
-    <Fragment slot="first">
-      <Heading level="h2" size="6xl">{heading}</Heading>
-      <SimpleText>{text}</SimpleText>
+    <div slot="first" style="padding: var(--spacing-2xl);">
+      <Heading level="h2" size="6xl" style="color: var(--color-brand);">{heading}</Heading>
+      <SimpleText size="xl">{text}</SimpleText>
       <ButtonGroup direction="row" alignX="start" buttonBlocks={buttonBlocks} />
-    </Fragment>
+    </div>
     <Fragment slot="second">
       <SmartImage
         data-prop-src="image"
         data-prop-alt="alt"
         data-editable="image"
-        rounded={true}
         source={image}
         alt={alt}
       />

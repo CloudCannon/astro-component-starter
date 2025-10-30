@@ -1,18 +1,20 @@
 .button {
   align-items: center;
   background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-xs);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
   color: var(--color-text-strong);
   display: inline-flex;
   flex-shrink: 0;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
   gap: 0.15em;
   justify-content: center;
+  line-height: 1.5;
   min-height: 10px;
   min-width: 10px;
   padding-block: var(--spacing-em-sm);
-  padding-inline: var(--spacing-em-sm);
+  padding-inline: var(--spacing-em-md);
+  padding-top: 0.4em;
   text-align: center;
   text-decoration: none;
   transition-duration: var(--animation-normal);
@@ -68,8 +70,8 @@
 
   &.variant-tertiary {
     background-color: transparent;
-    border-color: var(--color-border-strong);
-    color: var(--color-text-strong);
+    border-color: var(--color-brand);
+    color: var(--color-brand);
 
     &:hover,
     &:focus {

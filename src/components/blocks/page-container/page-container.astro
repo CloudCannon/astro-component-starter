@@ -5,6 +5,8 @@ const {
   contentBlocks = [],
   backgroundColor = "base",
   colorScheme = "default",
+  paddingHorizontal = "xl",
+  paddingVertical = "xl",
   class: className,
   ...rest
 } = Astro.props;
@@ -17,8 +19,8 @@ const htmlAttributes = Object.fromEntries(
 <Container
   {...htmlAttributes}
   class:list={["page-container", className]}
-  paddingHorizontal="xl"
-  paddingVertical="xl"
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
   maxContentWidth="2xl"
   backgroundColor={backgroundColor}
   colorScheme={colorScheme}

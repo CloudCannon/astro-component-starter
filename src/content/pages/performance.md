@@ -51,7 +51,7 @@ pageBlocks:
         authorImage: /src/assets/images/roy-gabriel-gm-construction.png
         alignX: center
       - _component: elements/spacer
-        size: 2xl
+        size: xl
       - _component: blocks/feature-grid
         items:
           - iconName: arrow-trending-up
@@ -70,6 +70,7 @@ pageBlocks:
             subtitle: Improved ranking on Google
             description: Want to find out more? Read the case study.
     colorScheme: default
+    style: "padding-bottom: 3rem;"
   - _component: blocks/page-container
     label: Main Block
     contentBlocks:
@@ -121,15 +122,10 @@ pageBlocks:
           compromises.
         alignX: center
         size: default
-    backgroundColor: surface
-    colorScheme: default
-  - _component: blocks/page-container
-    label: Resources
-    contentBlocks:
+        style: "max-width: 700px; margin-inline: auto;"
+      - _component: elements/spacer
+        size: xl
       - _component: blocks/feature-grid
-        minItemWidth: 200
-        maxItemWidth: 400
-        gap: md
         items:
           - iconName: presentation-chart-line
             iconColor: yellow
@@ -170,17 +166,21 @@ pageBlocks:
               hideText: false
               variant: text
               size: md
-    backgroundColor: surface
+    backgroundColor: accent
     colorScheme: default
+    style: "padding-block: 3rem;"
   - _component: blocks/page-container
     label: CTA Section
     contentBlocks:
+      - _component: elements/spacer
+        size: 3xl
       - _component: typography/heading
         text: For teams who want to ship, not suffer
         level: h2
         size: default
         alignX: center
         iconPosition: before
+        style: "margin-bottom: 3rem; margin-top: 0;"
       - _component: blocks/persona-cta
         colorScheme: default
       - _component: elements/spacer
@@ -204,4 +204,5 @@ pageBlocks:
             size: md
     backgroundColor: base
     colorScheme: contrast
+    paddingVertical: none
 ---

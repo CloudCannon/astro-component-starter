@@ -14,7 +14,7 @@ const htmlAttributes = Object.fromEntries(
 );
 ---
 
-<Grid class="feature-grid" {...htmlAttributes}>
+<Grid class="feature-grid" {...htmlAttributes} minItemWidth="200" maxItemWidth="400" gap="xl">
   {
     items.map((item: any) => (
       <GridItem>
@@ -26,11 +26,12 @@ const htmlAttributes = Object.fromEntries(
           rounded
           paddingHorizontal="lg"
           paddingVertical="lg"
+          style="border-style: dashed; border-width: 2px;"
         >
           {item.iconName && (
             <Icon name={item.iconName} color={item.iconColor} background={true} size="xl" />
           )}
-          {item.title && <Heading text={item.title} level="h3" size="lg" />}
+          {item.title && <Heading text={item.title} level="h3" size="2xl" />}
           {item.subtitle && <Heading text={item.subtitle} level="h4" size="md" class="subtitle" />}
           {item.description && <SimpleText text={item.description} />}
           {item.buttonBlock && (

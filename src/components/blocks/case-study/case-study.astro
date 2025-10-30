@@ -35,19 +35,19 @@ const htmlAttributes = Object.fromEntries(
   {...htmlAttributes}
 >
   <Card
-    paddingHorizontal="2xl"
-    paddingVertical="2xl"
     rounded={true}
     colorScheme={colorScheme}
     backgroundColor="base"
     border={border}
+    style="border-radius: var(--radius-3xl);"
   >
     <Split
-      distributionMode="third-two-thirds"
-      minSplitWidth="700"
+      distributionMode="fixed-flexible"
+      minSplitWidth="750"
+      fixedWidth="350"
       verticalAlignment="center"
       reverse={reverse}
-      minSplitWidth="300"
+      minSplitWidth="650"
     >
       <Fragment slot="first">
         <SmartImage
@@ -59,12 +59,13 @@ const htmlAttributes = Object.fromEntries(
           aspectRatio="square"
         />
       </Fragment>
-      <Fragment slot="second">
+      <div slot="second" style="padding: var(--spacing-2xl);">
         <Testimonial
           text={quote}
           authorName={authorName}
           authorDescription={authorDescription}
           alignX="start"
+          style="border:0;padding:0;"
         />
         <Spacer size="xl" />
         {
@@ -75,12 +76,12 @@ const htmlAttributes = Object.fromEntries(
                 href={ctaHref}
                 iconName="arrow-right"
                 iconPosition="after"
-                variant="primary"
+                variant="tertiary"
               />
             </ButtonGroup>
           )
         }
-      </Fragment>
+      </div>
     </Split>
   </Card>
 </Container>
