@@ -16,9 +16,12 @@ const {
   rounded = false,
   border = false,
   class: className,
+  editable = true,
 
   ...rest
 } = Astro.props;
+
+const isEditable = editable === true || editable === "true";
 
 const {
   source = "",
@@ -61,9 +64,11 @@ const Tag = link ? "a" : "div";
         source={source}
         alt={alt}
         editable={false}
-        data-prop-src="backgroundImage.source"
-        data-prop-alt="backgroundImage.alt"
-        data-editable="image"
+        {...(isEditable && {
+          "data-prop-src": "backgroundImage.source",
+          "data-prop-alt": "backgroundImage.alt",
+          "data-editable": "image",
+        })}
       />
     )
   }
@@ -79,7 +84,11 @@ const Tag = link ? "a" : "div";
   {
     (beforeContentBlocks || Astro.slots.has("before")) && (
       <div class="before-content">
-        <Component contentBlocks={beforeContentBlocks} propName="beforeContentBlocks" />
+        <Component
+          contentBlocks={beforeContentBlocks}
+          propName="beforeContentBlocks"
+          editable={isEditable}
+        />
         <slot name="before" />
       </div>
     )
@@ -94,14 +103,18 @@ const Tag = link ? "a" : "div";
       ]}
     >
       <slot />
-      <Component contentBlocks={contentBlocks} propName="contentBlocks" />
+      <Component contentBlocks={contentBlocks} propName="contentBlocks" editable={isEditable} />
     </div>
   </div>
 
   {
     (afterContentBlocks || Astro.slots.has("after")) && (
       <div class="after-content">
-        <Component contentBlocks={afterContentBlocks} propName="afterContentBlocks" />
+        <Component
+          contentBlocks={afterContentBlocks}
+          propName="afterContentBlocks"
+          editable={isEditable}
+        />
         <slot name="after" />
       </div>
     )
