@@ -19,6 +19,8 @@ const { heading = "", subtitle = "", image = "", reverse = false } = Astro.props
       data-editable="image"
       source={image}
       alt={heading}
+      widths={[300, 596, 1192]}
+      sizes="(min-width: 1192px) 596px, (min-width: 700px) 50vw, 100vw"
     />
   </Fragment>
 </Split>

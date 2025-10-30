@@ -11,15 +11,15 @@ pageBlocks:
     buttonBlocks:
       - _component: elements/button
         text: Demo CloudCannon
-        link: ''
-        iconName: ''
+        link: ""
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: elements/button
         text: Start with a trial
-        link: ''
+        link: ""
         iconName: arrow-right
         iconPosition: after
         hideText: false
@@ -86,8 +86,8 @@ pageBlocks:
         alignX: center
         size: default
       - _component: elements/smart-image
-        source: /src/assets/images/launchasfast-final.png
-        alt: ''
+        source: /src/assets/images/Traffic-with-spike.png
+        alt: ""
         rounded: false
         aspectRatio: none
         positionVertical: center
@@ -104,7 +104,7 @@ pageBlocks:
         authorDescription: Digital Lead - Papercut
         authorImage: /src/assets/images/grayson-campbell.jpg
         alignX: center
-    backgroundColor: accent
+    backgroundColor: accent-gradient
     colorScheme: default
   - _component: blocks/page-container
     label: CTA
@@ -130,12 +130,12 @@ pageBlocks:
         buttonBlocks:
           - _component: elements/button
             text: Free your team
-            link: ''
+            link: ""
             iconName: arrow-right
             iconPosition: after
             hideText: false
             variant: primary
             size: md
-    backgroundColor: surface
+    backgroundColor: surface-gradient
     colorScheme: contrast
 ---

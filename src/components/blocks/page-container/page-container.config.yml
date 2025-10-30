@@ -41,8 +41,12 @@ _inputs:
           name: Base
         - id: surface
           name: Surface
+        - id: surface-gradient
+          name: Surface Gradient
         - id: accent
           name: Accent
+        - id: accent-gradient
+          name: Accent Gradient
         - id: highlight
           name: Highlight
   colorScheme:

@@ -73,6 +73,7 @@ pageBlocks:
     style: "padding-bottom: 3rem;"
   - _component: blocks/page-container
     label: Main Block
+    topCorners: true
     contentBlocks:
       - _component: blocks/feature
         heading: SEO built in, not bolted on
@@ -166,11 +167,12 @@ pageBlocks:
               hideText: false
               variant: text
               size: md
-    backgroundColor: accent
+    backgroundColor: accent-gradient
     colorScheme: default
     style: "padding-block: 3rem;"
   - _component: blocks/page-container
     label: CTA Section
+    topCorners: true
     contentBlocks:
       - _component: elements/spacer
         size: 3xl
@@ -202,7 +204,7 @@ pageBlocks:
             hideText: false
             variant: primary
             size: md
-    backgroundColor: base
+    backgroundColor: surface-gradient
     colorScheme: contrast
     paddingVertical: none
 ---

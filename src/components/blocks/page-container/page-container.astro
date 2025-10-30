@@ -8,6 +8,7 @@ const {
   paddingHorizontal = "xl",
   paddingVertical = "xl",
   class: className,
+  topCorners = false,
   ...rest
 } = Astro.props;
 
@@ -18,7 +19,7 @@ const htmlAttributes = Object.fromEntries(
 
 <Container
   {...htmlAttributes}
-  class:list={["page-container", className]}
+  class:list={["page-container", topCorners && "top-corners", className]}
   paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   maxContentWidth="2xl"

@@ -57,6 +57,8 @@ const htmlAttributes = Object.fromEntries(
           source={image}
           alt={imageAlt || authorName}
           aspectRatio="square"
+          widths={[190, 285, 570]}
+          sizes="(min-width: 400px) 285px, 100vw"
         />
       </Fragment>
       <div slot="second" style="padding: var(--spacing-2xl);">

@@ -29,8 +29,10 @@ const MarkdownText = text ? md.render(text) : "";
         <SmartImage
           source={authorImage}
           alt={authorName}
-          width={100}
-          height={100}
+          width={200}
+          height={200}
+          widths={[200]}
+          sizes="200px"
           class="author-image"
           data-prop-src="authorImage"
           data-prop-alt="authorName"
