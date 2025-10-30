@@ -3,7 +3,7 @@ _schema: default
 title: Low Maintenance
 pageBlocks:
   - _component: blocks/main-hero
-    eyebrow: LOW MAINTENANCE WEBSITES Low Maintenance Websites
+    eyebrow: Low Maintenance Websites
     heading: Maintain less. Build more.
     subtitle: >-
       Shift your dev time from maintenance to growth, with no forced updates or
@@ -26,6 +26,7 @@ pageBlocks:
         variant: tertiary
         size: md
   - _component: blocks/page-container
+    label: Below Hero
     contentBlocks:
       - _component: elements/smart-image
         source: /src/assets/images/enterprise-hero-1.png
@@ -46,6 +47,21 @@ pageBlocks:
         authorImage: /uploads/sindre-gusdal-crop.jpeg
         alignX: center
     backgroundColor: base
+    colorScheme: default
+  - _component: blocks/page-container
+    label: Features
+    contentBlocks:
+      - _component: blocks/feature
+        heading: Set it and forget it
+        subtitle: >-
+          No more forced updates, database patches, or security monitoring.
+          CloudCannon’s static architecture eliminates the maintenance treadmill
+          that consumes development time. While WordPress sites need constant
+          attention, your CloudCannon sites just run — leaving your team free to
+          build new features instead of babysitting old ones.
+        image: /src/assets/images/agency-card-final.png
+        reverse: false
+    backgroundColor: accent
     colorScheme: default
   - _component: wrappers/container
     label: Features
@@ -380,19 +396,4 @@ pageBlocks:
       positionVertical: top
       positionHorizontal: center
     rounded: false
-  - _component: blocks/page-container
-    label: Features
-    contentBlocks:
-      - _component: blocks/feature
-        heading: Set it and forget it
-        subtitle: >-
-          No more forced updates, database patches, or security monitoring.
-          CloudCannon’s static architecture eliminates the maintenance treadmill
-          that consumes development time. While WordPress sites need constant
-          attention, your CloudCannon sites just run — leaving your team free to
-          build new features instead of babysitting old ones.
-        image: /src/assets/images/agency-card-final.png
-        reverse: false
-    backgroundColor: accent
-    colorScheme: default
 ---
