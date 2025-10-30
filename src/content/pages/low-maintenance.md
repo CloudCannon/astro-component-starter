@@ -61,75 +61,14 @@ pageBlocks:
           build new features instead of babysitting old ones.
         image: /src/assets/images/agency-card-final.png
         reverse: false
-    backgroundColor: accent
-    colorScheme: default
-  - _component: wrappers/container
-    label: Features
-    contentBlocks:
-      - _component: wrappers/split
-        label: ''
-        firstColumnContentBlocks:
-          - _component: typography/heading
-            text: Set it and forget it
-            level: h2
-            size: default
-            alignX: start
-            iconName:
-            iconPosition: before
-          - _component: typography/simple-text
-            text: >-
-              No more forced updates, database patches, or security monitoring.
-              CloudCannon’s static architecture eliminates the maintenance
-              treadmill that consumes development time. While WordPress sites
-              need constant attention, your CloudCannon sites just run — leaving
-              your team free to build new features instead of babysitting old
-              ones.
-            alignX: start
-            size: default
-        secondColumnContentBlocks:
-          - _component: elements/smart-image
-            source: /src/assets/images/setandforget.png
-            alt: Set and forget
-            rounded: false
-            aspectRatio: none
-            positionVertical: center
-            positionHorizontal: center
-        distributionMode: half
-        fixedWidth:
-        minSplitWidth: 0
-        verticalAlignment: center
-        reverse: false
-      - _component: wrappers/split
-        label: ''
-        firstColumnContentBlocks:
-          - _component: typography/heading
-            text: New site? No problem.
-            level: h2
-            size: default
-            alignX: start
-            iconName:
-            iconPosition: before
-          - _component: typography/simple-text
-            text: >-
-              Spin up new sites in minutes, not weeks. CloudCannon’s template
-              system and reusable components mean you’re not starting from
-              scratch every time. Whether it’s a product launch, regional site,
-              or client project, you can deploy new sites faster than other
-              teams can plan theirs.
-            alignX: start
-            size: default
-        secondColumnContentBlocks:
-          - _component: elements/smart-image
-            source: /src/assets/images/setandforget.png
-            alt: Set and forget
-            rounded: false
-            aspectRatio: none
-            positionVertical: center
-            positionHorizontal: center
-        distributionMode: half
-        fixedWidth:
-        minSplitWidth: 0
-        verticalAlignment: center
+      - _component: blocks/feature
+        heading: New site? No problem.
+        subtitle: >-
+          Spin up new sites in minutes, not weeks. CloudCannon’s template system
+          and reusable components mean you’re not starting from scratch every
+          time. Whether it’s a product launch, regional site, or client project,
+          you can deploy new sites faster than other teams can plan theirs.
+        image: /src/assets/images/agency-card-final.png
         reverse: true
       - _component: typography/heading
         text: Maximum uptime. Zero drama.
@@ -142,21 +81,17 @@ pageBlocks:
         text: >-
           CloudCannon’s hosting infrastructure handles traffic spikes
           automatically while static architecture eliminates the security
-          vulnerabilities that plague database-driven sites.
-
-          No 3am server alerts, no emergency patches — just reliable hosting
-          that works.
+          vulnerabilities that plague database-driven sites. No 3am server
+          alerts, no emergency patches — just reliable hosting that works.
         alignX: center
         size: default
       - _component: elements/smart-image
         source: /src/assets/images/launchasfast-final.png
-        alt: Launch
+        alt: ''
         rounded: false
         aspectRatio: none
         positionVertical: center
         positionHorizontal: center
-      - _component: elements/spacer
-        size: 3xl
       - _component: typography/testimonial
         text: >-
           The ability to manage all our websites from one central location has
@@ -169,17 +104,8 @@ pageBlocks:
         authorDescription: Digital Lead - Papercut
         authorImage: /uploads/grayson-campbell.jpg
         alignX: center
-    maxContentWidth: 2xl
-    paddingHorizontal: xl
-    paddingVertical: 3xl
-    colorScheme: default
     backgroundColor: accent
-    backgroundImage:
-      source: ''
-      alt: ''
-      positionVertical: top
-      positionHorizontal: center
-    rounded: false
+    colorScheme: default
   - _component: wrappers/container
     label: ''
     contentBlocks:
@@ -396,4 +322,9 @@ pageBlocks:
       positionVertical: top
       positionHorizontal: center
     rounded: false
+  - _component: blocks/page-container
+    label: CTA
+    contentBlocks: []
+    backgroundColor: surface
+    colorScheme: contrast
 ---
