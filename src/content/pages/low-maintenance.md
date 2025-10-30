@@ -381,6 +381,7 @@ pageBlocks:
       positionHorizontal: center
     rounded: false
   - _component: blocks/page-container
+    label: Features
     contentBlocks:
       - _component: blocks/feature
         heading: Set it and forget it
