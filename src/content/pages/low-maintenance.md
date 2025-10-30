@@ -3,7 +3,7 @@ _schema: default
 title: Low Maintenance
 pageBlocks:
   - _component: blocks/main-hero
-    eyebrow: LOW MAINTENANCE WEBSITES
+    eyebrow: LOW MAINTENANCE WEBSITES Low Maintenance Websites
     heading: Maintain less. Build more.
     subtitle: >-
       Shift your dev time from maintenance to growth, with no forced updates
