@@ -11,7 +11,7 @@ value:
   colorScheme: default
 preview:
   text:
-    - key: class
+    - key: label
     - Page Container
   subtext:
     - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
