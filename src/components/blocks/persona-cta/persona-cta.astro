@@ -1,0 +1,56 @@
+---
+import Button from "@components/elements/button/button.astro";
+import Heading from "@components/typography/heading/heading.astro";
+import SimpleText from "@components/typography/simple-text/simple-text.astro";
+import ButtonGroup from "@components/wrappers/button-group/button-group.astro";
+import Card from "@components/wrappers/card/card.astro";
+import GridItem from "@components/wrappers/grid/grid-item.astro";
+import Grid from "@components/wrappers/grid/grid.astro";
+import personaCtaData from "../../../data/persona-cta.json";
+
+interface Persona {
+  image: string;
+  alt: string;
+  heading: string;
+  text: string;
+  link: {
+    text: string;
+    url: string;
+  };
+}
+---
+
+<Grid minItemWidth="280" maxItemWidth="400" gap="xl">
+  {
+    personaCtaData.map((persona: Persona) => (
+      <GridItem>
+        <Card
+          colorScheme="default"
+          backgroundColor="base"
+          rounded={true}
+          paddingHorizontal="lg"
+          paddingVertical="lg"
+          beforeContentBlocks={[
+            {
+              _component: "elements/smart-image",
+              source: persona.image,
+              alt: persona.alt,
+            },
+          ]}
+        >
+          <Heading level="h3">{persona.heading}</Heading>
+          <SimpleText>{persona.text}</SimpleText>
+          <ButtonGroup direction="column" alignX="start">
+            <Button
+              text={persona.link.text}
+              href={persona.link.url}
+              variant="text"
+              iconName="arrow-right"
+              iconPosition="after"
+            />
+          </ButtonGroup>
+        </Card>
+      </GridItem>
+    ))
+  }
+</Grid>

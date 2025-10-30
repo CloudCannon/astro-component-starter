@@ -78,7 +78,7 @@ if (!htmlAttributes.id && label) {
       ]}
     >
       {
-        contentBlocks ? (
+        contentBlocks && contentBlocks.length > 0 ? (
           <Component contentBlocks={contentBlocks} propName="contentBlocks" />
         ) : (
           <slot />

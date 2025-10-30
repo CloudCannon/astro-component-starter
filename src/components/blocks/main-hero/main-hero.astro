@@ -1,8 +1,8 @@
 ---
+import PageContainer from "@components/blocks/page-container/page-container.astro";
 import Heading from "@components/typography/heading/heading.astro";
 import SimpleText from "@components/typography/simple-text/simple-text.astro";
 import ButtonGroup from "@components/wrappers/button-group/button-group.astro";
-import Container from "@components/wrappers/container/container.astro";
 
 const {
   eyebrow = "",
@@ -18,15 +18,9 @@ const htmlAttributes = Object.fromEntries(
 );
 ---
 
-<Container
-  {...htmlAttributes}
-  class:list={["main-hero", className]}
-  paddingHorizontal="xl"
-  paddingVertical="xl"
-  contentWidth="2xl"
->
+<PageContainer {...htmlAttributes} class:list={["main-hero", className]}>
   <SimpleText text={eyebrow} alignX="center" />
   <Heading text={heading} level="h1" alignX="center" />
   <SimpleText text={subtitle} alignX="center" />
   <ButtonGroup buttonBlocks={buttonBlocks} alignX="center" />
-</Container>
+</PageContainer>

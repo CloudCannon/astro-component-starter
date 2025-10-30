@@ -87,7 +87,7 @@ pageBlocks:
         size: default
       - _component: elements/smart-image
         source: /src/assets/images/launchasfast-final.png
-        alt: ''
+        alt: ""
         rounded: false
         aspectRatio: none
         positionVertical: center
@@ -324,7 +324,25 @@ pageBlocks:
     rounded: false
   - _component: blocks/page-container
     label: CTA
-    contentBlocks: []
+    contentBlocks:
+      - _component: typography/heading
+        text: For teams tired of digital babysitting
+        level: h2
+        alignX: center
+      - _component: blocks/persona-cta
+      - _component: elements/spacer
+        size: 2xl
+      - _component: blocks/cta
+        heading: Escape the updates
+        colorScheme: default
+        text: See how CloudCannon lets you focus on building features that move the needle.
+        image: /src/assets/images/liv-portrait.png
+        alt: Liv
+        buttonBlocks:
+          - _component: "elements/button"
+            text: Free your team
+            iconName: "arrow-right"
+            iconPosition: after
     backgroundColor: surface
     colorScheme: contrast
 ---

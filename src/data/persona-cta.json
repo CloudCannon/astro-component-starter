@@ -1,0 +1,32 @@
+[
+  {
+    "image": "/src/assets/images/devs-greydots.png",
+    "alt": "Devs Greydots",
+    "heading": "Developers",
+    "text": "Focus on building features, not emergency fixes",
+    "link": {
+      "text": "Build features, not fixes",
+      "url": "#"
+    }
+  },
+  {
+    "image": "/src/assets/images/agency-card-final.png",
+    "alt": "Agency Card Final",
+    "heading": "Digital agencies",
+    "text": "Client sites stay fast and compliant without eating into project budgets.",
+    "link": {
+      "text": "Join the Partner Program",
+      "url": "#"
+    }
+  },
+  {
+    "image": "/src/assets/images/inhouse-blue.png",
+    "alt": "Internal teams",
+    "heading": "Internal teams",
+    "text": "Your websites scale reliably while you focus on features, not fixes.",
+    "link": {
+      "text": "Manage content at scale",
+      "url": "#"
+    }
+  }
+]

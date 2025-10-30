@@ -19,8 +19,10 @@ const htmlAttributes = Object.fromEntries(
   class:list={["page-container", className]}
   paddingHorizontal="xl"
   paddingVertical="xl"
-  contentWidth="2xl"
+  maxContentWidth="2xl"
   backgroundColor={backgroundColor}
   colorScheme={colorScheme}
   contentBlocks={contentBlocks}
-/>
+>
+  <slot />
+</Container>
