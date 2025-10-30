@@ -38,7 +38,14 @@ const htmlAttributes = Object.fromEntries(
       <ButtonGroup direction="row" alignX="start" buttonBlocks={buttonBlocks} />
     </Fragment>
     <Fragment slot="second">
-      <SmartImage rounded={true} source={image} alt={alt} />
+      <SmartImage
+        data-prop-src="image"
+        data-prop-alt="alt"
+        data-editable="image"
+        rounded={true}
+        source={image}
+        alt={alt}
+      />
     </Fragment>
   </Split>
 </Container>

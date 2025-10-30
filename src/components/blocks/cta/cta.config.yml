@@ -1,0 +1,56 @@
+label: CTA
+icon: hero
+description: "Call-to-action section with heading, text, buttons, and image."
+structures:
+  - containerBlocks
+value:
+  _component: blocks/cta
+  heading: "Ready to get started?"
+  text: "Join thousands of developers and agencies who trust our platform to deliver exceptional results."
+  buttonBlocks: []
+  image: ""
+  alt: ""
+  colorScheme: "default"
+preview:
+  text:
+    - key: heading
+    - CTA
+  subtext:
+    - key: text
+    - Add CTA content
+picker_preview:
+  text: CTA
+  subtext: "Call-to-action section with heading, text, buttons, and image."
+  icon: hero
+
+_inputs:
+  heading:
+    type: text
+    comment: "Main heading text for the CTA section."
+  text:
+    type: text
+    comment: "Descriptive text displayed below the heading."
+  buttonBlocks:
+    type: array
+    comment: "Array of button components for call-to-action buttons. See the Button component documentation for more information."
+    options:
+      structures: _structures.buttonBlocks
+  image:
+    type: image
+    comment: "Image to display alongside the CTA content."
+    options:
+      paths:
+        uploads: src/assets/images
+        static: ""
+  alt:
+    type: text
+    comment: "Alt text for the image for accessibility."
+  colorScheme:
+    type: select
+    comment: "Color scheme for the CTA section."
+    options:
+      values:
+        - id: default
+          name: Default
+        - id: contrast
+          name: Contrast
