@@ -1,0 +1,26 @@
+---
+import Container from "@components/wrappers/container/container.astro";
+
+const {
+  contentBlocks = [],
+  backgroundColor = "base",
+  colorScheme = "default",
+  class: className,
+  ...rest
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => key !== "_component")
+);
+---
+
+<Container
+  {...htmlAttributes}
+  class:list={["page-container", className]}
+  paddingHorizontal="xl"
+  paddingVertical="xl"
+  contentWidth="2xl"
+  backgroundColor={backgroundColor}
+  colorScheme={colorScheme}
+  contentBlocks={contentBlocks}
+/>

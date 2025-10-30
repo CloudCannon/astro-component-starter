@@ -1,0 +1,53 @@
+label: Page Container
+icon: width_full
+description: "A specialized container for page-level content with consistent styling."
+structures:
+  - pageBlocks
+value:
+  _component: blocks/page-container
+  contentBlocks: []
+  backgroundColor: base
+  colorScheme: default
+  class: ""
+preview:
+  text:
+    - key: class
+    - Page Container
+  subtext:
+    - template: Contains {contentBlocks|array_length} content {"block"|pluralize=contentBlocks}
+    - Add content blocks to the page container
+picker_preview:
+  text: Page Container
+  subtext: "A page-level container with consistent padding and styling for main content areas."
+  icon: width_full
+
+_inputs:
+  contentBlocks:
+    type: array
+    comment: "Array of content blocks to render within the page container."
+    options:
+      structures: _structures.pageBlocks
+  backgroundColor:
+    type: select
+    comment: "Background color for the page container."
+    options:
+      values:
+        - id: none
+          name: None
+        - id: base
+          name: Base
+        - id: surface
+          name: Surface
+        - id: accent
+          name: Accent
+        - id: highlight
+          name: Highlight
+  colorScheme:
+    type: select
+    comment: "Color scheme theme for the page container."
+    options:
+      values:
+        - id: default
+          name: Default
+        - id: contrast
+          name: Contrast
