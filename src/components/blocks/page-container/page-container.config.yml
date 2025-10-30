@@ -5,6 +5,7 @@ structures:
   - pageBlocks
 value:
   _component: blocks/page-container
+  label: ""
   contentBlocks: []
   backgroundColor: base
   colorScheme: default
@@ -21,6 +22,9 @@ picker_preview:
   icon: width_full
 
 _inputs:
+  label:
+    type: text
+    comment: Optional label for the accordion to help identify it in the editor.
   contentBlocks:
     type: array
     comment: "Array of content blocks to render within the page container."

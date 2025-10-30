@@ -7,7 +7,7 @@ import Split from "@components/wrappers/split/split.astro";
 const { heading = "", subtitle = "", image = "", reverse = false } = Astro.props;
 ---
 
-<Split distributionMode="half" minSplitWidth="700" verticalAlign="center" reverse={reverse}>
+<Split distributionMode="half" minSplitWidth="700" reverse={reverse} verticalAlignment="center">
   <Fragment slot="first">
     <Heading text={heading} level="h2" />
     <SimpleText text={subtitle} />

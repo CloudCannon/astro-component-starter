@@ -22,10 +22,10 @@ picker_preview:
 
 _inputs:
   heading:
-    type: text
+    type: textarea
     comment: "Main heading text for the feature section."
   subtitle:
-    type: text
+    type: textarea
     comment: "Subtitle text displayed below the main heading."
   image:
     type: image
