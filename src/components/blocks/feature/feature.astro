@@ -1,0 +1,18 @@
+---
+import SmartImage from "@components/elements/smart-image/smart-image.astro";
+import Heading from "@components/typography/heading/heading.astro";
+import SimpleText from "@components/typography/simple-text/simple-text.astro";
+import Split from "@components/wrappers/split/split.astro";
+
+const { heading = "", subtitle = "", image = "", reverse = false } = Astro.props;
+---
+
+<Split distributionMode="half" minSplitWidth: "700" verticalAlign="center" reverse={reverse}>
+  <Fragment slot="first">
+    <Heading text={heading} level="h2" />
+    <SimpleText text={subtitle} />
+  </Fragment>
+  <Fragment slot="second">
+    <SmartImage source={image} alt={heading} />
+  </Fragment>
+</Split>

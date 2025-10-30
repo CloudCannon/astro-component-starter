@@ -1,0 +1,39 @@
+label: Feature
+icon: feature
+description: "A two-column feature section with heading, subtitle, and image."
+structures: [containerBlocks]
+value:
+  _component: blocks/feature
+  heading: ""
+  subtitle: ""
+  image: ""
+  reverse: false
+preview:
+  text:
+    - key: heading
+    - Feature
+  subtext:
+    - key: subtitle
+    - Add content to the feature
+picker_preview:
+  text: Feature
+  subtext: "A feature section with heading, subtitle, and image in a two-column layout."
+  icon: feature
+
+_inputs:
+  heading:
+    type: text
+    comment: "Main heading text for the feature section."
+  subtitle:
+    type: text
+    comment: "Subtitle text displayed below the main heading."
+  image:
+    type: image
+    comment: "Feature image to display alongside the content."
+    options:
+      paths:
+        uploads: src/assets/images
+        static: ""
+  reverse:
+    type: switch
+    comment: "Whether to reverse the order of content and image (image first, content second)."
