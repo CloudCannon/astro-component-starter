@@ -1,0 +1,70 @@
+label: Case Study
+icon: quote
+description: "Case study block with image, testimonial, and CTA."
+structures:
+  - containerBlocks
+value:
+  _component: blocks/case-study
+  image: ""
+  imageAlt: ""
+  quote: ""
+  authorName: ""
+  authorDescription: ""
+  ctaText: "Read case study"
+  ctaHref: "#"
+  reverse: false
+  colorScheme: default
+  border: false
+preview:
+  text:
+    - key: authorName
+    - Case Study
+  subtext:
+    - key: quote
+    - Add a testimonial quote
+picker_preview:
+  text: Case Study
+  subtext: "Image + testimonial + CTA"
+  icon: quote
+
+_inputs:
+  image:
+    type: image
+    comment: "Case study image."
+    options:
+      paths:
+        uploads: src/assets/images
+        static: ""
+  imageAlt:
+    type: text
+    comment: "Alt text for image."
+  quote:
+    type: textarea
+    comment: "Testimonial quote text."
+  authorName:
+    type: text
+    comment: "Name of the person quoted."
+  authorDescription:
+    type: text
+    comment: "Role or company of the person quoted."
+  ctaText:
+    type: text
+    comment: "CTA button text."
+  ctaHref:
+    type: text
+    comment: "CTA button URL."
+  reverse:
+    type: switch
+    comment: "Show image on the right."
+  border:
+    type: switch
+    comment: "Show border around the card."
+  colorScheme:
+    type: select
+    options:
+      values:
+        - id: default
+          name: Default
+        - id: contrast
+          name: Contrast
+    default: default

@@ -53,7 +53,6 @@ _inputs:
   authorImage:
     comment: The image of the author.
     type: image
-    comment: The URL or path to the image.
     options:
       paths:
         uploads: src/assets/images

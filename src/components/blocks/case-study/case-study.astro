@@ -1,0 +1,86 @@
+---
+import Button from "@components/elements/button/button.astro";
+import SmartImage from "@components/elements/smart-image/smart-image.astro";
+import Spacer from "@components/elements/spacer/spacer.astro";
+import Testimonial from "@components/typography/testimonial/testimonial.astro";
+import ButtonGroup from "@components/wrappers/button-group/button-group.astro";
+import Card from "@components/wrappers/card/card.astro";
+import Container from "@components/wrappers/container/container.astro";
+import Split from "@components/wrappers/split/split.astro";
+const {
+  image = "",
+  imageAlt = "",
+  quote = "",
+  authorName = "",
+  authorDescription = "",
+  ctaText = "",
+  ctaHref = "#",
+  reverse = false,
+  colorScheme = "default",
+  border = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const htmlAttributes = Object.fromEntries(
+  Object.entries(rest).filter(([key]) => key !== "_component")
+);
+---
+
+<Container
+  class:list={["case-study", className]}
+  paddingHorizontal="lg"
+  paddingVertical="lg"
+  maxContentWidth="xl"
+  {...htmlAttributes}
+>
+  <Card
+    paddingHorizontal="2xl"
+    paddingVertical="2xl"
+    rounded={true}
+    colorScheme={colorScheme}
+    backgroundColor="base"
+    border={border}
+  >
+    <Split
+      distributionMode="third-two-thirds"
+      minSplitWidth="700"
+      verticalAlignment="center"
+      reverse={reverse}
+      minSplitWidth="300"
+    >
+      <Fragment slot="first">
+        <SmartImage
+          data-prop-src="image"
+          data-prop-alt="imageAlt"
+          data-editable="image"
+          source={image}
+          alt={imageAlt || authorName}
+          aspectRatio="square"
+        />
+      </Fragment>
+      <Fragment slot="second">
+        <Testimonial
+          text={quote}
+          authorName={authorName}
+          authorDescription={authorDescription}
+          alignX="start"
+        />
+        <Spacer size="xl" />
+        {
+          ctaText && (
+            <ButtonGroup direction="row" alignX="start">
+              <Button
+                text={ctaText}
+                href={ctaHref}
+                iconName="arrow-right"
+                iconPosition="after"
+                variant="primary"
+              />
+            </ButtonGroup>
+          )
+        }
+      </Fragment>
+    </Split>
+  </Card>
+</Container>

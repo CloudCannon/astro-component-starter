@@ -1,0 +1,121 @@
+label: Feature Grid
+icon: grid_on
+description: "A grid of feature cards with optional icon, headings, description and an optional per-card button."
+structures:
+  - containerBlocks
+value:
+  _component: blocks/feature-grid
+  colorScheme: default
+  items: []
+preview:
+  text:
+    - Feature Grid
+  subtext:
+    - template: Contains {items|array_length} feature {"card"|pluralize=items}
+    - Add one or more feature items
+picker_preview:
+  text: Feature Grid
+  subtext: Cards with icon, title, subtitle, description and optional button.
+  icon: grid_on
+
+_inputs:
+  colorScheme:
+    type: select
+    comment: Color scheme for the feature cards.
+    options:
+      values:
+        - id: default
+          name: Default
+        - id: contrast
+          name: Contrast
+    default: default
+  items:
+    label: Feature Items
+    type: array
+    comment: Add one or more feature cards.
+    options:
+      structures: _structures.featureItems
+
+_structures:
+  featureItems:
+    values:
+      - label: Feature Item
+        value:
+          title: ""
+          subtitle: ""
+          description: ""
+          iconName: ""
+          iconColor: default
+        preview:
+          icon: grid_view
+          text:
+            - key: title
+            - Feature Item
+          subtext:
+            - key: subtitle
+            - key: description
+        _inputs:
+          title:
+            type: text
+            comment: Feature title.
+          subtitle:
+            type: text
+            comment: Optional subtitle.
+          description:
+            type: textarea
+            comment: Short description of the feature.
+          iconName:
+            type: select
+            comment: Optional icon to display.
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: "src/icons/{id}.svg"
+          iconColor:
+            type: select
+            comment: Color of the icon background.
+            options:
+              values:
+                - id: default
+                  name: Default (inherit)
+                - id: blue
+                  name: Blue
+                - id: green
+                  name: Green
+                - id: yellow
+                  name: Yellow
+                - id: orange
+                  name: Orange
+                - id: red
+                  name: Red
+                - id: purple
+                  name: Purple
+                - id: pink
+                  name: Pink
+                - id: cyan
+                  name: Cyan
+          buttonBlock:
+            type: object
+            comment: Optional button to show at the bottom of the card.
+            options:
+              structures: _structures.buttonBlock
+
+  buttonBlock:
+    values:
+      - label: Button
+        value:
+          _component: elements/button
+          text: "Learn more"
+          link: ""
+          variant: text
+        preview:
+          icon: variables
+          text:
+            - key: text
+            - Button
+          subtext:
+            - key: link
+
