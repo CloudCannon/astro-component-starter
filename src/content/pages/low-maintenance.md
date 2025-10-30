@@ -380,4 +380,18 @@ pageBlocks:
       positionVertical: top
       positionHorizontal: center
     rounded: false
+  - _component: blocks/page-container
+    contentBlocks:
+      - _component: blocks/feature
+        heading: Set it and forget it
+        subtitle: >-
+          No more forced updates, database patches, or security monitoring.
+          CloudCannon’s static architecture eliminates the maintenance treadmill
+          that consumes development time. While WordPress sites need constant
+          attention, your CloudCannon sites just run — leaving your team free to
+          build new features instead of babysitting old ones.
+        image: /src/assets/images/agency-card-final.png
+        reverse: false
+    backgroundColor: accent
+    colorScheme: default
 ---
