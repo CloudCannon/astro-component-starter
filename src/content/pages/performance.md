@@ -396,6 +396,12 @@ pageBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
+                  - _component: elements/icon
+                    name: presentation-chart-line
+                    size: xl
+                    color: yellow
+                    background: true
+                    alignX: start
                   - _component: typography/heading
                     text: The rise of static-first websites
                     level: h3
@@ -442,6 +448,12 @@ pageBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
+                  - _component: elements/icon
+                    name: bolt
+                    size: xl
+                    color: blue
+                    background: true
+                    alignX: start
                   - _component: typography/heading
                     text: Improving your Core Web Vitals
                     level: h3
@@ -488,6 +500,12 @@ pageBlocks:
               - _component: wrappers/card
                 label:
                 contentBlocks:
+                  - _component: elements/icon
+                    name: trophy
+                    size: xl
+                    color: cyan
+                    background: true
+                    alignX: start
                   - _component: typography/heading
                     text: No time to migrate? We're here to help.
                     level: h3
