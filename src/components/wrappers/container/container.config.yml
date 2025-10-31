@@ -11,7 +11,7 @@ value:
   maxContentWidth: 2xl
   paddingHorizontal: md
   paddingVertical: md
-  colorScheme: default
+  colorScheme:
   backgroundColor: base
   backgroundImage:
     source: ""

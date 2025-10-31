@@ -54,7 +54,7 @@ function createNavItemData(item, level, parentGroupId) {
         return (
           <li class="nav-item has-children">
             <input
-              type="radio"
+              type="checkbox"
               name={itemData.groupName}
               id={itemData.dropdownId}
               class="nav-item-toggle"
@@ -164,7 +164,6 @@ function createNavItemData(item, level, parentGroupId) {
 </nav>
 
 <script>
-  // Update ARIA states for dropdown toggle
   function updateAriaStates(toggle, isExpanded) {
     const contentId = toggle.getAttribute("aria-controls");
     const content = document.getElementById(contentId || "");
@@ -192,11 +191,12 @@ function createNavItemData(item, level, parentGroupId) {
 
     if (target.checked) {
       updateAriaStates(target, true);
-      const radioName = target.getAttribute("name");
-      if (radioName && barNav) {
-        barNav.querySelectorAll(`input[name="${radioName}"]`).forEach((radio) => {
-          if (radio !== target) {
-            updateAriaStates(radio, false);
+
+      if (barNav) {
+        barNav.querySelectorAll(".nav-item-toggle[type='checkbox']").forEach((toggle) => {
+          if (toggle !== target && toggle.checked) {
+            toggle.checked = false;
+            updateAriaStates(toggle, false);
           }
         });
       }
