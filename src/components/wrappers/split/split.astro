@@ -101,3 +101,79 @@ const splitId = `split-${crypto.randomUUID()}`;
     />
   )
 }
+
+<style lang="pcss">
+  :where(:has(> .split):not(:is(editable-array-item, editable-array))) {
+    container-type: inline-size;
+  }
+
+  :where(:has(> editable-array > editable-array-item > .split)) {
+    container-type: inline-size;
+  }
+
+  .split {
+    --gap-size: var(--spacing-lg);
+    --split-columns-mobile: 1fr;
+    --split-columns-desktop: 1fr 1fr;
+    --split-fixed-width: auto;
+
+    display: grid;
+    gap: var(--gap-size);
+    grid-template-columns: var(--split-columns-desktop);
+
+    &.align-top {
+      align-items: start;
+    }
+
+    &.align-center {
+      align-items: center;
+    }
+
+    &.align-bottom {
+      align-items: end;
+    }
+
+    &.align-stretch {
+      align-items: stretch;
+
+      > .pane > *:not(editable-array):only-child,
+      > .pane > editable-array > editable-array-item:only-child > * {
+        height: 100%;
+      }
+    }
+
+    .pane {
+      min-width: 0;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+  }
+
+  .split.half {
+    --split-columns-desktop: 1fr 1fr;
+  }
+
+  .split.third-two-thirds {
+    --split-columns-desktop: 1fr 2fr;
+  }
+
+  .split.two-thirds-third {
+    --split-columns-desktop: 2fr 1fr;
+  }
+
+  .split.quarter-three-quarters {
+    --split-columns-desktop: 1fr 3fr;
+  }
+
+  .split.three-quarters-quarter {
+    --split-columns-desktop: 3fr 1fr;
+  }
+
+  .split.fixed-flexible {
+    --split-columns-desktop: var(--split-fixed-width) 1fr;
+  }
+
+  .split.flexible-fixed {
+    --split-columns-desktop: 1fr var(--split-fixed-width);
+  }
+</style>

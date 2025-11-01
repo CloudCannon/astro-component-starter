@@ -23,10 +23,60 @@ const htmlAttributes = Object.fromEntries(
   {
     items?.length > 0 ? (
       items.map((item: any) => {
-        return <ListItem text={item.text} icon={item.icon} />;
+        return <ListItem text={item.text} iconName={item.iconName} iconColor={item.iconColor} />;
       })
     ) : (
       <slot />
     )
   }
 </ul>
+
+<style lang="pcss">
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-em-sm);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    &.direction-horizontal {
+      flex-flow: row wrap;
+      gap: var(--spacing-em-sm);
+    }
+
+    &.alignment-end {
+      align-items: flex-end;
+      justify-content: flex-end;
+    }
+
+    &.alignment-center {
+      align-items: center;
+      justify-content: center;
+    }
+
+    &.size-xs {
+      font-size: var(--font-size-xs);
+    }
+
+    &.size-sm {
+      font-size: var(--font-size-sm);
+    }
+
+    &.size-md {
+      font-size: var(--font-size-md);
+    }
+
+    &.size-lg {
+      font-size: var(--font-size-lg);
+    }
+
+    &.size-xl {
+      font-size: var(--font-size-xl);
+    }
+
+    &.size-2xl {
+      font-size: var(--font-size-2xl);
+    }
+  }
+</style>

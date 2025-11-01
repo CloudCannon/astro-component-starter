@@ -33,9 +33,9 @@ blocks:
         - _component: typography/list
           items:
             - text: "NZ & AU: 2–5 days"
-              icon: clock
+              iconName: clock
             - text: "US & EU: 5–10 days"
-              icon: globe-alt
+              iconName: globe-alt
           direction: vertical
           alignX: start
           size: md

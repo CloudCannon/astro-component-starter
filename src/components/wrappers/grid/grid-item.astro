@@ -17,3 +17,37 @@ const htmlAttributes = Object.fromEntries(
     )
   }
 </div>
+
+<style lang="pcss">
+  .grid-item {
+    &.layout-start {
+      height: 100%;
+
+      > :global(editable-array) > :global(editable-array-item:only-child) > :global(*),
+      > :global(:not(editable-array):only-child) {
+        height: 100%;
+      }
+    }
+
+    &.layout-center {
+      flex: 1 1 min(var(--min-item-width, 200px), 100%);
+      height: 100%;
+      max-width: var(--max-item-width, 320px);
+
+      > :global(editable-array) > :global(editable-array-item:only-child) > :global(*),
+      > :global(:not(editable-array):only-child) {
+        height: 100%;
+      }
+
+      > :global(editable-array) > :global(editable-array-item) {
+        height: 100%;
+      }
+    }
+
+    &.layout-uneven-columns {
+      flex: 0 0 auto;
+      max-width: var(--max-item-width, 320px);
+      min-width: min(var(--min-item-width, 200px), 100%);
+    }
+  }
+</style>

@@ -8,3 +8,37 @@ const htmlAttributes = Object.fromEntries(
 
 <div class:list={["spacer", className, `size-${size}`]} {...htmlAttributes} aria-hidden="true">
 </div>
+
+<style lang="pcss">
+  .spacer {
+    height: 0;
+
+    &.size-xs {
+      height: var(--spacing-xs);
+    }
+
+    &.size-sm {
+      height: var(--spacing-sm);
+    }
+
+    &.size-md {
+      height: var(--spacing-md);
+    }
+
+    &.size-lg {
+      height: var(--spacing-lg);
+    }
+
+    &.size-xl {
+      height: var(--spacing-xl);
+    }
+
+    &.size-2xl {
+      height: var(--spacing-2xl);
+    }
+
+    &.size-3xl {
+      height: var(--spacing-3xl);
+    }
+  }
+</style>

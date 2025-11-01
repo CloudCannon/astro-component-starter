@@ -54,3 +54,36 @@ const mobileNavData = [
     class="mobile-main-nav"
   />
 </Container>
+
+<style lang="pcss">
+  .main-nav {
+    z-index: var(--layer-2);
+    .desktop-main-nav.bar,
+    .desktop-button-group.button-group {
+      @container (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    .nav-hamburger.mobile-button {
+      @container (min-width: 769px) {
+        display: none;
+      }
+    }
+
+    > .outer-content > .content {
+      align-items: center;
+      container-type: inline-size;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+      justify-content: space-between;
+
+      > .smart-image img {
+        height: 1.8em;
+        max-width: min(20em, 100%);
+        width: auto;
+      }
+    }
+  }
+</style>

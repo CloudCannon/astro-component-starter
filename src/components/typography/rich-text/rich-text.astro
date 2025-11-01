@@ -16,3 +16,19 @@ const markdownContent = text ? md.render(text) : "";
 <div class:list={["rich-text", className, `align-${alignX}`]} {...htmlAttributes}>
   {text ? <Fragment set:html={markdownContent} /> : <slot />}
 </div>
+
+<style lang="pcss">
+  .rich-text {
+    &.align-start {
+      text-align: start;
+    }
+
+    &.align-center {
+      text-align: center;
+    }
+
+    &.align-end {
+      text-align: end;
+    }
+  }
+</style>

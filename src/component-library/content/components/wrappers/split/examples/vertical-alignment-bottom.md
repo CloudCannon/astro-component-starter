@@ -6,6 +6,8 @@ blocks:
   firstColumnContentBlocks:
     - _component: "wrappers/container"
       backgroundColor: "accent"
+      paddingHorizontal: sm
+      paddingVertical: sm
       contentBlocks:
         - _component: "typography/rich-text"
           text: |-
@@ -19,6 +21,8 @@ blocks:
   secondColumnContentBlocks:
     - _component: "wrappers/container"
       backgroundColor: "highlight"
+      paddingHorizontal: sm
+      paddingVertical: sm
       contentBlocks:
         - _component: "typography/rich-text"
           text: |-

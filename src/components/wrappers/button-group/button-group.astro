@@ -47,3 +47,45 @@ const alignClass = alignMap[alignX as keyof typeof alignMap] ?? "align-start";
     )
   }
 </div>
+
+<style lang="pcss">
+  .button-group {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    position: relative;
+
+    &.column {
+      flex-direction: column;
+
+      &.align-start {
+        align-items: flex-start;
+      }
+
+      &.align-center {
+        align-items: center;
+      }
+
+      &.align-end {
+        align-items: flex-end;
+      }
+    }
+
+    &.row {
+      flex-direction: row;
+    }
+
+    &.align-center {
+      justify-content: center;
+    }
+
+    &.align-end {
+      justify-content: flex-end;
+    }
+
+    &.align-start {
+      justify-content: flex-start;
+    }
+  }
+</style>

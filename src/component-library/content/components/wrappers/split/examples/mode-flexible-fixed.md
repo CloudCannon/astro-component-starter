@@ -6,6 +6,8 @@ blocks:
   firstColumnContentBlocks:
     - _component: "wrappers/container"
       backgroundColor: "accent"
+      paddingHorizontal: sm
+      paddingVertical: sm
       contentBlocks:
         - _component: "typography/rich-text"
           text: |-
@@ -14,6 +16,8 @@ blocks:
             This column takes up the remaining space.
   secondColumnContentBlocks:
     - _component: "wrappers/container"
+      paddingHorizontal: sm
+      paddingVertical: sm
       backgroundColor: "highlight"
       contentBlocks:
         - _component: "typography/rich-text"

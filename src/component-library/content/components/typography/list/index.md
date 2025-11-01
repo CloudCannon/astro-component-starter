@@ -32,4 +32,6 @@ examples:
       - size-xl
       - size-2xl
     title: Sizes
+  - slugs:
+      - icon-colors
 ---

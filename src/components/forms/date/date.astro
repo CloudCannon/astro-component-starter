@@ -34,3 +34,19 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
     {...htmlAttributes}
   />
 </div>
+
+<style lang="pcss">
+  .date {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    width: 100%;
+    margin: 0;
+    margin-bottom: var(--spacing-md);
+
+    .required {
+      color: red;
+      margin-inline-end: var(--spacing-em-xs);
+    }
+  }
+</style>

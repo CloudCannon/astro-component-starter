@@ -53,3 +53,68 @@ const MarkdownText = text ? md.render(text) : "";
     </cite>
   </div>
 </blockquote>
+
+<style lang="pcss">
+  .testimonial {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-em-sm);
+    margin: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+
+    &.alignment-center {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    > .quote {
+      margin: 0;
+
+      * {
+        font-size: var(--font-size-2xl);
+      }
+
+      *:first-child {
+        margin-top: 0;
+      }
+
+      *:last-child {
+        margin-bottom: 0;
+      }
+
+      *:first-child::before {
+        content: "\201C";
+      }
+
+      *:last-child::after {
+        content: "\201D";
+      }
+    }
+
+    > .author {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-md);
+
+      > .author-content {
+        font-style: normal;
+        text-align: start;
+      }
+
+      > .author-image {
+        aspect-ratio: var(--ratio-square);
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        width: 80px;
+        height: 80px;
+
+        img {
+          height: auto;
+        }
+      }
+    }
+  }
+</style>

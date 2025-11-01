@@ -5,11 +5,11 @@ blocks:
   - _component: "typography/list"
     items:
       - text: First list item
-        icon: check-circle
+        iconName: check-circle
       - text: Second list item
-        icon: check-circle
+        iconName: check-circle
       - text: Third list item
-        icon: check-circle
+        iconName: check-circle
     direction: vertical
     alignX: start
     size: md

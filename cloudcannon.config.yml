@@ -2377,11 +2377,12 @@ _structures:
       - label: List Item
         value:
           text: ""
-          icon: ""
+          iconName: ""
+          iconColor: default
         preview:
           icon: text_fields
           image:
-            - template: src/icons/{icon}.svg
+            - template: src/icons/{iconName}.svg
         _inputs:
           text:
             type: markdown
@@ -2398,7 +2399,7 @@ _structures:
               redo: true
               removeformat: true
               copyformatting: true
-          icon:
+          iconName:
             type: select
             comment: The name of the icon to display from the icon library.
             options:
@@ -2408,6 +2409,29 @@ _structures:
                   - key: name
                 image:
                   - template: src/icons/{id}.svg
+          iconColor:
+            type: select
+            comment: The color of the icon.
+            options:
+              values:
+                - id: default
+                  name: Default
+                - id: blue
+                  name: Blue
+                - id: green
+                  name: Green
+                - id: yellow
+                  name: Yellow
+                - id: orange
+                  name: Orange
+                - id: red
+                  name: Red
+                - id: purple
+                  name: Purple
+                - id: pink
+                  name: Pink
+                - id: cyan
+                  name: Cyan
   definitionListItems:
     id_key: _component
     style: modal
@@ -2605,7 +2629,7 @@ _structures:
           hideText:
             type: switch
             comment: Whether to hide the button text and show only the icon.
-            hidden: "!iconName\""
+            hidden: '!iconName"'
           disabled:
             type: switch
             comment: Whether the submit button is disabled.

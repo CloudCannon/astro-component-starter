@@ -48,10 +48,7 @@ if (!htmlAttributes.id && label) {
   {
     source && (
       <SmartImage
-        class:list={[
-          "background-image",
-          positionVertical && positionHorizontal && `${positionVertical}-${positionHorizontal}`,
-        ]}
+        class:list={["background-image"]}
         source={source}
         alt={alt}
         priority={priority}
@@ -59,6 +56,9 @@ if (!htmlAttributes.id && label) {
         data-prop-src="backgroundImage.source"
         data-prop-alt="backgroundImage.alt"
         data-editable="image"
+        positionVertical={positionVertical}
+        positionHorizontal={positionHorizontal}
+        background={true}
       />
     )
   }
@@ -87,3 +87,166 @@ if (!htmlAttributes.id && label) {
     </div>
   </div>
 </section>
+
+<style lang="pcss">
+  .container {
+    position: relative;
+
+    &.rounded {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    > .outer-content {
+      height: 100%;
+    }
+
+    > .outer-content > .content {
+      height: 100%;
+      margin-inline: auto;
+      position: relative;
+      z-index: var(--layer-1);
+
+      > *:first-child {
+        margin-top: 0;
+      }
+
+      > *:last-child {
+        margin-bottom: 0;
+      }
+
+      &.pad-x-xs {
+        padding-inline: var(--spacing-xs);
+      }
+
+      &.pad-x-sm {
+        padding-inline: var(--spacing-sm);
+      }
+
+      &.pad-x-md {
+        padding-inline: var(--spacing-md);
+      }
+
+      &.pad-x-lg {
+        padding-inline: var(--spacing-lg);
+      }
+
+      &.pad-x-xl {
+        padding-inline: var(--spacing-xl);
+      }
+
+      &.pad-x-2xl {
+        padding-inline: var(--spacing-2xl);
+      }
+
+      &.pad-x-3xl {
+        padding-inline: var(--spacing-3xl);
+      }
+
+      &.pad-x-4xl {
+        padding-inline: var(--spacing-4xl);
+      }
+
+      &.pad-x-5xl {
+        padding-inline: var(--spacing-5xl);
+      }
+
+      &.pad-x-6xl {
+        padding-inline: var(--spacing-6xl);
+      }
+
+      &.pad-y-xs {
+        padding-block: var(--spacing-xs);
+      }
+
+      &.pad-y-sm {
+        padding-block: var(--spacing-sm);
+      }
+
+      &.pad-y-md {
+        padding-block: var(--spacing-md);
+      }
+
+      &.pad-y-lg {
+        padding-block: var(--spacing-lg);
+      }
+
+      &.pad-y-xl {
+        padding-block: var(--spacing-xl);
+      }
+
+      &.pad-y-2xl {
+        padding-block: var(--spacing-2xl);
+      }
+
+      &.pad-y-3xl {
+        padding-block: var(--spacing-3xl);
+      }
+
+      &.pad-y-4xl {
+        padding-block: var(--spacing-4xl);
+      }
+
+      &.pad-y-5xl {
+        padding-block: var(--spacing-5xl);
+      }
+
+      &.pad-y-6xl {
+        padding-block: var(--spacing-6xl);
+      }
+
+      &.max-width-xs {
+        max-width: var(--content-width-xs);
+      }
+
+      &.max-width-sm {
+        max-width: var(--content-width-sm);
+      }
+
+      &.max-width-md {
+        max-width: var(--content-width-md);
+      }
+
+      &.max-width-lg {
+        max-width: var(--content-width-lg);
+      }
+
+      &.max-width-xl {
+        max-width: var(--content-width-xl);
+      }
+
+      &.max-width-2xl {
+        max-width: var(--content-width-2xl);
+      }
+
+      &.max-width-3xl {
+        max-width: var(--content-width-3xl);
+      }
+    }
+
+    > .background {
+      inset: 0;
+      position: absolute;
+    }
+
+    > .background-image {
+      z-index: var(--layer-1);
+    }
+
+    > .bg-base {
+      background-color: var(--color-bg);
+    }
+
+    > .bg-surface {
+      background-color: var(--color-bg-surface);
+    }
+
+    > .bg-accent {
+      background-color: var(--color-bg-accent);
+    }
+
+    > .bg-highlight {
+      background-color: var(--color-bg-highlight);
+    }
+  }
+</style>

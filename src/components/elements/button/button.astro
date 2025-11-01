@@ -42,3 +42,126 @@ const tagProps = Tag === "a" && link ? { href: link } : Tag === "button" ? { typ
   {iconName && <Icon name={iconName} size="none" />}
   {!hideText && (text ? <span>{text}</span> : <slot />)}
 </Tag>
+
+<style lang="pcss">
+  .button {
+    align-items: center;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xs);
+    color: var(--color-text-strong);
+    display: inline-flex;
+    flex-shrink: 0;
+    font-weight: var(--font-weight-semibold);
+    gap: 0.15em;
+    justify-content: center;
+    min-height: 10px;
+    min-width: 10px;
+    padding-block: var(--spacing-em-sm);
+    padding-inline: var(--spacing-em-sm);
+    text-align: center;
+    text-decoration: none;
+    transition-duration: var(--animation-normal);
+    transition-property: background-color, color, border-color;
+    transition-timing-function: ease-in-out;
+    vertical-align: middle;
+
+    &:hover {
+      background-color: var(--color-bg-muted);
+      border-color: var(--color-border-strong);
+      color: var(--color-text-strong);
+      cursor: pointer;
+    }
+
+    &:focus {
+      box-shadow: 0 0 2px 2px var(--color-focus-ring) inset;
+      outline: none;
+    }
+
+    &.icon-only {
+      padding: var(--spacing-em-xs);
+    }
+
+    &.icon-after {
+      flex-direction: row-reverse;
+    }
+
+    &.variant-primary {
+      background-color: var(--color-bg-brand);
+      border-color: transparent;
+      color: var(--color-text-on-brand);
+
+      &:hover,
+      &:focus {
+        background-color: var(--color-bg-brand-muted);
+        border-color: transparent;
+        color: var(--color-text-on-brand);
+      }
+    }
+
+    &.variant-secondary {
+      background-color: var(--color-bg-muted);
+      border-color: transparent;
+      color: var(--color-text-strong);
+
+      &:hover,
+      &:focus {
+        background-color: var(--color-state-hover);
+        border-color: transparent;
+        color: var(--color-text-strong);
+      }
+    }
+
+    &.variant-tertiary {
+      background-color: transparent;
+      border-color: var(--color-border-strong);
+      color: var(--color-text-strong);
+
+      &:hover,
+      &:focus {
+        background-color: var(--color-bg-surface);
+        border-color: var(--color-border-strong);
+        color: var(--color-text-strong);
+      }
+    }
+
+    &.variant-ghost {
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--color-text-strong);
+
+      &:hover,
+      &:focus {
+        background-color: var(--color-state-hover);
+        border-color: transparent;
+        color: var(--color-text-strong);
+      }
+    }
+
+    &.variant-text {
+      background-color: transparent;
+      border-color: transparent;
+      color: var(--color-brand);
+      font-size: var(--font-size-lg);
+      font-weight: 600;
+      padding: 0;
+
+      &:hover,
+      &:focus {
+        color: var(--color-brand-muted);
+      }
+    }
+
+    &.size-sm {
+      font-size: var(--font-size-xs);
+    }
+
+    &.size-md {
+      font-size: var(--font-size-md);
+    }
+
+    &.size-lg {
+      font-size: var(--font-size-xl);
+    }
+  }
+</style>

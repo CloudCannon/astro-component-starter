@@ -18,7 +18,6 @@ examples:
       - ratio-landscape
       - ratio-portrait
       - ratio-widescreen
-      - ratio-golden
   - title: Position
     size: lg
     slugs:

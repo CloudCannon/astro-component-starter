@@ -5,11 +5,11 @@ blocks:
   - _component: "typography/list"
     items:
       - text: First vertical list item
-        icon: bolt
+        iconName: bolt
       - text: Second vertical list item
-        icon: bolt
+        iconName: bolt
       - text: Third vertical list item
-        icon: bolt
+        iconName: bolt
     direction: vertical
     alignX: start
     size: md

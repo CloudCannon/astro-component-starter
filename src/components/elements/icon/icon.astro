@@ -41,3 +41,138 @@ const htmlAttributes = Object.fromEntries(
     </div>
   )
 }
+
+<style lang="pcss">
+  .icon {
+    border-radius: var(--radius-xs);
+    color: inherit;
+    display: inline-block;
+    line-height: 0;
+    vertical-align: middle;
+    &.flip-rtl {
+      transform: scaleX(-1);
+    }
+
+    &.background-subtle {
+      padding: 0.15em;
+    }
+
+    &.fill {
+      fill: currentcolor;
+    }
+
+    &.background {
+      background-color: var(--color-bg-surface);
+      padding: var(--spacing-em-xs);
+    }
+
+    &.color-blue {
+      color: var(--blue-dark);
+
+      &.background {
+        background-color: var(--blue-light);
+      }
+    }
+
+    &.color-green {
+      color: var(--green-dark);
+
+      &.background {
+        background-color: var(--green-light);
+      }
+    }
+
+    &.color-yellow {
+      color: var(--yellow-dark);
+
+      &.background {
+        background-color: var(--yellow-light);
+      }
+    }
+
+    &.color-orange {
+      color: var(--orange-dark);
+
+      &.background {
+        background-color: var(--orange-light);
+      }
+    }
+
+    &.color-red {
+      color: var(--red-dark);
+
+      &.background {
+        background-color: var(--red-light);
+      }
+    }
+
+    &.color-purple {
+      color: var(--purple-dark);
+
+      &.background {
+        background-color: var(--purple-light);
+      }
+    }
+
+    &.color-pink {
+      color: var(--pink-dark);
+
+      &.background {
+        background-color: var(--pink-light);
+      }
+    }
+
+    &.color-cyan {
+      color: var(--cyan-dark);
+
+      &.background {
+        background-color: var(--cyan-light);
+      }
+    }
+
+    &.size-sm {
+      font-size: var(--font-size-sm);
+    }
+
+    &.size-md {
+      font-size: var(--font-size-xl);
+    }
+
+    &.size-lg {
+      font-size: var(--font-size-3xl);
+    }
+
+    &.size-xl {
+      font-size: var(--font-size-4xl);
+    }
+
+    &.size-2xl {
+      font-size: var(--font-size-5xl);
+    }
+
+    &.size-3xl {
+      font-size: var(--font-size-6xl);
+    }
+
+    &.align-start {
+      display: block;
+      width: fit-content;
+    }
+
+    &.align-center {
+      display: block;
+      margin-inline: auto;
+      width: fit-content;
+    }
+
+    &.align-end {
+      display: block;
+      margin-inline-start: auto;
+      width: fit-content;
+    }
+
+    svg {
+      max-height: 100%;
+    }
+  }
+</style>

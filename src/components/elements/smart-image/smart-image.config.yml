@@ -80,3 +80,7 @@ _inputs:
           name: Center
         - id: right
           name: Right
+  background:
+    type: switch
+    hidden: true
+    comment: Covers the entire parent container with the image.

@@ -2,7 +2,7 @@
 import Icon from "@components/elements/icon/icon.astro";
 import MarkdownIt from "markdown-it";
 
-const { text = "", icon, class: className, ...restProps } = Astro.props;
+const { text = "", iconName, iconColor = "default", class: className, ...restProps } = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => key !== "_component")
@@ -12,6 +12,31 @@ const md = new MarkdownIt({ html: true });
 ---
 
 <li class:list={["item", className]} {...htmlAttributes}>
-  <Icon name={icon} size="none" class="list-icon" aria-hidden="true" />
+  {
+    iconName && (
+      <Icon name={iconName} color={iconColor} size="none" class="list-icon" aria-hidden="true" />
+    )
+  }
   {text ? <span set:html={md.renderInline(text)} /> : <slot />}
 </li>
+
+<style lang="pcss">
+  .item {
+    display: block;
+
+    > .list-icon {
+      display: inline-block;
+      flex-shrink: 0;
+      height: 1em;
+      margin-right: var(--spacing-em-xs);
+      vertical-align: -0.15em;
+      width: 1em;
+
+      svg {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+</style>

@@ -13,6 +13,7 @@ const {
   aspectRatio = null,
   positionVertical = "center",
   positionHorizontal = "center",
+  background = false,
   editable = true,
   class: className,
   "data-prop-src": customDataPropSrc,
@@ -57,6 +58,7 @@ const positionClass = `position-${positionVertical}-${positionHorizontal}`;
     aspectRatio && `ratio-${aspectRatio}`,
     positionClass,
     rounded && "rounded",
+    background && "background",
     className,
   ]}
   {...htmlAttributes}
@@ -89,3 +91,105 @@ const positionClass = `position-${positionVertical}-${positionHorizontal}`;
     )
   }
 </div>
+
+<style lang="pcss">
+  .smart-image {
+    display: block;
+    overflow: hidden;
+
+    &.ratio-square {
+      aspect-ratio: var(--ratio-square);
+    }
+
+    &.ratio-landscape {
+      aspect-ratio: var(--ratio-landscape);
+    }
+
+    &.ratio-portrait {
+      aspect-ratio: var(--ratio-portrait);
+    }
+
+    &.ratio-widescreen {
+      aspect-ratio: var(--ratio-widescreen);
+    }
+
+    &.ratio {
+      :global(picture) {
+        height: 100%;
+      }
+
+      :global(img) {
+        height: 100%;
+        object-fit: cover;
+        object-position: center center;
+      }
+    }
+
+    &.background {
+      inset: 0;
+      position: absolute;
+
+      > :global(picture) {
+        height: 100%;
+      }
+
+      > :global(picture) > :global(img) {
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+      }
+    }
+
+    :global(picture) {
+      display: block;
+      margin-block: auto;
+      width: 100%;
+    }
+
+    :global(img) {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    &.position-center-center :global(img) {
+      object-position: center center;
+    }
+
+    &.position-top-center :global(img) {
+      object-position: center top;
+    }
+
+    &.position-bottom-center :global(img) {
+      object-position: center bottom;
+    }
+
+    &.position-center-left :global(img) {
+      object-position: left center;
+    }
+
+    &.position-center-right :global(img) {
+      object-position: right center;
+    }
+
+    &.position-top-left :global(img) {
+      object-position: left top;
+    }
+
+    &.position-top-right :global(img) {
+      object-position: right top;
+    }
+
+    &.position-bottom-left :global(img) {
+      object-position: left bottom;
+    }
+
+    &.position-bottom-right :global(img) {
+      object-position: right bottom;
+    }
+
+    &.rounded {
+      border-radius: var(--radius-lg);
+    }
+  }
+</style>
