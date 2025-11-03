@@ -19,7 +19,9 @@ const htmlAttributes = Object.fromEntries(
 );
 
 const md = MarkdownIt({ html: true });
-const MarkdownText = text ? md.renderInline(text) : "";
+let MarkdownText = text ? md.renderInline(text) : "";
+
+MarkdownText = MarkdownText.replace(/\n/g, "<br />");
 const Tag = level;
 ---
 
