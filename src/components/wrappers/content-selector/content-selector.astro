@@ -26,13 +26,10 @@ const uniqueId = crypto.randomUUID();
   class:list={["content-selector", `nav-${navigationPosition}`, className]}
   data-uid={uniqueId}
   {...htmlAttributes}
-  data-editable="array"
-  data-prop="items"
 >
   {
     items?.map((item: any, index: number) => (
       <input
-        data-editable="array-item"
         type="radio"
         name={`tabs-${uniqueId}`}
         id={`tab-${uniqueId}-${index}`}
@@ -44,11 +41,10 @@ const uniqueId = crypto.randomUUID();
     ))
   }
 
-  <div class="tabs" data-editable="array" data-prop="items" role="tablist">
+  <div class="tabs" role="tablist">
     {
       items?.map((item: any, index: number) => (
         <label
-          data-editable="array-item"
           class="tab"
           id={`tablabel-${uniqueId}-${index}`}
           for={`tab-${uniqueId}-${index}`}
