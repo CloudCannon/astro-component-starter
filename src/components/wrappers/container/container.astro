@@ -8,6 +8,7 @@ const {
   maxContentWidth,
   paddingHorizontal,
   paddingVertical,
+  gap = "md",
   colorScheme,
   backgroundColor,
   backgroundImage,
@@ -76,6 +77,7 @@ if (!htmlAttributes.id && label) {
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
+      style={`--container-gap: var(--content-space-${gap});`}
     >
       {
         contentBlocks ? (
@@ -106,6 +108,13 @@ if (!htmlAttributes.id && label) {
       margin-inline: auto;
       position: relative;
       z-index: var(--layer-1);
+
+      &, & > :global(editable-array) {
+        display: flex;
+        flex-direction: column;
+        gap: var(--container-gap, var(--content-space-md));
+        
+      }
 
       > *:first-child {
         margin-top: 0;

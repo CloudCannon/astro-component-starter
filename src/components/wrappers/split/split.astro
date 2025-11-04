@@ -9,7 +9,10 @@ const {
   reverse = false,
   fixedWidth,
   minSplitWidth = 700,
+  gap = "md",
+  columnGap = "lg",
   class: className,
+  style: userStyle,
   label,
   ...rest
 } = Astro.props;
@@ -60,7 +63,14 @@ const splitId = `split-${crypto.randomUUID()}`;
 <section
   class:list={["split", `align-${verticalAlignment}`, finalDistributionMode, className]}
   data-split-id={splitId}
-  style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
+  style={[
+    `--column-gap: var(--spacing-${columnGap});`,
+    `--pane-gap: var(--spacing-${gap});`,
+    fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : "",
+    userStyle,
+  ]
+    .filter(Boolean)
+    .join("; ")}
   {...htmlAttributes}
 >
   <div class="pane first">
@@ -112,13 +122,14 @@ const splitId = `split-${crypto.randomUUID()}`;
   }
 
   .split {
-    --gap-size: var(--spacing-lg);
+    --column-gap: var(--spacing-lg);
+    --pane-gap: var(--spacing-md);
     --split-columns-mobile: 1fr;
     --split-columns-desktop: 1fr 1fr;
     --split-fixed-width: auto;
 
     display: grid;
-    gap: var(--gap-size);
+    gap: var(--column-gap);
     grid-template-columns: var(--split-columns-desktop);
 
     &.align-top {
@@ -143,6 +154,9 @@ const splitId = `split-${crypto.randomUUID()}`;
     }
 
     .pane {
+      display: flex;
+      flex-direction: column;
+      gap: var(--pane-gap);
       min-width: 0;
       overflow-wrap: break-word;
       word-wrap: break-word;

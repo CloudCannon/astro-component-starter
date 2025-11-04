@@ -37,6 +37,13 @@ examples:
       - padding-lg
       - padding-2xl
       - padding-3xl
+  - title: Gap
+    slugs:
+      - gap-xs
+      - gap-sm
+      - gap-md
+      - gap-lg
+      - gap-xl
   - title: Color Scheme
     slugs:
       - scheme-contrast

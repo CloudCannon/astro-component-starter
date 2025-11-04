@@ -32,6 +32,14 @@ examples:
       - padding-xl
       - padding-2xl
     size: md
+  - title: "Gap Options"
+    slugs:
+      - gap-xs
+      - gap-sm
+      - gap-md
+      - gap-lg
+      - gap-xl
+    size: md
   - title: "Background Options"
     slugs:
       - background-accent

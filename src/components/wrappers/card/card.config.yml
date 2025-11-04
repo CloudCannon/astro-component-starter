@@ -13,6 +13,7 @@ value:
   contentBlocks: []
   paddingHorizontal: sm
   paddingVertical: sm
+  gap: md
   colorScheme: default
   backgroundColor: base
   backgroundImage:
@@ -92,6 +93,25 @@ _inputs:
           name: Extra Large
         - id: 2xl
           name: 2xl
+  gap:
+    type: select
+    comment: The gap between content blocks within the card.
+    options:
+      values:
+        - id: xs
+          name: Extra Small
+        - id: sm
+          name: Small
+        - id: md
+          name: Medium
+        - id: lg
+          name: Large
+        - id: xl
+          name: Extra Large
+        - id: 2xl
+          name: 2xl
+        - id: 3xl
+          name: 3xl
   colorScheme:
     type: select
     comment: Color scheme theme for the card.

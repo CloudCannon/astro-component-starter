@@ -9,6 +9,7 @@ const {
   afterContentBlocks,
   paddingHorizontal,
   paddingVertical,
+  gap = "md",
   colorScheme,
   backgroundColor,
   backgroundImage,
@@ -92,6 +93,7 @@ const Tag = link ? "a" : "div";
         paddingHorizontal && `pad-x-${paddingHorizontal}`,
         paddingVertical && `pad-y-${paddingVertical}`,
       ]}
+      style={`--card-gap: var(--spacing-${gap});`}
     >
       <slot />
       <Component contentBlocks={contentBlocks} propName="contentBlocks" />
@@ -136,6 +138,9 @@ const Tag = link ? "a" : "div";
     }
 
     > .outer-content > .content {
+      display: flex;
+      flex-direction: column;
+      gap: var(--card-gap, var(--spacing-md));
       height: 100%;
       position: relative;
       z-index: var(--layer-1);
