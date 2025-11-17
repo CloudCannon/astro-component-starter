@@ -22,11 +22,17 @@ Object.entries(componentImports).forEach(([path, obj]) => {
 });
 
 const { contentSections, propName = "contentSections", editable = true } = Astro.props;
+
+const sectionsArray = Array.isArray(contentSections)
+  ? contentSections
+  : editable
+    ? []
+    : contentSections;
 ---
 
 {
   !editable ? (
-    contentSections?.map((block) => {
+    sectionsArray?.map((block) => {
       const Component = components[block._component];
 
       if (!Component && block._component) {
@@ -45,7 +51,7 @@ const { contentSections, propName = "contentSections", editable = true } = Astro
       data-id-key="_component"
       data-prop={propName}
     >
-      {contentSections?.map((block) => {
+      {sectionsArray?.map((block) => {
         const Component = components[block._component];
 
         if (!Component && block._component) {

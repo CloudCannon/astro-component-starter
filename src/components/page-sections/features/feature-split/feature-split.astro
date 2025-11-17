@@ -1,5 +1,10 @@
 ---
 import CustomSection from "@builders/custom-section/custom-section.astro";
+import Heading from "@core-elements/heading/heading.astro";
+import Image from "@core-elements/image/image.astro";
+import SimpleText from "@core-elements/simple-text/simple-text.astro";
+import ButtonGroup from "@wrappers/button-group/button-group.astro";
+import Split from "@wrappers/split/split.astro";
 
 const {
   eyebrow = "",
@@ -29,7 +34,60 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   data-feature-split-id={featureSplitId}
-/>
+>
+  <Split
+    class="feature-split-layout"
+    distributionMode="flexible-fixed"
+    fixedWidth="420"
+    minSplitWidth={minSplitWidth}
+    reverse={reverse}
+    verticalAlignment="center"
+  >
+    <div slot="first">
+      {eyebrow && <SimpleText class="eyebrow">{eyebrow}</SimpleText>}
+      {
+        heading && (
+          <Heading level="h2" size="lg">
+            {heading}
+          </Heading>
+        )
+      }
+      {
+        subtext && (
+          <SimpleText class="subtext" size="md">
+            {subtext}
+          </SimpleText>
+        )
+      }
+      {
+        buttonSections?.length > 0 && (
+          <ButtonGroup
+            class="feature-buttons"
+            buttonSections={buttonSections}
+            direction="row"
+            alignX="start"
+          />
+        )
+      }
+    </div>
+    <div slot="second">
+      {
+        hasImage && (
+          <Image
+            class:list={["feature-split-image", reverse && "reverse"]}
+            source={imageSource}
+            alt={imageAlt}
+            rounded={imageRounded}
+            aspectRatio={imageAspectRatio}
+            data-prop-src="imageSource"
+            data-prop-alt="imageAlt"
+            data-editable="image"
+          />
+        )
+      }
+    </div>
+  </Split>
+</CustomSection>
 
 {
   imageAspectRatio == "portrait" && (

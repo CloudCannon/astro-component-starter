@@ -1,10 +1,10 @@
 ---
-import Image from "@core-elements/image/image.astro";
 import Component from "@components/utils/renderBlock.astro";
+import Image from "@core-elements/image/image.astro";
 
 const {
   label,
-  contentSections,
+  contentSections = [],
   maxContentWidth,
   paddingHorizontal,
   paddingVertical,
@@ -77,13 +77,8 @@ if (!htmlAttributes.id && label) {
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
     >
-      {
-        contentSections ? (
-          <Component contentSections={contentSections} propName="contentSections" />
-        ) : (
-          <slot />
-        )
-      }
+      {(<Component contentSections={contentSections} propName="contentSections" />)}
+      {(!contentSections || contentSections.length === 0) && <slot />}
     </div>
   </div>
 </section>
