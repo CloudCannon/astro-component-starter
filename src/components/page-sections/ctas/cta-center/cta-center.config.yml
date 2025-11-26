@@ -22,12 +22,12 @@ value:
 preview:
   text:
     - key: heading
-    - Center CTA
+    - CTA Center
   subtext:
     - key: subtext
     - Add supporting text
 picker_preview:
-  text: Center CTA
+  text: CTA Center
   subtext: Centered CTA with stacked text and buttons.
   icon: hero
 _inputs:

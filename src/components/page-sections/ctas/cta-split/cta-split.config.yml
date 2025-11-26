@@ -25,12 +25,12 @@ value:
 preview:
   text:
     - key: heading
-    - Split CTA
+    - CTA Split
   subtext:
     - key: subtext
     - Add supporting text
 picker_preview:
-  text: Split CTA
+  text: CTA Split
   subtext: Split layout CTA with button stack.
   icon: hero
 _inputs:

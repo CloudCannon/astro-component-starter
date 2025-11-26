@@ -22,14 +22,14 @@ value:
 preview:
   text:
     - key: heading
-    - Center Hero
+    - Hero Center
   subtext:
     - key: eyebrow
     - Eyebrow
     - key: subtext
     - Add subtext to the hero
 picker_preview:
-  text: Center Hero
+  text: Hero Center
   subtext: "Centered hero with heading, subtext, and buttons."
   icon: hero
 _inputs:

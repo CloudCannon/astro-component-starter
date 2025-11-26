@@ -34,12 +34,12 @@ value:
 preview:
   text:
     - key: heading
-    - Form CTA
+    - CTA Form
   subtext:
     - key: subtext
     - Add supporting text
 picker_preview:
-  text: Form CTA
+  text: CTA Form
   subtext: Split layout CTA with form and image.
   icon: hero
 _inputs:
