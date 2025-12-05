@@ -10,7 +10,7 @@ import Split from "@wrappers/split/split.astro";
 const {
   eyebrow = "",
   heading = "",
-  subtitle = "",
+  subtext = "",
   imageSource = "",
   imageAlt = "",
   imageAspectRatio = "none",
@@ -49,9 +49,7 @@ const {
         )
       }
       <Heading level="h1" size="2xl" data-prop="heading">{heading}</Heading>
-      {subtitle && (
-        <Text class="subtext" data-prop="subtitle" text={subtitle} />
-      )}
+      {subtext && <Text class="subtext" data-prop="subtext" text={subtext} />}
       <ButtonGroup class="buttons-container" buttonSections={buttonSections} />
     </Fragment>
     <Fragment slot="second">

@@ -5,7 +5,7 @@ value:
   _component: page-sections/heroes/hero-split
   eyebrow: Eyebrow text
   heading: Heading text
-  subtitle: Subtitle placeholder text that will be replaced with actual content.
+  subtext: Subtitle placeholder text that will be replaced with actual content.
   imageSource: /src/assets/images/component-library/dunedin-cliff.jpg
   imageAlt: Hero image
   imageAspectRatio: none
@@ -37,7 +37,7 @@ _inputs:
   heading:
     type: text
     comment: Main heading text for the hero section.
-  subtitle:
+  subtext:
     type: markdown
     comment: Subtitle text displayed below the main heading.
     options:

@@ -5,7 +5,7 @@ pageSections:
   - _component: page-sections/heroes/hero-split
     eyebrow:
     heading: Why this Starter exists
-    subtitle: Build websites with small, predictable pieces and only the essentials so everything stays fast and easy to manage.
+    subtext: Build websites with small, predictable pieces and only the essentials so everything stays fast and easy to manage.
     imageSource: /src/assets/images/component-library/sunset.jpg
     imageAlt: Sunset
     imageAspectRatio: "portrait"

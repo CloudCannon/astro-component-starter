@@ -5,7 +5,7 @@ blocks:
   _component: "page-sections/heroes/hero-split"
   eyebrow: "Destination guide"
   heading: "Discover Dunedin"
-  subtitle: "A city of students, heritage, and natural wonder at the edge of the Pacific."
+  subtext: "A city of students, heritage, and natural wonder at the edge of the Pacific."
   reverse: true
   imageSource: /src/assets/images/component-library/dunedin-cliff.jpg
   imageAlt: "Cliffs and rugged coastline near Dunedin, New Zealand, with yellow flowering shrubs in the foreground and waves crashing against the rocks below."
