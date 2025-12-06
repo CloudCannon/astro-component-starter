@@ -27,7 +27,7 @@ const hasImage = Boolean(imageSource);
 <Card
   {...htmlAttributes}
   class:list={["feature-slider-item", className]}
-  paddingHorizontal="none"
+  paddingHorizontal="xs"
   paddingVertical="none"
 >
   <Split
@@ -50,11 +50,7 @@ const hasImage = Boolean(imageSource);
           </Heading>
         )
       }
-      {
-        description && (
-          <Text data-prop="description" text={description} />
-        )
-      }
+      {description && <Text data-prop="description" text={description} />}
     </Fragment>
     {
       hasImage && (
