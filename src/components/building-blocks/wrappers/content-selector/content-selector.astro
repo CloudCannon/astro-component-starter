@@ -2,7 +2,14 @@
 import Heading from "@core-elements/heading/heading.astro";
 import ContentSelectorPanel from "./content-selector-panel.astro";
 
-const { items, navigationPosition = "start", class: className, label, editable = true, ...restProps } = Astro.props;
+const {
+  items,
+  navigationPosition = "start",
+  class: className,
+  label,
+  editable = true,
+  ...restProps
+} = Astro.props;
 
 const htmlAttributes = Object.fromEntries(
   Object.entries(restProps).filter(([key]) => key !== "_component")
@@ -68,16 +75,14 @@ const arrayDataAttributes = editable
             size="h3"
             alignX={navigationPosition === "top" ? "center" : "start"}
             class="tab-heading"
+            editable={false}
           />
         </label>
       ))
     }
   </div>
 
-  <div
-    class="panels"
-    {...arrayDataAttributes}
-  >
+  <div class="panels" {...arrayDataAttributes}>
     {
       items?.map((item: any, index: number) => (
         <editable-array-item data-component="building-blocks/wrappers/content-selector/content-selector-panel">
