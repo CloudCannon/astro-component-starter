@@ -87,7 +87,11 @@ const arrayDataAttributes = editable
     {
       items?.map((item: any, index: number) => (
         <editable-array-item data-component="building-blocks/wrappers/content-selector/content-selector-panel">
-          abc
+          <ContentSelectorPanel
+            index={index}
+            uniqueId={uniqueId}
+            contentSections={item.contentSections}
+          />
         </editable-array-item>
       ))
     }
