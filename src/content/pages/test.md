@@ -112,9 +112,17 @@ pageSections:
       - _component: building-blocks/core-elements/divider
         paddingVertical: lg
       - _component: building-blocks/core-elements/embed
-        source: https://www.youtube.com/embed/yXBiY3tHsfc
+        source: >-
+          <iframe height="300" style="width: 100%;" scrolling="no" title="2024
+          Rewind  - Top 80 most ❤️ pens (scroll to see more)"
+          src="https://codepen.io/cbolson/embed/ogvWOgN?default-tab=html%2Cresult"
+          frameborder="no" loading="lazy" allowtransparency="true">       See
+          the Pen <a href="https://codepen.io/cbolson/pen/ogvWOgN">   2024
+          Rewind  - Top 80 most ❤️ pens (scroll to see more)</a> by Chris Bolson
+          (<a href="https://codepen.io/cbolson">@cbolson</a>)   on <a
+          href="https://codepen.io">CodePen</a>.       </iframe>
         title: ''
-        aspectRatio: landscape
+        aspectRatio: widescreen
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md
