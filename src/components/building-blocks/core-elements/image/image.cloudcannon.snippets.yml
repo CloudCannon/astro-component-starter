@@ -34,5 +34,8 @@ image:
       - editor_key: background
         type: boolean
         optional: true
+      - editor_key: priority
+        type: boolean
+        optional: true
   _inputs_from_glob:
     - /src/components/building-blocks/core-elements/image/image.cloudcannon.inputs.yml

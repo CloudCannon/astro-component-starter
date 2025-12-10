@@ -52,4 +52,7 @@ background:
   type: switch
   hidden: true
   comment: Covers the entire parent container with the image.
+priority:
+  type: switch
+  comment: Load the image with high priority (eager loading for above-the-fold images).
 
