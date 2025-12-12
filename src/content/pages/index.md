@@ -4,33 +4,86 @@ title: Component Library
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
-    heading: A Ruthlessly Clean Component Starter for the Web.
+    heading: The Astro Component Library for building any site
     subtext: >-
-      Built on web fundamentals. Fast to use, fast to ship, and simple to
-      maintain.
+      Built on web fundamentals. Easy to customize, fast to use, and simple to maintain.
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-library/
-        iconName: ''
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: View Guidelines
-        link: /component-library/guidelines
-        iconName: ''
+        text: View in GitHub
+        link: #
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: secondary
         size: md
     colorScheme: default
     backgroundColor: base
+  - _component: page-sections/features/feature-split
+    eyebrow: Built for Astro
+    heading: Fast, modern, and easy to work with
+    subtext: >-
+      This library takes full advantage of Astro's zero-JS-by-default approach. You get fast pages, simple routing, and a component system that stays easy to use as your site grows.
+    buttonSections: []
+    imageSource: /src/assets/images/component-library/website-feature.svg
+    imageAlt: Website Feature
+    imageAspectRatio: none
+    imageRounded: false
+    reverse: false
+    colorScheme: default
+    backgroundColor: base
+  - _component: page-sections/features/feature-split
+    eyebrow: CloudCannon Ready
+    heading: Easy Visual Editing
+    subtext: >-
+      Every component is built to work seamlessly in CloudCannon's Visual Editor. Developers can create and style custom Page Sections with Astro. Editors can click, change, and rearrange content right on the page without touching the code or guessing where anything lives.
+    buttonSections: []
+    imageSource: /src/assets/images/component-library/website-split.svg
+    imageAlt: Website Split
+    imageAspectRatio: none
+    imageRounded: false
+    reverse: true
+    colorScheme:
+    backgroundColor:
+    paddingVertical: lg
+  - _component: page-sections/features/feature-split
+    eyebrow: Performance
+    heading: Fast by architecture, not by accident
+    subtext: >-
+      Your components render to static HTML, keeping bundles lean and pages instant. Your users get instant page loads. You get modern DX.
+    buttonSections: []
+    imageSource: /src/assets/images/component-library/website-split.svg
+    imageAlt: Website Split
+    imageAspectRatio: none
+    imageRounded: false
+    reverse: false
+    colorScheme:
+    backgroundColor:
+    paddingVertical: lg
+  - _component: page-sections/features/feature-split
+    eyebrow: Documentation
+    heading: Every Component, Clearly Documented
+    subtext: >-
+      Each component comes with straightforward docs, real examples, full descriptions of every property, and clear guidance without having to dig through source files.
+    buttonSections: []
+    imageSource: /src/assets/images/component-library/website-hero.svg
+    imageAlt: Website Hero
+    imageAspectRatio: none
+    imageRounded: false
+    reverse: true
+    colorScheme: default
+    backgroundColor: base
   - _component: page-sections/features/feature-grid
     eyebrow: Principles
     heading: Built for Real-World Web Projects
-    subtext: No trends. No noise. Just fundamentals that stay reliable year after year.
+    subtext: No trends. No noise. Just reliability.
     gap: xl
     minItemWidth: 280
     maxItemWidth: 360
@@ -65,77 +118,29 @@ pageSections:
         iconColor: purple
       - _component: page-sections/features/feature-grid/feature-item
         title: Adaptable
-        description: Purposefully plain styling. It adapts to any design without a fight.
+        description: Purposefully plain styling. The whole component library adapts to your designs without a fight.
         iconName: paint-brush
         iconColor: pink
     colorScheme: default
     backgroundColor: surface
     align: center
-  - _component: page-sections/features/feature-split
-    eyebrow: Built on Astro
-    heading: Fast, Modern, and Ridiculously Easy to Work With
-    subtext: >-
-      This starter takes full advantage of Astro's zero-JS-by-default approach.
-      You get fast pages, simple routing, and a component system that stays easy
-      to reason about as the site grows.
-    buttonSections: []
-    imageSource: /src/assets/images/component-library/website-feature.svg
-    imageAlt: Website Feature
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: false
-    colorScheme: default
-    backgroundColor: base
-  - _component: page-sections/features/feature-split
-    eyebrow: Editor Ready
-    heading: Easy Visual Editing
-    subtext: >-
-      Every component is built to work seamlessly in CloudCannon's Visual
-      Editor. Editors can click, change, and rearrange content right on the page
-      without touching the code or guessing where anything lives.
-    buttonSections: []
-    imageSource: /src/assets/images/component-library/website-split.svg
-    imageAlt: Website Split
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: true
-    colorScheme:
-    backgroundColor:
-    paddingVertical: lg
-  - _component: page-sections/features/feature-split
-    eyebrow: Documentation
-    heading: Every Component, Clearly Documented
-    subtext: >-
-      Each component comes with straightforward docs, real examples, full
-      descriptions of every property, and clear guidance without having to dig
-      through source files.
-    buttonSections: []
-    imageSource: /src/assets/images/component-library/website-hero.svg
-    imageAlt: Website Hero
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: false
-    colorScheme: default
-    backgroundColor: base
   - _component: page-sections/ctas/cta-center
     heading: Ready to start building?
     subtext: >-
-      Browse our complete component library and see live examples of every
-      component in action. All components are ready to use and fully
-      customizable.
+      Browse our complete component library and see live examples of every component in action. All components are ready to use and fully customizable
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-library/
-        iconName: ''
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: View Guidelines
-        link: /component-library/guidelines
-        iconName: ''
+        text: View in GitHub
+        link: "#"
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: tertiary

@@ -5,7 +5,7 @@ description: Read our latest articles and insights on web development, design, a
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow: ""
-    heading: Our Blog
+    heading: All posts
     subtext: Insights, tutorials, and thoughts on web development, design, and building great digital experiences.
     buttonSections: []
     colorScheme: default

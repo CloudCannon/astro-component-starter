@@ -4,8 +4,8 @@ title: Why
 pageSections:
   - _component: page-sections/heroes/hero-split
     eyebrow:
-    heading: Why this Starter exists
-    subtext: Build websites with small, predictable pieces and only the essentials so everything stays fast and easy to manage.
+    heading: Why build another Astro component library?
+    subtext: We're big fans of the static web. And we love what the Astro team is making! As more [partner agencies](https://cloudcannon.com/partner-program/) are building client sites on CloudCannon, we wanted to provide a component library for Astro that outputs static HTML and CSS, for the fastest delivery possible — all unbranded and adaptable for any project.
     imageSource: /src/assets/images/component-library/sunset.jpg
     imageAlt: Sunset
     imageAspectRatio: "portrait"
@@ -37,22 +37,23 @@ pageSections:
       - _component: page-sections/features/feature-slider/feature-slider-item
         eyebrow: Collaboration
         title: Team Friendly
-        description: Teams move faster when everything feels obvious. Clear names, simple patterns, and consistent structure mean anyone can open the project and immediately know where things live and how they work. No handoff drama. No onboarding tour.
+        description: Teams move faster when everything feels obvious. Clear names, simple patterns, and a consistent structure mean anyone can open the project and immediately know where things live and how they work.
+
         imageSource: /src/assets/images/component-library/castle.jpg
         imageAlt: Move Faster
         minSplitWidth: 300
       - _component: page-sections/features/feature-slider/feature-slider-item
         eyebrow: Future
         title: Long-Term Stability
-        description: This stack isn't chasing trends, and it won't age out. It's built to last. You're using the same basics the web has relied on from the start. It's a set of solid tools that stay understandable and easy to improve, no matter how much time passes.
+        description: This stack isn't chasing trends, and it's built to last. It's a set of solid tools that stay understandable and easy to improve, no matter how much time passes.
         imageSource: /src/assets/images/component-library/dunedin-cliff.jpg
         imageAlt: Long-Term Stability
         minSplitWidth: 0
 
   - _component: page-sections/people/testimonial-section
-    text: "This framework has completely changed the way we build. The sites come together fast, they run even faster, and the whole process feels effortless. I couldn't be happier with the results."
-    authorName: Richard Johnson
-    authorDescription: CEO, Tech Innovations
+    text: "This testimonial component has completely changed the way I present my quotations on Astro sites. I couldn't be happier with the results."
+    authorName: John Convincingname
+    authorDescription: Founder
     authorImage: /src/assets/images/component-library/profile.jpg
     paddingVertical: 2xl
     colorScheme: contrast
@@ -60,7 +61,7 @@ pageSections:
   - _component: page-sections/people/team-grid
     eyebrow: Our Team
     heading: Meet the People
-    subtext: We're a group of faces that fill out this team grid.
+    subtext: We're a group of stock photography faces that fill out this team grid.
     paddingVertical: 2xl
     teamMembers:
       - _component: page-sections/people/team-grid/team-item
@@ -96,7 +97,7 @@ pageSections:
         title: How does the component starter work?
         contentSections:
           - _component: building-blocks/core-elements/simple-text
-            text: The framework gives you straightforward building blocks without hiding anything behind layers of abstraction. You see what's happening and you stay in control.
+            text: We give you [straightforward building blocks](/component-library/) without hiding anything behind layers of abstraction. You see everything that's happening, and stay in control.
             size: md
       - _component: building-blocks/wrappers/accordion/accordion-item
         title: What's included in the component starter?
@@ -114,7 +115,7 @@ pageSections:
         title: How can I make the component starter my own?
         contentSections:
           - _component: building-blocks/core-elements/simple-text
-            text: Every part of the component starter is meant to be opened, read, and edited. You shape it to fit your project instead of working around someone else's opinions.
+            text: Every part of the component library is meant to be opened, read, and edited. You shape it to fit your project instead of working around someone else's opinions. Start by [browsing the components](/component-library/) to see how they're set up!
             size: md
     maxContentWidth: xl
     paddingHorizontal: xl
