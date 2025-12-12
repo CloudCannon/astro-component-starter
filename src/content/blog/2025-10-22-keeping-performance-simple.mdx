@@ -7,20 +7,20 @@ image: "/src/assets/images/component-library/sunset.jpg"
 tags: ["Performance", "Optimization"]
 ---
 
-Most performance advice gets overly clever. Our approach is boring on purpose: don't ship code the browser doesn't need. Critical CSS stays tiny. JS loads only when something actually requires it. And components are designed to be static-first, so the default state is fast. This template won't fight you, it nudges you toward good decisions automatically.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-The simplest performance optimization is the one you don't have to make because you never shipped the code in the first place. When your default state is static HTML and CSS, you're starting from a fast baseline. Every enhancement you add is intentional, which means you can evaluate whether it's worth the performance cost. This approach prevents the slow accumulation of unnecessary code that happens when everything is interactive by default.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
 
-Critical CSS stays small because we're not loading styles for components that aren't on the page. Each component brings only the styles it needs, and those styles are scoped to prevent conflicts. This means your initial page load includes exactly what's required to render the first view, nothing more. The browser can paint the page quickly because it's not parsing and applying styles for components that don't exist yet.
+Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
 
-JavaScript loads on demand because interactivity should be a choice, not an assumption. An accordion component loads its script only when that accordion appears on the page. A modal loads its functionality only when it's needed. This pattern means users only download code for features they actually encounter. The performance benefit is immediate: smaller bundles, faster parsing, less work for the browser.
+Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.
 
-Here's how that works:
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem:
 
 ```astro
 ---
 // Component script only loads when component is used
-import { initAccordion } from './accordion.js';
+import { initAccordion } from "./accordion.js";
 ---
 
 <div class="accordion" data-accordion>
@@ -29,11 +29,11 @@ import { initAccordion } from './accordion.js';
 </div>
 
 <script>
-  initAccordion(document.querySelector('[data-accordion]'));
+  initAccordion(document.querySelector("[data-accordion]"));
 </script>
 ```
 
-The script is tiny, scoped to this component, and only runs when needed. No global bundle, no unnecessary overhead.
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 <Image
   source="/src/assets/images/component-library/quiet-street.jpg"
@@ -42,9 +42,9 @@ The script is tiny, scoped to this component, and only runs when needed. No glob
   alt="Performance optimization illustration"
 />
 
-Static-first design means your site works perfectly without JavaScript. Content is accessible, navigation functions, and the core experience is complete. JavaScript enhances that experience where it adds value, but it's never required for basic functionality. This approach serves users on slow connections, users with JavaScript disabled, and users on devices with limited processing power. Everyone gets a fast experience, and those with capable devices get enhanced interactivity.
+At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
 
-The automatic nudges toward good decisions come from the structure itself. When components are designed to be static-first, you naturally think about progressive enhancement. When JavaScript is opt-in, you naturally consider whether interactivity is necessary. When CSS is scoped and minimal, you naturally avoid style conflicts. The patterns guide you toward performance without requiring constant vigilance.
+Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
 
 <CtaCenter
   buttonSections={[
