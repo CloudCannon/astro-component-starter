@@ -30,7 +30,7 @@ pageSections:
     eyebrow: Built for Astro
     heading: Fast, modern, and easy to work with
     subtext: >-
-      This library takes full advantage of Astro's zero-JS-by-default approach. You get fast pages, simple routing, and a component system that stays easy to use as your site grows.
+      Our component library takes full advantage of Astro's zero-JS-by-default approach. You get fast pages, simple routing, and a component system that stays easy to use as your site grows.
     buttonSections: []
     imageSource: /src/assets/images/component-library/website-feature.svg
     imageAlt: Website Feature
@@ -41,7 +41,7 @@ pageSections:
     backgroundColor: base
   - _component: page-sections/features/feature-split
     eyebrow: CloudCannon Ready
-    heading: Easy Visual Editing
+    heading: Easy visual editing
     subtext: >-
       Every component is built to work seamlessly in CloudCannon's Visual Editor. Developers can create and style custom Page Sections with Astro. Editors can click, change, and rearrange content right on the page without touching the code or guessing where anything lives.
     buttonSections: []
@@ -69,12 +69,12 @@ pageSections:
     paddingVertical: lg
   - _component: page-sections/features/feature-split
     eyebrow: Documentation
-    heading: Every Component, Clearly Documented
+    heading: Every component, clearly documented
     subtext: >-
       Each component comes with straightforward docs, real examples, full descriptions of every property, and clear guidance without having to dig through source files.
     buttonSections: []
-    imageSource: /src/assets/images/component-library/website-hero.svg
-    imageAlt: Website Hero
+    imageSource: /src/assets/images/component-library/website-cards.svg
+    imageAlt: Website Cards
     imageAspectRatio: none
     imageRounded: false
     reverse: true
@@ -82,21 +82,21 @@ pageSections:
     backgroundColor: base
   - _component: page-sections/features/feature-grid
     eyebrow: Principles
-    heading: Built for Real-World Web Projects
+    heading: Built for real-world web projects
     subtext: No trends. No noise. Just reliability.
     gap: xl
     minItemWidth: 280
     maxItemWidth: 360
     features:
       - _component: page-sections/features/feature-grid/feature-item
-        title: Web Fundamentals
+        title: Web fundamentals
         description: >-
           Semantic HTML. Lean CSS. JavaScript only when it's needed. The stack
           is boring by design, and that’s exactly why it works.
         iconName: cube
         iconColor: blue
       - _component: page-sections/features/feature-grid/feature-item
-        title: Built for Speed
+        title: Built for speed
         description: >-
           Static-rendered, minimal payloads, zero waste. Built to be extremely
           fast from the first byte.
@@ -110,7 +110,7 @@ pageSections:
         iconName: puzzle-piece
         iconColor: green
       - _component: page-sections/features/feature-grid/feature-item
-        title: Controlled Editing
+        title: Controlled editing
         description: >-
           Enough freedom for editors to move fast. Enough structure for
           developers to sleep at night.
@@ -127,7 +127,7 @@ pageSections:
   - _component: page-sections/ctas/cta-center
     heading: Ready to start building?
     subtext: >-
-      Browse our complete component library and see live examples of every component in action. All components are ready to use and fully customizable
+      Browse the complete Astro component library and see live examples of every component in action. All components are ready to use in CloudCannon and are fully customizable.
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
