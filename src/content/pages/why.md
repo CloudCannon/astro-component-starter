@@ -99,44 +99,49 @@ pageSections:
   - _component: page-sections/features/feature-slider
     slides:
       - _component: page-sections/features/feature-slider/feature-slider-item
-        eyebrow: Speed
-        title: High performance
+        eyebrow: First slide demonstration
+        title: Welcome to the carousel component
         description: >-
-          Great performance starts with what you choose not to load. This
-          component library keeps everything lean with simple HTML, CSS, and
-          vanilla JavaScript, plus built-in tools that squeeze every drop of
-          performance out of your images.
+          This initial slide introduces visitors to the rotating content
+          display. You'll notice how the text hierarchy works with the eyebrow,
+          headline, and body copy creating clear visual distinction. The
+          component is designed to guide users through multiple messages without
+          overwhelming the page.
         imageSource: /src/assets/images/component-library/quiet-street.jpg
         imageAlt: High Performance
         minSplitWidth: 0
       - _component: page-sections/features/feature-slider/feature-slider-item
-        eyebrow: Simplicity
-        title: Easy maintenance
+        eyebrow: Content transition example
+        title: Seamless navigation between slides
         description: >-
-          Maintaining a site is easier when the pieces stay small and
-          predictable. With this component library, you build on top of highly
-          polished building blocks that stay clear, focused, and easy to work
-          with as your site grows.
+          As you move to the second position, observe how the previous content
+          gracefully exits while this new information appears. The navigation
+          controls below allow users to move at their own pace. This slide
+          exists purely to demonstrate the component's ability to handle
+          sequential content delivery.
         imageSource: /src/assets/images/component-library/sheep.jpg
         imageAlt: Easy Maintenance
         minSplitWidth: 0
       - _component: page-sections/features/feature-slider/feature-slider-item
-        eyebrow: Collaboration
-        title: Team friendly
+        eyebrow: Third position showcase
+        title: Maintaining consistent formatting
         description: >-
-          Teams move faster when everything feels obvious. Clear names, simple
-          patterns, and a consistent structure mean anyone can open the project
-          and immediately know where things live and how they work.
+          By the third slide, the pattern becomes clear. Each rotation maintains
+          the same structural hierarchy and spacing, ensuring visual coherence
+          throughout the carousel. This consistency helps users understand what
+          to expect as they progress through the available content.
         imageSource: /src/assets/images/component-library/castle.jpg
         imageAlt: Move Faster
         minSplitWidth: 300
       - _component: page-sections/features/feature-slider/feature-slider-item
-        eyebrow: Future
-        title: Long-term stability
+        eyebrow: Final slide
+        title: Completing the carousel loop
         description: >-
-          This stack isn't chasing trends, and it's built to last. It's a set of
-          solid tools that stay understandable and easy to improve, no matter
-          how much time passes.
+          This fourth and final slide demonstrates how the component handles the
+          end of its sequence. Users can either cycle back to the beginning or
+          pause here to absorb the information. The carousel has now
+          successfully shown its capacity to present multiple content blocks in
+          a compact, navigable format.
         imageSource: /src/assets/images/component-library/dunedin-cliff.jpg
         imageAlt: Long-Term Stability
         minSplitWidth: 0
