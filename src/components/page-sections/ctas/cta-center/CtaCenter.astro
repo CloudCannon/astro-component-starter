@@ -2,7 +2,7 @@
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Text from "@core-elements/text/Text.astro";
-import ButtonGroup from "@wrappers/button-group/Buttongroup.astro";
+import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 
 const {
   heading = "",
@@ -35,11 +35,7 @@ const {
         </Heading>
       )
     }
-    {
-      subtext && (
-        <Text alignX="center" data-prop="subtext" text={subtext} />
-      )
-    }
+    {subtext && <Text alignX="center" data-prop="subtext" text={subtext} />}
     {
       buttonSections?.length > 0 && (
         <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" />

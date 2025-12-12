@@ -4,7 +4,7 @@ import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
-import ButtonGroup from "@wrappers/button-group/Buttongroup.astro";
+import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 import Split from "@wrappers/split/Split.astro";
 
 const {
@@ -61,11 +61,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
           </Heading>
         )
       }
-      {
-        subtext && (
-          <Text class="subtext" data-prop="subtext" text={subtext} />
-        )
-      }
+      {subtext && <Text class="subtext" data-prop="subtext" text={subtext} />}
       {
         buttonSections?.length > 0 && (
           <ButtonGroup

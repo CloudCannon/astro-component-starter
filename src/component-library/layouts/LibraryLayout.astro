@@ -12,9 +12,9 @@ const libraryLayoutSchema = z.object({
     .optional(),
 });
 
-import MobileNavLayout from "@component-library/layouts/Mobilenavlayout.astro";
-import SidebarNavLayout from "@component-library/layouts/Sidebarnavlayout.astro";
 import CustomSection from "@builders/custom-section/CustomSection.astro";
+import MobileNavLayout from "@component-library/layouts/MobileNavLayout.astro";
+import SidebarNavLayout from "@component-library/layouts/SidebarNavLayout.astro";
 import RenderBlock from "@components/utils/renderBlock.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
