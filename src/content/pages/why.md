@@ -10,11 +10,11 @@ pageSections:
       Astro team is building!
 
 
-      As more <a href="https://cloudcannon.com/partner-program/" target="_blank"
-      rel="noopener">partner agencies</a> are building client sites with
-      CloudCannon, we wanted to provide a component library for Astro that
-      outputs static HTML and CSS, for the fastest delivery possible —&nbsp;all
-      unbranded and adaptable for any project.
+      As more and more <a href="https://cloudcannon.com/partner-program/"
+      target="_blank" rel="noopener">partner agencies</a> are building client
+      sites with CloudCannon, we wanted to help out by providing a component
+      library for Astro that outputs static HTML and CSS, for the fastest
+      delivery possible —&nbsp;all unbranded and adaptable for any project.
     imageSource: /src/assets/images/component-library/sunset.jpg
     imageAlt: Sunset
     imageAspectRatio: portrait
@@ -214,10 +214,10 @@ pageSections:
   - _component: page-sections/ctas/cta-form
     heading: Form and function!
     subtext: >-
-      This is a sample form component, so it's not wired up yet, but it's all
-      ready to <a
+      This is a sample form component, so it's not wired up with a target inbox
+      yet, but it's all ready to <a
       href="https://cloudcannon.com/documentation/articles/getting-started-with-forms-on-cloudcannon/"
-      target="_blank" rel="noopener">configure with CloudCannon</a>.
+      target="_blank" rel="noopener">configure with CloudCannon forms</a>.
     formAction: ./
     formBlocks:
       - _component: building-blocks/forms/input

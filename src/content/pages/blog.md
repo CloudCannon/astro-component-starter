@@ -6,8 +6,9 @@ pageSections:
     eyebrow: ''
     heading: All posts
     subtext: >-
-      Insights, tutorials, and thoughts on web development, design, and building
-      great digital experiences.
+      This paginated blog index displays a grid of article cards, each waiting
+      to be populated with genuine posts once your content strategy moves beyond
+      placeholder text.
     buttonSections: []
     colorScheme: default
     backgroundColor: base

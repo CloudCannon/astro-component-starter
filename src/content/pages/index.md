@@ -12,15 +12,15 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-library/
-        iconName: ''
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
         text: View in GitHub
-        link: '#'
-        iconName: ''
+        link: "#"
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: secondary
@@ -81,7 +81,7 @@ pageSections:
       descriptions of every property, and clear guidance without having to dig
       through source files.
     buttonSections: []
-    imageSource: /src/assets/images/documented.svg
+    imageSource: /src/assets/images/component-library/website-documented.svg
     imageAlt: Website Hero
     imageAspectRatio: none
     imageRounded: false
@@ -144,15 +144,15 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-library/
-        iconName: ''
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
         text: View in GitHub
-        link: '#'
-        iconName: ''
+        link: "#"
+        iconName: ""
         iconPosition: before
         hideText: false
         variant: tertiary

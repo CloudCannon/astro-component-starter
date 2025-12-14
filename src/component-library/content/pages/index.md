@@ -1,107 +1,74 @@
 ---
-title: "Astro Component Library"
+title: Astro Component Library
 contentSections: []
 ---
-
 # Astro Component Library
 
-Welcome to your Astro component library: a modular foundation for building fast, accessible, and maintainable websites using web fundamentals.
+Welcome to your Astro component library. It’s a modular foundation for building fast, accessible, and maintainable websites using web fundamentals.
 
-This library provides **examples and documentation** for every component in your design system, helping you build consistent, scalable websites with less code and more confidence.
+Here you’ll find **examples and documentation** for every component in your design system.
 
-## What you'll find here
+This library will help you:
 
-This library helps you:
+* Keep designs consistent across pages and sites
+* Maintain a single source of truth for your components
+* Make it simple to explore, tweak, and extend your system
 
-- **Maintain consistency** — Keep designs uniform across pages and projects
-- **Work faster** — Reuse tested components instead of building from scratch
-- **Stay organized** — Single source of truth for all your UI components
-- **Customize easily** — Explore, tweak, and extend components to fit your needs
+### What are components?
 
-## Component categories
+Components are focused, reusable UI pieces that combine to create larger sections.
 
-Components are organized by purpose into three main categories:
+Components are grouped by purpose:
 
-### Building Blocks
+* **Building Blocks** — Foundational UI components designed for reuse within larger structures.
+* **Page Sections** — Full-width sections used to assemble complete page layouts.
+* **Navigation** — Components that facilitate movement throughout the site, such as headers, menus, and footers.
 
-Foundational UI components designed for reuse within larger structures. These are the atomic pieces you combine to build more complex interfaces.
+### Using this library
 
-- **Core Elements** — Basic content components like buttons, headings, text, images, icons, and lists
-- **Forms** — Form controls including inputs, selects, textareas, file uploads, and form wrappers
-- **Wrappers** — Layout containers like grids, splits, cards, accordions, and carousels
+Components are designed to work together seamlessly. You can:
 
-### Page Sections
+* **Browse components** using the sidebar to see all available options
+* **View examples** for each component to understand different use cases
+* **Copy code** directly from the component viewer to use in your pages
+* **Customize components** by modifying their props and slots
+* **Combine components** to build complete page sections
 
-Pre-built, full-width sections ready to assemble complete page layouts. These combine multiple building blocks into cohesive, reusable patterns.
-
-- **Heroes** — Eye-catching header sections for landing pages
-- **Features** — Sections for showcasing product features and benefits
-- **CTAs** — Call-to-action sections with various layouts
-- **Info Blocks** — FAQ sections and other informational content
-- **People** — Team grids and testimonial sections
-- **Builders** — Custom sections for flexible page construction
-
-### Navigation
-
-Components that facilitate movement throughout your site.
-
-- **Main Navigation** — Primary site navigation menus
-- **Mobile Navigation** — Mobile-friendly menu patterns
-- **Side Navigation** — Sidebar navigation components
-- **Footer** — Site footer components
-- **Navigation Bar** — Additional navigation bars
-
-## Technical approach
-
-This section outlines the architectural decisions that power the component library.
-
-### Components
-
-All components in this library are built using Astro templating. They're as self-contained as possible, each `.astro` file has all the templating, styles and JavaScript the component needs.
-
-### CSS architecture
+### CSS
 
 This library uses modern, vanilla CSS built on PostCSS with CSS variables for theming and consistency.
 
-**Style organization:**
+Styles are organized into:
 
-- **Variables** (`src/styles/variables/`) — Design tokens for colors, spacing, typography, content widths, and more
-- **Base styles** (`src/styles/base/`) — Reset styles, typography defaults, form styling, and HTML element foundations
-- **Themes** (`src/styles/themes/`) — Color scheme definitions for default (light) and contrast (dark) themes
-- **Component styles** — Scoped styles within each component file
+* **Variables** (`src/styles/variables/`) — Design tokens for colors, spacing, typography, and more
+* **Base styles** (`src/styles/base/`) — Reset, typography, forms, and HTML element defaults
+* **Themes** (`src/styles/themes/`) — Color scheme definitions for default (light) and contrast (dark) themes.
+* **Component styles** — Scoped styles within each component file
 
-All styling is themeable through CSS variables, making it easy to customize colors, spacing, and typography across your entire site.
+### JavaScript
 
-### JavaScript philosophy
+JavaScript is treated as a **progressive enhancement** throughout the component library.
 
-JavaScript is treated as **progressive enhancement** throughout the component library.
+* **Most components** have no JavaScript at all
+* **Some components** use JavaScript to manage aria attributes for accessibility
+* **A few components** are reliant on JavaScript for core functionality (like carousels)
 
-- **Most components** have zero JavaScript—they work perfectly without it
-- **Accessibility features** — Some components use minimal JavaScript to manage ARIA attributes for better accessibility
-- **Interactive components** — A few components (like carousels) require JavaScript for core functionality
+When JavaScript is needed, it's written in **vanilla JavaScript**.
 
-When JavaScript is needed, it's written in **vanilla JavaScript** with no framework dependencies, keeping bundles small and performance fast.
+### CloudCannon Configuration
 
-## CloudCannon integration
+Components are configured for use with <a href="https://cloudcannon.com/" target="_blank" rel="noopener">CloudCannon</a>, so editors can visually edit and management content without touching code.
 
-Components are configured for use with [CloudCannon](https://cloudcannon.com/), enabling visual content editing without touching code. Editors can add components, edit content, and manage pages through a visual interface.
+#### Configuration Files
 
-### Configuration files
+Each component can include:
 
-Each component can include CloudCannon configuration files:
+* **`*.cloudcannon.inputs.yml`** — Defines the [inputs](https://cloudcannon.com/documentation/articles/what-are-inputs/) shown in CloudCannon's editor. Each prop can be configured with a type (text, select, switch, etc.), description, and validation
+* **`*.cloudcannon.structure-value.yml`** — Defines the [structures](https://cloudcannon.com/documentation/articles/what-is-a-structure/) for components to control how they behave in the editor.
+* **`*.cloudcannon.snippets.yml`** — Defines [snippets](https://cloudcannon.com/documentation/articles/what-is-a-snippet/) editors can use while editing MDX files.
 
-- **`*.cloudcannon.inputs.yml`** — Defines the [inputs](https://cloudcannon.com/documentation/articles/what-are-inputs/) shown in CloudCannon's editor. Configure prop types (text, select, switch, etc.), descriptions, and validation rules
-- **`*.cloudcannon.structure-value.yml`** — Defines [structures](https://cloudcannon.com/documentation/articles/what-is-a-structure/) that control how components behave in the editor, including nested content and repeatable sections
-- **`*.cloudcannon.snippets.yml`** — Defines [snippets](https://cloudcannon.com/documentation/articles/what-is-a-snippet/) editors can insert while editing MDX files
+#### Editable Regions
 
-### Editable regions
+[Editable Regions](https://cloudcannon.com/documentation/articles/what-are-editable-regions/) enable live preview editing in CloudCannon, allowing you to add and edit components, modify text, and update assets directly on the page.
 
-[Editable Regions](https://cloudcannon.com/documentation/articles/what-are-editable-regions/) enable live preview editing in CloudCannon, allowing editors to add and edit components, modify text, and update assets directly on the page.
-
-To enable editable regions in Page Sections, use `data-prop` attributes to map text props correctly. The same approach applies to images and arrays. See the Page Sections component source code for implementation examples.
-
-## Next steps
-
-- **New to the library?** Start with the [Getting Started guide](/component-library/getting-started/) to learn how to customize components and build pages
-- **Ready to explore?** Browse components in the sidebar to see what's available
-- **Want to customize?** Check component source files in `src/components/` to see how they're built and modify them to fit your needs
+Editable regions require context about prop names and array structures. When building Page Sections, use `data-prop` attributes to map text props correctly. The same approach applies to images and arrays. See the Page Sections components source code for examples.

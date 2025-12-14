@@ -11,7 +11,7 @@ value:
   minSplitWidth: 760
   verticalAlignment: center
   reverse: false
-  reverseOrderOnMobile: true
+  reverseOrderOnMobile: false
   gap: lg
 preview:
   text:
