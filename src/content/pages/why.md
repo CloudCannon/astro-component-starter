@@ -4,7 +4,7 @@ title: Why
 pageSections:
   - _component: page-sections/heroes/hero-split
     eyebrow:
-    heading: Why build another Astro component library?
+    heading: Why build an Astro component starter?
     subtext: >-
       At CloudCannon, we're big fans of the static web. And we love what the
       Astro team is building!
@@ -12,8 +12,8 @@ pageSections:
 
       As more and more <a href="https://cloudcannon.com/partner-program/"
       target="_blank" rel="noopener">partner agencies</a> are building client
-      sites with CloudCannon, we wanted to help out by providing a component
-      library for Astro that outputs static HTML and CSS, for the fastest
+      sites with CloudCannon, we wanted to help out by providing the foundations
+      for Astro components that output static HTML and CSS, for the fastest
       delivery possible —&nbsp;all unbranded and adaptable for any project.
     imageSource: /src/assets/images/component-library/sunset.jpg
     imageAlt: Sunset
@@ -31,7 +31,7 @@ pageSections:
     openFirst: false
     items:
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: How does the component starter work?
+        title: How does the Component Starter work?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
@@ -39,7 +39,7 @@ pageSections:
               without hiding anything behind layers of abstraction. You see
               everything that's happening, and stay in control.
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: What's included in the component starter?
+        title: What's included in the Component Starter?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
@@ -47,7 +47,7 @@ pageSections:
               weight, no surprise dependencies, just the pieces you actually
               need to build great pages.
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: How is the component starter so fast?
+        title: How is the Component Starter so fast?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
@@ -55,11 +55,11 @@ pageSections:
               handles image optimization and responsive patterns so your site
               stays quick without extra work.
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: Can I customize the component starter?
+        title: Can I customize the Component Starter?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Every part of the component starter is meant to be opened, read,
+              Every part of the Component Starter is meant to be opened, read,
               and edited. You shape it to fit your project instead of working
               around someone else's opinions. Start by [browsing the
               components](/component-library/) to see how they're set up!
@@ -175,8 +175,8 @@ pageSections:
         bio: >-
           As a fictional representation of a real employee, I exist solely to
           demonstrate how profile information appears in this layout. My
-          expertise includes being professionally photographed and having
-          exactly three sentences of biographical text.
+          headshot is perfectly lit, and my description maintains the ideal
+          length for this component.
         imageSource: /src/assets/images/component-library/profile1.jpg
         imageAlt: Alex Smith, CEO
       - _component: page-sections/people/team-grid/team-item
@@ -184,8 +184,8 @@ pageSections:
         role: Chief Technology Officer
         bio: >-
           I'm here to show how multiple team members look when displayed
-          together. My headshot is perfectly lit, and my description maintains
-          the ideal length for this component.
+          together. My expertise includes being professionally photographed and
+          having exactly two sentences of biographical text.
         imageSource: /src/assets/images/component-library/profile2.jpg
         imageAlt: Tom Rodriguez, CTO
       - _component: page-sections/people/team-grid/team-item

@@ -209,13 +209,13 @@ Try updating some of these variables and see the impact across your entire site.
 
 ### Customizing components
 
-All components in this library are yours to edit, tweak, and extend. Whether you want to:
+All components in this starter are yours to edit, tweak, and extend. Whether you want to:
 
 * Modify existing components to better match your needs
 * Add new props for additional customization
 * Create entirely new components by combining building blocks
 
-You have full control. Component source files are in `src/components/`—open any component file and customize it to your heart's content. This library is a starting point, not a limitation.
+You have full control. Component source files are in `src/components/`—open any component file and customize it to your heart's content. This is a starting point, not a limitation.
 
 ## Next Steps
 

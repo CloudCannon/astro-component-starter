@@ -4,11 +4,11 @@ contentSections: []
 ---
 # Astro Component Starter
 
-Welcome to your Astro component starter. It's a modular foundation for building fast, accessible, and maintainable websites using web fundamentals.
+Welcome to your Astro Component Starter. It's a modular foundation for building fast, accessible, and maintainable websites using web fundamentals.
 
 Here you’ll find **examples and documentation** for every component in your design system.
 
-This library will help you:
+This starter will help you:
 
 * Keep designs consistent across pages and sites
 * Maintain a single source of truth for your components
@@ -24,7 +24,7 @@ Components are grouped by purpose:
 * **Page Sections** — Full-width sections used to assemble complete page layouts.
 * **Navigation** — Components that facilitate movement throughout the site, such as headers, menus, and footers.
 
-### Using this library
+### Using this starter
 
 Components are designed to work together seamlessly. You can:
 
@@ -36,7 +36,7 @@ Components are designed to work together seamlessly. You can:
 
 ### CSS
 
-This library uses modern, vanilla CSS built on PostCSS with CSS variables for theming and consistency.
+This starter uses modern, vanilla CSS built on PostCSS with CSS variables for theming and consistency.
 
 Styles are organized into:
 
@@ -47,7 +47,7 @@ Styles are organized into:
 
 ### JavaScript
 
-JavaScript is treated as a **progressive enhancement** throughout the component starter.
+JavaScript is treated as a **progressive enhancement** throughout the Component Starter.
 
 * **Most components** have no JavaScript at all
 * **Some components** use JavaScript to manage aria attributes for accessibility

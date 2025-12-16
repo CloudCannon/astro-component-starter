@@ -12,15 +12,15 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-library/
-        iconName: ""
+        iconName: ''
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
         text: View in GitHub
-        link: "#"
-        iconName: ""
+        link: https://github.com/CloudCannon/astro-component-starter
+        iconName: ''
         iconPosition: before
         hideText: false
         variant: secondary
@@ -31,7 +31,7 @@ pageSections:
     eyebrow: Built for Astro
     heading: Fast, modern, and easy to work with
     subtext: >-
-      Our component starter takes full advantage of Astro's zero-JS-by-default
+      The Component Starter takes full advantage of Astro's zero-JS-by-default
       approach. You get fast pages, simple routing, and a component system that
       stays easy to use as your site grows.
     buttonSections: []
@@ -137,22 +137,22 @@ pageSections:
   - _component: page-sections/ctas/cta-center
     heading: Ready to start building?
     subtext: >-
-      Browse the complete Astro component starter and see live examples of every
+      Browse the complete Astro Component Starter and see live examples of every
       component in action. All components are ready to use in CloudCannon and
       are fully customizable.
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-library/
-        iconName: ""
+        iconName: ''
         iconPosition: before
         hideText: false
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
         text: View in GitHub
-        link: "#"
-        iconName: ""
+        link: https://github.com/CloudCannon/astro-component-starter
+        iconName: ''
         iconPosition: before
         hideText: false
         variant: tertiary
