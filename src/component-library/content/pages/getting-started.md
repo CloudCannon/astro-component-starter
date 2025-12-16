@@ -187,7 +187,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 * **`data-prop` attributes** tell CloudCannon which props map to editable regions for inline editing.
 * **Conditional rendering** (the `&&` checks) means components only render when they have content.
 
-This is the foundation of how you build in the Astro Component Library: combine polished building blocks to create Page Sections that editors can use to build pages without touching code.
+This is the foundation of how you build in the Astro Component Starter: combine polished building blocks to create Page Sections that editors can use to build pages without touching code.
 
 ## Customizing your brand
 
@@ -221,7 +221,7 @@ You have full control. Component source files are in `src/components/`—open an
 
 Now that you understand the basics, here's how to continue:
 
-* **Explore the component library**: Browse all available components in the sidebar to see what's possible.
+* **Explore the component starter**: Browse all available components in the sidebar to see what's possible.
 * **Read component documentation**: Each component has detailed prop information and examples.
 * **Experiment with combinations**: Try combining different building blocks to create unique layouts.
 * **Review CloudCannon configuration**: Check `cloudcannon.config.yml` and component `.cloudcannon.*.yml` files to understand how editor customization works.

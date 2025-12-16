@@ -12,7 +12,7 @@
     "manually_configure_urls": false,
     "hugo_version": "0.128.1",
     "ruby_version": "2.7.3",
-    "node_version": "24.10.0",
+    "node_version": "file",
     "deno_version": "1.40.2"
   }
 }

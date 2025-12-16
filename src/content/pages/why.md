@@ -4,7 +4,7 @@ title: Why
 pageSections:
   - _component: page-sections/heroes/hero-split
     eyebrow:
-    heading: Why build another Astro component library?
+    heading: Why build another Astro component starter?
     subtext: >-
       At CloudCannon, we're big fans of the static web. And we love what the
       Astro team is building!
@@ -31,7 +31,7 @@ pageSections:
     openFirst: false
     items:
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: How does the component library work?
+        title: How does the component starter work?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
@@ -39,7 +39,7 @@ pageSections:
               without hiding anything behind layers of abstraction. You see
               everything that's happening, and stay in control.
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: What's included in the component library?
+        title: What's included in the component starter?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
@@ -47,7 +47,7 @@ pageSections:
               weight, no surprise dependencies, just the pieces you actually
               need to build great pages.
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: How is the component library so fast?
+        title: How is the component starter so fast?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
@@ -55,11 +55,11 @@ pageSections:
               handles image optimization and responsive patterns so your site
               stays quick without extra work.
       - _component: building-blocks/wrappers/accordion/accordion-item
-        title: Can I customize the component library?
+        title: Can I customize the component starter?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Every part of the component library is meant to be opened, read,
+              Every part of the component starter is meant to be opened, read,
               and edited. You shape it to fit your project instead of working
               around someone else's opinions. Start by [browsing the
               components](/component-library/) to see how they're set up!

@@ -1,15 +1,15 @@
 {
   "defaultSeo": {
-    "titleFormat": "{title} | Component Starter",
+    "titleFormat": "{title} | Astro Component Starter",
     "description": "",
     "image": "/images/logo.svg",
-    "siteName": "CloudCannon Component Starter",
+    "siteName": "Astro Component Starter",
     "twitterHandle": "@yourusername"
   },
   "organization": {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "CloudCannon Component Starter",
+    "name": "Astro Component Starter",
     "url": "https://example.com",
     "logo": "https://example.com/images/logo.svg",
     "description": "",

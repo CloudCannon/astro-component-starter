@@ -1,5 +1,5 @@
 {
-  "name": "cloudcannon-component-starter",
+  "name": "astro-component-starter",
   "type": "module",
   "version": "1.0.0",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",

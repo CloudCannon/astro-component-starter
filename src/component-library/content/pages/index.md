@@ -1,10 +1,10 @@
 ---
-title: Astro Component Library
+title: Astro Component Starter
 contentSections: []
 ---
-# Astro Component Library
+# Astro Component Starter
 
-Welcome to your Astro component library. It’s a modular foundation for building fast, accessible, and maintainable websites using web fundamentals.
+Welcome to your Astro component starter. It's a modular foundation for building fast, accessible, and maintainable websites using web fundamentals.
 
 Here you’ll find **examples and documentation** for every component in your design system.
 
@@ -47,7 +47,7 @@ Styles are organized into:
 
 ### JavaScript
 
-JavaScript is treated as a **progressive enhancement** throughout the component library.
+JavaScript is treated as a **progressive enhancement** throughout the component starter.
 
 * **Most components** have no JavaScript at all
 * **Some components** use JavaScript to manage aria attributes for accessibility
