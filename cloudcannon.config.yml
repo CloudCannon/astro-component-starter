@@ -60,8 +60,8 @@ collections_config:
         type: text
         comment: Optional image path for the blog post.
       tags:
-        type: text
-        comment: Comma-separated list of tags.
+        type: array
+        comment: Tags relevant to this post's content.
   data:
     path: src/data
     glob:
