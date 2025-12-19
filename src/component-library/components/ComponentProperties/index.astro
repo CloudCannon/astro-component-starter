@@ -18,7 +18,7 @@ function parseConfigProperties(configData: any): PropertyMeta[] {
         default: formatDefaultValue(value, inputConfig),
         enumValues: getEnumValues(inputConfig),
         description: inputConfig?.comment || "",
-        nestedProperties: getNestedProperties(inputConfig, configData),
+        nestedProperties: getNestedProperties(inputConfig, configData, key),
         arrayItemProperties: getArrayItemProperties(inputConfig, configData),
       });
     });
@@ -100,7 +100,11 @@ function getEnumValues(inputConfig: any): string[] | undefined {
   return undefined;
 }
 
-function getNestedProperties(inputConfig: any, configData?: any): PropertyMeta[] | undefined {
+function getNestedProperties(
+  inputConfig: any,
+  configData?: any,
+  parentKey?: string
+): PropertyMeta[] | undefined {
   if (inputConfig?.type === "object" && inputConfig._inputs) {
     const nestedProperties: PropertyMeta[] = [];
 
@@ -112,12 +116,45 @@ function getNestedProperties(inputConfig: any, configData?: any): PropertyMeta[]
         default: formatDefaultValue(nestedInput.default, nestedInput),
         enumValues: getEnumValues(nestedInput),
         description: nestedInput?.comment || "",
-        nestedProperties: getNestedProperties(nestedInput, configData),
+        nestedProperties: getNestedProperties(nestedInput, configData, key),
         arrayItemProperties: getArrayItemProperties(nestedInput, configData),
       });
     });
 
     return nestedProperties;
+  }
+
+  // Handle dot notation properties (e.g., backgroundImage.source)
+  if (inputConfig?.type === "object" && parentKey && configData?._inputs) {
+    const nestedProperties: PropertyMeta[] = [];
+    const prefix = `${parentKey}.`;
+
+    Object.keys(configData._inputs).forEach((key) => {
+      if (key.startsWith(prefix)) {
+        const nestedKey = key.replace(prefix, "");
+        const nestedInput = configData._inputs[key];
+
+        // Only include direct children (not nested deeper)
+        if (!nestedKey.includes(".")) {
+          nestedProperties.push({
+            name: nestedKey,
+            type: getPropertyType(nestedInput),
+            optional: false,
+            default: formatDefaultValue(nestedInput?.default, nestedInput),
+            enumValues: getEnumValues(nestedInput),
+            description: nestedInput?.comment || "",
+            nestedProperties: getNestedProperties(
+              nestedInput,
+              configData,
+              `${parentKey}.${nestedKey}`
+            ),
+            arrayItemProperties: getArrayItemProperties(nestedInput, configData),
+          });
+        }
+      }
+    });
+
+    return nestedProperties.length > 0 ? nestedProperties : undefined;
   }
 
   return undefined;

@@ -12,6 +12,5 @@ blocks:
       current: "/3"
       next: "/4"
       last: "/10"
-  showArrows: true
+  showArrows: true'
 ---
-

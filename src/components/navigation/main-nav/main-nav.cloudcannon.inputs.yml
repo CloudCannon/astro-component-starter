@@ -1,0 +1,70 @@
+logoSource:
+  type: image
+  comment: "Logo image source URL or path. Leave empty to hide the logo."
+logoAlt:
+  type: text
+  comment: "Alt text for the logo image for accessibility."
+navData:
+  type: array
+  comment: "Array of navigation items to render in the navigation bar."
+  options:
+    structures: _structures.navItemLevel1
+buttonSections:
+  type: array
+  comment: "Array of button components to display in the navigation bar. See the Button component documentation for more information."
+_structures:
+  navItemLevel1:
+    values:
+      - label: Navigation Item (Level 1)
+        icon: link
+        value:
+          name: ""
+          path: ""
+          children: []
+        _inputs:
+          name:
+            type: text
+            comment: "Display text for the navigation item."
+          path:
+            type: text
+            comment: "URL path for the navigation item."
+          children:
+            type: array
+            comment: "Child navigation items for dropdown menus."
+            options:
+              structures: _structures.navItemLevel2
+  navItemLevel2:
+    values:
+      - label: Navigation Item (Level 2)
+        icon: link
+        value:
+          name: ""
+          path: ""
+          children: []
+        _inputs:
+          name:
+            type: text
+            comment: "Display text for the child navigation item."
+          path:
+            type: text
+            comment: "URL path for the child navigation item."
+          children:
+            type: array
+            comment: "Grandchild navigation items for nested dropdowns."
+            options:
+              structures: _structures.navItemLevel3
+  navItemLevel3:
+    values:
+      - label: Navigation Item (Level 3)
+        icon: link
+        value:
+          name: ""
+          path: ""
+        _inputs:
+          name:
+            type: text
+            comment: "Display text for the grandchild navigation item."
+          path:
+            type: text
+            comment: "URL path for the grandchild navigation item."
+

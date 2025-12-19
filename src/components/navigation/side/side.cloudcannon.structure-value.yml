@@ -1,0 +1,16 @@
+label: Side Navigation
+icon: sidebar
+description: "Sidebar navigation with expandable sections."
+value:
+  _component: navigation/side
+  navData: []
+preview:
+  text:
+    - Side Navigation
+picker_preview:
+  text: Side Navigation
+  subtext: "Sidebar navigation with expandable sections."
+  icon: sidebar
+_inputs_from_glob:
+  - /src/components/navigation/side/side.cloudcannon.inputs.yml
+

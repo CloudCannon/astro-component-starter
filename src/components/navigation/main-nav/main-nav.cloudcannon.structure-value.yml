@@ -1,0 +1,20 @@
+label: Main Nav
+icon: navigation
+description: "Header navigation combining logo, links, and actions."
+value:
+  _component: navigation/main-nav
+  logoSource: ""
+  logoAlt: "Logo"
+  navData: []
+  buttonSections: []
+preview:
+  text:
+    - Main Nav
+  icon: navigation
+picker_preview:
+  text: Main Nav
+  subtext: "Header navigation combining logo, links, and actions."
+  icon: navigation
+_inputs_from_glob:
+  - /src/components/navigation/main-nav/main-nav.cloudcannon.inputs.yml
+

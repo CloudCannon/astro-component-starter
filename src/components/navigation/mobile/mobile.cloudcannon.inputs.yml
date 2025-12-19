@@ -1,24 +1,17 @@
-label: Side Navigation
-icon: sidebar
-description: "Sidebar navigation with expandable sections."
-structures: []
-value:
-  _component: navigation/side
-  navData: []
-preview:
-  text:
-    - Side Navigation
-picker_preview:
-  text: Side Navigation
-  subtext: "Sidebar navigation with expandable sections."
-  icon: sidebar
-_inputs:
-  navData:
-    type: array
-    label: Navigation Data
-    comment: Array of navigation items with name, path, and optional children (up to 3 levels).
-    options:
-      structures: _structures.navItemLevel1
+logoSource:
+  type: text
+  label: Logo Source
+  comment: Path to the logo image.
+logoAlt:
+  type: text
+  label: Logo Alt Text
+  comment: Alternative text for the logo image.
+navData:
+  type: array
+  label: Navigation Data
+  comment: Array of navigation items with name, path, and optional children (up to 3 levels).
+  options:
+    structures: _structures.navItemLevel1
 _structures:
   navItemLevel1:
     values:
@@ -74,3 +67,4 @@ _structures:
           path:
             type: text
             comment: The URL/path for the navigation item.
+

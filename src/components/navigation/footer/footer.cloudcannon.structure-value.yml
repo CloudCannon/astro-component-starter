@@ -1,0 +1,21 @@
+label: Footer
+icon: footer
+description: "Footer block with logo, links, and legal information."
+value:
+  _component: navigation/footer
+  logoSource: ""
+  logoAlt: "Logo"
+  links: []
+  socials: []
+  footerText: ""
+preview:
+  text:
+    - Footer
+  icon: footer
+picker_preview:
+  text: Footer
+  subtext: "Footer block with logo, links, and legal information."
+  icon: footer
+_inputs_from_glob:
+  - /src/components/navigation/footer/footer.cloudcannon.inputs.yml
+

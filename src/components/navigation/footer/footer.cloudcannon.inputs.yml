@@ -1,0 +1,49 @@
+logoSource:
+  type: image
+  comment: "Logo image source URL or path."
+logoAlt:
+  type: text
+  comment: "Alt text for the logo image for accessibility."
+links:
+  type: array
+  comment: "Array of navigation links to display in the footer."
+  options:
+    structures: _structures.linkItems
+socials:
+  type: array
+  comment: "Array of social media links to display in the footer."
+  options:
+    structures: _structures.socialItems
+footerText:
+  type: text
+  comment: "Legal text or copyright information to display at the bottom of the footer."
+_structures:
+  linkItems:
+    values:
+      - label: Navigation Link
+        icon: link
+        value:
+          name: ""
+          path: ""
+        _inputs:
+          name:
+            type: text
+            comment: "Display text for the navigation link."
+          path:
+            type: text
+            comment: "URL path for the navigation link."
+  socialItems:
+    values:
+      - label: Social Link
+        icon: share
+        value:
+          icon: ""
+          link: ""
+        _inputs:
+          icon:
+            type: text
+            comment: "Icon name for the social media platform."
+          link:
+            type: text
+            comment: "URL link to the social media profile."
+

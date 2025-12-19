@@ -1,25 +1,9 @@
-label: Bar Navigation
-icon: navigation
-description: "Horizontal navigation bar with dropdown menus."
-structures: []
-value:
-  _component: navigation/bar
-  navData: []
-preview:
-  text:
-    - Bar Navigation
-  icon: navigation
-picker_preview:
-  text: Bar Navigation
-  subtext: "Horizontal navigation bar with dropdown menus."
-  icon: navigation
-_inputs:
-  navData:
-    type: array
-    label: Navigation Data
-    comment: Array of navigation items with name, path, and optional children (up to 3 levels).
-    options:
-      structures: _structures.navItemLevel1
+navData:
+  type: array
+  label: Navigation Data
+  comment: Array of navigation items with name, path, and optional children (up to 3 levels).
+  options:
+    structures: _structures.navItemLevel1
 _structures:
   navItemLevel1:
     values:
@@ -75,3 +59,4 @@ _structures:
           path:
             type: text
             comment: The URL/path for the navigation item.
+

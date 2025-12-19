@@ -1,0 +1,18 @@
+label: Mobile Navigation
+icon: device-phone-mobile
+description: "Mobile navigation with full-screen overlay."
+value:
+  _component: navigation/mobile
+  logoSource: null
+  logoAlt: null
+  navData: []
+preview:
+  text:
+    - Mobile Navigation
+picker_preview:
+  text: Mobile Navigation
+  subtext: "Mobile navigation with full-screen overlay."
+  icon: device-phone-mobile
+_inputs_from_glob:
+  - /src/components/navigation/mobile/mobile.cloudcannon.inputs.yml
+

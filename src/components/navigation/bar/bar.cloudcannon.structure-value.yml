@@ -1,0 +1,17 @@
+label: Bar Navigation
+icon: navigation
+description: "Horizontal navigation bar with dropdown menus."
+value:
+  _component: navigation/bar
+  navData: []
+preview:
+  text:
+    - Bar Navigation
+  icon: navigation
+picker_preview:
+  text: Bar Navigation
+  subtext: "Horizontal navigation bar with dropdown menus."
+  icon: navigation
+_inputs_from_glob:
+  - /src/components/navigation/bar/bar.cloudcannon.inputs.yml
+

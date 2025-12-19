@@ -67,28 +67,41 @@ export async function getStaticPaths() {
 
           if (configData?._inputs_from_glob && Array.isArray(configData._inputs_from_glob)) {
             const inputs: Record<string, any> = {};
-            
+            const structures: Record<string, any> = {};
+
             for (const inputPath of configData._inputs_from_glob) {
               const resolvedPath = inputPath.startsWith("/")
                 ? inputPath.slice(1)
                 : `src/components/${componentKey}/${inputPath}`;
-              
+
               if (existsSync(resolvedPath)) {
                 try {
                   const inputContent = readFileSync(resolvedPath, "utf8");
                   const inputData = yaml.load(inputContent);
-                  
+
                   if (inputData && typeof inputData === "object") {
-                    Object.assign(inputs, inputData);
+                    // Extract all top-level keys except _structures as inputs
+                    Object.keys(inputData).forEach((key) => {
+                      if (key !== "_structures") {
+                        inputs[key] = inputData[key];
+                      }
+                    });
+                    // Extract _structures separately
+                    if (inputData._structures) {
+                      Object.assign(structures, inputData._structures);
+                    }
                   }
                 } catch (error) {
                   console.error(`Error parsing input file ${resolvedPath}:`, error);
                 }
               }
             }
-            
+
             if (Object.keys(inputs).length > 0) {
               configData._inputs = inputs;
+            }
+            if (Object.keys(structures).length > 0) {
+              configData._structures = structures;
             }
           }
         } catch (error) {

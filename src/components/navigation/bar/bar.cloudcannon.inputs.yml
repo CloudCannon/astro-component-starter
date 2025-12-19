@@ -1,34 +1,9 @@
-label: Mobile Navigation
-icon: device-phone-mobile
-description: "Mobile navigation with full-screen overlay."
-structures: []
-value:
-  _component: navigation/mobile
-  logoSource: null
-  logoAlt: null
-  navData: []
-preview:
-  text:
-    - Mobile Navigation
-picker_preview:
-  text: Mobile Navigation
-  subtext: "Mobile navigation with full-screen overlay."
-  icon: device-phone-mobile
-_inputs:
-  logoSource:
-    type: text
-    label: Logo Source
-    comment: Path to the logo image.
-  logoAlt:
-    type: text
-    label: Logo Alt Text
-    comment: Alternative text for the logo image.
-  navData:
-    type: array
-    label: Navigation Data
-    comment: Array of navigation items with name, path, and optional children (up to 3 levels).
-    options:
-      structures: _structures.navItemLevel1
+navData:
+  type: array
+  label: Navigation Data
+  comment: Array of navigation items with name, path, and optional children (up to 3 levels).
+  options:
+    structures: _structures.navItemLevel1
 _structures:
   navItemLevel1:
     values:
@@ -84,3 +59,4 @@ _structures:
           path:
             type: text
             comment: The URL/path for the navigation item.
+
