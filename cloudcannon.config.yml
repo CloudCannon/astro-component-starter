@@ -57,8 +57,12 @@ collections_config:
         type: text
         comment: The author of the blog post.
       image:
-        type: text
-        comment: Optional image path for the blog post.
+        type: image
+        comment: Required image path for the blog post.
+        options:
+          paths:
+            uploads: src/assets/images
+          required: true
       tags:
         type: text
         comment: Comma-separated list of tags.
