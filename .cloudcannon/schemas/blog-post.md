@@ -3,6 +3,6 @@ title:
 description:
 date:
 author: Anonymous
-image:
+image: ""
 tags: []
 ---
