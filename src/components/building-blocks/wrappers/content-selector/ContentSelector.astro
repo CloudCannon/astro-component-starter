@@ -133,7 +133,8 @@ const arrayDataAttributes = editable
 </section>
 
 <style lang="pcss">
-  .content-selector {
+  @layer components {
+    .content-selector {
     --content-selector-border-width: 1px;
     display: flex;
     margin-top: var(--spacing-lg);
@@ -224,5 +225,6 @@ const arrayDataAttributes = editable
       inset-block: 100%;
       width: 100%;
     }
+  }
   }
 </style>

@@ -20,8 +20,10 @@ const htmlAttributes = Object.fromEntries(
 </form>
 
 <style lang="pcss">
-  .form {
-    margin-top: var(--spacing-lg);
-    width: 100%;
+  @layer components {
+    .form {
+      margin-top: var(--spacing-lg);
+      width: 100%;
+    }
   }
 </style>

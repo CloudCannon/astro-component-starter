@@ -85,7 +85,8 @@ if (!htmlAttributes.id && label) {
 </section>
 
 <style lang="pcss">
-  .custom-section {
+  @layer components {
+    .custom-section {
     position: relative;
 
     &.rounded {
@@ -288,5 +289,6 @@ if (!htmlAttributes.id && label) {
     > .bg-highlight {
       background-color: var(--color-bg-highlight);
     }
+  }
   }
 </style>

@@ -64,7 +64,8 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
 </div>
 
 <style lang="pcss">
-  .select {
+  @layer components {
+    .select {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -76,5 +77,6 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
       color: red;
       margin-inline-end: var(--spacing-em-xs);
     }
+  }
   }
 </style>

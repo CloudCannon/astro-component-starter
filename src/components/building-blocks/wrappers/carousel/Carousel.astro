@@ -250,9 +250,8 @@ const carouselStyles = `
 </script>
 
 <style lang="pcss">
-
-
-  .carousel {
+  @layer components {
+    .carousel {
     margin-top: var(--spacing-lg);
     position: relative;
     width: 100%;
@@ -337,5 +336,6 @@ const carouselStyles = `
         display: none;
       }
     }
+  }
   }
 </style>

@@ -54,7 +54,8 @@ const mobileNavData = [
 </CustomSection>
 
 <style lang="pcss">
-  .main-nav {
+  @layer components {
+    .main-nav {
     z-index: var(--layer-2);
     :global(.desktop-main-nav.bar),
     :global(.desktop-button-group.button-group) {
@@ -98,5 +99,6 @@ const mobileNavData = [
         container-type: normal;
       }
     }
+  }
   }
 </style>

@@ -43,7 +43,8 @@ const arrayDataAttributes = editable
 </dl>
 
 <style lang="pcss">
-  .definition-list {
+  @layer components {
+    .definition-list {
     display: grid;
     gap: var(--spacing-em-sm) var(--spacing-em-md);
     grid-template-columns: auto 1fr;
@@ -96,5 +97,6 @@ const arrayDataAttributes = editable
     > .content {
       margin: 0;
     }
+  }
   }
 </style>

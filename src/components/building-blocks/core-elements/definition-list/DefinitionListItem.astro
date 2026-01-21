@@ -55,7 +55,9 @@ if ((!hasTitle && !hasTitleSlotContent) || (!hasText && !hasSlotContent)) return
 </dd>
 
 <style lang="pcss">
-  .title {
-    font-weight: var(--font-weight-bold);
+  @layer components {
+    .title {
+      font-weight: var(--font-weight-bold);
+    }
   }
 </style>

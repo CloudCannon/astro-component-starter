@@ -1,119 +1,121 @@
-.component-library {
-  .library-container > .outer-content > .content {
-    display: flex;
+@layer components {
+  .component-library {
+    .library-container > .outer-content > .content {
+      display: flex;
 
-    > .nav-root {
-      flex-shrink: 0;
+      > .nav-root {
+        flex-shrink: 0;
+      }
+
+      > .main {
+        padding-block-end: var(--spacing-2xl);
+
+        @media (--from-md) {
+          border-left: 1px solid var(--color-border-subtle);
+          padding-inline-start: var(--spacing-em-lg);
+        }
+      }
     }
 
-    > .main {
-      padding-block-end: var(--spacing-2xl);
+    .library-sidebar {
+      display: none;
+      flex-shrink: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: var(--spacing-md);
+      position: sticky;
+      top: 0;
+      width: 280px;
+
+      > .sidebar-logo {
+        height: auto;
+        margin-inline: var(--spacing-sm);
+        margin-bottom: var(--spacing-sm);
+        max-width: 130px;
+        width: 100%;
+
+        > svg {
+          height: 2.5em;
+          width: 100%;
+        }
+      }
 
       @media (--from-md) {
-        border-left: 1px solid var(--color-border-subtle);
-        padding-inline-start: var(--spacing-em-lg);
-      }
-    }
-  }
-
-  .library-sidebar {
-    display: none;
-    flex-shrink: 0;
-    height: 100vh;
-    overflow-y: auto;
-    padding: var(--spacing-md);
-    position: sticky;
-    top: 0;
-    width: 280px;
-
-    > .sidebar-logo {
-      height: auto;
-      margin-inline: var(--spacing-sm);
-      margin-bottom: var(--spacing-sm);
-      max-width: 130px;
-      width: 100%;
-
-      > svg {
-        height: 2.5em;
-        width: 100%;
+        display: block;
       }
     }
 
-    @media (--from-md) {
+    .library-mobile-nav {
+      align-items: center;
+      background: var(--color-bg);
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
       display: block;
-    }
-  }
+      display: flex;
+      justify-content: space-between;
+      padding: var(--spacing-md);
+      position: sticky;
+      top: 0;
+      z-index: var(--layer-2);
 
-  .library-mobile-nav {
-    align-items: center;
-    background: var(--color-bg);
-    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-    display: block;
-    display: flex;
-    justify-content: space-between;
-    padding: var(--spacing-md);
-    position: sticky;
-    top: 0;
-    z-index: var(--layer-2);
+      > .sidebar-logo {
+        height: 30px;
+        width: auto;
 
-    > .sidebar-logo {
-      height: 30px;
-      width: auto;
+        svg {
+          height: 100%;
+          width: 100%;
+        }
+      }
 
-      svg {
-        height: 100%;
-        width: 100%;
+      @media (--from-md) {
+        display: none;
       }
     }
 
-    @media (--from-md) {
-      display: none;
-    }
-  }
+    /* Component Viewer Styles */
+    .component-viewer {
+      .copy-button {
+        position: relative;
 
-  /* Component Viewer Styles */
-  .component-viewer {
-    .copy-button {
-      position: relative;
+        &.copied {
+          background-color: rgb(32, 219, 156);
 
-      &.copied {
-        background-color: rgb(32, 219, 156);
-
-        &::after {
-          animation: fadeInOut 3s ease-in-out;
-          background: var(--color-bg-surface);
-          border: 1px solid var(--color-border);
-          border-radius: var(--radius-xs);
-          bottom: -2.5rem;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          color: var(--color-text-strong);
-          content: "Copied!";
-          font-size: var(--font-size-sm);
-          font-weight: var(--font-weight-medium);
-          left: 50%;
-          padding: var(--spacing-xs) var(--spacing-sm);
-          position: absolute;
-          transform: translateX(-50%);
-          white-space: nowrap;
-          z-index: var(--layer-10);
+          &::after {
+            animation: fadeInOut 3s ease-in-out;
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xs);
+            bottom: -2.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            color: var(--color-text-strong);
+            content: "Copied!";
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            left: 50%;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            position: absolute;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: var(--layer-10);
+          }
         }
       }
     }
   }
-}
 
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-4px);
-  }
-  10%,
-  90% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-4px);
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-4px);
+    }
+    10%,
+    90% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-4px);
+    }
   }
 }

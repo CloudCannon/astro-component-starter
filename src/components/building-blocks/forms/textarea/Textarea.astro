@@ -41,7 +41,8 @@ const fieldId = htmlAttributes.id || `textarea-${crypto.randomUUID()}`;
 </div>
 
 <style lang="pcss">
-  .textarea {
+  @layer components {
+    .textarea {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -53,5 +54,6 @@ const fieldId = htmlAttributes.id || `textarea-${crypto.randomUUID()}`;
       color: red;
       margin-inline-end: var(--spacing-em-xs);
     }
+  }
   }
 </style>

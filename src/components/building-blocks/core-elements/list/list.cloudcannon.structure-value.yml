@@ -7,12 +7,15 @@ value:
     - _component: building-blocks/core-elements/list/list-item
       text: List item 1
       iconName: check
+      iconColor: default
     - _component: building-blocks/core-elements/list/list-item
       text: List item 2
       iconName: lock-closed
+      iconColor: default
     - _component: building-blocks/core-elements/list/list-item
       text: List item 3
       iconName: briefcase
+      iconColor: default
   direction: vertical
   alignX: start
   size: md
@@ -30,7 +33,7 @@ _structures:
     values:
       - label: List Item
         value:
-          _component: building-blocks/core-elements/list-item
+          _component: building-blocks/core-elements/list/list-item
           text: "List item"
           iconName: ""
           iconColor: default

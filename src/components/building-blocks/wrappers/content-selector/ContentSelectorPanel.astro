@@ -20,7 +20,8 @@ const htmlAttributes = Object.fromEntries(
 </div>
 
 <style lang="pcss">
-  .panel {
+  @layer components {
+    .panel {
     container-type: inline-size;
     animation: fade-in var(--animation-slow) ease-in-out forwards;
     display: none;
@@ -30,5 +31,6 @@ const htmlAttributes = Object.fromEntries(
     > :global(:not(editable-array):first-child) {
       margin-top: 0 !important;
     }
+  }
   }
 </style>

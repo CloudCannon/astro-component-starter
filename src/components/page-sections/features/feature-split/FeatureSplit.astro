@@ -96,9 +96,9 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 }
 
 <style lang="pcss">
-
-  .feature-split-layout {
-    container-type: inline-size;
+  @layer overrides {
+    .feature-split-layout {
+      container-type: inline-size;
+    }
   }
-
 </style>

@@ -2,6 +2,7 @@
 title: Getting Started
 contentSections: []
 ---
+
 # Getting Started
 
 This guide will walk you through the basics of customizing your site in CloudCannon, from editing components to creating custom sections and adjusting your brand colors.
@@ -182,12 +183,35 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 
 **Key points:**
 
-* **Hardcoded values** like `maxContentWidth="xl"` and `gap="2xl"` are set by the developer.
-* **Editor-controlled props** like `heading`, `subtext`, and `imageSource` come from CloudCannon inputs.
-* **`data-prop` attributes** tell CloudCannon which props map to editable regions for inline editing.
-* **Conditional rendering** (the `&&` checks) means components only render when they have content.
+- **Hardcoded values** like `maxContentWidth="xl"` and `gap="2xl"` are set by the developer.
+- **Editor-controlled props** like `heading`, `subtext`, and `imageSource` come from CloudCannon inputs.
+- **`data-prop` attributes** tell CloudCannon which props map to editable regions for inline editing.
+- **Conditional rendering** (the `&&` checks) means components only render when they have content.
 
 This is the foundation of how you build in the Astro Component Starter: combine polished building blocks to create Page Sections that editors can use to build pages without touching code.
+
+## Understanding CSS Cascade Layers
+
+This project uses CSS Cascade Layers to organize styles into a predictable hierarchy. This system ensures that component styles can be easily overridden without fighting specificity battles.
+
+### How Layers Work
+
+Styles are organized into five layers (in order of precedence):
+
+1. **`reset`** - CSS reset styles that normalize browser defaults
+2. **`base`** - Base typography, form elements, and HTML element styles
+3. **`components`** - Reusable component styles (buttons, cards, navigation, etc.)
+4. **`utils`** - Utility classes (e.g., `.visually-hidden`)
+5. **`overrides`** - Page section styles and custom overrides
+
+Later layers always win over earlier layers, regardless of CSS specificity. This means a simple selector like `.my-class` in the `overrides` layer will override a highly specific selector like `.bar[data-astro-cid-xyz] .nav-item > a` in the `components` layer.
+
+### Using Layers When Building Components
+
+When creating new components or modifying existing ones:
+
+- **Building block components** (buttons, headings, forms, wrappers) should use `@layer components`
+- **Page section components** (heroes, features, CTAs) should use `@layer overrides`
 
 ## Customizing your brand
 
@@ -197,13 +221,13 @@ Your site's brand colors, content widths, font sizes, and other styling aspects 
 
 **Brand colors** are defined in:
 
-* **`src/styles/themes/_default.pcss`** — Light theme variables
-* **`src/styles/themes/_contrast.pcss`** — Dark theme variables
+- **`src/styles/themes/_default.pcss`** — Light theme variables
+- **`src/styles/themes/_contrast.pcss`** — Dark theme variables
 
 **Typography and layout** are defined in:
 
-* **`src/styles/variables/_fonts.pcss`** — Font families and sizing
-* **`src/styles/variables/_content-widths.pcss`** — Max content widths used by sections/layouts
+- **`src/styles/variables/_fonts.pcss`** — Font families and sizing
+- **`src/styles/variables/_content-widths.pcss`** — Max content widths used by sections/layouts
 
 Try updating some of these variables and see the impact across your entire site. Since components use these variables, changes propagate automatically.
 
@@ -211,9 +235,9 @@ Try updating some of these variables and see the impact across your entire site.
 
 All components in this starter are yours to edit, tweak, and extend. Whether you want to:
 
-* Modify existing components to better match your needs
-* Add new props for additional customization
-* Create entirely new components by combining building blocks
+- Modify existing components to better match your needs
+- Add new props for additional customization
+- Create entirely new components by combining building blocks
 
 You have full control. Component source files are in `src/components/`—open any component file and customize it to your heart's content. This is a starting point, not a limitation.
 
@@ -221,8 +245,8 @@ You have full control. Component source files are in `src/components/`—open an
 
 Now that you understand the basics, here's how to continue:
 
-* **Explore the component starter**: Browse all available components in the sidebar to see what's possible.
-* **Read component documentation**: Each component has detailed prop information and examples.
-* **Experiment with combinations**: Try combining different building blocks to create unique layouts.
-* **Review CloudCannon configuration**: Check `cloudcannon.config.yml` and component `.cloudcannon.*.yml` files to understand how editor customization works.
-* **Build your own Page Section**: Use Feature Split as a template to create custom sections for your specific needs.
+- **Explore the component starter**: Browse all available components in the sidebar to see what's possible.
+- **Read component documentation**: Each component has detailed prop information and examples.
+- **Experiment with combinations**: Try combining different building blocks to create unique layouts.
+- **Review CloudCannon configuration**: Check `cloudcannon.config.yml` and component `.cloudcannon.*.yml` files to understand how editor customization works.
+- **Build your own Page Section**: Use Feature Split as a template to create custom sections for your specific needs.

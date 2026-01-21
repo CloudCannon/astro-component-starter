@@ -29,14 +29,19 @@ const textDataAttributes =
 
 <li class:list={["item", className]} {...htmlAttributes}>
   <Icon name={iconName} color={iconColor} size="none" class="list-icon" aria-hidden="true" />
-  <span {...textDataAttributes}>
+  <p {...textDataAttributes}>
     {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
-  </span>
+  </p>
 </li>
 
 <style lang="pcss">
-  .item {
+  @layer components {
+    .item {
     display: block;
+    > p {
+      display: inline;
+      margin: 0;
+    }
 
     > .list-icon {
       display: inline-block;
@@ -52,5 +57,6 @@ const textDataAttributes =
         width: 100%;
       }
     }
+  }
   }
 </style>

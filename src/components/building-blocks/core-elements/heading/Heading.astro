@@ -75,7 +75,8 @@ if (!hasText && !hasSlotContent) return;
 </Tag>
 
 <style lang="pcss">
-  .heading {
+  @layer components {
+    .heading {
     margin-top: var(--spacing-lg);
 
     .heading-icon {
@@ -131,5 +132,6 @@ if (!hasText && !hasSlotContent) return;
     &.align-end {
       text-align: end;
     }
+  }
   }
 </style>

@@ -13,6 +13,7 @@ A modern design system built with Astro. This starter provides a modular foundat
 - 📝 **Component Documentation** - Built-in documentation for every component
 - 🎭 **Theme Support** - Light and dark theme support out of the box
 - 🔧 **PostCSS Architecture** - Modern CSS with custom properties and nesting
+- 🎯 **CSS Cascade Layers** - Organized style hierarchy for predictable overrides
 
 ## Prerequisites
 
@@ -111,6 +112,29 @@ Components that facilitate movement throughout your site:
 - **Side Navigation** - Sidebar navigation
 - **Footer** - Site footer components
 - **Navigation Bar** - Additional navigation bars
+
+## CSS Cascade Layers
+
+This project uses CSS Cascade Layers to organize styles into a predictable hierarchy. This ensures that component styles can be easily overridden without fighting specificity battles.
+
+### Layer Order
+
+Styles are organized into five layers (in order of precedence):
+
+1. **`reset`** - CSS reset styles (normalize browser defaults)
+2. **`base`** - Base typography, form elements, and HTML element styles
+3. **`components`** - Reusable component styles (buttons, cards, navigation, etc.)
+4. **`utils`** - Utility classes (e.g., `.visually-hidden`)
+5. **`overrides`** - Page section styles and custom overrides
+
+Later layers always win over earlier layers, regardless of specificity. This means a simple selector in the `overrides` layer will override a highly specific selector in the `components` layer.
+
+### Using Layers in Components
+
+When creating or modifying components:
+
+- **Building block components** (buttons, headings, forms, etc.) should use `@layer components`
+- **Page section components** (heroes, features, CTAs, etc.) should use `@layer overrides` to have precedence over the base component styles.
 
 ## Customization
 

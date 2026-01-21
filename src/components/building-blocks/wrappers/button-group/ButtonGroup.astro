@@ -55,7 +55,8 @@ if (!hasButtonSections && !hasSlotContent) return;
 </div>
 
 <style lang="pcss">
-  .button-group {
+  @layer components {
+    .button-group {
     position: relative;
     margin-top: var(--spacing-lg);
     container-type: inline-size;
@@ -115,5 +116,6 @@ if (!hasButtonSections && !hasSlotContent) return;
         justify-content: flex-start;
       }
     }
+  }
   }
 </style>

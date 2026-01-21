@@ -45,7 +45,8 @@ if (!hasText && !hasSlotContent) return;
 </div>
 
 <style lang="pcss">
-  .text {
+  @layer components {
+    .text {
     margin-top: var(--spacing-lg);
 
     &.align-start {
@@ -59,5 +60,6 @@ if (!hasText && !hasSlotContent) return;
     &.align-end {
       text-align: end;
     }
+  }
   }
 </style>

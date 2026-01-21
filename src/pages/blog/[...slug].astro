@@ -62,7 +62,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const pubDate = post.data.pubDate.toLocaleDateString("en-US", {
+const date = post.data.date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
   day: "numeric",
@@ -79,7 +79,7 @@ const pubDate = post.data.pubDate.toLocaleDateString("en-US", {
     class="post-container"
   >
     <SimpleText size="sm" style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);">
-      {pubDate} • {post.data.author}
+      {date} • {post.data.author}
     </SimpleText>
 
     <Heading level="h1" size="2xl" style="margin-bottom: var(--spacing-xs);">

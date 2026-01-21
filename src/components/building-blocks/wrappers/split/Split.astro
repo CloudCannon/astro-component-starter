@@ -135,8 +135,8 @@ const splitId = `split-${crypto.randomUUID()}`;
 }
 
 <style lang="pcss">
-
-  .split {
+  @layer components {
+    .split {
     --split-columns-mobile: 1fr;
     --split-columns-desktop: 1fr 1fr;
     --split-fixed-width: auto;
@@ -264,5 +264,6 @@ const splitId = `split-${crypto.randomUUID()}`;
 
   .split.flexible-fixed {
     --split-columns-desktop: 1fr var(--split-fixed-width);
+  }
   }
 </style>

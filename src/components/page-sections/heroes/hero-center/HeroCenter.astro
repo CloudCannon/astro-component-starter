@@ -35,8 +35,10 @@ const {
   <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" />
 </CustomSection>
 
-<style>
-  .subtext :global(p) {
-    font-size: var(--font-size-lg);
+<style lang="pcss">
+  @layer overrides {
+    .subtext :global(p) {
+      font-size: var(--font-size-lg);
+    }
   }
 </style>

@@ -19,17 +19,19 @@ const htmlAttributes = Object.fromEntries(
 </div>
 
 <style lang="pcss">
-  .grid-item {
-    container-type: inline-size;
+  @layer components {
+    .grid-item {
+      container-type: inline-size;
 
-    :global(editable-array-item:only-child) > :global(*:only-child),
-    > :global(:not(editable-array):only-child) {
-      height: 100%;
-    }
+      :global(editable-array-item:only-child) > :global(*:only-child),
+      > :global(:not(editable-array):only-child) {
+        height: 100%;
+      }
 
-    :global(editable-array-item:first-child) > :global(*:first-child),
-    > :global(:not(editable-array):first-child) {
-      margin-top: 0 !important;
+      :global(editable-array-item:first-child) > :global(*:first-child),
+      > :global(:not(editable-array):first-child) {
+        margin-top: 0 !important;
+      }
     }
   }
 </style>

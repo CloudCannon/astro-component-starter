@@ -50,15 +50,18 @@ collections_config:
       description:
         type: text
         comment: A brief description of the blog post.
-      pubDate:
+      date:
         type: date
         comment: The publication date.
       author:
         type: text
         comment: The author of the blog post.
       image:
-        type: text
+        type: image
         comment: Optional image path for the blog post.
+        options:
+          paths:
+            uploads: src/assets/images
       tags:
         type: text
         comment: Comma-separated list of tags.

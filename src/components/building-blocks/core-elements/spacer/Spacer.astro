@@ -14,7 +14,8 @@ const htmlAttributes = Object.fromEntries(
 </div>
 
 <style lang="pcss">
-  .spacer {
+  @layer components {
+    .spacer {
     height: 0;
 
     &.size-xs {
@@ -44,5 +45,6 @@ const htmlAttributes = Object.fromEntries(
     &.size-3xl {
       height: var(--spacing-3xl);
     }
+  }
   }
 </style>

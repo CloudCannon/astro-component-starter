@@ -76,7 +76,8 @@ const htmlAttributes = Object.fromEntries(
 </script>
 
 <style lang="pcss">
-  .counter {
+  @layer components {
+    .counter {
     align-items: start;
     display: flex;
     font-size: var(--font-size-heading-2xl);
@@ -126,5 +127,6 @@ const htmlAttributes = Object.fromEntries(
     .suffix {
       white-space: pre-wrap;
     }
+  }
   }
 </style>

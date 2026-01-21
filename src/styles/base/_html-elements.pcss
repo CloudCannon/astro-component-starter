@@ -1,75 +1,77 @@
-:where(:root) {
-  html,
-  body {
-    margin: 0;
-    overflow-x: hidden;
-    padding: 0;
-    width: 100%;
-  }
-
-  body {
-    background-color: var(--color-bg);
-    min-height: 100vh;
-  }
-
-  body,
-  [data-theme="contrast"],
-  [data-theme="default"] {
-    color: var(--color-text);
-  }
-
-  main {
-    width: 100%;
-  }
-
-  code[class*="language-"],
-  pre[class*="language-"] {
-    border-radius: var(--radius-sm);
-    font-size: var(--font-size-md);
-  }
-
-  .astro-code {
-    border-radius: var(--radius-sm);
-    padding: var(--spacing-lg);
-    code {
-      white-space: pre-wrap;
+@layer base {
+  :where(:root) {
+    html,
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      padding: 0;
+      width: 100%;
     }
-  }
 
-  p,
-  ul,
-  ol {
-    code {
-      background: var(--color-bg);
-      border-radius: 0.25rem;
-      padding: 0.1rem 0.2rem;
+    body {
+      background-color: var(--color-bg);
+      min-height: 100vh;
     }
-  }
 
-  blockquote {
-    border-left: 3px solid var(--color-border);
-    padding-left: var(--spacing-sm);
-  }
+    body,
+    [data-theme="contrast"],
+    [data-theme="default"] {
+      color: var(--color-text);
+    }
 
-  /* Handle margin for components inside editable-array */
-  editable-array > editable-array-item:first-child > .hero,
-  editable-array > editable-array-item:first-child > .blog-block,
-  editable-array > editable-array-item:first-child > .container,
-  editable-array > editable-array-item:first-child > .carousel,
-  editable-array > editable-array-item:first-child > .grid,
-  editable-array > editable-array-item:first-child > .split,
-  editable-array > editable-array-item:first-child > .accordion,
-  editable-array > editable-array-item:first-child > .content-selector,
-  editable-array > editable-array-item:first-child > .card,
-  main > :first-child.hero,
-  main > :first-child.blog-block,
-  main > :first-child.container,
-  main > :first-child.carousel,
-  main > :first-child.grid,
-  main > :first-child.split,
-  main > :first-child.accordion,
-  main > :first-child.content-selector,
-  main > :first-child.card {
-    margin-top: 0;
+    main {
+      width: 100%;
+    }
+
+    code[class*="language-"],
+    pre[class*="language-"] {
+      border-radius: var(--radius-sm);
+      font-size: var(--font-size-md);
+    }
+
+    .astro-code {
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-lg);
+      code {
+        white-space: pre-wrap;
+      }
+    }
+
+    p,
+    ul,
+    ol {
+      code {
+        background: var(--color-bg);
+        border-radius: 0.25rem;
+        padding: 0.1rem 0.2rem;
+      }
+    }
+
+    blockquote {
+      border-left: 3px solid var(--color-border);
+      padding-left: var(--spacing-sm);
+    }
+
+    /* Handle margin for components inside editable-array */
+    editable-array > editable-array-item:first-child > .hero,
+    editable-array > editable-array-item:first-child > .blog-block,
+    editable-array > editable-array-item:first-child > .container,
+    editable-array > editable-array-item:first-child > .carousel,
+    editable-array > editable-array-item:first-child > .grid,
+    editable-array > editable-array-item:first-child > .split,
+    editable-array > editable-array-item:first-child > .accordion,
+    editable-array > editable-array-item:first-child > .content-selector,
+    editable-array > editable-array-item:first-child > .card,
+    main > :first-child.hero,
+    main > :first-child.blog-block,
+    main > :first-child.container,
+    main > :first-child.carousel,
+    main > :first-child.grid,
+    main > :first-child.split,
+    main > :first-child.accordion,
+    main > :first-child.content-selector,
+    main > :first-child.card {
+      margin-top: 0;
+    }
   }
 }

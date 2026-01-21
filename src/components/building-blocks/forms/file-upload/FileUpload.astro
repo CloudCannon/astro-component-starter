@@ -43,7 +43,8 @@ const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
 </div>
 
 <style lang="pcss">
-  .file-upload {
+  @layer components {
+    .file-upload {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -55,5 +56,6 @@ const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
       color: red;
       margin-inline-end: var(--spacing-em-xs);
     }
+  }
   }
 </style>

@@ -92,7 +92,8 @@ const positionClass = `position-${positionVertical}-${positionHorizontal}`;
 </div>
 
 <style lang="pcss">
-  .image {
+  @layer components {
+    .image {
     display: block;
     overflow: hidden;
     margin-top: var(--spacing-lg);
@@ -196,5 +197,6 @@ const positionClass = `position-${positionVertical}-${positionHorizontal}`;
     &.rounded {
       border-radius: var(--radius-lg);
     }
+  }
   }
 </style>

@@ -347,7 +347,8 @@ function createNavItemData(item, level, parentGroupId) {
 </script>
 
 <style lang="pcss">
-  .nav-toggle {
+  @layer components {
+    .nav-toggle {
     display: none;
   }
 
@@ -517,5 +518,6 @@ function createNavItemData(item, level, parentGroupId) {
     &.open {
       transform: translateX(0);
     }
+  }
   }
 </style>

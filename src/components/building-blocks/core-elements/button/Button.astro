@@ -67,7 +67,8 @@ if (!hasText && !hasSlotContent && !hasIcon) return;
 </Tag>
 
 <style lang="pcss">
-  .button {
+  @layer components {
+    .button {
     align-items: center;
     background-color: var(--color-bg-surface);
     border: 1px solid var(--color-border);
@@ -186,5 +187,6 @@ if (!hasText && !hasSlotContent && !hasIcon) return;
     &.size-lg {
       font-size: var(--font-size-xl);
     }
+  }
   }
 </style>

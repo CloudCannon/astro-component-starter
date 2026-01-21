@@ -300,7 +300,8 @@ function createNavItemData(item, level, parentGroupId) {
 </script>
 
 <style lang="pcss">
-  .bar {
+  @layer components {
+    .bar {
     font-weight: var(--font-weight-semibold);
     .bar-list {
       align-items: center;
@@ -415,5 +416,6 @@ function createNavItemData(item, level, parentGroupId) {
       border-radius: 0;
       padding-left: var(--spacing-xl);
     }
+  }
   }
 </style>

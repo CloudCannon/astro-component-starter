@@ -83,7 +83,8 @@ const authorDescriptionDataAttributes =
 </blockquote>
 
 <style lang="pcss">
-  .testimonial {
+  @layer components {
+    .testimonial {
     display: flex;
     background: var(--color-bg);
     flex-direction: column;
@@ -149,5 +150,6 @@ const authorDescriptionDataAttributes =
         }
       }
     }
+  }
   }
 </style>

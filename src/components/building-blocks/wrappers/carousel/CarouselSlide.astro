@@ -19,7 +19,8 @@ const htmlAttributes = Object.fromEntries(
 </div>
 
 <style lang="pcss">
-  .slide {
+  @layer components {
+    .slide {
     flex-shrink: 0;
     flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
     container-type: inline-size;
@@ -28,5 +29,6 @@ const htmlAttributes = Object.fromEntries(
     > :global(:not(editable-array):first-child) {
       margin-top: 0 !important;
     }
+  }
   }
 </style>

@@ -72,7 +72,8 @@ const inputType = multiple ? "checkbox" : "radio";
 </fieldset>
 
 <style lang="pcss">
-  .segments {
+  @layer components {
+    .segments {
     border: none;
     display: flex;
     flex-direction: column;
@@ -183,5 +184,6 @@ const inputType = multiple ? "checkbox" : "radio";
     &.icon-only .option .segment .segment-icon {
       margin-block: var(--spacing-xs);
     }
+  }
   }
 </style>

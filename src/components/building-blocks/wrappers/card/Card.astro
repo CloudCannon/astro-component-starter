@@ -118,7 +118,8 @@ const Tag = link ? "a" : "div";
 </Tag>
 
 <style lang="pcss">
-  a.card:hover {
+  @layer components {
+    a.card:hover {
     transform: scale(1.05);
   }
 
@@ -300,5 +301,6 @@ const Tag = link ? "a" : "div";
     > .bg-highlight {
       background-color: var(--color-bg-highlight);
     }
+  }
   }
 </style>

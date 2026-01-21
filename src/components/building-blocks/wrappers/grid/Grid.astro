@@ -76,29 +76,31 @@ if (!hasItems && !hasSlotContent) return;
 </div>
 
 <style lang="pcss">
-  .grid {
-    gap: var(--grid-spacing, --spacing-md);
-    margin-top: var(--spacing-lg);
-    width: 100%;
+  @layer components {
+    .grid {
+      gap: var(--grid-spacing, --spacing-md);
+      margin-top: var(--spacing-lg);
+      width: 100%;
 
-    &.layout-start {
-      align-items: stretch;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
-      justify-content: start;
-    }
+      &.layout-start {
+        align-items: stretch;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
+        justify-content: start;
+      }
 
-    &.layout-center {
-      align-items: stretch;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+      &.layout-center {
+        align-items: stretch;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
 
-      > :global(editable-array-item),
-      > :global(.grid-item) {
-        flex: 1 1 var(--min-item-width, 200px);
-        max-width: var(--max-item-width, 320px);
-        min-width: min(var(--min-item-width, 200px), 100%);
+        > :global(editable-array-item),
+        > :global(.grid-item) {
+          flex: 1 1 var(--min-item-width, 200px);
+          max-width: var(--max-item-width, 320px);
+          min-width: min(var(--min-item-width, 200px), 100%);
+        }
       }
     }
   }

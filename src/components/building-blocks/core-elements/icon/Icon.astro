@@ -39,7 +39,8 @@ const htmlAttributes = Object.fromEntries(
 </div>
 
 <style lang="pcss">
-  .icon {
+  @layer components {
+    .icon {
     border-radius: var(--radius-xs);
     color: inherit;
     display: inline-block;
@@ -174,5 +175,6 @@ const htmlAttributes = Object.fromEntries(
     svg {
       max-height: 100%;
     }
+  }
   }
 </style>

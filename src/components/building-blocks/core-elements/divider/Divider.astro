@@ -15,7 +15,8 @@ const htmlAttributes = Object.fromEntries(
 </div>
 
 <style lang="pcss">
-  .divider {
+  @layer components {
+    .divider {
 
     &.padding-y-none {
       padding: 0;
@@ -54,5 +55,6 @@ const htmlAttributes = Object.fromEntries(
       border: 0;
       border-top: 2px solid var(--color-border-subtle);
     }
+  }
   }
 </style>

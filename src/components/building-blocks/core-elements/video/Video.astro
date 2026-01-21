@@ -50,8 +50,10 @@ const htmlAttributes = Object.fromEntries(
 }
 
 <style lang="pcss">
-  .video {
-    display: block;
-    margin-top: var(--spacing-lg);
+  @layer components {
+    .video {
+      display: block;
+      margin-top: var(--spacing-lg);
+    }
   }
 </style>

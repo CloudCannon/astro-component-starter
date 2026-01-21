@@ -44,7 +44,8 @@ const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
 </div>
 
 <style lang="pcss">
-  .input {
+  @layer components {
+    .input {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -56,5 +57,6 @@ const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
       color: red;
       margin-inline-end: var(--spacing-em-xs);
     }
+  }
   }
 </style>

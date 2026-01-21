@@ -36,7 +36,8 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
 </div>
 
 <style lang="pcss">
-  .date {
+  @layer components {
+    .date {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
@@ -48,5 +49,6 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
       color: red;
       margin-inline-end: var(--spacing-em-xs);
     }
+  }
   }
 </style>

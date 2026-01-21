@@ -22,7 +22,8 @@ const htmlAttributes = Object.fromEntries(
 </details>
 
 <style lang="pcss">
-  .item {
+  @layer components {
+    .item {
     border-bottom: 1px solid var(--color-border-subtle);
     container-type: inline-size;
 
@@ -75,5 +76,6 @@ const htmlAttributes = Object.fromEntries(
     > .detail {
       animation: grow-out 300ms ease-out;
     }
+  }
   }
 </style>

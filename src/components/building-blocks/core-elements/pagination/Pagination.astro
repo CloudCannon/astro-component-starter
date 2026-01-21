@@ -126,7 +126,8 @@ const getPageUrl = (pageNum: number) => {
 </nav>
 
 <style lang="pcss">
-  .pagination {
+  @layer components {
+    .pagination {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -200,5 +201,6 @@ const getPageUrl = (pageNum: number) => {
       border-bottom-right-radius: var(--radius-sm);
       border-top-right-radius: var(--radius-sm);
     }
+  }
   }
 </style>
