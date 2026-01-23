@@ -72,6 +72,17 @@ collections_config:
     icon: database
     _enabled_editors:
       - data
+    _inputs:
+      logoSource:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+      image:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
 collection_groups:
   - heading: Content
     collections:
