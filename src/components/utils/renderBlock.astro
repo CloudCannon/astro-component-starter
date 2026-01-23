@@ -50,7 +50,7 @@ const { contentSections, propName = "contentSections", editable = true } = Astro
         );
       }
 
-      return Component ? <Component {...block} /> : null;
+      return Component ? <Component {...block} editable={editable} /> : null;
     })
   ) : (
     <editable-array
