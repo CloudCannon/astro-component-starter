@@ -28,16 +28,6 @@
       "iconPosition": "before",
       "variant": "ghost",
       "size": "lg"
-    },
-    {
-      "_component": "building-blocks/core-elements/button",
-      "text": "My Button",
-      "hideText": false,
-      "link": "",
-      "iconName": "",
-      "iconPosition": "before",
-      "variant": "primary",
-      "size": "md"
     }
   ]
 }
