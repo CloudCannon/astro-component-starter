@@ -22,7 +22,7 @@
     {
       "_component": "building-blocks/core-elements/button",
       "text": "Search",
-      "hideText": true,
+      "hideText": false,
       "link": "/search/",
       "iconName": "magnifying-glass",
       "iconPosition": "before",
