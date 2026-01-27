@@ -54,10 +54,9 @@ if (!_component && !hasItems && !hasSlotContent) return;
           <editable-array-item data-component="building-blocks/core-elements/list/list-item">
             <ListItem
               text={item.text}
-              iconName={item.iconName}
-              iconColor={item.iconColor}
+              iconName={showIcons ? item.iconName : undefined}
+              iconColor={showIcons ? item.iconColor : undefined}
               editable={editable}
-              showIcon={showIcons}
             />
           </editable-array-item>
         ))
