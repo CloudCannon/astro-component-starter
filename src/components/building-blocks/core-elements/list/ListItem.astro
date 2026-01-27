@@ -6,6 +6,7 @@ const {
   text = "",
   iconName,
   iconColor = "default",
+  showIcon = false,
   class: className,
   editable = true,
   "data-prop": customDataProp = "text",
@@ -24,9 +25,12 @@ const textDataAttributes =
     : {};
 ---
 
-<li class:list={["item", iconName && "list-item-has-icon", className]} {...htmlAttributes}>
+<li
+  class:list={["item", showIcon && iconName && "list-item-has-icon", className]}
+  {...htmlAttributes}
+>
   {
-    iconName && (
+    showIcon && iconName && (
       <Icon name={iconName} color={iconColor} size="none" class="list-icon" aria-hidden="true" />
     )
   }
