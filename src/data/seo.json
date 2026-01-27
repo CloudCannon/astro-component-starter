@@ -4,6 +4,5 @@
   "description": "",
   "logo": "/images/logo.svg",
   "titleFormat": "{title} | Astro Component Starter",
-  "twitterHandle": "@yourusername",
-  "socialLinks": ["https://x.com/yourusername", "https://github.com/yourusername"]
+  "twitterHandle": "@yourusername"
 }

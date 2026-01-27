@@ -5,20 +5,18 @@ export interface Props {
     url: string;
     logo: string;
     description: string;
-    socialLinks: string[];
   };
 }
 
 const { site } = Astro.props;
 
-const structuredData = {
+const structuredData: Record<string, any> = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: site.name,
   url: site.url,
   logo: site.url + site.logo,
   description: site.description,
-  sameAs: site.socialLinks,
 };
 ---
 
