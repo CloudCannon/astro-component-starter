@@ -80,6 +80,14 @@ if (!_component && !hasItems && !hasSlotContent) return;
         gap: var(--spacing-em-sm);
       }
 
+      &.type-bullet {
+        list-style: disc;
+      }
+
+      &.type-numbered {
+        list-style: decimal;
+      }
+
       &.type-bullet,
       &.type-numbered {
 
