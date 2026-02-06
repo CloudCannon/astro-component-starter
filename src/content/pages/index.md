@@ -1,26 +1,26 @@
 ---
 _schema: default
-title: Astro Component Starter
+title: 'Pasifika Festivals Aotearoa '
 pageSections:
   - _component: page-sections/heroes/hero-center
-    eyebrow:
-    heading: The Astro Component Starter for building any site
+    eyebrow: Pasifika Festivals Aotearoa Inc.
+    heading: Connecting Pasifika Festivals across Aotearoa
     subtext: >-
-      Built on web fundamentals. Easy to customize, fast to use, and simple to
-      maintain.
+      *Holding the vā for an Indigenous-centric support network that increases
+      resource accessibility, cultural understanding and advocacy*
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
+        text: Upcoming Festivals
         hideText: false
-        link: /component-library/
+        link: /festivals/
         iconName: ''
         iconPosition: before
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: View in GitHub
+        text: Festival Resources
         hideText: false
-        link: https://github.com/CloudCannon/astro-component-starter
+        link: /resources/
         iconName: ''
         iconPosition: before
         variant: secondary
@@ -40,53 +40,6 @@ pageSections:
     imageAspectRatio: none
     imageRounded: false
     reverse: false
-    colorScheme: default
-    backgroundColor: base
-  - _component: page-sections/features/feature-split
-    eyebrow: CloudCannon Ready
-    heading: Easy visual editing
-    subtext: >-
-      Every component is built to work seamlessly in CloudCannon's Visual
-      Editor. Developers can create and style custom Page Sections with Astro.
-      Editors can click, change, and rearrange content right on the page without
-      touching the code or guessing where anything lives.
-    buttonSections: []
-    imageSource: /src/assets/images/component-library/website-split.svg
-    imageAlt: Website Split
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: true
-    colorScheme:
-    backgroundColor:
-    paddingVertical: lg
-  - _component: page-sections/features/feature-split
-    eyebrow: Performance
-    heading: Fast by architecture, not by accident
-    subtext: >-
-      Your components render to static HTML, keeping bundles lean and pages
-      instant. Your users get instant page loads. You get a modern developer
-      experience.
-    buttonSections: []
-    imageSource: /src/assets/images/component-library/website-hero.svg
-    imageAlt: Website Hero
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: false
-    colorScheme: default
-    backgroundColor: base
-  - _component: page-sections/features/feature-split
-    eyebrow: Documentation
-    heading: Every component, clearly documented
-    subtext: >-
-      Each component comes with straightforward docs, real examples, full
-      descriptions of every property, and clear guidance without having to dig
-      through source files.
-    buttonSections: []
-    imageSource: /src/assets/images/component-library/website-documented.svg
-    imageAlt: Website Hero
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: true
     colorScheme: default
     backgroundColor: base
   - _component: page-sections/features/feature-grid
@@ -135,25 +88,40 @@ pageSections:
     colorScheme: default
     backgroundColor: surface
     align: center
+  - _component: page-sections/features/feature-slider
+    slides:
+      - _component: page-sections/features/feature-slider/feature-slider-item
+        eyebrow: Resources
+        title: Slide title
+        description: Short description for this slide.
+        imageSource: /src/assets/images/component-library/sunset.jpg
+        imageAlt: Slide image alt text
+        minSplitWidth: 0
+      - _component: page-sections/features/feature-slider/feature-slider-item
+        eyebrow: Advocacy
+        title: Slide title
+        description: Short description for this slide.
+        imageSource: /src/assets/images/component-library/sunset.jpg
+        imageAlt: Slide image alt text
+        minSplitWidth: 0
+    colorScheme: inherit
+    backgroundColor: base
   - _component: page-sections/ctas/cta-center
-    heading: Ready to start building?
-    subtext: >-
-      Browse the complete Astro Component Starter and see live examples of every
-      component in action. All components are ready to use in CloudCannon and
-      are fully customizable.
+    heading: 'Want to join our network? '
+    subtext: Become a founding member of PFA during our 2026 National Fono Rounds
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
+        text: Explore Resources
         hideText: false
-        link: /component-library/
+        link: /resources/
         iconName: ''
         iconPosition: before
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: View in GitHub
+        text: Become a Member
         hideText: false
-        link: https://github.com/CloudCannon/astro-component-starter
+        link: /members/
         iconName: ''
         iconPosition: before
         variant: tertiary
@@ -161,4 +129,5 @@ pageSections:
     colorScheme: contrast
     backgroundColor: surface
     rounded: false
+description: Home page for Pasifika Festivals Aotearoa Inc Website
 ---

@@ -1,20 +1,22 @@
 ---
 _schema: default
-title: Why
+title: About
 pageSections:
   - _component: page-sections/heroes/hero-split
     eyebrow:
-    heading: Why build an Astro component starter?
+    heading: 'Why a Pasifika Festivals Aotearoa Incorporated Society? '
     subtext: >-
-      At CloudCannon, we're big fans of the static web. And we love what the
-      Astro team is building!
+      Pasifika Festivals Aotearoa Incorporated Society (PFA Inc) was established
+      in April 2024 as an outcome of the Ministry for Culture and Heritage (MCH)
+      investment in Pasifika festivals through Creative New Zealand (CNZ). The
+      investment emphasised the collective voice, coordination, and leadership
+      required to strengthen the Pasifika festival ecosystem across Aotearoa.
 
 
-      As more and more <a href="https://cloudcannon.com/partner-program/"
-      target="_blank" rel="noopener">partner agencies</a> are building client
-      sites with CloudCannon, we wanted to help out by providing the foundations
-      for Astro components that output static HTML and CSS, for the fastest
-      delivery possible —&nbsp;all unbranded and adaptable for any project.
+      PFA Inc is a national, intergenerational collective of Pacific festivals —
+      weaving together culture, community, and celebration. Our mission is to
+      hold the vā between festivals, sharing resources, knowledge, and advocacy
+      to grow Pacific capability, visibility, and resilience.
     imageSource: /src/assets/images/component-library/sunset.jpg
     imageAlt: Sunset
     imageAspectRatio: portrait
@@ -23,79 +25,53 @@ pageSections:
     colorScheme: default
     backgroundColor: base
     paddingVertical: 4xl
-  - _component: page-sections/info-blocks/faq-section
-    heading: Frequently asked questions
-    headingLevel: h2
-    headingSize: lg
-    singleOpen: true
-    openFirst: false
-    items:
-      - _component: building-blocks/wrappers/accordion/accordion-item
-        title: How does the Component Starter work?
-        contentSections:
-          - _component: building-blocks/core-elements/text
-            text: >-
-              We give you [straightforward building blocks](/component-library/)
-              without hiding anything behind layers of abstraction. You see
-              everything that's happening, and stay in control.
-      - _component: building-blocks/wrappers/accordion/accordion-item
-        title: What's included in the Component Starter?
-        contentSections:
-          - _component: building-blocks/core-elements/text
-            text: >-
-              Lean HTML, CSS, and small touches of vanilla JavaScript. No dead
-              weight, no surprise dependencies, just the pieces you actually
-              need to build great pages.
-      - _component: building-blocks/wrappers/accordion/accordion-item
-        title: How is the Component Starter so fast?
-        contentSections:
-          - _component: building-blocks/core-elements/text
-            text: >-
-              Performance comes from keeping things lightweight. The framework
-              handles image optimization and responsive patterns so your site
-              stays quick without extra work.
-      - _component: building-blocks/wrappers/accordion/accordion-item
-        title: Can I customize the Component Starter?
-        contentSections:
-          - _component: building-blocks/core-elements/text
-            text: >-
-              Every part of the Component Starter is meant to be opened, read,
-              and edited. You shape it to fit your project instead of working
-              around someone else's opinions. Start by [browsing the
-              components](/component-library/) to see how they're set up!
-    maxContentWidth: xl
-    paddingHorizontal: xl
-    paddingVertical: 4xl
-    colorScheme: default
-    backgroundColor: none
-  - _component: page-sections/builders/custom-section
-    label: ""
-    contentSections:
-      - _component: building-blocks/core-elements/spacer
-        size: md
-      - _component: building-blocks/core-elements/heading
-        text: Mix and match your components
-        level: h2
-        size: default
-        alignX: center
-        iconName:
-        iconPosition: before
-      - _component: building-blocks/core-elements/text
-        text: >-
-          With custom sections, you can create components for almost any use
-          case.
-        alignX: center
-    maxContentWidth: 2xl
-    paddingHorizontal: md
-    paddingVertical: md
+  - _component: page-sections/people/team-grid
+    eyebrow: Our Team
+    heading: Meet the people
+    subtext: We're a group of stock photography faces that fill out this team grid.
+    teamMembers:
+      - _component: page-sections/people/team-grid/team-item
+        name: 'Alex Smith '
+        role: Lead Developer
+        bio: >-
+          As a fictional representation of a real employee, I exist solely to
+          demonstrate how profile information appears in this layout. My
+          headshot is perfectly lit, and my description maintains the ideal
+          length for this component.
+        imageSource: /src/assets/images/component-library/profile1.jpg
+        imageAlt: Alex Smith, CEO
+      - _component: page-sections/people/team-grid/team-item
+        name: Tom Rodriguez
+        role: Chief Technology Officer
+        bio: >-
+          I'm here to show how multiple team members look when displayed
+          together. My expertise includes being professionally photographed and
+          having exactly two sentences of biographical text.
+        imageSource: /src/assets/images/component-library/profile2.jpg
+        imageAlt: Tom Rodriguez, CTO
+      - _component: page-sections/people/team-grid/team-item
+        name: Helen Kim
+        role: Head of Design
+        bio: >-
+          I demonstrate how the component handles a third profile entry. My
+          carefully crafted placeholder text ensures the layout remains
+          consistent, regardless of whether you're viewing on a tablet or
+          desktop display.
+        imageSource: /src/assets/images/component-library/profile3.jpg
+        imageAlt: Helen Kim, Head of Design
+      - _component: page-sections/people/team-grid/team-item
+        name: Emily Watson
+        role: Director of Operations
+        bio: >-
+          I round out the team grid to demonstrate how the layout adapts to a
+          fourth member. My presence here confirms that the component scales
+          appropriately, maintaining visual balance across different screen
+          sizes.
+        imageSource: /src/assets/images/component-library/profile4.jpg
+        imageAlt: Emily Watson, Director of Operations
     colorScheme: contrast
     backgroundColor: surface
-    backgroundImage:
-      source: ""
-      alt: ""
-      positionVertical: top
-      positionHorizontal: center
-    rounded: false
+    paddingVertical: 2xl
   - _component: page-sections/features/feature-slider
     slides:
       - _component: page-sections/features/feature-slider/feature-slider-item
@@ -151,6 +127,51 @@ pageSections:
     heading: Why this approach works
     subtext: Highlight the core reasons in a simple, swipeable format.
     paddingVertical: 4xl
+  - _component: page-sections/info-blocks/faq-section
+    heading: Frequently asked questions
+    headingLevel: h2
+    headingSize: lg
+    singleOpen: true
+    openFirst: false
+    items:
+      - _component: building-blocks/wrappers/accordion/accordion-item
+        title: How does the Component Starter work?
+        contentSections:
+          - _component: building-blocks/core-elements/text
+            text: >-
+              We give you [straightforward building blocks](/component-library/)
+              without hiding anything behind layers of abstraction. You see
+              everything that's happening, and stay in control.
+      - _component: building-blocks/wrappers/accordion/accordion-item
+        title: What's included in the Component Starter?
+        contentSections:
+          - _component: building-blocks/core-elements/text
+            text: >-
+              Lean HTML, CSS, and small touches of vanilla JavaScript. No dead
+              weight, no surprise dependencies, just the pieces you actually
+              need to build great pages.
+      - _component: building-blocks/wrappers/accordion/accordion-item
+        title: How is the Component Starter so fast?
+        contentSections:
+          - _component: building-blocks/core-elements/text
+            text: >-
+              Performance comes from keeping things lightweight. The framework
+              handles image optimization and responsive patterns so your site
+              stays quick without extra work.
+      - _component: building-blocks/wrappers/accordion/accordion-item
+        title: Can I customize the Component Starter?
+        contentSections:
+          - _component: building-blocks/core-elements/text
+            text: >-
+              Every part of the Component Starter is meant to be opened, read,
+              and edited. You shape it to fit your project instead of working
+              around someone else's opinions. Start by [browsing the
+              components](/component-library/) to see how they're set up!
+    maxContentWidth: xl
+    paddingHorizontal: xl
+    paddingVertical: 4xl
+    colorScheme: default
+    backgroundColor: none
   - _component: page-sections/people/testimonial-section
     text: >-
       This testimonial component has completely changed the way I present my
@@ -164,53 +185,6 @@ pageSections:
     paddingVertical: 2xl
     colorScheme: contrast
     backgroundColor: surface
-  - _component: page-sections/people/team-grid
-    eyebrow: Our Team
-    heading: Meet the people
-    subtext: We're a group of stock photography faces that fill out this team grid.
-    teamMembers:
-      - _component: page-sections/people/team-grid/team-item
-        name: "Alex Smith "
-        role: Lead Developer
-        bio: >-
-          As a fictional representation of a real employee, I exist solely to
-          demonstrate how profile information appears in this layout. My
-          headshot is perfectly lit, and my description maintains the ideal
-          length for this component.
-        imageSource: /src/assets/images/component-library/profile1.jpg
-        imageAlt: Alex Smith, CEO
-      - _component: page-sections/people/team-grid/team-item
-        name: Tom Rodriguez
-        role: Chief Technology Officer
-        bio: >-
-          I'm here to show how multiple team members look when displayed
-          together. My expertise includes being professionally photographed and
-          having exactly two sentences of biographical text.
-        imageSource: /src/assets/images/component-library/profile2.jpg
-        imageAlt: Tom Rodriguez, CTO
-      - _component: page-sections/people/team-grid/team-item
-        name: Helen Kim
-        role: Head of Design
-        bio: >-
-          I demonstrate how the component handles a third profile entry. My
-          carefully crafted placeholder text ensures the layout remains
-          consistent, regardless of whether you're viewing on a tablet or
-          desktop display.
-        imageSource: /src/assets/images/component-library/profile3.jpg
-        imageAlt: Helen Kim, Head of Design
-      - _component: page-sections/people/team-grid/team-item
-        name: Emily Watson
-        role: Director of Operations
-        bio: >-
-          I round out the team grid to demonstrate how the layout adapts to a
-          fourth member. My presence here confirms that the component scales
-          appropriately, maintaining visual balance across different screen
-          sizes.
-        imageSource: /src/assets/images/component-library/profile4.jpg
-        imageAlt: Emily Watson, Director of Operations
-    colorScheme: contrast
-    backgroundColor: surface
-    paddingVertical: 2xl
   - _component: page-sections/ctas/cta-form
     heading: Form and function!
     subtext: >-
@@ -247,4 +221,5 @@ pageSections:
     colorScheme: contrast
     backgroundColor: surface
     paddingVertical: 4xl
+description: ''
 ---

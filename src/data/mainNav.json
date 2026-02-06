@@ -13,8 +13,39 @@
       "children": []
     },
     {
+      "name": "Festivals",
+      "path": null,
+      "children": [
+        {
+          "name": "Festivals Directory",
+          "path": "/festivals/",
+          "children": [
+            {
+              "name": "",
+              "path": ""
+            }
+          ]
+        },
+        {
+          "name": "Calendar",
+          "path": "",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Resources",
+      "path": "/resources/",
+      "children": []
+    },
+    {
       "name": "Blog",
       "path": "/blog/",
+      "children": []
+    },
+    {
+      "name": "Members Resources",
+      "path": "/members/",
       "children": []
     }
   ],
