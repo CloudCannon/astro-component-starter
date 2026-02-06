@@ -49,7 +49,7 @@ collections_config:
         cascade: true
     add_options:
       - name: Add New Festival
-        icon: festival
+        icon: event
         schema: default
     create:
       path: '[relative_base_path]/{filename|slugify|lowercase}.md'
@@ -82,7 +82,7 @@ collections_config:
         cascade: true
     add_options:
       - name: Add New Team Member
-        icon: emoji people
+        icon: groups
         schema: default
     create:
       path: '[relative_base_path]/{filename|slugify|lowercase}.md'
@@ -115,7 +115,7 @@ collections_config:
         cascade: true
     add_options:
       - name: Add New Resource
-        icon: document scanner
+        icon: description
         schema: default
     create:
       path: '[relative_base_path]/{filename|slugify|lowercase}.md'
