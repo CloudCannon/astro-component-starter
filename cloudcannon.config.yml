@@ -166,13 +166,6 @@ collection_groups:
   - heading: Data
     collections:
       - data
-  - heading: New Collections
-    collections:
-      - src
-  - heading: New Collections
-    collections: []
-  - heading: New Collections
-    collections: []
 _inputs:
   pageSections:
     comment: The main sections of the page.
