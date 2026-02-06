@@ -2,19 +2,6 @@
 _schema: default
 title: 'Festivals '
 pageSections:
-  - _component: page-sections/features/feature-grid
-    eyebrow: Festivals
-    heading: Festivals
-    subtext: >-
-      Discover Pacific festivals taking place across Aotearoa. Each festival
-      reflects the unique cultures, languages, and communities that make up our
-      Pacific identity in New Zealand.
-    gap: xl
-    minItemWidth: 280
-    maxItemWidth: 360
-    features: []
-    colorScheme: inherit
-    backgroundColor: base
   - _component: page-sections/heroes/hero-split
     eyebrow: Festivals
     heading: Festivals 2026
@@ -22,12 +9,12 @@ pageSections:
       Discover Pacific festivals taking place across Aotearoa. Each festival
       reflects the unique cultures, languages, and communities that make up our
       Pacific identity in New Zealand.
-    imageSource: /src/assets/images/component-library/dunedin-cliff.jpg
+    imageSource: /src/assets/images/9780824838713-scaled.jpg
     imageAlt: Hero image
     imageAspectRatio: none
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: My Button
+        text: Add your festival
         hideText: false
         link: ''
         iconName: ''
@@ -37,5 +24,26 @@ pageSections:
     reverse: false
     colorScheme: inherit
     backgroundColor: base
+  - _component: page-sections/builders/custom-section
+    label: Festivals listed
+    contentSections:
+      - _component: building-blocks/wrappers/grid
+        label: Festival Grid
+        layout: center
+        minItemWidth: 280
+        maxItemWidth: 400
+        items: []
+        gap: md
+    maxContentWidth: 2xl
+    paddingHorizontal: md
+    paddingVertical: md
+    colorScheme: inherit
+    backgroundColor: base
+    backgroundImage:
+      source: ''
+      alt: ''
+      positionVertical: top
+      positionHorizontal: center
+    rounded: false
 description: ''
 ---
