@@ -27,6 +27,61 @@ pageSections:
         size: md
     colorScheme: default
     backgroundColor: base
+  - _component: page-sections/builders/custom-section
+    label: 'Upcoming Festivals '
+    contentSections:
+      - _component: building-blocks/core-elements/text
+        text: >-
+          # Upcoming Festivals
+
+
+          > Pasifika Festivals Aotearoa Inc connects and supports festivals
+          across Aotearoa, strengthening cultural storytelling, collaboration,
+          and advocacy for Pasifika arts and communities.
+        alignX: start
+    maxContentWidth: 2xl
+    paddingHorizontal: md
+    paddingVertical: md
+    colorScheme: inherit
+    backgroundColor: base
+    backgroundImage:
+      source: ''
+      alt: ''
+      positionVertical: top
+      positionHorizontal: center
+    rounded: false
+  - _component: page-sections/features/feature-slider
+    slides:
+      - _component: page-sections/features/feature-slider/feature-slider-item
+        eyebrow: 'Auckland '
+        title: 'Pasifika Festival '
+        description: Short description for this slide.
+        imageSource: /src/assets/images/component-library/sunset.jpg
+        imageAlt: Slide image alt text
+        minSplitWidth: 0
+      - _component: page-sections/features/feature-slider/feature-slider-item
+        eyebrow: 'What''s On? '
+        title: 'Upcoming Festivals '
+        description: March 2026
+        imageSource: /src/assets/images/component-library/sunset.jpg
+        imageAlt: Slide image alt text
+        minSplitWidth: 0
+      - _component: page-sections/features/feature-slider/feature-slider-item
+        eyebrow: Christchurch
+        title: 'Kia Mau Festival '
+        description: Short description for this slide.
+        imageSource: /src/assets/images/component-library/sunset.jpg
+        imageAlt: Slide image alt text
+        minSplitWidth: 0
+      - _component: page-sections/features/feature-slider/feature-slider-item
+        eyebrow: Otago
+        title: 'Otago Polyfest '
+        description: Short description for this slide.
+        imageSource: /src/assets/images/component-library/sunset.jpg
+        imageAlt: Slide image alt text
+        minSplitWidth: 0
+    colorScheme: inherit
+    backgroundColor: base
   - _component: page-sections/features/feature-split
     eyebrow: 'Why an Incorporated Society? '
     heading: 'Investment in Pasifika festivals '
@@ -50,57 +105,52 @@ pageSections:
     reverse: false
     colorScheme: default
     backgroundColor: base
-  - _component: page-sections/features/feature-grid
-    eyebrow: Principles
-    heading: Built for real-world web projects
-    subtext: No trends. No noise. Just reliability.
-    gap: xl
-    minItemWidth: 280
-    maxItemWidth: 360
-    features:
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Web fundamentals
-        description: >-
-          Semantic HTML. Lean CSS. JavaScript only when it's needed. The stack
-          is boring by design, and that’s exactly why it works.
-        iconName: cube
-        iconColor: blue
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Built for speed
-        description: >-
-          Static-rendered, minimal payloads, zero waste. Built to be extremely
-          fast from the first byte.
-        iconName: bolt
-        iconColor: yellow
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Everything just fits
-        description: >-
-          Simple, predictable components that play nice together. Build bigger
-          pieces without creating a maintenance mess.
-        iconName: puzzle-piece
-        iconColor: green
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Controlled editing
-        description: >-
-          Enough freedom for editors to move fast. Enough structure for
-          developers to sleep at night.
-        iconName: pencil
-        iconColor: purple
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Adaptable
-        description: >-
-          Purposefully plain styling. The whole component starter adapts to your
-          designs without a fight.
-        iconName: paint-brush
-        iconColor: pink
-    colorScheme: default
-    backgroundColor: surface
-    align: center
+  - _component: page-sections/builders/custom-section
+    label: Video
+    contentSections:
+      - _component: building-blocks/core-elements/video
+        type: youtube
+        id: https://www.youtube.com/watch?v=KVEr2vdXK6w
+        title: Festival Video Showcase
+        source: ''
+        thumbnail: ''
+    maxContentWidth: 2xl
+    paddingHorizontal: md
+    paddingVertical: md
+    colorScheme: inherit
+    backgroundColor: base
+    backgroundImage:
+      source: ''
+      alt: ''
+      positionVertical: top
+      positionHorizontal: center
+    rounded: false
   - _component: page-sections/people/team-grid
-    eyebrow: Our team
+    eyebrow: Pasifika Festivals Aotearoa Inc Team
     heading: Meet the team
-    subtext: Get to know the people behind our work.
-    teamMembers: []
+    subtext: >-
+      Our team connects and supports festivals across Aotearoa, strengthening
+      cultural storytelling, collaboration, and advocacy for Pasifika arts and
+      communities.
+    teamMembers:
+      - _component: page-sections/people/team-grid/team-item
+        name: Name
+        role: Role
+        bio: 'Brief bio or description of the team member coming soon '
+        imageSource: /src/assets/images/component-library/profile.jpg
+        imageAlt: Team member photo
+      - _component: page-sections/people/team-grid/team-item
+        name: Team member name
+        role: Job title
+        bio: Brief bio or description of the team member.
+        imageSource: /src/assets/images/component-library/profile.jpg
+        imageAlt: Team member photo
+      - _component: page-sections/people/team-grid/team-item
+        name: Team member name
+        role: Job title
+        bio: Brief bio or description of the team member.
+        imageSource: /src/assets/images/component-library/profile.jpg
+        imageAlt: Team member photo
     colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/ctas/cta-center
