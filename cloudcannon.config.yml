@@ -65,7 +65,7 @@ collections_config:
         remove_empty_inputs: false
         remove_extra_inputs: false
         name: New Festival
-  pages:
+  team:
     path: src/content/team
     glob:
       - '**/*.md'
