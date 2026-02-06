@@ -1,3 +1,4 @@
+---
 title: 
 location: 
 festival_dates: 
@@ -6,3 +7,4 @@ featured_image:
 region: 
 summary: 
 featured: 
+---
