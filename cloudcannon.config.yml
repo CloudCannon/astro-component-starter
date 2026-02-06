@@ -31,6 +31,104 @@ collections_config:
         remove_empty_inputs: false
         remove_extra_inputs: false
         name: New Page
+  festivals:
+    path: src/content/festivals
+    glob:
+      - '**/*.md'
+    icon: laptop_mac
+    url: /[full_slug]/
+    disable_url: false
+    _enabled_editors:
+      - visual
+      - content
+    _inputs:
+      title:
+        type: text
+        comment: Controls the metadata title for the page.
+        cascade: true
+    add_options:
+      - name: Add New Festival
+        icon: festival
+        schema: default
+    create:
+      path: '[relative_base_path]/{filename|slugify|lowercase}.md'
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    new_preview_url: /
+    schemas:
+      default:
+        path: .cloudcannon/schemas/festivals.md
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: New Festival
+  pages:
+    path: src/content/team
+    glob:
+      - '**/*.md'
+    icon: laptop_mac
+    url: /[full_slug]/
+    disable_url: false
+    _enabled_editors:
+      - visual
+    _inputs:
+      title:
+        type: text
+        comment: Controls the metadata title for the page.
+        cascade: true
+    add_options:
+      - name: Add New Team Member
+        icon: emoji people
+        schema: default
+    create:
+      path: '[relative_base_path]/{filename|slugify|lowercase}.md'
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    new_preview_url: /
+    schemas:
+      default:
+        path: .cloudcannon/schemas/team.md
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: New Team Member
+  resources:
+    path: src/content/resources
+    glob:
+      - '**/*.md'
+    icon: laptop_mac
+    url: /[full_slug]/
+    disable_url: false
+    _enabled_editors:
+      - visual
+      - content
+    _inputs:
+      title:
+        type: text
+        comment: Controls the metadata title for the page.
+        cascade: true
+    add_options:
+      - name: Add New Resource
+        icon: document scanner
+        schema: default
+    create:
+      path: '[relative_base_path]/{filename|slugify|lowercase}.md'
+    disable_add: false
+    disable_add_folder: false
+    disable_file_actions: false
+    new_preview_url: /
+    schemas:
+      default:
+        path: .cloudcannon/schemas/resources.md
+        reorder_inputs: true
+        hide_extra_inputs: false
+        remove_empty_inputs: false
+        remove_extra_inputs: false
+        name: New Resource
   data:
     path: src/data
     glob:
