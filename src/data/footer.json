@@ -7,26 +7,22 @@
       "path": "/"
     },
     {
-      "name": "Why",
-      "path": "/why/"
-    },
-    {
-      "name": "Blog",
-      "path": "/blog/"
+      "name": "Members",
+      "path": "/members/"
     }
   ],
   "socials": [
     {
-      "icon": "social/github",
-      "link": "https://github.com"
-    },
-    {
-      "icon": "social/x",
-      "link": "https://twitter.com"
-    },
-    {
       "icon": "social/linkedin",
       "link": "https://linkedin.com"
+    },
+    {
+      "icon": "social/facebook",
+      "link": "https://facebook.com"
+    },
+    {
+      "icon": "social/instagram",
+      "link": "https://instagram.com"
     }
   ],
   "footerText": "© 2026 All rights reserved."
