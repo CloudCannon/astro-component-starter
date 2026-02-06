@@ -93,9 +93,32 @@ const blogCollection = defineCollection({
   schema: blogPostSchema,
 });
 
+const festivals = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    location: z.string(),
+    festival_dates: z.string(),
+    summary: z.string(),
+    featured_image: z.string().optional(),
+    featured: z.boolean().optional()
+  })
+});
+
+const team = defineCollection({
+  schema: z.object({
+    name: z.string(),
+    role: z.string(),
+    group: z.string(),
+    image: z.string().optional(),
+    order: z.number().optional()
+  })
+});
+
 export const collections = {
   pages: pagesCollection,
   "docs-pages": docsPagesCollection,
   "docs-components": docsComponentsCollection,
   blog: blogCollection,
+  festivals: festivalsCollection, 
+  team: teamCollection
 };
