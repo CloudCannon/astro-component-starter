@@ -32,7 +32,7 @@
     "@csstools/postcss-global-data": "^3.0.0",
     "@justinribeiro/lite-youtube": "^1.8.2",
     "@types/js-yaml": "^4.0.9",
-    "astro": "^5.17.1",
+    "astro": "^6.0.0-beta.0",
     "astro-auto-import": "^0.5.1",
     "astro-icon": "^1.1.5",
     "astro-seo": "^1.1.0",
