@@ -1,0 +1,25 @@
+label: Events Section
+icon: calendar-days
+description: Displays upcoming events with a toggle to switch between list and calendar views.
+value:
+  _component: page-sections/events/events-section
+  eyebrow: Upcoming
+  heading: Upcoming Events
+  subtext: Check out our schedule of upcoming events and competitions.
+  defaultView: list
+  maxEventsToShow: 0
+  colorScheme: null
+  backgroundColor: base
+  paddingVertical: 4xl
+preview:
+  text:
+    - Events Section
+  subtext:
+    - key: heading
+  icon: calendar-days
+picker_preview:
+  text: Events Section
+  subtext: Events with list/calendar toggle view.
+_inputs_from_glob:
+  - /src/components/page-sections/events/events-section/events-section.cloudcannon.inputs.yml
+
