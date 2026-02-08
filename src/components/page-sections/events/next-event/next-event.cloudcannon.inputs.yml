@@ -1,0 +1,52 @@
+eyebrow:
+  type: text
+  comment: Optional eyebrow text shown above the event card (e.g., "Next Up").
+heading:
+  type: text
+  comment: Optional heading text above the event card.
+colorScheme:
+  type: select
+  comment: Color scheme theme applied to the section wrapper.
+  options:
+    values:
+      - id: default
+        name: Default
+      - id: contrast
+        name: Contrast
+backgroundColor:
+  type: select
+  comment: Background color used behind the event card.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: base
+        name: Base
+      - id: surface
+        name: Surface
+      - id: accent
+        name: Accent
+      - id: highlight
+        name: Highlight
+paddingVertical:
+  type: select
+  comment: Vertical padding for the section.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+      - id: 4xl
+        name: 4xl
+

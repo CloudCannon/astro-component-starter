@@ -1,0 +1,22 @@
+label: Next Event
+icon: calendar
+description: Displays a featured card showing the next upcoming event with a countdown.
+value:
+  _component: page-sections/events/next-event
+  eyebrow: Next Up
+  heading: ""
+  colorScheme: null
+  backgroundColor: base
+  paddingVertical: 4xl
+preview:
+  text:
+    - Next Event
+  subtext:
+    - key: eyebrow
+  icon: calendar
+picker_preview:
+  text: Next Event
+  subtext: Featured card showing the next upcoming event.
+_inputs_from_glob:
+  - /src/components/page-sections/events/next-event/next-event.cloudcannon.inputs.yml
+
