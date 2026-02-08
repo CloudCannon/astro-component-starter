@@ -1,0 +1,608 @@
+---
+import eventsData from "@data/events.json";
+
+const { class: className } = Astro.props;
+
+// Get current date
+const now = new Date();
+const currentMonth = now.getMonth();
+const currentYear = now.getFullYear();
+
+// Find the last event date
+const eventDates = eventsData.events.map((event) => new Date(event.date));
+const lastEventDate = eventDates.length > 0 
+  ? eventDates.reduce((latest, date) => date > latest ? date : latest)
+  : now;
+const lastEventMonth = lastEventDate.getMonth();
+const lastEventYear = lastEventDate.getFullYear();
+
+// Pass events data to client-side
+const eventsJson = JSON.stringify(eventsData.events);
+
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+// Generate year options (current year to last event year)
+const years = Array.from(
+  { length: lastEventYear - currentYear + 1 }, 
+  (_, i) => currentYear + i
+);
+
+const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+---
+
+<div 
+  class:list={["event-calendar-view", className]}
+  data-events={eventsJson} 
+  data-current-month={currentMonth} 
+  data-current-year={currentYear}
+  data-min-month={currentMonth}
+  data-min-year={currentYear}
+  data-max-month={lastEventMonth}
+  data-max-year={lastEventYear}
+>
+  <div class="calendar-nav">
+    <button type="button" class="nav-btn prev-btn" aria-label="Previous month">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+    <div class="month-year-selectors">
+      <select class="month-select" aria-label="Select month">
+        {months.map((month, index) => (
+          <option value={index} selected={index === currentMonth}>{month}</option>
+        ))}
+      </select>
+      <select class="year-select" aria-label="Select year">
+        {years.map((year) => (
+          <option value={year} selected={year === currentYear}>{year}</option>
+        ))}
+      </select>
+    </div>
+    
+    <button type="button" class="nav-btn next-btn" aria-label="Next month">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+
+  <div class="calendar-wrapper">
+    <div class="calendar-grid">
+      {weekDays.map((day) => (
+        <div class="weekday-header">{day}</div>
+      ))}
+      <div class="days-container">
+        <!-- Days will be rendered by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <button type="button" class="today-btn">Today</button>
+
+  <div class="calendar-legend">
+    <div class="legend-item">
+      <span class="legend-dot today"></span>
+      <span>Today</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot event"></span>
+      <span>Event</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initCalendarViews() {
+    const containers = document.querySelectorAll('.event-calendar-view');
+    
+    containers.forEach((container) => {
+      // Skip if already initialized
+      if (container.dataset.initialized === 'true') return;
+      container.dataset.initialized = 'true';
+
+      const eventsData = JSON.parse(container.dataset.events || '[]');
+      let currentMonth = parseInt(container.dataset.currentMonth || '0', 10);
+      let currentYear = parseInt(container.dataset.currentYear || '2026', 10);
+      
+      // Get min/max boundaries
+      const minMonth = parseInt(container.dataset.minMonth || '0', 10);
+      const minYear = parseInt(container.dataset.minYear || '2026', 10);
+      const maxMonth = parseInt(container.dataset.maxMonth || '11', 10);
+      const maxYear = parseInt(container.dataset.maxYear || '2026', 10);
+      
+      const monthSelect = container.querySelector('.month-select') as HTMLSelectElement;
+      const yearSelect = container.querySelector('.year-select') as HTMLSelectElement;
+      const prevBtn = container.querySelector('.prev-btn') as HTMLButtonElement;
+      const nextBtn = container.querySelector('.next-btn') as HTMLButtonElement;
+      const todayBtn = container.querySelector('.today-btn');
+      const daysContainer = container.querySelector('.days-container');
+      
+      // Create events map by date
+      const eventsByDate = new Map<string, any[]>();
+      eventsData.forEach((event: any) => {
+        const dateKey = event.date;
+        if (!eventsByDate.has(dateKey)) {
+          eventsByDate.set(dateKey, []);
+        }
+        eventsByDate.get(dateKey)!.push(event);
+      });
+      
+      const formatTime = (timeStr: string) => {
+        const [hours, minutes] = timeStr.split(':');
+        const hour = parseInt(hours, 10);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+      };
+      
+      const isAtMinBoundary = () => {
+        return currentYear === minYear && currentMonth === minMonth;
+      };
+      
+      const isAtMaxBoundary = () => {
+        return currentYear === maxYear && currentMonth === maxMonth;
+      };
+      
+      const updateNavButtons = () => {
+        if (prevBtn) {
+          prevBtn.disabled = isAtMinBoundary();
+        }
+        if (nextBtn) {
+          nextBtn.disabled = isAtMaxBoundary();
+        }
+      };
+      
+      const updateMonthOptions = () => {
+        if (!monthSelect) return;
+        
+        const options = monthSelect.querySelectorAll('option');
+        options.forEach((option, index) => {
+          let disabled = false;
+          
+          if (currentYear === minYear && index < minMonth) {
+            disabled = true;
+          }
+          if (currentYear === maxYear && index > maxMonth) {
+            disabled = true;
+          }
+          
+          option.disabled = disabled;
+        });
+      };
+      
+      const renderCalendar = () => {
+        if (!daysContainer) return;
+        
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        const lastDay = new Date(currentYear, currentMonth + 1, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDay = firstDay.getDay();
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        let html = '';
+        
+        for (let i = 0; i < startingDay; i++) {
+          html += '<div class="calendar-day empty"></div>';
+        }
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+          const dayDate = new Date(currentYear, currentMonth, day);
+          const isToday = dayDate.toDateString() === today.toDateString();
+          const isPast = dayDate < today;
+          const dayEvents = eventsByDate.get(dateStr) || [];
+          const hasEvents = dayEvents.length > 0;
+          
+          const classes = [
+            'calendar-day',
+            hasEvents ? 'has-events' : '',
+            isToday ? 'is-today' : '',
+            isPast ? 'is-past' : '',
+          ].filter(Boolean).join(' ');
+          
+          html += `<div class="${classes}">`;
+          html += `<span class="day-number">${day}</span>`;
+          
+          if (hasEvents) {
+            html += '<div class="day-events">';
+            dayEvents.forEach((event: any) => {
+              html += `
+                <div class="day-event">
+                  <span class="event-time">${formatTime(event.time)}</span>
+                  <span class="event-name">${event.name}</span>
+                </div>
+              `;
+            });
+            html += '</div>';
+          }
+          
+          html += '</div>';
+        }
+        
+        daysContainer.innerHTML = html;
+        
+        if (monthSelect) monthSelect.value = String(currentMonth);
+        if (yearSelect) yearSelect.value = String(currentYear);
+        
+        updateNavButtons();
+        updateMonthOptions();
+      };
+      
+      const goToPrevMonth = () => {
+        if (isAtMinBoundary()) return;
+        
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        
+        if (currentYear < minYear || (currentYear === minYear && currentMonth < minMonth)) {
+          currentYear = minYear;
+          currentMonth = minMonth;
+        }
+        
+        renderCalendar();
+      };
+      
+      const goToNextMonth = () => {
+        if (isAtMaxBoundary()) return;
+        
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        
+        if (currentYear > maxYear || (currentYear === maxYear && currentMonth > maxMonth)) {
+          currentYear = maxYear;
+          currentMonth = maxMonth;
+        }
+        
+        renderCalendar();
+      };
+      
+      const goToToday = () => {
+        const today = new Date();
+        let targetMonth = today.getMonth();
+        let targetYear = today.getFullYear();
+        
+        if (targetYear < minYear || (targetYear === minYear && targetMonth < minMonth)) {
+          targetYear = minYear;
+          targetMonth = minMonth;
+        }
+        if (targetYear > maxYear || (targetYear === maxYear && targetMonth > maxMonth)) {
+          targetYear = maxYear;
+          targetMonth = maxMonth;
+        }
+        
+        currentMonth = targetMonth;
+        currentYear = targetYear;
+        renderCalendar();
+      };
+      
+      prevBtn?.addEventListener('click', goToPrevMonth);
+      nextBtn?.addEventListener('click', goToNextMonth);
+      todayBtn?.addEventListener('click', goToToday);
+      
+      monthSelect?.addEventListener('change', () => {
+        const newMonth = parseInt(monthSelect.value, 10);
+        
+        if (currentYear === minYear && newMonth < minMonth) return;
+        if (currentYear === maxYear && newMonth > maxMonth) return;
+        
+        currentMonth = newMonth;
+        renderCalendar();
+      });
+      
+      yearSelect?.addEventListener('change', () => {
+        currentYear = parseInt(yearSelect.value, 10);
+        
+        if (currentYear === minYear && currentMonth < minMonth) {
+          currentMonth = minMonth;
+        }
+        if (currentYear === maxYear && currentMonth > maxMonth) {
+          currentMonth = maxMonth;
+        }
+        
+        renderCalendar();
+      });
+      
+      renderCalendar();
+    });
+  }
+
+  // Initialize on DOMContentLoaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCalendarViews);
+  } else {
+    initCalendarViews();
+  }
+
+  // Re-initialize when view becomes visible (for tab switching)
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+        const target = mutation.target as HTMLElement;
+        if (target.classList.contains('calendar-view') && target.style.display !== 'none') {
+          initCalendarViews();
+        }
+      }
+    });
+  });
+
+  document.querySelectorAll('.calendar-view').forEach((view) => {
+    observer.observe(view, { attributes: true });
+  });
+</script>
+
+<style lang="pcss">
+  .event-calendar-view {
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    max-width: 900px;
+    margin-inline: auto;
+
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--color-navy);
+      border-radius: var(--radius-md);
+      background: var(--color-bg);
+      color: var(--color-navy);
+      cursor: pointer;
+      transition: all 0.15s ease;
+
+      &:hover:not(:disabled) {
+        background: var(--color-navy);
+        color: var(--white, #fff);
+        border-color: var(--color-navy);
+      }
+
+      &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .month-year-selectors {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .month-select,
+    .year-select {
+      padding: var(--spacing-sm) var(--spacing-md);
+      font-size: var(--font-size-md);
+      font-weight: 600;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg);
+      color: var(--color-text);
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right var(--spacing-sm) center;
+      padding-right: var(--spacing-xl);
+
+      &:hover {
+        border-color: var(--color-navy);
+      }
+
+      &:focus {
+        outline: 2px solid var(--color-navy);
+        outline-offset: 2px;
+      }
+
+      option:disabled {
+        color: var(--color-text-muted);
+      }
+    }
+
+    .month-select {
+      min-width: 140px;
+    }
+
+    .year-select {
+      min-width: 90px;
+    }
+
+    .calendar-wrapper {
+      overflow: hidden;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+      background: var(--color-border);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .weekday-header {
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      padding: var(--spacing-sm);
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+      background: var(--color-bg);
+    }
+
+    .days-container {
+      display: contents;
+    }
+
+    :global(.calendar-day) {
+      min-height: 100px;
+      padding: var(--spacing-xs);
+      background: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.15s ease;
+
+      @media (--to-sm) {
+        min-height: 80px;
+      }
+    }
+
+    :global(.calendar-day.empty) {
+      background: var(--color-bg-surface);
+    }
+
+    :global(.calendar-day.is-past) {
+      opacity: 0.5;
+    }
+
+    :global(.calendar-day.is-today) {
+      background: var(--color-accent);
+
+      :global(.day-number) {
+        color: var(--color-bg);
+        font-weight: 700;
+      }
+
+      :global(.day-events) {
+        color: var(--color-bg);
+      }
+
+      :global(.day-event) {
+        background: color-mix(in srgb, var(--white) 20%, transparent);
+      }
+
+      :global(.event-time) {
+        color: color-mix(in srgb, var(--white) 80%, transparent);
+      }
+    }
+
+    :global(.calendar-day.has-events:not(.is-today)) {
+      background: color-mix(in srgb, var(--color-accent) 5%, transparent);
+    }
+
+    :global(.day-number) {
+      font-weight: 600;
+      font-size: var(--font-size-sm);
+      color: var(--color-text);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    :global(.day-events) {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    :global(.day-event) {
+      display: flex;
+      flex-direction: column;
+      padding: 2px 4px;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-radius: var(--radius-sm);
+      font-size: 10px;
+      line-height: 1.3;
+      overflow: hidden;
+
+      @media (--to-md) {
+        padding: 2px;
+      }
+    }
+
+    :global(.event-time) {
+      font-weight: 600;
+      opacity: 0.9;
+      white-space: nowrap;
+
+      @media (--to-sm) {
+        display: none;
+      }
+    }
+
+    :global(.event-name) {
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .today-btn {
+      display: block;
+      margin: var(--spacing-lg) auto 0;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      border: 1px solid var(--color-navy);
+      border-radius: var(--radius-md);
+      background: var(--color-bg);
+      color: var(--color-navy);
+      cursor: pointer;
+      transition: all 0.15s ease;
+
+      &:hover {
+        background: var(--color-navy);
+        color: var(--white, #fff);
+        border-color: var(--color-navy);
+      }
+    }
+
+    .calendar-legend {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: var(--radius-sm);
+
+      &.today {
+        background: var(--color-accent);
+      }
+
+      &.event {
+        background: var(--color-accent);
+        opacity: 0.6;
+      }
+    }
+  }
+</style>
+
