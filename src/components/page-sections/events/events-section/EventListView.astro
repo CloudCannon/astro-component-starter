@@ -1,0 +1,205 @@
+---
+import Icon from "@core-elements/icon/Icon.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import eventsData from "@data/events.json";
+
+const {
+  maxEventsToShow = 0,
+  class: className,
+} = Astro.props;
+
+// Get current date for filtering
+const now = new Date();
+
+// Sort events by date (ascending) and filter only future events
+const sortedEvents = eventsData.events
+  .map((event) => ({
+    ...event,
+    dateObj: new Date(`${event.date}T${event.time}`),
+  }))
+  .filter((event) => event.dateObj >= now)
+  .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+
+// Skip the first (closest) event, showing from second closest onwards
+const eventsToDisplay = sortedEvents.slice(1);
+
+// Limit events if maxEventsToShow is set
+const limitedEvents = maxEventsToShow > 0 
+  ? eventsToDisplay.slice(0, maxEventsToShow) 
+  : eventsToDisplay;
+
+// Format date for display
+const formatDate = (dateStr: string) => {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-NZ", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+// Format time for display
+const formatTime = (timeStr: string) => {
+  const [hours, minutes] = timeStr.split(":");
+  const hour = parseInt(hours, 10);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const hour12 = hour % 12 || 12;
+  return `${hour12}:${minutes} ${ampm}`;
+};
+---
+
+<div class:list={["event-list-view", className]}>
+  {limitedEvents.length > 0 ? (
+    <div class="events-container">
+      {limitedEvents.map((event, index) => (
+        <article class="event-card" style={`--animation-delay: ${index * 0.1}s`}>
+          <div class="event-date-badge">
+            <span class="event-day">{new Date(event.date).getDate()}</span>
+            <span class="event-month">{new Date(event.date).toLocaleDateString("en-NZ", { month: "short" })}</span>
+          </div>
+          <div class="event-details">
+            <h3 class="event-name">{event.name}</h3>
+            <div class="event-meta">
+              <div class="event-meta-item">
+                <Icon name="map-pin" size="sm" class="event-icon" />
+                <span>{event.location}</span>
+              </div>
+              <div class="event-meta-item">
+                <Icon name="calendar" size="sm" class="event-icon" />
+                <span>{formatDate(event.date)}</span>
+              </div>
+              <div class="event-meta-item">
+                <Icon name="clock" size="sm" class="event-icon" />
+                <span>{formatTime(event.time)}</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <SimpleText alignX="center" class="no-events">
+      No upcoming events scheduled at this time.
+    </SimpleText>
+  )}
+</div>
+
+<style lang="pcss">
+  .event-list-view {
+    max-width: var(--content-width-xl);
+    margin-inline: auto;
+
+    .events-container {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .event-card {
+      display: flex;
+      gap: var(--spacing-lg);
+      padding: var(--spacing-lg);
+      background: var(--color-bg-surface);
+      border-radius: var(--radius-lg);
+      border-left: 4px solid var(--color-accent);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      animation: slideIn 0.4s ease forwards;
+      animation-delay: var(--animation-delay);
+      opacity: 0;
+
+      &:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      @media (--to-sm) {
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .event-date-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 70px;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-radius: var(--radius-md);
+      text-align: center;
+
+      @media (--to-sm) {
+        flex-direction: row;
+        gap: var(--spacing-xs);
+        width: fit-content;
+      }
+    }
+
+    .event-day {
+      font-size: var(--font-size-heading-lg);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .event-month {
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .event-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .event-name {
+      font-size: var(--font-size-heading-sm);
+      font-weight: 600;
+      margin: 0 0 var(--spacing-sm) 0;
+      color: var(--color-text);
+    }
+
+    .event-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+    }
+
+    .event-meta-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-size: var(--font-size-sm);
+      color: var(--color-text-muted);
+    }
+
+    .event-icon {
+      color: var(--color-navy);
+      flex-shrink: 0;
+    }
+
+    .no-events {
+      padding: var(--spacing-2xl);
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+  }
+</style>
+
