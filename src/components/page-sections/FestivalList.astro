@@ -1,0 +1,14 @@
+---
+import FestivalCard from "@components/building-blocks/FestivalCard.astro";
+import { getCollection } from "astro:content";
+
+const festivals = await getCollection("festivals");
+---
+
+<section>
+  <div class="container">
+    {festivals.map((festival) => (
+      <FestivalCard festival={festival} />
+    ))}
+  </div>
+</section>
