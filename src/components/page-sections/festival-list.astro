@@ -1,16 +1,19 @@
 ---
-import { getCollection } from "astro:content";
-import FestivalCard from "@components/building-blocks/FestivalCard.astro";
+import { getCollection } from 'astro:content';
 
-const festivals = await getCollection("festivals");
+// Get all festival pages
+const festivals = await getCollection('festivals');
 ---
 
-<section>
-  <div class="container">
-    {festivals.map((festival) => (
-    <a href={`/festivals/${festival.slug}/`}>
-      <FestivalCard festival={festival.data} />
-    </a>
+<section class="festival-list">
+  <h2>Festivals</h2>
+  <ul>
+    {festivals.map(festival => (
+      <li key={festival.id}>
+        <h3>{festival.data.title}</h3>
+        {festival.data.date && <p>{festival.data.date}</p>}
+        {festival.data.location && <p>{festival.data.location}</p>}
+      </li>
     ))}
-  </div>
+  </ul>
 </section>
