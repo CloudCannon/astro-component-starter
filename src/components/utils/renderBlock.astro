@@ -1,80 +1,22 @@
 ---
-export interface Props {
-  contentSections: any[];
-  propName?: string;
-  editable?: boolean;
-}
+const { contentSections = [] } = Astro.props;
+import { getCollection } from "astro:content";
 
-const components: Record<string, Function> = {};
-const componentImports = import.meta.glob("../**/*.{jsx,astro}", {
-  eager: true,
-});
-
-function pascalToKebab(pascal: string): string {
-  return pascal
-    .replace(/([A-Z])/g, "-$1")
-    .toLowerCase()
-    .replace(/^-/, "");
-}
-
-Object.entries(componentImports).forEach(([path, obj]) => {
-  const parts = path.replace("../", "").split(".")[0].split("/");
-  const filename = parts[parts.length - 1];
-
-  const kebabFilename = pascalToKebab(filename);
-
-  if (parts.length > 1 && kebabFilename === parts[parts.length - 2]) {
-    parts.pop();
-    parts[parts.length - 1] = kebabFilename;
-  } else {
-    parts[parts.length - 1] = kebabFilename;
-  }
-
-  const componentName = parts.join("/");
-
-  components[componentName] = (obj as any).default;
-});
-
-const { contentSections, propName = "contentSections", editable = true } = Astro.props;
+// Load festivals collection once, only needed for festival-list
+const festivals = await getCollection('festivals');
 ---
 
-{
-  !editable ? (
-    contentSections?.map((block) => {
-      const Component = components[block._component];
+{contentSections.map(async (section) => {
+  if (!section._component) return null;
 
-      if (!Component && block._component) {
-        console.warn(
-          `Component not found: ${block._component}. Available components:`,
-          Object.keys(components)
-        );
-      }
+  // Dynamically import the component
+  const Component = (await import(`../${section._component}.astro`)).default;
 
-      return Component ? <Component {...block} /> : null;
-    })
-  ) : (
-    <editable-array
-      data-editable="array"
-      data-component-key="_component"
-      data-id-key="_component"
-      data-prop={propName}
-    >
-      {contentSections?.map((block) => {
-        const Component = components[block._component];
+  // Provide festivals collection to festival-list component
+  if (section._component === 'page-sections/festival-list') {
+    return <Component festivals={festivals} {...section} />;
+  }
 
-        if (!Component && block._component) {
-          console.warn(
-            `Component not found: ${block._component}. Available components:`,
-            Object.keys(components)
-          );
-        }
-
-        return Component ? (
-          <editable-array-item data-id={block._component} data-component={block._component}>
-            <Component {...block} />
-          </editable-array-item>
-        ) : null;
-      })}
-    </editable-array>
-  )
-}
+  // All other components just get their section props
+  return <Component {...section} />;
+})}
