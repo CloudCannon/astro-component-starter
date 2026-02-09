@@ -1,0 +1,4 @@
+label: Festival List
+icon: ticket
+value:
+  _component: page-sections/festival-list
