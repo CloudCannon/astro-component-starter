@@ -1,29 +1,21 @@
 ---
-_schema: default
-title: 'Festivals '
+title: Festivals
 pageSections:
-  - _component: page-sections/heroes/hero-split
-    eyebrow: Festivals
-    heading: Festivals 2026
-    subtext: >-
-      Discover Pacific festivals taking place across Aotearoa. Each festival
-      reflects the unique cultures, languages, and communities that make up our
-      Pacific identity in New Zealand.
-    imageSource: /src/assets/images/9780824838713-scaled.jpg
-    imageAlt: Hero image
-    imageAspectRatio: none
-    buttonSections:
-      - _component: building-blocks/core-elements/button
-        text: Add your festival
-        hideText: false
-        link: ''
-        iconName: ''
-        iconPosition: before
-        variant: primary
-        size: md
-    reverse: false
-    colorScheme: inherit
-    backgroundColor: '#000000'
+
+  - _component: page-sections/hero
+    heading: Festivals
+    subheading: Celebrating Pasifika culture across Aotearoa
+
+  - _component: page-sections/rich-text
+    content: |
+      Pasifika festivals play an important role in bringing communities together...
+
   - _component: page-sections/festival-list
-description: ''
+
+  - _component: page-sections/cta
+    heading: Add Your Festival
+    text: Help us grow the directory by submitting your event.
+    button:
+      text: Submit Festival
+      url: /contact/
 ---
