@@ -1,0 +1,3 @@
+- label: Festival List
+  value:
+    _component: page-sections/festival-list
