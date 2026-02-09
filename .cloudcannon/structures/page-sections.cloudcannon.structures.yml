@@ -3,7 +3,7 @@ pageSections:
   style: modal
   values_from_glob:
     - /src/components/page-sections/**/*.cloudcannon.structure-value.yml
-  - label: Festival List
+  label: Festival List
     icon: ticket
     value:
       _component: page-sections/festival-list
