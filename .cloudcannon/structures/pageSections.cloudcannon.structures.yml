@@ -6,6 +6,6 @@ pageSections:
   - label: Festival List
     icon: ticket
     value:
-      _component: page-sections/festivals/festival-list
+      _component: page-sections/festival-list
       label: Festival List
 
