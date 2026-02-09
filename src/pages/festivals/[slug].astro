@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const festivals = await getCollection('festivals');
+
+  return festivals.map((festival) => ({
+    params: { slug: festival.slug },
+    props: { festival }
+  }));
+}
+
+const { festival } = Astro.props;
+const { data } = festival;
+---
+
+<h1>{data.title}</h1>
+
+<img src={data.image} alt={data.title} />
+
+<p>{data.location}</p>
+<p>{data.date}</p>
+
+<article>
+  <Content />
+</article>
