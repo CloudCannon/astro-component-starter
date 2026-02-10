@@ -1,6 +1,5 @@
 import { glob } from "astro/loaders";
-import { defineCollection } from "astro:content";
-import { z } from "zod";
+import { defineCollection, z } from "astro:content";
 
 const pageSchema = z.object({
   title: z.string(),
@@ -20,7 +19,7 @@ const docsComponentSchema = z.object({
   spacing: z.string().optional().nullable(),
   component: z.string().optional(),
   component_path: z.string().optional(),
-  blocks: z.union([z.record(z.string(), z.any()), z.array(z.record(z.string(), z.any()))]).optional(),
+  blocks: z.union([z.record(z.any()), z.array(z.record(z.any()))]).optional(),
   slots: z
     .array(
       z.object({

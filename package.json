@@ -25,17 +25,17 @@
     "format:fix": "prettier --write ."
   },
   "dependencies": {
-    "@astrojs/mdx": "^5.0.0-beta.2",
+    "@astrojs/mdx": "^4.3.12",
     "@astrojs/sitemap": "^3.5.1",
     "@choctawnationofoklahoma/lite-vimeo": "^1.3.1",
     "@cloudcannon/editable-regions": "^0.0.9",
     "@csstools/postcss-global-data": "^3.0.0",
     "@justinribeiro/lite-youtube": "^1.8.2",
     "@types/js-yaml": "^4.0.9",
-    "astro": "^6.0.0-beta.0",
-    "astro-auto-import": "^0.5.1",
+    "astro": "^5.16.5",
+    "astro-auto-import": "^0.4.5",
     "astro-icon": "^1.1.5",
-    "astro-seo": "^1.1.0",
+    "astro-seo": "^0.8.4",
     "autoprefixer": "^10.4.21",
     "embla-carousel": "^8.6.0",
     "embla-carousel-auto-scroll": "^8.6.0",
@@ -82,8 +82,5 @@
     "@img/sharp-linuxmusl-x64": "^0.33.5",
     "@rollup/rollup-linux-x64-gnu": "^4.24.0",
     "@rollup/rollup-win32-x64-msvc": "^4.24.0"
-  },
-  "overrides": {
-    "lodash": "^4.17.22"
   }
 }
