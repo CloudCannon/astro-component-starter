@@ -46,8 +46,9 @@ The site will be available at `http://localhost:4321`
 ## Available Scripts
 
 - `npm run dev` - Start the development server
-- `npm run build` - Build the site for production
+- `npm run build` - Default build
 - `npm run build:no-library` - Build without the component starter documentation
+- `npm run build:optimized` - Optimized build (no library + strict remote image validation)
 - `npm run preview` - Preview the production build locally
 - `npm run lint` - Run all linters (JS, CSS, YML)
 - `npm run lint:fix` - Auto-fix linting issues

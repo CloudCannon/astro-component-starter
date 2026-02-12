@@ -23,6 +23,9 @@ const POSITION_MAP: Record<string, string> = {
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 450;
+const isFastImageMode = import.meta.env.DEV || process.env.IMAGE_FAST === "true";
+const shouldValidateRemoteImages = process.env.VALIDATE_REMOTE_IMAGES === "true";
+const outputFormats = isFastImageMode ? ["webp"] : ["avif"];
 
 const {
   source,
@@ -83,23 +86,27 @@ if (isRemoteUrl) {
     imageWidth = imageWidth || DEFAULT_WIDTH;
     imageHeight = imageHeight || DEFAULT_HEIGHT;
 
-    try {
-      const response = await fetch(source, { method: "HEAD" });
+    if (shouldValidateRemoteImages) {
+      try {
+        const response = await fetch(source, { method: "HEAD" });
 
-      if (response.ok) {
-        const contentType = response.headers.get("content-type");
+        if (response.ok) {
+          const contentType = response.headers.get("content-type");
 
-        if (contentType?.startsWith("image/")) {
-          shouldRender = true;
-          useInferSize = true;
+          if (contentType?.startsWith("image/")) {
+            shouldRender = true;
+            useInferSize = true;
+          } else {
+            console.warn(`Invalid content-type for image: ${source} (${contentType})`);
+          }
         } else {
-          console.warn(`Invalid content-type for image: ${source} (${contentType})`);
+          console.warn(`Image not accessible: ${source} (${response.status})`);
         }
-      } else {
-        console.warn(`Image not accessible: ${source} (${response.status})`);
+      } catch (error) {
+        console.warn(`Could not validate image URL: ${source}`, error);
       }
-    } catch (error) {
-      console.warn(`Could not validate image URL: ${source}`, error);
+    } else {
+      shouldRender = true;
     }
   } else {
     shouldRender = true;
@@ -159,7 +166,7 @@ if (aspectRatio && aspectRatio !== "none" && shouldRender && imageSrc && imageWi
       alt={alt}
       widths={filteredWidths}
       sizes={sizes}
-      formats={["avif"]}
+      formats={outputFormats}
       width={finalWidth}
       height={finalHeight}
       fit={useFit}

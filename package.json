@@ -3,19 +3,14 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
-  "keywords": [
-    "design-system",
-    "astro",
-    "components",
-    "css",
-    "design-tokens"
-  ],
+  "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "IMAGE_FAST=true astro build",
     "build:no-library": "DISABLE_COMPONENT_LIBRARY=true astro build",
+    "build:optimized": "DISABLE_COMPONENT_LIBRARY=true VALIDATE_REMOTE_IMAGES=true astro build",
     "preview": "astro preview",
     "astro": "astro",
     "generate:structures": "node structuresGenerator.js",
