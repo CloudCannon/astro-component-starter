@@ -1,16 +1,36 @@
 ---
-import { getProviderForUrl } from "unpic";
-import AstroImage from "./AstroImage.astro";
-import UnpicImage from "./UnpicImage.astro";
+import { Picture } from "astro:assets";
+
+const ASPECT_RATIO_MAP: Record<string, number> = {
+  square: 1,
+  landscape: 4 / 3,
+  portrait: 3 / 4,
+  widescreen: 16 / 9,
+  "horizontal-strip": 16 / 5,
+};
+
+const POSITION_MAP: Record<string, string> = {
+  "top-left": "northwest",
+  "top-center": "north",
+  "top-right": "northeast",
+  "center-left": "west",
+  "center-center": "center",
+  "center-right": "east",
+  "bottom-left": "southwest",
+  "bottom-center": "south",
+  "bottom-right": "southeast",
+};
 
 const {
   source,
   alt,
-  sizes = "(min-width: 30em) 50vw, 100vw",
-  widths = [400, 600, 800, 1200, 1600],
+  sizes = "(max-width: 1280px) 100vw, 1280px",
+  widths = [640, 1280, 2560],
   rounded = false,
   priority = false,
   aspectRatio = null,
+  width,
+  height,
   positionVertical = "center",
   positionHorizontal = "center",
   background = false,
@@ -24,18 +44,11 @@ const {
 } = Astro.props;
 
 const hasValidSrc = source && typeof source === "string" && source.trim() !== "";
-
 if (!_component && !hasValidSrc) {
   return;
 }
 
-const provider = hasValidSrc ? getProviderForUrl(source) : false;
-const isExternalCDN = provider !== false;
-
-const commonProps = {
-  alt: alt || "",
-};
-
+const normalizedAlt = alt || "";
 const dataAttributes = editable
   ? {
       "data-editable": customDataEditable || "image",
@@ -45,6 +58,78 @@ const dataAttributes = editable
   : {};
 
 const positionClass = `position-${positionVertical}-${positionHorizontal}`;
+const isLocalSource = typeof source === "string" && source.startsWith("/src/");
+
+let imageSrc = source;
+let imageWidth = width;
+let imageHeight = height;
+let shouldRenderOptimizedPicture = false;
+
+if (isLocalSource) {
+  const imageFiles = import.meta.glob("/src/assets/images/**/*", {
+    import: "default",
+    eager: true,
+  }) as Record<string, any>;
+
+  const imageKey = Object.keys(imageFiles).find((key) => key.endsWith(source));
+
+  if (imageKey && imageFiles[imageKey]) {
+    imageSrc = imageFiles[imageKey];
+    imageWidth = imageWidth || imageSrc.width;
+    imageHeight = imageHeight || imageSrc.height;
+    shouldRenderOptimizedPicture = true;
+  } else {
+    console.warn(`Local image not found for path: ${source}`);
+  }
+}
+
+let finalWidth = imageWidth;
+let finalHeight = imageHeight;
+let useFit = undefined;
+let usePosition = undefined;
+let filteredWidths = widths;
+
+if (
+  aspectRatio &&
+  aspectRatio !== "none" &&
+  shouldRenderOptimizedPicture &&
+  imageSrc &&
+  imageWidth
+) {
+  const targetAspect = ASPECT_RATIO_MAP[aspectRatio];
+
+  if (targetAspect) {
+    let maxWidth: number;
+    let maxHeight: number;
+
+    if (targetAspect === 1 && imageHeight) {
+      const dimension = Math.min(imageWidth, imageHeight);
+      maxWidth = dimension;
+      maxHeight = dimension;
+    } else if (imageHeight) {
+      const heightFromWidth = imageWidth / targetAspect;
+
+      if (heightFromWidth <= imageHeight) {
+        maxWidth = imageWidth;
+        maxHeight = Math.round(imageWidth / targetAspect);
+      } else {
+        maxWidth = Math.round(imageHeight * targetAspect);
+        maxHeight = imageHeight;
+      }
+    } else {
+      maxWidth = imageWidth;
+      maxHeight = Math.round(imageWidth / targetAspect);
+    }
+
+    finalWidth = maxWidth;
+    finalHeight = maxHeight;
+    filteredWidths = widths.filter((w: number) => w <= maxWidth);
+    useFit = "cover";
+
+    const positionKey = `${positionVertical}-${positionHorizontal}`;
+    usePosition = POSITION_MAP[positionKey] || "center";
+  }
+}
 ---
 
 <div
@@ -60,30 +145,35 @@ const positionClass = `position-${positionVertical}-${positionHorizontal}`;
   {...htmlAttributes}
 >
   {
-    isExternalCDN ? (
-      <UnpicImage
-        {...commonProps}
-        {...dataAttributes}
-        source={source}
+    shouldRenderOptimizedPicture ? (
+      <Picture
+        src={imageSrc}
+        alt={normalizedAlt}
+        widths={filteredWidths}
         sizes={sizes}
-        widths={widths}
-        priority={priority}
-        aspectRatio={aspectRatio}
-        positionVertical={positionVertical}
-        positionHorizontal={positionHorizontal}
+        formats={["avif"]}
+        width={finalWidth}
+        height={finalHeight}
+        fit={useFit}
+        position={usePosition}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        fetchpriority={priority ? "high" : undefined}
+        {...dataAttributes}
       />
     ) : (
-      <AstroImage
-        {...commonProps}
-        {...dataAttributes}
-        source={source}
-        sizes={sizes}
-        widths={widths}
-        priority={priority}
-        aspectRatio={aspectRatio}
-        positionVertical={positionVertical}
-        positionHorizontal={positionHorizontal}
-      />
+      <picture>
+        <img
+          {...dataAttributes}
+          src={source}
+          alt={normalizedAlt}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          fetchpriority={priority ? "high" : undefined}
+          width={width}
+          height={height}
+        />
+      </picture>
     )
   }
 </div>

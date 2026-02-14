@@ -5,6 +5,13 @@ value:
   _component: building-blocks/core-elements/image
   source: ""
   alt: ""
+  sizes: "(max-width: 1280px) 100vw, 1280px"
+  widths:
+    - 640
+    - 1280
+    - 2560
+  width:
+  height:
   rounded: false
   aspectRatio: none
   positionVertical: center

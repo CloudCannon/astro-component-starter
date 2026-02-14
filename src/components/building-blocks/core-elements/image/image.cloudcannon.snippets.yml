@@ -16,6 +16,22 @@ image:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: sizes
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: widths
+        type: array
+        optional: true
+        remove_empty: true
+      - editor_key: width
+        type: number
+        optional: true
+        remove_empty: true
+      - editor_key: height
+        type: number
+        optional: true
+        remove_empty: true
       - editor_key: rounded
         type: boolean
         optional: true

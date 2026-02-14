@@ -8,6 +8,22 @@ source:
 alt:
   type: textarea
   comment: Alternative text for accessibility.
+sizes:
+  type: text
+  comment: Responsive sizes attribute for the image.
+  hidden: true
+widths:
+  type: array
+  comment: Responsive width candidates used to generate image variants.
+  hidden: true
+width:
+  type: number
+  comment: Optional explicit image width in pixels.
+  hidden: true
+height:
+  type: number
+  comment: Optional explicit image height in pixels.
+  hidden: true
 rounded:
   type: switch
   comment: Whether to apply rounded corners to the image.
