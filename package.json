@@ -3,17 +3,12 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
-  "keywords": [
-    "design-system",
-    "astro",
-    "components",
-    "css",
-    "design-tokens"
-  ],
+  "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
     "build:no-library": "DISABLE_COMPONENT_LIBRARY=true astro build",
     "preview": "astro preview",
@@ -38,7 +33,7 @@
     "@csstools/postcss-global-data": "^3.0.0",
     "@justinribeiro/lite-youtube": "^1.8.2",
     "@types/js-yaml": "^4.0.9",
-    "astro": "^5.16.5",
+    "astro": "^5.17.0",
     "astro-auto-import": "^0.4.5",
     "astro-icon": "^1.1.5",
     "astro-seo": "^0.8.4",
