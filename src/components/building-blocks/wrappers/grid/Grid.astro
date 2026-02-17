@@ -63,9 +63,11 @@ if (!_component && !hasItems && !hasSlotContent) return;
       items &&
         items.length > 0 &&
         items.map((item: any) => (
-          <editable-array-item data-component="building-blocks/wrappers/grid/grid-item">
-            <GridItem class:list={`layout-${layout}`} contentSections={item.contentSections} />
-          </editable-array-item>
+          <GridItem
+            data-editable="array-item"
+            class:list={`layout-${layout}`}
+            contentSections={item.contentSections}
+          />
         ))
     }
   </slot>
