@@ -69,6 +69,8 @@ if (!htmlAttributes.id && label) {
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
+      data-editable={contentSections ? "array" : undefined}
+      data-prop="contentSections"
     >
       <slot>
         {
@@ -102,13 +104,13 @@ if (!htmlAttributes.id && label) {
         z-index: var(--layer-1);
         container-type: inline-size;
 
-        > *:not(editable-array-item):first-child, 
-        > editable-array > editable-array-item:first-child > *:first-child {
+        > [data-editable="array-item"]:first-child > *:first-child,
+        > :not([data-editable="array-item"]):first-child {
           margin-top: 0 !important;
         }
 
-        > *:not(editable-array-item):last-child, 
-        > editable-array > editable-array-item:last-child > *:last-child {
+        > [data-editable="array-item"]:last-child > *:last-child,
+        > :not([data-editable="array-item"]):last-child {
           margin-bottom: 0 !important;
         }
 

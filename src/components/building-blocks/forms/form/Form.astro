@@ -9,6 +9,8 @@ const { action, formBlocks = [], class: className, _component, ...htmlAttributes
   action={action}
   method="post"
   enctype="multipart/form-data"
+  data-editable="array"
+  data-prop="formBlocks"
   {...htmlAttributes}
 >
   <RenderBlock contentSections={formBlocks} propName="formBlocks" />

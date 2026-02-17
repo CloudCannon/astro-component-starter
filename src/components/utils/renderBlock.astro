@@ -35,46 +35,26 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   components[componentName] = (obj as any).default;
 });
 
-const { contentSections, propName = "contentSections", editable = true } = Astro.props;
+const { contentSections, editable = true } = Astro.props;
 ---
 
 {
-  !editable ? (
-    contentSections?.map((block) => {
-      const Component = components[block._component];
+  contentSections?.map((block) => {
+    const Component = components[block._component];
 
-      if (!Component && block._component) {
-        console.warn(
-          `Component not found: ${block._component}. Available components:`,
-          Object.keys(components)
-        );
-      }
+    if (!Component && block._component) {
+      console.warn(
+        `Component not found: ${block._component}. Available components:`,
+        Object.keys(components)
+      );
+    }
 
-      return Component ? <Component {...block} editable={editable} /> : null;
-    })
-  ) : (
-    <editable-array
-      data-editable="array"
-      data-component-key="_component"
-      data-id-key="_component"
-      data-prop={propName}
-    >
-      {contentSections?.map((block) => {
-        const Component = components[block._component];
-
-        if (!Component && block._component) {
-          console.warn(
-            `Component not found: ${block._component}. Available components:`,
-            Object.keys(components)
-          );
-        }
-
-        return Component ? (
-          <editable-array-item data-id={block._component} data-component={block._component}>
-            <Component {...block} />
-          </editable-array-item>
-        ) : null;
-      })}
-    </editable-array>
-  )
+    return Component ? (
+      <Component
+        data-editable={editable ? "array-item" : undefined}
+        {...block}
+        editable={editable}
+      />
+    ) : null;
+  })
 }

@@ -10,6 +10,8 @@ const { contentSections, index, uniqueId, _component, ...htmlAttributes } = Astr
   role="tabpanel"
   aria-labelledby={`tablabel-${uniqueId}-${index}`}
   aria-hidden={index !== 0}
+  data-editable={contentSections ? "array" : undefined}
+  data-prop="contentSections"
   {...htmlAttributes}
 >
   <RenderBlock contentSections={contentSections} />
@@ -23,8 +25,8 @@ const { contentSections, index, uniqueId, _component, ...htmlAttributes } = Astr
       display: none;
       padding: 0 var(--spacing-md);
 
-      > editable-array > editable-array-item:first-child > *:first-child,
-      > :not(editable-array):first-child {
+      > [data-editable="array-item"]:first-child > *:first-child,
+      > :not([data-editable="array-item"]):first-child {
         margin-top: 0 !important;
       }
     }

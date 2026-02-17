@@ -17,7 +17,11 @@ const {
     <span class="accordion-item-title-text">{title}</span>
     <Icon name="chevron-down" size="none" class="accordion-item-icon" />
   </summary>
-  <div class="accordion-item-detail">
+  <div
+    class="accordion-item-detail"
+    data-editable={contentSections ? "array" : undefined}
+    data-prop="contentSections"
+  >
     <slot>
       {contentSections && <RenderBlock contentSections={contentSections} />}
     </slot>
@@ -64,8 +68,8 @@ const {
       padding-inline: var(--spacing-md);
       padding-bottom: var(--spacing-md);
 
-      > editable-array > editable-array-item:first-child > *:first-child,
-      > :not(editable-array):first-child {
+      > [data-editable="array-item"]:first-child > *:first-child,
+      > :not([data-editable="array-item"]):first-child {
         margin-top: 0 !important;
       }
     }

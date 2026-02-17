@@ -68,7 +68,11 @@ const splitId = `split-${crypto.randomUUID()}`;
   style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
   {...htmlAttributes}
 >
-  <div class="pane first">
+  <div
+    class="pane first"
+    data-editable={firstSplitBlocks && firstSplitBlocks.length > 0 ? "array" : undefined}
+    data-prop={firstPropName}
+  >
     {
       reverse ? (
         <slot name="second">
@@ -85,7 +89,11 @@ const splitId = `split-${crypto.randomUUID()}`;
       )
     }
   </div>
-  <div class="pane second">
+  <div
+    class="pane second"
+    data-editable={secondSplitBlocks && secondSplitBlocks.length > 0 ? "array" : undefined}
+    data-prop={secondPropName}
+  >
     {
       reverse ? (
         <slot name="first">
@@ -216,8 +224,8 @@ const splitId = `split-${crypto.randomUUID()}`;
       &.align-stretch {
         align-items: stretch;
 
-        > .pane > *:not(editable-array):only-child,
-        > .pane > editable-array > editable-array-item:only-child > * {
+        > .pane > [data-editable="array-item"]:only-child > *,
+        > .pane > :not([data-editable="array-item"]):only-child {
           height: 100%;
         }
       }
@@ -228,8 +236,8 @@ const splitId = `split-${crypto.randomUUID()}`;
         word-wrap: break-word;
         container-type: inline-size;
 
-        > editable-array > editable-array-item:first-child > *:first-child,
-        > :not(editable-array):first-child {
+        > [data-editable="array-item"]:first-child > *:first-child,
+        > :not([data-editable="array-item"]):first-child {
           margin-top: 0 !important;
         }
       }

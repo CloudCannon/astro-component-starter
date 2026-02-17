@@ -72,7 +72,11 @@ const Tag = link ? "a" : "div";
 
   {
     ((beforeContentSections && showBeforeAfter) || Astro.slots.has("before")) && (
-      <div class="before-content">
+      <div
+        class="before-content"
+        data-editable={editable && beforeContentSections ? "array" : undefined}
+        data-prop="beforeContentSections"
+      >
         <slot name="before">
           {beforeContentSections && (
             <Component contentSections={beforeContentSections} propName="beforeContentSections" />
@@ -90,6 +94,8 @@ const Tag = link ? "a" : "div";
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
+      data-editable={editable && contentSections ? "array" : undefined}
+      data-prop="contentSections"
     >
       <slot>
         {
@@ -103,7 +109,11 @@ const Tag = link ? "a" : "div";
 
   {
     ((afterContentSections && showBeforeAfter) || Astro.slots.has("after")) && (
-      <div class="after-content">
+      <div
+        class="after-content"
+        data-editable={editable && afterContentSections ? "array" : undefined}
+        data-prop="afterContentSections"
+      >
         <slot name="after">
           {afterContentSections && (
             <Component contentSections={afterContentSections} propName="afterContentSections" />
@@ -150,13 +160,13 @@ const Tag = link ? "a" : "div";
         z-index: var(--layer-1);
         container-type: inline-size;
 
-        > editable-array > editable-array-item:first-child > *:first-child,
-        > :not(editable-array):first-child {
+        > [data-editable="array-item"]:first-child > *:first-child,
+        > :not([data-editable="array-item"]):first-child {
           margin-top: 0 !important;
         }
 
-        > editable-array > editable-array-item:last-child > *:last-child,
-        > :not(editable-array):last-child {
+        > [data-editable="array-item"]:last-child > *:last-child,
+        > :not([data-editable="array-item"]):last-child {
           margin-bottom: 0 !important;
         }
 
@@ -268,13 +278,13 @@ const Tag = link ? "a" : "div";
         position: relative;
         z-index: var(--layer-2);
 
-        > editable-array > editable-array-item:first-child > *:first-child,
-        > :not(editable-array):first-child {
+        > [data-editable="array-item"]:first-child > *:first-child,
+        > :not([data-editable="array-item"]):first-child {
           margin-top: 0 !important;
         }
 
-        > editable-array > editable-array-item:last-child > *:last-child,
-        > :not(editable-array):last-child {
+        > [data-editable="array-item"]:last-child > *:last-child,
+        > :not([data-editable="array-item"]):last-child {
           margin-bottom: 0 !important;
         }
       }

@@ -4,7 +4,12 @@ import RenderBlock from "@components/utils/renderBlock.astro";
 const { contentSections, class: className, _component, ...htmlAttributes } = Astro.props;
 ---
 
-<div class:list={["grid-item", className]} {...htmlAttributes}>
+<div
+  class:list={["grid-item", className]}
+  data-editable={contentSections ? "array" : undefined}
+  data-prop="contentSections"
+  {...htmlAttributes}
+>
   <slot>
     {
       contentSections && contentSections.length > 0 && (
@@ -20,13 +25,11 @@ const { contentSections, class: className, _component, ...htmlAttributes } = Ast
       height: 100%;
       container-type: inline-size;
 
-      > editable-array > editable-array-item:only-child > *:only-child,
-      > :not(editable-array):only-child {
+      > *:only-child {
         height: 100%;
       }
 
-      > editable-array > editable-array-item:first-child > *:first-child,
-      > :not(editable-array):first-child {
+      > *:first-child {
         margin-top: 0 !important;
       }
     }

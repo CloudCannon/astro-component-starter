@@ -40,6 +40,8 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
 
 <div
   class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
+  data-editable={editable && buttonSections ? "array" : undefined}
+  data-prop="buttonSections"
   {...htmlAttributes}
 >
   <slot>
@@ -59,7 +61,7 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
       container-type: inline-size;
       width: 100%;
 
-      &, > editable-array {
+      & {
         align-items: center;
         display: flex;
         flex-wrap: wrap;
@@ -67,49 +69,49 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
       }
 
       &.column {
-        &, > editable-array {
+        & {
           flex-direction: column;
         }
 
         &.align-start {
-          &, > editable-array {
+          & {
             align-items: flex-start;
           }
         }
 
         &.align-center {
-          &, > editable-array {
+          & {
             align-items: center;
           }
         }
 
         &.align-end {
-          &, > editable-array {
+          & {
             align-items: flex-end;
           }
         }
       }
 
       &.row {
-        &, > editable-array {
+        & {
           flex-direction: row;
         }
       }
 
       &.align-center {
-        &, > editable-array {
+        & {
           justify-content: center;
         }
       }
 
       &.align-end {
-        &, > editable-array {
+        & {
           justify-content: flex-end;
         }
       }
 
       &.align-start {
-        &, > editable-array {
+        & {
           justify-content: flex-start;
         }
       }

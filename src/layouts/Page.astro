@@ -53,7 +53,11 @@ const hasSlotContent = Astro.slots.has("default");
   canonical={canonical}
 >
   <MainNavigation {...mainNav} />
-  <main data-pagefind-body>
+  <main
+    data-pagefind-body
+    data-editable={hasPageSections ? "array" : undefined}
+    data-prop="pageSections"
+  >
     {
       hasPageSections ? (
         <Components contentSections={pageSections} propName="pageSections" />

@@ -42,7 +42,13 @@ const pageDescription =
 ---
 
 <Page title={pageTitle} description={pageDescription}>
-  {heroSections.length > 0 && <Components contentSections={heroSections} propName="pageSections" />}
+  {
+    heroSections.length > 0 && (
+      <div data-editable="array" data-prop="pageSections">
+        <Components contentSections={heroSections} propName="pageSections" />
+      </div>
+    )
+  }
 
   <CustomSection
     maxContentWidth="2xl"
