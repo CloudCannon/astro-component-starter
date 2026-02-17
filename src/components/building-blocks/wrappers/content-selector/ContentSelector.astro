@@ -83,13 +83,12 @@ const arrayDataAttributes = editable
   <div class="panels" {...arrayDataAttributes}>
     {
       items?.map((item: any, index: number) => (
-        <editable-array-item data-component="building-blocks/wrappers/content-selector/content-selector-panel">
-          <ContentSelectorPanel
-            index={index}
-            uniqueId={uniqueId}
-            contentSections={item.contentSections}
-          />
-        </editable-array-item>
+        <ContentSelectorPanel
+          data-editable="array-item"
+          index={index}
+          uniqueId={uniqueId}
+          contentSections={item.contentSections}
+        />
       ))
     }
   </div>

@@ -91,12 +91,11 @@ const carouselStyles = `
       {
         slides.length > 0 ? (
           slides.map((slide: any, index: number) => (
-            <editable-array-item data-component="building-blocks/wrappers/carousel/carousel-slide">
-              <CarouselSlide
-                contentSections={slide.contentSections}
-                aria-label={`Slide ${index + 1} of ${slides.length}`}
-              />
-            </editable-array-item>
+            <CarouselSlide
+              data-editable="array-item"
+              contentSections={slide.contentSections}
+              aria-label={`Slide ${index + 1} of ${slides.length}`}
+            />
           ))
         ) : (
           <slot />
@@ -265,12 +264,9 @@ const carouselStyles = `
         display: flex;
         flex-wrap: nowrap;
 
-        > editable-array-item, > .slide {
+        > .slide {
           flex-shrink: 0;
           flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
-        }
-
-        > editable-array-item > .slide {
           width: 100%;
         }
       }

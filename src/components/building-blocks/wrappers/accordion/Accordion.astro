@@ -52,14 +52,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
           const isFirst = index === 0 && openFirst;
 
           return (
-            <editable-array-item data-component="building-blocks/wrappers/accordion/accordion-item">
-              <AccordionItem
-                title={item.title}
-                contentSections={item.contentSections}
-                isOpen={isFirst}
-                accordionName={accordionName}
-              />
-            </editable-array-item>
+            <AccordionItem
+              title={item.title}
+              contentSections={item.contentSections}
+              isOpen={isFirst}
+              accordionName={accordionName}
+              data-editable="array-item"
+            />
           );
         })
     }
