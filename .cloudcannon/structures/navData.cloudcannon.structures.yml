@@ -24,7 +24,7 @@ navData:
           type: text
           comment: Display text for the navigation item.
         path:
-          type: text
+          type: url
           comment: URL path for the navigation item.
         children:
           type: array
@@ -50,7 +50,7 @@ navData:
                     type: text
                     comment: Display text for the child navigation item.
                   path:
-                    type: text
+                    type: url
                     comment: URL path for the child navigation item.
                   children:
                     type: array
@@ -75,5 +75,5 @@ navData:
                               type: text
                               comment: Display text for the grandchild navigation item.
                             path:
-                              type: text
+                              type: url
                               comment: URL path for the grandchild navigation item.
