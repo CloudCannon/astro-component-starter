@@ -29,9 +29,12 @@ const arrayDataAttributes = editable
   {
     items && items.length > 0 ? (
       items.map((item: any) => (
-        <editable-array-item data-component="building-blocks/core-elements/definition-list/definition-list-item">
-          <DefinitionListItem title={item.title} text={item.text} editable={editable} />
-        </editable-array-item>
+        <DefinitionListItem
+          data-editable="array-item"
+          title={item.title}
+          text={item.text}
+          editable={editable}
+        />
       ))
     ) : (
       <slot />
@@ -47,13 +50,6 @@ const arrayDataAttributes = editable
       grid-template-columns: auto 1fr;
       margin: 0;
       margin-top: var(--spacing-lg);
-
-      > editable-array-item {
-        display: grid;
-        gap: var(--spacing-em-sm) var(--spacing-em-md);
-        grid-column: 1 / -1;
-        grid-template-columns: auto 1fr;
-      }
 
       &.alignment-center {
         align-items: center;
@@ -75,22 +71,15 @@ const arrayDataAttributes = editable
         grid-template-columns: auto auto;
         justify-content: end;
 
-        > editable-array-item {
-          grid-template-columns: auto auto;
-        }
-
-        > editable-array-item > .title,
         > .title {
           text-align: start;
         }
 
-        > editable-array-item > .content,
         > .content {
           text-align: end;
         }
       }
 
-      > editable-array-item > .content,
       > .content {
         margin: 0;
       }
