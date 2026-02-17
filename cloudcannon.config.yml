@@ -62,6 +62,9 @@ collections_config:
         options:
           paths:
             uploads: src/assets/images
+          resize_style: contain
+          width: 1920
+          height: 1080
       tags:
         type: array
         comment: Tags relevant to this post's content.
@@ -78,11 +81,17 @@ collections_config:
         options:
           paths:
             uploads: src/assets/images
+          resize_style: contain
+          width: 1920
+          height: 1080
       image:
         type: image
         options:
           paths:
             uploads: src/assets/images
+          resize_style: contain
+          width: 1920
+          height: 1080
 collection_groups:
   - heading: Content
     collections:

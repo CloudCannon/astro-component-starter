@@ -5,6 +5,9 @@ source:
     paths:
       uploads: src/assets/images
       static: ""
+    resize_style: contain
+    width: 1920
+    height: 1080
 alt:
   type: textarea
   comment: Alternative text for accessibility.

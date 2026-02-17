@@ -23,6 +23,9 @@ imageSource:
     paths:
       uploads: src/assets/images
       static: ""
+    resize_style: contain
+    width: 1920
+    height: 1080
 imageAlt:
   type: text
   comment: Alt text describing the CTA image.

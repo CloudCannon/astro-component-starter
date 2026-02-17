@@ -35,4 +35,7 @@ thumbnail:
     paths:
       uploads: public/images
       static: public
+    resize_style: contain
+    width: 1920
+    height: 1080
 

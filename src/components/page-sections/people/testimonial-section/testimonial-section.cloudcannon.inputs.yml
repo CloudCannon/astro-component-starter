@@ -26,6 +26,9 @@ authorImage:
     paths:
       uploads: src/assets/images
       static: ""
+    resize_style: contain
+    width: 1920
+    height: 1080
 alignX:
   type: select
   comment: Horizontal alignment of the testimonial content.
