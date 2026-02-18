@@ -38,7 +38,13 @@ const {
   <Heading level="h2" size="lg" alignX="center" data-prop="heading" editable={editable}>
     {heading}
   </Heading>
-  <Text class="feature-grid-subtext" alignX="center" data-prop="subtext" text={subtext} editable={editable} />
+  <Text
+    class="feature-grid-subtext"
+    alignX="center"
+    data-prop="subtext"
+    text={subtext}
+    editable={editable}
+  />
   <Grid
     gap="lg"
     minItemWidth="360"
@@ -49,8 +55,14 @@ const {
   >
     {
       features.map((feature: any, index: number) => (
-        <GridItem data-editable="array-item" editable={editable}>
-          <FeatureItem {...feature} class="feature-grid-item" data-index={index} editable={editable} />
+        <GridItem editable={false}>
+          <FeatureItem
+            {...feature}
+            data-editable="array-item"
+            class="feature-grid-item"
+            data-index={index}
+            editable={editable}
+          />
         </GridItem>
       ))
     }
