@@ -81,7 +81,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter;
     (usesBeforeContentSections || hasBeforeSlot) && (
       <div
         class="before-content"
-        data-editable={editable && usesBeforeContentSections ? "array" : undefined}
+        data-editable={editable ? "array" : undefined}
         data-prop="beforeContentSections"
       >
         <slot name="before">
@@ -105,7 +105,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter;
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable && usesContentSections ? "array" : undefined}
+      data-editable={editable ? "array" : undefined}
       data-prop="contentSections"
     >
       <slot>
@@ -126,7 +126,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter;
     (usesAfterContentSections || hasAfterSlot) && (
       <div
         class="after-content"
-        data-editable={editable && usesAfterContentSections ? "array" : undefined}
+        data-editable={editable ? "array" : undefined}
         data-prop="afterContentSections"
       >
         <slot name="after">
