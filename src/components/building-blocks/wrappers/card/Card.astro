@@ -44,11 +44,9 @@ if (!htmlAttributes.id && label) {
 
 const Tag = link ? "a" : "div";
 const hasBeforeSlot = await hasMeaningfulSlotContent(Astro.slots, "before");
-const hasDefaultSlot = await hasMeaningfulSlotContent(Astro.slots);
 const hasAfterSlot = await hasMeaningfulSlotContent(Astro.slots, "after");
-const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter;
-const usesContentSections = !hasDefaultSlot;
-const usesAfterContentSections = !hasAfterSlot && showBeforeAfter;
+const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeContentSections;
+const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterContentSections;
 ---
 
 <Tag
@@ -126,7 +124,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter;
     (usesAfterContentSections || hasAfterSlot) && (
       <div
         class="after-content"
-        data-editable={editable ? "array" : undefined}
+        data-editable={editable && usesAfterContentSections ? "array" : undefined}
         data-prop="afterContentSections"
       >
         <slot name="after">
