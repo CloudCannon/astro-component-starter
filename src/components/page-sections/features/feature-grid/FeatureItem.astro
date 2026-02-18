@@ -25,7 +25,7 @@ const {
   rounded
   border
   backgroundColor="base"
-  editable={editable}
+  editable={false}
 >
   <Icon
     class="feature-icon"
@@ -35,7 +35,14 @@ const {
     background={iconBackground}
     alignX="start"
   />
-  <Heading class="feature-title" level="h3" size="md" alignX="start" data-prop="title" editable={editable}>
+  <Heading
+    class="feature-title"
+    level="h3"
+    size="md"
+    alignX="start"
+    data-prop="title"
+    editable={editable}
+  >
     {title}
   </Heading>
   <Text
