@@ -54,6 +54,7 @@ const { contentSections, editable = true } = Astro.props;
     return Component ? (
       <Component
         data-editable={editable ? "array-item" : undefined}
+        data-component-key="_component"
         {...block}
         editable={editable}
       />
