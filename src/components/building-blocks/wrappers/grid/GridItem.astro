@@ -1,19 +1,29 @@
 ---
 import RenderBlock from "@components/utils/renderBlock.astro";
 
-const { contentSections, class: className, _component, ...htmlAttributes } = Astro.props;
+const {
+  contentSections,
+  editable = true,
+  class: className,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
 ---
 
 <div
   class:list={["grid-item", className]}
-  data-editable={contentSections ? "array" : undefined}
+  data-editable={editable ? "array" : undefined}
   data-prop="contentSections"
   {...htmlAttributes}
 >
   <slot>
     {
       contentSections && contentSections.length > 0 && (
-        <RenderBlock contentSections={contentSections} propName="contentSections" />
+        <RenderBlock
+          contentSections={contentSections}
+          propName="contentSections"
+          editable={editable}
+        />
       )
     }
   </slot>

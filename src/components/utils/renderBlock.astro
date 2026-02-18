@@ -39,6 +39,8 @@ const { contentSections, editable = true } = Astro.props;
 ---
 
 {
+  // Array-level editable attributes are owned by the caller's container element.
+  // This utility only resolves blocks and marks each rendered block as an array item.
   contentSections?.map((block) => {
     const Component = components[block._component];
 

@@ -11,6 +11,7 @@ const {
   fixedWidth,
   minSplitWidth = 700,
   gap = "lg",
+  editable = true,
   class: className,
   label,
   _component,
@@ -33,6 +34,12 @@ const firstSplitBlocks = reverse ? secondColumnContentSections : firstColumnCont
 const secondSplitBlocks = reverse ? firstColumnContentSections : secondColumnContentSections;
 const firstPropName = reverse ? "secondColumnContentSections" : "firstColumnContentSections";
 const secondPropName = reverse ? "firstColumnContentSections" : "secondColumnContentSections";
+const firstSlotName = reverse ? "second" : "first";
+const secondSlotName = reverse ? "first" : "second";
+const firstPaneUsesSlot = Astro.slots.has(firstSlotName);
+const secondPaneUsesSlot = Astro.slots.has(secondSlotName);
+const firstPaneEditable = editable && !firstPaneUsesSlot;
+const secondPaneEditable = editable && !secondPaneUsesSlot;
 
 const getReversedDistributionMode = (mode: string) => {
   const reverseMap = {
@@ -70,20 +77,28 @@ const splitId = `split-${crypto.randomUUID()}`;
 >
   <div
     class="pane first"
-    data-editable={firstSplitBlocks && firstSplitBlocks.length > 0 ? "array" : undefined}
+    data-editable={firstPaneEditable ? "array" : undefined}
     data-prop={firstPropName}
   >
     {
       reverse ? (
         <slot name="second">
           {firstSplitBlocks && firstSplitBlocks.length > 0 && (
-            <Component contentSections={firstSplitBlocks} propName={firstPropName} />
+            <Component
+              contentSections={firstSplitBlocks}
+              propName={firstPropName}
+              editable={firstPaneEditable}
+            />
           )}
         </slot>
       ) : (
         <slot name="first">
           {firstSplitBlocks && firstSplitBlocks.length > 0 && (
-            <Component contentSections={firstSplitBlocks} propName={firstPropName} />
+            <Component
+              contentSections={firstSplitBlocks}
+              propName={firstPropName}
+              editable={firstPaneEditable}
+            />
           )}
         </slot>
       )
@@ -91,20 +106,28 @@ const splitId = `split-${crypto.randomUUID()}`;
   </div>
   <div
     class="pane second"
-    data-editable={secondSplitBlocks && secondSplitBlocks.length > 0 ? "array" : undefined}
+    data-editable={secondPaneEditable ? "array" : undefined}
     data-prop={secondPropName}
   >
     {
       reverse ? (
         <slot name="first">
           {secondSplitBlocks && secondSplitBlocks.length > 0 && (
-            <Component contentSections={secondSplitBlocks} propName={secondPropName} />
+            <Component
+              contentSections={secondSplitBlocks}
+              propName={secondPropName}
+              editable={secondPaneEditable}
+            />
           )}
         </slot>
       ) : (
         <slot name="second">
           {secondSplitBlocks && secondSplitBlocks.length > 0 && (
-            <Component contentSections={secondSplitBlocks} propName={secondPropName} />
+            <Component
+              contentSections={secondSplitBlocks}
+              propName={secondPropName}
+              editable={secondPaneEditable}
+            />
           )}
         </slot>
       )

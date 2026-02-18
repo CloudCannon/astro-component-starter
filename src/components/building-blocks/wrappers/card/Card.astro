@@ -74,12 +74,16 @@ const Tag = link ? "a" : "div";
     ((beforeContentSections && showBeforeAfter) || Astro.slots.has("before")) && (
       <div
         class="before-content"
-        data-editable={editable && beforeContentSections ? "array" : undefined}
+        data-editable={editable ? "array" : undefined}
         data-prop="beforeContentSections"
       >
         <slot name="before">
           {beforeContentSections && (
-            <Component contentSections={beforeContentSections} propName="beforeContentSections" />
+            <Component
+              contentSections={beforeContentSections}
+              propName="beforeContentSections"
+              editable={editable}
+            />
           )}
         </slot>
       </div>
@@ -94,13 +98,17 @@ const Tag = link ? "a" : "div";
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable && contentSections ? "array" : undefined}
+      data-editable={editable ? "array" : undefined}
       data-prop="contentSections"
     >
       <slot>
         {
           contentSections && (
-            <Component contentSections={contentSections} propName="contentSections" />
+            <Component
+              contentSections={contentSections}
+              propName="contentSections"
+              editable={editable}
+            />
           )
         }
       </slot>
@@ -111,12 +119,16 @@ const Tag = link ? "a" : "div";
     ((afterContentSections && showBeforeAfter) || Astro.slots.has("after")) && (
       <div
         class="after-content"
-        data-editable={editable && afterContentSections ? "array" : undefined}
+        data-editable={editable ? "array" : undefined}
         data-prop="afterContentSections"
       >
         <slot name="after">
           {afterContentSections && (
-            <Component contentSections={afterContentSections} propName="afterContentSections" />
+            <Component
+              contentSections={afterContentSections}
+              propName="afterContentSections"
+              editable={editable}
+            />
           )}
         </slot>
       </div>

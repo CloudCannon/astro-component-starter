@@ -5,6 +5,7 @@ import Icon from "@core-elements/icon/Icon.astro";
 const {
   title,
   contentSections,
+  editable = true,
   isOpen = false,
   accordionName,
   _component,
@@ -19,11 +20,11 @@ const {
   </summary>
   <div
     class="accordion-item-detail"
-    data-editable={contentSections ? "array" : undefined}
+    data-editable={editable ? "array" : undefined}
     data-prop="contentSections"
   >
     <slot>
-      {contentSections && <RenderBlock contentSections={contentSections} />}
+      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>
   </div>
 </details>

@@ -1,20 +1,20 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
 
-const { contentSections = [], _component, ...htmlAttributes } = Astro.props;
+const { contentSections = [], editable = true, _component, ...htmlAttributes } = Astro.props;
 ---
 
 <div
   class="slide"
   role="group"
-  data-editable={contentSections && contentSections.length > 0 ? "array" : undefined}
+  data-editable={editable ? "array" : undefined}
   data-prop="contentSections"
   {...htmlAttributes}
 >
   <slot>
     {
       contentSections && contentSections.length > 0 && (
-        <Component contentSections={contentSections} />
+        <Component contentSections={contentSections} editable={editable} />
       )
     }
   </slot>
