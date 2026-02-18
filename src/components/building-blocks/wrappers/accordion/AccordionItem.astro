@@ -1,5 +1,6 @@
 ---
 import RenderBlock from "@components/utils/renderBlock.astro";
+import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
@@ -12,7 +13,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const hasDefaultSlot = Astro.slots.has("default");
+const hasDefaultSlot = await hasMeaningfulSlotContent(Astro.slots);
 const usesContentSections = !hasDefaultSlot;
 ---
 

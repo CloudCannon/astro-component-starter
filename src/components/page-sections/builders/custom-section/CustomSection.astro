@@ -1,5 +1,6 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 import Image from "@core-elements/image/Image.astro";
 
 const {
@@ -37,7 +38,7 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-const hasDefaultSlot = Astro.slots.has("default");
+const hasDefaultSlot = await hasMeaningfulSlotContent(Astro.slots);
 const usesContentSections = !hasDefaultSlot;
 ---
 

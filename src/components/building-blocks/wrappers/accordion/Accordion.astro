@@ -1,5 +1,6 @@
 ---
 import AccordionItem from "./AccordionItem.astro";
+import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const {
   items,
@@ -37,8 +38,7 @@ const arrayDataAttributes = editable
   : {};
 
 const hasItems = items?.length > 0;
-const slotContent = Astro.slots.has("default") ? await Astro.slots.render("default") : null;
-const hasSlotContent = (slotContent?.toString().trim().length ?? 0) > 0;
+const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
 const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;

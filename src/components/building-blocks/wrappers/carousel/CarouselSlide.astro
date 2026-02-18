@@ -1,8 +1,9 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const { contentSections = [], editable = true, _component, ...htmlAttributes } = Astro.props;
-const hasDefaultSlot = Astro.slots.has("default");
+const hasDefaultSlot = await hasMeaningfulSlotContent(Astro.slots);
 const usesContentSections = !hasDefaultSlot;
 ---
 

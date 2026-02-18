@@ -1,5 +1,6 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const {
   firstColumnContentSections = [],
@@ -36,8 +37,8 @@ const firstPropName = reverse ? "secondColumnContentSections" : "firstColumnCont
 const secondPropName = reverse ? "firstColumnContentSections" : "secondColumnContentSections";
 const firstSlotName = reverse ? "second" : "first";
 const secondSlotName = reverse ? "first" : "second";
-const firstPaneUsesSlot = Astro.slots.has(firstSlotName);
-const secondPaneUsesSlot = Astro.slots.has(secondSlotName);
+const firstPaneUsesSlot = await hasMeaningfulSlotContent(Astro.slots, firstSlotName);
+const secondPaneUsesSlot = await hasMeaningfulSlotContent(Astro.slots, secondSlotName);
 const firstPaneEditable = editable && !firstPaneUsesSlot;
 const secondPaneEditable = editable && !secondPaneUsesSlot;
 
@@ -83,7 +84,7 @@ const splitId = `split-${crypto.randomUUID()}`;
     {
       reverse ? (
         <slot name="second">
-          {firstSplitBlocks && firstSplitBlocks.length > 0 && (
+          {firstSplitBlocks && (
             <Component
               contentSections={firstSplitBlocks}
               propName={firstPropName}
@@ -93,7 +94,7 @@ const splitId = `split-${crypto.randomUUID()}`;
         </slot>
       ) : (
         <slot name="first">
-          {firstSplitBlocks && firstSplitBlocks.length > 0 && (
+          {firstSplitBlocks && (
             <Component
               contentSections={firstSplitBlocks}
               propName={firstPropName}
@@ -112,7 +113,7 @@ const splitId = `split-${crypto.randomUUID()}`;
     {
       reverse ? (
         <slot name="first">
-          {secondSplitBlocks && secondSplitBlocks.length > 0 && (
+          {secondSplitBlocks && (
             <Component
               contentSections={secondSplitBlocks}
               propName={secondPropName}
@@ -122,7 +123,7 @@ const splitId = `split-${crypto.randomUUID()}`;
         </slot>
       ) : (
         <slot name="second">
-          {secondSplitBlocks && secondSplitBlocks.length > 0 && (
+          {secondSplitBlocks && (
             <Component
               contentSections={secondSplitBlocks}
               propName={secondPropName}

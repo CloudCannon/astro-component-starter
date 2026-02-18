@@ -1,6 +1,7 @@
 ---
 import Button from "@core-elements/button/Button.astro";
 import CarouselSlide from "./CarouselSlide.astro";
+import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const {
   slides = [],
@@ -66,7 +67,7 @@ const carouselStyles = `
   --min-slide-width: ${minSlideWidth}px;
   ${style}
 `.trim();
-const hasSlotContent = Astro.slots.has("default");
+const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
 const usesSlidesArray = !hasSlotContent;
 ---
 
