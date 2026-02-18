@@ -45,10 +45,8 @@ const {
   >
     {
       teamMembers.map((member: any, index: number) => (
-        <GridItem>
-          <editable-array-item data-component="page-sections/people/team-grid/team-item">
-            <TeamItem {...member} class="team-grid-item" data-index={index} />
-          </editable-array-item>
+        <GridItem data-editable="array-item">
+          <TeamItem {...member} class="team-grid-item" data-index={index} />
         </GridItem>
       ))
     }

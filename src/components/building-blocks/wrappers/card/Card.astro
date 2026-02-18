@@ -160,13 +160,11 @@ const Tag = link ? "a" : "div";
         z-index: var(--layer-1);
         container-type: inline-size;
 
-        > [data-editable="array-item"]:first-child > *:first-child,
-        > :not([data-editable="array-item"]):first-child {
+        > *:first-child {
           margin-top: 0 !important;
         }
 
-        > [data-editable="array-item"]:last-child > *:last-child,
-        > :not([data-editable="array-item"]):last-child {
+        > *:last-child {
           margin-bottom: 0 !important;
         }
 
@@ -278,13 +276,11 @@ const Tag = link ? "a" : "div";
         position: relative;
         z-index: var(--layer-2);
 
-        > [data-editable="array-item"]:first-child > *:first-child,
-        > :not([data-editable="array-item"]):first-child {
+        > *:first-child {
           margin-top: 0 !important;
         }
 
-        > [data-editable="array-item"]:last-child > *:last-child,
-        > :not([data-editable="array-item"]):last-child {
+        > *:last-child {
           margin-bottom: 0 !important;
         }
       }

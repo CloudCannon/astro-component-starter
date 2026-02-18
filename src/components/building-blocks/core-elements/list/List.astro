@@ -51,15 +51,14 @@ if (!_component && !hasItems && !hasSlotContent) return;
       items &&
         items.length > 0 &&
         items.map((item: any) => (
-          <editable-array-item data-component="building-blocks/core-elements/list/list-item">
-            <ListItem
-              text={item.text}
-              iconName={item.iconName}
-              iconColor={item.iconColor}
-              editable={editable}
-              showIcon={showIcons}
-            />
-          </editable-array-item>
+          <ListItem
+            data-editable="array-item"
+            text={item.text}
+            iconName={item.iconName}
+            iconColor={item.iconColor}
+            editable={editable}
+            showIcon={showIcons}
+          />
         ))
     }
   </slot>
@@ -91,7 +90,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
       &.type-bullet,
       &.type-numbered {
 
-        &.direction-horizontal > li:not(:first-child), &.direction-horizontal > editable-array-item:not(:first-child) li {
+        &.direction-horizontal > li:not(:first-child) {
           margin-inline-start: var(--spacing-lg);
         }
       }

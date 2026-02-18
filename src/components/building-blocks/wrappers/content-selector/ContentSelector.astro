@@ -183,8 +183,7 @@ const arrayDataAttributes = editable
           background: var(--color-border-strong);
         }
 
-        .input:nth-of-type($i):checked ~ .panels > .panel:nth-of-type($i),
-        .input:nth-of-type($i):checked ~ .panels > editable-array-item:nth-of-type($i) > .panel {
+        .input:nth-of-type($i):checked ~ .panels > .panel:nth-of-type($i) {
           display: revert;
         }
       }
