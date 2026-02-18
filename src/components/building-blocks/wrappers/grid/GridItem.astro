@@ -16,7 +16,7 @@ const usesContentSections = !hasDefaultSlot;
 
 <div
   class:list={["grid-item", className]}
-  data-editable={editable && usesContentSections ? "array" : undefined}
+  data-editable={editable ? "array" : undefined}
   data-prop="contentSections"
   {...htmlAttributes}
 >

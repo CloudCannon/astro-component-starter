@@ -55,7 +55,7 @@ const {
   >
     {
       features.map((feature: any) => (
-        <GridItem data-editable="array-item">
+        <GridItem data-editable="array-item" editable={false}>
           <FeatureItem {...feature} class="feature-grid-item" editable={editable} />
         </GridItem>
       ))
