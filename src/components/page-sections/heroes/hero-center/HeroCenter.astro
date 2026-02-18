@@ -13,6 +13,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -26,16 +27,17 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  editable={editable}
   {...htmlAttributes}
 >
-  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow">
+  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={editable}>
     {eyebrow}
   </SimpleText>
-  <Heading level="h1" size="2xl" alignX="center" data-prop="heading">
+  <Heading level="h1" size="2xl" alignX="center" data-prop="heading" editable={editable}>
     {heading}
   </Heading>
-  <Text alignX="center" class="subtext" data-prop="subtext" text={subtext} />
-  <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" />
+  <Text alignX="center" class="subtext" data-prop="subtext" text={subtext} editable={editable} />
+  <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" editable={editable} />
 </CustomSection>
 
 <style lang="pcss" is:global>

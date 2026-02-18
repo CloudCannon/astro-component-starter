@@ -14,6 +14,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
+  editable = true,
   class: className,
 } = Astro.props;
 ---
@@ -25,14 +26,22 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  editable={editable}
 >
-  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow">
+  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={editable}>
     {eyebrow}
   </SimpleText>
-  <Heading class="team-grid-heading" level="h2" size="lg" alignX="center" data-prop="heading">
+  <Heading
+    class="team-grid-heading"
+    level="h2"
+    size="lg"
+    alignX="center"
+    data-prop="heading"
+    editable={editable}
+  >
     {heading}
   </Heading>
-  <SimpleText class="team-grid-subtext" size="md" alignX="center" data-prop="subtext">
+  <SimpleText class="team-grid-subtext" size="md" alignX="center" data-prop="subtext" editable={editable}>
     {subtext}
   </SimpleText>
   <Grid
@@ -42,11 +51,12 @@ const {
     maxItemWidth={400}
     data-prop="teamMembers"
     layout="start"
+    editable={editable}
   >
     {
       teamMembers.map((member: any, index: number) => (
-        <GridItem data-editable="array-item">
-          <TeamItem {...member} class="team-grid-item" data-index={index} />
+        <GridItem data-editable="array-item" editable={editable}>
+          <TeamItem {...member} class="team-grid-item" data-index={index} editable={editable} />
         </GridItem>
       ))
     }

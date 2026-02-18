@@ -10,6 +10,7 @@ const {
   bio = "",
   imageSource = "",
   imageAlt = "",
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -26,6 +27,7 @@ const cardClasses = ["team-item", className].filter(Boolean).join(" ");
   rounded
   border
   backgroundColor="base"
+  editable={editable}
 >
   <Image
     class="team-image"
@@ -34,7 +36,7 @@ const cardClasses = ["team-item", className].filter(Boolean).join(" ");
     aspectRatio="square"
     widths={[400, 800]}
     sizes="400px"
-    editable={true}
+    editable={editable}
     data-prop-src="imageSource"
     data-prop-alt="imageAlt"
     data-editable="image"
@@ -47,6 +49,7 @@ const cardClasses = ["team-item", className].filter(Boolean).join(" ");
     alignX="start"
     style="margin-bottom: var(--spacing-xs); margin-top: 0;"
     data-prop="name"
+    editable={editable}
   >
     {name}
   </Heading>
@@ -56,6 +59,7 @@ const cardClasses = ["team-item", className].filter(Boolean).join(" ");
     alignX="start"
     style=" color: var(--color-text-subtle); font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-sm);margin-top: 0;;"
     data-prop="role"
+    editable={editable}
   >
     {role}
   </SimpleText>
@@ -65,6 +69,7 @@ const cardClasses = ["team-item", className].filter(Boolean).join(" ");
     alignX="start"
     style=" color: var(--color-text-muted); margin-top: 0;"
     data-prop="bio"
+    editable={editable}
   >
     {bio}
   </SimpleText>

@@ -17,6 +17,7 @@ const {
   backgroundColor,
   paddingVertical = "4xl",
   rounded = false,
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -31,6 +32,7 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   rounded={rounded}
+  editable={false}
   {...htmlAttributes}
 >
   <Split
@@ -40,13 +42,20 @@ const {
     verticalAlignment="center"
     reverse={reverse}
     minSplitWidth={640}
+    editable={editable}
   >
     <Fragment slot="first">
-      <Heading level="h2" size="xl" data-prop="heading">
+      <Heading level="h2" size="xl" data-prop="heading" editable={editable}>
         {heading}
       </Heading>
-      <Text data-prop="subtext" text={subtext} />
-      <ButtonGroup class="buttons" buttonSections={buttonSections} direction="row" alignX="start" />
+      <Text data-prop="subtext" text={subtext} editable={editable} />
+      <ButtonGroup
+        class="buttons"
+        buttonSections={buttonSections}
+        direction="row"
+        alignX="start"
+        editable={editable}
+      />
     </Fragment>
     <Fragment slot="second">
       <Image
@@ -54,7 +63,7 @@ const {
         rounded={true}
         alt={imageAlt}
         aspectRatio="landscape"
-        editable={true}
+        editable={editable}
         data-prop-src="imageSource"
         data-prop-alt="imageAlt"
         data-editable="image"

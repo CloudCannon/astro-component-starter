@@ -15,6 +15,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -28,26 +29,28 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  editable={editable}
   {...htmlAttributes}
 >
-  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow">
+  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={editable}>
     {eyebrow}
   </SimpleText>
-  <Heading level="h2" size="lg" alignX="center" data-prop="heading">
+  <Heading level="h2" size="lg" alignX="center" data-prop="heading" editable={editable}>
     {heading}
   </Heading>
-  <Text class="feature-grid-subtext" alignX="center" data-prop="subtext" text={subtext} />
+  <Text class="feature-grid-subtext" alignX="center" data-prop="subtext" text={subtext} editable={editable} />
   <Grid
     gap="lg"
     minItemWidth="360"
     maxItemWidth="360"
     data-prop="features"
     class="feature-grid-grid"
+    editable={editable}
   >
     {
       features.map((feature: any, index: number) => (
-        <GridItem data-editable="array-item">
-          <FeatureItem {...feature} class="feature-grid-item" data-index={index} />
+        <GridItem data-editable="array-item" editable={editable}>
+          <FeatureItem {...feature} class="feature-grid-item" data-index={index} editable={editable} />
         </GridItem>
       ))
     }

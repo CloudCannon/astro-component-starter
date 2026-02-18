@@ -11,6 +11,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
+  editable = true,
   class: className,
   rounded = false,
   _component,
@@ -26,9 +27,22 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   rounded={rounded}
+  editable={false}
   {...htmlAttributes}
 >
-  <Heading level="h2" size="xl" alignX="center" data-prop="heading" text={heading} />
-  <Text alignX="center" data-prop="subtext" text={subtext} />
-  <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" />
+  <Heading
+    level="h2"
+    size="xl"
+    alignX="center"
+    data-prop="heading"
+    text={heading}
+    editable={editable}
+  />
+  <Text alignX="center" data-prop="subtext" text={subtext} editable={editable} />
+  <ButtonGroup
+    class="buttons"
+    buttonSections={buttonSections}
+    alignX="center"
+    editable={editable}
+  />
 </CustomSection>

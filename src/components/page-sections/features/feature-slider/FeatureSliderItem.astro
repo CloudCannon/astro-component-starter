@@ -13,6 +13,7 @@ const {
   imageSource = "",
   imageAlt = "",
   minSplitWidth = 0,
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -25,21 +26,23 @@ const hasImage = Boolean(imageSource);
   class:list={["feature-slider-item", className]}
   paddingHorizontal="xs"
   paddingVertical="none"
+  editable={editable}
   {...htmlAttributes}
 >
   <Split
     distributionMode="two-thirds-third"
     minSplitWidth={minSplitWidth}
     verticalAlignment="center"
+    editable={editable}
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow">
+      <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
         {eyebrow}
       </SimpleText>
-      <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title">
+      <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title" editable={editable}>
         {title}
       </Heading>
-      <Text data-prop="description" text={description} />
+      <Text data-prop="description" text={description} editable={editable} />
     </Fragment>
     <Image
       slot="second"
@@ -48,6 +51,7 @@ const hasImage = Boolean(imageSource);
       rounded={true}
       aspectRatio="portrait"
       priority={true}
+      editable={editable}
       data-prop-src="imageSource"
       data-prop-alt="imageAlt"
       data-editable="image"

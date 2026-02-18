@@ -11,6 +11,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   class: className,
+  editable = true,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -24,7 +25,8 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  editable={editable}
 >
-  <Heading level="h2" size="lg" alignX="center" text={heading} data-prop="heading" />
-  <Accordion label={label} singleOpen={true} openFirst={false} items={items} />
+  <Heading level="h2" size="lg" alignX="center" text={heading} data-prop="heading" editable={editable} />
+  <Accordion label={label} singleOpen={true} openFirst={false} items={items} editable={editable} />
 </CustomSection>

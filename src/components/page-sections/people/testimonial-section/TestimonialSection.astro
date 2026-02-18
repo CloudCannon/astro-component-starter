@@ -11,6 +11,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   class: className,
+  editable = true,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -24,6 +25,7 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  editable={editable}
 >
   <Testimonial
     text={text}
@@ -34,5 +36,6 @@ const {
     data-prop="text"
     data-prop-author-name="authorName"
     data-prop-author-description="authorDescription"
+    editable={editable}
   />
 </CustomSection>

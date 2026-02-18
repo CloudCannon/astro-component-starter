@@ -10,6 +10,7 @@ const {
   paddingVertical = "4xl",
   class: className,
   slides = [],
+  editable = true,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -22,6 +23,7 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  editable={editable}
   {...htmlAttributes}
 >
   <Carousel
@@ -31,6 +33,7 @@ const {
     autoPlay={false}
     autoScroll={false}
     data-prop="slides"
+    editable={editable}
   >
     {
       Array.isArray(slides) &&
@@ -39,8 +42,9 @@ const {
           <CarouselSlide
             data-editable="array-item"
             aria-label={`Slide ${index + 1} of ${slides.length}`}
+            editable={editable}
           >
-            <FeatureSliderItem {...slide} data-index={index} />
+            <FeatureSliderItem {...slide} data-index={index} editable={editable} />
           </CarouselSlide>
         ))
     }

@@ -10,6 +10,7 @@ const {
   iconName = "",
   iconColor = "default",
   iconBackground = true,
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -24,6 +25,7 @@ const {
   rounded
   border
   backgroundColor="base"
+  editable={editable}
 >
   <Icon
     class="feature-icon"
@@ -33,10 +35,16 @@ const {
     background={iconBackground}
     alignX="start"
   />
-  <Heading class="feature-title" level="h3" size="md" alignX="start" data-prop="title">
+  <Heading class="feature-title" level="h3" size="md" alignX="start" data-prop="title" editable={editable}>
     {title}
   </Heading>
-  <Text class="feature-description" alignX="start" data-prop="description" text={description} />
+  <Text
+    class="feature-description"
+    alignX="start"
+    data-prop="description"
+    text={description}
+    editable={editable}
+  />
 </Card>
 
 <style lang="pcss" is:global>

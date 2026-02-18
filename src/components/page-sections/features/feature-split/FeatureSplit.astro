@@ -20,6 +20,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -37,6 +38,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   data-feature-split-id={featureSplitId}
+  editable={editable}
   {...htmlAttributes}
 >
   <Split
@@ -48,20 +50,22 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     verticalAlignment="center"
     gap="2xl"
     reverseOrderOnMobile={true}
+    editable={editable}
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow">
+      <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
         {eyebrow}
       </SimpleText>
-      <Heading level="h2" size="lg" data-prop="heading">
+      <Heading level="h2" size="lg" data-prop="heading" editable={editable}>
         {heading}
       </Heading>
-      <Text class="subtext" data-prop="subtext" text={subtext} />
+      <Text class="subtext" data-prop="subtext" text={subtext} editable={editable} />
       <ButtonGroup
         class="feature-buttons"
         buttonSections={buttonSections}
         direction="row"
         alignX="start"
+        editable={editable}
       />
     </Fragment>
     <Image
@@ -71,6 +75,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
       alt={imageAlt}
       rounded={imageRounded}
       aspectRatio={imageAspectRatio}
+      editable={editable}
       data-prop-src="imageSource"
       data-prop-alt="imageAlt"
       data-editable="image"

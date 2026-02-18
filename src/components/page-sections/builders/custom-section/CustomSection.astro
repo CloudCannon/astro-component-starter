@@ -12,6 +12,7 @@ const {
   backgroundColor,
   backgroundImage,
   rounded = false,
+  editable = true,
   class: className,
   _component,
   ...htmlAttributes
@@ -69,13 +70,17 @@ if (!htmlAttributes.id && label) {
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={contentSections ? "array" : undefined}
+      data-editable={editable ? "array" : undefined}
       data-prop="contentSections"
     >
       <slot>
         {
           contentSections && (
-            <Component contentSections={contentSections} propName="contentSections" />
+            <Component
+              contentSections={contentSections}
+              propName="contentSections"
+              editable={editable}
+            />
           )
         }
       </slot>
