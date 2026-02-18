@@ -39,11 +39,16 @@ const arrayDataAttributes = editable
 const hasItems = items?.length > 0;
 const slotContent = Astro.slots.has("default") ? await Astro.slots.render("default") : null;
 const hasSlotContent = (slotContent?.toString().trim().length ?? 0) > 0;
+const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div class:list={["accordion"]} {...arrayDataAttributes} {...htmlAttributes}>
+<div
+  class:list={["accordion"]}
+  {...editable && usesItemsArray ? arrayDataAttributes : {}}
+  {...htmlAttributes}
+>
   <slot>
     {
       items &&

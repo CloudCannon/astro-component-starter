@@ -9,6 +9,9 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const hasDefaultSlot = Astro.slots.has("default");
+const usesContentSections = !hasDefaultSlot;
 ---
 
 <div
@@ -17,11 +20,13 @@ const {
   role="tabpanel"
   aria-labelledby={`tablabel-${uniqueId}-${index}`}
   aria-hidden={index !== 0}
-  data-editable={editable ? "array" : undefined}
+  data-editable={editable && usesContentSections ? "array" : undefined}
   data-prop="contentSections"
   {...htmlAttributes}
 >
-  <RenderBlock contentSections={contentSections} editable={editable} />
+  <slot>
+    {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
+  </slot>
 </div>
 
 <style lang="pcss" is:global>

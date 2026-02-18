@@ -19,27 +19,33 @@ const arrayDataAttributes = editable
       "data-id-key": "_component",
     }
   : {};
+const hasItems = items?.length > 0;
+const slotContent = Astro.slots.has("default") ? await Astro.slots.render("default") : null;
+const hasSlotContent = (slotContent?.toString().trim().length ?? 0) > 0;
+const usesItemsArray = !hasSlotContent;
+
+if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <dl
   class:list={["definition-list", `alignment-${alignX}`, className]}
-  {...arrayDataAttributes}
+  {...(editable && usesItemsArray ? arrayDataAttributes : {})}
   {...htmlAttributes}
 >
-  {
-    items && items.length > 0 ? (
-      items.map((item: any) => (
+  <slot>
+    {
+      items &&
+        items.length > 0 &&
+        items.map((item: any) => (
         <DefinitionListItem
           data-editable="array-item"
           title={item.title}
           text={item.text}
-          editable={editable}
+          editable={editable && usesItemsArray}
         />
       ))
-    ) : (
-      <slot />
-    )
-  }
+    }
+  </slot>
 </dl>
 
 <style lang="pcss" is:global>

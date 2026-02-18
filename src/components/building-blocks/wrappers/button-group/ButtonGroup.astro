@@ -32,22 +32,26 @@ const alignMap = {
 const alignClass = alignMap[alignX as keyof typeof alignMap] ?? "align-start";
 
 const hasButtonSections = buttonSections?.length > 0;
-const slotContent = Astro.slots.has("default") ? await Astro.slots.render("default") : null;
-const hasSlotContent = (slotContent?.toString().trim().length ?? 0) > 0;
+const hasSlotContent = Astro.slots.has("default");
+const usesButtonSections = !hasSlotContent;
 
 if (!_component && !hasButtonSections && !hasSlotContent) return;
 ---
 
 <div
   class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
-  data-editable={editable && buttonSections ? "array" : undefined}
+  data-editable={editable && usesButtonSections ? "array" : undefined}
   data-prop="buttonSections"
   {...htmlAttributes}
 >
   <slot>
     {
       buttonSections && buttonSections.length > 0 && (
-        <Component contentSections={buttonSections} editable={editable} propName="buttonSections" />
+        <Component
+          contentSections={buttonSections}
+          editable={editable}
+          propName="buttonSections"
+        />
       )
     }
   </slot>

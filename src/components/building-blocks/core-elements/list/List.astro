@@ -26,6 +26,7 @@ const arrayDataAttributes = editable
 const hasItems = items?.length > 0;
 const slotContent = Astro.slots.has("default") ? await Astro.slots.render("default") : null;
 const hasSlotContent = (slotContent?.toString().trim().length ?? 0) > 0;
+const usesItemsArray = !hasSlotContent;
 
 const ListTag = listType === "numbered" ? "ol" : "ul";
 const showIcons = listType === "icon";
@@ -43,7 +44,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
     className,
   ]}
   role="list"
-  {...arrayDataAttributes}
+  {...editable && usesItemsArray ? arrayDataAttributes : {}}
   {...htmlAttributes}
 >
   <slot>

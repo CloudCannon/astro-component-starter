@@ -42,6 +42,12 @@ if (!htmlAttributes.id && label) {
 }
 
 const Tag = link ? "a" : "div";
+const hasBeforeSlot = Astro.slots.has("before");
+const hasDefaultSlot = Astro.slots.has("default");
+const hasAfterSlot = Astro.slots.has("after");
+const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter;
+const usesContentSections = !hasDefaultSlot;
+const usesAfterContentSections = !hasAfterSlot && showBeforeAfter;
 ---
 
 <Tag
@@ -71,10 +77,10 @@ const Tag = link ? "a" : "div";
   }
 
   {
-    ((beforeContentSections && showBeforeAfter) || Astro.slots.has("before")) && (
+    (usesBeforeContentSections || hasBeforeSlot) && (
       <div
         class="before-content"
-        data-editable={editable ? "array" : undefined}
+        data-editable={editable && usesBeforeContentSections ? "array" : undefined}
         data-prop="beforeContentSections"
       >
         <slot name="before">
@@ -98,7 +104,7 @@ const Tag = link ? "a" : "div";
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable ? "array" : undefined}
+      data-editable={editable && usesContentSections ? "array" : undefined}
       data-prop="contentSections"
     >
       <slot>
@@ -116,10 +122,10 @@ const Tag = link ? "a" : "div";
   </div>
 
   {
-    ((afterContentSections && showBeforeAfter) || Astro.slots.has("after")) && (
+    (usesAfterContentSections || hasAfterSlot) && (
       <div
         class="after-content"
-        data-editable={editable ? "array" : undefined}
+        data-editable={editable && usesAfterContentSections ? "array" : undefined}
         data-prop="afterContentSections"
       >
         <slot name="after">

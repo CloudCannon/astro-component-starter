@@ -8,11 +8,14 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const hasDefaultSlot = Astro.slots.has("default");
+const usesContentSections = !hasDefaultSlot;
 ---
 
 <div
   class:list={["grid-item", className]}
-  data-editable={editable ? "array" : undefined}
+  data-editable={editable && usesContentSections ? "array" : undefined}
   data-prop="contentSections"
   {...htmlAttributes}
 >

@@ -66,6 +66,8 @@ const carouselStyles = `
   --min-slide-width: ${minSlideWidth}px;
   ${style}
 `.trim();
+const hasSlotContent = Astro.slots.has("default");
+const usesSlidesArray = !hasSlotContent;
 ---
 
 <section
@@ -79,7 +81,7 @@ const carouselStyles = `
   <div class="viewport">
     <div
       class="track"
-      {...editable
+      {...editable && usesSlidesArray
         ? {
             "data-editable": "array",
             "data-component-key": "_component",

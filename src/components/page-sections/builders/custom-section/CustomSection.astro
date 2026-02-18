@@ -36,6 +36,9 @@ const slugifyLabel = (label: string) => {
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
+
+const hasDefaultSlot = Astro.slots.has("default");
+const usesContentSections = !hasDefaultSlot;
 ---
 
 <section
@@ -70,7 +73,7 @@ if (!htmlAttributes.id && label) {
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable ? "array" : undefined}
+      data-editable={editable && usesContentSections ? "array" : undefined}
       data-prop="contentSections"
     >
       <slot>
