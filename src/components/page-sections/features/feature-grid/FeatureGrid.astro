@@ -54,15 +54,9 @@ const {
     editable={editable}
   >
     {
-      features.map((feature: any, index: number) => (
-        <GridItem editable={false}>
-          <FeatureItem
-            {...feature}
-            data-editable="array-item"
-            class="feature-grid-item"
-            data-index={index}
-            editable={editable}
-          />
+      features.map((feature: any) => (
+        <GridItem data-editable="array-item">
+          <FeatureItem {...feature} class="feature-grid-item" editable={editable} />
         </GridItem>
       ))
     }

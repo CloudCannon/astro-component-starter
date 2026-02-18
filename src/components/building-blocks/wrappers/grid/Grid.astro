@@ -1,6 +1,6 @@
 ---
-import GridItem from "./GridItem.astro";
 import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
+import GridItem from "./GridItem.astro";
 
 const {
   layout = "center",
@@ -48,13 +48,12 @@ const arrayDataAttributes = editable
 
 const hasItems = items?.length > 0;
 const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
-const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  {...editable && usesItemsArray ? arrayDataAttributes : {}}
+  {...editable ? arrayDataAttributes : {}}
   class:list={["grid", `layout-${layout}`, className]}
   style={gridStyles}
   {...htmlAttributes}
