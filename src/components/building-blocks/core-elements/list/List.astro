@@ -1,5 +1,4 @@
 ---
-import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 import ListItem from "./ListItem.astro";
 
 const {
@@ -23,7 +22,7 @@ const arrayDataAttributes = editable
   : {};
 
 const hasItems = items?.length > 0;
-const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
+const hasSlotContent = Astro.slots.has("default");
 const usesItemsArray = !hasSlotContent;
 
 const ListTag = listType === "numbered" ? "ol" : "ul";

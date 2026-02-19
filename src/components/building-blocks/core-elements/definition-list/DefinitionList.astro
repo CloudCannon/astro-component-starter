@@ -1,5 +1,4 @@
 ---
-import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 import DefinitionListItem from "./DefinitionListItem.astro";
 
 const {
@@ -19,7 +18,7 @@ const arrayDataAttributes = editable
     }
   : {};
 const hasItems = items?.length > 0;
-const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
+const hasSlotContent = Astro.slots.has("default");
 const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;

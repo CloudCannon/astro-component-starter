@@ -1,6 +1,5 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
-import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 import Image from "@core-elements/image/Image.astro";
 
 const {
@@ -43,8 +42,8 @@ if (!htmlAttributes.id && label) {
 }
 
 const Tag = link ? "a" : "div";
-const hasBeforeSlot = await hasMeaningfulSlotContent(Astro.slots, "before");
-const hasAfterSlot = await hasMeaningfulSlotContent(Astro.slots, "after");
+const hasBeforeSlot = Astro.slots.has("before");
+const hasAfterSlot = Astro.slots.has("after");
 const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeContentSections;
 const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterContentSections;
 ---

@@ -1,6 +1,5 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
-import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const {
   direction = "row",
@@ -33,7 +32,7 @@ const alignMap = {
 const alignClass = alignMap[alignX as keyof typeof alignMap] ?? "align-start";
 
 const hasButtonSections = buttonSections?.length > 0;
-const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
+const hasSlotContent = Astro.slots.has("default");
 const usesButtonSections = !hasSlotContent;
 
 if (!_component && !hasButtonSections && !hasSlotContent) return;

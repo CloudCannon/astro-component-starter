@@ -16,30 +16,45 @@ const {
 } = Astro.props;
 
 const hasSlot = Astro.slots.has("default");
-let finalText = text;
-
-if (hasSlot) {
-  const slotContent = await Astro.slots.render("default");
-
-  finalText = slotContent?.toString().trim() || text;
-}
 ---
 
-<Button
-  element="button"
-  type="submit"
-  text={finalText}
-  variant={variant}
-  size={size}
-  iconName={iconName}
-  iconPosition={iconPosition}
-  hideText={hideText}
-  disabled={disabled}
-  editable={editable}
-  data-prop="text"
-  class:list={["submit", className]}
-  {...htmlAttributes}
-/>
+{
+  hasSlot ? (
+    <Button
+      element="button"
+      type="submit"
+      text={text}
+      variant={variant}
+      size={size}
+      iconName={iconName}
+      iconPosition={iconPosition}
+      hideText={hideText}
+      disabled={disabled}
+      editable={editable}
+      data-prop="text"
+      class:list={["submit", className]}
+      {...htmlAttributes}
+    >
+      <slot />
+    </Button>
+  ) : (
+    <Button
+      element="button"
+      type="submit"
+      text={text}
+      variant={variant}
+      size={size}
+      iconName={iconName}
+      iconPosition={iconPosition}
+      hideText={hideText}
+      disabled={disabled}
+      editable={editable}
+      data-prop="text"
+      class:list={["submit", className]}
+      {...htmlAttributes}
+    />
+  )
+}
 
 <style lang="pcss" is:global>
   @layer components {

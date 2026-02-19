@@ -1,7 +1,6 @@
 ---
 import Button from "@core-elements/button/Button.astro";
 import CarouselSlide from "./CarouselSlide.astro";
-import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const {
   slides = [],
@@ -67,7 +66,7 @@ const carouselStyles = `
   --min-slide-width: ${minSlideWidth}px;
   ${style}
 `.trim();
-const hasSlotContent = await hasMeaningfulSlotContent(Astro.slots);
+const hasSlotContent = Astro.slots.has("default");
 const usesSlidesArray = !hasSlotContent;
 ---
 
@@ -151,7 +150,11 @@ const usesSlidesArray = !hasSlotContent;
       const slidesToScroll = carousel.hasAttribute("data-slides-to-scroll")
         ? Number(carousel.getAttribute("data-slides-to-scroll")) || "auto"
         : "auto";
-      const align = carousel.getAttribute("data-align") || "start";
+      const alignAttr = carousel.getAttribute("data-align");
+      const align =
+        alignAttr === "start" || alignAttr === "center" || alignAttr === "end"
+          ? (alignAttr as "start" | "center" | "end")
+          : "start";
 
       const plugins = [];
       if (carousel.hasAttribute("data-autoplay")) {

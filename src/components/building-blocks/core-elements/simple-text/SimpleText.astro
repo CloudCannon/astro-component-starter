@@ -26,8 +26,7 @@ const textDataAttributes =
     : {};
 
 const hasText = text?.trim().length > 0;
-const slotContent = Astro.slots.has("default") ? await Astro.slots.render("default") : null;
-const hasSlotContent = (slotContent?.toString().trim().length ?? 0) > 0;
+const hasSlotContent = Astro.slots.has("default");
 
 if (!_component && !hasText && !hasSlotContent) return;
 ---

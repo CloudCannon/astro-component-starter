@@ -1,6 +1,5 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
-import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
 
 const {
   firstColumnContentSections = [],
@@ -37,8 +36,8 @@ const firstPropName = reverse ? "secondColumnContentSections" : "firstColumnCont
 const secondPropName = reverse ? "firstColumnContentSections" : "secondColumnContentSections";
 const firstSlotName = reverse ? "second" : "first";
 const secondSlotName = reverse ? "first" : "second";
-const firstPaneUsesSlot = await hasMeaningfulSlotContent(Astro.slots, firstSlotName);
-const secondPaneUsesSlot = await hasMeaningfulSlotContent(Astro.slots, secondSlotName);
+const firstPaneUsesSlot = Astro.slots.has(firstSlotName);
+const secondPaneUsesSlot = Astro.slots.has(secondSlotName);
 const firstPaneEditable = editable && !firstPaneUsesSlot;
 const secondPaneEditable = editable && !secondPaneUsesSlot;
 
