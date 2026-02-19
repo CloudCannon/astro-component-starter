@@ -23,18 +23,18 @@ const {
 const hasImage = Boolean(imageSource);
 ---
 
-<CarouselSlide editable={editable} {...htmlAttributes}>
+<CarouselSlide editable={false} {...htmlAttributes}>
   <Card
     class:list={["feature-slider-item", className]}
     paddingHorizontal="xs"
     paddingVertical="none"
-    editable={editable}
+    editable={false}
   >
     <Split
       distributionMode="two-thirds-third"
       minSplitWidth={minSplitWidth}
       verticalAlignment="center"
-      editable={editable}
+      editable={false}
     >
       <Fragment slot="first">
         <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>

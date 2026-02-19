@@ -35,17 +35,14 @@ const {
     editable={editable}
   >
     {
-      Array.isArray(slides) &&
-        slides.length > 0 &&
-        slides.map((slide, index) => (
-          <FeatureSliderItem
-            data-editable="array-item"
-            aria-label={`Slide ${index + 1} of ${slides.length}`}
-            {...slide}
-            data-index={index}
-            editable={editable}
-          />
-        ))
+      slides.map((slide: any, index: number) => (
+        <FeatureSliderItem
+          data-editable="array-item"
+          aria-label={`Slide ${index + 1} of ${slides.length}`}
+          {...slide}
+          editable={editable}
+        />
+      ))
     }
   </Carousel>
 </CustomSection>
