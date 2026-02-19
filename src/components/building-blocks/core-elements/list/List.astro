@@ -1,6 +1,6 @@
 ---
-import ListItem from "./ListItem.astro";
 import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
+import ListItem from "./ListItem.astro";
 
 const {
   items = [],
@@ -19,8 +19,6 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": customDataProp,
-      "data-component-key": "_component",
-      "data-id-key": "_component",
     }
   : {};
 

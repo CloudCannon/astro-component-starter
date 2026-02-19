@@ -1,6 +1,6 @@
 ---
-import DefinitionListItem from "./DefinitionListItem.astro";
 import { hasMeaningfulSlotContent } from "@components/utils/slotContent";
+import DefinitionListItem from "./DefinitionListItem.astro";
 
 const {
   items,
@@ -16,8 +16,6 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": customDataProp,
-      "data-component-key": "_component",
-      "data-id-key": "_component",
     }
   : {};
 const hasItems = items?.length > 0;
@@ -29,7 +27,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
 <dl
   class:list={["definition-list", `alignment-${alignX}`, className]}
-  {...(editable && usesItemsArray ? arrayDataAttributes : {})}
+  {...editable && usesItemsArray ? arrayDataAttributes : {}}
   {...htmlAttributes}
 >
   <slot>
@@ -37,13 +35,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
       items &&
         items.length > 0 &&
         items.map((item: any) => (
-        <DefinitionListItem
-          data-editable="array-item"
-          title={item.title}
-          text={item.text}
-          editable={editable && usesItemsArray}
-        />
-      ))
+          <DefinitionListItem
+            data-editable="array-item"
+            title={item.title}
+            text={item.text}
+            editable={editable && usesItemsArray}
+          />
+        ))
     }
   </slot>
 </dl>
