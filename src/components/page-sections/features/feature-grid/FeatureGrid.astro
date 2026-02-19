@@ -46,8 +46,16 @@ const {
   >
     {
       features.map((feature: any, index: number) => (
-        <GridItem data-editable="array-item">
-          <FeatureItem {...feature} class="feature-grid-item" data-index={index} />
+        <GridItem
+          data-editable="array-item"
+          data-component="building-blocks/wrappers/grid/grid-item"
+        >
+          <FeatureItem
+            {...feature}
+            data-component="page-sections/features/feature-grid/feature-item"
+            class="feature-grid-item"
+            data-index={index}
+          />
         </GridItem>
       ))
     }
