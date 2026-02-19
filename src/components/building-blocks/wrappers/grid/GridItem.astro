@@ -14,23 +14,24 @@ const hasDefaultSlot = await hasMeaningfulSlotContent(Astro.slots);
 const usesContentSections = !hasDefaultSlot;
 ---
 
-<div
-  class:list={["grid-item", className]}
-  data-editable={editable ? "array" : undefined}
-  data-prop="contentSections"
-  {...htmlAttributes}
->
-  <slot>
-    {
-      contentSections && contentSections.length > 0 && (
-        <RenderBlock
-          contentSections={contentSections}
-          propName="contentSections"
-          editable={editable}
-        />
-      )
-    }
-  </slot>
+<div class:list={["grid-item", className]} {...htmlAttributes}>
+  <div
+    class="grid-item-content"
+    data-editable={editable ? "array" : undefined}
+    data-prop="contentSections"
+  >
+    <slot>
+      {
+        contentSections && contentSections.length > 0 && (
+          <RenderBlock
+            contentSections={contentSections}
+            propName="contentSections"
+            editable={editable}
+          />
+        )
+      }
+    </slot>
+  </div>
 </div>
 
 <style lang="pcss" is:global>
@@ -38,12 +39,15 @@ const usesContentSections = !hasDefaultSlot;
     .grid-item {
       height: 100%;
       container-type: inline-size;
-
-      > *:only-child {
+      > .grid-item-content {
         height: 100%;
       }
 
-      > *:first-child {
+      > .grid-item-content > *:only-child {
+        height: 100%;
+      }
+
+      > .grid-item-content > *:first-child {
         margin-top: 0 !important;
       }
     }
