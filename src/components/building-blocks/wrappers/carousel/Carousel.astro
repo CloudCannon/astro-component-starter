@@ -80,15 +80,7 @@ const usesSlidesArray = !hasSlotContent;
   {...dataAttributes}
 >
   <div class="viewport">
-    <div
-      class="track"
-      {...editable && usesSlidesArray
-        ? {
-            "data-editable": "array",
-            "data-prop": customDataProp,
-          }
-        : {}}
-    >
+    <div class="track" data-editable={editable ? "array" : undefined} data-prop={customDataProp}>
       {
         slides.length > 0 ? (
           slides.map((slide: any, index: number) => (
