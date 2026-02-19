@@ -5,7 +5,6 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
 import FeatureItem from "@features/feature-grid/FeatureItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
-import GridItem from "@wrappers/grid/GridItem.astro";
 
 const {
   eyebrow = "",
@@ -55,9 +54,7 @@ const {
   >
     {
       features.map((feature: any) => (
-        <GridItem data-editable="array-item" editable={false}>
-          <FeatureItem {...feature} class="feature-grid-item" editable={editable} />
-        </GridItem>
+        <FeatureItem data-editable="array-item" {...feature} class="feature-grid-item" editable={editable} />
       ))
     }
   </Grid>

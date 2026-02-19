@@ -4,6 +4,7 @@ import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
 import Card from "@wrappers/card/Card.astro";
+import CarouselSlide from "@wrappers/carousel/CarouselSlide.astro";
 import Split from "@wrappers/split/Split.astro";
 
 const {
@@ -22,39 +23,40 @@ const {
 const hasImage = Boolean(imageSource);
 ---
 
-<Card
-  class:list={["feature-slider-item", className]}
-  paddingHorizontal="xs"
-  paddingVertical="none"
-  editable={editable}
-  {...htmlAttributes}
->
-  <Split
-    distributionMode="two-thirds-third"
-    minSplitWidth={minSplitWidth}
-    verticalAlignment="center"
+<CarouselSlide editable={editable} {...htmlAttributes}>
+  <Card
+    class:list={["feature-slider-item", className]}
+    paddingHorizontal="xs"
+    paddingVertical="none"
     editable={editable}
   >
-    <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
-        {eyebrow}
-      </SimpleText>
-      <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title" editable={editable}>
-        {title}
-      </Heading>
-      <Text data-prop="description" text={description} editable={editable} />
-    </Fragment>
-    <Image
-      slot="second"
-      source={imageSource}
-      alt={imageAlt || title}
-      rounded={true}
-      aspectRatio="portrait"
-      priority={true}
+    <Split
+      distributionMode="two-thirds-third"
+      minSplitWidth={minSplitWidth}
+      verticalAlignment="center"
       editable={editable}
-      data-prop-src="imageSource"
-      data-prop-alt="imageAlt"
-      data-editable="image"
-    />
-  </Split>
-</Card>
+    >
+      <Fragment slot="first">
+        <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
+          {eyebrow}
+        </SimpleText>
+        <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title" editable={editable}>
+          {title}
+        </Heading>
+        <Text data-prop="description" text={description} editable={editable} />
+      </Fragment>
+      <Image
+        slot="second"
+        source={imageSource}
+        alt={imageAlt || title}
+        rounded={true}
+        aspectRatio="portrait"
+        priority={true}
+        editable={editable}
+        data-prop-src="imageSource"
+        data-prop-alt="imageAlt"
+        data-editable="image"
+      />
+    </Split>
+  </Card>
+</CarouselSlide>

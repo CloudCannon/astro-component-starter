@@ -4,7 +4,6 @@ import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import TeamItem from "@page-sections/people/team-grid/TeamItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
-import GridItem from "@wrappers/grid/GridItem.astro";
 
 const {
   eyebrow = "",
@@ -55,9 +54,13 @@ const {
   >
     {
       teamMembers.map((member: any, index: number) => (
-        <GridItem data-editable="array-item" editable={editable}>
-          <TeamItem {...member} class="team-grid-item" data-index={index} editable={editable} />
-        </GridItem>
+        <TeamItem
+          data-editable="array-item"
+          {...member}
+          class="team-grid-item"
+          data-index={index}
+          editable={editable}
+        />
       ))
     }
   </Grid>

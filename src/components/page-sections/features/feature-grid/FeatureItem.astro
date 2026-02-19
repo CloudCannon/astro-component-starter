@@ -3,6 +3,7 @@ import Heading from "@core-elements/heading/Heading.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 import Text from "@core-elements/text/Text.astro";
 import Card from "@wrappers/card/Card.astro";
+import GridItem from "@wrappers/grid/GridItem.astro";
 
 const {
   title = "",
@@ -17,42 +18,43 @@ const {
 } = Astro.props;
 ---
 
-<Card
-  {...htmlAttributes}
-  class:list={["feature-item", className]}
-  paddingHorizontal="lg"
-  paddingVertical="lg"
-  rounded
-  border
-  backgroundColor="base"
-  editable={false}
->
-  <Icon
-    class="feature-icon"
-    name={iconName}
-    size="lg"
-    color={iconColor}
-    background={iconBackground}
-    alignX="start"
-  />
-  <Heading
-    class="feature-title"
-    level="h3"
-    size="md"
-    alignX="start"
-    data-prop="title"
-    editable={editable}
+<GridItem editable={false} {...htmlAttributes}>
+  <Card
+    class:list={["feature-item", className]}
+    paddingHorizontal="lg"
+    paddingVertical="lg"
+    rounded
+    border
+    backgroundColor="base"
+    editable={false}
   >
-    {title}
-  </Heading>
-  <Text
-    class="feature-description"
-    alignX="start"
-    data-prop="description"
-    text={description}
-    editable={editable}
-  />
-</Card>
+    <Icon
+      class="feature-icon"
+      name={iconName}
+      size="lg"
+      color={iconColor}
+      background={iconBackground}
+      alignX="start"
+    />
+    <Heading
+      class="feature-title"
+      level="h3"
+      size="md"
+      alignX="start"
+      data-prop="title"
+      editable={editable}
+    >
+      {title}
+    </Heading>
+    <Text
+      class="feature-description"
+      alignX="start"
+      data-prop="description"
+      text={description}
+      editable={editable}
+    />
+  </Card>
+</GridItem>
 
 <style lang="pcss" is:global>
   @layer page-sections {
