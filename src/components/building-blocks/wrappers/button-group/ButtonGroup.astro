@@ -47,11 +47,7 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
   <slot>
     {
       buttonSections && buttonSections.length > 0 && (
-        <Component
-          contentSections={buttonSections}
-          editable={editable}
-          propName="buttonSections"
-        />
+        <Component contentSections={buttonSections} editable={editable} propName="buttonSections" />
       )
     }
   </slot>

@@ -31,7 +31,7 @@ const showIcons = listType === "icon";
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<ListTag
+<div
   class:list={[
     "list",
     `size-${size}`,
@@ -40,72 +40,89 @@ if (!_component && !hasItems && !hasSlotContent) return;
     `type-${listType}`,
     className,
   ]}
-  role="list"
-  {...editable && usesItemsArray ? arrayDataAttributes : {}}
-  {...htmlAttributes}
 >
-  <slot>
-    {
-      items &&
-        items.length > 0 &&
-        items.map((item: any) => (
-          <ListItem
-            data-editable="array-item"
-            text={item.text}
-            iconName={item.iconName}
-            iconColor={item.iconColor}
-            editable={editable}
-            showIcon={showIcons}
-          />
-        ))
-    }
-  </slot>
-</ListTag>
+  <ListTag
+    role="list"
+    {...editable && usesItemsArray ? arrayDataAttributes : {}}
+    {...htmlAttributes}
+  >
+    <slot>
+      {
+        items &&
+          items.length > 0 &&
+          items.map((item: any) => (
+            <ListItem
+              data-editable="array-item"
+              text={item.text}
+              iconName={item.iconName}
+              iconColor={item.iconColor}
+              editable={editable}
+              showIcon={showIcons}
+            />
+          ))
+      }
+    </slot>
+  </ListTag>
+</div>
 
 <style lang="pcss" is:global>
   @layer components {
     .list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-em-sm);
-      margin: 0;
-      margin-top: var(--spacing-lg);
-      padding-inline-start: var(--spacing-md);
+      & > :where(ul, ol) {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-em-sm);
+        margin: 0;
+        margin-top: var(--spacing-lg);
+        padding-inline-start: var(--spacing-md);
+      }
 
       &.direction-horizontal {
-        flex-flow: row wrap;
-        gap: var(--spacing-em-sm);
+        & > :where(ul, ol) {
+          flex-flow: row wrap;
+          gap: var(--spacing-em-sm);
+        }
       }
 
       &.type-bullet {
-        list-style: disc;
+        & > :where(ul, ol) {
+          list-style: disc;
+        }
       }
 
       &.type-numbered {
-        list-style: decimal;
+        & > :where(ul, ol) {
+          list-style: decimal;
+        }
       }
 
       &.type-bullet,
       &.type-numbered {
 
-        &.direction-horizontal > li:not(:first-child) {
+        &.direction-horizontal > :where(ul, ol) > li:not(:first-child) {
           margin-inline-start: var(--spacing-lg);
         }
       }
 
       &.type-icon {
-        list-style: none;
-        padding: 0;
+        & > :where(ul, ol) {
+          list-style: none;
+          padding: 0;
+        }
       }
 
       &.alignment-end {
-        align-items: flex-end;
-        justify-content: flex-end;
+        & > :where(ul, ol) {
+          align-items: flex-end;
+          justify-content: flex-end;
+        }
       }
 
       &.alignment-center {
-        align-items: center;
-        justify-content: center;
+        & > :where(ul, ol) {
+          align-items: center;
+          justify-content: center;
+        }
       }
 
       &.size-xs {
