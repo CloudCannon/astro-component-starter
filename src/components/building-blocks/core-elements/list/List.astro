@@ -39,13 +39,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
     `alignment-${alignX}`,
     `type-${listType}`,
     className,
+    { ...htmlAttributes },
   ]}
 >
-  <ListTag
-    role="list"
-    {...editable && usesItemsArray ? arrayDataAttributes : {}}
-    {...htmlAttributes}
-  >
+  <ListTag role="list" {...editable ? arrayDataAttributes : {}}>
     <slot>
       {
         items &&
