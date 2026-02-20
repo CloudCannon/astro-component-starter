@@ -14,13 +14,6 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const arrayDataAttributes = editable
-  ? {
-      "data-editable": "array",
-      "data-prop": customDataProp,
-    }
-  : {};
-
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const usesItemsArray = !hasSlotContent;
@@ -29,6 +22,14 @@ const ListTag = listType === "numbered" ? "ol" : "ul";
 const showIcons = listType === "icon";
 
 if (!_component && !hasItems && !hasSlotContent) return;
+
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataProp,
+      "data-component": "building-blocks/core-elements/list/list-item",
+    }
+  : {};
 ---
 
 <div
@@ -39,10 +40,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
     `alignment-${alignX}`,
     `type-${listType}`,
     className,
-    { ...htmlAttributes },
   ]}
+  {...htmlAttributes}
 >
-  <ListTag role="list" {...editable ? arrayDataAttributes : {}}>
+  <ListTag role="list" {...arrayDataAttributes}>
     <slot>
       {
         items &&
