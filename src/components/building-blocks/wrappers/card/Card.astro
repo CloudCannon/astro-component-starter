@@ -123,7 +123,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
     (usesAfterContentSections || hasAfterSlot) && (
       <div
         class="after-content"
-        data-editable={editable && usesAfterContentSections ? "array" : undefined}
+        data-editable={editable ? "array" : undefined}
         data-prop="afterContentSections"
       >
         <slot name="after">

@@ -16,7 +16,6 @@ const {
 
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const usesItemsArray = !hasSlotContent;
 
 const ListTag = listType === "numbered" ? "ol" : "ul";
 const showIcons = listType === "icon";

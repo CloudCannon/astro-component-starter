@@ -34,23 +34,29 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && ((!hasTitle && !hasTitleSlotContent) || (!hasText && !hasSlotContent))) return;
 ---
 
-<dt class:list={["title", className]} role="term" {...titleDataAttributes} {...htmlAttributes}>
-  <span {...titleDataAttributes}>
-    <slot name="title">
-      {title}
-    </slot>
-  </span>
-</dt>
-<dd class:list={["content", className]} role="definition" {...htmlAttributes}>
-  <span {...contentDataAttributes}>
-    <slot>
-      {text}
-    </slot>
-  </span>
-</dd>
+<div class="definition-list-row" {...htmlAttributes}>
+  <dt class:list={["title", className]} role="term" {...titleDataAttributes}>
+    <span {...titleDataAttributes}>
+      <slot name="title">
+        {title}
+      </slot>
+    </span>
+  </dt>
+  <dd class:list={["content", className]} role="definition">
+    <span {...contentDataAttributes}>
+      <slot>
+        {text}
+      </slot>
+    </span>
+  </dd>
+</div>
 
 <style lang="pcss" is:global>
   @layer components {
+    .definition-list-row {
+      display: contents;
+    }
+
     .title {
       font-weight: var(--font-weight-bold);
     }

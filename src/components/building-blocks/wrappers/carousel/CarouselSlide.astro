@@ -3,23 +3,26 @@ import Component from "@components/utils/renderBlock.astro";
 
 const { contentSections = [], editable = true, _component, ...htmlAttributes } = Astro.props;
 const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
 ---
 
 <div
   class="slide"
   role="group"
-  data-editable={editable && usesContentSections ? "array" : undefined}
-  data-prop="contentSections"
   {...htmlAttributes}
 >
-  <slot>
-    {
-      contentSections && contentSections.length > 0 && (
-        <Component contentSections={contentSections} editable={editable} />
-      )
-    }
-  </slot>
+  <div
+    class="slide-content"
+    data-editable={editable ? "array" : undefined}
+    data-prop="contentSections"
+  >
+    <slot>
+      {
+        contentSections && contentSections.length > 0 && (
+          <Component contentSections={contentSections} editable={editable} />
+        )
+      }
+    </slot>
+  </div>
 </div>
 
 <style lang="pcss" is:global>
@@ -29,10 +32,9 @@ const usesContentSections = !hasDefaultSlot;
     flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
     container-type: inline-size;
 
-    > [data-editable="array-item"]:first-child > *:first-child,
-    > :not([data-editable="array-item"]):first-child {
-      margin-top: 0 !important;
+      .slide-content > *:first-child {
+        margin-top: 0 !important;
+      }
     }
-  }
   }
 </style>

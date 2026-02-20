@@ -40,6 +40,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": dataProp,
+      "data-component": "building-blocks/wrappers/grid/grid-item",
     }
   : {};
 
@@ -50,25 +51,28 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  {...editable ? arrayDataAttributes : {}}
-  class:list={["grid", `layout-${layout}`, className]}
-  style={gridStyles}
   {...htmlAttributes}
 >
-  <slot>
-    {
-      items &&
-        items.length > 0 &&
-        items.map((item: any) => (
-          <GridItem
-            data-editable="array-item"
-            class:list={`layout-${layout}`}
-            contentSections={item.contentSections}
-            editable={editable}
-          />
-        ))
-    }
-  </slot>
+  <div
+    {...editable ? arrayDataAttributes : {}}
+    class:list={["grid", `layout-${layout}`, className]}
+    style={gridStyles}
+  >
+    <slot>
+      {
+        items &&
+          items.length > 0 &&
+          items.map((item: any) => (
+            <GridItem
+              data-editable="array-item"
+              class:list={`layout-${layout}`}
+              contentSections={item.contentSections}
+              editable={editable}
+            />
+          ))
+      }
+    </slot>
+  </div>
 </div>
 
 <style lang="pcss" is:global>

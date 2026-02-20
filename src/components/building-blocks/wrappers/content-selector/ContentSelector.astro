@@ -25,7 +25,6 @@ if (!htmlAttributes.id && label) {
 }
 
 const uniqueId = crypto.randomUUID();
-const usesItemsArray = items && items.length > 0;
 
 const arrayDataAttributes = editable
   ? {
@@ -79,7 +78,7 @@ const arrayDataAttributes = editable
     }
   </div>
 
-  <div class="panels" {...editable && usesItemsArray ? arrayDataAttributes : {}}>
+  <div class="panels" {...editable ? arrayDataAttributes : {}}>
     {
       items?.map((item: any, index: number) => (
         <ContentSelectorPanel

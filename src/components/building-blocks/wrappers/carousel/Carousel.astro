@@ -79,7 +79,12 @@ const usesSlidesArray = !hasSlotContent;
   {...dataAttributes}
 >
   <div class="viewport">
-    <div class="track" data-editable={editable ? "array" : undefined} data-prop={customDataProp}>
+    <div
+      class="track"
+      data-editable={editable ? "array" : undefined}
+      data-prop={customDataProp}
+      data-component="building-blocks/wrappers/carousel/carousel-slide"
+    >
       {
         slides.length > 0 ? (
           slides.map((slide: any, index: number) => (

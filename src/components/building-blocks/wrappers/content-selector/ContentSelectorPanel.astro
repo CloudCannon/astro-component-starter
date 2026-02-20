@@ -11,7 +11,6 @@ const {
 } = Astro.props;
 
 const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
 ---
 
 <div
@@ -20,13 +19,17 @@ const usesContentSections = !hasDefaultSlot;
   role="tabpanel"
   aria-labelledby={`tablabel-${uniqueId}-${index}`}
   aria-hidden={index !== 0}
-  data-editable={editable && usesContentSections ? "array" : undefined}
-  data-prop="contentSections"
   {...htmlAttributes}
 >
-  <slot>
-    {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
-  </slot>
+  <div
+    class="panel-content"
+    data-editable={editable ? "array" : undefined}
+    data-prop="contentSections"
+  >
+    <slot>
+      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
+    </slot>
+  </div>
 </div>
 
 <style lang="pcss" is:global>
@@ -37,8 +40,8 @@ const usesContentSections = !hasDefaultSlot;
       display: none;
       padding: 0 var(--spacing-md);
 
-      > [data-editable="array-item"]:first-child > *:first-child,
-      > :not([data-editable="array-item"]):first-child {
+      .panel-content > [data-editable="array-item"]:first-child > *:first-child,
+      .panel-content > :not([data-editable="array-item"]):first-child {
         margin-top: 0 !important;
       }
     }

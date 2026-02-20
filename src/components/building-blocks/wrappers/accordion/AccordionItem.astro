@@ -13,7 +13,6 @@ const {
 } = Astro.props;
 
 const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
 ---
 
 <details class="accordion-item" open={isOpen} name={accordionName} {...htmlAttributes}>
@@ -23,13 +22,11 @@ const usesContentSections = !hasDefaultSlot;
   </summary>
   <div
     class="accordion-item-detail"
-    data-editable={editable && usesContentSections ? "array" : undefined}
+    data-editable={editable ? "array" : undefined}
     data-prop="contentSections"
   >
     <slot>
-      {contentSections && (
-        <RenderBlock contentSections={contentSections} editable={editable} />
-      )}
+      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>
   </div>
 </details>

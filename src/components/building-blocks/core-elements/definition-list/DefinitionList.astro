@@ -15,34 +15,35 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": customDataProp,
+      "data-component": "building-blocks/core-elements/definition-list/definition-list-item",
     }
   : {};
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <dl
   class:list={["definition-list", `alignment-${alignX}`, className]}
-  {...editable && usesItemsArray ? arrayDataAttributes : {}}
   {...htmlAttributes}
 >
-  <slot>
-    {
-      items &&
-        items.length > 0 &&
-        items.map((item: any) => (
-          <DefinitionListItem
-            data-editable="array-item"
-            title={item.title}
-            text={item.text}
-            editable={editable && usesItemsArray}
-          />
-        ))
-    }
-  </slot>
+  <div class="definition-list-items" {...editable ? arrayDataAttributes : {}}>
+    <slot>
+      {
+        items &&
+          items.length > 0 &&
+          items.map((item: any) => (
+            <DefinitionListItem
+              data-editable="array-item"
+              title={item.title}
+              text={item.text}
+              editable={editable}
+            />
+          ))
+      }
+    </slot>
+  </div>
 </dl>
 
 <style lang="pcss" is:global>
@@ -59,7 +60,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
         grid-template-columns: 1fr 1fr;
         justify-content: center;
 
-        > .title {
+        .title {
           text-align: end;
         }
       }
@@ -69,18 +70,22 @@ if (!_component && !hasItems && !hasSlotContent) return;
         grid-template-columns: auto auto;
         justify-content: end;
 
-        > .title {
+        .title {
           text-align: start;
         }
 
-        > .content {
+        .content {
           text-align: end;
         }
       }
 
-      > .content {
+      .content {
         margin: 0;
       }
+    }
+
+    .definition-list-items {
+      display: contents;
     }
   }
 </style>

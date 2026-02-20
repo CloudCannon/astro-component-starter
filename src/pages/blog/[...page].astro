@@ -11,7 +11,7 @@ import Grid from "@wrappers/grid/Grid.astro";
 import GridItem from "@wrappers/grid/GridItem.astro";
 import { getCollection } from "astro:content";
 
-export async function getStaticPaths({ paginate }) {
+export async function getStaticPaths({ paginate }: { paginate: any }) {
   const blogPosts = (await getCollection("blog")).sort(
     (a: any, b: any) => b.data.date.getTime() - a.data.date.getTime()
   );
@@ -19,7 +19,7 @@ export async function getStaticPaths({ paginate }) {
   return paginate(blogPosts, { pageSize: 9 });
 }
 
-const { page } = Astro.props;
+const { page } = Astro.props as { page: any };
 
 // Try to load blog page from pages collection for hero sections
 let blogPage: any;
