@@ -24,26 +24,27 @@ const usesItemsArray = !hasSlotContent;
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<dl
-  class:list={["definition-list", `alignment-${alignX}`, className]}
-  {...editable && usesItemsArray ? arrayDataAttributes : {}}
-  {...htmlAttributes}
->
-  <slot>
-    {
-      items &&
-        items.length > 0 &&
-        items.map((item: any) => (
-          <DefinitionListItem
-            data-editable="array-item"
-            title={item.title}
-            text={item.text}
-            editable={editable && usesItemsArray}
-          />
-        ))
-    }
-  </slot>
-</dl>
+<div {...htmlAttributes}>
+  <dl
+    class:list={["definition-list", `alignment-${alignX}`, className]}
+    {...editable && usesItemsArray ? arrayDataAttributes : {}}
+  >
+    <slot>
+      {
+        items &&
+          items.length > 0 &&
+          items.map((item: any) => (
+            <DefinitionListItem
+              data-editable="array-item"
+              title={item.title}
+              text={item.text}
+              editable={editable && usesItemsArray}
+            />
+          ))
+      }
+    </slot>
+  </dl>
+</div>
 
 <style lang="pcss" is:global>
   @layer components {
