@@ -1,8 +1,7 @@
 ---
 import RenderBlock from "@components/utils/renderBlock.astro";
 
-const { action, formBlocks = [], class: className, editable = true, _component, ...htmlAttributes } =
-  Astro.props;
+const { action, formBlocks = [], class: className, _component, ...htmlAttributes } = Astro.props;
 ---
 
 <form
@@ -10,15 +9,11 @@ const { action, formBlocks = [], class: className, editable = true, _component, 
   action={action}
   method="post"
   enctype="multipart/form-data"
+  data-editable="array"
+  data-prop="formBlocks"
   {...htmlAttributes}
 >
-  <div
-    class="form-blocks"
-    data-editable={editable ? "array" : undefined}
-    data-prop="formBlocks"
-  >
-    <RenderBlock contentSections={formBlocks} propName="formBlocks" />
-  </div>
+  <RenderBlock contentSections={formBlocks} propName="formBlocks" />
   <slot />
 </form>
 

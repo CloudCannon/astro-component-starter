@@ -40,25 +40,17 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
 
 <div
   class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
+  data-editable={editable && usesButtonSections ? "array" : undefined}
+  data-prop="buttonSections"
   {...htmlAttributes}
 >
-  <div
-    class="button-group-array"
-    data-editable={editable ? "array" : undefined}
-    data-prop="buttonSections"
-  >
-    <slot>
-      {
-        buttonSections && buttonSections.length > 0 && (
-          <Component
-            contentSections={buttonSections}
-            editable={editable}
-            propName="buttonSections"
-          />
-        )
-      }
-    </slot>
-  </div>
+  <slot>
+    {
+      buttonSections && buttonSections.length > 0 && (
+        <Component contentSections={buttonSections} editable={editable} propName="buttonSections" />
+      )
+    }
+  </slot>
 </div>
 
 <style lang="pcss" is:global>
@@ -123,10 +115,6 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
           justify-content: flex-start;
         }
       }
-    }
-
-    .button-group-array {
-      display: contents;
     }
   }
 </style>

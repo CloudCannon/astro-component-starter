@@ -10,6 +10,7 @@ const {
 } = Astro.props;
 
 const hasDefaultSlot = Astro.slots.has("default");
+const usesContentSections = !hasDefaultSlot;
 ---
 
 <div class:list={["grid-item", className]} {...htmlAttributes}>
@@ -20,7 +21,7 @@ const hasDefaultSlot = Astro.slots.has("default");
   >
     <slot>
       {
-        contentSections && (
+        contentSections && contentSections.length > 0 && (
           <RenderBlock
             contentSections={contentSections}
             propName="contentSections"
