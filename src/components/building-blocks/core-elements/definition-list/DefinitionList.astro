@@ -61,7 +61,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
         grid-template-columns: 1fr 1fr;
         justify-content: center;
 
-        > .title {
+        > .title,
+        > .definition-list-item > .title {
           text-align: end;
         }
       }
@@ -71,16 +72,19 @@ if (!_component && !hasItems && !hasSlotContent) return;
         grid-template-columns: auto auto;
         justify-content: end;
 
-        > .title {
+        > .title,
+        > .definition-list-item > .title {
           text-align: start;
         }
 
-        > .content {
+        > .content,
+        > .definition-list-item > .content {
           text-align: end;
         }
       }
 
-      > .content {
+      > .content,
+      > .definition-list-item > .content {
         margin: 0;
       }
     }
