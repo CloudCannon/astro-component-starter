@@ -9,8 +9,10 @@ const {
   editable = true,
   "data-prop": customDataProp = "items",
   _component,
-  ...htmlAttributes
+  ...rawHtmlAttributes
 } = Astro.props;
+
+const { ["data-editable"]: dataEditableAttr, ...htmlAttributes } = rawHtmlAttributes;
 
 const slugifyLabel = (label: string) => {
   return label
@@ -34,6 +36,14 @@ const arrayDataAttributes = editable
     }
   : {};
 
+const outerEditableAttributes =
+  dataEditableAttr === "array-item" ? { "data-editable": dataEditableAttr } : {};
+
+const innerHtmlAttributes =
+  dataEditableAttr && dataEditableAttr !== "array-item"
+    ? { ...htmlAttributes, "data-editable": dataEditableAttr }
+    : htmlAttributes;
+
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const usesItemsArray = !hasSlotContent;
@@ -41,31 +51,34 @@ const usesItemsArray = !hasSlotContent;
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div
-  class:list={["accordion"]}
-  {...editable && usesItemsArray ? arrayDataAttributes : {}}
-  {...htmlAttributes}
->
-  <slot>
-    {
-      items &&
-        items.length > 0 &&
-        items.map((item: any, index: number) => {
-          const isFirst = index === 0 && openFirst;
+<div {...outerEditableAttributes}>
+  <div
+    class:list={["accordion"]}
+    {...editable && usesItemsArray ? arrayDataAttributes : {}}
+    {...innerHtmlAttributes}
+  >
+    <slot>
+      {
+        items &&
+          items.length > 0 &&
+          items.map((item: any, index: number) => {
+            const isFirst = index === 0 && openFirst;
 
-          return (
-            <AccordionItem
-              title={item.title}
-              contentSections={item.contentSections}
-              isOpen={isFirst}
-              accordionName={accordionName}
-              editable={editable}
-              data-editable="array-item"
-            />
-          );
-        })
-    }
-  </slot>
+            return (
+              <AccordionItem
+                title={item.title}
+                contentSections={item.contentSections}
+                isOpen={isFirst}
+                accordionName={accordionName}
+                editable={editable}
+                data-editable="array-item"
+                data-component="building-blocks/wrappers/accordion/accordion-item"
+              />
+            );
+          })
+      }
+    </slot>
+  </div>
 </div>
 
 <style lang="pcss" is:global>

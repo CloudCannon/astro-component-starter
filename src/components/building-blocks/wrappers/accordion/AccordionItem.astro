@@ -27,9 +27,7 @@ const usesContentSections = !hasDefaultSlot;
     data-prop="contentSections"
   >
     <slot>
-      {contentSections && (
-        <RenderBlock contentSections={contentSections} editable={editable} />
-      )}
+      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>
   </div>
 </details>
