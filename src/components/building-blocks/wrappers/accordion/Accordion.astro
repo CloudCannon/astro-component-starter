@@ -9,10 +9,8 @@ const {
   editable = true,
   "data-prop": customDataProp = "items",
   _component,
-  ...rawHtmlAttributes
+  ...htmlAttributes
 } = Astro.props;
-
-const { ["data-editable"]: dataEditableAttr, ...htmlAttributes } = rawHtmlAttributes;
 
 const slugifyLabel = (label: string) => {
   return label
@@ -36,14 +34,6 @@ const arrayDataAttributes = editable
     }
   : {};
 
-const outerEditableAttributes =
-  dataEditableAttr === "array-item" ? { "data-editable": dataEditableAttr } : {};
-
-const innerHtmlAttributes =
-  dataEditableAttr && dataEditableAttr !== "array-item"
-    ? { ...htmlAttributes, "data-editable": dataEditableAttr }
-    : htmlAttributes;
-
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const usesItemsArray = !hasSlotContent;
@@ -51,12 +41,8 @@ const usesItemsArray = !hasSlotContent;
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div {...outerEditableAttributes}>
-  <div
-    class:list={["accordion"]}
-    {...editable && usesItemsArray ? arrayDataAttributes : {}}
-    {...innerHtmlAttributes}
-  >
+<div class:list={["accordion"]} {...htmlAttributes}>
+  <div {...editable && usesItemsArray ? arrayDataAttributes : {}}>
     <slot>
       {
         items &&
