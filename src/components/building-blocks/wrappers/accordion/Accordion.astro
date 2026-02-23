@@ -31,6 +31,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": customDataProp,
+      "data-component": "building-blocks/wrappers/accordion/accordion-item",
     }
   : {};
 
@@ -58,7 +59,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
                 accordionName={accordionName}
                 editable={editable}
                 data-editable="array-item"
-                data-component="building-blocks/wrappers/accordion/accordion-item"
               />
             );
           })
