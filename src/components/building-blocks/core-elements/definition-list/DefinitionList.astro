@@ -28,7 +28,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <dl
     class:list={["definition-list", `alignment-${alignX}`, className]}
     {...editable && usesItemsArray ? arrayDataAttributes : {}}
-    data-component="building-blocks/core-elements/definition-list/definition-list-item"
+    data-component-key="_component"
   >
     <slot>
       {
@@ -39,7 +39,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
               data-editable="array-item"
               title={item.title}
               text={item.text}
-              data-component="building-blocks/core-elements/definition-list/definition-list-item"
               editable={editable && usesItemsArray}
             />
           ))
