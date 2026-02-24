@@ -59,6 +59,9 @@ const hasSlotContent = Astro.slots.has("default");
       pageSections={pageSections}
       hasPageSections={hasPageSections}
       hasSlotContent={hasSlotContent}
+      data-prop-page-sections="pageSections"
+      data-literal-has-page-sections="{hasPageSections}"
+      data-literal-has-slot-content="{hasSlotContent}"
     />
   </main>
   <Footer {...footer} />
