@@ -40,8 +40,8 @@ const description = frontmatter?.description ?? descriptionProp;
 const keywords = frontmatter?.keywords ?? keywordsProp;
 const image = frontmatter?.image ?? imageProp;
 const canonical = frontmatter?.canonical ?? canonicalProp;
-const pageSections = frontmatter?.pageSections;
-const hasPageSections = pageSections && pageSections.length > 0;
+const sections = frontmatter?.pageSections;
+const hasPageSections = sections && sections.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 ---
 
@@ -57,12 +57,12 @@ const hasSlotContent = Astro.slots.has("default");
   <main
     data-editable="component"
     data-component="utils/main-component"
-    data-prop-page-sections="pageSections"
+    data-prop-sections="sections"
     data-literal-has-page-sections={hasPageSections}
     data-literal-has-slot-content={hasSlotContent}
   >
     <MainComponent
-      pageSections={pageSections}
+      sections={sections}
       hasPageSections={hasPageSections}
       hasSlotContent={hasSlotContent}
     />
