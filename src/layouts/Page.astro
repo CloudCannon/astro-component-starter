@@ -1,7 +1,7 @@
 ---
 import Footer from "@components/navigation/footer/Footer.astro";
 import MainNavigation from "@components/navigation/main-nav/MainNav.astro";
-import Components from "@components/utils/renderBlock.astro";
+import MainComponent from "@components/utils/MainComponent.astro";
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
 import Layout from "@layouts/BaseLayout.astro";
@@ -53,19 +53,13 @@ const hasSlotContent = Astro.slots.has("default");
   canonical={canonical}
 >
   <MainNavigation {...mainNav} />
-  <main
-    data-pagefind-body
-    data-editable={hasPageSections ? "array" : undefined}
-    data-prop="pageSections"
-    data-component-key="_component"
-  >
-    {
-      hasPageSections ? (
-        <Components contentSections={pageSections} propName="pageSections" />
-      ) : hasSlotContent ? (
-        <slot />
-      ) : null
-    }
+
+  <main data-editable="component" data-component="utils/main-component">
+    <MainComponent
+      pageSections={pageSections}
+      hasPageSections={hasPageSections}
+      hasSlotContent={hasSlotContent}
+    />
   </main>
   <Footer {...footer} />
 </Layout>
