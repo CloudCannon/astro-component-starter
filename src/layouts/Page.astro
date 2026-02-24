@@ -58,14 +58,8 @@ const hasSlotContent = Astro.slots.has("default");
     data-editable="component"
     data-component="utils/main-component"
     data-prop-sections="sections"
-    data-literal-has-page-sections={hasPageSections}
-    data-literal-has-slot-content={hasSlotContent}
   >
-    <MainComponent
-      sections={sections}
-      hasPageSections={hasPageSections}
-      hasSlotContent={hasSlotContent}
-    />
+    <MainComponent sections={sections} />
   </main>
   <Footer {...footer} />
 </Layout>
