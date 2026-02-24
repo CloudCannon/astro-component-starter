@@ -1,18 +1,18 @@
 ---
 import Components from "@components/utils/renderBlock.astro";
 
-const { pageSections, hasPageSections, hasSlotContent } = Astro.props;
+const { sections, hasPageSections, hasSlotContent } = Astro.props;
 ---
 
 <div
   data-pagefind-body
   data-editable={hasPageSections ? "array" : undefined}
-  data-prop="pageSections"
+  data-prop="sections"
   data-component-key="_component"
 >
   {
     hasPageSections ? (
-      <Components contentSections={pageSections} propName="pageSections" />
+      <Components contentSections={sections} propName="sections" />
     ) : hasSlotContent ? (
       <slot />
     ) : null
