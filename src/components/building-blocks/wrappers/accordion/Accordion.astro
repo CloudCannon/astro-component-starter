@@ -42,7 +42,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div class:list={["accordion"]} {...htmlAttributes}>
-  <div>
+  <div {...editable && usesItemsArray ? arrayDataAttributes : {}}>
     <slot>
       {
         items &&
@@ -57,6 +57,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
                 isOpen={isFirst}
                 accordionName={accordionName}
                 editable={editable}
+                data-editable="array-item"
               />
             );
           })
