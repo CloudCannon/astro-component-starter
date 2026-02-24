@@ -10,7 +10,7 @@ pageSections:
       courtesy of <a href="https://pagefind.app/" target="_blank"
       rel="noopener">Pagefind</a> 💙)
     buttonSections: []
-    colorScheme: default
+    colorScheme: light
     backgroundColor: base
     paddingVertical: 4xl
   - _component: page-sections/builders/custom-section
@@ -30,7 +30,7 @@ pageSections:
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 2xl
-    colorScheme: default
+    colorScheme: light
     backgroundColor: base
     backgroundImage:
       source: ''

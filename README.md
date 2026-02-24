@@ -145,8 +145,8 @@ Customize your brand by editing CSS variables:
 
 **Colors** (themes):
 
-- `src/styles/themes/_default.pcss` - Light theme
-- `src/styles/themes/_contrast.pcss` - Dark theme
+- `src/styles/themes/_light.pcss` - Light theme
+- `src/styles/themes/_dark.pcss` - Dark theme
 
 **Typography**:
 

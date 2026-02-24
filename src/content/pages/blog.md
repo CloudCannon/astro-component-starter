@@ -10,7 +10,7 @@ pageSections:
       to be populated with genuine posts once your content strategy moves beyond
       placeholder text.
     buttonSections: []
-    colorScheme: default
+    colorScheme: light
     backgroundColor: base
 description: >-
   Read our latest articles and insights on web development, design, and

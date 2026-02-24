@@ -20,10 +20,10 @@ colorScheme:
     values:
       - id: inherit
         name: Inherit
-      - id: default
-        name: Default
-      - id: contrast
-        name: Contrast
+      - id: light
+        name: Light
+      - id: dark
+        name: Dark
 backgroundColor:
   type: select
   comment: Background color used behind the grid.

@@ -20,7 +20,7 @@ pageSections:
     imageAspectRatio: portrait
     buttonSections: []
     reverse: true
-    colorScheme: default
+    colorScheme: light
     backgroundColor: base
     paddingVertical: 4xl
   - _component: page-sections/info-blocks/faq-section
@@ -66,7 +66,7 @@ pageSections:
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 4xl
-    colorScheme: default
+    colorScheme: light
     backgroundColor: none
   - _component: page-sections/builders/custom-section
     label: ""
@@ -88,7 +88,7 @@ pageSections:
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md
-    colorScheme: contrast
+    colorScheme: dark
     backgroundColor: surface
     backgroundImage:
       source: ""
@@ -145,7 +145,7 @@ pageSections:
         imageSource: /src/assets/images/component-library/dunedin-cliff.jpg
         imageAlt: Long-Term Stability
         minSplitWidth: 0
-    colorScheme: contrast
+    colorScheme: dark
     backgroundColor: surface
     eyebrow: Why Carousel
     heading: Why this approach works
@@ -162,7 +162,7 @@ pageSections:
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 2xl
-    colorScheme: contrast
+    colorScheme: dark
     backgroundColor: surface
   - _component: page-sections/people/team-grid
     eyebrow: Our Team
@@ -208,7 +208,7 @@ pageSections:
           sizes.
         imageSource: /src/assets/images/component-library/profile4.jpg
         imageAlt: Emily Watson, Director of Operations
-    colorScheme: contrast
+    colorScheme: dark
     backgroundColor: surface
     paddingVertical: 2xl
   - _component: page-sections/ctas/cta-form
@@ -244,7 +244,7 @@ pageSections:
     imageSource: /src/assets/images/component-library/castle.jpg
     imageAlt: Get in touch
     reverse: false
-    colorScheme: contrast
+    colorScheme: dark
     backgroundColor: surface
     paddingVertical: 4xl
 ---

@@ -17,7 +17,7 @@ value:
       variant: primary
       size: md
   reverse: false
-  colorScheme: default
+  colorScheme: light
   backgroundColor: base
   rounded: false
 preview:

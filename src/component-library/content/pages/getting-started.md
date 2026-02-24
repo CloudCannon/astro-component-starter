@@ -222,8 +222,8 @@ Your site's brand colors, content widths, font sizes, and other styling aspects 
 
 **Brand colors** are defined in:
 
-- **`src/styles/themes/_default.pcss`** — Light theme variables
-- **`src/styles/themes/_contrast.pcss`** — Dark theme variables
+- **`src/styles/themes/_light.pcss`** — Light theme variables
+- **`src/styles/themes/_dark.pcss`** — Dark theme variables
 
 **Typography and layout** are defined in:
 

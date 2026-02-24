@@ -13,7 +13,6 @@
     "build:no-library": "DISABLE_COMPONENT_LIBRARY=true astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate:structures": "node structuresGenerator.js",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:yml",
     "lint:js": "eslint .",
     "lint:yml": "eslint \"**/*.{yml,yaml}\"",

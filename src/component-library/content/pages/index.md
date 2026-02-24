@@ -42,7 +42,7 @@ Styles are organized into:
 
 * **Variables** (`src/styles/variables/`) — Design tokens for colors, spacing, typography, and more
 * **Base styles** (`src/styles/base/`) — Reset, typography, forms, and HTML element defaults
-* **Themes** (`src/styles/themes/`) — Color scheme definitions for default (light) and contrast (dark) themes.
+* **Themes** (`src/styles/themes/`) — Color scheme definitions for light (default) and dark (contrast) themes.
 * **Component styles** — Scoped styles within each component file
 
 ### JavaScript

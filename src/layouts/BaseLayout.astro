@@ -20,7 +20,7 @@ const pageImage = props.image || seoData.logoSource;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="default">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -29,6 +29,8 @@ const pageImage = props.image || seoData.logoSource;
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
+
+    {import.meta.env.DEV ? <script type="module" src="/@vite/client"></script> : null}
 
     <script>
       if (window.inEditorMode) {
