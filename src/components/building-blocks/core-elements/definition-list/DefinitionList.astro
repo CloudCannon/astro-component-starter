@@ -23,10 +23,7 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div
-  class:list={["definition-list", `alignment-${alignX}`, className]}
-  {...htmlAttributes}
->
+<div class:list={["definition-list", `alignment-${alignX}`, className]} {...htmlAttributes}>
   <dl {...editable ? arrayDataAttributes : {}} data-id-key="_component">
     <slot>
       {
@@ -35,6 +32,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
           items.map((item: any) => (
             <DefinitionListItem
               data-editable="array-item"
+              data-component="building-blocks/core-elements/definition-list/definition-list-item"
+              _component={item._component}
               title={item.title}
               text={item.text}
               editable={editable}
