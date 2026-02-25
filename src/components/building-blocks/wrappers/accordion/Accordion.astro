@@ -42,7 +42,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div class:list={["accordion"]} {...htmlAttributes}>
-  <div {...editable ? arrayDataAttributes : {}}>
+  <div {...editable ? arrayDataAttributes : {}} data-id-key="_component">
     <slot>
       {
         items &&

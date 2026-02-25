@@ -23,12 +23,11 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div {...htmlAttributes}>
-  <dl
-    class:list={["definition-list", `alignment-${alignX}`, className]}
-    {...editable ? arrayDataAttributes : {}}
-    data-id-key="_component"
-  >
+<div
+  class:list={["definition-list", `alignment-${alignX}`, className]}
+  {...htmlAttributes}
+>
+  <dl {...editable ? arrayDataAttributes : {}} data-id-key="_component">
     <slot>
       {
         items &&
@@ -49,41 +48,47 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style lang="pcss" is:global>
   @layer components {
     .definition-list {
-      display: grid;
-      gap: var(--spacing-em-sm) var(--spacing-em-md);
-      grid-template-columns: auto 1fr;
-      margin: 0;
-      margin-top: var(--spacing-lg);
+      & > dl {
+        display: grid;
+        gap: var(--spacing-em-sm) var(--spacing-em-md);
+        grid-template-columns: auto 1fr;
+        margin: 0;
+        margin-top: var(--spacing-lg);
+      }
 
       &.alignment-center {
-        align-items: center;
-        grid-template-columns: 1fr 1fr;
-        justify-content: center;
+        & > dl {
+          align-items: center;
+          grid-template-columns: 1fr 1fr;
+          justify-content: center;
+        }
 
-        > .title,
-        > .definition-list-item > .title {
+        & > dl > .title,
+        & > dl > .definition-list-item > .title {
           text-align: end;
         }
       }
 
       &.alignment-end {
-        align-items: end;
-        grid-template-columns: auto auto;
-        justify-content: end;
+        & > dl {
+          align-items: end;
+          grid-template-columns: auto auto;
+          justify-content: end;
+        }
 
-        > .title,
-        > .definition-list-item > .title {
+        & > dl > .title,
+        & > dl > .definition-list-item > .title {
           text-align: start;
         }
 
-        > .content,
-        > .definition-list-item > .content {
+        & > dl > .content,
+        & > dl > .definition-list-item > .content {
           text-align: end;
         }
       }
 
-      > .content,
-      > .definition-list-item > .content {
+      & > dl > .content,
+      & > dl > .definition-list-item > .content {
         margin: 0;
       }
     }
