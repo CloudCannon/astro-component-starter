@@ -41,8 +41,6 @@ const keywords = frontmatter?.keywords ?? keywordsProp;
 const image = frontmatter?.image ?? imageProp;
 const canonical = frontmatter?.canonical ?? canonicalProp;
 const sections = frontmatter?.pageSections;
-const hasPageSections = sections && sections.length > 0;
-const hasSlotContent = Astro.slots.has("default");
 ---
 
 <Layout

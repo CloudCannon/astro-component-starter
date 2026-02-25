@@ -19,7 +19,6 @@ const arrayDataAttributes = editable
   : {};
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
@@ -27,8 +26,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <div {...htmlAttributes}>
   <dl
     class:list={["definition-list", `alignment-${alignX}`, className]}
-    {...editable && usesItemsArray ? arrayDataAttributes : {}}
-    data-component-key="_component"
+    {...editable ? arrayDataAttributes : {}}
+    data-id-key="_component"
   >
     <slot>
       {
@@ -39,7 +38,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
               data-editable="array-item"
               title={item.title}
               text={item.text}
-              editable={editable && usesItemsArray}
+              editable={editable}
             />
           ))
       }
