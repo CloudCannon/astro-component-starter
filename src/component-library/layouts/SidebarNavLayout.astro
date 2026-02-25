@@ -23,11 +23,11 @@ const sideNavData = await generateNavData(navData);
   <Side navData={sideNavData} />
 </div>
 
-<style lang="pcss">
+<style>
   .sidebar-logo-container {
+    align-items: center;
     display: flex;
     justify-content: space-between;
-    align-items: center;
     margin-top: 5px;
 
     :global(.icon) {
@@ -35,8 +35,8 @@ const sideNavData = await generateNavData(navData);
       max-width: 138px;
 
       :global(svg) {
-        width: 100%;
         height: 100%;
+        width: 100%;
       }
     }
   }

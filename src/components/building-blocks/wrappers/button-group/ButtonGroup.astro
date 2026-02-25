@@ -53,12 +53,12 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
   </slot>
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .button-group {
-      position: relative;
-      margin-top: var(--spacing-lg);
       container-type: inline-size;
+      margin-top: var(--spacing-lg);
+      position: relative;
       width: 100%;
 
       & {

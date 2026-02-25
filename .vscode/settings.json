@@ -6,6 +6,13 @@
     "source.organizeImports": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
+  "files.associations": {
+    "*.pcss": "postcss",
+    "*.postcss": "postcss"
+  },
+  "emmet.includeLanguages": {
+    "postcss": "css"
+  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

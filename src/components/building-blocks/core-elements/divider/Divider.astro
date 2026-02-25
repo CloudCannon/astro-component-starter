@@ -10,7 +10,7 @@ const { paddingVertical = "md", class: className, _component, ...htmlAttributes 
   <hr class="rule" />
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .divider {
       &.padding-y-none {
@@ -46,9 +46,9 @@ const { paddingVertical = "md", class: className, _component, ...htmlAttributes 
       }
 
       > .rule {
-        margin: 0;
         border: 0;
         border-top: 2px solid var(--color-border-subtle);
+        margin: 0;
       }
     }
   }

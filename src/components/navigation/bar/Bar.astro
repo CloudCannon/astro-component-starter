@@ -295,7 +295,7 @@ function createNavItemData(item, level, parentGroupId) {
   initBarNavigation();
 </script>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .bar {
       font-weight: var(--font-weight-semibold);
@@ -351,11 +351,11 @@ function createNavItemData(item, level, parentGroupId) {
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
+        transform-origin: 50% 60%;
         transition:
           color var(--animation-normal) ease-in-out,
           transform var(--animation-normal) ease-in-out;
         width: 0.8rem;
-        transform-origin: 50% 60%;
       }
 
       .nav-item-trigger:hover .nav-item-icon {

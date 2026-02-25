@@ -1,7 +1,7 @@
 /* Note: Layer order is declared in layouts (BaseLayout.astro, LibraryLayout.astro) 
    using <style is:inline> to ensure it's processed before component styles */
-@import "_variables.pcss";
-@import "_theme.pcss";
-@import "_reset.pcss";
-@import "_base.pcss";
-@import "_utils.pcss";
+@import "_variables.css";
+@import "_theme.css";
+@import "_reset.css";
+@import "_base.css";
+@import "_utils.css";

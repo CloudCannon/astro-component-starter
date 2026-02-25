@@ -37,15 +37,15 @@ const fieldId = htmlAttributes.id || `textarea-${crypto.randomUUID()}`;
   >
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .textarea {
       display: flex;
       flex-direction: column;
       gap: var(--spacing-xs);
-      width: 100%;
       margin: 0;
       margin-bottom: var(--spacing-md);
+      width: 100%;
 
       .textarea-required {
         color: red;

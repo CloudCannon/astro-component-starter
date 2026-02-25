@@ -29,11 +29,11 @@ const usesContentSections = !hasDefaultSlot;
   </slot>
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .panel {
-      container-type: inline-size;
       animation: fade-in var(--animation-slow) ease-in-out forwards;
+      container-type: inline-size;
       display: none;
       padding: 0 var(--spacing-md);
 

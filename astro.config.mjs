@@ -1,15 +1,9 @@
 import sitemap from "@astrojs/sitemap";
 import editableRegions from "@cloudcannon/editable-regions/astro-integration";
-import postcssGlobalData from "@csstools/postcss-global-data";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
-import autoprefixer from "autoprefixer";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import postcssCustomMedia from "postcss-custom-media";
-import postcssEach from "postcss-each";
-import postcssImport from "postcss-import";
-import postcssNested from "postcss-nested";
 
 import mdx from "@astrojs/mdx";
 
@@ -50,18 +44,10 @@ export default defineConfig({
   vite: {
     css: {
       devSourcemap: true,
-      postcss: {
-        plugins: [
-          postcssImport,
-          postcssGlobalData({
-            files: [path.resolve(__dirname, "./src/styles/variables/_media.pcss")],
-          }),
-          postcssCustomMedia,
-          postcssNested,
-          postcssEach,
-          autoprefixer,
-        ],
-      },
+      transformer: "lightningcss",
+    },
+    build: {
+      cssMinify: "lightningcss",
     },
     resolve: {
       alias: {

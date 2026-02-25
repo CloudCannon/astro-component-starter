@@ -170,7 +170,7 @@ ${propsDestructuring}
 
 ${componentUsage}
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer page-sections {
     .${componentName} {
      

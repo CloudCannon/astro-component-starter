@@ -178,12 +178,12 @@ if (
   }
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .image {
       display: block;
-      overflow: hidden;
       margin-top: var(--spacing-lg);
+      overflow: hidden;
 
       &.ratio-square {
         aspect-ratio: var(--ratio-square);
@@ -219,8 +219,8 @@ if (
 
       &.background {
         inset: 0;
-        position: absolute;
         margin-top: 0;
+        position: absolute;
 
         > picture {
           height: 100%;

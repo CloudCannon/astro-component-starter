@@ -1,6 +1,6 @@
 @layer components {
   .component-library {
-    .library-container > .outer-content > .content {
+    & .library-container > .outer-content > .content {
       display: flex;
 
       > .nav-root {
@@ -9,15 +9,10 @@
 
       > .main {
         padding-block-end: var(--spacing-2xl);
-
-        @media (--from-md) {
-          border-left: 1px solid var(--color-border-subtle);
-          padding-inline-start: var(--spacing-em-lg);
-        }
       }
     }
 
-    .library-sidebar {
+    & .library-sidebar {
       display: none;
       flex-shrink: 0;
       height: 100vh;
@@ -39,17 +34,12 @@
           width: 100%;
         }
       }
-
-      @media (--from-md) {
-        display: block;
-      }
     }
 
-    .library-mobile-nav {
+    & .library-mobile-nav {
       align-items: center;
       background: var(--color-bg);
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-      display: block;
       display: flex;
       justify-content: space-between;
       padding: var(--spacing-md);
@@ -61,27 +51,22 @@
         height: 30px;
         width: auto;
 
-        svg {
+        & svg {
           height: 100%;
           width: 100%;
         }
       }
-
-      @media (--from-md) {
-        display: none;
-      }
     }
 
-    /* Component Viewer Styles */
-    .component-viewer {
-      .copy-button {
+    & .component-viewer {
+      & .copy-button {
         position: relative;
 
         &.copied {
           background-color: rgb(32, 219, 156);
 
           &::after {
-            animation: fadeInOut 3s ease-in-out;
+            animation: fade-in-out 3s ease-in-out;
             background: var(--color-bg-surface);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-xs);
@@ -103,7 +88,24 @@
     }
   }
 
-  @keyframes fadeInOut {
+  @media (width >= 768px) {
+    .component-library {
+      & .library-container > .outer-content > .content > .main {
+        border-left: 1px solid var(--color-border-subtle);
+        padding-inline-start: var(--spacing-em-lg);
+      }
+
+      & .library-sidebar {
+        display: block;
+      }
+
+      & .library-mobile-nav {
+        display: none;
+      }
+    }
+  }
+
+  @keyframes fade-in-out {
     0% {
       opacity: 0;
       transform: translateX(-50%) translateY(-4px);

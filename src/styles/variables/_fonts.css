@@ -28,7 +28,7 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  @media (--to-sm) {
+  @media (width < 640px) {
     --font-size-xs: 0.625rem;
     --font-size-sm: 0.75rem;
     --font-size-md: 0.875rem;

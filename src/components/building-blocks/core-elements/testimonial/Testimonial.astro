@@ -79,17 +79,17 @@ const authorDescriptionDataAttributes =
   </div>
 </blockquote>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .testimonial {
-      display: flex;
       background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex;
       flex-direction: column;
       gap: var(--spacing-em-sm);
       margin: 0;
       margin-top: var(--spacing-lg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
       padding: var(--spacing-md);
 
       &.alignment-center {
@@ -122,8 +122,8 @@ const authorDescriptionDataAttributes =
       }
 
       > .author {
-        display: flex;
         align-items: center;
+        display: flex;
         gap: var(--spacing-md);
         margin-top: var(--spacing-md);
 
@@ -134,8 +134,8 @@ const authorDescriptionDataAttributes =
 
         > .author-image {
           aspect-ratio: var(--ratio-square);
-          width: 80px;
           height: 80px;
+          width: 80px;
 
           picture {
             border-radius: var(--radius-full);

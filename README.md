@@ -145,21 +145,21 @@ Customize your brand by editing CSS variables:
 
 **Colors** (themes):
 
-- `src/styles/themes/_light.pcss` - Light theme
-- `src/styles/themes/_dark.pcss` - Dark theme
+- `src/styles/themes/_light.css` - Light theme
+- `src/styles/themes/_dark.css` - Dark theme
 
 **Typography**:
 
-- `src/styles/variables/_fonts.pcss` - Font families and sizing
+- `src/styles/variables/_fonts.css` - Font families and sizing
 
 **Layout**:
 
-- `src/styles/variables/_content-widths.pcss` - Max content widths
-- `src/styles/variables/_spacing.pcss` - Spacing scale
+- `src/styles/variables/_content-widths.css` - Max content widths
+- `src/styles/variables/_spacing.css` - Spacing scale
 
 **Colors**:
 
-- `src/styles/variables/_colors.pcss` - Color palette
+- `src/styles/variables/_colors.css` - Color palette
 
 ### Components
 

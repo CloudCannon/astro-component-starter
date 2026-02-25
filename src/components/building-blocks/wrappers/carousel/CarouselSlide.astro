@@ -22,12 +22,12 @@ const usesContentSections = !hasDefaultSlot;
   </slot>
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .slide {
-    flex-shrink: 0;
-    flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
     container-type: inline-size;
+    flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
+    flex-shrink: 0;
 
     > [data-editable="array-item"]:first-child > *:first-child,
     > :not([data-editable="array-item"]):first-child {

@@ -121,7 +121,7 @@ const getPageUrl = (pageNum: number) => {
   }
 </nav>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .pagination {
       display: flex;
@@ -175,21 +175,21 @@ const getPageUrl = (pageNum: number) => {
       }
 
       .pagination-arrow {
-        display: flex;
         align-items: center;
+        display: flex;
         justify-content: center;
         min-width: 2.5rem;
 
         .icon {
-          display: flex;
           align-items: center;
+          display: flex;
           justify-content: center;
         }
       }
 
       .pagination-prev {
-        border-inline-start: 1px solid var(--color-border);
         border-bottom-left-radius: var(--radius-sm);
+        border-inline-start: 1px solid var(--color-border);
         border-top-left-radius: var(--radius-sm);
       }
 

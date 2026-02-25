@@ -44,13 +44,13 @@ const fieldId = htmlAttributes.id || `slider-${crypto.randomUUID()}`;
   </label>
 </div>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .slider {
       display: flex;
-      width: 100%;
       margin: 0;
       margin-bottom: var(--spacing-md);
+      width: 100%;
 
       .slider-container {
         align-items: center;

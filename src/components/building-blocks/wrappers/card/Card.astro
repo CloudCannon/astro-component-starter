@@ -140,7 +140,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
   }
 </Tag>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     a.card:hover {
       transform: scale(1.05);
@@ -167,123 +167,99 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
       > .card-outer-content {
         height: 100%;
-      }
-
-      > .card-outer-content > .card-content {
-        height: 100%;
-        margin-inline: auto;
         position: relative;
-        z-index: var(--layer-1);
-        container-type: inline-size;
+        z-index: var(--layer-2);
 
-        > *:first-child {
-          margin-top: 0 !important;
-        }
+        > .card-content {
+          container-type: inline-size;
+          height: 100%;
+          margin-inline: auto;
+          position: relative;
+          z-index: var(--layer-1);
 
-        > *:last-child {
-          margin-bottom: 0 !important;
-        }
+          > *:first-child {
+            margin-top: 0 !important;
+          }
 
-        &.pad-x-xs {
-          padding-inline: var(--spacing-xs);
-        }
+          > *:last-child {
+            margin-bottom: 0 !important;
+          }
 
-        &.pad-x-sm {
-          padding-inline: var(--spacing-sm);
-        }
+          &.pad-x-xs {
+            padding-inline: var(--spacing-xs);
+          }
 
-        &.pad-x-md {
-          padding-inline: var(--spacing-md);
-        }
+          &.pad-x-sm {
+            padding-inline: var(--spacing-sm);
+          }
 
-        &.pad-x-lg {
-          padding-inline: var(--spacing-lg);
-        }
+          &.pad-x-md {
+            padding-inline: var(--spacing-md);
+          }
 
-        &.pad-x-xl {
-          padding-inline: var(--spacing-xl);
-        }
+          &.pad-x-lg {
+            padding-inline: var(--spacing-lg);
+          }
 
-        &.pad-x-2xl {
-          padding-inline: var(--spacing-2xl);
-        }
+          &.pad-x-xl {
+            padding-inline: var(--spacing-xl);
+          }
 
-        &.pad-y-xs {
-          padding-block: var(--spacing-xs);
-        }
+          &.pad-x-2xl {
+            padding-inline: var(--spacing-2xl);
+          }
 
-        &.pad-y-sm {
-          padding-block: var(--spacing-sm);
-        }
-
-        &.pad-y-md {
-          padding-block: var(--spacing-md);
-        }
-
-        &.pad-y-lg {
-          padding-block: var(--spacing-lg);
-        }
-
-        &.pad-y-xl {
-          padding-block: var(--spacing-xl);
-        }
-
-        &.pad-y-2xl {
-          padding-block: var(--spacing-2xl);
-        }
-
-        @media (--to-sm) {
           &.pad-y-xs {
             padding-block: var(--spacing-xs);
           }
 
           &.pad-y-sm {
-            padding-block: var(--spacing-xs);
-          }
-
-          &.pad-y-md {
             padding-block: var(--spacing-sm);
           }
 
-          &.pad-y-lg {
+          &.pad-y-md {
             padding-block: var(--spacing-md);
+          }
+
+          &.pad-y-lg {
+            padding-block: var(--spacing-lg);
           }
 
           &.pad-y-xl {
-            padding-block: var(--spacing-md);
+            padding-block: var(--spacing-xl);
           }
 
           &.pad-y-2xl {
-            padding-block: var(--spacing-lg);
+            padding-block: var(--spacing-2xl);
           }
-        }
 
-        &.max-width-xs {
-          max-width: var(--content-width-xs);
-        }
+          &.max-width-xs {
+            max-width: var(--content-width-xs);
+          }
 
-        &.max-width-sm {
-          max-width: var(--content-width-sm);
-        }
+          &.max-width-sm {
+            max-width: var(--content-width-sm);
+          }
 
-        &.max-width-md {
-          max-width: var(--content-width-md);
-        }
+          &.max-width-md {
+            max-width: var(--content-width-md);
+          }
 
-        &.max-width-lg {
-          max-width: var(--content-width-lg);
-        }
+          &.max-width-lg {
+            max-width: var(--content-width-lg);
+          }
 
-        &.max-width-xl {
-          max-width: var(--content-width-xl);
-        }
+          &.max-width-xl {
+            max-width: var(--content-width-xl);
+          }
 
-        &.max-width-2xl {
-          max-width: var(--content-width-2xl);
-        }
+          &.max-width-2xl {
+            max-width: var(--content-width-2xl);
+          }
 
-        &.max-width-3xl {
-          max-width: var(--content-width-3xl);
+          &.max-width-3xl {
+            max-width: var(--content-width-3xl);
+          }
         }
       }
 
@@ -301,11 +277,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         }
       }
 
-      > .card-outer-content {
-        position: relative;
-        z-index: var(--layer-2);
-      }
-
       > .background {
         inset: 0;
         position: absolute;
@@ -314,7 +285,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
       > .background-image {
         z-index: var(--layer-1);
       }
-      
+
       > .bg-base {
         background-color: var(--color-bg);
       }
@@ -329,6 +300,34 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
       > .bg-highlight {
         background-color: var(--color-bg-highlight);
+      }
+    }
+
+    @media (width < 640px) {
+      .card > .card-outer-content > .card-content {
+        &.pad-y-xs {
+          padding-block: var(--spacing-xs);
+        }
+
+        &.pad-y-sm {
+          padding-block: var(--spacing-xs);
+        }
+
+        &.pad-y-md {
+          padding-block: var(--spacing-sm);
+        }
+
+        &.pad-y-lg {
+          padding-block: var(--spacing-md);
+        }
+
+        &.pad-y-xl {
+          padding-block: var(--spacing-md);
+        }
+
+        &.pad-y-2xl {
+          padding-block: var(--spacing-lg);
+        }
       }
     }
   }

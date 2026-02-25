@@ -242,7 +242,7 @@ const usesSlidesArray = !hasSlotContent;
   document.addEventListener("astro:page-load", setupCarousels);
 </script>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .carousel {
       margin-top: var(--spacing-lg);
@@ -262,27 +262,27 @@ const usesSlidesArray = !hasSlotContent;
         flex-wrap: nowrap;
 
         > .slide {
-          flex-shrink: 0;
           flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
+          flex-shrink: 0;
           width: 100%;
         }
       }
 
       > .controls-wrapper {
-        display: flex;
         align-items: center;
-        justify-content: center;
+        display: flex;
         gap: var(--spacing-md);
-        margin-top: var(--spacing-sm);
+        justify-content: center;
         margin-bottom: var(--spacing-sm);
+        margin-top: var(--spacing-sm);
       }
 
       > .controls-wrapper > .prev,
       > .controls-wrapper > .next {
-        pointer-events: auto;
-        border-radius: var(--radius-full);
         background-color: var(--color-bg);
+        border-radius: var(--radius-full);
         flex-shrink: 0;
+        pointer-events: auto;
 
         &:hover {
           background-color: var(--color-bg-surface);
@@ -291,22 +291,22 @@ const usesSlidesArray = !hasSlotContent;
 
       > .controls-wrapper > .indicators {
         display: flex;
-        justify-content: center;
         gap: var(--spacing-sm);
+        justify-content: center;
       }
 
       > .controls-wrapper > .indicators > .indicator {
-        border-radius: var(--radius-full);
-        width: 8px;
         aspect-ratio: 1/1;
-        padding: 0;
-        min-width: 0;
+        border: none;
+        border-radius: var(--radius-full);
+        cursor: pointer;
         min-height: 0;
+        min-width: 0;
+        padding: 0;
         transition:
           transform var(--animation-normal) ease,
           background-color var(--animation-normal) ease;
-        border: none;
-        cursor: pointer;
+        width: 8px;
 
         &[data-selected="true"] {
           background-color: var(--color-brand-muted);

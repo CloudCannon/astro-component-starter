@@ -222,13 +222,13 @@ Your site's brand colors, content widths, font sizes, and other styling aspects 
 
 **Brand colors** are defined in:
 
-- **`src/styles/themes/_light.pcss`** — Light theme variables
-- **`src/styles/themes/_dark.pcss`** — Dark theme variables
+- **`src/styles/themes/_light.css`** — Light theme variables
+- **`src/styles/themes/_dark.css`** — Dark theme variables
 
 **Typography and layout** are defined in:
 
-- **`src/styles/variables/_fonts.pcss`** — Font families and sizing
-- **`src/styles/variables/_content-widths.pcss`** — Max content widths used by sections/layouts
+- **`src/styles/variables/_fonts.css`** — Font families and sizing
+- **`src/styles/variables/_content-widths.css`** — Max content widths used by sections/layouts
 
 Try updating some of these variables and see the impact across your entire site. Since components use these variables, changes propagate automatically.
 

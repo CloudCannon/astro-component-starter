@@ -128,7 +128,7 @@ const arrayDataAttributes = editable
   </script>
 </section>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     .content-selector {
       --content-selector-border-width: 1px;
@@ -141,36 +141,36 @@ const arrayDataAttributes = editable
 
       > .tabs {
         border: 0 solid var(--color-bg-muted);
-      }
 
-      > .tabs > .tab {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        display: block;
-        padding: var(--spacing-md);
-        position: relative;
-        transition: background-color var(--animation-normal) ease-in-out;
-        width: 100%;
-
-        &::before {
+        > .tab {
           background: transparent;
-          content: "";
-          inset-block: 0;
-          inset-inline-start: calc(var(--content-selector-border-width) * -1);
-          position: absolute;
-          transition:
-            transform var(--animation-normal),
-            background var(--animation-normal);
-        }
+          border: none;
+          cursor: pointer;
+          display: block;
+          padding: var(--spacing-md);
+          position: relative;
+          transition: background-color var(--animation-normal) ease-in-out;
+          width: 100%;
 
-        &:hover {
-          background: var(--color-state-hover);
-        }
-      }
+          &::before {
+            background: transparent;
+            content: "";
+            inset-block: 0;
+            inset-inline-start: calc(var(--content-selector-border-width) * -1);
+            position: absolute;
+            transition:
+              transform var(--animation-normal),
+              background var(--animation-normal);
+          }
 
-      > .tabs > .tab > .tab-heading {
-        margin: 0;
+          &:hover {
+            background: var(--color-state-hover);
+          }
+
+          > .tab-heading {
+            margin: 0;
+          }
+        }
       }
 
       > .panels {
@@ -178,47 +178,61 @@ const arrayDataAttributes = editable
         width: 100%;
       }
 
-      @each $i in 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 {
-        .input:nth-of-type($i):checked ~ .tabs > .tab:nth-of-type($i)::before {
-          background: var(--color-border-strong);
+      > .input:nth-of-type(1):checked ~ .tabs > .tab:nth-of-type(1)::before,
+      > .input:nth-of-type(2):checked ~ .tabs > .tab:nth-of-type(2)::before,
+      > .input:nth-of-type(3):checked ~ .tabs > .tab:nth-of-type(3)::before,
+      > .input:nth-of-type(4):checked ~ .tabs > .tab:nth-of-type(4)::before,
+      > .input:nth-of-type(5):checked ~ .tabs > .tab:nth-of-type(5)::before,
+      > .input:nth-of-type(6):checked ~ .tabs > .tab:nth-of-type(6)::before,
+      > .input:nth-of-type(7):checked ~ .tabs > .tab:nth-of-type(7)::before,
+      > .input:nth-of-type(8):checked ~ .tabs > .tab:nth-of-type(8)::before,
+      > .input:nth-of-type(9):checked ~ .tabs > .tab:nth-of-type(9)::before,
+      > .input:nth-of-type(10):checked ~ .tabs > .tab:nth-of-type(10)::before {
+        background: var(--color-border-strong);
+      }
+
+      > .input:nth-of-type(1):checked ~ .panels > .panel:nth-of-type(1),
+      > .input:nth-of-type(2):checked ~ .panels > .panel:nth-of-type(2),
+      > .input:nth-of-type(3):checked ~ .panels > .panel:nth-of-type(3),
+      > .input:nth-of-type(4):checked ~ .panels > .panel:nth-of-type(4),
+      > .input:nth-of-type(5):checked ~ .panels > .panel:nth-of-type(5),
+      > .input:nth-of-type(6):checked ~ .panels > .panel:nth-of-type(6),
+      > .input:nth-of-type(7):checked ~ .panels > .panel:nth-of-type(7),
+      > .input:nth-of-type(8):checked ~ .panels > .panel:nth-of-type(8),
+      > .input:nth-of-type(9):checked ~ .panels > .panel:nth-of-type(9),
+      > .input:nth-of-type(10):checked ~ .panels > .panel:nth-of-type(10) {
+        display: revert;
+      }
+
+      &.nav-start {
+        gap: var(--spacing-em-lg);
+
+        > .tabs {
+          border-inline-start-width: var(--content-selector-border-width);
+          max-width: 20rem;
+          min-width: 10rem;
+          width: fit-content;
+
+          > .tab::before {
+            width: var(--content-selector-border-width);
+          }
         }
+      }
 
-        .input:nth-of-type($i):checked ~ .panels > .panel:nth-of-type($i) {
-          display: revert;
+      &.nav-top {
+        flex-direction: column;
+
+        > .tabs {
+          border-bottom-width: var(--content-selector-border-width);
+          display: flex;
+          margin-bottom: var(--spacing-md);
+
+          > .tab::before {
+            height: var(--content-selector-border-width);
+            inset-block: 100%;
+            width: 100%;
+          }
         }
-      }
-    }
-
-    .content-selector.nav-start {
-      gap: var(--spacing-em-lg);
-
-      > .tabs {
-        border-inline-start-width: var(--content-selector-border-width);
-        max-width: 20rem;
-        min-width: 10rem;
-        width: fit-content;
-      }
-
-      > .tabs > .tab {
-        &::before {
-          width: var(--content-selector-border-width);
-        }
-      }
-    }
-
-    .content-selector.nav-top {
-      flex-direction: column;
-
-      > .tabs {
-        border-bottom-width: var(--content-selector-border-width);
-        display: flex;
-        margin-bottom: var(--spacing-md);
-      }
-
-      > .tabs > .tab::before {
-        height: var(--content-selector-border-width);
-        inset-block: 100%;
-        width: 100%;
       }
     }
   }

@@ -83,6 +83,7 @@ export default [
     files: ["**/*.astro"],
     plugins: {
       astro: eslintPluginAstro,
+      "@typescript-eslint": typescriptEslint,
     },
     languageOptions: {
       parser: astroEslintParser,

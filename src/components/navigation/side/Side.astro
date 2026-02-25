@@ -233,7 +233,7 @@ function hasCurrentChild(item) {
   }, 1000);
 </script>
 
-<style lang="pcss" is:global>
+<style is:global>
   @layer components {
     /* Sidebar Navigation Styles */
     .side {
@@ -307,8 +307,8 @@ function hasCurrentChild(item) {
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
-        transition: transform var(--animation-normal) ease;
         transform-origin: 50% 60%;
+        transition: transform var(--animation-normal) ease;
       }
 
       .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon {
