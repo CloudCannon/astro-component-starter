@@ -74,8 +74,8 @@ const usesContentSections = !hasDefaultSlot;
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable && usesContentSections ? "array" : undefined}
-      data-children-prop="contentSections"
+      data-editable={editable ? "array" : undefined}
+      data-prop="contentSections"
     >
       <slot>
         {contentSections && <Component contentSections={contentSections} editable={editable} />}
