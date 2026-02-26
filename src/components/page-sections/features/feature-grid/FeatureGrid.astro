@@ -51,15 +51,13 @@ const {
     data-prop="features"
     class="feature-grid-grid"
     editable={false}
+    data-editable="array"
+    data-prop="features"
+    data-id-key="_component"
   >
     {
       features.map((feature: any) => (
-        <FeatureItem
-          data-editable="array-item"
-          {...feature}
-          class="feature-grid-item"
-          editable={editable}
-        />
+        <FeatureItem data-editable="array-item" {...feature} editable={editable} />
       ))
     }
   </Grid>

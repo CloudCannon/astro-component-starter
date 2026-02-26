@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 ---
 
-<GridItem editable={false} {...htmlAttributes}>
+<GridItem editable={false} class="feature-grid-item" {...htmlAttributes}>
   <Card
     class:list={["feature-item", className]}
     paddingHorizontal="lg"
