@@ -45,24 +45,21 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <div {...arrayDataAttributes}>
     <slot>
       {
-        items &&
-          items.length > 0 &&
-          items.map((item: any, index: number) => {
-            const isFirst = index === 0 && openFirst;
+        items?.map((item: any, index: number) => {
+          const isFirst = index === 0 && openFirst;
 
-            return (
-              <AccordionItem
-                title={item.title}
-                contentSections={item.contentSections}
-                isOpen={isFirst}
-                accordionName={accordionName}
-                editable={editable}
-                data-editable="array-item"
-                data-component="building-blocks/wrappers/accordion/accordion-item"
-                _component={item._component}
-              />
-            );
-          })
+          return (
+            <AccordionItem
+              title={item.title}
+              contentSections={item.contentSections}
+              isOpen={isFirst}
+              accordionName={accordionName}
+              editable={editable}
+              data-editable="array-item"
+              _component={item._component}
+            />
+          );
+        })
       }
     </slot>
   </div>
