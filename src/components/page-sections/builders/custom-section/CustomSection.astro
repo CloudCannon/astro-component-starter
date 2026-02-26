@@ -15,6 +15,8 @@ const {
   editable = true,
   class: className,
   _component,
+  editable = true,
+  "data-children-prop": childrenDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
 
@@ -36,6 +38,14 @@ const slugifyLabel = (label: string) => {
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
+
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-id-key": "_component",
+      "data-prop": childrenDataProp,
+    }
+  : {};
 
 const hasDefaultSlot = Astro.slots.has("default");
 const usesContentSections = !hasDefaultSlot;
@@ -74,8 +84,7 @@ const usesContentSections = !hasDefaultSlot;
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable ? "array" : undefined}
-      data-prop="contentSections"
+      {...arrayDataAttributes}
     >
       <slot>
         {contentSections && <Component contentSections={contentSections} editable={editable} />}
