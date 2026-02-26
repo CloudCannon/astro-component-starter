@@ -14,6 +14,8 @@ const {
   editable = true,
   class: className,
   label,
+  "data-first-prop": customFirstDataProp = "firstColumnContentSections",
+  "data-second-prop": customSecondDataProp = "secondColumnContentSections",
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -32,14 +34,28 @@ if (!htmlAttributes.id && label) {
 // Get content blocks and prop names based on reverse setting
 const firstSplitBlocks = reverse ? secondColumnContentSections : firstColumnContentSections;
 const secondSplitBlocks = reverse ? firstColumnContentSections : secondColumnContentSections;
-const firstPropName = reverse ? "secondColumnContentSections" : "firstColumnContentSections";
-const secondPropName = reverse ? "firstColumnContentSections" : "secondColumnContentSections";
+const firstPropName = reverse ? customSecondDataProp : customFirstDataProp;
+const secondPropName = reverse ? customFirstDataProp : customSecondDataProp;
 const firstSlotName = reverse ? "second" : "first";
 const secondSlotName = reverse ? "first" : "second";
 const firstPaneUsesSlot = Astro.slots.has(firstSlotName);
 const secondPaneUsesSlot = Astro.slots.has(secondSlotName);
 const firstPaneEditable = editable && !firstPaneUsesSlot;
 const secondPaneEditable = editable && !secondPaneUsesSlot;
+
+const arrayDataAttributesFirst = editable
+  ? {
+      "data-editable": "array",
+      "data-id-key": "_component",
+    }
+  : {};
+
+const arrayDataAttributesSecond = editable
+  ? {
+      "data-editable": "array",
+      "data-id-key": "_component",
+    }
+  : {};
 
 const getReversedDistributionMode = (mode: string) => {
   const reverseMap = {
@@ -75,11 +91,7 @@ const splitId = `split-${crypto.randomUUID()}`;
   style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
   {...htmlAttributes}
 >
-  <div
-    class="pane first"
-    data-editable={firstPaneEditable ? "array" : undefined}
-    data-prop={firstPropName}
-  >
+  <div class="pane first" {...arrayDataAttributesFirst}>
     {
       reverse ? (
         <slot name="second">
@@ -104,11 +116,7 @@ const splitId = `split-${crypto.randomUUID()}`;
       )
     }
   </div>
-  <div
-    class="pane second"
-    data-editable={secondPaneEditable ? "array" : undefined}
-    data-prop={secondPropName}
-  >
+  <div class="pane second" {...arrayDataAttributesSecond}>
     {
       reverse ? (
         <slot name="first">

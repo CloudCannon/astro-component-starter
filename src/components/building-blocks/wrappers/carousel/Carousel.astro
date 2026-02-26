@@ -58,6 +58,14 @@ if (autoScroll) {
   dataAttributes["data-show-arrows"] = "false";
 }
 
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataProp,
+      "data-id-key": "_component",
+    }
+  : {};
+
 const carouselClasses = "carousel";
 
 // Build the style attribute, merging custom styles with CSS variables
@@ -66,8 +74,11 @@ const carouselStyles = `
   --min-slide-width: ${minSlideWidth}px;
   ${style}
 `.trim();
+
+const hasSlides = slides?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const usesSlidesArray = !hasSlotContent;
+
+if (!_component && !hasSlides && !hasSlotContent) return;
 ---
 
 <section
@@ -79,13 +90,16 @@ const usesSlidesArray = !hasSlotContent;
   {...dataAttributes}
 >
   <div class="viewport">
-    <div class="track" data-editable={editable ? "array" : undefined} data-prop={customDataProp}>
+    <div class="track" {...arrayDataAttributes}>
       {
         slides.length > 0 ? (
           slides.map((slide: any, index: number) => (
             <CarouselSlide
+              _component={slide._component}
+              data-component="building-blocks/wrappers/carousel/carousel-slide"
               data-editable="array-item"
               contentSections={slide.contentSections}
+              propName="contentSections"
               editable={editable}
               aria-label={`Slide ${index + 1} of ${slides.length}`}
             />

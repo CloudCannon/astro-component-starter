@@ -20,6 +20,9 @@ const {
   class: className,
   editable = true,
   _component,
+  "data-prop": customDataProp = "contentSections",
+  "data-prop-before": customDataPropBefore = "beforeContentSections",
+  "data-prop-after": customDataPropAfter = "afterContentSections",
   ...htmlAttributes
 } = Astro.props;
 
@@ -40,6 +43,27 @@ const slugifyLabel = (label: string) => {
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
+
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataProp,
+    }
+  : {};
+
+const arrayDataAttributesBefore = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataPropBefore,
+    }
+  : {};
+
+const arrayDataAttributesAfter = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataPropAfter,
+    }
+  : {};
 
 const Tag = link ? "a" : "div";
 const hasBeforeSlot = Astro.slots.has("before");
@@ -76,18 +100,10 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
   {
     (usesBeforeContentSections || hasBeforeSlot) && (
-      <div
-        class="before-content"
-        data-editable={editable ? "array" : undefined}
-        data-prop="beforeContentSections"
-      >
+      <div class="before-content" {...arrayDataAttributesBefore}>
         <slot name="before">
           {beforeContentSections && (
-            <Component
-              contentSections={beforeContentSections}
-              propName="beforeContentSections"
-              editable={editable}
-            />
+            <Component contentSections={beforeContentSections} editable={editable} />
           )}
         </slot>
       </div>
@@ -102,37 +118,20 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-      data-editable={editable ? "array" : undefined}
-      data-prop="contentSections"
+      {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <Component
-              contentSections={contentSections}
-              propName="contentSections"
-              editable={editable}
-            />
-          )
-        }
+        {contentSections && <Component contentSections={contentSections} editable={editable} />}
       </slot>
     </div>
   </div>
 
   {
     (usesAfterContentSections || hasAfterSlot) && (
-      <div
-        class="after-content"
-        data-editable={editable && usesAfterContentSections ? "array" : undefined}
-        data-prop="afterContentSections"
-      >
+      <div class="after-content" {...arrayDataAttributesAfter}>
         <slot name="after">
           {afterContentSections && (
-            <Component
-              contentSections={afterContentSections}
-              propName="afterContentSections"
-              editable={editable}
-            />
+            <Component contentSections={afterContentSections} editable={editable} />
           )}
         </slot>
       </div>

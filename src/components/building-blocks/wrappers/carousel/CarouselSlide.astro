@@ -1,38 +1,43 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
 
-const { contentSections = [], editable = true, _component, ...htmlAttributes } = Astro.props;
-const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
+const {
+  contentSections = [],
+  editable = true,
+  class: className,
+  _component,
+  "data-prop": customDataProp = "contentSections",
+  ...htmlAttributes
+} = Astro.props;
+
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataProp,
+    }
+  : {};
 ---
 
-<div
-  class="slide"
-  role="group"
-  data-editable={editable && usesContentSections ? "array" : undefined}
-  data-prop="contentSections"
-  {...htmlAttributes}
->
-  <slot>
-    {
-      contentSections && contentSections.length > 0 && (
-        <Component contentSections={contentSections} editable={editable} />
-      )
-    }
-  </slot>
+<div class:list={["slide", className]} role="group" {...htmlAttributes}>
+  <div class="slide__content" {...arrayDataAttributes}>
+    <slot>
+      {contentSections && <Component contentSections={contentSections} editable={editable} />}
+    </slot>
+  </div>
 </div>
 
 <style is:global>
   @layer components {
     .slide {
-    container-type: inline-size;
-    flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
-    flex-shrink: 0;
+      container-type: inline-size;
+      flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
+      flex-shrink: 0;
 
-    > [data-editable="array-item"]:first-child > *:first-child,
-    > :not([data-editable="array-item"]):first-child {
-      margin-top: 0 !important;
+      > .slide__content {
+        > *:first-child {
+          margin-top: 0 !important;
+        }
+      }
     }
-  }
   }
 </style>

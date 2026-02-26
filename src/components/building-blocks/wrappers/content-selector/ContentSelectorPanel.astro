@@ -7,11 +7,16 @@ const {
   index,
   uniqueId,
   _component,
+  "data-prop": customDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
 
-const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-prop": customDataProp,
+    }
+  : {};
 ---
 
 <div
@@ -20,13 +25,13 @@ const usesContentSections = !hasDefaultSlot;
   role="tabpanel"
   aria-labelledby={`tablabel-${uniqueId}-${index}`}
   aria-hidden={index !== 0}
-  data-editable={editable && usesContentSections ? "array" : undefined}
-  data-prop="contentSections"
   {...htmlAttributes}
 >
-  <slot>
-    {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
-  </slot>
+  <div class="panel__content" {...arrayDataAttributes}>
+    <slot>
+      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
+    </slot>
+  </div>
 </div>
 
 <style is:global>
@@ -37,8 +42,7 @@ const usesContentSections = !hasDefaultSlot;
       display: none;
       padding: 0 var(--spacing-md);
 
-      > [data-editable="array-item"]:first-child > *:first-child,
-      > :not([data-editable="array-item"]):first-child {
+      > .panel__content > *:first-child {
         margin-top: 0 !important;
       }
     }

@@ -6,25 +6,26 @@ const {
   editable = true,
   class: className,
   _component,
+  "data-prop": customDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
 
-const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-id-key": "_component",
+    }
+  : {};
 ---
 
 <div class:list={["grid-item", className]} {...htmlAttributes}>
-  <div
-    class="grid-item-content"
-    data-editable={editable ? "array" : undefined}
-    data-prop="contentSections"
-  >
+  <div class="grid-item-content" {...arrayDataAttributes}>
     <slot>
       {
-        contentSections && contentSections.length > 0 && (
+        contentSections && (
           <RenderBlock
             contentSections={contentSections}
-            propName="contentSections"
+            propName={customDataProp}
             editable={editable}
           />
         )
@@ -37,7 +38,6 @@ const usesContentSections = !hasDefaultSlot;
   @layer components {
     .grid-item {
       container-type: inline-size;
-      height: 100%;
       > .grid-item-content {
         height: 100%;
       }

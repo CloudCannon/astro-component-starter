@@ -31,18 +31,18 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": customDataProp,
+      "data-id-key": "_component",
     }
   : {};
 
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const usesItemsArray = !hasSlotContent;
 
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div class:list={["accordion"]} {...htmlAttributes}>
-  <div {...editable ? arrayDataAttributes : {}} data-id-key="_component">
+  <div {...arrayDataAttributes}>
     <slot>
       {
         items &&

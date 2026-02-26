@@ -24,7 +24,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div class:list={["definition-list", `alignment-${alignX}`, className]} {...htmlAttributes}>
-  <dl {...editable ? arrayDataAttributes : {}} data-id-key="_component">
+  <dl {...arrayDataAttributes} data-id-key="_component">
     <slot>
       {
         items &&
@@ -47,7 +47,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .definition-list {
-      & > dl {
+      > dl {
         display: grid;
         gap: var(--spacing-em-sm) var(--spacing-em-md);
         grid-template-columns: auto 1fr;
@@ -56,38 +56,34 @@ if (!_component && !hasItems && !hasSlotContent) return;
       }
 
       &.alignment-center {
-        & > dl {
+        > dl {
           align-items: center;
           grid-template-columns: 1fr 1fr;
           justify-content: center;
         }
 
-        & > dl > .title,
-        & > dl > .definition-list-item > .title {
+        > dl > .definition-list-item > .title {
           text-align: end;
         }
       }
 
       &.alignment-end {
-        & > dl {
+        > dl {
           align-items: end;
           grid-template-columns: auto auto;
           justify-content: end;
         }
 
-        & > dl > .title,
-        & > dl > .definition-list-item > .title {
+        > dl > .definition-list-item > .title {
           text-align: start;
         }
 
-        & > dl > .content,
-        & > dl > .definition-list-item > .content {
+        > dl > .definition-list-item > .content {
           text-align: end;
         }
       }
 
-      & > dl > .content,
-      & > dl > .definition-list-item > .content {
+      > dl > .definition-list-item > .content {
         margin: 0;
       }
     }

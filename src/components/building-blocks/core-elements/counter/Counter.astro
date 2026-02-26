@@ -75,14 +75,15 @@ const duration = 500;
 <style is:global>
   @layer components {
     .counter {
-      align-items: start;
+      align-items: flex-start;
       display: flex;
       font-size: var(--font-size-heading-2xl);
+      font-variant-numeric: tabular-nums;
       font-weight: var(--font-weight-bold);
       margin-top: var(--spacing-lg);
 
       &.alignment-end {
-        justify-content: end;
+        justify-content: flex-end;
       }
       &.alignment-center {
         justify-content: center;

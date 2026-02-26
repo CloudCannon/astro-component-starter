@@ -44,6 +44,7 @@ const {
 } = Astro.props;
 
 const hasValidSrc = source && typeof source === "string" && source.trim() !== "";
+
 if (!_component && !hasValidSrc) {
   return;
 }
@@ -104,6 +105,7 @@ if (
 
     if (targetAspect === 1 && imageHeight) {
       const dimension = Math.min(imageWidth, imageHeight);
+
       maxWidth = dimension;
       maxHeight = dimension;
     } else if (imageHeight) {
@@ -127,6 +129,7 @@ if (
     useFit = "cover";
 
     const positionKey = `${positionVertical}-${positionHorizontal}`;
+
     usePosition = POSITION_MAP[positionKey] || "center";
   }
 }

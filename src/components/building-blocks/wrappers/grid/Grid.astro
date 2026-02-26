@@ -40,6 +40,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": dataProp,
+      "data-id-key": "_component",
     }
   : {};
 
@@ -49,12 +50,8 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div {...htmlAttributes}>
-  <div
-    {...editable ? arrayDataAttributes : {}}
-    class:list={["grid", `layout-${layout}`, className]}
-    style={gridStyles}
-  >
+<div {...htmlAttributes} class:list={["grid", `layout-${layout}`, className]} style={gridStyles}>
+  <div {...arrayDataAttributes} class="grid-inner">
     <slot>
       {
         items &&
@@ -64,6 +61,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
               data-editable="array-item"
               class:list={`layout-${layout}`}
               contentSections={item.contentSections}
+              propName="contentSections"
               editable={editable}
               data-component="building-blocks/wrappers/grid/grid-item"
             />
@@ -76,29 +74,32 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .grid {
-      gap: var(--grid-spacing, --spacing-md);
       margin-top: var(--spacing-lg);
       width: 100%;
+    }
 
-      &.layout-start {
-        align-items: stretch;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
-        justify-content: start;
-      }
+    .grid.layout-start > .grid-inner {
+      align-items: stretch;
+      display: grid;
+      gap: var(--grid-spacing, var(--spacing-md));
+      grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
+      justify-content: start;
+      width: 100%;
+    }
 
-      &.layout-center {
-        align-items: stretch;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
+    .grid.layout-center > .grid-inner {
+      align-items: stretch;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--grid-spacing, var(--spacing-md));
+      justify-content: center;
+      width: 100%;
+    }
 
-        > .grid-item {
-          flex: 1 1 var(--min-item-width, 200px);
-          max-width: var(--max-item-width, 320px);
-          min-width: min(var(--min-item-width, 200px), 100%);
-        }
-      }
+    .grid.layout-center > .grid-inner > .grid-item {
+      flex: 1 1 var(--min-item-width, 200px);
+      max-width: var(--max-item-width, 320px);
+      min-width: min(var(--min-item-width, 200px), 100%);
     }
   }
 </style>

@@ -27,9 +27,11 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": customDataProp,
-      "data-component": "building-blocks/core-elements/list/list-item",
+      "data-id-key": "_component",
     }
   : {};
+
+if (!_component && !hasItems && !usesItemsArray) return;
 ---
 
 <div
@@ -97,7 +99,6 @@ const arrayDataAttributes = editable
 
       &.type-bullet,
       &.type-numbered {
-
         &.direction-horizontal > :where(ul, ol) > li:not(:first-child) {
           margin-inline-start: var(--spacing-lg);
         }
