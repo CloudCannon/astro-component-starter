@@ -31,6 +31,7 @@ const mobileNavData = [
   paddingVertical="none"
   class:list={["main-nav", className]}
   {...htmlAttributes}
+  editable={false}
 >
   <a href="/">
     <Image source={logoSource} class="main-nav-logo" alt={logoAlt} editable={false} />
@@ -51,15 +52,16 @@ const mobileNavData = [
     logoAlt={logoAlt}
     navData={mobileNavData}
     class="mobile-main-nav"
+    editable={false}
   />
 </CustomSection>
 
 <style is:global>
   @layer page-sections {
     .main-nav {
-      background-color: var(--color-bg); 
+      background-color: var(--color-bg);
       padding-block: var(--spacing-md);
-      position: sticky; 
+      position: sticky;
       top: 0;
       z-index: var(--layer-2);
 
