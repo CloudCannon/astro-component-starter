@@ -16,8 +16,8 @@ const {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-children-prop": childrenDataProp,
-      "data-id-key": "_component",
+      "data-prop": childrenDataProp,
+      "data-component-key": "_component",
     }
   : {};
 const hasDefaultSlot = Astro.slots.has("default");
