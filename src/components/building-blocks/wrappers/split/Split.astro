@@ -46,7 +46,6 @@ const secondPaneEditable = editable && !secondPaneUsesSlot;
 const arrayDataAttributesFirst = editable
   ? {
       "data-editable": "array",
-      "data-prop": firstPropName,
       "data-id-key": "_component",
     }
   : {};
@@ -54,7 +53,6 @@ const arrayDataAttributesFirst = editable
 const arrayDataAttributesSecond = editable
   ? {
       "data-editable": "array",
-      "data-prop": secondPropName,
       "data-id-key": "_component",
     }
   : {};
@@ -93,51 +91,35 @@ const splitId = `split-${crypto.randomUUID()}`;
   style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
   {...htmlAttributes}
 >
-  <div class="pane first" {...arrayDataAttributesFirst}>
+  <div class="pane first" data-prop={firstPropName} {...arrayDataAttributesFirst}>
     {
       reverse ? (
         <slot name="second">
           {firstSplitBlocks && (
-            <Component
-              contentSections={firstSplitBlocks}
-              propName={firstPropName}
-              editable={firstPaneEditable}
-            />
+            <Component contentSections={firstSplitBlocks} editable={firstPaneEditable} />
           )}
         </slot>
       ) : (
         <slot name="first">
           {firstSplitBlocks && (
-            <Component
-              contentSections={firstSplitBlocks}
-              propName={firstPropName}
-              editable={firstPaneEditable}
-            />
+            <Component contentSections={firstSplitBlocks} editable={firstPaneEditable} />
           )}
         </slot>
       )
     }
   </div>
-  <div class="pane second" {...arrayDataAttributesSecond}>
+  <div class="pane second" data-prop={secondPropName} {...arrayDataAttributesSecond}>
     {
       reverse ? (
         <slot name="first">
           {secondSplitBlocks && (
-            <Component
-              contentSections={secondSplitBlocks}
-              propName={secondPropName}
-              editable={secondPaneEditable}
-            />
+            <Component contentSections={secondSplitBlocks} editable={secondPaneEditable} />
           )}
         </slot>
       ) : (
         <slot name="second">
           {secondSplitBlocks && (
-            <Component
-              contentSections={secondSplitBlocks}
-              propName={secondPropName}
-              editable={secondPaneEditable}
-            />
+            <Component contentSections={secondSplitBlocks} editable={secondPaneEditable} />
           )}
         </slot>
       )

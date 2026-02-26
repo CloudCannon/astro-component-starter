@@ -78,15 +78,7 @@ const usesContentSections = !hasDefaultSlot;
       data-prop="contentSections"
     >
       <slot>
-        {
-          contentSections && (
-            <Component
-              contentSections={contentSections}
-              propName="contentSections"
-              editable={editable}
-            />
-          )
-        }
+        {contentSections && <Component contentSections={contentSections} editable={editable} />}
       </slot>
     </div>
   </div>
@@ -115,12 +107,20 @@ const usesContentSections = !hasDefaultSlot;
       z-index: var(--layer-1);
     }
 
-    .custom-section > .outer-content > .content > [data-editable="array-item"]:first-child > *:first-child,
+    .custom-section
+      > .outer-content
+      > .content
+      > [data-editable="array-item"]:first-child
+      > *:first-child,
     .custom-section > .outer-content > .content > :not([data-editable="array-item"]):first-child {
       margin-top: 0 !important;
     }
 
-    .custom-section > .outer-content > .content > [data-editable="array-item"]:last-child > *:last-child,
+    .custom-section
+      > .outer-content
+      > .content
+      > [data-editable="array-item"]:last-child
+      > *:last-child,
     .custom-section > .outer-content > .content > :not([data-editable="array-item"]):last-child {
       margin-bottom: 0 !important;
     }

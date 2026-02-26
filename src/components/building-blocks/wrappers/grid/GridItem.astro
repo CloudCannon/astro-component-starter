@@ -19,17 +19,9 @@ const arrayDataAttributes = editable
 ---
 
 <div class:list={["grid-item", className]} {...htmlAttributes}>
-  <div class="grid-item-content" {...arrayDataAttributes}>
+  <div class="grid-item-content" data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
-      {
-        contentSections && (
-          <RenderBlock
-            contentSections={contentSections}
-            propName={customDataProp}
-            editable={editable}
-          />
-        )
-      }
+      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>
   </div>
 </div>

@@ -39,7 +39,6 @@ const gridStyles = [
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": dataProp,
       "data-id-key": "_component",
     }
   : {};
@@ -50,8 +49,8 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div {...htmlAttributes} class:list={["grid", `layout-${layout}`, className]} style={gridStyles}>
-  <div {...arrayDataAttributes} class="grid-inner">
+<div class:list={["grid", `layout-${layout}`, className]} style={gridStyles} {...htmlAttributes}>
+  <div {...arrayDataAttributes} data-prop={dataProp} class="grid-inner">
     <slot>
       {
         items &&
@@ -61,7 +60,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
               data-editable="array-item"
               class:list={`layout-${layout}`}
               contentSections={item.contentSections}
-              propName="contentSections"
               editable={editable}
               data-component="building-blocks/wrappers/grid/grid-item"
             />

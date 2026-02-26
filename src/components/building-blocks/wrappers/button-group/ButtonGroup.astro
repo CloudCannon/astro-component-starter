@@ -23,7 +23,6 @@ const slugifyLabel = (label: string) => {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
       "data-id-key": "_component",
     }
   : {};
@@ -50,7 +49,7 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
   class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
   {...htmlAttributes}
 >
-  <div class="button-group__items" {...arrayDataAttributes}>
+  <div class="button-group__items" data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
       {
         buttonSections && buttonSections.length > 0 && (

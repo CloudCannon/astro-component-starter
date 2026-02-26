@@ -14,7 +14,6 @@ const {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
     }
   : {};
 ---
@@ -27,7 +26,7 @@ const arrayDataAttributes = editable
   aria-hidden={index !== 0}
   {...htmlAttributes}
 >
-  <div class="panel__content" {...arrayDataAttributes}>
+  <div class="panel__content" data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
       {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>

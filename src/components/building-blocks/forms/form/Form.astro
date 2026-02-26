@@ -14,7 +14,6 @@ const {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
       "data-id-key": "_component",
     }
   : {};
@@ -33,9 +32,9 @@ if (!_component && !hasFormBlocks && !usesFormBlocks) return;
   enctype="multipart/form-data"
   {...htmlAttributes}
 >
-  <div {...arrayDataAttributes}>
+  <div data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
-      {formBlocks && <RenderBlock contentSections={formBlocks} propName="formBlocks" />}
+      {formBlocks && <RenderBlock contentSections={formBlocks} />}
     </slot>
   </div>
   <slot />

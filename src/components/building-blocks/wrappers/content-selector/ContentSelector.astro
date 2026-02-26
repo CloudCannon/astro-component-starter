@@ -29,7 +29,6 @@ const uniqueId = crypto.randomUUID();
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
       "data-id-key": "_component",
     }
   : {};
@@ -84,7 +83,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
     }
   </div>
 
-  <div class="panels" {...arrayDataAttributes}>
+  <div class="panels" data-prop={customDataProp} {...arrayDataAttributes}>
     {
       items?.map((item: any, index: number) => (
         <ContentSelectorPanel
@@ -92,7 +91,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
           index={index}
           uniqueId={uniqueId}
           contentSections={item.contentSections}
-          propName="contentSections"
           editable={editable}
         />
       ))

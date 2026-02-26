@@ -30,7 +30,6 @@ const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefine
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
       "data-id-key": "_component",
     }
   : {};
@@ -42,7 +41,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div class:list={["accordion"]} {...htmlAttributes}>
-  <div {...arrayDataAttributes}>
+  <div data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
       {
         items &&

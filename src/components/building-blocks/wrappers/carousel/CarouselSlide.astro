@@ -13,13 +13,12 @@ const {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
     }
   : {};
 ---
 
 <div class:list={["slide", className]} role="group" {...htmlAttributes}>
-  <div class="slide__content" {...arrayDataAttributes}>
+  <div class="slide__content" data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
       {contentSections && <Component contentSections={contentSections} editable={editable} />}
     </slot>

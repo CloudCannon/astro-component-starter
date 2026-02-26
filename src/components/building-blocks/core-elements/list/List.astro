@@ -26,7 +26,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-prop": customDataProp,
       "data-id-key": "_component",
     }
   : {};
@@ -45,7 +44,7 @@ if (!_component && !hasItems && !usesItemsArray) return;
   ]}
   {...htmlAttributes}
 >
-  <ListTag role="list" {...arrayDataAttributes}>
+  <ListTag role="list" data-prop={customDataProp} {...arrayDataAttributes}>
     <slot>
       {
         items &&
