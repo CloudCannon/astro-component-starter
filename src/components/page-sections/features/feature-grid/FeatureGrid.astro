@@ -28,7 +28,7 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  editable={editable}
+  editable={false}
   {...htmlAttributes}
 >
   <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={editable}>
@@ -52,7 +52,7 @@ const {
     data-prop="features"
     data-editable="array"
     data-id-key="_component"
-    editable={editable}
+    editable={false}
   >
     {
       features.map((feature: any) => (
