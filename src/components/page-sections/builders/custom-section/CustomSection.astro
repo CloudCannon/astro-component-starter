@@ -75,7 +75,7 @@ const usesContentSections = !hasDefaultSlot;
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
       data-editable={editable && usesContentSections ? "array" : undefined}
-      data-prop="contentSections"
+      data-children-prop="contentSections"
     >
       <slot>
         {contentSections && <Component contentSections={contentSections} editable={editable} />}

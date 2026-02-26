@@ -7,13 +7,14 @@ const {
   index,
   uniqueId,
   _component,
-  "data-prop": customDataProp = "contentSections",
+  "data-children-prop": childrenDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
 
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
+      "data-children-prop": childrenDataProp,
     }
   : {};
 ---
@@ -26,7 +27,7 @@ const arrayDataAttributes = editable
   aria-hidden={index !== 0}
   {...htmlAttributes}
 >
-  <div class="panel__content" data-prop={customDataProp} {...arrayDataAttributes}>
+  <div class="panel__content" {...arrayDataAttributes}>
     <slot>
       {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>

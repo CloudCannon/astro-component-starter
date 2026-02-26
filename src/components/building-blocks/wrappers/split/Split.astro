@@ -47,6 +47,7 @@ const arrayDataAttributesFirst = editable
   ? {
       "data-editable": "array",
       "data-id-key": "_component",
+      "data-children-prop": firstPropName,
     }
   : {};
 
@@ -54,6 +55,7 @@ const arrayDataAttributesSecond = editable
   ? {
       "data-editable": "array",
       "data-id-key": "_component",
+      "data-children-prop": secondPropName,
     }
   : {};
 
@@ -91,7 +93,7 @@ const splitId = `split-${crypto.randomUUID()}`;
   style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
   {...htmlAttributes}
 >
-  <div class="pane first" data-prop={firstPropName} {...arrayDataAttributesFirst}>
+  <div class="pane first" {...arrayDataAttributesFirst}>
     {
       reverse ? (
         <slot name="second">
@@ -108,7 +110,7 @@ const splitId = `split-${crypto.randomUUID()}`;
       )
     }
   </div>
-  <div class="pane second" data-prop={secondPropName} {...arrayDataAttributesSecond}>
+  <div class="pane second" {...arrayDataAttributesSecond}>
     {
       reverse ? (
         <slot name="first">

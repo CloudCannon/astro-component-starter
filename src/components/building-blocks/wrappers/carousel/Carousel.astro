@@ -10,7 +10,7 @@ const {
   minSlideWidth = 0,
   style = "",
   label,
-  "data-prop": customDataProp = "slides",
+  "data-children-prop": childrenDataProp = "slides",
   editable = true,
   _component,
   ...htmlAttributes
@@ -62,6 +62,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-id-key": "_component",
+      "data-children-prop": childrenDataProp,
     }
   : {};
 
@@ -89,7 +90,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
   {...dataAttributes}
 >
   <div class="viewport">
-    <div class="track" data-prop={customDataProp} {...arrayDataAttributes}>
+    <div class="track" {...arrayDataAttributes}>
       {
         slides.length > 0 ? (
           slides.map((slide: any, index: number) => (

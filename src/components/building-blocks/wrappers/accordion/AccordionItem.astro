@@ -9,9 +9,17 @@ const {
   isOpen = false,
   accordionName,
   _component,
+  "data-children-prop": childrenDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
 
+const arrayDataAttributes = editable
+  ? {
+      "data-editable": "array",
+      "data-children-prop": childrenDataProp,
+      "data-id-key": "_component",
+    }
+  : {};
 const hasDefaultSlot = Astro.slots.has("default");
 const usesContentSections = !hasDefaultSlot;
 ---
@@ -21,11 +29,7 @@ const usesContentSections = !hasDefaultSlot;
     <span class="accordion-item-title-text">{title}</span>
     <Icon name="chevron-down" size="none" class="accordion-item-icon" />
   </summary>
-  <div
-    class="accordion-item-detail"
-    data-editable={editable && usesContentSections ? "array" : undefined}
-    data-prop="contentSections"
-  >
+  <div class="accordion-item-detail" {...arrayDataAttributes}>
     <slot>
       {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
     </slot>
@@ -35,58 +39,58 @@ const usesContentSections = !hasDefaultSlot;
 <style is:global>
   @layer components {
     .accordion-item {
-    border-bottom: 1px solid var(--color-border-subtle);
-    container-type: inline-size;
+      border-bottom: 1px solid var(--color-border-subtle);
+      container-type: inline-size;
 
-    > .accordion-item-title {
-      align-items: center;
-      cursor: pointer;
-      display: flex;
-      font-size: var(--font-size-xl);
-      font-weight: var(--font-weight-bold);
-      justify-content: space-between;
-      padding: var(--spacing-md);
-      transition: background-color var(--animation-normal) ease-out;
-      -webkit-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
+      > .accordion-item-title {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        justify-content: space-between;
+        padding: var(--spacing-md);
+        transition: background-color var(--animation-normal) ease-out;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
-      &:first-of-type {
-        list-style-type: none;
+        &:first-of-type {
+          list-style-type: none;
+        }
+
+        &:hover {
+          background-color: var(--color-bg-surface);
+        }
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        .accordion-item-icon {
+          transition: transform var(--animation-normal) ease-out;
+        }
       }
 
-      &:hover {
-        background-color: var(--color-bg-surface);
-      }
+      > .accordion-item-detail {
+        padding-inline: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
 
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      .accordion-item-icon {
-        transition: transform var(--animation-normal) ease-out;
+        > [data-editable="array-item"]:first-child > *:first-child,
+        > :not([data-editable="array-item"]):first-child {
+          margin-top: 0 !important;
+        }
       }
     }
 
-    > .accordion-item-detail {
-      padding-inline: var(--spacing-md);
-      padding-bottom: var(--spacing-md);
+    .accordion-item[open] {
+      > .accordion-item-title .accordion-item-icon {
+        transform: rotate(180deg);
+      }
 
-      > [data-editable="array-item"]:first-child > *:first-child,
-      > :not([data-editable="array-item"]):first-child {
-        margin-top: 0 !important;
+      > .accordion-item-detail {
+        animation: grow-out 300ms ease-out;
       }
     }
-  }
-
-  .accordion-item[open] {
-    > .accordion-item-title .accordion-item-icon {
-      transform: rotate(180deg);
-    }
-
-    > .accordion-item-detail {
-      animation: grow-out 300ms ease-out;
-    }
-  }
   }
 </style>

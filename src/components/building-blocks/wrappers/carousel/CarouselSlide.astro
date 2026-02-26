@@ -6,19 +6,20 @@ const {
   editable = true,
   class: className,
   _component,
-  "data-prop": customDataProp = "contentSections",
+  "data-children-prop": childrenDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
 
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
+      "data-children-prop": childrenDataProp,
     }
   : {};
 ---
 
 <div class:list={["slide", className]} role="group" {...htmlAttributes}>
-  <div class="slide__content" data-prop={customDataProp} {...arrayDataAttributes}>
+  <div class="slide__content" {...arrayDataAttributes}>
     <slot>
       {contentSections && <Component contentSections={contentSections} editable={editable} />}
     </slot>

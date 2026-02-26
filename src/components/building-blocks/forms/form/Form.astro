@@ -7,7 +7,7 @@ const {
   class: className,
   _component,
   editable = true,
-  "data-prop": customDataProp = "formBlocks",
+  "data-children-prop": childrenDataProp = "formBlocks",
   ...htmlAttributes
 } = Astro.props;
 
@@ -15,6 +15,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-id-key": "_component",
+      "data-children-prop": childrenDataProp,
     }
   : {};
 
@@ -32,7 +33,7 @@ if (!_component && !hasFormBlocks && !usesFormBlocks) return;
   enctype="multipart/form-data"
   {...htmlAttributes}
 >
-  <div data-prop={customDataProp} {...arrayDataAttributes}>
+  <div {...arrayDataAttributes}>
     <slot>
       {formBlocks && <RenderBlock contentSections={formBlocks} />}
     </slot>

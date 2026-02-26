@@ -5,7 +5,7 @@ const {
   direction = "row",
   alignX = "start",
   buttonSections,
-  "data-prop": customDataProp = "buttonSections",
+  "data-children-prop": childrenDataProp = "buttonSections",
   editable = true,
   class: className,
   label,
@@ -24,6 +24,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-id-key": "_component",
+      "data-children-prop": childrenDataProp,
     }
   : {};
 
@@ -49,7 +50,7 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
   class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
   {...htmlAttributes}
 >
-  <div class="button-group__items" data-prop={customDataProp} {...arrayDataAttributes}>
+  <div class="button-group__items" {...arrayDataAttributes}>
     <slot>
       {
         buttonSections && buttonSections.length > 0 && (

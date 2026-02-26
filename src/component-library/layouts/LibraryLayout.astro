@@ -45,7 +45,7 @@ const contentSections = props.frontmatter?.contentSections || [];
     >
       <SidebarNavLayout />
       <main class="main">
-        <div data-editable="array" data-prop="contentSections">
+        <div data-editable="array" data-children-prop="contentSections">
           <RenderBlock contentSections={contentSections} />
         </div>
         <slot />

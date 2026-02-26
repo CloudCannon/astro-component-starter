@@ -20,9 +20,9 @@ const {
   class: className,
   editable = true,
   _component,
-  "data-prop": customDataProp = "contentSections",
-  "data-prop-before": customDataPropBefore = "beforeContentSections",
-  "data-prop-after": customDataPropAfter = "afterContentSections",
+  "data-children-prop": childrenDataProp = "contentSections",
+  "data-children-prop-before": childrenDataPropBefore = "beforeContentSections",
+  "data-children-prop-after": childrenDataPropAfter = "afterContentSections",
   ...htmlAttributes
 } = Astro.props;
 
@@ -47,18 +47,21 @@ if (!htmlAttributes.id && label) {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
+      "data-children-prop": childrenDataProp,
     }
   : {};
 
 const arrayDataAttributesBefore = editable
   ? {
       "data-editable": "array",
+      "data-children-prop": childrenDataPropBefore,
     }
   : {};
 
 const arrayDataAttributesAfter = editable
   ? {
       "data-editable": "array",
+      "data-children-prop": childrenDataPropAfter,
     }
   : {};
 
@@ -97,7 +100,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
   {
     (usesBeforeContentSections || hasBeforeSlot) && (
-      <div class="before-content" data-prop={customDataPropBefore} {...arrayDataAttributesBefore}>
+      <div class="before-content" {...arrayDataAttributesBefore}>
         <slot name="before">
           {beforeContentSections && (
             <Component contentSections={beforeContentSections} editable={editable} />
@@ -115,7 +118,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
       ]}
-        data-prop={customDataProp}
       {...arrayDataAttributes}
     >
       <slot>
@@ -126,7 +128,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
   {
     (usesAfterContentSections || hasAfterSlot) && (
-      <div class="after-content" data-prop={customDataPropAfter} {...arrayDataAttributesAfter}>
+      <div class="after-content" {...arrayDataAttributesAfter}>
         <slot name="after">
           {afterContentSections && (
             <Component contentSections={afterContentSections} editable={editable} />
