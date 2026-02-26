@@ -46,6 +46,7 @@ const secondPaneEditable = editable && !secondPaneUsesSlot;
 const arrayDataAttributesFirst = editable
   ? {
       "data-editable": "array",
+      "data-prop": firstPropName,
       "data-id-key": "_component",
     }
   : {};
@@ -53,6 +54,7 @@ const arrayDataAttributesFirst = editable
 const arrayDataAttributesSecond = editable
   ? {
       "data-editable": "array",
+      "data-prop": secondPropName,
       "data-id-key": "_component",
     }
   : {};
