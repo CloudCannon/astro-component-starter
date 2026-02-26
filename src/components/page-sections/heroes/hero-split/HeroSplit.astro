@@ -33,7 +33,7 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   class:list={["hero", className]}
-  editable={editable}
+  editable={false}
   {...htmlAttributes}
 >
   <Split
@@ -44,22 +44,22 @@ const {
     minSplitWidth={710}
     gap="2xl"
     class="hero-split"
-    editable={editable}
+    editable={false}
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
+      <SimpleText class="eyebrow" data-prop="eyebrow" editable={true}>
         {eyebrow}
       </SimpleText>
-      <Heading level="h1" size="2xl" data-prop="heading" editable={editable}>{heading}</Heading>
-      <Text class="subtext" data-prop="subtext" text={subtext} editable={editable} />
-      <ButtonGroup class="buttons-container" buttonSections={buttonSections} editable={editable} />
+      <Heading level="h1" size="2xl" data-prop="heading" editable={true}>{heading}</Heading>
+      <Text class="subtext" data-prop="subtext" text={subtext} editable={true} />
+      <ButtonGroup class="buttons-container" buttonSections={buttonSections} editable={true} />
     </Fragment>
     <Fragment slot="second">
       <Image
         source={imageSource}
         alt={imageAlt}
         rounded={true}
-        editable={editable}
+        editable={true}
         aspectRatio={imageAspectRatio}
         data-prop-src="imageSource"
         data-prop-alt="imageAlt"

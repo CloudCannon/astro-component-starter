@@ -27,7 +27,7 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   rounded={rounded}
-  editable={editable}
+  editable={false}
   {...htmlAttributes}
 >
   <Heading
@@ -36,14 +36,14 @@ const {
     alignX="center"
     data-prop="heading"
     text={heading}
-    editable={editable}
+    editable={true}
   />
   <Text alignX="center" data-prop="subtext" text={subtext} editable={editable} />
   <ButtonGroup
     class="buttons"
     buttonSections={buttonSections}
     alignX="center"
-    editable={editable}
+    editable={true}
     data-prop="buttonSections"
   />
 </CustomSection>

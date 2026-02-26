@@ -53,19 +53,19 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     editable={false}
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
+      <SimpleText class="eyebrow" data-prop="eyebrow" editable={true}>
         {eyebrow}
       </SimpleText>
-      <Heading level="h2" size="lg" data-prop="heading" editable={editable}>
+      <Heading level="h2" size="lg" data-prop="heading" editable={true}>
         {heading}
       </Heading>
-      <Text class="subtext" data-prop="subtext" text={subtext} editable={editable} />
+      <Text class="subtext" data-prop="subtext" text={subtext} editable={true} />
       <ButtonGroup
         class="feature-buttons"
         buttonSections={buttonSections}
         direction="row"
         alignX="start"
-        editable={editable}
+        editable={true}
       />
     </Fragment>
     <Image
@@ -75,7 +75,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
       alt={imageAlt}
       rounded={imageRounded}
       aspectRatio={imageAspectRatio}
-      editable={editable}
+      editable={true}
       data-prop-src="imageSource"
       data-prop-alt="imageAlt"
       data-editable="image"

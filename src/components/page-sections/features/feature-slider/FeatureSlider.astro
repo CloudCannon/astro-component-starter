@@ -32,7 +32,7 @@ const {
     autoPlay={false}
     autoScroll={false}
     data-prop="slides"
-    editable={editable}
+    editable={false}
   >
     {
       slides.map((slide: any, index: number) => (
@@ -40,7 +40,7 @@ const {
           data-editable="array-item"
           aria-label={`Slide ${index + 1} of ${slides.length}`}
           {...slide}
-          editable={editable}
+          editable={true}
         />
       ))
     }

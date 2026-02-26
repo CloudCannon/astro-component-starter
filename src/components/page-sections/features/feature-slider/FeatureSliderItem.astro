@@ -37,13 +37,13 @@ const hasImage = Boolean(imageSource);
       editable={false}
     >
       <Fragment slot="first">
-        <SimpleText class="eyebrow" data-prop="eyebrow" editable={editable}>
+        <SimpleText class="eyebrow" data-prop="eyebrow" editable={true}>
           {eyebrow}
         </SimpleText>
-        <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title" editable={editable}>
+        <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title" editable={true}>
           {title}
         </Heading>
-        <Text data-prop="description" text={description} editable={editable} />
+        <Text data-prop="description" text={description} editable={true} />
       </Fragment>
       <Image
         slot="second"
@@ -52,7 +52,7 @@ const hasImage = Boolean(imageSource);
         rounded={true}
         aspectRatio="portrait"
         priority={true}
-        editable={editable}
+        editable={true}
         data-prop-src="imageSource"
         data-prop-alt="imageAlt"
         data-editable="image"

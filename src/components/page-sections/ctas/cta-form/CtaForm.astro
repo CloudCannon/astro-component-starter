@@ -43,18 +43,18 @@ const {
     verticalAlignment="center"
     reverse={reverse}
     minSplitWidth={640}
-    editable={editable}
+    editable={false}
   >
     <Fragment slot="first">
-      <Heading level="h2" size="lg" data-prop="heading" editable={editable}>
+      <Heading level="h2" size="lg" data-prop="heading" editable={true}>
         {heading}
       </Heading>
-      <Text data-prop="subtext" text={subtext} editable={editable} />
+      <Text data-prop="subtext" text={subtext} editable={true} />
       <Form
         class="form"
         action={formAction}
         formBlocks={formBlocks?.length > 0 ? formBlocks : []}
-        editable={editable}
+        editable={true}
       >
         <slot />
       </Form>
@@ -65,7 +65,7 @@ const {
         rounded={true}
         alt={imageAlt}
         aspectRatio="landscape"
-        editable={editable}
+        editable={true}
         data-prop-src="imageSource"
         data-prop-alt="imageAlt"
         data-editable="image"
