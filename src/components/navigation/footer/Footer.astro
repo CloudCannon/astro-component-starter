@@ -19,13 +19,18 @@ const {
 ---
 
 <footer class="footer" {...htmlAttributes}>
-  <CustomSection maxContentWidth="2xl" paddingHorizontal="md" paddingVertical="2xl">
+  <CustomSection
+    maxContentWidth="2xl"
+    paddingHorizontal="md"
+    paddingVertical="2xl"
+    editable={false}
+  >
     <div class="footer-content">
       <div class="content-container">
         <Image source={logoSource} alt={logoAlt} class="footer-logo" editable={false} />
       </div>
       <div class="content-container">
-        <Bar navData={links} />
+        <Bar navData={links} editable={false} />
       </div>
     </div>
 
@@ -33,10 +38,10 @@ const {
 
     <div class="footer-content">
       <div class="content-container">
-        <Text class="footer-legal-text" text={footerText || ""} data-prop="" />
+        <Text class="footer-legal-text" text={footerText || ""} data-prop="" editable={false} />
       </div>
       <div class="content-container">
-        <ButtonGroup alignX="end">
+        <ButtonGroup alignX="end" editable={false}>
           {
             socials.map((social: any) => (
               <Button
@@ -48,6 +53,7 @@ const {
                 aria-label={`Visit our ${social.icon} page`}
                 target="_blank"
                 rel="noopener noreferrer"
+                editable={false}
               />
             ))
           }
