@@ -50,18 +50,12 @@ const {
         {heading}
       </Heading>
       <Text data-prop="subtext" text={subtext} editable={true} />
-      <div
-        data-editable="component"
-        data-component="building-blocks/forms/form"
-        data-prop-formBlocks="formBlocks"
-      >
-        <Form
-          action={formAction}
-          data-children-prop="formBlocks"
-          formBlocks={formBlocks}
-          editable={true}
-        />
-      </div>
+      <Form
+        action={formAction}
+        data-children-prop="formBlocks"
+        formBlocks={formBlocks}
+        editable={true}
+      />
     </Fragment>
     <Fragment slot="second">
       <Image
