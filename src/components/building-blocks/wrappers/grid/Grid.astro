@@ -1,6 +1,6 @@
 ---
-import GridItem from "./GridItem.astro";
 import { slugifyLabel } from "@components/utils/slugify";
+import GridItem from "./GridItem.astro";
 
 const {
   layout = "center",
@@ -14,6 +14,7 @@ const {
   editable = false,
   _component,
   "data-children-prop": childrenDataProp = "items",
+  innerComponent = "building-blocks/wrappers/grid/grid-item",
   ...htmlAttributes
 } = Astro.props;
 
@@ -33,7 +34,7 @@ const gridStyles = [
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-component": "building-blocks/wrappers/grid/grid-item",
+      "data-component": innerComponent,
       "data-prop": childrenDataProp,
     }
   : {};
