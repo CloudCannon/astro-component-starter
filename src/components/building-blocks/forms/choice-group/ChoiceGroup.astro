@@ -7,19 +7,9 @@ const {
   required = false,
   multiple = false,
   class: className,
-  editable = true,
   _component,
-  "data-prop-title": customDataPropTitle = "title",
   ...htmlAttributes
 } = Astro.props;
-
-const titleDataAttributes =
-  editable && customDataPropTitle
-    ? {
-        "data-editable": "text",
-        "data-prop": customDataPropTitle,
-      }
-    : {};
 
 const inputType = multiple ? "checkbox" : "radio";
 const inputName = multiple ? `${name}[]` : name;
@@ -33,7 +23,7 @@ const inputName = multiple ? `${name}[]` : name;
   {
     title && (
       <legend class="legend">
-        <span {...titleDataAttributes}>{title}</span>
+        {title}
         {required && (
           <span class="choice-group-required" aria-label="required">
             *

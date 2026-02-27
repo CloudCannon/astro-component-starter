@@ -6,19 +6,9 @@ const {
   accept,
   multiple = false,
   class: className,
-  editable = true,
   _component,
-  "data-prop": customDataProp = "label",
   ...htmlAttributes
 } = Astro.props;
-
-const labelDataAttributes =
-  editable && customDataProp
-    ? {
-        "data-editable": "text",
-        "data-prop": customDataProp,
-      }
-    : {};
 
 const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
 ---
@@ -27,7 +17,7 @@ const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
   {
     label && (
       <label for={fieldId} class="label">
-        <span {...labelDataAttributes}>{label}</span>
+        {label}
         {required && (
           <span class="file-upload-required" aria-label="required">
             *
