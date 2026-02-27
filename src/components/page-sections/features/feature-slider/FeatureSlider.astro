@@ -9,7 +9,7 @@ const {
   paddingVertical = "4xl",
   class: className,
   slides = [],
-  editable = true,
+  editable = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -31,10 +31,7 @@ const {
     minSlideWidth={0}
     autoPlay={false}
     autoScroll={false}
-    editable={true}
-    data-component-key="_component"
-    data-editable="array"
-    data-prop="slides"
+    editable={false}
   >
     {
       slides.map((slide: any, index: number) => (
