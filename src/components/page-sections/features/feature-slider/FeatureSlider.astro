@@ -40,6 +40,7 @@ const {
       slides.map((slide: any, index: number) => (
         <FeatureSliderItem
           aria-label={`Slide ${index + 1} of ${slides.length}`}
+          data-editable="array-item"
           {...slide}
           editable={false}
         />
