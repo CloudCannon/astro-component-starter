@@ -13,8 +13,10 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
+  _component,
   editable = true,
   class: className,
+  ...htmlAttributes
 } = Astro.props;
 ---
 
@@ -26,6 +28,7 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   editable={false}
+  {...htmlAttributes}
 >
   <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={true}>
     {eyebrow}
