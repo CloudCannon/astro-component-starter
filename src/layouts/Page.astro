@@ -40,7 +40,7 @@ const description = frontmatter?.description ?? descriptionProp;
 const keywords = frontmatter?.keywords ?? keywordsProp;
 const image = frontmatter?.image ?? imageProp;
 const canonical = frontmatter?.canonical ?? canonicalProp;
-const sections = frontmatter?.pageSections;
+const sections = frontmatter?.pageSections ?? [];
 ---
 
 <Layout
@@ -52,12 +52,18 @@ const sections = frontmatter?.pageSections;
 >
   <MainNavigation {...mainNav} />
 
-  <main
-    data-editable="component"
-    data-component="utils/main-component"
-    data-prop-sections="pageSections"
-  >
-    {sections ? <MainComponent sections={sections} /> : null}
+  <main>
+    {
+      sections.length > 0 && (
+        <div
+          data-editable="component"
+          data-component="utils/main-component"
+          data-prop-sections="pageSections"
+        >
+          <MainComponent sections={sections} />
+        </div>
+      )
+    }
     <slot />
   </main>
   <Footer {...footer} />
