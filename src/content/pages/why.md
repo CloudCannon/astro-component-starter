@@ -170,7 +170,7 @@ pageSections:
     subtext: We're a group of stock photography faces that fill out this team grid.
     teamMembers:
       - _component: page-sections/people/team-grid/team-item
-        name: "Alex Smith "
+        name: Alex Smith
         role: Lead Developer
         bio: >-
           As a fictional representation of a real employee, I exist solely to

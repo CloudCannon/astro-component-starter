@@ -16,13 +16,11 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const cardClasses = ["team-item", className].filter(Boolean).join(" ");
 ---
 
 <GridItem editable={false} {...htmlAttributes}>
   <Card
-    class:list={cardClasses || undefined}
+    class:list={["team-item", className]}
     paddingHorizontal="lg"
     paddingVertical="sm"
     rounded
