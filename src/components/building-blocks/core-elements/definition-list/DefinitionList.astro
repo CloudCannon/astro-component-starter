@@ -15,7 +15,7 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": childrenDataProp,
-      "data-component-key": "_component",
+      "data-component": "building-blocks/core-elements/definition-list/definition-list-item",
     }
   : {};
 const hasItems = items?.length > 0;
@@ -31,13 +31,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
         items &&
           items.length > 0 &&
           items.map((item: any) => (
-            <DefinitionListItem
-              data-editable="array-item"
-              _component={item._component}
-              title={item.title}
-              text={item.text}
-              editable={editable}
-            />
+            <DefinitionListItem data-editable="array-item" editable={editable} {...item} />
           ))
       }
     </slot>
