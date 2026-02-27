@@ -106,7 +106,7 @@ const date = post.data.date.toLocaleDateString("en-US", {
           alt={post.data.title}
           rounded={true}
           editable={true}
-          data-prop-source="image"
+          data-prop-src="image"
           data-prop-alt="title"
           class="post-image"
           aspectRatio="horizontal-strip"
@@ -115,7 +115,7 @@ const date = post.data.date.toLocaleDateString("en-US", {
       )
     }
 
-    <div class="post" data-prop="content" data-editable="array" data-component-key="_component">
+    <div class="post">
       <Content components={mdxComponents} />
     </div>
   </CustomSection>
