@@ -34,7 +34,7 @@ const gridStyles = [
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-component": innerComponent,
+      "data-component-key": "_component",
       "data-prop": childrenDataProp,
     }
   : {};
@@ -52,6 +52,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
         items?.map((item: any) => (
           <GridItem
             data-editable="array-item"
+            data-id={item._component}
             class:list={`layout-${layout}`}
             editable={editable}
             {...item}

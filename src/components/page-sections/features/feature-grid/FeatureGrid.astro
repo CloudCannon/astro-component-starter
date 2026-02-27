@@ -41,10 +41,17 @@ const {
     maxItemWidth="360"
     class="feature-grid-grid"
     data-children-prop="features"
-    innerComponent="page-sections/features/feature-grid/feature-item"
     editable={true}
   >
-    {features.map((feature: any) => <FeatureItem data-editable="array-item" {...feature} />)}
+    {
+      features.map((feature: any) => (
+        <FeatureItem
+          data-id="page-sections/features/feature-grid/feature-item"
+          data-editable="array-item"
+          {...feature}
+        />
+      ))
+    }
   </Grid>
 </CustomSection>
 
