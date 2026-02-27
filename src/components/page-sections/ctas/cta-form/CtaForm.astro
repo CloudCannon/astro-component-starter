@@ -33,7 +33,7 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   rounded={rounded}
-  editable={editable}
+  editable={false}
   {...htmlAttributes}
 >
   <Split
@@ -50,14 +50,19 @@ const {
         {heading}
       </Heading>
       <Text data-prop="subtext" text={subtext} editable={true} />
-      <Form
-        class="form"
-        action={formAction}
-        formBlocks={formBlocks?.length > 0 ? formBlocks : []}
-        editable={true}
+      <div
+        data-editable="component"
+        data-component="building-blocks/forms/form"
+        data-prop-formBlocks="formBlocks"
       >
-        <slot />
-      </Form>
+        <Form
+          class="form"
+          action={formAction}
+          data-children-prop="formBlocks"
+          formBlocks={formBlocks}
+          editable={true}
+        />
+      </div>
     </Fragment>
     <Fragment slot="second">
       <Image
