@@ -1,5 +1,4 @@
 ---
-import Components from "@components/utils/renderBlock.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import Pagination from "@core-elements/pagination/Pagination.astro";
@@ -47,21 +46,20 @@ const pageDescription =
   "Read our latest articles and insights on web development, design, and technology.";
 ---
 
-<Page title={pageTitle} description={pageDescription}>
-  {
-    heroSections.length > 0 && (
-      <div data-editable="array" data-children-prop="pageSections">
-        <Components contentSections={heroSections} />
-      </div>
-    )
-  }
-
+<Page
+  frontmatter={{
+    title: pageTitle,
+    description: pageDescription,
+    pageSections: heroSections,
+  }}
+>
   <CustomSection
     maxContentWidth="2xl"
     paddingHorizontal="lg"
     paddingVertical="none"
     colorScheme="light"
     backgroundColor="base"
+    editable={false}
   >
     {
       page.data.length > 0 ? (
