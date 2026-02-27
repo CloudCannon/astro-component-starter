@@ -61,7 +61,7 @@ if (autoScroll) {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-component-key": "_component",
+      "data-id-key": "_component",
       "data-prop": childrenDataProp,
     }
   : {};
@@ -91,23 +91,18 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 >
   <div class="viewport">
     <div class="track" {...arrayDataAttributes}>
-      {
-        slides.length > 0 ? (
-          slides.map((slide: any, index: number) => (
+      <slot>
+        {
+          slides?.map((slide: any, index: number) => (
             <CarouselSlide
-              _component={slide._component}
-              data-component="building-blocks/wrappers/carousel/carousel-slide"
+              {...slide}
               data-editable="array-item"
-              _component={slide._component}
-              contentSections={slide.contentSections}
               editable={editable}
               aria-label={`Slide ${index + 1} of ${slides.length}`}
             />
           ))
-        ) : (
-          <slot />
-        )
-      }
+        }
+      </slot>
     </div>
   </div>
 

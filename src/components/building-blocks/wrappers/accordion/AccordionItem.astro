@@ -17,11 +17,9 @@ const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
       "data-prop": childrenDataProp,
-      "data-component-key": "_component",
+      "data-id-key": "_component",
     }
   : {};
-const hasDefaultSlot = Astro.slots.has("default");
-const usesContentSections = !hasDefaultSlot;
 ---
 
 <details class="accordion-item" open={isOpen} name={accordionName} {...htmlAttributes}>

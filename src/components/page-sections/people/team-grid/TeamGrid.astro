@@ -62,13 +62,7 @@ const {
   >
     {
       teamMembers.map((member: any) => (
-        <TeamItem
-          data-editable="array-item"
-          data-component="page-sections/people/team-grid/team-item"
-          {...member}
-          class="team-grid-item"
-          editable={true}
-        />
+        <TeamItem data-editable="array-item" {...member} class="team-grid-item" editable={true} />
       ))
     }
   </Grid>

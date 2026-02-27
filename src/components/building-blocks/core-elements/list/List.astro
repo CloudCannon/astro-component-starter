@@ -48,19 +48,16 @@ if (!_component && !hasItems && !usesItemsArray) return;
   <ListTag role="list" {...arrayDataAttributes}>
     <slot>
       {
-        items &&
-          items.length > 0 &&
-          items.map((item: any) => (
-            <ListItem
-              data-editable="array-item"
-              data-component="building-blocks/core-elements/list/list-item"
-              text={item.text}
-              iconName={item.iconName}
-              iconColor={item.iconColor}
-              editable={editable}
-              showIcon={showIcons}
-            />
-          ))
+        items?.map((item: any) => (
+          <ListItem
+            data-editable="array-item"
+            text={item.text}
+            iconName={item.iconName}
+            iconColor={item.iconColor}
+            editable={editable}
+            showIcon={showIcons}
+          />
+        ))
       }
     </slot>
   </ListTag>
