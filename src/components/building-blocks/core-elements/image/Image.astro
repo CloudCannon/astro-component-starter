@@ -165,9 +165,8 @@ if (
         {...dataAttributes}
       />
     ) : (
-      <picture>
+      <picture {...dataAttributes}>
         <img
-          {...dataAttributes}
           src={source}
           alt={normalizedAlt}
           loading={priority ? "eager" : "lazy"}

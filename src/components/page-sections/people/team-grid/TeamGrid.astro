@@ -61,12 +61,12 @@ const {
     editable={false}
   >
     {
-      teamMembers.map((member: any, index: number) => (
+      teamMembers.map((member: any) => (
         <TeamItem
           data-editable="array-item"
+          data-component="page-sections/people/team-grid/team-item"
           {...member}
           class="team-grid-item"
-          data-index={index}
           editable={true}
         />
       ))
