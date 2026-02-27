@@ -1,6 +1,7 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
 import Image from "@core-elements/image/Image.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   label,
@@ -12,7 +13,7 @@ const {
   backgroundColor,
   backgroundImage,
   rounded = false,
-  editable = true,
+  editable = false,
   class: className,
   _component,
   "data-children-prop": childrenDataProp = "contentSections",
@@ -26,13 +27,6 @@ const {
   positionHorizontal = "center",
   priority = false,
 } = backgroundImage || {};
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -57,10 +51,9 @@ const arrayDataAttributes = editable
     source={source}
     alt={alt}
     priority={priority}
-    editable={false}
+    editable={editable}
     data-prop-src="backgroundImage.source"
     data-prop-alt="backgroundImage.alt"
-    data-editable="image"
     positionVertical={positionVertical}
     positionHorizontal={positionHorizontal}
     background={true}

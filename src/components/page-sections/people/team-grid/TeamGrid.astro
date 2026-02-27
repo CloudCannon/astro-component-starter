@@ -27,19 +27,15 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  editable={false}
   {...htmlAttributes}
 >
-  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={true}>
-    {eyebrow}
-  </SimpleText>
+  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" text={eyebrow} />
   <Heading
     class="team-grid-heading"
     level="h2"
     size="lg"
     alignX="center"
     data-prop="heading"
-    editable={true}
   >
     {heading}
   </Heading>
@@ -48,10 +44,8 @@ const {
     size="md"
     alignX="center"
     data-prop="subtext"
-    editable={true}
-  >
-    {subtext}
-  </SimpleText>
+    text={subtext}
+  />
   <Grid
     class="team-grid-grid"
     gap="md"
@@ -61,11 +55,10 @@ const {
     data-editable="array"
     data-component="page-sections/people/team-grid/team-item"
     layout="start"
-    editable={false}
   >
     {
       teamMembers.map((member: any) => (
-        <TeamItem data-editable="array-item" {...member} class="team-grid-item" editable={true} />
+        <TeamItem data-editable="array-item" {...member} class="team-grid-item" />
       ))
     }
   </Grid>

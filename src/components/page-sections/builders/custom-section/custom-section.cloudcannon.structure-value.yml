@@ -16,6 +16,7 @@ value:
     positionVertical: top
     positionHorizontal: center
   rounded: false
+  editable: true
 preview:
   text:
     - Custom Section

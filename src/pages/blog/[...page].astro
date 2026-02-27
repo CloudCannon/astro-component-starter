@@ -59,7 +59,6 @@ const pageDescription =
     paddingVertical="none"
     colorScheme="light"
     backgroundColor="base"
-    editable={false}
   >
     {
       page.data.length > 0 ? (
@@ -70,7 +69,6 @@ const pageDescription =
             minItemWidth="320"
             maxItemWidth="400"
             style="margin-top: var(--spacing-2xl)"
-            editable={false}
           >
             {page.data.map((post: any) => {
               const pubDate = post.data.date.toLocaleDateString("en-US", {
@@ -83,14 +81,13 @@ const pageDescription =
               const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
 
               return (
-                <GridItem editable={false}>
+                <GridItem>
                   <Card
                     link={`/blog/${slug}`}
                     rounded={true}
                     border={true}
                     paddingVertical="lg"
                     paddingHorizontal="lg"
-                    editable={false}
                   >
                     {post.data.image && (
                       <Image

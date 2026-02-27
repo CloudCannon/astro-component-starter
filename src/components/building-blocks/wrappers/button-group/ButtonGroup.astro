@@ -1,24 +1,18 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   direction = "row",
   alignX = "start",
   buttonSections,
   "data-children-prop": childrenDataProp = "buttonSections",
-  editable = true,
+  editable = false,
   class: className,
   label,
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 const arrayDataAttributes = editable
   ? {

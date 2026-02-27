@@ -6,7 +6,7 @@ const {
   formBlocks = [],
   class: className,
   _component,
-  editable = true,
+  editable = false,
   "data-children-prop": childrenDataProp = "formBlocks",
   ...htmlAttributes
 } = Astro.props;
@@ -38,7 +38,6 @@ if (!_component && !hasFormBlocks && !usesFormBlocks) return;
       {formBlocks && <RenderBlock contentSections={formBlocks} />}
     </slot>
   </div>
-  <slot />
 </form>
 
 <style is:global>

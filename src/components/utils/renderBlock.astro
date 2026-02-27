@@ -1,4 +1,6 @@
 ---
+import { pascalToKebab } from "@components/utils/pascalToKebab";
+
 export interface Props {
   contentSections: any[];
   editable?: boolean;
@@ -8,13 +10,6 @@ const components: Record<string, Function> = {};
 const componentImports = import.meta.glob("../**/*.{jsx,astro}", {
   eager: true,
 });
-
-function pascalToKebab(pascal: string): string {
-  return pascal
-    .replace(/([A-Z])/g, "-$1")
-    .toLowerCase()
-    .replace(/^-/, "");
-}
 
 Object.entries(componentImports).forEach(([path, obj]) => {
   const parts = path.replace("../", "").split(".")[0].split("/");

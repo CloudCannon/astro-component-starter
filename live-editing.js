@@ -1,15 +1,8 @@
 import { registerAstroComponent } from "@cloudcannon/editable-regions/astro";
 import "@cloudcannon/editable-regions/astro-react-renderer";
+import { pascalToKebab } from "./src/components/utils/pascalToKebab";
 
 const componentModules = import.meta.glob("./src/components/**/*.astro", { eager: true });
-
-// Helper to convert PascalCase to kebab-case
-function pascalToKebab(pascal) {
-  return pascal
-    .replace(/([A-Z])/g, "-$1")
-    .toLowerCase()
-    .replace(/^-/, "");
-}
 
 for (const [path, module] of Object.entries(componentModules)) {
   const match = path.match(/\.\/src\/components\/(.+)\.astro$/);

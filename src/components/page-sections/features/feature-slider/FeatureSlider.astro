@@ -22,7 +22,6 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  editable={false}
   {...htmlAttributes}
 >
   <Carousel
@@ -31,7 +30,6 @@ const {
     minSlideWidth={0}
     autoPlay={false}
     autoScroll={false}
-    editable={false}
     data-component="page-sections/features/feature-slider/feature-slider-item"
     data-prop="slides"
     data-editable="array"
@@ -42,7 +40,6 @@ const {
           aria-label={`Slide ${index + 1} of ${slides.length}`}
           data-editable="array-item"
           {...slide}
-          editable={false}
         />
       ))
     }

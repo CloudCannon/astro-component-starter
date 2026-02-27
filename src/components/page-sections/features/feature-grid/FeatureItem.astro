@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 ---
 
-<GridItem editable={false} class="feature-grid-item" {...htmlAttributes}>
+<GridItem class="feature-grid-item" {...htmlAttributes}>
   <Card
     class:list={["feature-item", className]}
     paddingHorizontal="lg"
@@ -26,7 +26,6 @@ const {
     rounded
     border
     backgroundColor="base"
-    editable={false}
   >
     <Icon
       class="feature-icon"
@@ -42,7 +41,6 @@ const {
       size="md"
       alignX="start"
       data-prop="title"
-      editable={editable}
     >
       {title}
     </Heading>
@@ -51,7 +49,6 @@ const {
       alignX="start"
       data-prop="description"
       text={description}
-      editable={editable}
     />
   </Card>
 </GridItem>

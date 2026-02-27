@@ -38,7 +38,6 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   data-feature-split-id={featureSplitId}
-  editable={false}
   {...htmlAttributes}
 >
   <Split
@@ -50,16 +49,13 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     verticalAlignment="center"
     gap="2xl"
     reverseOrderOnMobile={true}
-    editable={false}
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow" editable={true}>
-        {eyebrow}
-      </SimpleText>
-      <Heading level="h2" size="lg" data-prop="heading" editable={true}>
+      <SimpleText class="eyebrow" data-prop="eyebrow" text={eyebrow} />
+      <Heading level="h2" size="lg" data-prop="heading">
         {heading}
       </Heading>
-      <Text class="subtext" data-prop="subtext" text={subtext} editable={true} />
+      <Text class="subtext" data-prop="subtext" text={subtext} />
       <ButtonGroup
         class="feature-buttons"
         buttonSections={buttonSections}
@@ -75,7 +71,6 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
       alt={imageAlt}
       rounded={imageRounded}
       aspectRatio={imageAspectRatio}
-      editable={true}
       data-prop-src="imageSource"
       data-prop-alt="imageAlt"
       data-editable="image"

@@ -1,5 +1,6 @@
 ---
 import GridItem from "./GridItem.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   layout = "center",
@@ -10,18 +11,11 @@ const {
   items = [],
   label,
   gap = "md",
-  editable = true,
+  editable = false,
   _component,
   "data-children-prop": childrenDataProp = "items",
   ...htmlAttributes
 } = Astro.props;
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);

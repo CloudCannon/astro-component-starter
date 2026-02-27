@@ -1,23 +1,17 @@
 ---
 import AccordionItem from "./AccordionItem.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   items,
   openFirst,
   singleOpen = false,
   label,
-  editable = true,
+  editable = false,
   "data-children-prop": childrenDataProp = "items",
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 const generatedLabel = label || `Accordion-${crypto.randomUUID()}`;
 

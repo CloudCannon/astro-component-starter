@@ -27,16 +27,13 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  editable={false}
   {...htmlAttributes}
 >
-  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={true}>
-    {eyebrow}
-  </SimpleText>
-  <Heading level="h1" size="2xl" alignX="center" data-prop="heading" editable={true}>
+  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" text={eyebrow} />
+  <Heading level="h1" size="2xl" alignX="center" data-prop="heading">
     {heading}
   </Heading>
-  <Text alignX="center" class="subtext" data-prop="subtext" text={subtext} editable={true} />
+  <Text alignX="center" class="subtext" data-prop="subtext" text={subtext} />
   <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" editable={true} />
 </CustomSection>
 

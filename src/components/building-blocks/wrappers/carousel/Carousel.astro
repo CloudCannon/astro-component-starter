@@ -1,6 +1,7 @@
 ---
 import Button from "@core-elements/button/Button.astro";
 import CarouselSlide from "./CarouselSlide.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   slides = [],
@@ -11,17 +12,10 @@ const {
   style = "",
   label,
   "data-children-prop": childrenDataProp = "slides",
-  editable = true,
+  editable = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);

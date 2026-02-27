@@ -1,5 +1,6 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   firstColumnContentSections = [],
@@ -11,7 +12,7 @@ const {
   fixedWidth,
   minSplitWidth = 700,
   gap = "lg",
-  editable = true,
+  editable = false,
   class: className,
   label,
   "data-first-prop": customFirstDataProp = "firstColumnContentSections",
@@ -19,13 +20,6 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);

@@ -1,24 +1,18 @@
 ---
 import Heading from "@core-elements/heading/Heading.astro";
 import ContentSelectorPanel from "./ContentSelectorPanel.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   items,
   navigationPosition = "start",
   class: className,
   label,
-  editable = true,
+  editable = false,
   "data-children-prop": childrenDataProp = "items",
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slugifyLabel = (label: string) => {
-  return label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);

@@ -65,10 +65,8 @@ const date = post.data.date.toLocaleDateString("en-US", {
     colorScheme="light"
     backgroundColor="base"
     class="post-container"
-    editable={false}
   >
     <SimpleText
-      editable={true}
       size="sm"
       style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);"
       data-prop="author"
@@ -77,7 +75,6 @@ const date = post.data.date.toLocaleDateString("en-US", {
     </SimpleText>
 
     <Heading
-      editable={true}
       data-prop="title"
       level="h1"
       size="2xl"
@@ -89,7 +86,6 @@ const date = post.data.date.toLocaleDateString("en-US", {
     {
       post.data.description && (
         <SimpleText
-          editable={true}
           data-prop="description"
           size="lg"
           style="color: var(--color-text-muted); margin-bottom: 0; margin-top: var(--spacing-xs);"
@@ -105,7 +101,6 @@ const date = post.data.date.toLocaleDateString("en-US", {
           source={post.data.image}
           alt={post.data.title}
           rounded={true}
-          editable={true}
           data-prop-src="image"
           data-prop-alt="title"
           class="post-image"

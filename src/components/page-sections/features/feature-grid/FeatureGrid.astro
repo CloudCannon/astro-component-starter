@@ -28,13 +28,10 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  editable={false}
   {...htmlAttributes}
 >
-  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" editable={editable}>
-    {eyebrow}
-  </SimpleText>
-  <Heading level="h2" size="lg" alignX="center" data-prop="heading" editable={editable}>
+  <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" text={eyebrow} />
+  <Heading level="h2" size="lg" alignX="center" data-prop="heading">
     {heading}
   </Heading>
   <Text
@@ -42,7 +39,6 @@ const {
     alignX="center"
     data-prop="subtext"
     text={subtext}
-    editable={editable}
   />
   <Grid
     gap="lg"
@@ -52,11 +48,10 @@ const {
     data-prop="features"
     data-editable="array"
     data-component="page-sections/features/feature-grid/feature-item"
-    editable={false}
   >
     {
       features.map((feature: any) => (
-        <FeatureItem data-editable="array-item" {...feature} editable={true} />
+        <FeatureItem data-editable="array-item" {...feature} />
       ))
     }
   </Grid>
