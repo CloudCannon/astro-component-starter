@@ -31,8 +31,10 @@ const {
     minSlideWidth={0}
     autoPlay={false}
     autoScroll={false}
-    data-prop="slides"
     editable={false}
+    data-editable="array"
+    data-component-key="_component"
+    data-prop="slides"
   >
     {
       slides.map((slide: any, index: number) => (
