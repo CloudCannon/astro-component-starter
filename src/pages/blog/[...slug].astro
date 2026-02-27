@@ -24,18 +24,6 @@ const mdxComponents: Record<string, any> = {};
 Object.entries(componentImports).forEach(([path, module]) => {
   const pathParts = path.split("/");
   const fileName = pathParts[pathParts.length - 1].replace(".astro", "");
-  const folderName = pathParts[pathParts.length - 2];
-
-  // Convert PascalCase to component name (already PascalCase, so just use it)
-  // If filename matches folder (in kebab-case), use folder-based name
-  const kebabFileName = fileName
-    .replace(/([A-Z])/g, "-$1")
-    .toLowerCase()
-    .replace(/^-/, "");
-  const kebabFolderName = folderName
-    .replace(/([A-Z])/g, "-$1")
-    .toLowerCase()
-    .replace(/^-/, "");
 
   // Component name is already PascalCase from filename
   const componentName = fileName;
@@ -77,18 +65,32 @@ const date = post.data.date.toLocaleDateString("en-US", {
     colorScheme="light"
     backgroundColor="base"
     class="post-container"
+    editable={false}
   >
-    <SimpleText size="sm" style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);">
+    <SimpleText
+      editable={true}
+      size="sm"
+      style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);"
+      data-prop="author"
+    >
       {date} • {post.data.author}
     </SimpleText>
 
-    <Heading level="h1" size="2xl" style="margin-bottom: var(--spacing-xs);">
+    <Heading
+      editable={true}
+      data-prop="title"
+      level="h1"
+      size="2xl"
+      style="margin-bottom: var(--spacing-xs);"
+    >
       {post.data.title}
     </Heading>
 
     {
       post.data.description && (
         <SimpleText
+          editable={true}
+          data-prop="description"
           size="lg"
           style="color: var(--color-text-muted); margin-bottom: 0; margin-top: var(--spacing-xs);"
         >
@@ -103,7 +105,9 @@ const date = post.data.date.toLocaleDateString("en-US", {
           source={post.data.image}
           alt={post.data.title}
           rounded={true}
-          editable={false}
+          editable={true}
+          data-prop-source="image"
+          data-prop-alt="title"
           class="post-image"
           aspectRatio="horizontal-strip"
           positionVertical="center"
@@ -111,14 +115,14 @@ const date = post.data.date.toLocaleDateString("en-US", {
       )
     }
 
-    <div class="post">
+    <div class="post" data-prop="content" data-editable="array" data-component-key="_component">
       <Content components={mdxComponents} />
     </div>
   </CustomSection>
 </Page>
 
-<style>
-  :global(.post-container.custom-section) > :global(.outer-content) > :global(.content) {
+<style is:global>
+  .post-container.custom-section > .outer-content > .content {
     padding-bottom: 0 !important;
   }
 
@@ -132,37 +136,32 @@ const date = post.data.date.toLocaleDateString("en-US", {
     margin-top: var(--spacing-xl);
   }
 
-  .post > :global(*) {
+  .post > * {
     grid-column: 2;
   }
 
-  .post > :global(.wide),
-  .post > :global(pre),
-  .post > :global(.image),
-  .post > :global(.video) {
+  .post > .wide,
+  .post > pre,
+  .post > .image,
+  .post > .video {
     grid-column: 1 / -1;
   }
 
-  .post > :global(h1),
-  .post > :global(h2),
-  .post > :global(h3),
-  .post > :global(h4),
-  .post > :global(h5),
-  .post > :global(h6) {
+  .post > h1,
+  .post > h2,
+  .post > h3,
+  .post > h4,
+  .post > h5,
+  .post > h6 {
     margin-bottom: 0;
     margin-top: 1rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
-  .post > :global(h1:first-child),
-  .post > :global(h2:first-child),
-  .post > :global(h3:first-child),
-  .post > :global(h4:first-child),
-  .post > :global(h5:first-child),
-  .post > :global(h6:first-child) {
-    margin-top: 0;
-  }
-
-  .post > :global(.astro-code) {
+  .post > .astro-code {
     margin-block: var(--spacing-xl);
   }
 
