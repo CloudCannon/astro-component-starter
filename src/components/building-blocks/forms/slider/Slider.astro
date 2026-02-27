@@ -6,9 +6,19 @@ const {
   required = false,
   value = "on",
   class: className,
+  editable = true,
   _component,
+  "data-prop": customDataProp = "label",
   ...htmlAttributes
 } = Astro.props;
+
+const labelDataAttributes =
+  editable && customDataProp
+    ? {
+        "data-editable": "text",
+        "data-prop": customDataProp,
+      }
+    : {};
 
 const fieldId = htmlAttributes.id || `slider-${crypto.randomUUID()}`;
 ---
@@ -32,7 +42,7 @@ const fieldId = htmlAttributes.id || `slider-${crypto.randomUUID()}`;
     {
       label && (
         <span class="slider-label">
-          {label}
+          <span {...labelDataAttributes}>{label}</span>
           {required && (
             <span class="slider-required" aria-label="required">
               *

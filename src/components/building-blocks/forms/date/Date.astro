@@ -1,5 +1,25 @@
 ---
-const { label, name, required = false, value, min, max, class: className, _component, ...htmlAttributes } = Astro.props;
+const {
+  label,
+  name,
+  required = false,
+  value,
+  min,
+  max,
+  class: className,
+  editable = true,
+  "data-prop": customDataProp = "label",
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const labelDataAttributes =
+  editable && customDataProp
+    ? {
+        "data-editable": "text",
+        "data-prop": customDataProp,
+      }
+    : {};
 
 const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
 ---
@@ -8,7 +28,7 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
   {
     label && (
       <label for={fieldId} class="label">
-        {label}
+        <span {...labelDataAttributes}>{label}</span>
         {required && (
           <span class="date-required" aria-label="required">
             *

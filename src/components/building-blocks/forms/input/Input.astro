@@ -7,9 +7,18 @@ const {
   required = false,
   value,
   class: className,
+  editable = true,
   _component,
+  "data-prop": customDataProp = "label",
   ...htmlAttributes
 } = Astro.props;
+
+const labelDataAttributes = editable
+  ? {
+      "data-editable": "text",
+      "data-prop": customDataProp,
+    }
+  : {};
 
 const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
 ---
@@ -18,7 +27,7 @@ const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
   {
     label && (
       <label for={fieldId} class="label">
-        {label}
+        <span {...labelDataAttributes}>{label}</span>
         {required && (
           <span class="input-required" aria-label="required">
             *
