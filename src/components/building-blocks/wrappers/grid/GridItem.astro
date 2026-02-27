@@ -13,13 +13,16 @@ const {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-component-key": "_component",
       "data-prop": childrenDataProp,
     }
   : {};
 ---
 
-<div class:list={["grid-item", className]} {...htmlAttributes}>
+<div
+  data-id="building-blocks/wrappers/grid/grid-item"
+  class:list={["grid-item", className]}
+  {...htmlAttributes}
+>
   <div class="grid-item-content" {...arrayDataAttributes}>
     <slot>
       {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
