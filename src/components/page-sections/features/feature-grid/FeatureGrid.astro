@@ -49,12 +49,19 @@ const {
     minItemWidth="360"
     maxItemWidth="360"
     class="feature-grid-grid"
-    data-children-prop="features"
-    editable={true}
+    data-prop="features"
+    data-editable="array"
+    data-id-key="_component"
+    editable={false}
   >
     {
       features.map((feature: any) => (
-        <FeatureItem data-editable="array-item" {...feature} editable={false} />
+        <FeatureItem
+          data-editable="array-item"
+          data-component="page-sections/features/feature-grid/feature-item"
+          {...feature}
+          editable={false}
+        />
       ))
     }
   </Grid>
