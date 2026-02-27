@@ -25,29 +25,26 @@ const {
   editable={false}
   {...htmlAttributes}
 >
-  <div
-    data-editable="component"
-    data-component="building-blocks/wrappers/carousel"
-    data-prop-slides="slides"
+  <Carousel
+    label="Feature slider"
+    slideWidthPercent={100}
+    minSlideWidth={0}
+    autoPlay={false}
+    autoScroll={false}
+    editable={true}
+    data-id-key="_component"
+    data-editable="array"
+    data-prop="slides"
   >
-    <Carousel
-      label="Feature slider"
-      slideWidthPercent={100}
-      minSlideWidth={0}
-      autoPlay={false}
-      autoScroll={false}
-      editable={true}
-    >
-      {
-        slides.map((slide: any, index: number) => (
-          <FeatureSliderItem
-            data-editable="array-item"
-            aria-label={`Slide ${index + 1} of ${slides.length}`}
-            {...slide}
-            editable={false}
-          />
-        ))
-      }
-    </Carousel>
-  </div>
+    {
+      slides.map((slide: any, index: number) => (
+        <FeatureSliderItem
+          data-editable="array-item"
+          aria-label={`Slide ${index + 1} of ${slides.length}`}
+          {...slide}
+          editable={false}
+        />
+      ))
+    }
+  </Carousel>
 </CustomSection>
