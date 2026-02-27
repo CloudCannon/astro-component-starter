@@ -44,22 +44,28 @@ const {
     text={subtext}
     editable={editable}
   />
-  <Grid
-    gap="lg"
-    minItemWidth="360"
-    maxItemWidth="360"
-    class="feature-grid-grid"
-    data-prop="features"
-    data-editable="array"
-    data-component-key="_component"
-    editable={false}
+  <div
+    data-editable="component"
+    data-component="building-blocks/wrappers/grid"
+    data-prop-features="features"
   >
-    {
-      features.map((feature: any) => (
-        <FeatureItem data-editable="array-item" {...feature} editable={false} />
-      ))
-    }
-  </Grid>
+    <Grid
+      gap="lg"
+      minItemWidth="360"
+      maxItemWidth="360"
+      class="feature-grid-grid"
+      data-prop="features"
+      data-editable="array"
+      data-component-key="_component"
+      editable={false}
+    >
+      {
+        features.map((feature: any) => (
+          <FeatureItem data-editable="array-item" {...feature} editable={false} />
+        ))
+      }
+    </Grid>
+  </div>
 </CustomSection>
 
 <style is:global>
