@@ -4,7 +4,7 @@ title: Astro Component Starter
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
-    heading: The Astro Component Starter for building any site
+    heading: 'The Astro Component Starter for building any site test '
     subtext: >-
       Built on web fundamentals. Easy to customize, fast to use, and simple to
       maintain.
@@ -13,7 +13,7 @@ pageSections:
         text: Explore Components
         hideText: false
         link: /component-library/
-        iconName: ""
+        iconName: ''
         iconPosition: before
         variant: primary
         size: md
@@ -21,7 +21,7 @@ pageSections:
         text: View in GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
-        iconName: ""
+        iconName: ''
         iconPosition: before
         variant: secondary
         size: md
@@ -146,7 +146,7 @@ pageSections:
         text: Explore Components
         hideText: false
         link: /component-library/
-        iconName: ""
+        iconName: ''
         iconPosition: before
         variant: primary
         size: md
@@ -154,11 +154,12 @@ pageSections:
         text: View in GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
-        iconName: ""
+        iconName: ''
         iconPosition: before
         variant: tertiary
         size: md
     colorScheme: dark
     backgroundColor: surface
     rounded: false
+description: ''
 ---
