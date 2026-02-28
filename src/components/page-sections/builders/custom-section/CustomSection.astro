@@ -1,7 +1,7 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
-import Image from "@core-elements/image/Image.astro";
 import { slugifyLabel } from "@components/utils/slugify";
+import Image from "@core-elements/image/Image.astro";
 
 const {
   label,
@@ -35,7 +35,6 @@ if (!htmlAttributes.id && label) {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-component-key": "_component",
       "data-prop": childrenDataProp,
     }
   : {};

@@ -30,13 +30,7 @@ const {
   {...htmlAttributes}
 >
   <SimpleText alignX="center" class="eyebrow" data-prop="eyebrow" text={eyebrow} />
-  <Heading
-    class="team-grid-heading"
-    level="h2"
-    size="lg"
-    alignX="center"
-    data-prop="heading"
-  >
+  <Heading class="team-grid-heading" level="h2" size="lg" alignX="center" data-prop="heading">
     {heading}
   </Heading>
   <SimpleText
@@ -53,12 +47,16 @@ const {
     maxItemWidth={400}
     data-prop="teamMembers"
     data-editable="array"
-    data-component="page-sections/people/team-grid/team-item"
     layout="start"
   >
     {
       teamMembers.map((member: any) => (
-        <TeamItem data-editable="array-item" {...member} class="team-grid-item" />
+        <TeamItem
+          data-id="page-sections/people/team-grid/team-item"
+          data-editable="array-item"
+          {...member}
+          class="team-grid-item"
+        />
       ))
     }
   </Grid>

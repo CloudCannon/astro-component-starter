@@ -48,7 +48,13 @@ if (!_component && !hasItems && !usesItemsArray) return;
     <slot>
       {
         items?.map((item: any) => (
-          <ListItem data-editable="array-item" editable={editable} showIcon={showIcons} {...item} />
+          <ListItem
+            data-id="building-blocks/core-elements/list/list-item"
+            data-editable="array-item"
+            editable={editable}
+            showIcon={showIcons}
+            {...item}
+          />
         ))
       }
     </slot>

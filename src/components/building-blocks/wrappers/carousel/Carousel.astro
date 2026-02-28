@@ -55,7 +55,6 @@ if (autoScroll) {
 const arrayDataAttributes = editable
   ? {
       "data-editable": "array",
-      "data-component": "building-blocks/wrappers/carousel/carousel-slide",
       "data-prop": childrenDataProp,
     }
   : {};
@@ -91,6 +90,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
             <CarouselSlide
               {...slide}
               data-editable="array-item"
+              data-id="building-blocks/wrappers/carousel/carousel-slide"
               editable={editable}
               aria-label={`Slide ${index + 1} of ${slides.length}`}
             />

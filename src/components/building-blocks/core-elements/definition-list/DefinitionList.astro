@@ -30,7 +30,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
         items &&
           items.length > 0 &&
           items.map((item: any) => (
-            <DefinitionListItem data-editable="array-item" editable={editable} {...item} />
+            <DefinitionListItem
+              data-id="building-blocks/core-elements/definition-list/definition-list-item"
+              data-editable="array-item"
+              editable={editable}
+              {...item}
+            />
           ))
       }
     </slot>

@@ -50,8 +50,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
       {
         items?.map((item: any) => (
           <GridItem
+            data-id="building-blocks/wrappers/grid/grid-item"
             data-editable="array-item"
-            data-id={item._component}
             class:list={`layout-${layout}`}
             editable={editable}
             {...item}
