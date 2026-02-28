@@ -1,15 +1,23 @@
 ---
 import RenderBlock from "@components/utils/renderBlock.astro";
+import Heading from "@core-elements/heading/Heading.astro";
 
 const {
+  title,
   contentSections,
   editable = true,
-  index,
-  uniqueId,
+  checked = false,
+  groupName = "content-selector-tabs",
+  navigationPosition = "start",
   _component,
   "data-children-prop": childrenDataProp = "contentSections",
   ...htmlAttributes
 } = Astro.props;
+
+const uniqueId = crypto.randomUUID();
+const tabId = `tab-${uniqueId}`;
+const panelId = `panel-${uniqueId}`;
+const tabLabelId = `tablabel-${uniqueId}`;
 
 const arrayDataAttributes = editable
   ? {
@@ -20,32 +28,61 @@ const arrayDataAttributes = editable
 ---
 
 <div
-  class="panel"
-  id={`panel-${uniqueId}-${index}`}
-  role="tabpanel"
-  aria-labelledby={`tablabel-${uniqueId}-${index}`}
-  aria-hidden={index !== 0}
-  data-id="building-blocks/wrappers/content-selector/content-selector-panel"
+  class="content-selector-item"
+  data-id="building-blocks/wrappers/content-selector/content-selector-item"
   {...htmlAttributes}
 >
-  <div class="panel__content" {...arrayDataAttributes}>
-    <slot>
-      {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
-    </slot>
+  <input
+    type="radio"
+    name={groupName}
+    id={tabId}
+    class="content-selector-input"
+    checked={checked}
+    autocomplete="off"
+  />
+  <label
+    class="content-selector-tab"
+    id={tabLabelId}
+    for={tabId}
+    role="tab"
+    aria-controls={panelId}
+  >
+    <Heading
+      text={title}
+      level="h3"
+      size="h3"
+      alignX={navigationPosition === "top" ? "center" : "start"}
+      class="content-selector-tab-heading"
+      editable={false}
+    />
+  </label>
+  <div class="content-selector-panel" id={panelId} role="tabpanel" aria-labelledby={tabLabelId}>
+    <div class="content-selector-panel-content" {...arrayDataAttributes}>
+      <slot>
+        {contentSections && <RenderBlock contentSections={contentSections} editable={editable} />}
+      </slot>
+    </div>
   </div>
 </div>
 
 <style is:global>
   @layer components {
-    .panel {
+    .content-selector-item {
+      display: contents;
+    }
+
+    .content-selector-input {
+      display: none;
+    }
+
+    .content-selector-panel {
       animation: fade-in var(--animation-slow) ease-in-out forwards;
       container-type: inline-size;
       display: none;
-      padding: 0 var(--spacing-md);
+    }
 
-      > .panel__content > *:first-child {
-        margin-top: 0 !important;
-      }
+    .content-selector-panel-content > *:first-child {
+      margin-top: 0 !important;
     }
   }
 </style>

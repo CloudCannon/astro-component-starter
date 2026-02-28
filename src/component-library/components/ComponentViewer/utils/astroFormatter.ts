@@ -79,6 +79,23 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
         uniqueComponents.add("building-blocks/forms/form");
       }
 
+      // Handle content-selector items even when metadata fallback wiring is unavailable.
+      if (block._component?.includes("building-blocks/wrappers/content-selector") && block.items) {
+        uniqueComponents.add("building-blocks/wrappers/content-selector/content-selector-panel");
+        const items = Array.isArray(block.items) ? block.items : [block.items];
+
+        items.forEach((item: any) => {
+          if (!item || typeof item !== "object") return;
+          for (const prop of nestedBlockProperties) {
+            if (item[prop]) {
+              const nestedBlocks = Array.isArray(item[prop]) ? item[prop] : [item[prop]];
+
+              nestedBlocks.forEach(addComponentToSet);
+            }
+          }
+        });
+      }
+
       if (block._component) {
         const metadata = metadataMap.get(block._component);
 

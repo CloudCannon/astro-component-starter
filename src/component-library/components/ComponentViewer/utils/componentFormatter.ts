@@ -371,6 +371,82 @@ ${indent}  </${itemComponentName}>`;
     return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
 ${itemsContent}
 ${indent}</${componentName}>`;
+  } else if (items && componentPath.includes("content-selector")) {
+    // Handle content selector items as slot content
+    const itemsArray = Array.isArray(items) ? items : [items];
+    const itemComponentName = "ContentSelectorPanel";
+    const containerProps = { ...props };
+
+    delete containerProps.items;
+
+    const containerPropsString = Object.entries(containerProps)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([key, value]) => {
+        if (typeof value === "string") {
+          return `${key}="${value}"`;
+        } else if (typeof value === "boolean") {
+          return value ? key : "";
+        } else if (typeof value === "number") {
+          return `${key}={${value}}`;
+        } else if (Array.isArray(value)) {
+          const formattedArray = JSON.stringify(value, null, 2)
+            .split("\n")
+            .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
+            .join("\n");
+
+          return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
+        } else if (typeof value === "object" && value !== null) {
+          return `${key}={${JSON.stringify(value)}}`;
+        }
+        return `${key}="${String(value)}"`;
+      })
+      .filter(Boolean)
+      .join(" ");
+
+    const itemsContent = itemsArray
+      .map((item) => {
+        const itemProps = { ...item };
+
+        delete itemProps._component;
+        delete itemProps.contentSections;
+
+        const itemPropsString = Object.entries(itemProps)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([key, value]) => {
+            if (typeof value === "string") {
+              return `${key}="${value}"`;
+            } else if (typeof value === "boolean") {
+              return value ? key : "";
+            } else if (typeof value === "number") {
+              return `${key}={${value}}`;
+            }
+            return `${key}="${String(value)}"`;
+          })
+          .filter(Boolean)
+          .join(" ");
+
+        const itemContent = item.contentSections
+          ? (Array.isArray(item.contentSections) ? item.contentSections : [item.contentSections])
+              .map((nestedBlock) =>
+                formatComponentWithSlots(
+                  nestedBlock,
+                  indentLevel + 2,
+                  componentMetadata,
+                  nestedBlockProperties
+                )
+              )
+              .join("\n")
+          : "";
+
+        return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""}>
+${itemContent}
+${indent}  </${itemComponentName}>`;
+      })
+      .join("\n");
+
+    return `${indent}<${componentName}${containerPropsString ? ` ${containerPropsString}` : ""}>
+${itemsContent}
+${indent}</${componentName}>`;
   } else if (block.slides && componentPath.includes("carousel")) {
     // Handle carousel slides as slot content
     const slidesArray = Array.isArray(block.slides) ? block.slides : [block.slides];

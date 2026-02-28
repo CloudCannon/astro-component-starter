@@ -5,7 +5,8 @@ blocks:
   _component: building-blocks/wrappers/content-selector
   navigationPosition: start
   items:
-    - title: Overview
+    - _component: building-blocks/wrappers/content-selector/content-selector-item
+      title: Overview
       contentSections:
         - _component: building-blocks/core-elements/heading
           text: Overview
@@ -16,7 +17,8 @@ blocks:
             A small, service‑focused business offering practical help for everyday needs. Clear communication, fair pricing, and dependable results.
           alignX: start
           size: md
-    - title: Details
+    - _component: building-blocks/wrappers/content-selector/content-selector-item
+      title: Details
       contentSections:
         - _component: building-blocks/core-elements/heading
           text: Details
@@ -27,7 +29,8 @@ blocks:
             Typical work includes planning, setup, and ongoing support. Projects are delivered on time with straightforward steps and simple options.
           alignX: start
           size: md
-    - title: Next steps
+    - _component: building-blocks/wrappers/content-selector/content-selector-item
+      title: Next steps
       contentSections:
         - _component: building-blocks/core-elements/heading
           text: Next steps

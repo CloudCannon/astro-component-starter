@@ -1,5 +1,4 @@
 ---
-import Heading from "@core-elements/heading/Heading.astro";
 import ContentSelectorPanel from "./ContentSelectorPanel.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import type { ContentSelectorItem } from "../../../../types";
@@ -20,6 +19,7 @@ if (!htmlAttributes.id && label) {
 }
 
 const uniqueId = crypto.randomUUID();
+const groupName = `tabs-${uniqueId}`;
 
 const arrayDataAttributes = editable
   ? {
@@ -39,199 +39,137 @@ if (!_component && !hasItems && !hasSlotContent) return;
   data-uid={uniqueId}
   {...htmlAttributes}
 >
-  {
-    items?.map((_item: ContentSelectorItem, index: number) => (
-      <input
-        type="radio"
-        name={`tabs-${uniqueId}`}
-        id={`tab-${uniqueId}-${index}`}
-        class="input"
-        hidden
-        checked={index === 0}
-        autocomplete="off"
-      />
-    ))
-  }
-
-  <div class="tabs" role="tablist">
-    {
-      items?.map((item: ContentSelectorItem, index: number) => (
-        <label
-          class="tab"
-          id={`tablabel-${uniqueId}-${index}`}
-          for={`tab-${uniqueId}-${index}`}
-          role="tab"
-          aria-controls={`panel-${uniqueId}-${index}`}
-          tabindex="0"
-          aria-selected={index === 0}
-        >
-          <Heading
-            text={item.title}
-            level="h3"
-            size="h3"
-            alignX={navigationPosition === "top" ? "center" : "start"}
-            class="tab-heading"
-            editable={false}
+  <div class="content-selector-items" role="tablist" {...arrayDataAttributes}>
+    <slot>
+      {
+        items?.map((item: ContentSelectorItem, index: number) => (
+          <ContentSelectorPanel
+            title={item.title}
+            contentSections={item.contentSections}
+            _component={item._component}
+            checked={index === 0}
+            groupName={groupName}
+            navigationPosition={navigationPosition}
+            editable={editable}
+            data-editable="array-item"
           />
-        </label>
-      ))
-    }
+        ))
+      }
+    </slot>
   </div>
-
-  <div class="panels" {...arrayDataAttributes}>
-    {
-      items?.map((item: ContentSelectorItem, index: number) => (
-        <ContentSelectorPanel
-          data-editable="array-item"
-          index={index}
-          uniqueId={uniqueId}
-          contentSections={item.contentSections}
-          _component={item._component}
-          editable={editable}
-        />
-      ))
-    }
-  </div>
-
-  <script>
-    function updateContentSelectorAria(el: HTMLElement) {
-      const inputs = Array.from(el.querySelectorAll<HTMLInputElement>('input.input[type="radio"]'));
-      const tabs = Array.from(el.querySelectorAll<HTMLElement>('[role="tab"]'));
-      const panels = Array.from(el.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
-      const checked = el.querySelector<HTMLInputElement>('input.input[type="radio"]:checked');
-      const checkedIndex = checked ? inputs.indexOf(checked) : 0;
-      tabs.forEach((tab: HTMLElement, i: number) =>
-        tab.setAttribute("aria-selected", i === checkedIndex ? "true" : "false")
-      );
-      panels.forEach((panel: HTMLElement, i: number) =>
-        panel.setAttribute("aria-hidden", i !== checkedIndex ? "true" : "false")
-      );
-    }
-
-    function setupContentSelectors() {
-      document.querySelectorAll("section.content-selector").forEach((node) => {
-        if (!(node instanceof HTMLElement)) return;
-        const el: HTMLElement = node;
-        const inputs = el.querySelectorAll<HTMLInputElement>('input.input[type="radio"]');
-        inputs.forEach((input) => {
-          input.addEventListener("change", () => updateContentSelectorAria(el));
-        });
-        updateContentSelectorAria(el);
-      });
-    }
-
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", setupContentSelectors);
-    } else {
-      setupContentSelectors();
-    }
-  </script>
 </section>
 
 <style is:global>
   @layer components {
     .content-selector {
       --content-selector-border-width: 1px;
-      display: flex;
       margin-top: var(--spacing-lg);
 
-      > .input {
-        display: none;
-      }
-
-      > .tabs {
+      > .content-selector-items {
         border: 0 solid var(--color-bg-muted);
-
-        > .tab {
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          display: block;
-          padding: var(--spacing-md);
-          position: relative;
-          transition: background-color var(--animation-normal) ease-in-out;
-          width: 100%;
-
-          &::before {
-            background: transparent;
-            content: "";
-            inset-block: 0;
-            inset-inline-start: calc(var(--content-selector-border-width) * -1);
-            position: absolute;
-            transition:
-              transform var(--animation-normal),
-              background var(--animation-normal);
-          }
-
-          &:hover {
-            background: var(--color-state-hover);
-          }
-
-          > .tab-heading {
-            margin: 0;
-          }
-        }
-      }
-
-      > .panels {
-        flex: 1;
         width: 100%;
       }
 
-      > .input:nth-of-type(1):checked ~ .tabs > .tab:nth-of-type(1)::before,
-      > .input:nth-of-type(2):checked ~ .tabs > .tab:nth-of-type(2)::before,
-      > .input:nth-of-type(3):checked ~ .tabs > .tab:nth-of-type(3)::before,
-      > .input:nth-of-type(4):checked ~ .tabs > .tab:nth-of-type(4)::before,
-      > .input:nth-of-type(5):checked ~ .tabs > .tab:nth-of-type(5)::before,
-      > .input:nth-of-type(6):checked ~ .tabs > .tab:nth-of-type(6)::before,
-      > .input:nth-of-type(7):checked ~ .tabs > .tab:nth-of-type(7)::before,
-      > .input:nth-of-type(8):checked ~ .tabs > .tab:nth-of-type(8)::before,
-      > .input:nth-of-type(9):checked ~ .tabs > .tab:nth-of-type(9)::before,
-      > .input:nth-of-type(10):checked ~ .tabs > .tab:nth-of-type(10)::before {
+      .content-selector-tab {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        display: block;
+        padding: var(--spacing-md);
+        position: relative;
+        transition: background-color var(--animation-normal) ease-in-out;
+        width: 100%;
+
+        &::before {
+          background: transparent;
+          content: "";
+          position: absolute;
+          transition:
+            transform var(--animation-normal),
+            background var(--animation-normal);
+        }
+
+        &:hover {
+          background: var(--color-state-hover);
+        }
+
+        > .content-selector-tab-heading {
+          margin: 0;
+        }
+      }
+
+      .content-selector-item > .content-selector-input:checked + .content-selector-tab::before {
         background: var(--color-border-strong);
       }
 
-      > .input:nth-of-type(1):checked ~ .panels > .panel:nth-of-type(1),
-      > .input:nth-of-type(2):checked ~ .panels > .panel:nth-of-type(2),
-      > .input:nth-of-type(3):checked ~ .panels > .panel:nth-of-type(3),
-      > .input:nth-of-type(4):checked ~ .panels > .panel:nth-of-type(4),
-      > .input:nth-of-type(5):checked ~ .panels > .panel:nth-of-type(5),
-      > .input:nth-of-type(6):checked ~ .panels > .panel:nth-of-type(6),
-      > .input:nth-of-type(7):checked ~ .panels > .panel:nth-of-type(7),
-      > .input:nth-of-type(8):checked ~ .panels > .panel:nth-of-type(8),
-      > .input:nth-of-type(9):checked ~ .panels > .panel:nth-of-type(9),
-      > .input:nth-of-type(10):checked ~ .panels > .panel:nth-of-type(10) {
-        display: revert;
+      .content-selector-item
+        > .content-selector-input:checked
+        + .content-selector-tab
+        + .content-selector-panel {
+        display: block;
+      }
+
+      &:not(:has(.content-selector-item > .content-selector-input:checked))
+        .content-selector-item:first-of-type
+        > .content-selector-tab::before {
+        background: var(--color-border-strong);
+      }
+
+      &:not(:has(.content-selector-item > .content-selector-input:checked))
+        .content-selector-item:first-of-type
+        > .content-selector-panel {
+        display: block;
       }
 
       &.nav-start {
-        gap: var(--spacing-em-lg);
+        > .content-selector-items {
+          column-gap: var(--spacing-em-lg);
+          display: grid;
+          grid-template-columns: minmax(10rem, 20rem) minmax(0, 1fr);
+        }
 
-        > .tabs {
-          border-inline-start-width: var(--content-selector-border-width);
-          max-width: 20rem;
-          min-width: 10rem;
-          width: fit-content;
+        .content-selector-tab {
+          border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
+          grid-column: 1;
 
-          > .tab::before {
+          &::before {
+            inset-block: 0;
+            inset-inline-start: calc(var(--content-selector-border-width) * -1);
             width: var(--content-selector-border-width);
           }
+        }
+
+        .content-selector-panel {
+          grid-column: 2;
+          grid-row: 1 / span 999;
+          padding: 0 var(--spacing-md);
+          width: 100%;
         }
       }
 
       &.nav-top {
-        flex-direction: column;
-
-        > .tabs {
+        > .content-selector-items {
           border-bottom-width: var(--content-selector-border-width);
           display: flex;
-          margin-bottom: var(--spacing-md);
+          flex-wrap: wrap;
+        }
 
-          > .tab::before {
+        .content-selector-tab {
+          width: fit-content;
+
+          &::before {
             height: var(--content-selector-border-width);
             inset-block: 100%;
+            inset-inline-start: 0;
             width: 100%;
           }
+        }
+
+        .content-selector-panel {
+          flex-basis: 100%;
+          margin-top: var(--spacing-md);
+          padding: 0 var(--spacing-md);
+          width: 100%;
         }
       }
     }
