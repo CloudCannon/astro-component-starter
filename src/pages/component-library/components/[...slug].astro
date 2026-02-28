@@ -1,9 +1,8 @@
 ---
 import ComponentLayout from "@component-library/layouts/ComponentLayout.astro";
 import { getCollection, render } from "astro:content";
-// @ts-ignore
-import { existsSync, readFileSync } from "fs";
-import yaml from "js-yaml";
+import { existsSync, readFileSync } from "node:fs";
+import { load as yamlLoad } from "js-yaml";
 
 export async function getStaticPaths() {
   // Skip component library routes if DISABLE_COMPONENT_LIBRARY is set
@@ -63,11 +62,11 @@ export async function getStaticPaths() {
         try {
           const content = readFileSync(configPath, "utf8");
 
-          configData = yaml.load(content);
+          configData = yamlLoad(content) as Record<string, unknown> | null;
 
           if (configData?._inputs_from_glob && Array.isArray(configData._inputs_from_glob)) {
-            const inputs: Record<string, any> = {};
-            const structures: Record<string, any> = {};
+            const inputs: Record<string, unknown> = {};
+            const structures: Record<string, unknown> = {};
 
             for (const inputPath of configData._inputs_from_glob) {
               const resolvedPath = inputPath.startsWith("/")
@@ -77,18 +76,16 @@ export async function getStaticPaths() {
               if (existsSync(resolvedPath)) {
                 try {
                   const inputContent = readFileSync(resolvedPath, "utf8");
-                  const inputData = yaml.load(inputContent);
+                  const inputData = yamlLoad(inputContent) as Record<string, unknown> | null;
 
                   if (inputData && typeof inputData === "object") {
-                    // Extract all top-level keys except _structures as inputs
                     Object.keys(inputData).forEach((key) => {
                       if (key !== "_structures") {
                         inputs[key] = inputData[key];
                       }
                     });
-                    // Extract _structures separately
                     if (inputData._structures) {
-                      Object.assign(structures, inputData._structures);
+                      Object.assign(structures, inputData._structures as Record<string, unknown>);
                     }
                   }
                 } catch (error) {

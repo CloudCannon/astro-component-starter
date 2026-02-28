@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://example.com", // TODO: Update to your production URL
   build: {
     inlineStylesheets: "always",
   },
@@ -65,6 +65,7 @@ export default defineConfig({
         "@assets": path.resolve(__dirname, "src/assets"),
         "@component-library": path.resolve(__dirname, "src/component-library"),
         "@layouts": path.resolve(__dirname, "src/layouts"),
+        "@component-utils": path.resolve(__dirname, "src/components/utils"),
         "@styles": path.resolve(__dirname, "src/styles"),
       },
     },

@@ -12,6 +12,33 @@ autoPlay:
 autoScroll:
   comment: Enable auto-scroll functionality.
   type: switch
+loop:
+  comment: Loop the carousel back to the beginning when reaching the end.
+  type: switch
+showIndicators:
+  comment: Show dot indicators below the carousel.
+  type: switch
+showArrows:
+  comment: Show previous and next arrow buttons.
+  type: switch
+align:
+  comment: Alignment of slides within the carousel viewport.
+  type: select
+  options:
+    values:
+      - start
+      - center
+      - end
+slidesToScroll:
+  comment: Number of slides to scroll at a time, or "auto" to scroll by the number of visible slides.
+  type: select
+  options:
+    values:
+      - auto
+      - "1"
+      - "2"
+      - "3"
+      - "4"
 slideWidthPercent:
   comment: Width of each slide as a percentage of the carousel (e.g., 33, 50, 100).
   type: range

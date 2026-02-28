@@ -7,6 +7,11 @@ value:
   slides: []
   autoPlay: false
   autoScroll: false
+  loop: true
+  showIndicators: true
+  showArrows: true
+  align: center
+  slidesToScroll: auto
   slideWidthPercent: 100
   minSlideWidth: 0
 preview:

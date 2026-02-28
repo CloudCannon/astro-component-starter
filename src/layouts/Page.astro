@@ -6,6 +6,8 @@ import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
 import Layout from "@layouts/BaseLayout.astro";
 
+import type { ContentBlock } from "../types";
+
 type Props = {
   frontmatter?: {
     title: string;
@@ -13,15 +15,15 @@ type Props = {
     keywords?: string[];
     image?: string;
     canonical?: string;
-    pageSections?: any[];
+    pageSections?: ContentBlock[];
   };
   title?: string;
   description?: string;
   keywords?: string[];
   image?: string;
   canonical?: string;
-  mainNav?: Record<string, any>;
-  footer?: Record<string, any>;
+  mainNav?: Record<string, unknown>;
+  footer?: Record<string, unknown>;
 };
 
 const {

@@ -1,6 +1,8 @@
 ---
 import ListItem from "./ListItem.astro";
 
+type ItemProps = Record<string, unknown>;
+
 const {
   items = [],
   direction = "vertical",
@@ -47,7 +49,7 @@ if (!_component && !hasItems && !usesItemsArray) return;
   <ListTag role="list" {...arrayDataAttributes}>
     <slot>
       {
-        items?.map((item: any) => (
+        items?.map((item: ItemProps) => (
           <ListItem
             data-id="building-blocks/core-elements/list/list-item"
             data-editable="array-item"

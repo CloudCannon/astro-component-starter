@@ -1,5 +1,4 @@
-// @ts-ignore
-import yaml from "js-yaml";
+import { dump } from "js-yaml";
 import { removeStyleField } from "../../../shared/blockDataUtils";
 
 export function formatBlocksYaml(blocks: any, title: string, spacing: string): string {
@@ -12,7 +11,7 @@ export function formatBlocksYaml(blocks: any, title: string, spacing: string): s
       blocks: blocksWithoutStyle,
     };
 
-    const yamlContent = yaml.dump(frontMatterData, {
+    const yamlContent = dump(frontMatterData, {
       indent: 2,
       lineWidth: -1,
       noRefs: true,

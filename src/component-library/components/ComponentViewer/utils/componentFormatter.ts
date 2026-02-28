@@ -1,6 +1,4 @@
-// @ts-ignore
 import MarkdownIt from "markdown-it";
-// @ts-ignore
 import pkg from "js-beautify";
 import type { ComponentMetadata } from "../../../shared/metadata";
 import { getComponentDisplayName } from "./componentUtils";

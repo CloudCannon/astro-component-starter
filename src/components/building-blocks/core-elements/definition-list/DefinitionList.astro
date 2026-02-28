@@ -1,6 +1,8 @@
 ---
 import DefinitionListItem from "./DefinitionListItem.astro";
 
+type ItemProps = Record<string, unknown>;
+
 const {
   items,
   alignX = "start",
@@ -27,16 +29,14 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <dl {...arrayDataAttributes}>
     <slot>
       {
-        items &&
-          items.length > 0 &&
-          items.map((item: any) => (
-            <DefinitionListItem
-              data-id="building-blocks/core-elements/definition-list/definition-list-item"
-              data-editable="array-item"
-              editable={editable}
-              {...item}
-            />
-          ))
+        items?.map((item: ItemProps) => (
+          <DefinitionListItem
+            data-id="building-blocks/core-elements/definition-list/definition-list-item"
+            data-editable="array-item"
+            editable={editable}
+            {...item}
+          />
+        ))
       }
     </slot>
   </dl>

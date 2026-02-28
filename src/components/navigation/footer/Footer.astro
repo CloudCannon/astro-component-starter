@@ -6,10 +6,11 @@ import Divider from "@core-elements/divider/Divider.astro";
 import Image from "@core-elements/image/Image.astro";
 import Text from "@core-elements/text/Text.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
+import type { SocialLink } from "../../../../types";
 
 const {
   links = [],
-  socials = [],
+  socials = [] as SocialLink[],
   footerText = "",
   logoSource,
   logoAlt,
@@ -43,14 +44,14 @@ const {
       <div class="content-container">
         <ButtonGroup alignX="end" editable={false}>
           {
-            socials.map((social: any) => (
+            socials.map((social) => (
               <Button
                 variant="ghost"
                 size="lg"
                 iconName={social.icon}
                 link={social.link}
                 hideText="true"
-                aria-label={`Visit our ${social.icon} page`}
+                aria-label={social.label || `Visit our ${social.icon.replace(/^.*\//, "")} page`}
                 target="_blank"
                 rel="noopener noreferrer"
                 editable={false}

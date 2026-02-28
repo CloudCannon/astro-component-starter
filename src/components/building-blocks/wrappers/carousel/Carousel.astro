@@ -3,10 +3,17 @@ import Button from "@core-elements/button/Button.astro";
 import CarouselSlide from "./CarouselSlide.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 
+type SlideProps = Record<string, unknown>;
+
 const {
   slides = [],
   autoPlay = false,
   autoScroll = false,
+  showIndicators = true,
+  showArrows = true,
+  loop = true,
+  align = "center",
+  slidesToScroll = "auto",
   slideWidthPercent = 100,
   minSlideWidth = 0,
   style = "",
@@ -23,24 +30,11 @@ if (!htmlAttributes.id && label) {
 
 const dataAttributes: Record<string, string> = {};
 
-// These are hardcoded variables that you could setup
-// to be configured to be set by the editor.
-
-// Shows the indicators dots.
-dataAttributes["data-show-indicators"] = "true";
-
-// Shows the navigational arrows.
-dataAttributes["data-show-arrows"] = "true";
-
-// If false, the carousel will stop at the last slide.
-dataAttributes["data-loop"] = "true";
-
-// Positions the slides in the viewport.
-dataAttributes["data-align"] = "center";
-
-// Allows the carousel to scroll a specific number of
-// slides at a time.
-dataAttributes["data-slides-to-scroll"] = "auto";
+dataAttributes["data-show-indicators"] = String(showIndicators);
+dataAttributes["data-show-arrows"] = String(showArrows);
+dataAttributes["data-loop"] = String(loop);
+dataAttributes["data-align"] = String(align);
+dataAttributes["data-slides-to-scroll"] = String(slidesToScroll);
 
 if (autoPlay) {
   dataAttributes["data-autoplay"] = "3";
@@ -86,7 +80,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
     <div class="track" {...arrayDataAttributes}>
       <slot>
         {
-          slides?.map((slide: any, index: number) => (
+          slides?.map((slide: SlideProps, index: number) => (
             <CarouselSlide
               {...slide}
               data-editable="array-item"

@@ -1,9 +1,10 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import type { SegmentOption } from "../../../../types";
 
 const {
   name,
-  options = [],
+  options = [] as SegmentOption[],
   title,
   required = false,
   iconOnly = false,
@@ -38,7 +39,7 @@ const inputType = multiple ? "checkbox" : "radio";
   }
   <div class="segments-options" role="presentation">
     {
-      options.map((option: any, index: number) => (
+      options.map((option, index: number) => (
         <label class="segments-option">
           <input
             type={inputType}
@@ -79,7 +80,7 @@ const inputType = multiple ? "checkbox" : "radio";
       padding: 0;
 
       .segments-required {
-        color: red;
+        color: var(--color-error);
         margin-inline-end: var(--spacing-em-xs);
       }
 

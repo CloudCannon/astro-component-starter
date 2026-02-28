@@ -1,7 +1,6 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
 
-const props = Astro.props as any;
 const {
   name,
   size = "lg",
@@ -11,7 +10,7 @@ const {
   class: className,
   _component,
   ...htmlAttributes
-} = props;
+} = Astro.props;
 
 const isValidName = name && typeof name === "string" && name.trim();
 
@@ -30,7 +29,7 @@ if (!_component && !isValidName) {
     name?.includes("social/") && "fill",
     className,
   ]}
-  {...htmlAttributes as any}
+  {...htmlAttributes}
 >
   <AstroIcon name={String(name).trim()} is:inline />
 </div>

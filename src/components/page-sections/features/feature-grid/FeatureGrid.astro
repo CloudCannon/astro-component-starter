@@ -6,6 +6,8 @@ import Text from "@core-elements/text/Text.astro";
 import FeatureItem from "@features/feature-grid/FeatureItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
 
+type FeatureProps = Record<string, unknown>;
+
 const {
   eyebrow = "",
   heading = "",
@@ -44,7 +46,7 @@ const {
     editable={true}
   >
     {
-      features.map((feature: any) => (
+      features.map((feature: FeatureProps) => (
         <FeatureItem
           data-id="page-sections/features/feature-grid/feature-item"
           data-editable="array-item"

@@ -2,9 +2,10 @@
 import Heading from "@core-elements/heading/Heading.astro";
 import ContentSelectorPanel from "./ContentSelectorPanel.astro";
 import { slugifyLabel } from "@components/utils/slugify";
+import type { ContentSelectorItem } from "../../../../types";
 
 const {
-  items,
+  items = [] as ContentSelectorItem[],
   navigationPosition = "start",
   class: className,
   label,
@@ -39,7 +40,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   {...htmlAttributes}
 >
   {
-    items?.map((item: any, index: number) => (
+    items?.map((_item: ContentSelectorItem, index: number) => (
       <input
         type="radio"
         name={`tabs-${uniqueId}`}
@@ -54,7 +55,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
   <div class="tabs" role="tablist">
     {
-      items?.map((item: any, index: number) => (
+      items?.map((item: ContentSelectorItem, index: number) => (
         <label
           class="tab"
           id={`tablabel-${uniqueId}-${index}`}
@@ -79,7 +80,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
   <div class="panels" {...arrayDataAttributes}>
     {
-      items?.map((item: any, index: number) => (
+      items?.map((item: ContentSelectorItem, index: number) => (
         <ContentSelectorPanel
           data-editable="array-item"
           index={index}

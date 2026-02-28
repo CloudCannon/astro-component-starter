@@ -1,12 +1,15 @@
 ---
 import { pascalToKebab } from "@components/utils/pascalToKebab";
+import type { ContentBlock } from "../../types";
 
 export interface Props {
-  contentSections: any[];
+  contentSections: ContentBlock[];
   editable?: boolean;
 }
 
-const components: Record<string, Function> = {};
+type AstroComponent = (_props: Record<string, unknown>) => unknown;
+
+const components: Record<string, AstroComponent> = {};
 const componentImports = import.meta.glob("../**/*.{jsx,astro}", {
   eager: true,
 });
@@ -26,7 +29,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
 
   const componentName = parts.join("/");
 
-  components[componentName] = (obj as any).default;
+  components[componentName] = (obj as Record<string, AstroComponent>).default;
 });
 
 const { contentSections, editable = true } = Astro.props;

@@ -2,6 +2,8 @@
 import { slugifyLabel } from "@components/utils/slugify";
 import GridItem from "./GridItem.astro";
 
+type ItemProps = Record<string, unknown>;
+
 const {
   layout = "center",
   minItemWidth = 200,
@@ -48,7 +50,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <div {...arrayDataAttributes} class="grid-inner">
     <slot>
       {
-        items?.map((item: any) => (
+        items?.map((item: ItemProps) => (
           <GridItem
             data-id="building-blocks/wrappers/grid/grid-item"
             data-editable="array-item"

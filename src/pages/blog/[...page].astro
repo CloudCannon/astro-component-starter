@@ -38,7 +38,9 @@ try {
   if (blogPage?.data?.pageSections) {
     heroSections = blogPage.data.pageSections;
   }
-} catch {}
+} catch (e) {
+  console.error("Failed to load blog page data:", e);
+}
 
 const pageTitle = blogPage?.data?.title ?? "Blog";
 const pageDescription =

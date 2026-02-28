@@ -1,14 +1,16 @@
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
+const contentBlockSchema = z.object({ _component: z.string() }).passthrough();
+
 const pageSchema = z.object({
   title: z.string(),
-  pageSections: z.array(z.any()),
+  pageSections: z.array(contentBlockSchema),
 });
 
 const docsPageSchema = z.object({
   title: z.string(),
-  contentSections: z.array(z.any()),
+  contentSections: z.array(contentBlockSchema),
 });
 
 const docsComponentSchema = z.object({
@@ -47,10 +49,10 @@ const docsComponentSchema = z.object({
       z.null(),
     ])
     .optional()
-    .transform((val: any) => {
+    .transform((val) => {
       if (!val) return [];
 
-      return val.map((example: any) => ({
+      return val.map((example) => ({
         title:
           example.title ||
           (example.slugs?.[0]

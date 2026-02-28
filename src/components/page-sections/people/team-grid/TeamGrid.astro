@@ -5,6 +5,8 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import TeamItem from "@page-sections/people/team-grid/TeamItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
 
+type MemberProps = Record<string, unknown>;
+
 const {
   eyebrow = "",
   heading = "",
@@ -50,7 +52,7 @@ const {
     editable={true}
   >
     {
-      teamMembers.map((member: any) => (
+      teamMembers.map((member: MemberProps) => (
         <TeamItem
           data-id="page-sections/people/team-grid/team-item"
           data-editable="array-item"

@@ -12,7 +12,6 @@
       "@page-sections/*": ["src/components/page-sections/*"],
       "@features/*": ["src/components/page-sections/features/*"],
       "@builders/*": ["src/components/page-sections/builders/*"],
-      "@sections/*": ["src/components/sections/*"],
       "@component-utils/*": ["src/components/utils/*"],
       "@component-library/*": ["src/component-library/*"],
       "@layouts/*": ["src/layouts/*"],

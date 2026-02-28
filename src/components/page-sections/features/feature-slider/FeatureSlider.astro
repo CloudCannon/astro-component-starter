@@ -3,6 +3,8 @@ import CustomSection from "@builders/custom-section/CustomSection.astro";
 import FeatureSliderItem from "@features/feature-slider/FeatureSliderItem.astro";
 import Carousel from "@wrappers/carousel/Carousel.astro";
 
+type SlideProps = Record<string, unknown>;
+
 const {
   colorScheme = "inherit",
   backgroundColor,
@@ -34,7 +36,7 @@ const {
     editable={true}
   >
     {
-      slides.map((slide: any, index: number) => (
+      slides.map((slide: SlideProps, index: number) => (
         <FeatureSliderItem
           aria-label={`Slide ${index + 1} of ${slides.length}`}
           data-editable="array-item"
