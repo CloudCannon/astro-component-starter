@@ -19,11 +19,9 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const hasImage = Boolean(imageSource);
 ---
 
-<CarouselSlide {...htmlAttributes}>
+<CarouselSlide {...htmlAttributes} editable={false}>
   <Card
     class:list={["feature-slider-item", className]}
     paddingHorizontal="xs"
