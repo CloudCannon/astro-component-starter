@@ -45,9 +45,9 @@ const {
     gap="md"
     minItemWidth={260}
     maxItemWidth={400}
-    data-prop="teamMembers"
-    data-editable="array"
+    data-children-prop="teamMembers"
     layout="start"
+    editable={true}
   >
     {
       teamMembers.map((member: any) => (
