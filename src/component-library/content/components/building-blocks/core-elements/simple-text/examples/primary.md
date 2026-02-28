@@ -6,4 +6,3 @@ blocks:
   text: This is simple text with **bold** and *italic* inline formatting.
   alignX: start
 ---
-

@@ -6,4 +6,3 @@ formBlocks:
   comment: The form blocks to render inside the form.
   options:
     structures: _structures.formBlocks
-

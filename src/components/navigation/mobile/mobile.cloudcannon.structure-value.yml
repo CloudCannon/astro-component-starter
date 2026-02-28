@@ -15,4 +15,3 @@ picker_preview:
   icon: device-phone-mobile
 _inputs_from_glob:
   - /src/components/navigation/mobile/mobile.cloudcannon.inputs.yml
-

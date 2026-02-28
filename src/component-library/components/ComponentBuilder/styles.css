@@ -2,23 +2,23 @@
   /* ============================================
      CSS Custom Properties
      ============================================ */
-  
+
   /* Category Colors */
   --cb-category-builders: #8b5cf6;
   --cb-category-wrappers: #3b82f6;
   --cb-category-core: #10b981;
   --cb-category-forms: #f59e0b;
-  
+
   /* Background Colors */
   --cb-bg-muted: #f8fafc;
-  
+
   /* Status Colors */
   --cb-danger: #dc2626;
   --cb-danger-hover: #b91c1c;
   --cb-danger-light: #fca5a5;
   --cb-danger-bg-light: #fef2f2;
   --cb-error: #ef4444;
-  
+
   /* Misc */
   --cb-modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   --cb-preview-bg: #f8fafc;
@@ -123,16 +123,16 @@
     font-weight: var(--font-weight-bold);
   }
 
-    .sandbox-item-btn {
-      &-delete {
+  .sandbox-item-btn {
+    &-delete {
+      color: var(--cb-danger);
+      &:hover {
+        background: var(--cb-danger-bg-light);
+        border-color: var(--cb-danger-light);
         color: var(--cb-danger);
-        &:hover {
-            background: var(--cb-danger-bg-light);
-            border-color: var(--cb-danger-light);
-            color: var(--cb-danger);
-        }
       }
     }
+  }
 
   /* ============================================
      Slots
@@ -333,7 +333,7 @@
     background: var(--cb-bg-muted);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
-    margin-bottom: var(--spacing-md); 
+    margin-bottom: var(--spacing-md);
     padding: var(--spacing-md);
     word-wrap: break-word;
   }
@@ -427,7 +427,8 @@
   .sandbox-item[data-category="wrappers"] {
     border-inline-start: 4px solid var(--cb-category-wrappers);
 
-    &:hover, &.selected {
+    &:hover,
+    &.selected {
       border-color: var(--cb-category-wrappers);
     }
   }
@@ -437,11 +438,11 @@
     border-inline-start: 4px solid var(--cb-category-core);
   }
 
-
   .sandbox-item[data-category="core-elements"] {
     border-inline-start: 4px solid var(--cb-category-core);
 
-    &:hover, &.selected {
+    &:hover,
+    &.selected {
       border-inline-start-color: var(--cb-category-core);
     }
   }
@@ -451,7 +452,8 @@
   .sandbox-item[data-category="forms"] {
     border-inline-start: 4px solid var(--cb-category-forms);
 
-    &:hover, &.selected {
+    &:hover,
+    &.selected {
       border-color: var(--cb-category-forms);
     }
   }
@@ -672,7 +674,7 @@
 #export-btn.has-errors {
   background-color: var(--cb-danger);
   border-color: var(--cb-danger);
-  
+
   &:hover {
     background-color: var(--cb-danger-hover);
     border-color: var(--cb-danger-hover);
@@ -697,7 +699,7 @@
   font-weight: var(--font-weight-semibold);
   gap: var(--spacing-sm);
   padding: var(--spacing-sm) var(--spacing-md);
-  
+
   .validation-panel-icon {
     flex-shrink: 0;
   }
@@ -723,7 +725,7 @@
   font-weight: var(--font-weight-semibold);
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
-  
+
   .validation-error-icon {
     flex-shrink: 0;
   }
@@ -733,17 +735,17 @@
   color: var(--color-text);
   font-size: var(--font-size-sm);
   line-height: 1.5;
-  
+
   p {
     margin: var(--spacing-sm) 0;
   }
-  
+
   ul {
     list-style: disc;
     margin: var(--spacing-sm) 0;
     padding-left: var(--spacing-lg);
   }
-  
+
   li {
     margin: var(--spacing-xs) 0;
   }

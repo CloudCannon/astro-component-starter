@@ -83,10 +83,13 @@ export async function getNestedBlockProperties(): Promise<Set<string>> {
         if (configData._inputs && typeof configData._inputs === "object") {
           for (const [, inputConfig] of Object.entries(configData._inputs)) {
             const input = inputConfig as any;
+
             if (input?.type === "array" && input?.options?.structures) {
               const structures = input.options.structures;
+
               if (typeof structures === "string" && structures.startsWith("_structures.")) {
                 const structureName = structures.replace("_structures.", "");
+
                 nestedBlockPropertiesCache.add(structureName);
               }
             }
@@ -98,6 +101,7 @@ export async function getNestedBlockProperties(): Promise<Set<string>> {
     }
 
     const metadataMap = await getComponentMetadataMap();
+
     for (const metadata of metadataMap.values()) {
       if (metadata.fallbackFor) {
         nestedBlockPropertiesCache.add(metadata.fallbackFor);

@@ -159,4 +159,3 @@ rounded:
 border:
   type: switch
   comment: Whether to apply a border to the card.
-

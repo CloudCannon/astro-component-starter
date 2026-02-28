@@ -24,4 +24,3 @@ required:
 value:
   type: text
   comment: The default value for the input field.
-

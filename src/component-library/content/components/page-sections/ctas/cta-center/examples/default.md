@@ -12,7 +12,3 @@ blocks:
       size: md
       link: "/start"
 ---
-
-
-
-

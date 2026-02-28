@@ -55,4 +55,3 @@ hideText:
 disabled:
   type: switch
   comment: Whether the submit button is disabled.
-

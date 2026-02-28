@@ -16,4 +16,3 @@ placeholder:
 value:
   type: text
   comment: The default value for the textarea field.
-

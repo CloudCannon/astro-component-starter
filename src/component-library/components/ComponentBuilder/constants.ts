@@ -18,29 +18,29 @@ const DEBUG = false;
 /** Log helper that respects the {@link DEBUG} flag. */
 export function debugLog(...args: unknown[]): void {
   if (DEBUG) {
-    console.log('[ComponentBuilder]', ...args);
+    console.log("[ComponentBuilder]", ...args);
   }
 }
 
 /** Category display order */
-export const CATEGORY_ORDER = ['builders', 'wrappers', 'core-elements', 'forms'] as const;
+export const CATEGORY_ORDER = ["builders", "wrappers", "core-elements", "forms"] as const;
 
 /** Root component path - the base container for all builder compositions */
-export const ROOT_COMPONENT_PATH = 'page-sections/builders/custom-section';
+export const ROOT_COMPONENT_PATH = "page-sections/builders/custom-section";
 
 /**
  * Props that should be exposed by default (not hardcoded) for specific components
  * Maps component name to array of prop names that should default to exposed
  */
 export const DEFAULT_EXPOSED_PROPS: Record<string, string[]> = {
-  button: ['text'],
-  counter: ['number'],
-  embed: ['html'],
-  heading: ['text'],
-  icon: ['name'],
-  image: ['source'],
-  'simple-text': ['text'],
-  testimonial: ['text', 'authorName', 'authorDescription'],
-  text: ['text'],
-  video: ['source'],
+  button: ["text"],
+  counter: ["number"],
+  embed: ["html"],
+  heading: ["text"],
+  icon: ["name"],
+  image: ["source"],
+  "simple-text": ["text"],
+  testimonial: ["text", "authorName", "authorDescription"],
+  text: ["text"],
+  video: ["source"],
 } as const;

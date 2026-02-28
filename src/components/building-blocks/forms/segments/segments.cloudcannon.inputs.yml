@@ -26,4 +26,3 @@ multiple:
 keepStateOnRefresh:
   type: switch
   comment: When true, sets autocomplete="on" to allow browser to remember state on page refresh. Defaults to false (autocomplete="off").
-

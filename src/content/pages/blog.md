@@ -3,7 +3,7 @@ _schema: default
 title: Blog
 pageSections:
   - _component: page-sections/heroes/hero-center
-    eyebrow: ''
+    eyebrow: ""
     heading: All posts
     subtext: >-
       This paginated blog index displays a grid of article cards, each waiting

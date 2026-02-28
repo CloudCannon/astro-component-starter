@@ -59,4 +59,3 @@ _structures:
           path:
             type: text
             comment: The URL/path for the navigation item.
-

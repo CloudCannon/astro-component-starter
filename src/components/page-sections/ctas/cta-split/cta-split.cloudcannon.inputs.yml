@@ -66,4 +66,3 @@ backgroundColor:
 rounded:
   type: switch
   comment: Add rounded corners to the CTA section.
-

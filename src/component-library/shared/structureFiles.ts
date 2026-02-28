@@ -1,5 +1,5 @@
-import { readdirSync } from 'fs';
-import { join } from 'path';
+import { readdirSync } from "fs";
+import { join } from "path";
 
 /** Recursively find all CloudCannon structure-value files under a directory. */
 export function findStructureValueFiles(dir: string): string[] {
@@ -13,7 +13,7 @@ export function findStructureValueFiles(dir: string): string[] {
 
       if (entry.isDirectory()) {
         files.push(...findStructureValueFiles(fullPath));
-      } else if (entry.name.endsWith('.cloudcannon.structure-value.yml')) {
+      } else if (entry.name.endsWith(".cloudcannon.structure-value.yml")) {
         files.push(fullPath);
       }
     }

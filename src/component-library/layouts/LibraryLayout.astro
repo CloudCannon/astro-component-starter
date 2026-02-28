@@ -31,7 +31,7 @@ const contentSections = props.frontmatter?.contentSections || [];
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
-    {import.meta.env.DEV ? <script type="module" src="/@vite/client"></script> : null}
+    {import.meta.env.DEV ? <script type="module" src="/@vite/client" /> : null}
     <title>{pageTitle}</title>
     <slot name="head" />
   </head>

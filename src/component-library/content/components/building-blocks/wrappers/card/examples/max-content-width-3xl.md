@@ -11,4 +11,3 @@ blocks:
       level: h3
       alignX: center
 ---
-

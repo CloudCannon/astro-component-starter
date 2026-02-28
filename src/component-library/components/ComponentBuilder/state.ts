@@ -83,6 +83,7 @@ class BuilderState {
     }
 
     const customSection = this.createComponentNode(customSectionInfo);
+
     customSection._isRootComponent = true;
     this._componentTree.push(customSection);
     this.emit("treeChange");
@@ -267,6 +268,7 @@ class BuilderState {
       (path) => this.getComponentInfo(path),
       (info) => this.createComponentNode(info)
     );
+
     this.emit("treeChange");
 
     return nodeToAdd;
@@ -277,6 +279,7 @@ class BuilderState {
     const result = deleteComponentOperation(id, this._selectedComponentId, (nodeId, tree) =>
       this.removeNodeFromTree(nodeId, tree)
     );
+
     if (result.shouldClearSelection) {
       this._selectedComponentId = null;
       this.emit("selectionChange");
@@ -314,6 +317,7 @@ class BuilderState {
     const changed = toggleSlotModeOperation(nodeId, slotPropName, (id, tree) =>
       this.findComponentNode(id, tree)
     );
+
     if (changed) this.emit("treeChange");
   }
 
@@ -322,6 +326,7 @@ class BuilderState {
     const changed = updateNodePropertyOperation(nodeId, propName, value, (id, tree) =>
       this.findComponentNode(id, tree)
     );
+
     if (changed) {
       this.emit("treeChange");
     }
@@ -333,6 +338,7 @@ class BuilderState {
     const changed = updateNodePropertyOperation(nodeId, propName, value, (id, tree) =>
       this.findComponentNode(id, tree)
     );
+
     if (changed) {
       this.runValidation();
     }
@@ -343,7 +349,7 @@ class BuilderState {
     if (!this._listeners.has(event)) {
       this._listeners.set(event, new Set());
     }
-    this._listeners.get(event)!.add(callback);
+    this._listeners.get(event)?.add(callback);
 
     // Return unsubscribe function
     return () => {
@@ -403,8 +409,10 @@ class BuilderState {
         : fallbackProp
           ? [fallbackProp]
           : [];
+
       for (const slotPropName of slotsToRecurse) {
         const children = node[slotPropName];
+
         if (Array.isArray(children)) {
           this.forceExposeUniformSlots(children as ComponentNode[]);
         }

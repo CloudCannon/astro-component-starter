@@ -4,4 +4,3 @@ name:
 value:
   type: text
   comment: The value to be stored in the hidden field.
-

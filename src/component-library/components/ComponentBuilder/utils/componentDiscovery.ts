@@ -7,17 +7,17 @@
  * @module componentDiscovery
  */
 
-import { getComponentMetadataMap } from '../../../shared/metadata';
+import { getComponentMetadataMap } from "../../../shared/metadata";
 import {
   discoverPageSectionCategories,
   groupComponentsByCategory,
   populateAllowedComponentsForSlots,
   registerVirtualComponents,
-} from './discovery/postProcessing';
-import { parseNestingRules } from './discovery/nestingRules';
-import { scanBuildingBlocksComponents } from './discovery/scanBuildingBlocks';
-import { scanPageBuilderComponents } from './discovery/scanPageBuilders';
-import type { ComponentInfo, NestingRules, SlotDefinition } from '../types';
+} from "./discovery/postProcessing";
+import { parseNestingRules } from "./discovery/nestingRules";
+import { scanBuildingBlocksComponents } from "./discovery/scanBuildingBlocks";
+import { scanPageBuilderComponents } from "./discovery/scanPageBuilders";
+import type { ComponentInfo, NestingRules, SlotDefinition } from "../types";
 
 // Re-export types so existing consumers don't break
 export type { ComponentInfo, NestingRules, SlotDefinition };
@@ -28,7 +28,7 @@ const DEBUG = false;
 /** Debug log helper. */
 function debugLog(...args: unknown[]): void {
   if (DEBUG) {
-    console.log('[ComponentDiscovery]', ...args);
+    console.log("[ComponentDiscovery]", ...args);
   }
 }
 
@@ -50,13 +50,14 @@ export async function discoverComponents(): Promise<ComponentDiscoveryResult> {
     ...scanPageBuilderComponents(debugLog),
   ];
 
-  debugLog('Registering virtual components from inline structures...');
+  debugLog("Registering virtual components from inline structures...");
   const virtualComponents = registerVirtualComponents(components, metadataMap, debugLog);
+
   components.push(...virtualComponents);
   debugLog(`Added ${virtualComponents.length} virtual components`);
 
-  debugLog('Populating allowed components for slots...');
-  debugLog('Nesting rules:', nestingRules);
+  debugLog("Populating allowed components for slots...");
+  debugLog("Nesting rules:", nestingRules);
   populateAllowedComponentsForSlots(components, nestingRules, debugLog);
 
   return {

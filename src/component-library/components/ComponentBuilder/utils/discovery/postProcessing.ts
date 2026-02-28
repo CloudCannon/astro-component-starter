@@ -1,10 +1,10 @@
-import { existsSync, readdirSync, statSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readdirSync, statSync } from "fs";
+import { join } from "path";
 
-import { toKebabCase, toPascalCase } from '../../../../shared/caseUtils';
-import type { ComponentMetadata as SharedComponentMetadata } from '../../../../shared/metadata';
-import type { ComponentInfo, InputConfig, NestingRules, SlotDefinition } from '../../types';
-import { getAllowedComponentsForStructure } from './structureMatching';
+import { toKebabCase, toPascalCase } from "../../../../shared/caseUtils";
+import type { ComponentMetadata as SharedComponentMetadata } from "../../../../shared/metadata";
+import type { ComponentInfo, InputConfig, NestingRules, SlotDefinition } from "../../types";
+import { getAllowedComponentsForStructure } from "./structureMatching";
 
 type Logger = (...args: unknown[]) => void;
 
@@ -20,13 +20,16 @@ export function registerVirtualComponents(
     if (component.structureValue?._structures) {
       for (const [, structureDef] of Object.entries(component.structureValue._structures)) {
         const sd = structureDef as Record<string, unknown>;
+
         if (!sd?.values || !Array.isArray(sd.values)) continue;
 
         for (const valueItem of sd.values as Record<string, unknown>[]) {
           const valueObj = valueItem?.value as Record<string, unknown> | undefined;
+
           if (!valueObj?._component) continue;
 
           const virtualPath = valueObj._component as string;
+
           if (
             components.some((c) => c.path === virtualPath) ||
             virtualComponents.some((c) => c.path === virtualPath)
@@ -37,28 +40,30 @@ export function registerVirtualComponents(
           log(`Registering virtual component: ${virtualPath}`);
 
           const virtualSlots: SlotDefinition[] = [];
-          const valueInputs = valueItem._inputs as Record<string, Record<string, unknown>> | undefined;
+          const valueInputs = valueItem._inputs as
+            | Record<string, Record<string, unknown>>
+            | undefined;
 
           if (valueInputs) {
             for (const [propName, inputDef] of Object.entries(valueInputs)) {
               if (
-                typeof inputDef === 'object' &&
+                typeof inputDef === "object" &&
                 inputDef !== null &&
-                'type' in inputDef &&
-                inputDef.type === 'array' &&
-                'options' in inputDef &&
-                typeof inputDef.options === 'object' &&
+                "type" in inputDef &&
+                inputDef.type === "array" &&
+                "options" in inputDef &&
+                typeof inputDef.options === "object" &&
                 inputDef.options !== null &&
-                'structures' in inputDef.options &&
-                typeof (inputDef.options as Record<string, unknown>).structures === 'string'
+                "structures" in inputDef.options &&
+                typeof (inputDef.options as Record<string, unknown>).structures === "string"
               ) {
                 const nestedStructureName = (
                   (inputDef.options as Record<string, unknown>).structures as string
-                ).replace('_structures.', '');
+                ).replace("_structures.", "");
 
                 virtualSlots.push({
                   propName,
-                  label: propName.replace(/([A-Z])/g, ' $1').replace(/^./, (s) => s.toUpperCase()),
+                  label: propName.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()),
                   allowedComponents: [],
                   structureName: nestedStructureName,
                 });
@@ -69,9 +74,9 @@ export function registerVirtualComponents(
           const mergedInputs: Record<string, InputConfig> = {};
 
           for (const [key, val] of Object.entries(valueObj)) {
-            if (key.startsWith('_')) continue;
+            if (key.startsWith("_")) continue;
 
-            if (valueInputs && valueInputs[key] && typeof valueInputs[key] === 'object') {
+            if (valueInputs && valueInputs[key] && typeof valueInputs[key] === "object") {
               mergedInputs[key] = valueInputs[key] as InputConfig;
             } else {
               mergedInputs[key] = (val as InputConfig) || {};
@@ -81,7 +86,7 @@ export function registerVirtualComponents(
           const previewObj = valueItem.preview as Record<string, unknown> | undefined;
           const parentMetadata = metadataMap.get(component.path) || metadataMap.get(component.name);
           let virtualDisplayName =
-            (valueItem.label as string) || virtualPath.split('/').pop() || virtualPath;
+            (valueItem.label as string) || virtualPath.split("/").pop() || virtualPath;
 
           if (parentMetadata?.childComponent?.name) {
             const childName = parentMetadata.childComponent.name;
@@ -96,16 +101,16 @@ export function registerVirtualComponents(
           virtualComponents.push({
             path: virtualPath,
             category: component.category,
-            name: virtualPath.split('/').pop() || virtualPath,
+            name: virtualPath.split("/").pop() || virtualPath,
             displayName: virtualDisplayName,
             fileName: parentMetadata?.childComponent?.name
               ? `${parentMetadata.childComponent.name}.astro`
-              : `${toPascalCase(virtualPath.split('/').pop() || virtualPath)}.astro`,
+              : `${toPascalCase(virtualPath.split("/").pop() || virtualPath)}.astro`,
             inputs: mergedInputs,
             structureValue: null,
             supportsSlots: virtualSlots.length > 0,
-            description: '',
-            icon: (previewObj?.icon as string) || '',
+            description: "",
+            icon: (previewObj?.icon as string) || "",
             slots: virtualSlots.length > 0 ? virtualSlots : undefined,
             isVirtual: true,
           });
@@ -136,7 +141,7 @@ export function populateAllowedComponentsForSlots(
             nestingRules,
             log
           );
-          log('-> Allowed components:', slot.allowedComponents);
+          log("-> Allowed components:", slot.allowedComponents);
         }
       }
     }
@@ -144,7 +149,9 @@ export function populateAllowedComponentsForSlots(
 }
 
 /** Group components by category. */
-export function groupComponentsByCategory(components: ComponentInfo[]): Record<string, ComponentInfo[]> {
+export function groupComponentsByCategory(
+  components: ComponentInfo[]
+): Record<string, ComponentInfo[]> {
   const byCategory: Record<string, ComponentInfo[]> = {};
 
   components.forEach((component) => {
@@ -160,7 +167,7 @@ export function groupComponentsByCategory(components: ComponentInfo[]): Record<s
 
 /** Discover page-sections categories by reading folder structure. */
 export function discoverPageSectionCategories(): string[] {
-  const pageSectionsDir = join(process.cwd(), 'src/components/page-sections');
+  const pageSectionsDir = join(process.cwd(), "src/components/page-sections");
   let pageSectionCategories: string[] = [];
 
   if (existsSync(pageSectionsDir) && statSync(pageSectionsDir).isDirectory()) {
@@ -170,7 +177,7 @@ export function discoverPageSectionCategories(): string[] {
         .map((entry) => entry.name)
         .sort();
     } catch (error) {
-      console.warn('Error reading page-sections directory:', error);
+      console.warn("Error reading page-sections directory:", error);
     }
   }
 

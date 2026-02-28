@@ -18,4 +18,3 @@ picker_preview:
   icon: footer
 _inputs_from_glob:
   - /src/components/navigation/footer/footer.cloudcannon.inputs.yml
-

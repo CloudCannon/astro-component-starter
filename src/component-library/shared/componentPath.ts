@@ -1,4 +1,4 @@
-import { toKebabCase } from './caseUtils';
+import { toKebabCase } from "./caseUtils";
 
 /**
  * Gets the full component path for a child component.

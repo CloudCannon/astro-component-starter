@@ -7,8 +7,8 @@
  * @module modules
  */
 
-export * from './componentPicker';
-export * from './dragDrop';
-export * from './exportModal';
-export * from './propEditor';
-export * from './sandbox';
+export * from "./componentPicker";
+export * from "./dragDrop";
+export * from "./exportModal";
+export * from "./propEditor";
+export * from "./sandbox";

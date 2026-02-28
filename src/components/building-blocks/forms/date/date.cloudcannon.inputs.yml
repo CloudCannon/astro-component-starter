@@ -16,4 +16,3 @@ min:
 max:
   type: date
   comment: The maximum date allowed (ISO8601 format).
-

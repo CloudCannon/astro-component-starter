@@ -7,15 +7,15 @@
  * @module exportGenerator
  */
 
-import JSZip from 'jszip';
+import JSZip from "jszip";
 
-import { debugLog } from '../constants';
-import type { ComponentInfo, ComponentMetadata, ComponentNode } from '../types';
-import type { BuilderNode } from './shared';
-import { generateAstroFile } from './export/astroGenerator';
-import { generateCloudCannonInputs } from './export/cloudcannonGenerator';
-import { generateStructureValue } from './export/structureValueGenerator';
-import { cleanComponentTree } from './export/treeHelpers';
+import { debugLog } from "../constants";
+import type { ComponentInfo, ComponentMetadata, ComponentNode } from "../types";
+import type { BuilderNode } from "./shared";
+import { generateAstroFile } from "./export/astroGenerator";
+import { generateCloudCannonInputs } from "./export/cloudcannonGenerator";
+import { generateStructureValue } from "./export/structureValueGenerator";
+import { cleanComponentTree } from "./export/treeHelpers";
 
 /** Generate and download the component export. */
 export async function generateExport(
@@ -26,7 +26,7 @@ export async function generateExport(
   nestedBlockProperties: string[],
   componentPath: string | null = null
 ): Promise<void> {
-  debugLog('Starting export for:', componentName);
+  debugLog("Starting export for:", componentName);
 
   const cleanTree = cleanComponentTree(componentTree);
 
@@ -56,13 +56,14 @@ export async function generateExport(
   );
 
   const zip = new JSZip();
+
   zip.file(`${componentName}.astro`, astroCode);
   zip.file(`${componentName}.cloudcannon.inputs.yml`, inputsYaml);
   zip.file(`${componentName}.cloudcannon.structure-value.yml`, structureValueYaml);
 
-  const blob = await zip.generateAsync({ type: 'blob' });
+  const blob = await zip.generateAsync({ type: "blob" });
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
+  const a = document.createElement("a");
 
   a.href = url;
   a.download = `${componentName}.zip`;
@@ -71,5 +72,5 @@ export async function generateExport(
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  debugLog('Export completed successfully');
+  debugLog("Export completed successfully");
 }

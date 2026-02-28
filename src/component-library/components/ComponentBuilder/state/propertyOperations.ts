@@ -1,4 +1,4 @@
-import type { ComponentNode } from '../types';
+import type { ComponentNode } from "../types";
 
 export function toggleSlotModeOperation(
   nodeId: string,
@@ -6,11 +6,12 @@ export function toggleSlotModeOperation(
   findComponentNode: (id: string, tree?: ComponentNode[]) => ComponentNode | null
 ): boolean {
   const node = findComponentNode(nodeId);
+
   if (!node) return false;
 
   const modeKey = `_${slotPropName}_mode`;
-  const currentMode = (node[modeKey] as string) || 'components';
-  const newMode = currentMode === 'components' ? 'prop' : 'components';
+  const currentMode = (node[modeKey] as string) || "components";
+  const newMode = currentMode === "components" ? "prop" : "components";
 
   if (!node[slotPropName]) {
     node[slotPropName] = [];
@@ -18,7 +19,7 @@ export function toggleSlotModeOperation(
 
   node[modeKey] = newMode;
 
-  if (newMode === 'prop') {
+  if (newMode === "prop") {
     node[`_hardcoded_${slotPropName}`] = false;
   }
 
@@ -32,6 +33,7 @@ export function updateNodePropertyOperation(
   findComponentNode: (id: string, tree?: ComponentNode[]) => ComponentNode | null
 ): boolean {
   const node = findComponentNode(nodeId);
+
   if (!node) return false;
 
   if (value === undefined) {

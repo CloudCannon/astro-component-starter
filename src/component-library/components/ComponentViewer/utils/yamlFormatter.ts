@@ -1,7 +1,7 @@
 import { dump } from "js-yaml";
 import { removeStyleField } from "../../../shared/blockDataUtils";
 
-export function formatBlocksYaml(blocks: any, title: string, spacing: string): string {
+export function formatBlocksYaml(blocks: any, _title: string, _spacing: string): string {
   if (!blocks) return "";
 
   try {
@@ -21,7 +21,7 @@ export function formatBlocksYaml(blocks: any, title: string, spacing: string): s
     const trimmedContent = yamlContent.trimEnd();
 
     return `---\n${trimmedContent}\n---`;
-  } catch (error) {
+  } catch {
     return "";
   }
 }

@@ -9,8 +9,8 @@ import { isArrayStructureInput } from "./inputUtils";
 type Logger = (...args: unknown[]) => void;
 
 function buildSlotFromInput(propName: string, inputConfig: InputConfig): SlotDefinition {
-  const options = inputConfig.options!;
-  const structureRef = options.structures!;
+  const options = inputConfig.options ?? {};
+  const structureRef = options.structures ?? "";
   const structureName = structureRef.replace("_structures.", "");
 
   const slotDef: SlotDefinition = {
@@ -53,6 +53,7 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
 
     const astroFiles = readdirSync(fullPath).filter((f) => f.endsWith(".astro"));
     const mainComponentFile = astroFiles.find((f) => f.replace(".astro", "") === pascalName);
+
     if (!mainComponentFile) continue;
 
     const componentPath = `page-sections/builders/${entry.name}`;
@@ -68,10 +69,12 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
     if (existsSync(inputsPath)) {
       try {
         const inputsContent = readFileSync(inputsPath, "utf8");
+
         inputs = (yaml.load(inputsContent) as Record<string, InputConfig>) || {};
 
         for (const propName in inputs) {
           const inputConfig = inputs[propName];
+
           if (isArrayStructureInput(inputConfig)) {
             componentSlots.push(buildSlotFromInput(propName, inputConfig));
           }
@@ -84,6 +87,7 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
     if (existsSync(structureValuePath)) {
       try {
         const structureContent = readFileSync(structureValuePath, "utf8");
+
         structureValue = yaml.load(structureContent) as StructureValue;
         description = structureValue?.description || "";
         icon = structureValue?.icon || "";
@@ -102,14 +106,16 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
           if (Array.isArray(values)) {
             for (const valueItem of values) {
               const typedValue = valueItem as { _inputs?: Record<string, InputConfig> };
+
               if (typedValue._inputs) {
                 for (const [nestedPropName, nestedInputDef] of Object.entries(typedValue._inputs)) {
                   if (isArrayStructureInput(nestedInputDef)) {
-                    const nestedStructureRef = nestedInputDef.options!.structures!;
+                    const nestedStructureRef = nestedInputDef.options?.structures ?? "";
                     const nestedStructureName = nestedStructureRef.replace("_structures.", "");
 
                     if (!componentSlots.some((s) => s.propName === nestedPropName)) {
                       const nestedSlotDef = buildSlotFromInput(nestedPropName, nestedInputDef);
+
                       nestedSlotDef.structureName = nestedStructureName;
                       componentSlots.push(nestedSlotDef);
 

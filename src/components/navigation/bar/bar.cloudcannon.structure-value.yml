@@ -14,4 +14,3 @@ picker_preview:
   icon: navigation
 _inputs_from_glob:
   - /src/components/navigation/bar/bar.cloudcannon.inputs.yml
-

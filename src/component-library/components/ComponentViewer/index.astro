@@ -19,10 +19,10 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   const relativePath = path.replace("../../../components/", "").replace(/\.astro$/, "");
   const parts = relativePath.split("/");
   const filename = parts[parts.length - 1];
-  
+
   // Convert PascalCase filename to kebab-case
   const kebabFilename = pascalToKebab(filename);
-  
+
   // If filename (in kebab-case) matches parent folder, remove it
   if (parts.length > 1 && kebabFilename === parts[parts.length - 2]) {
     parts.pop();

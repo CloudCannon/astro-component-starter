@@ -49,4 +49,3 @@ slideWidthPercent:
 minSlideWidth:
   comment: Minimum width of slides in pixels. Prevents slides from getting too small.
   type: number
-

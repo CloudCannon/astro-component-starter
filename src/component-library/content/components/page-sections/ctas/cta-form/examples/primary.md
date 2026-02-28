@@ -27,4 +27,3 @@ blocks:
   imageSource: /src/assets/images/component-library/sunset.jpg
   imageAlt: "Contact us."
 ---
-

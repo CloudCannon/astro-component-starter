@@ -1,12 +1,12 @@
-import yaml from 'js-yaml';
+import yaml from "js-yaml";
 
-import type { ComponentInfo, ComponentMetadata, ComponentNode, InputConfig } from '../../types';
-import { shouldUseMapPattern, type BuilderNode } from '../shared';
+import type { ComponentInfo, ComponentMetadata, ComponentNode, InputConfig } from "../../types";
+import { shouldUseMapPattern, type BuilderNode } from "../shared";
 import {
   collectDeepExposedPropNames,
   getChildComponentPropInfo,
   getChildWrapperPropConfig,
-} from './treeHelpers';
+} from "./treeHelpers";
 
 /** Generate CloudCannon inputs YAML. */
 export function generateCloudCannonInputs(
@@ -17,16 +17,17 @@ export function generateCloudCannonInputs(
 ): string {
   const inputs: Record<string, InputConfig> = {
     label: {
-      type: 'text',
-      comment: 'Label for the component',
+      type: "text",
+      comment: "Label for the component",
     },
   };
 
   function collectExposedInputs(node: ComponentNode, originalNode: BuilderNode | null): void {
     const componentInfo = components.find((c) => c.path === node._component);
+
     if (!componentInfo?.inputs) return;
 
-    const fallbackProp = metadataMap[node._component]?.fallbackFor || 'contentSections';
+    const fallbackProp = metadataMap[node._component]?.fallbackFor || "contentSections";
     const originalNested = originalNode?.[fallbackProp] as BuilderNode[] | undefined;
     const useMapPattern = originalNested
       ? shouldUseMapPattern(originalNested, metadataMap, node._component)
@@ -38,10 +39,11 @@ export function generateCloudCannonInputs(
 
       const isHardcoded = originalNode ? originalNode[`_hardcoded_${propName}`] !== false : true;
       const modeKey = `_${propName}_mode` as const;
-      const isInFreeformMode = originalNode && originalNode[modeKey] === 'prop';
+      const isInFreeformMode = originalNode && originalNode[modeKey] === "prop";
 
       if (!isHardcoded || isInFreeformMode) {
         const renamedKey = originalNode?.[`_renamed_${propName}`] || propName;
+
         if (!inputs[renamedKey]) {
           inputs[renamedKey] = { ...(inputConfig as InputConfig) };
         }
@@ -49,7 +51,7 @@ export function generateCloudCannonInputs(
     });
 
     const modeKey = `_${fallbackProp}_mode` as const;
-    const isSlotInFreeformMode = originalNode && originalNode[modeKey] === 'prop';
+    const isSlotInFreeformMode = originalNode && originalNode[modeKey] === "prop";
 
     if (!isSlotInFreeformMode && node[fallbackProp] && Array.isArray(node[fallbackProp])) {
       if (useMapPattern && originalNested && originalNested.length > 0) {
@@ -67,13 +69,16 @@ export function generateCloudCannonInputs(
         }
 
         const childPropInfo = getChildComponentPropInfo(metadataMap[node._component]);
+
         if (childPropInfo) {
           for (const prop of childPropInfo.regularProps) {
             const renamedPropKey = firstChild?.[`_renamed_${prop}`] || prop;
+
             if (!objectFields[renamedPropKey]) {
               const config = getChildWrapperPropConfig(componentInfo, fallbackProp, prop);
+
               objectFields[renamedPropKey] = config || {
-                type: 'text',
+                type: "text",
                 comment: `${prop} value`,
               };
             }
@@ -82,13 +87,13 @@ export function generateCloudCannonInputs(
 
         if (Object.keys(objectFields).length > 0 && !inputs[renamedKey]) {
           inputs[renamedKey] = {
-            type: 'array',
+            type: "array",
             label: renamedKey.charAt(0).toUpperCase() + renamedKey.slice(1),
             options: {
               structures: {
                 values: [
                   {
-                    label: 'Item',
+                    label: "Item",
                     value: objectFields,
                   },
                 ],

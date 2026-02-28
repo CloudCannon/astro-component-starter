@@ -8,4 +8,3 @@ blocks:
   aspectRatio: widescreen
   style: "max-width: 600px;"
 ---
-

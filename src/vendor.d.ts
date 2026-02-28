@@ -49,7 +49,7 @@ declare module "js-yaml" {
     noRefs?: boolean;
     noCompatMode?: boolean;
     condenseFlow?: boolean;
-    quotingType?: "'" | "\"";
+    quotingType?: "'" | '"';
     forceQuotes?: boolean;
     [key: string]: unknown;
   }

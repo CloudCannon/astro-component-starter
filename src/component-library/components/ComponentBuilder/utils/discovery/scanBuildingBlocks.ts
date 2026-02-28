@@ -23,6 +23,7 @@ export function scanBuildingBlocksComponents(
 
       for (const entry of entries) {
         const fullPath = join(dir, entry.name);
+
         if (!entry.isDirectory()) continue;
 
         const astroFiles = readdirSync(fullPath).filter((f) => f.endsWith(".astro"));
@@ -31,6 +32,7 @@ export function scanBuildingBlocksComponents(
 
         const mainComponentFile = astroFiles.find((f) => {
           const baseName = f.replace(".astro", "");
+
           return (
             baseName.toLowerCase() === pascalName.toLowerCase() ||
             baseName.toLowerCase() === kebabName ||
@@ -61,6 +63,7 @@ export function scanBuildingBlocksComponents(
         if (existsSync(inputsPath)) {
           try {
             const inputsContent = readFileSync(inputsPath, "utf8");
+
             inputs = (yaml.load(inputsContent) as Record<string, InputConfig>) || {};
           } catch (error) {
             console.warn(`Error reading inputs file for ${componentPath}:`, error);
@@ -70,6 +73,7 @@ export function scanBuildingBlocksComponents(
         if (existsSync(structureValuePath)) {
           try {
             const structureContent = readFileSync(structureValuePath, "utf8");
+
             structureValue = yaml.load(structureContent) as StructureValue;
             description = structureValue?.description || "";
             icon = structureValue?.icon || "";
@@ -84,7 +88,9 @@ export function scanBuildingBlocksComponents(
         for (const [propName, inputDef] of Object.entries(inputs)) {
           if (!isArrayStructureInput(inputDef)) continue;
 
-          const structureRef = inputDef.options!.structures!;
+          const structureRef = inputDef.options?.structures;
+
+          if (!structureRef) continue;
           let structureName = structureRef.replace("_structures.", "");
 
           if (
@@ -93,6 +99,7 @@ export function scanBuildingBlocksComponents(
             structureValue._structures[structureName]
           ) {
             const inlineStruct = structureValue._structures[structureName];
+
             if (inlineStruct?.values && Array.isArray(inlineStruct.values)) {
               const firstValue = inlineStruct.values[0] as {
                 _inputs?: Record<string, InputConfig>;
@@ -101,7 +108,10 @@ export function scanBuildingBlocksComponents(
               if (firstValue?._inputs) {
                 for (const nestedInputDef of Object.values(firstValue._inputs)) {
                   if (isArrayStructureInput(nestedInputDef)) {
-                    const nestedStructureRef = nestedInputDef.options!.structures!;
+                    const nestedStructureRef = nestedInputDef.options?.structures;
+
+                    if (!nestedStructureRef) continue;
+
                     structureName = nestedStructureRef.replace("_structures.", "");
                     log(
                       `Resolved inline structure for slot "${propName}": ${structureRef} -> ${nestedStructureRef} (${structureName})`
@@ -145,8 +155,10 @@ export function scanBuildingBlocksComponents(
   }
 
   const buildingBlocksCategories = ["wrappers", "core-elements", "forms"];
+
   buildingBlocksCategories.forEach((category) => {
     const categoryDir = join(componentsDir, category);
+
     if (existsSync(categoryDir) && statSync(categoryDir).isDirectory()) {
       scanDirectory(categoryDir, category);
     }

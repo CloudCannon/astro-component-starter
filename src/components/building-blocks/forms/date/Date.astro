@@ -1,5 +1,15 @@
 ---
-const { label, name, required = false, value, min, max, class: className, _component, ...htmlAttributes } = Astro.props;
+const {
+  label,
+  name,
+  required = false,
+  value,
+  min,
+  max,
+  class: className,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
 
 const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
 ---

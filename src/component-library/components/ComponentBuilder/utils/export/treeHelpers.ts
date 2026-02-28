@@ -1,5 +1,5 @@
-import type { ComponentInfo, ComponentMetadata, ComponentNode, InputConfig } from '../../types';
-import type { BuilderNode } from '../shared';
+import type { ComponentInfo, ComponentMetadata, ComponentNode, InputConfig } from "../../types";
+import type { BuilderNode } from "../shared";
 
 /** Get child component props split into slot and non-slot categories. */
 export function getChildComponentPropInfo(
@@ -11,8 +11,8 @@ export function getChildComponentPropInfo(
   const regularProps: string[] = [];
 
   for (const prop of metadata.childComponent.props) {
-    if (prop.endsWith('/slot')) {
-      slotProps.push(prop.replace('/slot', ''));
+    if (prop.endsWith("/slot")) {
+      slotProps.push(prop.replace("/slot", ""));
     } else {
       regularProps.push(prop);
     }
@@ -30,9 +30,10 @@ export function getChildWrapperPropConfig(
   if (!componentInfo?.inputs || !componentInfo.structureValue?._structures) return null;
 
   const structuresRef = componentInfo.inputs[fallbackProp]?.options?.structures;
-  if (typeof structuresRef !== 'string') return null;
 
-  const structureName = structuresRef.replace('_structures.', '');
+  if (typeof structuresRef !== "string") return null;
+
+  const structureName = structuresRef.replace("_structures.", "");
   const structureDef = componentInfo.structureValue._structures[structureName] as
     | { values?: Array<{ _inputs?: Record<string, InputConfig> }> }
     | undefined;
@@ -44,15 +45,16 @@ export function getChildWrapperPropConfig(
 
 /** Recursively search a cleaned component tree for a prop value. */
 export function findPropValueInTree(node: ComponentNode, propName: string): unknown {
-  if (!node || typeof node !== 'object') return undefined;
+  if (!node || typeof node !== "object") return undefined;
 
   if (node[propName] !== undefined) return node[propName];
 
   for (const key of Object.keys(node)) {
     if (Array.isArray(node[key])) {
       for (const child of node[key] as ComponentNode[]) {
-        if (child && typeof child === 'object') {
+        if (child && typeof child === "object") {
           const found = findPropValueInTree(child, propName);
+
           if (found !== undefined) return found;
         }
       }
@@ -68,11 +70,11 @@ export function stripRuntimeIds(value: unknown): unknown {
     return value.map((item) => stripRuntimeIds(item));
   }
 
-  if (value && typeof value === 'object') {
+  if (value && typeof value === "object") {
     const result: Record<string, unknown> = {};
 
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
-      if (key === 'id') continue;
+      if (key === "id") continue;
       result[key] = stripRuntimeIds(val);
     }
 
@@ -95,8 +97,8 @@ export function collectDeepExposedPropNames(
   const componentInfo = components.find((c) => c.path === cleanNode._component);
 
   Object.keys(node).forEach((key) => {
-    if (key.startsWith('_hardcoded_') && node[key] === false) {
-      const propName = key.replace('_hardcoded_', '');
+    if (key.startsWith("_hardcoded_") && node[key] === false) {
+      const propName = key.replace("_hardcoded_", "");
       const renamedKey = node[`_renamed_${propName}`] || propName;
       const inputConfig = componentInfo?.inputs?.[propName]
         ? { ...(componentInfo.inputs[propName] as InputConfig) }
@@ -107,12 +109,12 @@ export function collectDeepExposedPropNames(
   });
 
   Object.keys(node).forEach((key) => {
-    if (Array.isArray(node[key]) && !key.startsWith('_')) {
+    if (Array.isArray(node[key]) && !key.startsWith("_")) {
       const children = node[key] as BuilderNode[];
       const cleanChildren = (cleanNode[key] as ComponentNode[]) || [];
 
       children.forEach((child, idx) => {
-        if (child && typeof child === 'object') {
+        if (child && typeof child === "object") {
           results.push(...collectDeepExposedPropNames(child, cleanChildren[idx], components));
         }
       });
@@ -132,12 +134,12 @@ export function cleanComponentTree(tree: ComponentNode[]): ComponentNode[] {
 
     Object.keys(node).forEach((key) => {
       if (
-        key.startsWith('_hardcoded_') ||
-        key.startsWith('_renamed_') ||
-        key.endsWith('_mode') ||
-        key === 'id' ||
-        key === '_component' ||
-        key === '_isRootComponent'
+        key.startsWith("_hardcoded_") ||
+        key.startsWith("_renamed_") ||
+        key.endsWith("_mode") ||
+        key === "id" ||
+        key === "_component" ||
+        key === "_isRootComponent"
       ) {
         return;
       }

@@ -13,7 +13,7 @@ pageSections:
         text: Explore Components
         hideText: false
         link: /component-library/
-        iconName: ''
+        iconName: ""
         iconPosition: before
         variant: primary
         size: md
@@ -21,7 +21,7 @@ pageSections:
         text: View in GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
-        iconName: ''
+        iconName: ""
         iconPosition: before
         variant: secondary
         size: md
@@ -146,7 +146,7 @@ pageSections:
         text: Explore Components
         hideText: false
         link: /component-library/
-        iconName: ''
+        iconName: ""
         iconPosition: before
         variant: primary
         size: md
@@ -154,7 +154,7 @@ pageSections:
         text: View in GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
-        iconName: ''
+        iconName: ""
         iconPosition: before
         variant: tertiary
         size: md

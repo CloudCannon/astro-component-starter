@@ -21,7 +21,7 @@ export default [
         "warn",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_component$",
+          varsIgnorePattern: "^(_component|editable)$",
         },
       ],
       "no-console": "off",
@@ -58,7 +58,7 @@ export default [
         "warn",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_component$",
+          varsIgnorePattern: "^(_component|editable)$",
         },
       ],
       "@typescript-eslint/no-explicit-any": "off",
@@ -106,7 +106,7 @@ export default [
         "warn",
         {
           argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_component$",
+          varsIgnorePattern: "^(_component|editable)$",
         },
       ],
     },

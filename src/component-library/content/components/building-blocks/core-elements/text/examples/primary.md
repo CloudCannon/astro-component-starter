@@ -14,4 +14,3 @@ blocks:
     * Too!
   alignX: start
 ---
-

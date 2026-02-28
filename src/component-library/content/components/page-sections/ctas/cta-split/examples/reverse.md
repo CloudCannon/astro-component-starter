@@ -18,7 +18,3 @@ blocks:
       size: md
       link: "/chat"
 ---
-
-
-
-

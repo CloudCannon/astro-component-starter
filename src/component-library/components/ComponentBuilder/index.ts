@@ -9,25 +9,25 @@
  * @module index
  */
 
-import { debugLog } from './constants';
-import { showExportConfigModal } from './modules/exportModal';
-import { renderPropEditor } from './modules/propEditor';
-import { renderSandbox, setRenderCallback } from './modules/sandbox';
-import { builderState } from './state';
-import type { BuilderData } from './types';
-import { generateExport } from './utils/exportGenerator';
+import { debugLog } from "./constants";
+import { showExportConfigModal } from "./modules/exportModal";
+import { renderPropEditor } from "./modules/propEditor";
+import { renderSandbox, setRenderCallback } from "./modules/sandbox";
+import { builderState } from "./state";
+import type { BuilderData } from "./types";
+import { generateExport } from "./utils/exportGenerator";
 
 /** Initialize the component builder */
 function initializeBuilder(): void {
-  const builderElement = document.querySelector('.component-builder');
+  const builderElement = document.querySelector(".component-builder");
 
   if (!builderElement) return;
 
   // Load builder data from data attribute
-  const dataAttr = builderElement.getAttribute('data-builder-data');
+  const dataAttr = builderElement.getAttribute("data-builder-data");
 
   if (!dataAttr) {
-    console.error('[ComponentBuilder] Missing data-builder-data attribute');
+    console.error("[ComponentBuilder] Missing data-builder-data attribute");
     return;
   }
 
@@ -36,27 +36,27 @@ function initializeBuilder(): void {
   try {
     builderData = JSON.parse(dataAttr);
   } catch (e) {
-    console.error('[ComponentBuilder] Failed to parse builder data:', e);
+    console.error("[ComponentBuilder] Failed to parse builder data:", e);
     return;
   }
 
   // Initialize state
   builderState.initialize(builderData);
 
-  debugLog('Builder initialized with:', {
+  debugLog("Builder initialized with:", {
     componentsCount: builderData.components?.length || 0,
     categories: Object.keys(builderData.componentsByCategory || {}),
   });
 
   // Get DOM elements
-  const sandbox = document.getElementById('sandbox');
-  const sidebarContent = document.getElementById('sidebar-content');
-  const sidebarTitle = document.getElementById('sidebar-title');
-  const exportBtn = document.getElementById('export-btn') as HTMLButtonElement;
-  const exportBar = document.querySelector('.export-bar') as HTMLElement;
+  const sandbox = document.getElementById("sandbox");
+  const sidebarContent = document.getElementById("sidebar-content");
+  const sidebarTitle = document.getElementById("sidebar-title");
+  const exportBtn = document.getElementById("export-btn") as HTMLButtonElement;
+  const exportBar = document.querySelector(".export-bar") as HTMLElement;
 
   if (!sandbox || !sidebarContent || !sidebarTitle || !exportBtn || !exportBar) {
-    console.error('[ComponentBuilder] Missing required DOM elements');
+    console.error("[ComponentBuilder] Missing required DOM elements");
     return;
   }
 
@@ -70,23 +70,23 @@ function initializeBuilder(): void {
   setRenderCallback(render);
 
   // Selection change handler
-  builderState.on('selectionChange', () => {
+  builderState.on("selectionChange", () => {
     updateSidebar();
   });
 
   // Tree change handler
-  builderState.on('treeChange', () => {
+  builderState.on("treeChange", () => {
     render();
   });
 
   // Validation change handler
-  builderState.on('validationChange', () => {
+  builderState.on("validationChange", () => {
     updateExportButton();
     updateValidationPanel();
   });
 
   // Export button handler
-  exportBtn.addEventListener('click', (e) => {
+  exportBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     handleExport();
@@ -100,7 +100,7 @@ function initializeBuilder(): void {
     const selectedId = builderState.selectedComponentId;
 
     if (!selectedId) {
-      title.textContent = 'Component Props';
+      title.textContent = "Component Props";
       content.innerHTML = '<p class="sidebar-empty">Select a component to edit its properties</p>';
       return;
     }
@@ -108,7 +108,7 @@ function initializeBuilder(): void {
     const node = builderState.findComponentNode(selectedId);
 
     if (!node) {
-      title.textContent = 'Component Props';
+      title.textContent = "Component Props";
       content.innerHTML = '<p class="sidebar-empty">Component not found</p>';
       return;
     }
@@ -116,7 +116,7 @@ function initializeBuilder(): void {
     const componentInfo = builderState.getComponentInfo(node._component);
 
     if (!componentInfo) {
-      title.textContent = 'Component Props';
+      title.textContent = "Component Props";
       content.innerHTML = '<p class="sidebar-empty">Unknown component type</p>';
       return;
     }
@@ -129,35 +129,35 @@ function initializeBuilder(): void {
   function updateExportButton(): void {
     const hasComponents = builderState.componentTree.length > 0;
     const validation = builderState.validationResult;
-    
+
     // Disable if no components
     if (!hasComponents) {
       exportBtn.disabled = true;
-      exportBtn.classList.remove('has-errors');
+      exportBtn.classList.remove("has-errors");
       return;
     }
-    
+
     // Show error state if validation fails
     if (!validation.isValid) {
       exportBtn.disabled = false; // Keep enabled to show errors
-      exportBtn.classList.add('has-errors');
-      
+      exportBtn.classList.add("has-errors");
+
       // Update button text to show error count
       const errorCount = validation.duplicateProps.length;
 
-      exportBtn.textContent = `Export Component (${errorCount} error${errorCount > 1 ? 's' : ''})`;
+      exportBtn.textContent = `Export Component (${errorCount} error${errorCount > 1 ? "s" : ""})`;
     } else {
       exportBtn.disabled = false;
-      exportBtn.classList.remove('has-errors');
-      exportBtn.textContent = 'Export Component';
+      exportBtn.classList.remove("has-errors");
+      exportBtn.textContent = "Export Component";
     }
   }
 
   // Update validation panel
   function updateValidationPanel(): void {
     const validation = builderState.validationResult;
-    let panel = document.getElementById('validation-panel');
-    
+    let panel = document.getElementById("validation-panel");
+
     // Remove existing panel if validation passes
     if (validation.isValid) {
       if (panel) {
@@ -165,27 +165,30 @@ function initializeBuilder(): void {
       }
       return;
     }
-    
+
     // Create panel if it doesn't exist
     if (!panel) {
-      panel = document.createElement('div');
-      panel.id = 'validation-panel';
-      panel.className = 'validation-panel';
+      panel = document.createElement("div");
+      panel.id = "validation-panel";
+      panel.className = "validation-panel";
       // Insert after export bar, not inside it
-      exportBar.insertAdjacentElement('afterend', panel);
+      exportBar.insertAdjacentElement("afterend", panel);
     }
-    
+
     // Build consolidated error list
     const allDuplicates = validation.duplicateProps
       .map((error) => {
         const locationsList = error.locations
-          .map((loc) => `<li><strong>${loc.nodePath}</strong> → "<strong>${error.exposedName}</strong>" (original: "${loc.originalPropName}")</li>`)
-          .join('');
+          .map(
+            (loc) =>
+              `<li><strong>${loc.nodePath}</strong> → "<strong>${error.exposedName}</strong>" (original: "${loc.originalPropName}")</li>`
+          )
+          .join("");
 
         return locationsList;
       })
-      .join('');
-    
+      .join("");
+
     panel.innerHTML = `
       <div class="validation-panel-header">
         <svg class="validation-panel-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -218,7 +221,7 @@ function initializeBuilder(): void {
   // Handle export
   async function handleExport(): Promise<void> {
     if (builderState.componentTree.length === 0) {
-      alert('Please add at least one component to the sandbox before exporting.');
+      alert("Please add at least one component to the sandbox before exporting.");
       return;
     }
 
@@ -227,17 +230,17 @@ function initializeBuilder(): void {
 
     if (!validation.isValid) {
       // Scroll to validation panel to show errors
-      const panel = document.getElementById('validation-panel');
+      const panel = document.getElementById("validation-panel");
 
       if (panel) {
-        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
       return;
     }
 
     showExportConfigModal(async (config) => {
       try {
-        debugLog('Starting export:', config);
+        debugLog("Starting export:", config);
 
         await generateExport(
           builderState.componentTree,
@@ -248,9 +251,9 @@ function initializeBuilder(): void {
           config.componentPath
         );
 
-        debugLog('Export completed successfully');
+        debugLog("Export completed successfully");
       } catch (error) {
-        console.error('[ComponentBuilder] Export error:', error);
+        console.error("[ComponentBuilder] Export error:", error);
         alert(`Error exporting component: ${(error as Error).message}`);
       }
     });
@@ -258,15 +261,14 @@ function initializeBuilder(): void {
 
   // Initial render
   render();
-  
+
   // Run initial validation
   updateValidationPanel();
 }
 
 // Initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeBuilder);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeBuilder);
 } else {
   initializeBuilder();
 }
-

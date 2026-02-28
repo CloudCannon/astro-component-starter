@@ -32,7 +32,3 @@ blocks:
       iconColor: orange
       iconBackground: true
 ---
-
-
-
-

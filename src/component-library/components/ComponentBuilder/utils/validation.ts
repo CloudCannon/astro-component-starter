@@ -65,7 +65,7 @@ export function validateComponentTree(
       exposedPropsMap.set(exposedName, []);
     }
 
-    exposedPropsMap.get(exposedName)!.push(location);
+    exposedPropsMap.get(exposedName)?.push(location);
   }
 
   function collectScopedExposedProps(node: BuilderNode, nodePath: string): PropLocation[] {
@@ -226,7 +226,7 @@ export function validateComponentTree(
             if (!scopedByName.has(scopedName)) {
               scopedByName.set(scopedName, []);
             }
-            scopedByName.get(scopedName)!.push(scopedLoc);
+            scopedByName.get(scopedName)?.push(scopedLoc);
           }
 
           scopedByName.forEach((locations, exposedName) => {

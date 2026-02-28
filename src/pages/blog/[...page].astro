@@ -10,7 +10,7 @@ import Grid from "@wrappers/grid/Grid.astro";
 import GridItem from "@wrappers/grid/GridItem.astro";
 import { getCollection } from "astro:content";
 
-type Paginate = (data: any[], opts: { pageSize: number }) => any;
+type Paginate = (_data: any[], _opts: { pageSize: number }) => any;
 
 export interface Props {
   page: { data: any[] };

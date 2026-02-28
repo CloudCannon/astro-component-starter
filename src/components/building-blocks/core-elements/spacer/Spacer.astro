@@ -1,5 +1,11 @@
 ---
-const { size = "md", class: className, editable = true, _component, ...htmlAttributes } = Astro.props;
+const {
+  size = "md",
+  class: className,
+  editable = true,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
 ---
 
 <div class:list={["spacer", className, `size-${size}`]} {...htmlAttributes} aria-hidden="true">

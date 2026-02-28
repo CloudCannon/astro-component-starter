@@ -3,13 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
-  "keywords": [
-    "design-system",
-    "astro",
-    "components",
-    "css",
-    "design-tokens"
-  ],
+  "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
@@ -19,6 +13,8 @@
     "build:no-library": "DISABLE_COMPONENT_LIBRARY=true astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "npm run lint && npm run format",
+    "check:fix": "npm run lint:fix && npm run format:fix",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:yml",
     "lint:js": "eslint .",
     "lint:yml": "eslint \"**/*.{yml,yaml}\"",
@@ -28,7 +24,8 @@
     "lint:css": "stylelint \"**/*.{css,pcss,astro}\"",
     "lint:css:fix": "stylelint \"**/*.{css,pcss,astro}\" --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.12",
@@ -66,6 +63,7 @@
     "eslint-plugin-jsonc": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-yml": "^1.18.0",
+    "husky": "^9.1.7",
     "jsonc-eslint-parser": "^2.4.0",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",

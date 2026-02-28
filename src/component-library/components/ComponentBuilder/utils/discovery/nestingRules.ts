@@ -1,18 +1,21 @@
-import { existsSync, readdirSync, readFileSync } from 'fs';
-import yaml from 'js-yaml';
-import { join } from 'path';
+import { existsSync, readdirSync, readFileSync } from "fs";
+import yaml from "js-yaml";
+import { join } from "path";
 
-import { findStructureValueFiles } from '../../../../shared/structureFiles';
-import type { NestingRules, StructureValue } from '../../types';
+import { findStructureValueFiles } from "../../../../shared/structureFiles";
+import type { NestingRules, StructureValue } from "../../types";
 
 type Logger = (...args: unknown[]) => void;
 
 /** Parse global and inline CloudCannon structures into nesting rules. */
 export function parseNestingRules(log: Logger = () => {}): NestingRules {
-  const structuresDir = join(process.cwd(), '.cloudcannon/structures');
+  const structuresDir = join(process.cwd(), ".cloudcannon/structures");
   const rules: NestingRules = {};
 
-  function processStructureDefinition(structureName: string, structureDef: Record<string, unknown>): void {
+  function processStructureDefinition(
+    structureName: string,
+    structureDef: Record<string, unknown>
+  ): void {
     const allowedPaths: string[] = [];
     const excludedPaths: string[] = [];
 
@@ -20,9 +23,10 @@ export function parseNestingRules(log: Logger = () => {}): NestingRules {
 
     if (Array.isArray(valuesFromGlob)) {
       for (const glob of valuesFromGlob as string[]) {
-        if (glob.startsWith('!')) {
+        if (glob.startsWith("!")) {
           const path = glob.substring(1);
           const match = path.match(/\/src\/components\/(.+?)\.cloudcannon\.structure-value\.yml/);
+
           if (match) {
             excludedPaths.push(match[1]);
           }
@@ -33,7 +37,8 @@ export function parseNestingRules(log: Logger = () => {}): NestingRules {
 
           if (match) {
             const componentPath = match[1];
-            if (glob.includes('/**/*.')) {
+
+            if (glob.includes("/**/*.")) {
               allowedPaths.push(`${componentPath}/*`);
             } else {
               allowedPaths.push(componentPath);
@@ -60,11 +65,11 @@ export function parseNestingRules(log: Logger = () => {}): NestingRules {
 
   if (existsSync(structuresDir)) {
     try {
-      const files = readdirSync(structuresDir).filter((f) => f.endsWith('.yml'));
+      const files = readdirSync(structuresDir).filter((f) => f.endsWith(".yml"));
 
       for (const file of files) {
         const filePath = join(structuresDir, file);
-        const content = readFileSync(filePath, 'utf8');
+        const content = readFileSync(filePath, "utf8");
         const parsed = yaml.load(content) as Record<string, Record<string, unknown>>;
 
         for (const [structureName, structureDef] of Object.entries(parsed)) {
@@ -72,23 +77,26 @@ export function parseNestingRules(log: Logger = () => {}): NestingRules {
         }
       }
     } catch (error) {
-      console.warn('Error parsing global nesting rules:', error);
+      console.warn("Error parsing global nesting rules:", error);
     }
   }
 
-  const componentsDir = join(process.cwd(), 'src/components');
+  const componentsDir = join(process.cwd(), "src/components");
 
   try {
     const structureValueFiles = findStructureValueFiles(componentsDir);
 
     for (const filePath of structureValueFiles) {
       try {
-        const content = readFileSync(filePath, 'utf8');
+        const content = readFileSync(filePath, "utf8");
         const parsed = yaml.load(content) as StructureValue | null;
 
         if (parsed?._structures) {
           for (const [structureName, structureDef] of Object.entries(parsed._structures)) {
-            processStructureDefinition(structureName, structureDef as unknown as Record<string, unknown>);
+            processStructureDefinition(
+              structureName,
+              structureDef as unknown as Record<string, unknown>
+            );
           }
         }
       } catch {
@@ -96,7 +104,7 @@ export function parseNestingRules(log: Logger = () => {}): NestingRules {
       }
     }
   } catch (error) {
-    console.warn('Error scanning for inline structures:', error);
+    console.warn("Error scanning for inline structures:", error);
   }
 
   return rules;

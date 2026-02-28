@@ -1,9 +1,9 @@
-import yaml from 'js-yaml';
+import yaml from "js-yaml";
 
-import { toPascalCase } from '../../../../shared/caseUtils';
-import type { ComponentInfo, ComponentMetadata, ComponentNode } from '../../types';
-import { shouldUseMapPattern, type BuilderNode } from '../shared';
-import { collectDeepExposedPropNames, findPropValueInTree, stripRuntimeIds } from './treeHelpers';
+import { toPascalCase } from "../../../../shared/caseUtils";
+import type { ComponentInfo, ComponentMetadata, ComponentNode } from "../../types";
+import { shouldUseMapPattern, type BuilderNode } from "../shared";
+import { collectDeepExposedPropNames, findPropValueInTree, stripRuntimeIds } from "./treeHelpers";
 
 /** Generate structure value YAML. */
 export function generateStructureValue(
@@ -25,13 +25,13 @@ export function generateStructureValue(
   }
 
   const displayName = componentName
-    .split('-')
+    .split("-")
     .map((word) => toPascalCase(word))
-    .join(' ');
+    .join(" ");
 
   const value: Record<string, unknown> = {
     _component: componentPath || `page-sections/${componentName}`,
-    label: '',
+    label: "",
   };
 
   const requiredStructures = new Map<string, unknown>();
@@ -42,14 +42,15 @@ export function generateStructureValue(
     const componentInfo = components.find((c) => c.path === cleanNode._component);
 
     Object.keys(node).forEach((key) => {
-      if (key.startsWith('_') || key === 'id' || key === 'class' || key === 'className') {
+      if (key.startsWith("_") || key === "id" || key === "class" || key === "className") {
         return;
       }
 
       const modeKey = `_${key}_mode` as const;
-      const isInFreeformMode = node[modeKey] === 'prop';
+      const isInFreeformMode = node[modeKey] === "prop";
       const isExposed = node[`_hardcoded_${key}`] === false;
-      const arrayUsesMapPattern = Array.isArray(cleanNode[key]) &&
+      const arrayUsesMapPattern =
+        Array.isArray(cleanNode[key]) &&
         Array.isArray(node[key]) &&
         shouldUseMapPattern(node[key] as BuilderNode[], metadataMap, cleanNode._component);
 
@@ -67,9 +68,8 @@ export function generateStructureValue(
 
               for (const { renamedKey: fieldKey, propName } of deepProps) {
                 const rawValue = findPropValueInTree(cleanChildNode, propName);
-                exampleItem[fieldKey] = rawValue !== undefined
-                  ? stripRuntimeIds(rawValue)
-                  : '';
+
+                exampleItem[fieldKey] = rawValue !== undefined ? stripRuntimeIds(rawValue) : "";
               }
 
               value[renamedKey] = [exampleItem];
@@ -82,7 +82,7 @@ export function generateStructureValue(
             const inputConfig = componentInfo.inputs?.[key];
             const structuresRef = inputConfig?.options?.structures;
 
-            if (structuresRef && typeof structuresRef === 'string') {
+            if (structuresRef && typeof structuresRef === "string") {
               const match = structuresRef.match(/_structures\.(\w+)/);
 
               if (match) {
@@ -102,7 +102,7 @@ export function generateStructureValue(
 
       if (!arrayUsesMapPattern && Array.isArray(node[key]) && Array.isArray(cleanNode[key])) {
         (node[key] as BuilderNode[]).forEach((child, idx) => {
-          if (child && typeof child === 'object' && (cleanNode[key] as ComponentNode[])[idx]) {
+          if (child && typeof child === "object" && (cleanNode[key] as ComponentNode[])[idx]) {
             collectExposedValues(child, (cleanNode[key] as ComponentNode[])[idx]);
           }
         });
@@ -125,6 +125,7 @@ export function generateStructureValue(
 
   if (requiredStructures.size > 0) {
     const structures: Record<string, unknown> = {};
+
     for (const [name, def] of requiredStructures.entries()) {
       structures[name] = def;
     }

@@ -10,4 +10,3 @@ blocks:
   paddingVertical: sm
   backgroundColor: surface
 ---
-

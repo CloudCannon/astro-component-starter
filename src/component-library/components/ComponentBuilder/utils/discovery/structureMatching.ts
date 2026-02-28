@@ -1,4 +1,4 @@
-import type { ComponentInfo, NestingRules } from '../../types';
+import type { ComponentInfo, NestingRules } from "../../types";
 
 type Logger = (...args: unknown[]) => void;
 
@@ -11,7 +11,7 @@ export function isComponentAllowedInStructure(
   const allowed = nestingRules[structureName] || [];
   const excluded = nestingRules[`${structureName}_excluded`] || [];
 
-  const componentName = componentPath.split('/').pop();
+  const componentName = componentPath.split("/").pop();
   const componentPathWithName = componentName ? `${componentPath}/${componentName}` : componentPath;
 
   if (excluded.includes(componentPath) || excluded.includes(componentPathWithName)) {
@@ -23,7 +23,7 @@ export function isComponentAllowedInStructure(
   }
 
   for (const pattern of allowed) {
-    if (pattern.endsWith('/*')) {
+    if (pattern.endsWith("/*")) {
       const prefix = pattern.slice(0, -2);
 
       if (componentPath.startsWith(`${prefix}/`)) {

@@ -1,27 +1,27 @@
-import { toPascalCase } from '../../../../shared/caseUtils';
-import { getChildComponentPath } from '../../../../shared/componentPath';
-import type { ComponentInfo, ComponentMetadata, ComponentNode } from '../../types';
-import { shouldUseMapPattern, type BuilderNode } from '../shared';
-import { getChildComponentPropInfo } from './treeHelpers';
+import { toPascalCase } from "../../../../shared/caseUtils";
+import { getChildComponentPath } from "../../../../shared/componentPath";
+import type { ComponentInfo, ComponentMetadata, ComponentNode } from "../../types";
+import { shouldUseMapPattern, type BuilderNode } from "../shared";
+import { getChildComponentPropInfo } from "./treeHelpers";
 
 function getAliasedImportDirectory(componentPath: string): string {
-  if (componentPath.startsWith('building-blocks/core-elements/')) {
-    return `@core-elements/${componentPath.slice('building-blocks/core-elements/'.length)}`;
+  if (componentPath.startsWith("building-blocks/core-elements/")) {
+    return `@core-elements/${componentPath.slice("building-blocks/core-elements/".length)}`;
   }
-  if (componentPath.startsWith('building-blocks/forms/')) {
-    return `@forms/${componentPath.slice('building-blocks/forms/'.length)}`;
+  if (componentPath.startsWith("building-blocks/forms/")) {
+    return `@forms/${componentPath.slice("building-blocks/forms/".length)}`;
   }
-  if (componentPath.startsWith('building-blocks/wrappers/')) {
-    return `@wrappers/${componentPath.slice('building-blocks/wrappers/'.length)}`;
+  if (componentPath.startsWith("building-blocks/wrappers/")) {
+    return `@wrappers/${componentPath.slice("building-blocks/wrappers/".length)}`;
   }
-  if (componentPath.startsWith('building-blocks/')) {
-    return `@building-blocks/${componentPath.slice('building-blocks/'.length)}`;
+  if (componentPath.startsWith("building-blocks/")) {
+    return `@building-blocks/${componentPath.slice("building-blocks/".length)}`;
   }
-  if (componentPath.startsWith('page-sections/builders/')) {
-    return `@builders/${componentPath.slice('page-sections/builders/'.length)}`;
+  if (componentPath.startsWith("page-sections/builders/")) {
+    return `@builders/${componentPath.slice("page-sections/builders/".length)}`;
   }
-  if (componentPath.startsWith('page-sections/')) {
-    return `@page-sections/${componentPath.slice('page-sections/'.length)}`;
+  if (componentPath.startsWith("page-sections/")) {
+    return `@page-sections/${componentPath.slice("page-sections/".length)}`;
   }
   return `@components/${componentPath}`;
 }
@@ -30,14 +30,14 @@ function getImportInfo(
   componentPath: string,
   components: ComponentInfo[]
 ): { componentName: string; importPath: string } {
-  const parts = componentPath.split('/');
+  const parts = componentPath.split("/");
   const lastPart = parts[parts.length - 1] || componentPath;
   const componentInfo = components.find((c) => c.path === componentPath);
   const componentName = toPascalCase(componentInfo?.name || lastPart);
   const astroFileName = componentInfo?.fileName || `${componentName}.astro`;
 
   // Virtual child components (e.g. accordion-item) live in the parent's folder.
-  const sourceDirectory = componentInfo?.isVirtual ? parts.slice(0, -1).join('/') : componentPath;
+  const sourceDirectory = componentInfo?.isVirtual ? parts.slice(0, -1).join("/") : componentPath;
   const aliasedDirectory = getAliasedImportDirectory(sourceDirectory);
 
   return {
@@ -62,32 +62,37 @@ export function generateAstroFile(
     if (!node) return;
 
     Object.keys(node).forEach((key) => {
-      if (key.startsWith('_hardcoded_')) {
-        const propName = key.replace('_hardcoded_', '');
+      if (key.startsWith("_hardcoded_")) {
+        const propName = key.replace("_hardcoded_", "");
+
         if (!node[key]) {
           const renamedKey = node[`_renamed_${propName}`] || propName;
+
           exposedProps.add(renamedKey);
         }
       }
     });
 
     Object.keys(node).forEach((key) => {
-      if (key.endsWith('_mode') && node[key as `_${string}_mode`] === 'prop') {
-        const propName = key.replace('_mode', '').substring(1);
+      if (key.endsWith("_mode") && node[key as `_${string}_mode`] === "prop") {
+        const propName = key.replace("_mode", "").substring(1);
         const renamedKey = node[`_renamed_${propName}`] || propName;
+
         exposedProps.add(renamedKey);
       }
     });
 
     Object.keys(node).forEach((key) => {
-      if (Array.isArray(node[key]) && !key.startsWith('_')) {
+      if (Array.isArray(node[key]) && !key.startsWith("_")) {
         const children = node[key] as BuilderNode[];
+
         if (shouldUseMapPattern(children, metadataMap, node._component)) {
           const renamedKey = node[`_renamed_${key}`] || key;
+
           exposedProps.add(renamedKey);
         } else {
           children.forEach((child) => {
-            if (child && typeof child === 'object') {
+            if (child && typeof child === "object") {
               collectExposedProps(child);
             }
           });
@@ -112,6 +117,7 @@ export function generateAstroFile(
     }
 
     const metadata = metadataMap[block._component];
+
     if (
       metadata?.childComponent?.name &&
       metadata?.fallbackFor &&
@@ -119,6 +125,7 @@ export function generateAstroFile(
       (block[metadata.fallbackFor] as ComponentNode[]).length > 0
     ) {
       const childPath = getChildComponentPath(block._component, metadata.childComponent.name);
+
       uniqueComponents.add(childPath);
     }
 
@@ -136,9 +143,10 @@ export function generateAstroFile(
   const imports = Array.from(uniqueComponents)
     .map((componentPath) => {
       const { componentName, importPath } = getImportInfo(componentPath, components);
+
       return `import ${componentName} from "${importPath}";`;
     })
-    .join('\n');
+    .join("\n");
 
   const componentUsage = blocks
     .map((block, index) =>
@@ -152,13 +160,13 @@ export function generateAstroFile(
         components
       )
     )
-    .join('\n\n');
+    .join("\n\n");
 
-  const standardProps = ['label', 'class: className', '_component'];
-  const allProps = [...standardProps, ...Array.from(exposedProps), '...htmlAttributes'];
+  const standardProps = ["label", "class: className", "_component"];
+  const allProps = [...standardProps, ...Array.from(exposedProps), "...htmlAttributes"];
   const propsDestructuring = allProps
-    .map((prop, idx) => `  ${prop}${idx < allProps.length - 1 ? ',' : ''}`)
-    .join('\n');
+    .map((prop, idx) => `  ${prop}${idx < allProps.length - 1 ? "," : ""}`)
+    .join("\n");
 
   return `---
 ${imports}
@@ -190,11 +198,11 @@ function formatComponentBlock(
   arrayItemContext?: string
 ): string {
   const componentPath = block._component;
-  const parts = componentPath.split('/');
+  const parts = componentPath.split("/");
   const lastPart = parts[parts.length - 1];
   const componentName = toPascalCase(lastPart);
 
-  const indent = '  '.repeat(indentLevel);
+  const indent = "  ".repeat(indentLevel);
   const props: Record<string, unknown> = { ...block };
   const isRootComponent = indentLevel === 0;
 
@@ -205,13 +213,15 @@ function formatComponentBlock(
   const metadata = metadataMap[componentPath];
   const componentInfo = components.find((c) => c.path === componentPath);
   const supportsSlots = metadata?.supportsSlots || componentInfo?.supportsSlots || false;
-  const fallbackProp = metadata?.fallbackFor || componentInfo?.fallbackFor || 'contentSections';
+  const fallbackProp = metadata?.fallbackFor || componentInfo?.fallbackFor || "contentSections";
 
   const propsInPropMode = new Set<string>();
+
   if (originalNode) {
     Object.keys(originalNode).forEach((key) => {
-      if (key.endsWith('_mode') && originalNode[key as `_${string}_mode`] === 'prop') {
-        const propName = key.replace('_mode', '').substring(1);
+      if (key.endsWith("_mode") && originalNode[key as `_${string}_mode`] === "prop") {
+        const propName = key.replace("_mode", "").substring(1);
+
         propsInPropMode.add(propName);
       }
     });
@@ -224,7 +234,7 @@ function formatComponentBlock(
       }
     });
 
-    if (!propsInPropMode.has('contentSections')) {
+    if (!propsInPropMode.has("contentSections")) {
       delete props.contentSections;
     }
   }
@@ -239,32 +249,33 @@ function formatComponentBlock(
     .map(([key, value]) => {
       const isInPropMode = propsInPropMode.has(key);
       const isHardcoded = originalNode ? originalNode[`_hardcoded_${key}`] !== false : true;
-      const renamedKey = originalNode ? (originalNode[`_renamed_${key}`] || key) : key;
+      const renamedKey = originalNode ? originalNode[`_renamed_${key}`] || key : key;
 
       if (!isHardcoded || isInPropMode) {
         const propReference = arrayItemContext ? `${arrayItemContext}.${renamedKey}` : renamedKey;
+
         return `${key}={${propReference}}`;
       }
 
-      if (typeof value === 'string') return `${key}="${value}"`;
-      if (typeof value === 'boolean') return value ? key : '';
-      if (typeof value === 'number') return `${key}={${value}}`;
-      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+      if (typeof value === "string") return `${key}="${value}"`;
+      if (typeof value === "boolean") return value ? key : "";
+      if (typeof value === "number") return `${key}={${value}}`;
+      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
         return `${key}={${JSON.stringify(value)}}`;
       }
-      return '';
+      return "";
     })
     .filter(Boolean);
 
   if (isRootComponent && rootComponentName) {
     propsList.push(`class:list={["${rootComponentName}", className]}`);
-    propsList.push('{...htmlAttributes}');
+    propsList.push("{...htmlAttributes}");
   }
 
   const formattedProps =
     propsList.length > 0
-      ? `\n${propsList.map((prop) => `${indent}  ${prop}`).join('\n')}\n${indent}`
-      : '';
+      ? `\n${propsList.map((prop) => `${indent}  ${prop}`).join("\n")}\n${indent}`
+      : "";
 
   if (
     supportsSlots &&
@@ -274,13 +285,14 @@ function formatComponentBlock(
     (block[fallbackProp] as ComponentNode[]).length > 0
   ) {
     const originalNested = originalNode?.[fallbackProp] as BuilderNode[] | undefined;
-    const useMapPattern = !arrayItemContext && originalNested
-      ? shouldUseMapPattern(originalNested, metadataMap, componentPath)
-      : false;
+    const useMapPattern =
+      !arrayItemContext && originalNested
+        ? shouldUseMapPattern(originalNested, metadataMap, componentPath)
+        : false;
 
     if (useMapPattern && originalNested && originalNested.length > 0) {
       const slotName = originalNode?.[`_renamed_${fallbackProp}`] || fallbackProp;
-      const singularName = slotName.endsWith('s') ? slotName.slice(0, -1) : 'item';
+      const singularName = slotName.endsWith("s") ? slotName.slice(0, -1) : "item";
 
       const templateNode = (block[fallbackProp] as ComponentNode[])[0];
       const templateOriginal = originalNested[0];
@@ -293,18 +305,19 @@ function formatComponentBlock(
 
         const childPropsList = childPropInfo.regularProps.map((prop) => {
           const renamedKey = templateOriginal?.[`_renamed_${prop}`] || prop;
+
           return `${prop}={${singularName}.${renamedKey}}`;
         });
 
-        const childIndent = '  '.repeat(indentLevel + 2);
+        const childIndent = "  ".repeat(indentLevel + 2);
         const formattedChildProps =
           childPropsList.length > 0
-            ? `\n${childPropsList.map((p) => `${childIndent}  ${p}`).join('\n')}\n${childIndent}`
-            : '';
+            ? `\n${childPropsList.map((p) => `${childIndent}  ${p}`).join("\n")}\n${childIndent}`
+            : "";
 
-        const slotProp = childPropInfo.slotProps[0] || 'contentSections';
+        const slotProp = childPropInfo.slotProps[0] || "contentSections";
         const isTemplateChildWrapper = templateNode._component === childComponentPath;
-        let innerContent = '';
+        let innerContent = "";
 
         if (isTemplateChildWrapper) {
           const grandchildren = templateNode[slotProp] as ComponentNode[] | undefined;
@@ -324,7 +337,7 @@ function formatComponentBlock(
                   singularName
                 )
               )
-              .join('\n');
+              .join("\n");
           }
         } else {
           innerContent = formatComponentBlock(
@@ -393,7 +406,7 @@ ${indent}</${componentName}>`;
           arrayItemContext
         )
       )
-      .join('\n');
+      .join("\n");
 
     return `${indent}<${componentName}${formattedProps}>
 ${nestedContent}

@@ -29,4 +29,3 @@ orientation:
 multiple:
   type: switch
   comment: When true, uses checkboxes for multiple selection. When false, uses radio buttons for single selection.
-

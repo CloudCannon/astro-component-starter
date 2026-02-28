@@ -8,4 +8,3 @@ blocks:
   aspectRatio: landscape
   style: "max-width: 500px;"
 ---
-

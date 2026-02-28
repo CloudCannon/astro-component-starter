@@ -11,11 +11,11 @@
  * @module propEditor
  */
 
-import { builderState } from '../state';
-import type { ComponentInfo, ComponentNode, InputConfig } from '../types';
-import { createSlider } from '../utils/sliderHelpers';
-import { slotHasSameComponentInEveryItem } from '../utils/shared';
-import { DEFAULT_EXPOSED_PROPS } from '../constants';
+import { builderState } from "../state";
+import type { ComponentInfo, ComponentNode, InputConfig } from "../types";
+import { createSlider } from "../utils/sliderHelpers";
+import { slotHasSameComponentInEveryItem } from "../utils/shared";
+import { DEFAULT_EXPOSED_PROPS } from "../constants";
 
 /** Render the property editor for a selected component */
 export function renderPropEditor(
@@ -23,7 +23,7 @@ export function renderPropEditor(
   componentInfo: ComponentInfo,
   container: HTMLElement
 ): void {
-  container.innerHTML = '';
+  container.innerHTML = "";
 
   if (!componentInfo.inputs || Object.keys(componentInfo.inputs).length === 0) {
     container.innerHTML = '<p class="sidebar-empty">No editable properties</p>';
@@ -55,7 +55,7 @@ export function renderPropEditor(
 
       if (parentMetadata?.childComponent?.props) {
         for (const prop of parentMetadata.childComponent.props) {
-          if (!prop.endsWith('/slot')) {
+          if (!prop.endsWith("/slot")) {
             forcedChildComponentProps.add(prop);
           }
         }
@@ -75,8 +75,8 @@ export function renderPropEditor(
   const parentObjectsWithDottedChildren = new Set<string>();
 
   Object.keys(componentInfo.inputs).forEach((propName) => {
-    if (propName.includes('.')) {
-      parentObjectsWithDottedChildren.add(propName.split('.')[0]);
+    if (propName.includes(".")) {
+      parentObjectsWithDottedChildren.add(propName.split(".")[0]);
     }
   });
 
@@ -85,8 +85,9 @@ export function renderPropEditor(
   const forcedSlotProps = new Set<string>();
 
   slotPropNames.forEach((slotPropName) => {
-    const isInPropMode = (node[`_${slotPropName}_mode`] as string) === 'prop';
-    const isUniform = hasChildComponentPattern && slotHasSameComponentInEveryItem(node, slotPropName);
+    const isInPropMode = (node[`_${slotPropName}_mode`] as string) === "prop";
+    const isUniform =
+      hasChildComponentPattern && slotHasSameComponentInEveryItem(node, slotPropName);
 
     if (isInPropMode || isUniform) {
       forcedSlotProps.add(slotPropName);
@@ -112,19 +113,21 @@ export function renderPropEditor(
   if (componentInfo.slots) {
     for (const slot of componentInfo.slots) {
       const propName = slot.propName;
+
       if (!forcedSlotProps.has(propName)) continue;
       if (editableProps.some(([p]) => p === propName)) continue;
-      const inputConfig: InputConfig =
-        componentInfo.inputs?.[propName] ?? {
-          type: 'array',
-          comment: slot.label || slot.propName,
-        };
+      const inputConfig: InputConfig = componentInfo.inputs?.[propName] ?? {
+        type: "array",
+        comment: slot.label || slot.propName,
+      };
+
       editableProps = editableProps.concat([[propName, inputConfig]]);
     }
   }
 
   if (editableProps.length === 0) {
-    container.innerHTML += '<p class="sidebar-empty">All properties are managed through visual slots</p>';
+    container.innerHTML +=
+      '<p class="sidebar-empty">All properties are managed through visual slots</p>';
     return;
   }
 
@@ -132,13 +135,7 @@ export function renderPropEditor(
   editableProps.forEach(([propName, inputConfig]) => {
     // Force-exposed: slot props (prop mode or uniform children) or child component props (e.g. title)
     const isForcedProp = forcedSlotProps.has(propName) || forcedChildComponentProps.has(propName);
-    const field = createPropField(
-      propName,
-      inputConfig,
-      node,
-      componentInfo,
-      isForcedProp
-    );
+    const field = createPropField(propName, inputConfig, node, componentInfo, isForcedProp);
 
     container.appendChild(field);
   });
@@ -170,9 +167,9 @@ function createPropField(
   const isHardcoded = node[`_hardcoded_${propName}`] as boolean;
   const displayName = (node[`_renamed_${propName}`] as string) || propName;
 
-  const field = document.createElement('div');
+  const field = document.createElement("div");
 
-  field.className = 'prop-field';
+  field.className = "prop-field";
   field.dataset.originalProp = propName;
 
   // Header
@@ -182,9 +179,9 @@ function createPropField(
 
   // Comment
   if (inputConfig.comment) {
-    const comment = document.createElement('p');
+    const comment = document.createElement("p");
 
-    comment.className = 'prop-comment';
+    comment.className = "prop-comment";
     comment.textContent = inputConfig.comment;
     field.appendChild(comment);
   }
@@ -202,9 +199,9 @@ function createPropField(
   }
 
   // Content
-  const content = document.createElement('div');
+  const content = document.createElement("div");
 
-  content.className = 'prop-field-content';
+  content.className = "prop-field-content";
 
   // Forced props are always treated as exposed for display.
   const showAsExposed = isForcedProp || !isHardcoded;
@@ -221,9 +218,7 @@ function createPropField(
     // Skip preview value for object/array values (e.g. slot arrays)
     const currentValue = node[propName];
     const isObjectValue =
-      currentValue !== null &&
-      currentValue !== undefined &&
-      typeof currentValue === 'object';
+      currentValue !== null && currentValue !== undefined && typeof currentValue === "object";
 
     if (!isObjectValue) {
       const valueSection = createPreviewValueSection(propName, inputConfig, node);
@@ -239,13 +234,13 @@ function createPropField(
 
 /** Create field header */
 function createFieldHeader(propName: string): HTMLElement {
-  const header = document.createElement('div');
+  const header = document.createElement("div");
 
-  header.className = 'prop-field-header';
+  header.className = "prop-field-header";
 
-  const name = document.createElement('span');
+  const name = document.createElement("span");
 
-  name.className = 'prop-field-name';
+  name.className = "prop-field-name";
   name.textContent = propName;
   name.title = propName;
 
@@ -259,14 +254,14 @@ function createFieldToggle(
   isHardcoded: boolean,
   onToggle: (exposed: boolean) => void
 ): HTMLElement {
-  const toggleWrapper = document.createElement('div');
+  const toggleWrapper = document.createElement("div");
 
-  toggleWrapper.className = 'prop-field-toggle-wrapper';
+  toggleWrapper.className = "prop-field-toggle-wrapper";
 
-  const toggleLabel = document.createElement('span');
+  const toggleLabel = document.createElement("span");
 
-  toggleLabel.className = 'prop-field-toggle-label';
-  toggleLabel.textContent = 'Expose';
+  toggleLabel.className = "prop-field-toggle-label";
+  toggleLabel.textContent = "Expose";
 
   const toggle = createSlider(!isHardcoded, (checked) => onToggle(checked));
 
@@ -282,14 +277,14 @@ function createHardcodedSection(
   inputConfig: InputConfig,
   node: ComponentNode
 ): HTMLElement {
-  const section = document.createElement('div');
+  const section = document.createElement("div");
 
-  section.className = 'prop-field-section';
+  section.className = "prop-field-section";
 
-  const label = document.createElement('label');
+  const label = document.createElement("label");
 
-  label.className = 'prop-field-section-label';
-  label.textContent = 'Hardcoded Value';
+  label.className = "prop-field-section-label";
+  label.textContent = "Hardcoded Value";
 
   const input = createInputForType(propName, inputConfig, node);
 
@@ -305,25 +300,25 @@ function createExposedNameSection(
   displayName: string,
   node: ComponentNode
 ): HTMLElement {
-  const section = document.createElement('div');
+  const section = document.createElement("div");
 
-  section.className = 'prop-field-section';
+  section.className = "prop-field-section";
 
-  const label = document.createElement('label');
+  const label = document.createElement("label");
 
-  label.className = 'prop-field-section-label';
-  label.textContent = 'Exposed Name';
+  label.className = "prop-field-section-label";
+  label.textContent = "Exposed Name";
 
-  const input = document.createElement('input');
+  const input = document.createElement("input");
 
-  input.type = 'text';
-  input.className = 'prop-field-input';
+  input.type = "text";
+  input.className = "prop-field-input";
   input.value = displayName;
   input.placeholder = propName;
 
   // Use updateNodeMetaProperty so typing doesn't trigger a full re-render
   // (which would destroy this input and lose focus). Only validation is re-run.
-  input.addEventListener('input', (e) => {
+  input.addEventListener("input", (e) => {
     const newName = (e.target as HTMLInputElement).value.trim();
 
     if (newName && newName !== propName) {
@@ -345,14 +340,14 @@ function createPreviewValueSection(
   inputConfig: InputConfig,
   node: ComponentNode
 ): HTMLElement {
-  const section = document.createElement('div');
+  const section = document.createElement("div");
 
-  section.className = 'prop-field-section';
+  section.className = "prop-field-section";
 
-  const label = document.createElement('label');
+  const label = document.createElement("label");
 
-  label.className = 'prop-field-section-label';
-  label.textContent = 'Preview Value';
+  label.className = "prop-field-section-label";
+  label.textContent = "Preview Value";
 
   const input = createInputForType(propName, inputConfig, node);
 
@@ -368,7 +363,7 @@ function createInputForType(
   inputConfig: InputConfig,
   node: ComponentNode
 ): HTMLElement {
-  const type = inputConfig.type || 'text';
+  const type = inputConfig.type || "text";
   let currentValue = node[propName];
 
   // Set defaults
@@ -377,40 +372,40 @@ function createInputForType(
       currentValue = inputConfig.default;
     } else {
       switch (type) {
-        case 'number':
+        case "number":
           currentValue = 0;
           break;
-        case 'switch':
-        case 'boolean':
+        case "switch":
+        case "boolean":
           currentValue = false;
           break;
-        case 'object':
+        case "object":
           currentValue = {};
           break;
         default:
-          currentValue = '';
+          currentValue = "";
       }
     }
   }
 
   // Handle object type
-  if (typeof currentValue === 'object' && currentValue !== null && !Array.isArray(currentValue)) {
+  if (typeof currentValue === "object" && currentValue !== null && !Array.isArray(currentValue)) {
     return createObjectInput(propName, currentValue as Record<string, unknown>, node);
   }
 
   switch (type) {
-    case 'switch':
-    case 'boolean':
+    case "switch":
+    case "boolean":
       return createBooleanInput(propName, currentValue as boolean, node);
-    case 'select':
+    case "select":
       return createSelectInput(propName, inputConfig, currentValue, node);
-    case 'number':
+    case "number":
       return createNumberInput(propName, currentValue as number, node);
-    case 'url':
+    case "url":
       return createUrlInput(propName, currentValue as string, node);
-    case 'image':
+    case "image":
       return createImageInput(propName, currentValue as string, node);
-    case 'object':
+    case "object":
       return createObjectInput(propName, currentValue as Record<string, unknown>, node);
     default:
       return createTextInput(propName, currentValue as string, node);
@@ -419,13 +414,13 @@ function createInputForType(
 
 /** Create text input */
 function createTextInput(propName: string, value: string, node: ComponentNode): HTMLElement {
-  const input = document.createElement('input');
+  const input = document.createElement("input");
 
-  input.type = 'text';
-  input.className = 'prop-field-input';
-  input.value = value || '';
+  input.type = "text";
+  input.className = "prop-field-input";
+  input.value = value || "";
 
-  input.addEventListener('input', (e) => {
+  input.addEventListener("input", (e) => {
     builderState.updateNodeProperty(node.id, propName, (e.target as HTMLInputElement).value);
   });
 
@@ -434,13 +429,13 @@ function createTextInput(propName: string, value: string, node: ComponentNode): 
 
 /** Create number input */
 function createNumberInput(propName: string, value: number, node: ComponentNode): HTMLElement {
-  const input = document.createElement('input');
+  const input = document.createElement("input");
 
-  input.type = 'number';
-  input.className = 'prop-field-input';
+  input.type = "number";
+  input.className = "prop-field-input";
   input.value = String(value || 0);
 
-  input.addEventListener('input', (e) => {
+  input.addEventListener("input", (e) => {
     builderState.updateNodeProperty(
       node.id,
       propName,
@@ -458,17 +453,17 @@ function createSelectInput(
   value: unknown,
   node: ComponentNode
 ): HTMLElement {
-  const select = document.createElement('select');
+  const select = document.createElement("select");
 
-  select.className = 'prop-field-select';
+  select.className = "prop-field-select";
 
   const rawOptions = inputConfig.options?.values;
   const options = Array.isArray(rawOptions) ? rawOptions : [];
 
   options.forEach((opt) => {
-    const option = document.createElement('option');
+    const option = document.createElement("option");
 
-    if (typeof opt === 'string') {
+    if (typeof opt === "string") {
       option.value = opt;
       option.textContent = opt;
     } else {
@@ -481,7 +476,7 @@ function createSelectInput(
     select.appendChild(option);
   });
 
-  select.addEventListener('change', (e) => {
+  select.addEventListener("change", (e) => {
     builderState.updateNodeProperty(node.id, propName, (e.target as HTMLSelectElement).value);
   });
 
@@ -497,14 +492,14 @@ function createBooleanInput(propName: string, value: boolean, node: ComponentNod
 
 /** Create URL input */
 function createUrlInput(propName: string, value: string, node: ComponentNode): HTMLElement {
-  const input = document.createElement('input');
+  const input = document.createElement("input");
 
-  input.type = 'url';
-  input.className = 'prop-field-input';
-  input.value = value || '';
-  input.placeholder = 'https://example.com';
+  input.type = "url";
+  input.className = "prop-field-input";
+  input.value = value || "";
+  input.placeholder = "https://example.com";
 
-  input.addEventListener('input', (e) => {
+  input.addEventListener("input", (e) => {
     builderState.updateNodeProperty(node.id, propName, (e.target as HTMLInputElement).value);
   });
 
@@ -513,25 +508,25 @@ function createUrlInput(propName: string, value: string, node: ComponentNode): H
 
 /** Create image input */
 function createImageInput(propName: string, value: string, node: ComponentNode): HTMLElement {
-  const container = document.createElement('div');
+  const container = document.createElement("div");
 
-  container.className = 'prop-image-input-container';
+  container.className = "prop-image-input-container";
 
-  const input = document.createElement('input');
+  const input = document.createElement("input");
 
-  input.type = 'text';
-  input.className = 'prop-field-input';
-  input.value = value || '';
-  input.placeholder = '/images/example.jpg';
+  input.type = "text";
+  input.className = "prop-field-input";
+  input.value = value || "";
+  input.placeholder = "/images/example.jpg";
 
-  input.addEventListener('input', (e) => {
+  input.addEventListener("input", (e) => {
     builderState.updateNodeProperty(node.id, propName, (e.target as HTMLInputElement).value);
   });
 
-  const hint = document.createElement('small');
+  const hint = document.createElement("small");
 
-  hint.className = 'prop-input-hint';
-  hint.textContent = 'Enter image path';
+  hint.className = "prop-input-hint";
+  hint.textContent = "Enter image path";
 
   container.appendChild(input);
   container.appendChild(hint);
@@ -545,27 +540,27 @@ function createObjectInput(
   value: Record<string, unknown>,
   node: ComponentNode
 ): HTMLElement {
-  const textarea = document.createElement('textarea');
+  const textarea = document.createElement("textarea");
 
-  textarea.className = 'prop-field-textarea';
+  textarea.className = "prop-field-textarea";
   textarea.rows = 6;
   textarea.value = JSON.stringify(value, null, 2);
-  textarea.placeholder = '{}';
+  textarea.placeholder = "{}";
 
   let parseTimeout: number;
 
-  textarea.addEventListener('input', (e) => {
+  textarea.addEventListener("input", (e) => {
     clearTimeout(parseTimeout);
-    textarea.classList.remove('error');
+    textarea.classList.remove("error");
 
     parseTimeout = window.setTimeout(() => {
       try {
         const parsed = JSON.parse((e.target as HTMLTextAreaElement).value);
 
         builderState.updateNodeProperty(node.id, propName, parsed);
-        textarea.classList.remove('error');
+        textarea.classList.remove("error");
       } catch {
-        textarea.classList.add('error');
+        textarea.classList.add("error");
       }
     }, 500);
   });

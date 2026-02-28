@@ -189,7 +189,12 @@ export async function generateNavData(navData) {
       });
 
       const cleanedNestedItems = nestedItems.map(
-        ({ order, hasExplicitOrder, subCategory, ...item }) => item
+        ({
+          order: _order,
+          hasExplicitOrder: _hasExplicitOrder,
+          subCategory: _subCategory,
+          ...item
+        }) => item
       );
 
       const allItems = [...sortedFlatItems, ...cleanedNestedItems];

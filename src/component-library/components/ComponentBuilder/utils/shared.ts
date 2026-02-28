@@ -4,7 +4,7 @@
  * Centralised here to avoid duplication between exportGenerator and validation.
  */
 
-import type { ComponentMetadata, ComponentNode } from '../types';
+import type { ComponentMetadata, ComponentNode } from "../types";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -14,7 +14,7 @@ import type { ComponentMetadata, ComponentNode } from '../types';
 export interface BuilderNode extends ComponentNode {
   [key: `_hardcoded_${string}`]: boolean;
   [key: `_renamed_${string}`]: string;
-  [key: `_${string}_mode`]: 'components' | 'prop';
+  [key: `_${string}_mode`]: "components" | "prop";
 }
 
 // ---------------------------------------------------------------------------
@@ -27,13 +27,15 @@ export interface BuilderNode extends ComponentNode {
  */
 export function slotHasSameComponentInEveryItem(
   node: ComponentNode,
-  slotPropName: string,
+  slotPropName: string
 ): boolean {
   const arr = node[slotPropName];
+
   if (!Array.isArray(arr) || arr.length === 0) return false;
   const first = arr[0] as ComponentNode | undefined;
   const componentPath = first?._component;
-  if (typeof componentPath !== 'string') return false;
+
+  if (typeof componentPath !== "string") return false;
   return (arr as ComponentNode[]).every((item) => item && item._component === componentPath);
 }
 
@@ -44,11 +46,9 @@ export function slotHasSameComponentInEveryItem(
  * it will be surfaced as a configurable prop in the exported component.
  */
 export function hasOwnExposedProps(node: BuilderNode): boolean {
-  if (!node || typeof node !== 'object') return false;
+  if (!node || typeof node !== "object") return false;
 
-  return Object.keys(node).some(
-    (key) => key.startsWith('_hardcoded_') && node[key] === false,
-  );
+  return Object.keys(node).some((key) => key.startsWith("_hardcoded_") && node[key] === false);
 }
 
 /**
@@ -67,27 +67,25 @@ export function hasOwnExposedProps(node: BuilderNode): boolean {
 export function shouldUseMapPattern(
   children: BuilderNode[],
   metadataMap: Record<string, ComponentMetadata>,
-  parentComponentPath: string,
+  parentComponentPath: string
 ): boolean {
   const parentMetadata = metadataMap[parentComponentPath];
 
   if (!parentMetadata?.childComponent) return false;
 
   return children.some((child) => {
-    if (!child || typeof child !== 'object') return false;
+    if (!child || typeof child !== "object") return false;
 
     // Level 0: direct child has exposed props
     if (hasOwnExposedProps(child)) return true;
 
     // Level 1: direct child's default-slot children have exposed props
     const childMetadata = metadataMap[child._component];
-    const childFallbackProp = childMetadata?.fallbackFor || 'contentSections';
+    const childFallbackProp = childMetadata?.fallbackFor || "contentSections";
     const grandchildren = child[childFallbackProp] as BuilderNode[] | undefined;
 
     if (!grandchildren || !Array.isArray(grandchildren)) return false;
 
-    return grandchildren.some(
-      (gc) => gc && typeof gc === 'object' && hasOwnExposedProps(gc),
-    );
+    return grandchildren.some((gc) => gc && typeof gc === "object" && hasOwnExposedProps(gc));
   });
 }

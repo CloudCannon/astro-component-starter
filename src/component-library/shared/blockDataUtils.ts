@@ -4,11 +4,11 @@ export function removeStyleField(value: unknown): unknown {
     return value.map((item) => removeStyleField(item));
   }
 
-  if (value !== null && typeof value === 'object') {
+  if (value !== null && typeof value === "object") {
     const result: Record<string, unknown> = {};
 
     for (const [key, nestedValue] of Object.entries(value)) {
-      if (key !== 'style') {
+      if (key !== "style") {
         result[key] = removeStyleField(nestedValue);
       }
     }

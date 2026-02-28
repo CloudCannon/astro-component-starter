@@ -16,4 +16,3 @@ accept:
 multiple:
   type: switch
   comment: Whether multiple files can be selected.
-

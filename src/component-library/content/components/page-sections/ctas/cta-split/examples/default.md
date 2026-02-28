@@ -17,7 +17,3 @@ blocks:
       size: md
       link: "/invite"
 ---
-
-
-
-

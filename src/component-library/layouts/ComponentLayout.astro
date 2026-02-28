@@ -5,7 +5,7 @@ import ComponentViewer from "@component-library/components/ComponentViewer/index
 import LibraryLayout from "@component-library/layouts/LibraryLayout.astro";
 import MarkdownIt from "markdown-it";
 
-const { frontmatter, schema, configData, examples = [], componentKey = "" } = Astro.props;
+const { frontmatter, configData, examples = [], componentKey = "" } = Astro.props;
 const meta = {
   description: configData?.description || "No description available",
   title: configData?.label || frontmatter.title,
@@ -72,8 +72,10 @@ const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
 
   {
     frontmatter.slots && (
-      <h2>Slots</h2>
-      <ComponentSlots slotData={frontmatter.slots} />
+      <>
+        <h2>Slots</h2>
+        <ComponentSlots slotData={frontmatter.slots} />
+      </>
     )
   }
   {processedExamples.length > 0 && <h2>Examples</h2>}

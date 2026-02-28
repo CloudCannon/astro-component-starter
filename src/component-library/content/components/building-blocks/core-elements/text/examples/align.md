@@ -12,4 +12,3 @@ blocks:
     text: "**End** aligned"
     alignX: end
 ---
-

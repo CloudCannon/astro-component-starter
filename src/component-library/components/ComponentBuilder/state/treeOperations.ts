@@ -1,9 +1,4 @@
-import type {
-  ComponentInfo,
-  ComponentMetadata,
-  ComponentNode,
-  NodeLocation,
-} from '../types';
+import type { ComponentInfo, ComponentMetadata, ComponentNode, NodeLocation } from "../types";
 
 type GetComponentInfo = (path: string) => ComponentInfo | undefined;
 
@@ -17,9 +12,11 @@ export function findComponentNodeInTree(
     if (node.id === id) return node;
 
     const componentInfo = getComponentInfo(node._component);
+
     if (componentInfo?.slots) {
       for (const slot of componentInfo.slots) {
         const children = node[slot.propName];
+
         if (Array.isArray(children)) {
           const found = findComponentNodeInTree(
             id,
@@ -27,14 +24,17 @@ export function findComponentNodeInTree(
             getComponentInfo,
             metadataMap
           );
+
           if (found) return found;
         }
       }
     }
 
     const fallbackProp = metadataMap[node._component]?.fallbackFor;
+
     if (fallbackProp) {
       const children = node[fallbackProp];
+
       if (Array.isArray(children)) {
         const found = findComponentNodeInTree(
           id,
@@ -42,6 +42,7 @@ export function findComponentNodeInTree(
           getComponentInfo,
           metadataMap
         );
+
         if (found) return found;
       }
     }
@@ -59,17 +60,31 @@ export function isNodeAncestorOfInTree(
 ): boolean {
   if (ancestorId === descendantId) return true;
 
-  const ancestor = findComponentNodeInTree(ancestorId, componentTree, getComponentInfo, metadataMap);
+  const ancestor = findComponentNodeInTree(
+    ancestorId,
+    componentTree,
+    getComponentInfo,
+    metadataMap
+  );
+
   if (!ancestor) return false;
 
   const componentInfo = getComponentInfo(ancestor._component);
+
   if (componentInfo?.slots) {
     for (const slot of componentInfo.slots) {
       const children = ancestor[slot.propName];
+
       if (Array.isArray(children)) {
         for (const child of children as ComponentNode[]) {
           if (
-            isNodeAncestorOfInTree(child.id, descendantId, componentTree, getComponentInfo, metadataMap)
+            isNodeAncestorOfInTree(
+              child.id,
+              descendantId,
+              componentTree,
+              getComponentInfo,
+              metadataMap
+            )
           ) {
             return true;
           }
@@ -95,9 +110,11 @@ export function findNodeLocationInTree(
     }
 
     const componentInfo = getComponentInfo(tree[i]._component);
+
     if (componentInfo?.slots) {
       for (const slot of componentInfo.slots) {
         const children = tree[i][slot.propName];
+
         if (Array.isArray(children)) {
           const found = findNodeLocationInTree(
             nodeId,
@@ -107,14 +124,17 @@ export function findNodeLocationInTree(
             tree[i].id,
             slot.propName
           );
+
           if (found) return found;
         }
       }
     }
 
     const fallbackProp = metadataMap[tree[i]._component]?.fallbackFor;
+
     if (fallbackProp) {
       const children = tree[i][fallbackProp];
+
       if (Array.isArray(children)) {
         const found = findNodeLocationInTree(
           nodeId,
@@ -124,6 +144,7 @@ export function findNodeLocationInTree(
           tree[i].id,
           fallbackProp
         );
+
         if (found) return found;
       }
     }
@@ -144,9 +165,11 @@ export function removeNodeFromTree(
     }
 
     const componentInfo = getComponentInfo(tree[i]._component);
+
     if (componentInfo?.slots) {
       for (const slot of componentInfo.slots) {
         const children = tree[i][slot.propName];
+
         if (Array.isArray(children)) {
           const found = removeNodeFromTree(
             nodeId,
@@ -154,14 +177,17 @@ export function removeNodeFromTree(
             getComponentInfo,
             metadataMap
           );
+
           if (found) return found;
         }
       }
     }
 
     const fallbackProp = metadataMap[tree[i]._component]?.fallbackFor;
+
     if (fallbackProp) {
       const children = tree[i][fallbackProp];
+
       if (Array.isArray(children)) {
         const found = removeNodeFromTree(
           nodeId,
@@ -169,6 +195,7 @@ export function removeNodeFromTree(
           getComponentInfo,
           metadataMap
         );
+
         if (found) return found;
       }
     }

@@ -23,4 +23,3 @@ placeholder:
 value:
   type: text
   comment: The default selected value.
-
