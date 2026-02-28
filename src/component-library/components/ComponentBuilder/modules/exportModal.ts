@@ -10,6 +10,7 @@
 import { builderState } from "../state";
 import type { ExportConfig } from "../types";
 import { createCloseButton } from "../utils/buttonHelpers";
+import { generateExportPreview } from "../utils/exportGenerator";
 
 /** Page section categories from folder structure */
 function getPageSectionCategories(): string[] {
@@ -111,7 +112,7 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
 
   /** Close modal */
   function closeModal(): void {
-    overlay.style.display = "none";
+    if (overlay) overlay.style.display = "none";
   }
 
   // Create and append close button
@@ -130,8 +131,42 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
     }
   };
 
-  // Handle confirm
-  confirmBtn.onclick = () => {
+  // Preview panel elements
+  const previewPanel = document.getElementById("export-preview-panel");
+  const previewCodeEl = document.querySelector("#export-preview-code-content code");
+  const previewTabs = document.querySelectorAll(".export-preview-tab");
+  const downloadBtn = document.getElementById("export-download-btn");
+
+  let previewData: { astro: string; inputs: string; structureValue: string } | null = null;
+  let activeTab = "astro";
+
+  function showPreviewTab(tab: string): void {
+    activeTab = tab;
+    previewTabs.forEach((t) => {
+      (t as HTMLElement).classList.toggle("active", t.getAttribute("data-tab") === tab);
+    });
+
+    if (!previewCodeEl || !previewData) return;
+
+    const content =
+      tab === "astro"
+        ? previewData.astro
+        : tab === "inputs"
+          ? previewData.inputs
+          : previewData.structureValue;
+
+    previewCodeEl.textContent = content;
+  }
+
+  previewTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const tabName = tab.getAttribute("data-tab");
+
+      if (tabName) showPreviewTab(tabName);
+    });
+  });
+
+  function getExportConfig(): ExportConfig | null {
     const type = componentTypeSelect.value as "page-section" | "building-block";
     const nameValue = componentNameInput.value.trim();
     let category: string;
@@ -146,28 +181,70 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
 
     if (!nameValue) {
       alert("Please enter a component name");
-      return;
+      return null;
     }
 
     if (!category) {
       alert("Please select or enter a category");
-      return;
+      return null;
     }
 
     const sanitizedName = nameValue.toLowerCase().replace(/[^a-z0-9-]/g, "-");
     const baseType = type === "page-section" ? "page-sections" : "building-blocks";
     const componentPath = `${baseType}/${category}/${sanitizedName}`;
 
-    closeModal();
+    return { componentType: type, category, componentName: sanitizedName, componentPath };
+  }
 
-    onExport({
-      componentType: type,
-      category,
-      componentName: sanitizedName,
-      componentPath,
-    });
+  // Handle confirm - show preview
+  confirmBtn.onclick = () => {
+    const config = getExportConfig();
+
+    if (!config) return;
+
+    previewData = generateExportPreview(
+      builderState.componentTree,
+      config.componentName,
+      builderState.components,
+      builderState.metadataMap,
+      builderState.nestedBlockProperties,
+      config.componentPath
+    );
+
+    if (previewPanel) {
+      previewPanel.style.display = "block";
+    }
+
+    showPreviewTab(activeTab);
+    confirmBtn.textContent = "Preview";
+    confirmBtn.classList.add("previewing");
   };
+
+  // Handle download
+  if (downloadBtn) {
+    downloadBtn.onclick = () => {
+      const config = getExportConfig();
+
+      if (!config) return;
+
+      closeModal();
+
+      onExport(config);
+    };
+  }
 
   // Show modal
   overlay.style.display = "flex";
+
+  // Reset preview state when opening
+  if (previewPanel) {
+    previewPanel.style.display = "none";
+  }
+
+  activeTab = "astro";
+  previewData = null;
+  if (confirmBtn) {
+    confirmBtn.textContent = "Preview";
+    confirmBtn.classList.remove("previewing");
+  }
 }

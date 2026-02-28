@@ -29,6 +29,8 @@ metadataMap.forEach((value, key) => {
 });
 
 const nestedBlockPropertiesArray = Array.from(nestedBlockProperties);
+
+const ssrEnabled = import.meta.env.DEV;
 ---
 
 <LibraryLayout frontmatter={{ title: "Component Builder", contentSections: [] }}>
@@ -39,5 +41,6 @@ const nestedBlockPropertiesArray = Array.from(nestedBlockProperties);
     nestedBlockProperties={nestedBlockPropertiesArray}
     nestingRules={componentDiscovery.nestingRules}
     pageSectionCategories={componentDiscovery.pageSectionCategories}
+    ssrEnabled={ssrEnabled}
   />
 </LibraryLayout>

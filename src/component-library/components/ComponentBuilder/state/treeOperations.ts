@@ -9,7 +9,7 @@ export function findComponentNodeInTree(
   metadataMap: Record<string, ComponentMetadata>
 ): ComponentNode | null {
   for (const node of tree) {
-    if (node.id === id) return node;
+    if (node._nodeId === id) return node;
 
     const componentInfo = getComponentInfo(node._component);
 
@@ -79,7 +79,7 @@ export function isNodeAncestorOfInTree(
         for (const child of children as ComponentNode[]) {
           if (
             isNodeAncestorOfInTree(
-              child.id,
+              child._nodeId,
               descendantId,
               componentTree,
               getComponentInfo,
@@ -105,7 +105,7 @@ export function findNodeLocationInTree(
   slotName: string | null = null
 ): NodeLocation | null {
   for (let i = 0; i < tree.length; i++) {
-    if (tree[i].id === nodeId) {
+    if (tree[i]._nodeId === nodeId) {
       return { index: i, parentId, slotName };
     }
 
@@ -121,7 +121,7 @@ export function findNodeLocationInTree(
             children as ComponentNode[],
             getComponentInfo,
             metadataMap,
-            tree[i].id,
+            tree[i]._nodeId,
             slot.propName
           );
 
@@ -141,7 +141,7 @@ export function findNodeLocationInTree(
           children as ComponentNode[],
           getComponentInfo,
           metadataMap,
-          tree[i].id,
+          tree[i]._nodeId,
           fallbackProp
         );
 
@@ -160,7 +160,7 @@ export function removeNodeFromTree(
   metadataMap: Record<string, ComponentMetadata>
 ): ComponentNode | null {
   for (let i = 0; i < tree.length; i++) {
-    if (tree[i].id === nodeId) {
+    if (tree[i]._nodeId === nodeId) {
       return tree.splice(i, 1)[0];
     }
 

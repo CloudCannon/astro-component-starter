@@ -71,7 +71,14 @@ export function addComponentToSlotOperation(
   if (!parent[slotName]) {
     parent[slotName] = [];
   }
-  (parent[slotName] as ComponentNode[]).splice(index, 0, nodeToAdd);
+
+  const existingChildren = parent[slotName] as ComponentNode[];
+
+  if (slot?.isRepeatable && existingChildren.length >= 1) {
+    existingChildren[0] = nodeToAdd;
+  } else {
+    existingChildren.splice(index, 0, nodeToAdd);
+  }
 
   return nodeToAdd;
 }

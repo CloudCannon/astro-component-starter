@@ -18,6 +18,7 @@ interface Props {
   nestedBlockProperties: string[];
   nestingRules: NestingRules;
   pageSectionCategories: string[];
+  ssrEnabled?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   nestedBlockProperties,
   nestingRules,
   pageSectionCategories,
+  ssrEnabled = false,
 } = Astro.props;
 
 // Serialize data for client
@@ -40,7 +42,11 @@ const builderData = {
 };
 ---
 
-<div class="component-builder" data-builder-data={JSON.stringify(builderData)}>
+<div
+  class="component-builder"
+  data-builder-data={JSON.stringify(builderData)}
+  data-ssr-enabled={String(ssrEnabled)}
+>
   <!-- Template for reusable Slider component -->
   <template id="slider-template">
     <Slider id="slider-template-id" name="slider-template" />
@@ -79,6 +85,8 @@ const builderData = {
   <div class="export-bar">
     <h1>Component Builder</h1>
     <div class="export-bar-actions">
+      <Button element="button" text="Templates" variant="ghost" size="sm" id="templates-btn" />
+      <Button element="button" text="Start Over" variant="ghost" size="sm" id="clear-btn" />
       <Button
         element="button"
         text="Export Component"
@@ -90,7 +98,36 @@ const builderData = {
     </div>
   </div>
 
-  <div class="builder-layout">
+  <div class="builder-view-toggle" id="builder-view-toggle">
+    <button type="button" class="builder-view-tab active" data-view="build">Build</button>
+    <button
+      type="button"
+      class="builder-view-tab"
+      data-view="preview"
+      id="preview-tab-btn"
+      style="display: none;">Preview</button
+    >
+    <button type="button" class="builder-view-tab" data-view="code">Code</button>
+  </div>
+
+  <div class="builder-preview-container" id="builder-preview-container" style="display: none;">
+    <!-- Preview iframe injected here by JS -->
+  </div>
+
+  <div class="builder-code-container" id="builder-code-container" style="display: none;">
+    <div class="builder-code-tabs" id="builder-code-tabs">
+      <button type="button" class="builder-code-tab active" data-code-tab="astro">Astro</button>
+      <button type="button" class="builder-code-tab" data-code-tab="inputs">Inputs YAML</button>
+      <button type="button" class="builder-code-tab" data-code-tab="structure"
+        >Structure Value</button
+      >
+    </div>
+    <div class="builder-code-content">
+      <!-- Populated by JS with shiki-highlighted code -->
+    </div>
+  </div>
+
+  <div class="builder-layout" id="builder-layout">
     <!-- Main Builder Area -->
     <main class="builder-main">
       <div class="sandbox-container">
@@ -166,6 +203,18 @@ const builderData = {
           <code id="component-path-preview">page-sections/my-category/my-component</code>
         </div>
       </div>
+      <div class="export-preview-panel" id="export-preview-panel" style="display: none;">
+        <div class="export-preview-tabs">
+          <button class="export-preview-tab active" data-tab="astro" type="button">Astro</button>
+          <button class="export-preview-tab" data-tab="inputs" type="button">Inputs YAML</button>
+          <button class="export-preview-tab" data-tab="structure" type="button"
+            >Structure Value</button
+          >
+        </div>
+        <div class="export-preview-code">
+          <pre id="export-preview-code-content"><code /></pre>
+        </div>
+      </div>
       <div class="export-config-footer">
         <Button
           element="button"
@@ -176,10 +225,17 @@ const builderData = {
         />
         <Button
           element="button"
-          text="Export"
-          variant="primary"
+          text="Preview"
+          variant="ghost"
           size="md"
           id="export-config-confirm"
+        />
+        <Button
+          element="button"
+          text="Download ZIP"
+          variant="primary"
+          size="md"
+          id="export-download-btn"
         />
       </div>
     </div>

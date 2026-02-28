@@ -1,253 +1,122 @@
 ---
-title: Getting Started
+title: Setting Up CloudCannon
 contentSections: []
 ---
 
-# Getting Started
+# Setting Up CloudCannon
 
-This guide will walk you through the basics of customizing your site in CloudCannon, from editing components to creating custom sections and adjusting your brand colors.
+CloudCannon is where the visual editing magic happens. This guide walks you through connecting your site from scratch: from creating an account to making your first visual edit.
 
-### What is CloudCannon?
+If you've been following the guides in order, you've already seen what CloudCannon can do. Now let's set it up for real.
 
-<a href="https://cloudcannon.com/" target="_blank" rel="noopener">CloudCannon</a> is a visual content management system that lets you edit your Astro site without touching code. Once your site is connected, you can add components, edit content, and manage pages through a visual interface that previews your changes in real time.
+## Create a CloudCannon account
 
-## Editing content
+1. Head to <a href="https://cloudcannon.com/" target="_blank" rel="noopener">cloudcannon.com</a> and sign up for a free account.
+2. Create a new **organization** (or use an existing one).
 
-Once your site is connected to CloudCannon, you can start editing components directly in the Visual Editor.
+## Connect your repository
 
-### Editing existing components
+1. Click **Add new site** in your CloudCannon dashboard.
+2. Choose **Build with your own files**.
+3. Name your site and select your Git provider (GitHub, GitLab, or Bitbucket).
+4. Authorize CloudCannon to access your repository and select the repo containing your Astro Component Starter.
+5. Choose the branch you want to edit (usually `main`).
 
-1. **Open a page** in CloudCannon's Visual Editor
-2. **Click on any component** to see its editable inputs in the sidebar. Make some updates and watch the preview update live.
-3. **Click on text** in the preview to edit it directly inline.
+## Configure the build
 
-### Adding new components
+CloudCannon will detect the Astro project automatically. Verify these settings:
 
-1. Click the **"Add Page Section"** button in the sidebar to open the component picker.
-2. **Choose** a Page Section to add from the available options.
-3. Fill out the content in the sidebar inputs.
-4. **Reorder components** by dragging them in the sidebar.
-5. Watch the preview update in real-time as you make changes.
+- **Build command:** `npm run build`
+- **Output path:** `dist`
+- **Node version:** File (reads from `.nvmrc`, Node 24)
 
-## Building a component structure from scratch
+The project already includes a `cloudcannon.config.yml` file at the root with all the collection and component configuration. CloudCannon reads this automatically, so you shouldn't need to change anything for the initial setup.
 
-Let's create a split layout with a heading and text on one side, and an image on the other. This will help you understand how components work together.
+Click **Build** and wait for the first build to complete. This usually takes a couple of minutes.
 
-### Step 1: Add a Custom Section
+## Your first visual edit
 
-A [Custom Section](/component-library/components/page-sections/builders/custom-section/) is a container that controls padding, width, and background colors. It's the foundation for most page sections.
+Once the build succeeds:
 
-1. On your page, click **"Add Page Section"** in the sidebar.
-2. Select **"Custom Section"** from the component picker.
-3. The custom section will appear with default settings.
+1. Go to the **Pages** collection in the sidebar.
+2. Open the home page (`index`).
+3. CloudCannon will open the **Visual Editor**, where you'll see your live site with editing capabilities.
+4. **Click on any text** in the preview to edit it inline.
+5. **Click on a component** to see its inputs in the sidebar.
+6. **Try adding a new section**: click "Add Page Section" in the sidebar, pick a component from the list, and watch it appear on the page.
 
-### Step 2: Add a Split
+That's it. You're visually editing the same components you've been working with in code.
 
-A [Split](/component-library/components/building-blocks/wrappers/split/) divides the space into two columns with adjustable widths.
+## How the configuration works
 
-1. Open your Custom Section in the sidebar.
-2. Click **"+ Add Content Section"**.
-3. Select **"Split"** from the component picker.
+The starter ships with a complete `cloudcannon.config.yml` that sets up everything CloudCannon needs. Here's what it configures:
 
-### Step 3: Add content elements
+### Collections
 
-Now we'll add the actual content: a [Heading](/component-library/components/building-blocks/core-elements/heading/), [Text](/component-library/components/building-blocks/core-elements/text/), and an [Image](/component-library/components/building-blocks/core-elements/image/).
+The config defines three collections that map to your content directories:
 
-**First Column:**
+- **Pages** (`src/content/pages/`): Site pages, opened in the Visual Editor by default
+- **Blog** (`src/content/blog/`): Blog posts in MDX, opened in the Content Editor
+- **Data** (`src/data/`): Site-wide data like navigation, footer, and SEO settings
 
-1. In your Split, click **"Add First Column Content Section"**.
-2. Select **"Heading"** and add your heading text.
-3. Click **"Add First Column Content Section"** again.
-4. Select **"Text"** and add your body text.
+### Component auto-discovery
 
-**Second Column:**
+CloudCannon automatically discovers your components through two mechanisms:
 
-1. In your Split, click **"Add Second Column Content Section"**.
-2. Select **"Image"**.
-3. Choose an image source from your assets.
+**Structure files.** The `_structures_from_glob` setting in `cloudcannon.config.yml` tells CloudCannon to scan for `.cloudcannon.structures.yml` files, which define reusable structure groups (like button arrays).
 
-**Result:** You've created a split layout! Experiment with the properties of each component to see how you can customize spacing, alignment, colors, and more.
+**Component config files.** Each component's `.cloudcannon.structure-value.yml` file registers it in CloudCannon's component picker. The `_inputs_from_glob` field inside each structure-value file tells CloudCannon where to find the matching inputs config.
 
-## Creating reusable page sections
+This means **adding a new component to the visual editor is automatic**: just include the two CloudCannon config files alongside your `.astro` file and CloudCannon picks it up on the next build.
 
-You've just built a split layout manually by nesting components together. While this works, it requires navigating through multiple levels of nested properties: Custom Section → Split → First Column → Heading/Text, and so on.
+### Snippets for MDX
 
-To make this easier for editors, you can create a **Page Section component** that packages this structure into a single, reusable component. Instead of managing all the nested components, editors see a simplified interface with just the properties they need: heading, text, image, and styling options.
+The `_snippets_from_glob` setting discovers `.cloudcannon.snippets.yml` files, which let editors insert components while editing MDX content (like blog posts) through CloudCannon's snippet picker.
 
-### Try Feature Split
+## Editable regions reference
 
-The [Feature Split](/component-library/components/page-sections/features/feature-split/) component is a perfect example of this pattern. It combines `CustomSection` and `Split` internally, but presents editors with a clean, focused set of inputs.
+Editable regions are what make the live preview interactive. They're `data-*` attributes you add to your component's HTML:
 
-1. Add a **Feature Split** component to your page.
-2. Notice how it has the same structure you just built, but with a simpler interface.
-3. Compare the editing experience. Much easier, right?
+### Text editing
 
-### How it works
-
-If we look at the Feature Split source code, we can see it uses the same building blocks, but with Astro templating:
-
-```astro
----
-import CustomSection from '@builders/custom-section/CustomSection.astro';
-import Heading from '@core-elements/heading/Heading.astro';
-import Image from '@core-elements/image/Image.astro';
-import SimpleText from '@core-elements/simple-text/SimpleText.astro';
-import Text from '@core-elements/text/Text.astro';
-import ButtonGroup from '@wrappers/button-group/ButtonGroup.astro';
-import Split from '@wrappers/split/Split.astro';
-
-const {
-  eyebrow = '',
-  heading = '',
-  subtext = '',
-  buttonSections = [],
-  imageSource = '',
-  imageAlt = '',
-  imageAspectRatio = 'portrait',
-  imageRounded = true,
-  reverse = false,
-  colorScheme,
-  backgroundColor,
-  paddingVertical = '4xl',
-  class: className,
-} = Astro.props;
-
-const minSplitWidth = 720;
-const featureSplitId = `feature-split-${crypto.randomUUID()}`;
----
-
-<CustomSection
-  class:list={['feature-split', className]}
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
-  paddingVertical={paddingVertical}
-  colorScheme={colorScheme}
-  backgroundColor={backgroundColor}
-  data-feature-split-id={featureSplitId}
->
-  <Split
-    class="feature-split-layout"
-    distributionMode="flexible-fixed"
-    fixedWidth="400"
-    minSplitWidth={minSplitWidth}
-    reverse={reverse}
-    verticalAlignment="center"
-    gap="2xl"
-    reverseOrderOnMobile={true}
-  >
-    <Fragment slot="first">
-      {
-        eyebrow && (
-          <SimpleText class="eyebrow" data-prop="eyebrow">
-            {eyebrow}
-          </SimpleText>
-        )
-      }
-      {
-        heading && (
-          <Heading level="h2" size="lg" data-prop="heading">
-            {heading}
-          </Heading>
-        )
-      }
-      {subtext && <Text class="subtext" data-prop="subtext" text={subtext} />}
-      {
-        buttonSections?.length > 0 && (
-          <ButtonGroup
-            class="feature-buttons"
-            buttonSections={buttonSections}
-            direction="row"
-            alignX="start"
-          />
-        )
-      }
-    </Fragment>
-    {
-      imageSource && (
-        <Image
-          slot="second"
-          class:list={['feature-split-image', reverse && 'reverse']}
-          source={imageSource}
-          alt={imageAlt}
-          rounded={imageRounded}
-          aspectRatio={imageAspectRatio}
-          data-prop-src="imageSource"
-          data-prop-alt="imageAlt"
-          data-editable="image"
-        />
-      )
-    }
-  </Split>
-</CustomSection>
+```html
+<Heading data-prop="heading" text="{heading}" />
 ```
 
-**Key points:**
+`data-prop="heading"` tells CloudCannon that clicking this element should edit the `heading` prop. Works for headings, text, and any text-based content.
 
-- **Hardcoded values** like `maxContentWidth="xl"` and `gap="2xl"` are set by the developer.
-- **Editor-controlled props** like `heading`, `subtext`, and `imageSource` come from CloudCannon inputs.
-- **`data-prop` attributes** tell CloudCannon which props map to editable regions for inline editing.
-- **Conditional rendering** (the `&&` checks) means components only render when they have content.
+### Image editing
 
-This is the foundation of how you build in the Astro Component Starter: combine polished building blocks to create Page Sections that editors can use to build pages without touching code.
+```html
+<image
+  data-prop-src="imageSource"
+  data-prop-alt="imageAlt"
+  data-editable="image"
+  source="{imageSource}"
+  alt="{imageAlt}"
+/>
+```
 
-## Understanding CSS Cascade Layers
+`data-editable="image"` enables the image picker. `data-prop-src` and `data-prop-alt` map to the source and alt text props.
 
-This project uses CSS Cascade Layers to organize styles into a predictable hierarchy. This system ensures that component styles can be easily overridden without fighting specificity battles.
+### Array editing
 
-### How Layers Work
+```html
+<ButtonGroup
+  buttonSections="{buttonSections}"
+  data-children-prop="buttonSections"
+  editable="{true}"
+/>
+```
 
-Styles are organized into six layers (in order of precedence):
+`data-children-prop="buttonSections"` tells CloudCannon this element contains an array of child components that can be added, removed, and reordered inline.
 
-1. **`reset`** - CSS reset styles that normalize browser defaults
-2. **`base`** - Base typography, form elements, and HTML element styles
-3. **`components`** - Reusable component styles (buttons, cards, navigation, etc.)
-4. **`page-sections`** - Page section component styles (heroes, features, CTAs, etc.)
-5. **`utils`** - Utility classes (e.g., `.visually-hidden`)
-6. **`overrides`** - Custom overrides and page-specific styles
+### Array items and containers
 
-Later layers always win over earlier layers, regardless of CSS specificity. This means a simple selector like `.my-class` in the `overrides` layer will override a highly specific selector like `.bar[data-astro-cid-xyz] .nav-item > a` in the `components` layer.
+The `renderBlock.astro` utility automatically adds `data-editable="array-item"` to each rendered block, and page layouts add `data-editable="array"` to section containers. You generally don't need to set these yourself; they're handled by the framework.
 
-### Using Layers When Building Components
+See the existing page section components (like [Feature Split](/component-library/components/page-sections/features/feature-split/) or [CTA Center](/component-library/components/page-sections/ctas/cta-center/)) for working examples of all these patterns.
 
-When creating new components or modifying existing ones:
+## What's next
 
-- **Building block components** (buttons, headings, forms, wrappers) should use `@layer components`
-- **Page section components** (heroes, features, CTAs) should use `@layer page-sections`
-
-## Customizing your brand
-
-Your site's brand colors, content widths, font sizes, and other styling aspects are controlled by CSS variables. You can customize them to match your brand.
-
-### Changing CSS variables
-
-**Brand colors** are defined in:
-
-- **`src/styles/themes/_light.css`** — Light theme variables
-- **`src/styles/themes/_dark.css`** — Dark theme variables
-
-**Typography and layout** are defined in:
-
-- **`src/styles/variables/_fonts.css`** — Font families and sizing
-- **`src/styles/variables/_content-widths.css`** — Max content widths used by sections/layouts
-
-Try updating some of these variables and see the impact across your entire site. Since components use these variables, changes propagate automatically.
-
-### Customizing components
-
-All components in this starter are yours to edit, tweak, and extend. Whether you want to:
-
-- Modify existing components to better match your needs
-- Add new props for additional customization
-- Create entirely new components by combining building blocks
-
-You have full control. Component source files are in `src/components/`—open any component file and customize it to your heart's content. This is a starting point, not a limitation.
-
-## Next Steps
-
-Now that you understand the basics, here's how to continue:
-
-- **Explore the component starter**: Browse all available components in the sidebar to see what's possible.
-- **Read component documentation**: Each component has detailed prop information and examples.
-- **Experiment with combinations**: Try combining different building blocks to create unique layouts.
-- **Review CloudCannon configuration**: Check `cloudcannon.config.yml` and component `.cloudcannon.*.yml` files to understand how editor customization works.
-- **Build your own Page Section**: Use Feature Split as a template to create custom sections for your specific needs.
+You've got your site connected, your components are visually editable, and you know how the configuration works. From here, the best thing to do is **browse all the components** in the sidebar. Each one has documentation, examples, and property details to help you build your site.

@@ -17,6 +17,25 @@ import { createSlider } from "../utils/sliderHelpers";
 import { slotHasSameComponentInEveryItem } from "../utils/shared";
 import { DEFAULT_EXPOSED_PROPS } from "../constants";
 
+/** Count exposed props on a node */
+export function getExposedPropCount(node: ComponentNode, componentInfo: ComponentInfo): number {
+  if (!componentInfo.inputs) return 0;
+
+  let count = 0;
+
+  for (const propName of Object.keys(componentInfo.inputs)) {
+    if (Array.isArray(node[propName])) {
+      const modeKey = `_${propName}_mode` as keyof ComponentNode;
+
+      if (node[modeKey] === "prop") count++;
+    } else if (node[`_hardcoded_${propName}`] === false) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
 /** Render the property editor for a selected component */
 export function renderPropEditor(
   node: ComponentNode,
@@ -45,7 +64,7 @@ export function renderPropEditor(
   // Determine if this node is a child component (e.g. accordion-item) whose parent
   // has childComponent.props that force-expose certain props (e.g. title).
   const forcedChildComponentProps = new Set<string>();
-  const nodeLocation = builderState.findNodeLocation(node.id);
+  const nodeLocation = builderState.findNodeLocation(node._nodeId);
 
   if (nodeLocation?.parentId) {
     const parentNode = builderState.findComponentNode(nodeLocation.parentId);
@@ -81,7 +100,7 @@ export function renderPropEditor(
   });
 
   // Determine which slot props should be forced into the editable list
-  // (either in prop mode OR has childComponent pattern with uniform children)
+  // (either in page-building mode OR has childComponent pattern with uniform children)
   const forcedSlotProps = new Set<string>();
 
   slotPropNames.forEach((slotPropName) => {
@@ -101,7 +120,7 @@ export function renderPropEditor(
       return false;
     }
 
-    // Slot props: only show if forced (prop mode or uniform children)
+    // Slot props: only show if forced (page-building mode or uniform children)
     if (slotPropNames.has(propName)) {
       return forcedSlotProps.has(propName);
     }
@@ -133,9 +152,16 @@ export function renderPropEditor(
 
   // Render each property field
   editableProps.forEach(([propName, inputConfig]) => {
-    // Force-exposed: slot props (prop mode or uniform children) or child component props (e.g. title)
-    const isForcedProp = forcedSlotProps.has(propName) || forcedChildComponentProps.has(propName);
-    const field = createPropField(propName, inputConfig, node, componentInfo, isForcedProp);
+    // Force-exposed: slot props (page-building mode or uniform children) or child component props (e.g. title)
+    let forceReason: string | null = null;
+
+    if (forcedSlotProps.has(propName)) {
+      forceReason = "Auto-exposed: all items use the same component";
+    } else if (forcedChildComponentProps.has(propName)) {
+      forceReason = "Auto-exposed: required by parent component";
+    }
+
+    const field = createPropField(propName, inputConfig, node, componentInfo, forceReason);
 
     container.appendChild(field);
   });
@@ -147,8 +173,10 @@ function createPropField(
   inputConfig: InputConfig,
   node: ComponentNode,
   componentInfo: ComponentInfo,
-  isForcedProp: boolean
+  forceReason: string | null
 ): HTMLElement {
+  const isForcedProp = forceReason !== null;
+
   // Forced props (slot or child-wrapper) must always be exposed.
   if (isForcedProp) {
     node[`_hardcoded_${propName}`] = false;
@@ -191,11 +219,15 @@ function createPropField(
     const toggle = createFieldToggle(isHardcoded, (exposed) => {
       // Delay state update to allow slider animation to complete (350ms)
       setTimeout(() => {
-        builderState.updateNodeProperty(node.id, `_hardcoded_${propName}`, !exposed);
+        builderState.updateNodeProperty(node._nodeId, `_hardcoded_${propName}`, !exposed);
       }, 350);
     });
 
     field.appendChild(toggle);
+  } else {
+    const badge = createForceExposeBadge(forceReason!);
+
+    field.appendChild(badge);
   }
 
   // Content
@@ -271,6 +303,16 @@ function createFieldToggle(
   return toggleWrapper;
 }
 
+/** Create force-expose explanation badge */
+function createForceExposeBadge(reason: string): HTMLElement {
+  const badge = document.createElement("div");
+
+  badge.className = "prop-field-force-badge";
+  badge.textContent = reason;
+
+  return badge;
+}
+
 /** Create hardcoded value section */
 function createHardcodedSection(
   propName: string,
@@ -322,9 +364,9 @@ function createExposedNameSection(
     const newName = (e.target as HTMLInputElement).value.trim();
 
     if (newName && newName !== propName) {
-      builderState.updateNodeMetaProperty(node.id, `_renamed_${propName}`, newName);
+      builderState.updateNodeMetaProperty(node._nodeId, `_renamed_${propName}`, newName);
     } else {
-      builderState.updateNodeMetaProperty(node.id, `_renamed_${propName}`, undefined);
+      builderState.updateNodeMetaProperty(node._nodeId, `_renamed_${propName}`, undefined);
     }
   });
 
@@ -372,6 +414,10 @@ function createInputForType(
       currentValue = inputConfig.default;
     } else {
       switch (type) {
+        case "select":
+          // Let select inputs determine a sensible initial value from options.
+          currentValue = undefined;
+          break;
         case "number":
           currentValue = 0;
           break;
@@ -421,7 +467,7 @@ function createTextInput(propName: string, value: string, node: ComponentNode): 
   input.value = value || "";
 
   input.addEventListener("input", (e) => {
-    builderState.updateNodeProperty(node.id, propName, (e.target as HTMLInputElement).value);
+    builderState.updateNodeProperty(node._nodeId, propName, (e.target as HTMLInputElement).value);
   });
 
   return input;
@@ -437,7 +483,7 @@ function createNumberInput(propName: string, value: number, node: ComponentNode)
 
   input.addEventListener("input", (e) => {
     builderState.updateNodeProperty(
-      node.id,
+      node._nodeId,
       propName,
       parseFloat((e.target as HTMLInputElement).value) || 0
     );
@@ -459,6 +505,31 @@ function createSelectInput(
 
   const rawOptions = inputConfig.options?.values;
   const options = Array.isArray(rawOptions) ? rawOptions : [];
+  const optionValues = options.map((opt) => (typeof opt === "string" ? opt : opt.id));
+  const hasEmptyOption = optionValues.includes("");
+
+  let resolvedValue = value;
+
+  if (resolvedValue === undefined || resolvedValue === null) {
+    if (inputConfig.default !== undefined && inputConfig.default !== null) {
+      resolvedValue = String(inputConfig.default);
+    } else if (optionValues.includes("default")) {
+      resolvedValue = "default";
+    } else {
+      resolvedValue = "";
+    }
+
+    // Persist the initial select value immediately so exports don't miss it.
+    node[propName] = resolvedValue;
+  }
+
+  if (!hasEmptyOption) {
+    const noneOption = document.createElement("option");
+
+    noneOption.value = "";
+    noneOption.textContent = "None";
+    select.appendChild(noneOption);
+  }
 
   options.forEach((opt) => {
     const option = document.createElement("option");
@@ -470,14 +541,18 @@ function createSelectInput(
       option.value = opt.id;
       option.textContent = opt.name;
     }
-    if (option.value === value) {
+    if (option.value === String(resolvedValue ?? "")) {
       option.selected = true;
     }
     select.appendChild(option);
   });
 
+  const resolvedValueString = String(resolvedValue ?? "");
+
+  select.value = resolvedValueString;
+
   select.addEventListener("change", (e) => {
-    builderState.updateNodeProperty(node.id, propName, (e.target as HTMLSelectElement).value);
+    builderState.updateNodeProperty(node._nodeId, propName, (e.target as HTMLSelectElement).value);
   });
 
   return select;
@@ -486,7 +561,7 @@ function createSelectInput(
 /** Create boolean/switch input */
 function createBooleanInput(propName: string, value: boolean, node: ComponentNode): HTMLElement {
   return createSlider(!!value, (checked) => {
-    builderState.updateNodeProperty(node.id, propName, checked);
+    builderState.updateNodeProperty(node._nodeId, propName, checked);
   });
 }
 
@@ -500,7 +575,7 @@ function createUrlInput(propName: string, value: string, node: ComponentNode): H
   input.placeholder = "https://example.com";
 
   input.addEventListener("input", (e) => {
-    builderState.updateNodeProperty(node.id, propName, (e.target as HTMLInputElement).value);
+    builderState.updateNodeProperty(node._nodeId, propName, (e.target as HTMLInputElement).value);
   });
 
   return input;
@@ -520,7 +595,7 @@ function createImageInput(propName: string, value: string, node: ComponentNode):
   input.placeholder = "/images/example.jpg";
 
   input.addEventListener("input", (e) => {
-    builderState.updateNodeProperty(node.id, propName, (e.target as HTMLInputElement).value);
+    builderState.updateNodeProperty(node._nodeId, propName, (e.target as HTMLInputElement).value);
   });
 
   const hint = document.createElement("small");
@@ -534,36 +609,113 @@ function createImageInput(propName: string, value: string, node: ComponentNode):
   return container;
 }
 
-/** Create object input (JSON textarea) */
+/** Create structured object editor with key-value rows */
 function createObjectInput(
   propName: string,
   value: Record<string, unknown>,
   node: ComponentNode
 ): HTMLElement {
-  const textarea = document.createElement("textarea");
+  const container = document.createElement("div");
 
-  textarea.className = "prop-field-textarea";
-  textarea.rows = 6;
-  textarea.value = JSON.stringify(value, null, 2);
-  textarea.placeholder = "{}";
+  container.className = "prop-object-editor";
 
-  let parseTimeout: number;
+  const currentObj = { ...value };
 
-  textarea.addEventListener("input", (e) => {
-    clearTimeout(parseTimeout);
-    textarea.classList.remove("error");
+  function commitObject(): void {
+    builderState.updateNodeProperty(node._nodeId, propName, { ...currentObj });
+  }
 
-    parseTimeout = window.setTimeout(() => {
-      try {
-        const parsed = JSON.parse((e.target as HTMLTextAreaElement).value);
+  function renderRows(): void {
+    container.innerHTML = "";
 
-        builderState.updateNodeProperty(node.id, propName, parsed);
-        textarea.classList.remove("error");
-      } catch {
-        textarea.classList.add("error");
+    const entries = Object.entries(currentObj);
+
+    for (const [key, val] of entries) {
+      const row = document.createElement("div");
+
+      row.className = "prop-object-row";
+
+      const keyInput = document.createElement("input");
+
+      keyInput.type = "text";
+      keyInput.className = "prop-object-key";
+      keyInput.value = key;
+      keyInput.placeholder = "key";
+
+      keyInput.addEventListener("change", () => {
+        const newKey = keyInput.value.trim();
+
+        if (!newKey || newKey === key) return;
+        if (newKey in currentObj) return;
+
+        const savedVal = currentObj[key];
+
+        delete currentObj[key];
+        currentObj[newKey] = savedVal;
+        commitObject();
+      });
+
+      const valInput = document.createElement("input");
+
+      valInput.type = "text";
+      valInput.className = "prop-object-value";
+      valInput.value = typeof val === "string" ? val : JSON.stringify(val);
+      valInput.placeholder = "value";
+
+      valInput.addEventListener("input", () => {
+        const raw = valInput.value;
+
+        try {
+          currentObj[key] = JSON.parse(raw);
+        } catch {
+          currentObj[key] = raw;
+        }
+
+        commitObject();
+      });
+
+      const removeBtn = document.createElement("button");
+
+      removeBtn.type = "button";
+      removeBtn.className = "prop-object-remove";
+      removeBtn.textContent = "\u00d7";
+      removeBtn.title = "Remove field";
+
+      removeBtn.addEventListener("click", () => {
+        delete currentObj[key];
+        commitObject();
+        renderRows();
+      });
+
+      row.appendChild(keyInput);
+      row.appendChild(valInput);
+      row.appendChild(removeBtn);
+      container.appendChild(row);
+    }
+
+    const addBtn = document.createElement("button");
+
+    addBtn.type = "button";
+    addBtn.className = "prop-object-add";
+    addBtn.textContent = "+ Add field";
+
+    addBtn.addEventListener("click", () => {
+      let newKey = "newField";
+      let i = 1;
+
+      while (newKey in currentObj) {
+        newKey = `newField${i++}`;
       }
-    }, 500);
-  });
 
-  return textarea;
+      currentObj[newKey] = "";
+      commitObject();
+      renderRows();
+    });
+
+    container.appendChild(addBtn);
+  }
+
+  renderRows();
+
+  return container;
 }

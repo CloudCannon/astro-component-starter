@@ -8,7 +8,7 @@ slots:
     child_component:
       name: SelectOption
       props:
-        - 'label/slot'
+        - label
         - 'value'
         - 'selected'
         - 'disabled'

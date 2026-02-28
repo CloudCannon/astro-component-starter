@@ -8,10 +8,17 @@ type ChildComponentInfo = {
   props?: string[];
 };
 
+export type SlotInfo = {
+  name: string;
+  fallbackFor: string;
+  childComponent?: ChildComponentInfo;
+};
+
 export type ComponentMetadata = {
   childComponent?: ChildComponentInfo;
   fallbackFor?: string;
   supportsSlots?: boolean;
+  slots?: SlotInfo[];
 };
 
 let metadataCache: Map<string, ComponentMetadata> | null = null;
@@ -39,12 +46,20 @@ export async function getComponentMetadataMap(): Promise<Map<string, ComponentMe
 
       let childComponent: ChildComponentInfo | undefined;
       let fallbackFor: string | undefined;
+      const slotInfos: SlotInfo[] = [];
 
       for (const slot of slots) {
-        if (slot?.child_component && slot?.fallback_for) {
+        if (slot?.fallback_for) {
+          slotInfos.push({
+            name: slot.title || "default",
+            fallbackFor: slot.fallback_for,
+            childComponent: slot.child_component || undefined,
+          });
+        }
+
+        if (slot?.child_component && slot?.fallback_for && !childComponent) {
           childComponent = slot.child_component;
           fallbackFor = slot.fallback_for;
-          break;
         } else if (slot?.fallback_for && !fallbackFor) {
           fallbackFor = slot.fallback_for;
         }
@@ -54,6 +69,7 @@ export async function getComponentMetadataMap(): Promise<Map<string, ComponentMe
         childComponent,
         fallbackFor,
         supportsSlots,
+        slots: slotInfos.length > 0 ? slotInfos : undefined,
       });
     }
   } catch (error) {
@@ -105,6 +121,12 @@ export async function getNestedBlockProperties(): Promise<Set<string>> {
     for (const metadata of metadataMap.values()) {
       if (metadata.fallbackFor) {
         nestedBlockPropertiesCache.add(metadata.fallbackFor);
+      }
+
+      if (metadata.slots) {
+        for (const slot of metadata.slots) {
+          nestedBlockPropertiesCache.add(slot.fallbackFor);
+        }
       }
     }
 

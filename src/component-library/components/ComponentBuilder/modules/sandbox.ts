@@ -59,11 +59,11 @@ function renderComponentNode(node: ComponentNode, index: number): HTMLElement {
 
   container.className = "sandbox-item";
   container.draggable = !node._isRootComponent;
-  container.dataset.componentId = node.id;
+  container.dataset.componentId = node._nodeId;
   container.dataset.index = String(index);
   container.dataset.category = componentInfo.category;
 
-  if (builderState.selectedComponentId === node.id) {
+  if (builderState.selectedComponentId === node._nodeId) {
     container.classList.add("selected");
   }
 
@@ -99,7 +99,7 @@ function renderComponentNode(node: ComponentNode, index: number): HTMLElement {
   container.addEventListener("click", (e) => {
     e.stopPropagation();
     if ((e.target as HTMLElement).closest(".sandbox-item-btn")) return;
-    selectComponent(node.id);
+    selectComponent(node._nodeId);
   });
 
   return container;
@@ -124,7 +124,7 @@ function createComponentHeader(node: ComponentNode, componentInfo: ComponentInfo
   // Delete button (not for root)
   if (!node._isRootComponent) {
     const deleteBtn = createDeleteButton(() => {
-      deleteComponent(node.id);
+      deleteComponent(node._nodeId);
     });
 
     deleteBtn.addEventListener("click", (e) => {
@@ -144,6 +144,10 @@ function createSlotElement(node: ComponentNode, slot: SlotDefinition): HTMLEleme
   const slotContainer = document.createElement("div");
 
   slotContainer.className = "slot-container";
+
+  if (slot.isRepeatable) {
+    return createRepeatableSlotElement(slotContainer, node, slot);
+  }
 
   // Header with toggle
   const header = document.createElement("div");
@@ -170,10 +174,10 @@ function createSlotElement(node: ComponentNode, slot: SlotDefinition): HTMLEleme
   const toggleLabel = document.createElement("span");
 
   toggleLabel.className = "slot-toggle-label";
-  toggleLabel.textContent = "Editor freeform";
+  toggleLabel.textContent = "Open for page building";
 
   const toggle = createModeToggle(currentMode === "prop", () => {
-    builderState.toggleSlotMode(node.id, slot.propName);
+    builderState.toggleSlotMode(node._nodeId, slot.propName);
     // Delay render to allow slider animation to complete (350ms)
     setTimeout(() => triggerRender(), 350);
   });
@@ -190,7 +194,7 @@ function createSlotElement(node: ComponentNode, slot: SlotDefinition): HTMLEleme
 
   content.className = "slot-content";
   content.dataset.slotName = slot.propName;
-  content.dataset.parentId = node.id;
+  content.dataset.parentId = node._nodeId;
 
   if (currentMode === "prop") {
     renderSlotAsProp(content, slot);
@@ -203,22 +207,121 @@ function createSlotElement(node: ComponentNode, slot: SlotDefinition): HTMLEleme
   return slotContainer;
 }
 
+/** Create a repeatable slot element (childComponent pattern like Accordion→AccordionItem) */
+function createRepeatableSlotElement(
+  slotContainer: HTMLElement,
+  node: ComponentNode,
+  slot: SlotDefinition
+): HTMLElement {
+  const previewCountKey = `_${slot.propName}_previewCount`;
+
+  if (node[previewCountKey] == null) {
+    node[previewCountKey] = 3;
+  }
+
+  // Header
+  const header = document.createElement("div");
+
+  header.className = "slot-header-switchable";
+
+  const labelWrapper = document.createElement("div");
+
+  labelWrapper.className = "repeatable-slot-label-wrapper";
+
+  const label = document.createElement("span");
+
+  label.className = "slot-label";
+  label.textContent = slot.label;
+
+  const badge = document.createElement("span");
+
+  badge.className = "repeatable-slot-badge";
+  badge.textContent = "Repeatable";
+
+  labelWrapper.appendChild(label);
+  labelWrapper.appendChild(badge);
+
+  // Preview count control
+  const countWrapper = document.createElement("div");
+
+  countWrapper.className = "repeatable-slot-count-wrapper";
+
+  const countLabel = document.createElement("span");
+
+  countLabel.className = "repeatable-slot-count-label";
+  countLabel.textContent = "Preview copies:";
+
+  const countInput = document.createElement("input");
+
+  countInput.type = "number";
+  countInput.className = "repeatable-slot-count-input";
+  countInput.min = "1";
+  countInput.max = "12";
+  countInput.value = String(node[previewCountKey]);
+  countInput.addEventListener("change", () => {
+    const val = Math.max(1, Math.min(12, parseInt(countInput.value, 10) || 1));
+
+    countInput.value = String(val);
+    node[previewCountKey] = val;
+    builderState.emit("treeChange");
+  });
+
+  countWrapper.appendChild(countLabel);
+  countWrapper.appendChild(countInput);
+
+  header.appendChild(labelWrapper);
+  header.appendChild(countWrapper);
+  slotContainer.appendChild(header);
+
+  // Description
+  const desc = document.createElement("p");
+
+  desc.className = "repeatable-slot-desc";
+  desc.textContent =
+    "Define the structure of each item below. Editors can add, remove, and reorder items when building pages.";
+  slotContainer.appendChild(desc);
+
+  // Content -- render template item (limit to first child)
+  const content = document.createElement("div");
+
+  content.className = "slot-content";
+  content.dataset.slotName = slot.propName;
+  content.dataset.parentId = node._nodeId;
+
+  const nestedNodes = (node[slot.propName] as ComponentNode[]) || [];
+
+  if (nestedNodes.length === 0) {
+    content.appendChild(createReorderDropZone(node, slot, 0));
+    content.appendChild(createDropZoneButton(node, slot, 0));
+  } else {
+    content.appendChild(createReorderDropZone(node, slot, 0));
+    const element = renderComponentNode(nestedNodes[0], 0);
+
+    content.appendChild(element);
+  }
+
+  slotContainer.appendChild(content);
+
+  return slotContainer;
+}
+
 /** Create mode toggle switch */
 function createModeToggle(checked: boolean, onChange: () => void): HTMLElement {
   const slider = createSlider(checked, onChange);
 
-  slider.title = "Toggle between visual editing and freeform data editing";
+  slider.title =
+    "When on, this slot is left open for editors to fill when building pages in CloudCannon";
   return slider;
 }
 
-/** Render slot in prop mode (freeform) */
+/** Render slot in prop mode (open for page building) */
 function renderSlotAsProp(container: HTMLElement, slot: SlotDefinition): void {
   const message = document.createElement("div");
 
   message.className = "slot-data-mode-message";
   message.innerHTML = `
-    <p><strong>${slot.label}</strong> is in data editing mode</p>
-    <p class="slot-data-hint">Edit the structure in the properties panel on the right →</p>
+    <p><strong>${slot.label}</strong> is open for page building</p>
+    <p class="slot-data-hint">Editors will choose what goes here when building pages. Configure the input in the properties panel →</p>
   `;
   container.appendChild(message);
 }
@@ -234,6 +337,10 @@ function renderSlotAsComponents(
   // Always create a drop zone at the top (for empty or populated slots)
   container.appendChild(createReorderDropZone(node, slot, 0));
 
+  if (nestedNodes.length === 0 && node._isRootComponent) {
+    container.appendChild(createEmptyStateGuide(slot));
+  }
+
   if (nestedNodes.length > 0) {
     nestedNodes.forEach((nestedNode, idx) => {
       const element = renderComponentNode(nestedNode, idx);
@@ -245,6 +352,45 @@ function renderSlotAsComponents(
 
   // Add button at bottom
   container.appendChild(createDropZoneButton(node, slot, nestedNodes.length));
+}
+
+/** Create the empty state guide shown when root slot is empty */
+function createEmptyStateGuide(slot: SlotDefinition): HTMLElement {
+  const guide = document.createElement("div");
+
+  guide.className = "empty-state-guide";
+  guide.innerHTML = `
+    <h3 class="empty-state-guide-title">Start building your component</h3>
+    <p class="empty-state-guide-desc">
+      Click <strong>+ Add to ${slot.label}</strong> below to add building blocks
+      like headings, text, images, buttons, and layout wrappers.
+    </p>
+    <div class="empty-state-guide-steps">
+      <div class="empty-state-guide-step">
+        <span class="empty-state-guide-step-num">1</span>
+        <div>
+          <strong>Add blocks</strong>
+          <span>Compose your component from building blocks and wrappers</span>
+        </div>
+      </div>
+      <div class="empty-state-guide-step">
+        <span class="empty-state-guide-step-num">2</span>
+        <div>
+          <strong>Configure props</strong>
+          <span>Select a block and toggle which props are editable by content editors</span>
+        </div>
+      </div>
+      <div class="empty-state-guide-step">
+        <span class="empty-state-guide-step-num">3</span>
+        <div>
+          <strong>Export</strong>
+          <span>Download your component as Astro + CloudCannon config files</span>
+        </div>
+      </div>
+    </div>
+  `;
+
+  return guide;
 }
 
 /** Create add component button */
@@ -262,7 +408,7 @@ function createDropZoneButton(
   button.type = "button";
   button.className = "drop-zone-button";
   button.dataset.insertIndex = String(insertIndex);
-  button.dataset.parentId = parentNode.id;
+  button.dataset.parentId = parentNode._nodeId;
   button.dataset.slotName = slot.propName;
 
   const icon = document.createElement("span");
@@ -280,7 +426,7 @@ function createDropZoneButton(
 
   // Click to open picker
   button.addEventListener("click", () => {
-    openComponentPicker(insertIndex, parentNode.id, slot.propName, slot, triggerRender);
+    openComponentPicker(insertIndex, parentNode._nodeId, slot.propName, slot, triggerRender);
   });
 
   // Drag support
@@ -298,7 +444,7 @@ function createDropZoneButton(
       e.stopPropagation();
 
       // Check for circular dependency
-      if (builderState.isNodeAncestorOf(dragSource.nodeId, parentNode.id)) {
+      if (builderState.isNodeAncestorOf(dragSource.nodeId, parentNode._nodeId)) {
         button.classList.add("drop-not-allowed");
         return;
       }
@@ -349,17 +495,17 @@ function createDropZoneButton(
       // Use state manager to add component (this will emit treeChange)
       const componentNode = builderState.addComponentToSlot(
         componentInfo,
-        parentNode.id,
+        parentNode._nodeId,
         slot.propName,
         insertIndex
       );
 
       // Select the newly added component
-      builderState.selectedComponentId = componentNode.id;
+      builderState.selectedComponentId = componentNode._nodeId;
 
       triggerRender();
     } else if (data?.type === "reorder" && data.nodeId) {
-      handleReorderDrop(data.nodeId, parentNode.id, slot.propName, insertIndex);
+      handleReorderDrop(data.nodeId, parentNode._nodeId, slot.propName, insertIndex);
       triggerRender();
     }
   });
@@ -381,7 +527,7 @@ function createReorderDropZone(
 
   dropZone.className = "reorder-drop-zone";
   dropZone.dataset.insertIndex = String(insertIndex);
-  dropZone.dataset.parentId = parentNode.id;
+  dropZone.dataset.parentId = parentNode._nodeId;
   dropZone.dataset.slotName = slot.propName;
 
   dropZone.addEventListener("dragover", (e) => {
@@ -394,7 +540,7 @@ function createReorderDropZone(
       if (!nodeId) return;
 
       // Check for circular dependency (dropping into itself or its descendants)
-      if (builderState.isNodeAncestorOf(nodeId, parentNode.id)) {
+      if (builderState.isNodeAncestorOf(nodeId, parentNode._nodeId)) {
         dropZone.classList.add("drop-not-allowed");
         dropZone.classList.remove("active");
         return;
@@ -441,7 +587,7 @@ function createReorderDropZone(
     const data = parseDragData(e);
 
     if (data?.type === "reorder" && data.nodeId) {
-      handleReorderDrop(data.nodeId, parentNode.id, slot.propName, insertIndex);
+      handleReorderDrop(data.nodeId, parentNode._nodeId, slot.propName, insertIndex);
       triggerRender();
     }
   });

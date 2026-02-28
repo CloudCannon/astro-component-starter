@@ -3,15 +3,22 @@ import yaml from "js-yaml";
 import { join } from "path";
 
 import { kebabToTitleCase, toPascalCase } from "../../../../shared/caseUtils";
+import type { ComponentMetadata as SharedComponentMetadata } from "../../../../shared/metadata";
 import type { ComponentInfo, InputConfig, SlotDefinition, StructureValue } from "../../types";
-import { isArrayStructureInput } from "./inputUtils";
+import { isArrayStructureInput, structureHasComponentValues } from "./inputUtils";
 
 type Logger = (...args: unknown[]) => void;
 
-function buildSlotFromInput(propName: string, inputConfig: InputConfig): SlotDefinition {
+function buildSlotFromInput(
+  propName: string,
+  inputConfig: InputConfig,
+  metadata?: SharedComponentMetadata | null
+): SlotDefinition {
   const options = inputConfig.options ?? {};
   const structureRef = options.structures ?? "";
   const structureName = structureRef.replace("_structures.", "");
+
+  const metaSlot = metadata?.slots?.find((s) => s.fallbackFor === propName);
 
   const slotDef: SlotDefinition = {
     propName,
@@ -21,6 +28,8 @@ function buildSlotFromInput(propName: string, inputConfig: InputConfig): SlotDef
         : propName.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()),
     allowedComponents: [],
     structureName,
+    astroSlotName: metaSlot?.name,
+    isRepeatable: !!metaSlot?.childComponent,
   };
 
   if (options.allow_as_prop === true) {
@@ -34,7 +43,10 @@ function buildSlotFromInput(propName: string, inputConfig: InputConfig): SlotDef
 }
 
 /** Scan page-sections/builders and return discovered builder components. */
-export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo[] {
+export function scanPageBuilderComponents(
+  metadataMap: Map<string, SharedComponentMetadata>,
+  log: Logger = () => {}
+): ComponentInfo[] {
   const buildersDir = join(process.cwd(), "src/components/page-sections/builders");
   const components: ComponentInfo[] = [];
 
@@ -64,7 +76,8 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
     let structureValue: StructureValue | null = null;
     let description = "";
     let icon = "";
-    const componentSlots: SlotDefinition[] = [];
+    let componentSlots: SlotDefinition[] = [];
+    const metadata = metadataMap.get(componentPath) || metadataMap.get(entry.name);
 
     if (existsSync(inputsPath)) {
       try {
@@ -76,7 +89,7 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
           const inputConfig = inputs[propName];
 
           if (isArrayStructureInput(inputConfig)) {
-            componentSlots.push(buildSlotFromInput(propName, inputConfig));
+            componentSlots.push(buildSlotFromInput(propName, inputConfig, metadata));
           }
         }
       } catch (error) {
@@ -96,6 +109,15 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
       }
     }
 
+    // Keep only true component slots:
+    // - explicitly declared metadata slots, OR
+    // - arrays whose structures contain `_component` blocks.
+    componentSlots = componentSlots.filter((slot) => {
+      const metaSlot = metadata?.slots?.find((s) => s.fallbackFor === slot.propName);
+
+      return !!metaSlot || structureHasComponentValues(structureValue, slot.structureName || "");
+    });
+
     if (structureValue?._structures) {
       for (const [inlineStructName, inlineStructDef] of Object.entries(
         structureValue._structures
@@ -112,9 +134,25 @@ export function scanPageBuilderComponents(log: Logger = () => {}): ComponentInfo
                   if (isArrayStructureInput(nestedInputDef)) {
                     const nestedStructureRef = nestedInputDef.options?.structures ?? "";
                     const nestedStructureName = nestedStructureRef.replace("_structures.", "");
+                    const nestedMeta =
+                      metadataMap.get(componentPath) || metadataMap.get(entry.name);
+                    const nestedMetaSlot = nestedMeta?.slots?.find(
+                      (s) => s.fallbackFor === nestedPropName
+                    );
+
+                    if (
+                      !nestedMetaSlot &&
+                      !structureHasComponentValues(structureValue, nestedStructureName)
+                    ) {
+                      continue;
+                    }
 
                     if (!componentSlots.some((s) => s.propName === nestedPropName)) {
-                      const nestedSlotDef = buildSlotFromInput(nestedPropName, nestedInputDef);
+                      const nestedSlotDef = buildSlotFromInput(
+                        nestedPropName,
+                        nestedInputDef,
+                        nestedMeta
+                      );
 
                       nestedSlotDef.structureName = nestedStructureName;
                       componentSlots.push(nestedSlotDef);

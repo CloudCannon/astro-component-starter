@@ -131,7 +131,7 @@ export function openComponentPicker(
           );
 
           // Select the newly added component
-          builderState.selectedComponentId = componentNode.id;
+          builderState.selectedComponentId = componentNode._nodeId;
         }
 
         onSelect();

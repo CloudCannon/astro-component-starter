@@ -8,8 +8,10 @@ slots:
     child_component:
       name: ListItem
       props:
-        - 'icon'
-        - 'text/slot'
+        - iconName
+        - iconColor
+        - showIcon
+        - text/slot
 examples:
   - slugs:
       - type-icon

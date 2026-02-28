@@ -5,7 +5,29 @@
   },
   {
     "name": "Getting Started",
-    "path": "/component-library/getting-started/"
+    "path": "#",
+    "children": [
+      {
+        "name": "Project Tour",
+        "path": "/component-library/project-tour/"
+      },
+      {
+        "name": "Editing a Page",
+        "path": "/component-library/editing-a-page/"
+      },
+      {
+        "name": "Customizing Your Brand",
+        "path": "/component-library/customizing-your-brand/"
+      },
+      {
+        "name": "Building a Page Section",
+        "path": "/component-library/building-a-page-section/"
+      },
+      {
+        "name": "Setting Up CloudCannon",
+        "path": "/component-library/getting-started/"
+      }
+    ]
   },
   {
     "name": "Component Builder",

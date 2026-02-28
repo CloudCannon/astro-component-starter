@@ -8,7 +8,8 @@ slots:
     child_component:
       name: DefinitionListItem
       props:
-        - 'text/slot'
+        - title
+        - text
 examples:
   - slugs:
       - alignment-start

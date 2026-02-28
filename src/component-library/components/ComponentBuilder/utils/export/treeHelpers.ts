@@ -64,7 +64,7 @@ export function findPropValueInTree(node: ComponentNode, propName: string): unkn
   return undefined;
 }
 
-/** Remove runtime-only node ids from exported structure values. */
+/** Remove internal builder properties from exported structure values. */
 export function stripRuntimeIds(value: unknown): unknown {
   if (Array.isArray(value)) {
     return value.map((item) => stripRuntimeIds(item));
@@ -74,7 +74,7 @@ export function stripRuntimeIds(value: unknown): unknown {
     const result: Record<string, unknown> = {};
 
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
-      if (key === "id") continue;
+      if (key.startsWith("_") || key === "editable") continue;
       result[key] = stripRuntimeIds(val);
     }
 
@@ -110,6 +110,18 @@ export function collectDeepExposedPropNames(
 
   Object.keys(node).forEach((key) => {
     if (Array.isArray(node[key]) && !key.startsWith("_")) {
+      const modeKey = `_${key}_mode` as const;
+
+      if (node[modeKey] === "prop") {
+        const renamedKey = node[`_renamed_${key}`] || key;
+        const inputConfig = componentInfo?.inputs?.[key]
+          ? { ...(componentInfo.inputs[key] as InputConfig) }
+          : null;
+
+        results.push({ propName: key, renamedKey, inputConfig });
+        return;
+      }
+
       const children = node[key] as BuilderNode[];
       const cleanChildren = (cleanNode[key] as ComponentNode[]) || [];
 
@@ -128,7 +140,7 @@ export function collectDeepExposedPropNames(
 export function cleanComponentTree(tree: ComponentNode[]): ComponentNode[] {
   return tree.map((node) => {
     const cleaned: ComponentNode = {
-      id: node.id,
+      _nodeId: node._nodeId,
       _component: node._component,
     };
 
@@ -137,9 +149,11 @@ export function cleanComponentTree(tree: ComponentNode[]): ComponentNode[] {
         key.startsWith("_hardcoded_") ||
         key.startsWith("_renamed_") ||
         key.endsWith("_mode") ||
-        key === "id" ||
+        key.endsWith("_previewCount") ||
+        key === "_nodeId" ||
         key === "_component" ||
-        key === "_isRootComponent"
+        key === "_isRootComponent" ||
+        key === "editable"
       ) {
         return;
       }

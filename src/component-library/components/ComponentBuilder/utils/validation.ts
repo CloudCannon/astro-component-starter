@@ -71,23 +71,26 @@ export function validateComponentTree(
   function collectScopedExposedProps(node: BuilderNode, nodePath: string): PropLocation[] {
     const results: PropLocation[] = [];
 
-    // Regular exposed props
+    // Regular exposed props.
+    // Arrays are included when exposed because they can still collide
+    // (e.g. two repeatable slots both exposed as "items").
     for (const key of Object.keys(node)) {
       if (!key.startsWith("_hardcoded_")) continue;
       if (node[key]) continue;
 
       const originalPropName = key.replace("_hardcoded_", "");
+
       const exposedPropName = node[`_renamed_${originalPropName}`] || originalPropName;
 
       results.push({
-        nodeId: node.id,
+        nodeId: node._nodeId,
         nodePath,
         originalPropName,
         exposedPropName,
       });
     }
 
-    // Slot props in prop mode
+    // Slot props in page-building mode
     for (const key of Object.keys(node)) {
       if (!key.endsWith("_mode") || node[key as `_${string}_mode`] !== "prop") continue;
 
@@ -95,27 +98,29 @@ export function validateComponentTree(
       const exposedPropName = node[`_renamed_${originalPropName}`] || originalPropName;
 
       results.push({
-        nodeId: node.id,
+        nodeId: node._nodeId,
         nodePath,
         originalPropName,
         exposedPropName,
       });
     }
 
-    // Recurse into active nested arrays
-    for (const key of Object.keys(node)) {
-      if (!Array.isArray(node[key]) || key.startsWith("_")) continue;
+    // Recurse into active nested arrays, but stop at nested map pattern boundaries
+    const activeSlotKeys = Object.keys(node).filter(
+      (k) => Array.isArray(node[k]) && !k.startsWith("_") && node[`_${k}_mode` as const] !== "prop"
+    );
 
-      const modeKey = `_${key}_mode` as const;
-
-      if (node[modeKey] === "prop") continue;
-
+    for (const key of activeSlotKeys) {
       const children = node[key] as BuilderNode[];
+
+      if (shouldUseMapPattern(children, metadataMap, node._component)) continue;
+
+      const slotLabel = activeSlotKeys.length > 1 ? ` [${key}]` : "";
 
       children.forEach((child, idx) => {
         if (!child || typeof child !== "object" || !child._component) return;
 
-        const childPath = `${nodePath} > ${getComponentPath(child._component)} #${idx + 1}`;
+        const childPath = `${nodePath}${slotLabel} > ${getComponentPath(child._component)} #${idx + 1}`;
 
         results.push(...collectScopedExposedProps(child, childPath));
       });
@@ -147,6 +152,8 @@ export function validateComponentTree(
     }
 
     // --- Regular exposed props (marked as not hardcoded) ---
+    // Include arrays too: exposed array props can collide across components.
+    // (Map-pattern slots are still handled separately below.)
     for (const key of Object.keys(node)) {
       if (!key.startsWith("_hardcoded_")) continue;
 
@@ -160,7 +167,7 @@ export function validateComponentTree(
       const renamedKey = node[`_renamed_${originalPropName}`] || originalPropName;
 
       const location: PropLocation = {
-        nodeId: node.id,
+        nodeId: node._nodeId,
         nodePath: currentPath,
         originalPropName,
         exposedPropName: renamedKey,
@@ -169,7 +176,7 @@ export function validateComponentTree(
       addExposedPropLocation(renamedKey, location);
     }
 
-    // --- Slots in "prop" (freeform) mode ---
+    // --- Slots in page-building mode ---
     for (const key of Object.keys(node)) {
       if (!key.endsWith("_mode") || node[key as `_${string}_mode`] !== "prop") continue;
 
@@ -177,7 +184,7 @@ export function validateComponentTree(
       const renamedKey = node[`_renamed_${originalPropName}`] || originalPropName;
 
       const location: PropLocation = {
-        nodeId: node.id,
+        nodeId: node._nodeId,
         nodePath: currentPath,
         originalPropName,
         exposedPropName: renamedKey,
@@ -187,15 +194,13 @@ export function validateComponentTree(
     }
 
     // --- Recurse into nested component arrays ---
-    for (const key of Object.keys(node)) {
-      if (!Array.isArray(node[key]) || key.startsWith("_")) continue;
+    const activeSlots = Object.keys(node).filter(
+      (k) => Array.isArray(node[k]) && !k.startsWith("_") && node[`_${k}_mode` as const] !== "prop"
+    );
 
-      // Skip slots in prop mode — their components are not active
-      const modeKey = `_${key}_mode` as const;
-
-      if (node[modeKey] === "prop") continue;
-
+    for (const key of activeSlots) {
       const children = node[key] as BuilderNode[];
+      const slotLabel = activeSlots.length > 1 ? ` [${key}]` : "";
 
       // If this slot uses the .map() pattern the array itself becomes an
       // exposed prop and individual props are scoped to each array item.
@@ -203,7 +208,7 @@ export function validateComponentTree(
         const renamedKey = node[`_renamed_${key}`] || key;
 
         const location: PropLocation = {
-          nodeId: node.id,
+          nodeId: node._nodeId,
           nodePath: currentPath,
           originalPropName: key,
           exposedPropName: renamedKey,
@@ -216,7 +221,7 @@ export function validateComponentTree(
         const templateChild = children[0];
 
         if (templateChild && typeof templateChild === "object" && templateChild._component) {
-          const templatePath = `${currentPath} > ${getComponentPath(templateChild._component)} #1`;
+          const templatePath = `${currentPath}${slotLabel} > ${getComponentPath(templateChild._component)} #1`;
           const scopedLocations = collectScopedExposedProps(templateChild, templatePath);
           const scopedByName = new Map<string, PropLocation[]>();
 
@@ -232,7 +237,7 @@ export function validateComponentTree(
           scopedByName.forEach((locations, exposedName) => {
             // De-duplicate entries that refer to the same underlying prop on the same node.
             // This can happen when a slot prop is both exposed (`_hardcoded_... = false`)
-            // and in freeform mode (`_..._mode = 'prop'`).
+            // and in page-building mode (`_..._mode = 'prop'`).
             const uniquePropInstances = new Set(
               locations.map((loc) => `${loc.nodeId}:${loc.originalPropName}`)
             );
@@ -251,7 +256,11 @@ export function validateComponentTree(
           if (child && typeof child === "object" && child._component) {
             const childComponentName = getComponentPath(child._component);
 
-            collectExposedProps(child, `${childComponentName} #${index + 1}`, currentPath);
+            collectExposedProps(
+              child,
+              `${childComponentName} #${index + 1}`,
+              `${currentPath}${slotLabel}`
+            );
           }
         });
       }
@@ -271,9 +280,9 @@ export function validateComponentTree(
   const duplicateProps: DuplicatePropError[] = [];
 
   exposedPropsMap.forEach((locations, exposedName) => {
-    const uniqueNodeIds = new Set(locations.map((loc) => loc.nodeId));
+    const uniqueProps = new Set(locations.map((loc) => `${loc.nodeId}:${loc.originalPropName}`));
 
-    if (uniqueNodeIds.size > 1) {
+    if (uniqueProps.size > 1) {
       duplicateProps.push({ exposedName, locations });
     }
   });

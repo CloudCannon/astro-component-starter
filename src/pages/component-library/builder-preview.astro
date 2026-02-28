@@ -1,0 +1,47 @@
+---
+import Component from "@components/utils/renderBlock.astro";
+import type { ContentBlock } from "../../types";
+import "@styles/style.css";
+
+/** Render on each request so query param ?tree=... is available (dev/preview only). */
+export const prerender = false;
+
+let contentSections: ContentBlock[] = [];
+
+if (Astro.request.url) {
+  const requestUrl = new URL(Astro.request.url);
+  const treeParam = requestUrl.searchParams.get("tree");
+
+  if (treeParam) {
+    try {
+      const tree = JSON.parse(treeParam);
+
+      contentSections = tree[0]?.contentSections || [];
+    } catch {
+      // Invalid tree data
+    }
+  }
+}
+---
+
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Builder Preview</title>
+    <style is:inline>
+      @layer reset, base, components, page-sections, utils, overrides;
+    </style>
+  </head>
+  <body style="margin: 0;">
+    {
+      contentSections.length > 0 ? (
+        <Component contentSections={contentSections} editable={false} />
+      ) : (
+        <p style="color: #94a3b8; padding: 2rem; text-align: center;">
+          Preview will appear here when you add components.
+        </p>
+      )
+    }
+  </body>
+</html>

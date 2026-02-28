@@ -5,7 +5,7 @@ import { join } from "path";
 import { kebabToTitleCase, toPascalCase } from "../../../../shared/caseUtils";
 import type { ComponentMetadata as SharedComponentMetadata } from "../../../../shared/metadata";
 import type { ComponentInfo, InputConfig, SlotDefinition, StructureValue } from "../../types";
-import { isArrayStructureInput } from "./inputUtils";
+import { isArrayStructureInput, structureHasComponentValues } from "./inputUtils";
 
 type Logger = (...args: unknown[]) => void;
 
@@ -17,6 +17,8 @@ export function scanBuildingBlocksComponents(
   const componentsDir = join(process.cwd(), "src/components/building-blocks");
   const components: ComponentInfo[] = [];
 
+  const excludedComponents = new Set(["pagination"]);
+
   function scanDirectory(dir: string, category: string): void {
     try {
       const entries = readdirSync(dir, { withFileTypes: true });
@@ -25,6 +27,7 @@ export function scanBuildingBlocksComponents(
         const fullPath = join(dir, entry.name);
 
         if (!entry.isDirectory()) continue;
+        if (excludedComponents.has(entry.name)) continue;
 
         const astroFiles = readdirSync(fullPath).filter((f) => f.endsWith(".astro"));
         const kebabName = entry.name;
@@ -123,6 +126,12 @@ export function scanBuildingBlocksComponents(
             }
           }
 
+          const metaSlot = metadata?.slots?.find((s) => s.fallbackFor === propName);
+          const shouldTreatAsSlot =
+            !!metaSlot || structureHasComponentValues(structureValue, structureName);
+
+          if (!shouldTreatAsSlot) continue;
+
           slots.push({
             propName,
             label:
@@ -131,6 +140,8 @@ export function scanBuildingBlocksComponents(
                 : propName.replace(/([A-Z])/g, " $1").replace(/^./, (s: string) => s.toUpperCase()),
             allowedComponents: [],
             structureName,
+            astroSlotName: metaSlot?.name,
+            isRepeatable: !!metaSlot?.childComponent,
           });
         }
 

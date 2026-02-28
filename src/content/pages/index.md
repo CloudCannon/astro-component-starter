@@ -4,7 +4,7 @@ title: Astro Component Starter
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
-    heading: The Astro Component Starter for building any site 2
+    heading: The Astro Component Starter for building any site
     subtext: >-
       Built on web fundamentals. Easy to customize, fast to use, and simple to
       maintain.

@@ -8,6 +8,23 @@ import {
   getChildWrapperPropConfig,
 } from "./treeHelpers";
 
+function normalizeInputConfigForExport(inputConfig: InputConfig): InputConfig {
+  const normalized: InputConfig = { ...(inputConfig as InputConfig) };
+
+  if (inputConfig.options && typeof inputConfig.options === "object") {
+    const options = { ...inputConfig.options };
+
+    if (typeof options.selectDataRef === "string") {
+      options.values = options.selectDataRef;
+      delete options.selectDataRef;
+    }
+
+    normalized.options = options;
+  }
+
+  return normalized;
+}
+
 /** Generate CloudCannon inputs YAML. */
 export function generateCloudCannonInputs(
   blocks: ComponentNode[],
@@ -45,7 +62,7 @@ export function generateCloudCannonInputs(
         const renamedKey = originalNode?.[`_renamed_${propName}`] || propName;
 
         if (!inputs[renamedKey]) {
-          inputs[renamedKey] = { ...(inputConfig as InputConfig) };
+          inputs[renamedKey] = normalizeInputConfigForExport(inputConfig as InputConfig);
         }
       }
     });
@@ -64,7 +81,7 @@ export function generateCloudCannonInputs(
 
         for (const { renamedKey: fieldKey, inputConfig: fieldConfig } of deepProps) {
           if (!objectFields[fieldKey] && fieldConfig) {
-            objectFields[fieldKey] = fieldConfig;
+            objectFields[fieldKey] = normalizeInputConfigForExport(fieldConfig);
           }
         }
 
@@ -77,10 +94,12 @@ export function generateCloudCannonInputs(
             if (!objectFields[renamedPropKey]) {
               const config = getChildWrapperPropConfig(componentInfo, fallbackProp, prop);
 
-              objectFields[renamedPropKey] = config || {
-                type: "text",
-                comment: `${prop} value`,
-              };
+              objectFields[renamedPropKey] = config
+                ? normalizeInputConfigForExport(config)
+                : {
+                    type: "text",
+                    comment: `${prop} value`,
+                  };
             }
           }
         }

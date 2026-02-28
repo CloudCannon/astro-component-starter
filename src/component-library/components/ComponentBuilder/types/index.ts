@@ -24,14 +24,18 @@ export interface SlotDefinition {
   allowedComponents: string[];
   /** CloudCannon structure name that governs allowed children. */
   structureName?: string;
-  /** Whether this slot can be toggled to freeform "prop" mode. */
+  /** Whether this slot can be toggled to "open for page building" mode. */
   allowAsProp?: boolean;
-  /** Input type when in prop mode (e.g. `"text"`, `"textarea"`). */
+  /** Input type when in page-building mode (e.g. `"text"`, `"textarea"`). */
   propType?: string;
-  /** Label shown when the slot is in prop mode. */
+  /** Label shown when the slot is in page-building mode. */
   propLabel?: string;
-  /** Additional input configuration for prop mode. */
+  /** Additional input configuration for page-building mode. */
   propConfig?: Record<string, unknown>;
+  /** Astro named slot (e.g. `"first"`, `"second"`). `"default"` = the unnamed slot. */
+  astroSlotName?: string;
+  /** True for slots backed by a childComponent (e.g. Accordion→AccordionItem). Only one template child is allowed; editors add/remove items when building pages. */
+  isRepeatable?: boolean;
 }
 
 /**
@@ -77,7 +81,9 @@ export interface InputConfig {
   comment?: string;
   default?: unknown;
   options?: {
-    values?: Array<string | { id: string; name: string }>;
+    values?: string | Array<string | { id: string; name: string }>;
+    /** Original `_select_data.*` reference used for export output. */
+    selectDataRef?: string;
     structures?: string;
     allow_as_prop?: boolean;
     prop_type?: string;
@@ -114,7 +120,7 @@ export interface StructureDefinition {
  */
 export interface ComponentNode {
   /** Unique ID assigned by the builder (e.g. `"component-3"`). */
-  id: string;
+  _nodeId: string;
   /** Component path that identifies which component this is. */
   _component: string;
   /** `true` only for the outermost root container. */

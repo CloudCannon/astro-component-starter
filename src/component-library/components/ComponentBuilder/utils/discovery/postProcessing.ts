@@ -94,7 +94,7 @@ export function registerVirtualComponents(
             const expectedVirtualPath = `${component.path}/${childKebab}`;
 
             if (virtualPath === expectedVirtualPath) {
-              virtualDisplayName = childName;
+              virtualDisplayName = childName.replace(/([a-z])([A-Z])/g, "$1 $2");
             }
           }
 

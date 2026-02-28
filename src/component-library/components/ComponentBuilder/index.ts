@@ -11,8 +11,10 @@
 
 import { debugLog } from "./constants";
 import { showExportConfigModal } from "./modules/exportModal";
-import { renderPropEditor } from "./modules/propEditor";
+import { initLivePreview } from "./modules/livePreview";
+import { getExposedPropCount, renderPropEditor } from "./modules/propEditor";
 import { renderSandbox, setRenderCallback } from "./modules/sandbox";
+import { showTemplatePicker } from "./modules/templates";
 import { builderState } from "./state";
 import type { BuilderData } from "./types";
 import { generateExport } from "./utils/exportGenerator";
@@ -76,7 +78,13 @@ function initializeBuilder(): void {
 
   // Tree change handler
   builderState.on("treeChange", () => {
-    render();
+    if (builderState.propEditInProgress) {
+      renderSandbox(sandbox);
+      updateExportButton();
+    } else {
+      render();
+    }
+    builderState.saveToLocalStorage();
   });
 
   // Validation change handler
@@ -90,6 +98,42 @@ function initializeBuilder(): void {
     e.preventDefault();
     e.stopPropagation();
     handleExport();
+  });
+
+  // Templates button
+  const templatesBtn = document.getElementById("templates-btn");
+
+  templatesBtn?.addEventListener("click", () => {
+    const hasContent = builderState.componentTree.some((node) => {
+      const info = builderState.getComponentInfo(node._component);
+
+      if (!info?.slots) return false;
+
+      return info.slots.some((slot) => {
+        const children = node[slot.propName];
+
+        return Array.isArray(children) && children.length > 0;
+      });
+    });
+
+    if (hasContent && !confirm("Load a template? This will replace your current work.")) {
+      return;
+    }
+
+    showTemplatePicker((tree) => {
+      builderState.loadTemplate(tree);
+      render();
+    });
+  });
+
+  // Clear / Start Over button
+  const clearBtn = document.getElementById("clear-btn");
+
+  clearBtn?.addEventListener("click", () => {
+    if (confirm("Start over? This will clear your current work.")) {
+      builderState.clearAndReset();
+      render();
+    }
   });
 
   // Update sidebar based on selection
@@ -121,7 +165,19 @@ function initializeBuilder(): void {
       return;
     }
 
-    title.textContent = `${componentInfo.displayName} Props`;
+    const exposedCount = getExposedPropCount(node, componentInfo);
+
+    title.innerHTML = "";
+    title.appendChild(document.createTextNode(`${componentInfo.displayName} Props`));
+
+    if (exposedCount > 0) {
+      const badge = document.createElement("span");
+
+      badge.className = "sidebar-exposed-badge";
+      badge.textContent = `${exposedCount} exposed`;
+      title.appendChild(badge);
+    }
+
     renderPropEditor(node, componentInfo, content);
   }
 
@@ -257,6 +313,15 @@ function initializeBuilder(): void {
         alert(`Error exporting component: ${(error as Error).message}`);
       }
     });
+  }
+
+  // Live preview
+  const viewToggle = document.getElementById("builder-view-toggle");
+  const builderLayout = document.getElementById("builder-layout");
+  const previewContainer = document.getElementById("builder-preview-container");
+
+  if (viewToggle && builderLayout && previewContainer) {
+    initLivePreview(builderLayout, previewContainer, viewToggle);
   }
 
   // Initial render

@@ -35,6 +35,9 @@ import { validateComponentTree, type ValidationResult } from "./utils/validation
 
 /** Builder state singleton */
 class BuilderState {
+  private static STORAGE_KEY = "componentBuilder_state";
+  private static MAX_HISTORY = 50;
+
   private _componentTree: ComponentNode[] = [];
   private _selectedComponentId: string | null = null;
   private _componentIdCounter = 0;
@@ -49,8 +52,18 @@ class BuilderState {
   // Validation
   private _validationResult: ValidationResult = { isValid: true, duplicateProps: [] };
 
+  // When true, the next treeChange handler should skip rebuilding the sidebar.
+  // Set by updateNodeProperty so prop-editor inputs don't lose focus.
+  private _propEditInProgress = false;
+
   // Event listeners
   private _listeners: Map<string, Set<() => void>> = new Map();
+
+  // Undo/redo
+  private _history: string[] = [];
+  private _redoStack: string[] = [];
+  private _lastTreeSnapshot = "[]";
+  private _isUndoRedoOp = false;
 
   /** Initialize state from builder data */
   initialize(data: BuilderData): void {
@@ -64,10 +77,14 @@ class BuilderState {
       categories: Object.keys(data.componentsByCategory),
     });
 
-    // Initialize with root component
-    this.initializeRootComponent();
+    const restored = this.loadFromLocalStorage();
 
-    // Run initial validation
+    if (!restored) {
+      this.initializeRootComponent();
+    }
+
+    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
+
     this.runValidation();
   }
 
@@ -91,9 +108,9 @@ class BuilderState {
 
   /** Create a new component node with default props */
   createComponentNode(componentInfo: ComponentInfo): ComponentNode {
-    const id = `component-${this._componentIdCounter++}`;
+    const _nodeId = `component-${this._componentIdCounter++}`;
     const node: ComponentNode = {
-      id,
+      _nodeId,
       _component: componentInfo.path,
       ...this.getDefaultProps(componentInfo),
     };
@@ -321,6 +338,11 @@ class BuilderState {
     if (changed) this.emit("treeChange");
   }
 
+  /** True when a prop-editor input triggered the current treeChange (sidebar should not re-render). */
+  get propEditInProgress(): boolean {
+    return this._propEditInProgress;
+  }
+
   /** Update a property value on a node */
   updateNodeProperty(nodeId: string, propName: string, value: unknown): void {
     const changed = updateNodePropertyOperation(nodeId, propName, value, (id, tree) =>
@@ -328,7 +350,11 @@ class BuilderState {
     );
 
     if (changed) {
+      const isContentProp = !propName.startsWith("_");
+
+      this._propEditInProgress = isContentProp;
       this.emit("treeChange");
+      this._propEditInProgress = false;
     }
   }
 
@@ -358,13 +384,157 @@ class BuilderState {
   }
 
   private emit(event: string): void {
+    if (event === "treeChange" && !this._isUndoRedoOp) {
+      this._redoStack = [];
+      this._history.push(this._lastTreeSnapshot);
+
+      if (this._history.length > BuilderState.MAX_HISTORY) {
+        this._history.shift();
+      }
+    }
+
     this._listeners.get(event)?.forEach((callback) => callback());
 
-    // Run validation whenever tree changes
     if (event === "treeChange") {
       this.forceExposeUniformSlots(this._componentTree);
       this.runValidation();
+      this._lastTreeSnapshot = JSON.stringify(this._componentTree);
     }
+  }
+
+  /** Undo the last change */
+  undo(): boolean {
+    if (this._history.length === 0) return false;
+
+    const snapshot = this._history.pop()!;
+
+    this._redoStack.push(JSON.stringify(this._componentTree));
+    this._isUndoRedoOp = true;
+    this._componentTree = JSON.parse(snapshot);
+    this._lastTreeSnapshot = snapshot;
+    this._selectedComponentId = null;
+    this.emit("treeChange");
+    this.emit("selectionChange");
+    this._isUndoRedoOp = false;
+
+    return true;
+  }
+
+  /** Redo a previously undone change */
+  redo(): boolean {
+    if (this._redoStack.length === 0) return false;
+
+    const snapshot = this._redoStack.pop()!;
+
+    this._history.push(JSON.stringify(this._componentTree));
+    this._isUndoRedoOp = true;
+    this._componentTree = JSON.parse(snapshot);
+    this._lastTreeSnapshot = snapshot;
+    this._selectedComponentId = null;
+    this.emit("treeChange");
+    this.emit("selectionChange");
+    this._isUndoRedoOp = false;
+
+    return true;
+  }
+
+  get canUndo(): boolean {
+    return this._history.length > 0;
+  }
+
+  get canRedo(): boolean {
+    return this._redoStack.length > 0;
+  }
+
+  /** Save the current tree to localStorage */
+  saveToLocalStorage(): void {
+    try {
+      const data = {
+        tree: this._componentTree,
+        counter: this._componentIdCounter,
+      };
+
+      localStorage.setItem(BuilderState.STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      // Quota exceeded or storage unavailable
+    }
+  }
+
+  /** Load a saved tree from localStorage. Returns true if restored successfully. */
+  private loadFromLocalStorage(): boolean {
+    try {
+      const raw = localStorage.getItem(BuilderState.STORAGE_KEY);
+
+      if (!raw) return false;
+
+      const data = JSON.parse(raw);
+
+      if (!data.tree || !Array.isArray(data.tree) || data.tree.length === 0) return false;
+
+      const rootComponent = data.tree[0]?._component;
+
+      if (!rootComponent || !this._components.find((c) => c.path === rootComponent)) {
+        return false;
+      }
+
+      this._componentTree = data.tree;
+      this._componentIdCounter = Math.max(data.counter || 0, this._componentIdCounter);
+
+      this.migrateNodeIds(this._componentTree);
+
+      debugLog("Restored state from localStorage");
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** Migrate old `id` property to `_nodeId` on persisted/template trees */
+  private migrateNodeIds(tree: ComponentNode[]): void {
+    for (const node of tree) {
+      if (!node._nodeId && (node as Record<string, unknown>).id) {
+        node._nodeId = (node as Record<string, unknown>).id as string;
+        delete (node as Record<string, unknown>).id;
+      }
+
+      for (const value of Object.values(node)) {
+        if (Array.isArray(value) && value.length > 0 && value[0]?._component) {
+          this.migrateNodeIds(value as ComponentNode[]);
+        }
+      }
+    }
+  }
+
+  /** Load a template tree, replacing the current tree */
+  loadTemplate(tree: ComponentNode[]): void {
+    this._componentTree = tree;
+    this.migrateNodeIds(this._componentTree);
+    this._selectedComponentId = null;
+    this._history = [];
+    this._redoStack = [];
+    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
+    this.saveToLocalStorage();
+    this.emit("treeChange");
+    this.emit("selectionChange");
+  }
+
+  /** Clear localStorage and reset to a fresh root component */
+  clearAndReset(): void {
+    this._componentTree = [];
+    this._selectedComponentId = null;
+    this._history = [];
+    this._redoStack = [];
+
+    try {
+      localStorage.removeItem(BuilderState.STORAGE_KEY);
+    } catch {
+      // Storage unavailable
+    }
+
+    this.initializeRootComponent();
+    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
+    this.emit("selectionChange");
   }
 
   /**

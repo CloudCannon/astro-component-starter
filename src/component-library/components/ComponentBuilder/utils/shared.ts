@@ -54,10 +54,10 @@ export function hasOwnExposedProps(node: BuilderNode): boolean {
 /**
  * Determine whether a slot's children should trigger the `.map()` export pattern.
  *
- * The `.map()` pattern is used when:
- * 1. The parent component defines a `childComponent` wrapper in its metadata
- *    (e.g. Carousel → CarouselSlide).
- * 2. At least one child (or its immediate slot grandchildren) has exposed props.
+ * The `.map()` pattern is used when the parent component defines a `childComponent`
+ * wrapper in its metadata (e.g. Carousel → CarouselSlide, Accordion → AccordionItem).
+ * These slots are inherently repeatable: editors add/remove items when building pages,
+ * and the single template child defines the structure of each item.
  *
  * @param children          - The child nodes inside the slot.
  * @param metadataMap       - Metadata map for component lookup.
@@ -71,21 +71,5 @@ export function shouldUseMapPattern(
 ): boolean {
   const parentMetadata = metadataMap[parentComponentPath];
 
-  if (!parentMetadata?.childComponent) return false;
-
-  return children.some((child) => {
-    if (!child || typeof child !== "object") return false;
-
-    // Level 0: direct child has exposed props
-    if (hasOwnExposedProps(child)) return true;
-
-    // Level 1: direct child's default-slot children have exposed props
-    const childMetadata = metadataMap[child._component];
-    const childFallbackProp = childMetadata?.fallbackFor || "contentSections";
-    const grandchildren = child[childFallbackProp] as BuilderNode[] | undefined;
-
-    if (!grandchildren || !Array.isArray(grandchildren)) return false;
-
-    return grandchildren.some((gc) => gc && typeof gc === "object" && hasOwnExposedProps(gc));
-  });
+  return !!parentMetadata?.childComponent && children.length > 0;
 }

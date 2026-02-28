@@ -46,6 +46,50 @@ function getImportInfo(
   };
 }
 
+/** Merge dotted props (e.g. `backgroundImage.alt`) into object props (`backgroundImage`). */
+function normalizeDottedObjectProps(props: Record<string, unknown>): Record<string, unknown> {
+  const normalized: Record<string, unknown> = { ...props };
+  const dottedKeys = Object.keys(normalized).filter((key) => key.includes("."));
+
+  for (const dottedKey of dottedKeys) {
+    const [parentKey, ...rest] = dottedKey.split(".");
+    const childPath = rest.join(".");
+
+    if (!parentKey || !childPath) continue;
+
+    const dottedValue = normalized[dottedKey];
+
+    // Build/merge a nested object shape from dotted key segments.
+    const baseObject =
+      normalized[parentKey] &&
+      typeof normalized[parentKey] === "object" &&
+      !Array.isArray(normalized[parentKey])
+        ? { ...(normalized[parentKey] as Record<string, unknown>) }
+        : {};
+    let cursor: Record<string, unknown> = baseObject;
+    const segments = childPath.split(".");
+
+    for (let i = 0; i < segments.length - 1; i++) {
+      const segment = segments[i];
+      const existing = cursor[segment];
+
+      if (existing && typeof existing === "object" && !Array.isArray(existing)) {
+        cursor[segment] = { ...(existing as Record<string, unknown>) };
+      } else {
+        cursor[segment] = {};
+      }
+
+      cursor = cursor[segment] as Record<string, unknown>;
+    }
+
+    cursor[segments[segments.length - 1]] = dottedValue;
+    normalized[parentKey] = baseObject;
+    delete normalized[dottedKey];
+  }
+
+  return normalized;
+}
+
 /** Generate the Astro component file. */
 export function generateAstroFile(
   blocks: ComponentNode[],
@@ -84,6 +128,10 @@ export function generateAstroFile(
 
     Object.keys(node).forEach((key) => {
       if (Array.isArray(node[key]) && !key.startsWith("_")) {
+        const modeKey = `_${key}_mode` as const;
+
+        if (node[modeKey] === "prop") return;
+
         const children = node[key] as BuilderNode[];
 
         if (shouldUseMapPattern(children, metadataMap, node._component)) {
@@ -105,40 +153,61 @@ export function generateAstroFile(
     collectExposedProps(originalTree[0]);
   }
 
-  function addComponent(block: ComponentNode): void {
+  function addComponent(block: ComponentNode, originalNode?: BuilderNode): void {
     if (block._component) {
       uniqueComponents.add(block._component);
     }
 
     for (const prop of nestedBlockProperties) {
       if (block[prop] && Array.isArray(block[prop])) {
-        (block[prop] as ComponentNode[]).forEach(addComponent);
+        const modeKey = `_${prop}_mode` as const;
+
+        if (originalNode && originalNode[modeKey] === "prop") continue;
+
+        (block[prop] as ComponentNode[]).forEach((child, idx) => {
+          const origChildren = originalNode?.[prop] as BuilderNode[] | undefined;
+
+          addComponent(child, origChildren?.[idx]);
+        });
       }
     }
 
     const metadata = metadataMap[block._component];
+    const fallback = metadata?.fallbackFor;
 
-    if (
-      metadata?.childComponent?.name &&
-      metadata?.fallbackFor &&
-      Array.isArray(block[metadata.fallbackFor]) &&
-      (block[metadata.fallbackFor] as ComponentNode[]).length > 0
-    ) {
-      const childPath = getChildComponentPath(block._component, metadata.childComponent.name);
+    if (fallback) {
+      const fallbackModeKey = `_${fallback}_mode` as const;
+      const isInFreeformMode = originalNode && originalNode[fallbackModeKey] === "prop";
 
-      uniqueComponents.add(childPath);
-    }
+      if (!isInFreeformMode) {
+        if (
+          metadata?.childComponent?.name &&
+          Array.isArray(block[fallback]) &&
+          (block[fallback] as ComponentNode[]).length > 0
+        ) {
+          const childPath = getChildComponentPath(block._component, metadata.childComponent.name);
 
-    if (metadata?.fallbackFor && block[metadata.fallbackFor]) {
-      const nested = Array.isArray(block[metadata.fallbackFor])
-        ? (block[metadata.fallbackFor] as ComponentNode[])
-        : [block[metadata.fallbackFor] as ComponentNode];
+          uniqueComponents.add(childPath);
+        }
 
-      nested.forEach(addComponent);
+        if (block[fallback]) {
+          const nested = Array.isArray(block[fallback])
+            ? (block[fallback] as ComponentNode[])
+            : [block[fallback] as ComponentNode];
+          const origNested = originalNode?.[fallback];
+          const origChildren = Array.isArray(origNested)
+            ? (origNested as BuilderNode[])
+            : origNested
+              ? [origNested as BuilderNode]
+              : [];
+
+          nested.forEach((child, idx) => addComponent(child, origChildren[idx]));
+        }
+      }
     }
   }
 
-  blocks.forEach(addComponent);
+  blocks.forEach((block, idx) => addComponent(block, originalTree[idx]));
 
   const imports = Array.from(uniqueComponents)
     .map((componentPath) => {
@@ -162,7 +231,7 @@ export function generateAstroFile(
     )
     .join("\n\n");
 
-  const standardProps = ["label", "class: className", "_component"];
+  const standardProps = ["label", "editable = true", "class: className", "_component"];
   const allProps = [...standardProps, ...Array.from(exposedProps), "...htmlAttributes"];
   const propsDestructuring = allProps
     .map((prop, idx) => `  ${prop}${idx < allProps.length - 1 ? "," : ""}`)
@@ -195,7 +264,8 @@ function formatComponentBlock(
   originalNode: BuilderNode | null,
   rootComponentName: string,
   components: ComponentInfo[],
-  arrayItemContext?: string
+  arrayItemContext?: string,
+  extraAttributes?: string[]
 ): string {
   const componentPath = block._component;
   const parts = componentPath.split("/");
@@ -203,12 +273,13 @@ function formatComponentBlock(
   const componentName = toPascalCase(lastPart);
 
   const indent = "  ".repeat(indentLevel);
-  const props: Record<string, unknown> = { ...block };
+  const props: Record<string, unknown> = normalizeDottedObjectProps({ ...block });
   const isRootComponent = indentLevel === 0;
 
   delete props._component;
   delete props._isRootComponent;
-  delete props.id;
+  delete props._nodeId;
+  delete props.editable;
 
   const metadata = metadataMap[componentPath];
   const componentInfo = components.find((c) => c.path === componentPath);
@@ -229,15 +300,30 @@ function formatComponentBlock(
 
   if (supportsSlots) {
     nestedBlockProperties.forEach((prop) => {
-      if (!propsInPropMode.has(prop)) {
+      if (!propsInPropMode.has(prop) && Array.isArray(props[prop])) {
         delete props[prop];
       }
     });
 
-    if (!propsInPropMode.has("contentSections")) {
+    if (!propsInPropMode.has("contentSections") && Array.isArray(props.contentSections)) {
       delete props.contentSections;
     }
   }
+
+  const hasSlotChildren =
+    supportsSlots &&
+    !propsInPropMode.has(fallbackProp) &&
+    block[fallbackProp] &&
+    Array.isArray(block[fallbackProp]) &&
+    (block[fallbackProp] as ComponentNode[]).length > 0;
+
+  const slotOriginalNested = hasSlotChildren
+    ? (originalNode?.[fallbackProp] as BuilderNode[] | undefined)
+    : undefined;
+
+  const isMapPatternSlot = slotOriginalNested
+    ? shouldUseMapPattern(slotOriginalNested, metadataMap, componentPath)
+    : false;
 
   const propsList = Object.entries(props)
     .filter(([key, value]) => {
@@ -267,9 +353,77 @@ function formatComponentBlock(
     })
     .filter(Boolean);
 
+  // Determine which slot props are in page-building mode on this component
+  const freeformSlotProps = supportsSlots
+    ? [...propsInPropMode].filter((p) => {
+        const inputType = componentInfo?.inputs?.[p]?.type;
+
+        return inputType === "array" || nestedBlockProperties.includes(p) || p === fallbackProp;
+      })
+    : [];
+
   if (isRootComponent && rootComponentName) {
     propsList.push(`class:list={["${rootComponentName}", className]}`);
+
+    if (freeformSlotProps.length > 0) {
+      propsList.push("editable={editable}");
+
+      for (const slotProp of freeformSlotProps) {
+        const renamedKey = originalNode?.[`_renamed_${slotProp}`] || slotProp;
+
+        if (renamedKey !== slotProp) {
+          propsList.push(`data-children-prop="${renamedKey}"`);
+        }
+      }
+    } else {
+      propsList.push("editable={false}");
+    }
+
     propsList.push("{...htmlAttributes}");
+  } else if (freeformSlotProps.length > 0) {
+    propsList.push("editable={true}");
+
+    for (const slotProp of freeformSlotProps) {
+      const renamedKey = originalNode?.[`_renamed_${slotProp}`] || slotProp;
+
+      if (renamedKey !== slotProp) {
+        propsList.push(`data-children-prop="${renamedKey}"`);
+      }
+    }
+  }
+
+  if (isMapPatternSlot) {
+    const mapSlotName = originalNode?.[`_renamed_${fallbackProp}`] || fallbackProp;
+
+    if (mapSlotName !== fallbackProp) {
+      propsList.push(`data-children-prop="${mapSlotName}"`);
+    }
+  }
+
+  if (!isRootComponent) {
+    let hasDataProp = false;
+
+    Object.entries(props).forEach(([key, value]) => {
+      if (hasDataProp || Array.isArray(value)) return;
+
+      const isHardcoded = originalNode ? originalNode[`_hardcoded_${key}`] !== false : true;
+      const isInPropMode = propsInPropMode.has(key);
+
+      if (!isHardcoded || isInPropMode) {
+        const inputType = componentInfo?.inputs?.[key]?.type;
+
+        if (inputType === "text" || inputType === "textarea" || inputType === "markdown") {
+          const renamedKey = originalNode ? originalNode[`_renamed_${key}`] || key : key;
+
+          propsList.push(`data-prop="${renamedKey}"`);
+          hasDataProp = true;
+        }
+      }
+    });
+  }
+
+  if (extraAttributes && extraAttributes.length > 0) {
+    propsList.push(...extraAttributes);
   }
 
   const formattedProps =
@@ -277,22 +431,74 @@ function formatComponentBlock(
       ? `\n${propsList.map((prop) => `${indent}  ${prop}`).join("\n")}\n${indent}`
       : "";
 
-  if (
-    supportsSlots &&
-    !propsInPropMode.has(fallbackProp) &&
-    block[fallbackProp] &&
-    Array.isArray(block[fallbackProp]) &&
-    (block[fallbackProp] as ComponentNode[]).length > 0
-  ) {
-    const originalNested = originalNode?.[fallbackProp] as BuilderNode[] | undefined;
-    const useMapPattern =
-      !arrayItemContext && originalNested
-        ? shouldUseMapPattern(originalNested, metadataMap, componentPath)
-        : false;
+  // --- Determine Astro slot names from component slot metadata ---
+  function getAstroSlotName(propName: string): string {
+    const slotDef = componentInfo?.slots?.find((s) => s.propName === propName);
+
+    return slotDef?.astroSlotName || "default";
+  }
+
+  // --- Build named-slot content for non-fallback slots ---
+  let namedSlotContent = "";
+
+  if (supportsSlots && componentInfo?.slots) {
+    for (const slotDef of componentInfo.slots) {
+      if (slotDef.propName === fallbackProp) continue;
+      if (propsInPropMode.has(slotDef.propName)) continue;
+
+      const children = block[slotDef.propName] as ComponentNode[] | undefined;
+
+      if (!children || children.length === 0) continue;
+
+      const origChildren = originalNode?.[slotDef.propName] as BuilderNode[] | undefined;
+      const astroSlot = slotDef.astroSlotName || slotDef.propName;
+
+      if (children.length === 1) {
+        namedSlotContent += `\n${formatComponentBlock(
+          children[0],
+          indentLevel + 1,
+          metadataMap,
+          nestedBlockProperties,
+          origChildren?.[0] || null,
+          rootComponentName,
+          components,
+          arrayItemContext,
+          [`slot="${astroSlot}"`]
+        )}`;
+      } else {
+        const fragmentContent = children
+          .map((child, idx) =>
+            formatComponentBlock(
+              child,
+              indentLevel + 2,
+              metadataMap,
+              nestedBlockProperties,
+              origChildren?.[idx] || null,
+              rootComponentName,
+              components,
+              arrayItemContext
+            )
+          )
+          .join("\n");
+
+        namedSlotContent += `\n${indent}  <Fragment slot="${astroSlot}">\n${fragmentContent}\n${indent}  </Fragment>`;
+      }
+    }
+  }
+
+  const fallbackAstroSlot = getAstroSlotName(fallbackProp);
+  const fallbackIsDefault = fallbackAstroSlot === "default";
+
+  if (hasSlotChildren) {
+    const originalNested = slotOriginalNested;
+    const useMapPattern = isMapPatternSlot;
 
     if (useMapPattern && originalNested && originalNested.length > 0) {
-      const slotName = originalNode?.[`_renamed_${fallbackProp}`] || fallbackProp;
-      const singularName = slotName.endsWith("s") ? slotName.slice(0, -1) : "item";
+      const rawSlotName = originalNode?.[`_renamed_${fallbackProp}`] || fallbackProp;
+      const slotName = arrayItemContext ? `${arrayItemContext}.${rawSlotName}` : rawSlotName;
+      const singularName = (rawSlotName as string).endsWith("s")
+        ? (rawSlotName as string).slice(0, -1)
+        : "item";
 
       const templateNode = (block[fallbackProp] as ComponentNode[])[0];
       const templateOriginal = originalNested[0];
@@ -309,6 +515,29 @@ function formatComponentBlock(
           return `${prop}={${singularName}.${renamedKey}}`;
         });
 
+        childPropsList.push(`data-editable="array-item"`);
+        childPropsList.push(`data-id="${childComponentPath}"`);
+
+        // Check if any slot props on the template child are in page-building mode
+        for (const sp of childPropInfo.slotProps) {
+          const spModeKey = `_${sp}_mode` as keyof typeof templateOriginal;
+
+          if (templateOriginal?.[spModeKey] === "prop") {
+            const renamedKey = templateOriginal?.[`_renamed_${sp}`] || sp;
+
+            childPropsList.push(`${sp}={${singularName}.${renamedKey}}`);
+            if (renamedKey !== sp) {
+              childPropsList.push(`data-children-prop="${renamedKey}"`);
+            }
+          }
+        }
+
+        const allSlotPropsInPropMode = childPropInfo.slotProps.every((sp) => {
+          const spModeKey = `_${sp}_mode` as keyof typeof templateOriginal;
+
+          return templateOriginal?.[spModeKey] === "prop";
+        });
+
         const childIndent = "  ".repeat(indentLevel + 2);
         const formattedChildProps =
           childPropsList.length > 0
@@ -319,7 +548,7 @@ function formatComponentBlock(
         const isTemplateChildWrapper = templateNode._component === childComponentPath;
         let innerContent = "";
 
-        if (isTemplateChildWrapper) {
+        if (isTemplateChildWrapper && !allSlotPropsInPropMode) {
           const grandchildren = templateNode[slotProp] as ComponentNode[] | undefined;
           const originalGrandchildren = templateOriginal?.[slotProp] as BuilderNode[] | undefined;
 
@@ -339,7 +568,7 @@ function formatComponentBlock(
               )
               .join("\n");
           }
-        } else {
+        } else if (!isTemplateChildWrapper) {
           innerContent = formatComponentBlock(
             templateNode,
             indentLevel + 3,
@@ -360,7 +589,7 @@ ${childIndent}<${childComponentName}${formattedChildProps}>
 ${innerContent}
 ${childIndent}</${childComponentName}>
 ${indent}    ))
-${indent}  }
+${indent}  }${namedSlotContent}
 ${indent}</${componentName}>`;
         }
 
@@ -369,7 +598,7 @@ ${indent}  {
 ${indent}    ${slotName}.map((${singularName}) => (
 ${childIndent}<${childComponentName}${formattedChildProps}/>
 ${indent}    ))
-${indent}  }
+${indent}  }${namedSlotContent}
 ${indent}</${componentName}>`;
       }
 
@@ -381,7 +610,8 @@ ${indent}</${componentName}>`;
         templateOriginal,
         rootComponentName,
         components,
-        singularName
+        singularName,
+        [`data-editable="array-item"`, `data-id="${templateNode._component}"`]
       );
 
       return `${indent}<${componentName}${formattedProps}>
@@ -389,18 +619,62 @@ ${indent}  {
 ${indent}    ${slotName}.map((${singularName}) => (
 ${templateContent}
 ${indent}    ))
-${indent}  }
+${indent}  }${namedSlotContent}
 ${indent}</${componentName}>`;
     }
 
-    const nestedContent = (block[fallbackProp] as ComponentNode[])
+    // Non-map-pattern children
+    const fallbackChildren = block[fallbackProp] as ComponentNode[];
+    const originalNested2 = originalNode?.[fallbackProp] as BuilderNode[] | undefined;
+
+    if (fallbackIsDefault) {
+      const nestedContent = fallbackChildren
+        .map((nested, idx) =>
+          formatComponentBlock(
+            nested,
+            indentLevel + 1,
+            metadataMap,
+            nestedBlockProperties,
+            originalNested2?.[idx] || null,
+            rootComponentName,
+            components,
+            arrayItemContext
+          )
+        )
+        .join("\n");
+
+      return `${indent}<${componentName}${formattedProps}>
+${nestedContent}${namedSlotContent}
+${indent}</${componentName}>`;
+    }
+
+    // Fallback slot has a named Astro slot — wrap children with slot attribute
+    if (fallbackChildren.length === 1) {
+      const childContent = formatComponentBlock(
+        fallbackChildren[0],
+        indentLevel + 1,
+        metadataMap,
+        nestedBlockProperties,
+        originalNested2?.[0] || null,
+        rootComponentName,
+        components,
+        arrayItemContext,
+        [`slot="${fallbackAstroSlot}"`]
+      );
+
+      return `${indent}<${componentName}${formattedProps}>
+${childContent}${namedSlotContent}
+${indent}</${componentName}>`;
+    }
+
+    const fragmentContent = fallbackChildren
       .map((nested, idx) =>
         formatComponentBlock(
           nested,
-          indentLevel + 1,
+          indentLevel + 2,
           metadataMap,
           nestedBlockProperties,
-          originalNested?.[idx] || null,
+          originalNested2?.[idx] || null,
           rootComponentName,
           components,
           arrayItemContext
@@ -409,7 +683,15 @@ ${indent}</${componentName}>`;
       .join("\n");
 
     return `${indent}<${componentName}${formattedProps}>
-${nestedContent}
+${indent}  <Fragment slot="${fallbackAstroSlot}">
+${fragmentContent}
+${indent}  </Fragment>${namedSlotContent}
+${indent}</${componentName}>`;
+  }
+
+  // No fallback slot children — maybe only named slot content
+  if (namedSlotContent) {
+    return `${indent}<${componentName}${formattedProps}>${namedSlotContent}
 ${indent}</${componentName}>`;
   }
 

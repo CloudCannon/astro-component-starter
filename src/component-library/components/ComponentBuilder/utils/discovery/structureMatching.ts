@@ -6,7 +6,8 @@ type Logger = (...args: unknown[]) => void;
 export function isComponentAllowedInStructure(
   componentPath: string,
   structureName: string,
-  nestingRules: NestingRules
+  nestingRules: NestingRules,
+  isVirtual = false
 ): boolean {
   const allowed = nestingRules[structureName] || [];
   const excluded = nestingRules[`${structureName}_excluded`] || [];
@@ -21,6 +22,10 @@ export function isComponentAllowedInStructure(
   if (allowed.includes(componentPath) || allowed.includes(componentPathWithName)) {
     return true;
   }
+
+  // Virtual sub-components (e.g. definition-list-item) should only match
+  // when explicitly listed, not through parent wildcards.
+  if (isVirtual) return false;
 
   for (const pattern of allowed) {
     if (pattern.endsWith("/*")) {
@@ -49,7 +54,12 @@ export function getAllowedComponentsForStructure(
 
   const filtered = allComponents
     .filter((c) => {
-      const allowed = isComponentAllowedInStructure(c.path, structureName, nestingRules);
+      const allowed = isComponentAllowedInStructure(
+        c.path,
+        structureName,
+        nestingRules,
+        c.isVirtual
+      );
 
       if (allowed) {
         log(`✓ ${c.path} is allowed`);

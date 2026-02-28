@@ -3,7 +3,7 @@ import yaml from "js-yaml";
 import { toPascalCase } from "../../../../shared/caseUtils";
 import type { ComponentInfo, ComponentMetadata, ComponentNode } from "../../types";
 import { shouldUseMapPattern, type BuilderNode } from "../shared";
-import { collectDeepExposedPropNames, findPropValueInTree, stripRuntimeIds } from "./treeHelpers";
+import { stripRuntimeIds } from "./treeHelpers";
 
 /** Generate structure value YAML. */
 export function generateStructureValue(
@@ -36,13 +36,120 @@ export function generateStructureValue(
 
   const requiredStructures = new Map<string, unknown>();
 
+  function buildMapItemExample(
+    node: BuilderNode | null,
+    cleanNode: ComponentNode | null
+  ): Record<string, unknown> {
+    const example: Record<string, unknown> = {};
+
+    if (!node || !cleanNode) return example;
+    const componentInfo = components.find((c) => c.path === cleanNode._component);
+    const defaultValues =
+      componentInfo?.structureValue?.value && typeof componentInfo.structureValue.value === "object"
+        ? (componentInfo.structureValue.value as Record<string, unknown>)
+        : {};
+
+    const candidateKeys = new Set<string>();
+
+    // Real value keys currently present on the node.
+    Object.keys(node).forEach((key) => {
+      if (!key.startsWith("_") && key !== "class" && key !== "className" && key !== "editable") {
+        candidateKeys.add(key);
+      }
+    });
+
+    const hasKnownInput = (propName: string): boolean =>
+      !!componentInfo?.inputs &&
+      Object.prototype.hasOwnProperty.call(componentInfo.inputs, propName);
+
+    // Exposed keys may not have a concrete value key yet.
+    Object.keys(node).forEach((key) => {
+      if (key.startsWith("_hardcoded_") && node[key] === false) {
+        const propName = key.replace("_hardcoded_", "");
+
+        if (hasKnownInput(propName) || cleanNode[propName] !== undefined) {
+          candidateKeys.add(propName);
+        }
+      }
+    });
+
+    // Freeform slot keys can also exist without a concrete value key.
+    Object.keys(node).forEach((key) => {
+      if (key.endsWith("_mode") && node[key as `_${string}_mode`] === "prop") {
+        const propName = key.replace("_mode", "").substring(1);
+
+        if (hasKnownInput(propName) || cleanNode[propName] !== undefined) {
+          candidateKeys.add(propName);
+        }
+      }
+    });
+
+    for (const key of candidateKeys) {
+      const modeKey = `_${key}_mode` as const;
+      const isInFreeformMode = node[modeKey] === "prop";
+      const isExposed = node[`_hardcoded_${key}`] === false;
+      const renamedKey = (node[`_renamed_${key}`] as string) || key;
+      const cleanValue = cleanNode[key];
+      const isArrayValue = Array.isArray(cleanValue) && Array.isArray(node[key]);
+
+      if (isArrayValue) {
+        const children = node[key] as BuilderNode[];
+        const cleanChildren = cleanValue as ComponentNode[];
+        const arrayUsesMapPattern = shouldUseMapPattern(
+          children,
+          metadataMap,
+          cleanNode._component
+        );
+
+        // Keep map-pattern arrays scoped under their own prop key.
+        if (arrayUsesMapPattern) {
+          if (isExposed || isInFreeformMode || children.length > 0) {
+            const firstChild = children[0];
+            const firstCleanChild = cleanChildren[0];
+
+            example[renamedKey] = [buildMapItemExample(firstChild, firstCleanChild)];
+          }
+          continue;
+        }
+
+        // For non-map arrays in component mode, bubble up descendant exposed fields.
+        if (!isInFreeformMode) {
+          children.forEach((child, idx) => {
+            const nested = buildMapItemExample(child, cleanChildren[idx] || null);
+
+            Object.assign(example, nested);
+          });
+          continue;
+        }
+
+        // Freeform array prop on a map item stays as an exposed array value.
+        example[renamedKey] = stripRuntimeIds(cleanValue);
+        continue;
+      }
+
+      if (isExposed || isInFreeformMode) {
+        if (cleanValue === undefined) {
+          // Preserve exposed keys even when the current node has no concrete value yet.
+          // Fall back to structure defaults when available.
+          const defaultValue = defaultValues[key];
+
+          example[renamedKey] = defaultValue !== undefined ? stripRuntimeIds(defaultValue) : null;
+        } else {
+          example[renamedKey] = stripRuntimeIds(cleanValue);
+        }
+      }
+    }
+
+    return example;
+  }
+
   function collectExposedValues(node: BuilderNode | null, cleanNode: ComponentNode): void {
     if (!node || !cleanNode) return;
 
     const componentInfo = components.find((c) => c.path === cleanNode._component);
 
     Object.keys(node).forEach((key) => {
-      if (key.startsWith("_") || key === "id" || key === "class" || key === "className") {
+      if (key.startsWith("_") || key === "class" || key === "className" || key === "editable") {
         return;
       }
 
@@ -63,16 +170,7 @@ export function generateStructureValue(
               const childNode = (node[key] as BuilderNode[])[0];
               const cleanChildNode = (cleanNode[key] as ComponentNode[])[0];
 
-              const deepProps = collectDeepExposedPropNames(childNode, cleanChildNode, components);
-              const exampleItem: Record<string, unknown> = {};
-
-              for (const { renamedKey: fieldKey, propName } of deepProps) {
-                const rawValue = findPropValueInTree(cleanChildNode, propName);
-
-                exampleItem[fieldKey] = rawValue !== undefined ? stripRuntimeIds(rawValue) : "";
-              }
-
-              value[renamedKey] = [exampleItem];
+              value[renamedKey] = [buildMapItemExample(childNode, cleanChildNode)];
             } else {
               value[renamedKey] = [];
             }
@@ -100,7 +198,12 @@ export function generateStructureValue(
         }
       }
 
-      if (!arrayUsesMapPattern && Array.isArray(node[key]) && Array.isArray(cleanNode[key])) {
+      if (
+        !arrayUsesMapPattern &&
+        !isInFreeformMode &&
+        Array.isArray(node[key]) &&
+        Array.isArray(cleanNode[key])
+      ) {
         (node[key] as BuilderNode[]).forEach((child, idx) => {
           if (child && typeof child === "object" && (cleanNode[key] as ComponentNode[])[idx]) {
             collectExposedValues(child, (cleanNode[key] as ComponentNode[])[idx]);
@@ -114,14 +217,31 @@ export function generateStructureValue(
     collectExposedValues(originalBlock, mainBlock);
   }
 
+  const firstTextKey = Object.keys(value).find(
+    (k) => k !== "_component" && k !== "label" && typeof value[k] === "string" && value[k]
+  );
+
   const structureValue: Record<string, unknown> = {
     label: displayName,
+    icon: "star",
     description: `${displayName} description`,
     value,
     preview: {
       text: [displayName],
+      subtext: firstTextKey ? [{ key: firstTextKey }] : undefined,
+      icon: "star",
+    },
+    picker_preview: {
+      text: displayName,
+      subtext: `${displayName} description`,
     },
   };
+
+  if (componentPath) {
+    structureValue._inputs_from_glob = [
+      `/src/components/${componentPath}/${componentName}.cloudcannon.inputs.yml`,
+    ];
+  }
 
   if (requiredStructures.size > 0) {
     const structures: Record<string, unknown> = {};
