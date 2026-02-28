@@ -1,10 +1,10 @@
 ---
-title: "Text Input"
-spacing: "all"
+title: 'Text Input'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/forms/input"
-  label: "Full Name"
-  name: "name"
-  type: "text"
-  placeholder: "Enter your full name"
+  _component: 'building-blocks/forms/input'
+  label: 'Full Name'
+  name: 'name'
+  type: 'text'
+  placeholder: 'Enter your full name'
 ---

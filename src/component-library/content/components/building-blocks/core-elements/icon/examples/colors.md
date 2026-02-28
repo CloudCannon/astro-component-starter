@@ -1,50 +1,50 @@
 ---
-title: "Colors"
-spacing: "all"
+title: 'Colors'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/icon"
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: default
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: blue
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: cyan
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: green
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: yellow
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: orange
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: red
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: purple
-    style: "margin-inline-end: .5rem;"
-  - _component: "building-blocks/core-elements/icon"
+    style: 'margin-inline-end: .5rem;'
+  - _component: 'building-blocks/core-elements/icon'
     name: cube
     size: lg
     color: pink
-    style: "margin-inline-end: .5rem;"
+    style: 'margin-inline-end: .5rem;'
 ---

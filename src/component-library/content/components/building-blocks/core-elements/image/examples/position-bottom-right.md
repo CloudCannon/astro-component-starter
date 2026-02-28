@@ -1,12 +1,12 @@
 ---
-title: "Position Bottom Right"
-spacing: "all"
+title: 'Position Bottom Right'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/image"
+  _component: 'building-blocks/core-elements/image'
   source: /src/assets/images/component-library/quiet-street.jpg
-  alt: "Quiet Street"
+  alt: 'Quiet Street'
   aspectRatio: square
   positionVertical: bottom
   positionHorizontal: right
-  style: "max-width: 400px;"
+  style: 'max-width: 400px;'
 ---

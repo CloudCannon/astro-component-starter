@@ -1,10 +1,10 @@
 ---
-title: "Center Alignment"
-spacing: "all"
+title: 'Center Alignment'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/counter"
+  _component: 'building-blocks/core-elements/counter'
   number: 50000
   prefix:
-  suffix: "+"
+  suffix: '+'
   alignX: center
 ---

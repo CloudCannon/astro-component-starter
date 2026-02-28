@@ -1,17 +1,17 @@
 ---
-title: "Footer"
-spacing: "top"
+title: 'Footer'
+spacing: 'top'
 blocks:
-  _component: "navigation/footer"
+  _component: 'navigation/footer'
   logoSource: /images/logo.svg
   logoAlt: Logo
   links:
-    - name: "Home"
-      path: "#"
-    - name: "Resources"
-      path: "#"
-    - name: "Contact"
-      path: "#"
+    - name: 'Home'
+      path: '#'
+    - name: 'Resources'
+      path: '#'
+    - name: 'Contact'
+      path: '#'
   socials:
     - icon: social/facebook
       link: https://facebook.com/
@@ -19,5 +19,5 @@ blocks:
       link: https://x.com/
     - icon: social/instagram
       link: https://instagram.com/
-  footerText: "&copy; 2025 My Site Inc. All rights reserved."
+  footerText: '&copy; 2025 My Site Inc. All rights reserved.'
 ---

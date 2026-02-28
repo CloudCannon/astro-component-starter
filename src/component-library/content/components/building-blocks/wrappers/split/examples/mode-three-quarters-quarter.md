@@ -2,31 +2,31 @@
 title: Three Quarters-Quarter
 spacing:
 blocks:
-  _component: "building-blocks/wrappers/split"
+  _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "accent"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Three quarters column
 
             This column takes up 75% of the available space.
   secondColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "highlight"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Quarter column
 
             This column takes up 25% of the available space.
-  distributionMode: "three-quarters-quarter"
+  distributionMode: 'three-quarters-quarter'
   fixedWidth: null
-  verticalAlignment: "top"
+  verticalAlignment: 'top'
   reverse: false
 ---

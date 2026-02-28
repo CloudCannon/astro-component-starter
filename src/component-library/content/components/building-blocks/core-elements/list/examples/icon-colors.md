@@ -1,8 +1,8 @@
 ---
-title: "Icon Colors"
-spacing: "all"
+title: 'Icon Colors'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/list"
+  _component: 'building-blocks/core-elements/list'
   items:
     - text: Default color icon
       iconName: hand-thumb-up

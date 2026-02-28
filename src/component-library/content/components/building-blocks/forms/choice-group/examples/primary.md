@@ -1,22 +1,22 @@
 ---
-title: "Primary Choice Group"
-spacing: "all"
+title: 'Primary Choice Group'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/forms/choice-group"
-  name: "interests"
-  title: "What are you interested in?"
+  _component: 'building-blocks/forms/choice-group'
+  name: 'interests'
+  title: 'What are you interested in?'
   multiple: true
   options:
-    - value: "design"
-      label: "Design"
+    - value: 'design'
+      label: 'Design'
       checked: false
-    - value: "development"
-      label: "Development"
+    - value: 'development'
+      label: 'Development'
       checked: true
-    - value: "marketing"
-      label: "Marketing"
+    - value: 'marketing'
+      label: 'Marketing'
       checked: false
-    - value: "business"
-      label: "Business"
+    - value: 'business'
+      label: 'Business'
       checked: false
 ---

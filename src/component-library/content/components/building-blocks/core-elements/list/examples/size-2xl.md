@@ -1,8 +1,8 @@
 ---
-title: "2xl size"
-spacing: "all"
+title: '2xl size'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First item
         iconName: arrow-down-right

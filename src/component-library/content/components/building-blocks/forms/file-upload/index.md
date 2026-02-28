@@ -1,6 +1,6 @@
 ---
 title: File Upload
-overview: "A form field that lets users upload one or more files. Supports labels, required validation, and accepted file type restrictions (e.g. .jpg, .png, .pdf)."
+overview: 'A form field that lets users upload one or more files. Supports labels, required validation, and accepted file type restrictions (e.g. .jpg, .png, .pdf).'
 examples:
   - slugs:
       - multiple

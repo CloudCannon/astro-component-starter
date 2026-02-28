@@ -1,20 +1,20 @@
 ---
-title: "Required Choice Group"
-spacing: "all"
+title: 'Required Choice Group'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/forms/choice-group"
-  name: "contact-method"
-  title: "Preferred Contact Method"
+  _component: 'building-blocks/forms/choice-group'
+  name: 'contact-method'
+  title: 'Preferred Contact Method'
   required: true
   multiple: false
   options:
-    - value: "email"
-      label: "Email"
+    - value: 'email'
+      label: 'Email'
       checked: false
-    - value: "phone"
-      label: "Phone"
+    - value: 'phone'
+      label: 'Phone'
       checked: false
-    - value: "sms"
-      label: "SMS"
+    - value: 'sms'
+      label: 'SMS'
       checked: false
 ---

@@ -1,8 +1,8 @@
 ---
-title: "Large size numbered"
-spacing: "all"
+title: 'Large size numbered'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First item
       - text: Second item

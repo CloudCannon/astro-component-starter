@@ -88,27 +88,27 @@ If we look at the Feature Split source code, we can see it uses the same buildin
 
 ```astro
 ---
-import CustomSection from "@builders/custom-section/CustomSection.astro";
-import Heading from "@core-elements/heading/Heading.astro";
-import Image from "@core-elements/image/Image.astro";
-import SimpleText from "@core-elements/simple-text/SimpleText.astro";
-import Text from "@core-elements/text/Text.astro";
-import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
-import Split from "@wrappers/split/Split.astro";
+import CustomSection from '@builders/custom-section/CustomSection.astro';
+import Heading from '@core-elements/heading/Heading.astro';
+import Image from '@core-elements/image/Image.astro';
+import SimpleText from '@core-elements/simple-text/SimpleText.astro';
+import Text from '@core-elements/text/Text.astro';
+import ButtonGroup from '@wrappers/button-group/ButtonGroup.astro';
+import Split from '@wrappers/split/Split.astro';
 
 const {
-  eyebrow = "",
-  heading = "",
-  subtext = "",
+  eyebrow = '',
+  heading = '',
+  subtext = '',
   buttonSections = [],
-  imageSource = "",
-  imageAlt = "",
-  imageAspectRatio = "portrait",
+  imageSource = '',
+  imageAlt = '',
+  imageAspectRatio = 'portrait',
   imageRounded = true,
   reverse = false,
   colorScheme,
   backgroundColor,
-  paddingVertical = "4xl",
+  paddingVertical = '4xl',
   class: className,
 } = Astro.props;
 
@@ -117,7 +117,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 ---
 
 <CustomSection
-  class:list={["feature-split", className]}
+  class:list={['feature-split', className]}
   maxContentWidth="xl"
   paddingHorizontal="lg"
   paddingVertical={paddingVertical}
@@ -166,7 +166,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
       imageSource && (
         <Image
           slot="second"
-          class:list={["feature-split-image", reverse && "reverse"]}
+          class:list={['feature-split-image', reverse && 'reverse']}
           source={imageSource}
           alt={imageAlt}
           rounded={imageRounded}

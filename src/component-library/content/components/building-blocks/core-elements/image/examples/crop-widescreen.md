@@ -1,10 +1,10 @@
 ---
-title: "Cropped to Widescreen (16:9)"
-spacing: "all"
+title: 'Cropped to Widescreen (16:9)'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/image"
+  _component: 'building-blocks/core-elements/image'
   source: /src/assets/images/component-library/castle.jpg
-  alt: "Castle"
+  alt: 'Castle'
   aspectRatio: widescreen
-  style: "max-width: 600px;"
+  style: 'max-width: 600px;'
 ---

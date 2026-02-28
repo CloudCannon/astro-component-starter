@@ -1,8 +1,8 @@
 ---
-title: "Center Alignment"
-spacing: "all"
+title: 'Center Alignment'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/definition-list"
+  - _component: 'building-blocks/core-elements/definition-list'
     items:
       - title: Brand
         text: TechCorp

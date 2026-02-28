@@ -31,7 +31,7 @@ blocks:
         - _component: building-blocks/core-elements/text
           text: This is the third slide of the carousel.
           alignX: center
-  label: ""
+  label: ''
   autoPlay: false
   autoScroll: false
   slideWidthPercent: 100

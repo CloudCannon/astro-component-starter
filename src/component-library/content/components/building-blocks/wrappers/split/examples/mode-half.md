@@ -2,32 +2,32 @@
 title: Half
 spacing:
 blocks:
-  _component: "building-blocks/wrappers/split"
+  _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "accent"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Half column
 
             This column takes up 50% of the available space.
   secondColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "highlight"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Half column
 
             This column also takes up 50% of the available space.
-  distributionMode: "half"
+  distributionMode: 'half'
   fixedWidth: null
   minSplitWidth: 500
-  verticalAlignment: "top"
+  verticalAlignment: 'top'
   reverse: false
 ---

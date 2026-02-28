@@ -1,10 +1,10 @@
 ---
-title: "Cropped to Square (1:1)"
-spacing: "all"
+title: 'Cropped to Square (1:1)'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/image"
+  _component: 'building-blocks/core-elements/image'
   source: /src/assets/images/component-library/castle.jpg
-  alt: "Castle"
+  alt: 'Castle'
   aspectRatio: square
-  style: "max-width: 400px;"
+  style: 'max-width: 400px;'
 ---

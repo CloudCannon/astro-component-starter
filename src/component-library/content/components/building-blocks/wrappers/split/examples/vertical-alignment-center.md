@@ -2,14 +2,14 @@
 title: Center Alignment
 spacing:
 blocks:
-  _component: "building-blocks/wrappers/split"
+  _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "accent"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Side A
 
@@ -19,18 +19,18 @@ blocks:
 
             And here's even more text to really drive the point home.
   secondColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "highlight"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Side B
 
             This is content for side B.
-  distributionMode: "half"
+  distributionMode: 'half'
   fixedWidth: null
-  verticalAlignment: "center"
+  verticalAlignment: 'center'
   reverse: false
 ---

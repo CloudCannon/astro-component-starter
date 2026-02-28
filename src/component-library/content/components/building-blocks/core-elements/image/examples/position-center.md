@@ -1,12 +1,12 @@
 ---
-title: "Position Center"
-spacing: "all"
+title: 'Position Center'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/image"
+  _component: 'building-blocks/core-elements/image'
   source: /src/assets/images/component-library/quiet-street.jpg
-  alt: "Quiet Street"
+  alt: 'Quiet Street'
   aspectRatio: square
   positionVertical: center
   positionHorizontal: center
-  style: "max-width: 400px;"
+  style: 'max-width: 400px;'
 ---

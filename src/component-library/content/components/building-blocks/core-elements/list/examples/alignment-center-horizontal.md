@@ -1,8 +1,8 @@
 ---
-title: "Center alignment with horizontal direction"
-spacing: "all"
+title: 'Center alignment with horizontal direction'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First list item
         iconName: check-circle

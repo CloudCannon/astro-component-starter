@@ -1,55 +1,55 @@
 ---
-title: "Primary Bar Navigation"
-spacing: ""
+title: 'Primary Bar Navigation'
+spacing: ''
 blocks:
-  _component: "navigation/bar"
+  _component: 'navigation/bar'
   navData:
-    - name: "Home"
-      path: "#"
+    - name: 'Home'
+      path: '#'
       children: []
-    - name: "Products"
-      path: "#"
+    - name: 'Products'
+      path: '#'
       children:
-        - name: "All Products"
-          path: "#all-products"
+        - name: 'All Products'
+          path: '#all-products'
           children: []
-        - name: "Categories"
-          path: "#categories"
+        - name: 'Categories'
+          path: '#categories'
           children:
-            - name: "Electronics"
-              path: "#electronics"
-            - name: "Clothing"
-              path: "#clothing"
-            - name: "Home & Garden"
-              path: "#home-garden"
-        - name: "Best Sellers"
-          path: "#best-sellers"
+            - name: 'Electronics'
+              path: '#electronics'
+            - name: 'Clothing'
+              path: '#clothing'
+            - name: 'Home & Garden'
+              path: '#home-garden'
+        - name: 'Best Sellers'
+          path: '#best-sellers'
           children: []
-    - name: "Services"
-      path: "#"
+    - name: 'Services'
+      path: '#'
       children:
-        - name: "Consulting"
-          path: "#consulting"
+        - name: 'Consulting'
+          path: '#consulting'
           children: []
-        - name: "Support"
-          path: "#support"
+        - name: 'Support'
+          path: '#support'
           children: []
-        - name: "Training"
-          path: "#training"
+        - name: 'Training'
+          path: '#training'
           children: []
-    - name: "Resources"
-      path: "#resources"
+    - name: 'Resources'
+      path: '#resources'
       children:
-        - name: "Blog"
-          path: "#blog"
+        - name: 'Blog'
+          path: '#blog'
           children: []
-        - name: "Documentation"
-          path: "#documentation"
+        - name: 'Documentation'
+          path: '#documentation'
           children: []
-        - name: "Videos"
-          path: "#videos"
+        - name: 'Videos'
+          path: '#videos'
           children: []
-    - name: "Contact"
-      path: "#contact"
+    - name: 'Contact'
+      path: '#contact'
       children: []
 ---

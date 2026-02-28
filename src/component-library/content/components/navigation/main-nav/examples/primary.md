@@ -1,43 +1,43 @@
 ---
-title: "Primary Main Nav"
-spacing: "top"
+title: 'Primary Main Nav'
+spacing: 'top'
 blocks:
-  _component: "navigation/main-nav"
+  _component: 'navigation/main-nav'
   logoSource: /src/assets/images/component-library/logo.svg
   logoAlt: Logo
   navData:
-    - name: "Home"
-      path: "#"
+    - name: 'Home'
+      path: '#'
       children: []
-    - name: "Resources"
-      path: "#"
+    - name: 'Resources'
+      path: '#'
       children:
-        - name: "Blog"
-          path: "#"
+        - name: 'Blog'
+          path: '#'
           children: []
-        - name: "Documentation"
-          path: "#"
+        - name: 'Documentation'
+          path: '#'
           children: []
-        - name: "Support"
-          path: "#"
+        - name: 'Support'
+          path: '#'
           children: []
-    - name: "Contact"
-      path: "#"
+    - name: 'Contact'
+      path: '#'
       children: []
   buttonSections:
-    - _component: "building-blocks/core-elements/button"
-      link: "#"
-      variant: "ghost"
+    - _component: 'building-blocks/core-elements/button'
+      link: '#'
+      variant: 'ghost'
       size: lg
       text: Search
       hideText: true
       iconName: magnifying-glass
-    - _component: "building-blocks/core-elements/button"
-      link: "#"
-      text: "Careers"
-      variant: "ghost"
-      iconName: "arrow-top-right-on-square"
-      iconPosition: "after"
-      _target: "blank"
-      rel: "noopener noreferrer"
+    - _component: 'building-blocks/core-elements/button'
+      link: '#'
+      text: 'Careers'
+      variant: 'ghost'
+      iconName: 'arrow-top-right-on-square'
+      iconPosition: 'after'
+      _target: 'blank'
+      rel: 'noopener noreferrer'
 ---

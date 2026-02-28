@@ -1,8 +1,8 @@
 ---
-title: "Alignment End"
-spacing: "all"
+title: 'Alignment End'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/icon"
+  - _component: 'building-blocks/core-elements/icon'
     name: arrow-right
     size: lg
     alignX: end

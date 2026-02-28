@@ -1,6 +1,6 @@
 ---
 title: Select
-overview: "A form field that lets users select one option from a dropdown list. Supports custom labels, placeholders, default selections, and required validation. Each option includes a label and a value used in the form submission."
+overview: 'A form field that lets users select one option from a dropdown list. Supports custom labels, placeholders, default selections, and required validation. Each option includes a label and a value used in the form submission.'
 slots:
   - title: default
     description: Select options.
@@ -8,10 +8,10 @@ slots:
     child_component:
       name: SelectOption
       props:
-        - "label/slot"
-        - "value"
-        - "selected"
-        - "disabled"
+        - 'label/slot'
+        - 'value'
+        - 'selected'
+        - 'disabled'
 examples:
   - slugs:
       - placeholder

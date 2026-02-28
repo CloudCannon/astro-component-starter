@@ -1,75 +1,75 @@
 ---
-title: "Primary Mobile Navigation"
-spacing: ""
+title: 'Primary Mobile Navigation'
+spacing: ''
 blocks:
-  _component: "navigation/mobile"
+  _component: 'navigation/mobile'
   logoSource:
   logoAlt:
   navData:
-    - name: "Home"
-      path: "#"
+    - name: 'Home'
+      path: '#'
       children: []
-    - name: "Products"
-      path: "#"
+    - name: 'Products'
+      path: '#'
       children:
-        - name: "All Products"
-          path: "#"
+        - name: 'All Products'
+          path: '#'
           children: []
-        - name: "Categories"
-          path: "#"
+        - name: 'Categories'
+          path: '#'
           children:
-            - name: "Electronics"
-              path: "#"
-            - name: "Clothing"
-              path: "#"
-            - name: "Home & Garden"
-              path: "#"
-        - name: "Best Sellers"
-          path: "#"
+            - name: 'Electronics'
+              path: '#'
+            - name: 'Clothing'
+              path: '#'
+            - name: 'Home & Garden'
+              path: '#'
+        - name: 'Best Sellers'
+          path: '#'
           children: []
-        - name: "New Arrivals"
-          path: "#"
+        - name: 'New Arrivals'
+          path: '#'
           children: []
-    - name: "Services"
-      path: "#"
+    - name: 'Services'
+      path: '#'
       children:
-        - name: "Consulting"
-          path: "#"
+        - name: 'Consulting'
+          path: '#'
           children: []
-        - name: "Support"
-          path: "#"
+        - name: 'Support'
+          path: '#'
           children: []
-        - name: "Training"
-          path: "#"
+        - name: 'Training'
+          path: '#'
           children: []
-    - name: "Resources"
-      path: "#"
+    - name: 'Resources'
+      path: '#'
       children:
-        - name: "Blog"
-          path: "#"
+        - name: 'Blog'
+          path: '#'
           children: []
-        - name: "Documentation"
-          path: "#"
+        - name: 'Documentation'
+          path: '#'
           children: []
-        - name: "Videos"
-          path: "#"
+        - name: 'Videos'
+          path: '#'
           children: []
-        - name: "Help Center"
-          path: "#"
+        - name: 'Help Center'
+          path: '#'
           children: []
-    - name: "About"
-      path: "#"
+    - name: 'About'
+      path: '#'
       children:
-        - name: "Our Story"
-          path: "#"
+        - name: 'Our Story'
+          path: '#'
           children: []
-        - name: "Team"
-          path: "#"
+        - name: 'Team'
+          path: '#'
           children: []
-        - name: "Careers"
-          path: "#"
+        - name: 'Careers'
+          path: '#'
           children: []
-    - name: "Contact"
-      path: "#"
+    - name: 'Contact'
+      path: '#'
       children: []
 ---

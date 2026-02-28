@@ -19,7 +19,7 @@ blocks:
       contentSections:
         - _component: building-blocks/core-elements/text
           text: You can invite team members to your projects, assign roles, and collaborate in real time. Changes are tracked and synced automatically across environments.
-  label: ""
+  label: ''
   openFirst: false
   singleOpen: false
 ---

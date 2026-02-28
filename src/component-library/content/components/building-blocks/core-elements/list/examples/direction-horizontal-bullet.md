@@ -1,8 +1,8 @@
 ---
-title: "Horizontal bullet direction"
-spacing: "all"
+title: 'Horizontal bullet direction'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First horizontal bullet item
       - text: Second horizontal bullet item

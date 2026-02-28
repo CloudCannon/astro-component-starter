@@ -1,8 +1,8 @@
 ---
-title: "Medium size"
-spacing: "all"
+title: 'Medium size'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First item
         iconName: arrow-down-right

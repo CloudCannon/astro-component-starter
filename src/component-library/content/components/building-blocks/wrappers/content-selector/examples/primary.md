@@ -38,5 +38,5 @@ blocks:
             Reach out for a quick estimate or to discuss what's needed. Responses are friendly and prompt.
           alignX: start
           size: md
-  label: ""
+  label: ''
 ---

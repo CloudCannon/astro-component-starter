@@ -1,6 +1,6 @@
 ---
 title: Counter
-overview: "Displays animated numeric values for key stats or figures, with support for prefix and suffix text, sizing, and alignment. For a unanimated version use [Heading](/component-library/components/building-blocks/core-elements/heading/)."
+overview: 'Displays animated numeric values for key stats or figures, with support for prefix and suffix text, sizing, and alignment. For a unanimated version use [Heading](/component-library/components/building-blocks/core-elements/heading/).'
 examples:
   - slugs:
       - alignment-start

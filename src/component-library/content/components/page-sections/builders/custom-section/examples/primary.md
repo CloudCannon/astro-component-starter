@@ -10,12 +10,12 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: This is a Heading inside a Custom Section.
       level: h2
-  label: ""
+  label: ''
   maxContentWidth: 2xl
   colorScheme: inherit
   backgroundImage:
-    source: ""
-    alt: ""
+    source: ''
+    alt: ''
     positionVertical: top
     positionHorizontal: center
   rounded: false

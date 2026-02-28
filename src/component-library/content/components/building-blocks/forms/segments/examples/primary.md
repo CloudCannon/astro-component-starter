@@ -1,27 +1,27 @@
 ---
-title: "Primary Segments"
-spacing: "all"
+title: 'Primary Segments'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/forms/segments"
-  name: "primary-demo-theme"
-  title: "Theme"
+  _component: 'building-blocks/forms/segments'
+  name: 'primary-demo-theme'
+  title: 'Theme'
   options:
-    - value: "light"
-      label: "Light"
-      icon: "sun"
-      iconSize: "sm"
-      iconBackground: "none"
+    - value: 'light'
+      label: 'Light'
+      icon: 'sun'
+      iconSize: 'sm'
+      iconBackground: 'none'
       checked: true
-    - value: "dark"
-      label: "Dark"
-      icon: "moon"
-      iconSize: "sm"
-      iconBackground: "none"
+    - value: 'dark'
+      label: 'Dark'
+      icon: 'moon'
+      iconSize: 'sm'
+      iconBackground: 'none'
       checked: false
-    - value: "auto"
-      label: "Auto"
-      icon: "computer-desktop"
-      iconSize: "sm"
-      iconBackground: "none"
+    - value: 'auto'
+      label: 'Auto'
+      icon: 'computer-desktop'
+      iconSize: 'sm'
+      iconBackground: 'none'
       checked: false
 ---

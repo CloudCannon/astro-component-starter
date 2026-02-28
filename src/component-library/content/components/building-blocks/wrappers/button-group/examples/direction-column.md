@@ -1,18 +1,18 @@
 ---
 title: Column direction
-spacing: "all"
+spacing: 'all'
 blocks:
-  _component: "building-blocks/wrappers/button-group"
+  _component: 'building-blocks/wrappers/button-group'
   direction: column
   alignX: start
   buttonSections:
-    - _component: "building-blocks/core-elements/button"
-      text: "Button A"
+    - _component: 'building-blocks/core-elements/button'
+      text: 'Button A'
       variant: secondary
-    - _component: "building-blocks/core-elements/button"
-      text: "Button B"
+    - _component: 'building-blocks/core-elements/button'
+      text: 'Button B'
       variant: secondary
-    - _component: "building-blocks/core-elements/button"
-      text: "Button C"
+    - _component: 'building-blocks/core-elements/button'
+      text: 'Button C'
       variant: secondary
 ---

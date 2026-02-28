@@ -1,8 +1,8 @@
 ---
-title: "End alignment with horizontal direction numbered"
-spacing: "all"
+title: 'End alignment with horizontal direction numbered'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First list item
       - text: Second list item

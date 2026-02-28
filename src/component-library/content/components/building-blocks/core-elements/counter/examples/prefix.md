@@ -1,10 +1,10 @@
 ---
-title: "Prefix Only"
-spacing: "all"
+title: 'Prefix Only'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/counter"
+  _component: 'building-blocks/core-elements/counter'
   number: 1000
-  prefix: "$"
+  prefix: '$'
   suffix:
   alignX: center
 ---

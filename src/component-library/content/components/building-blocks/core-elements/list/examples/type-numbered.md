@@ -1,8 +1,8 @@
 ---
-title: "Numbered List"
-spacing: "all"
+title: 'Numbered List'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/list"
+  _component: 'building-blocks/core-elements/list'
   items:
     - text: First numbered list item
     - text: Second numbered list item with **bold text**

@@ -1,8 +1,8 @@
 ---
-title: "Bullet List"
-spacing: "all"
+title: 'Bullet List'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/list"
+  _component: 'building-blocks/core-elements/list'
   items:
     - text: First bullet list item
     - text: Second bullet list item with **bold text**

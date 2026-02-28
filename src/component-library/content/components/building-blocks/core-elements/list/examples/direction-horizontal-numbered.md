@@ -1,8 +1,8 @@
 ---
-title: "Horizontal numbered direction"
-spacing: "all"
+title: 'Horizontal numbered direction'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First horizontal numbered item
       - text: Second horizontal numbered item

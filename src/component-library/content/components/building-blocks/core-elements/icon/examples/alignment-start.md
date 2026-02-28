@@ -1,8 +1,8 @@
 ---
-title: "Alignment Start"
-spacing: "all"
+title: 'Alignment Start'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/icon"
+  - _component: 'building-blocks/core-elements/icon'
     name: arrow-right
     size: lg
     alignX: start

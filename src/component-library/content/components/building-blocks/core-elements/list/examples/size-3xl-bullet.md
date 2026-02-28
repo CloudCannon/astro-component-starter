@@ -1,8 +1,8 @@
 ---
-title: "3xl size bullet"
-spacing: "all"
+title: '3xl size bullet'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First item
       - text: Second item

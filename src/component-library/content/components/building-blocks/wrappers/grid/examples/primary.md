@@ -24,7 +24,7 @@ blocks:
           level: h3
         - _component: building-blocks/core-elements/text
           text: This is the third grid item. The layout is responsive and adapts to different screen sizes.
-  label: ""
+  label: ''
   maxItemWidth: 400
   gap: md
 ---

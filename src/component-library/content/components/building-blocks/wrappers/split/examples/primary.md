@@ -19,6 +19,6 @@ blocks:
   fixedWidth: null
   verticalAlignment: top
   reverse: false
-  label: ""
+  label: ''
   minSplitWidth: 700
 ---

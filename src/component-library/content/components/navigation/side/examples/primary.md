@@ -1,53 +1,53 @@
 ---
-title: "Primary Side Navigation"
-spacing: ""
+title: 'Primary Side Navigation'
+spacing: ''
 blocks:
-  _component: "navigation/side"
+  _component: 'navigation/side'
   navData:
-    - name: "Getting Started"
-      path: "#"
+    - name: 'Getting Started'
+      path: '#'
       children:
-        - name: "Introduction"
-          path: "#"
+        - name: 'Introduction'
+          path: '#'
           children: []
-        - name: "Installation"
-          path: "#"
+        - name: 'Installation'
+          path: '#'
           children: []
-        - name: "Quick Start"
-          path: "#"
+        - name: 'Quick Start'
+          path: '#'
           children: []
-    - name: "Components"
-      path: "#"
+    - name: 'Components'
+      path: '#'
       children:
-        - name: "Blocks"
-          path: "#"
+        - name: 'Blocks'
+          path: '#'
           children:
-            - name: "Hero"
-              path: "#"
-            - name: "Footer"
-              path: "#"
-            - name: "Main Nav"
-              path: "#"
-        - name: "Elements"
-          path: "#"
+            - name: 'Hero'
+              path: '#'
+            - name: 'Footer'
+              path: '#'
+            - name: 'Main Nav'
+              path: '#'
+        - name: 'Elements'
+          path: '#'
           children:
-            - name: "Button"
-              path: "#"
-            - name: "Icon"
-              path: "#"
-        - name: "Typography"
-          path: "#"
+            - name: 'Button'
+              path: '#'
+            - name: 'Icon'
+              path: '#'
+        - name: 'Typography'
+          path: '#'
           children: []
-    - name: "Guides"
-      path: "#"
+    - name: 'Guides'
+      path: '#'
       children:
-        - name: "Theming"
-          path: "#"
+        - name: 'Theming'
+          path: '#'
           children: []
-        - name: "Styling"
-          path: "#"
+        - name: 'Styling'
+          path: '#'
           children: []
-    - name: "About"
-      path: "#"
+    - name: 'About'
+      path: '#'
       children: []
 ---

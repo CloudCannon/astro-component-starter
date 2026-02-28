@@ -1,6 +1,6 @@
 ---
 title: List
-overview: "Displays a list with icons, bullets, or numbers as markers. Supports vertical or horizontal layouts, custom styling, alignment, and markdown formatting."
+overview: 'Displays a list with icons, bullets, or numbers as markers. Supports vertical or horizontal layouts, custom styling, alignment, and markdown formatting.'
 slots:
   - title: default
     description: The content inside the List.
@@ -8,8 +8,8 @@ slots:
     child_component:
       name: ListItem
       props:
-        - "icon"
-        - "text/slot"
+        - 'icon'
+        - 'text/slot'
 examples:
   - slugs:
       - type-icon

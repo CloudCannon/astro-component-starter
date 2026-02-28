@@ -12,5 +12,5 @@ blocks:
     - _component: building-blocks/core-elements/button
       text: Secondary Action
       variant: secondary
-  label: ""
+  label: ''
 ---

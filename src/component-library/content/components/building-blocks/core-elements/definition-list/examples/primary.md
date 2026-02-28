@@ -1,8 +1,8 @@
 ---
-title: "Definition List"
-spacing: "all"
+title: 'Definition List'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/definition-list"
+  - _component: 'building-blocks/core-elements/definition-list'
     items:
       - title: Monday
         text: 8am – 5pm

@@ -1,25 +1,25 @@
 ---
-title: "Submit Button Variants"
-spacing: "all"
+title: 'Submit Button Variants'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/forms/submit"
-    text: "Primary Submit"
-    variant: "primary"
-    style: "margin-inline-end: var(--spacing-sm);"
-  - _component: "building-blocks/forms/submit"
-    text: "Secondary Submit"
-    variant: "secondary"
-    style: "margin-inline-end: var(--spacing-sm);"
-  - _component: "building-blocks/forms/submit"
-    text: "Tertiary Submit"
-    variant: "tertiary"
-    style: "margin-inline-end: var(--spacing-sm);"
-  - _component: "building-blocks/forms/submit"
-    text: "Ghost Submit"
-    variant: "ghost"
-    style: "margin-inline-end: var(--spacing-sm);"
-  - _component: "building-blocks/forms/submit"
-    text: "Text Submit"
-    variant: "text"
-    style: "margin-inline-end: var(--spacing-sm);"
+  - _component: 'building-blocks/forms/submit'
+    text: 'Primary Submit'
+    variant: 'primary'
+    style: 'margin-inline-end: var(--spacing-sm);'
+  - _component: 'building-blocks/forms/submit'
+    text: 'Secondary Submit'
+    variant: 'secondary'
+    style: 'margin-inline-end: var(--spacing-sm);'
+  - _component: 'building-blocks/forms/submit'
+    text: 'Tertiary Submit'
+    variant: 'tertiary'
+    style: 'margin-inline-end: var(--spacing-sm);'
+  - _component: 'building-blocks/forms/submit'
+    text: 'Ghost Submit'
+    variant: 'ghost'
+    style: 'margin-inline-end: var(--spacing-sm);'
+  - _component: 'building-blocks/forms/submit'
+    text: 'Text Submit'
+    variant: 'text'
+    style: 'margin-inline-end: var(--spacing-sm);'
 ---

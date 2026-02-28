@@ -1,9 +1,9 @@
 ---
-title: "Required Date Input"
-spacing: "all"
+title: 'Required Date Input'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/forms/date"
-  label: "Birth Date"
-  name: "birthdate"
+  _component: 'building-blocks/forms/date'
+  label: 'Birth Date'
+  name: 'birthdate'
   required: true
 ---

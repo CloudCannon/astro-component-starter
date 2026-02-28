@@ -69,7 +69,7 @@ pageSections:
     colorScheme: light
     backgroundColor: none
   - _component: page-sections/builders/custom-section
-    label: ""
+    label: ''
     contentSections:
       - _component: building-blocks/core-elements/spacer
         size: md
@@ -91,8 +91,8 @@ pageSections:
     colorScheme: dark
     backgroundColor: surface
     backgroundImage:
-      source: ""
-      alt: ""
+      source: ''
+      alt: ''
       positionVertical: top
       positionHorizontal: center
     rounded: false

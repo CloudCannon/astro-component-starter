@@ -2,7 +2,7 @@
 title: Card
 description: A container component that provides card layout with background options, padding controls, and optional link.
 order: 2
-overview: "A card for grouping related content within a section. Provides background, and padding. Includes before and after slots that render outside the card’s inner padding (ideal for edge-to-edge images or banners), plus a padded body area for regular content."
+overview: 'A card for grouping related content within a section. Provides background, and padding. Includes before and after slots that render outside the card’s inner padding (ideal for edge-to-edge images or banners), plus a padded body area for regular content.'
 
 slots:
   - title: default
@@ -23,7 +23,7 @@ examples:
   - slugs:
       - border
       - border-none
-  - title: "Max Content Width"
+  - title: 'Max Content Width'
     slugs:
       - max-content-width-xs
       - max-content-width-sm
@@ -32,7 +32,7 @@ examples:
       - max-content-width-xl
       - max-content-width-2xl
       - max-content-width-3xl
-  - title: "Padding Options"
+  - title: 'Padding Options'
     slugs:
       - padding-xs
       - padding-sm
@@ -41,7 +41,7 @@ examples:
       - padding-xl
       - padding-2xl
     size: md
-  - title: "Background Options"
+  - title: 'Background Options'
     slugs:
       - background-accent
       - background-highlight
@@ -49,18 +49,18 @@ examples:
       - background-base
       - background-none
     size: md
-  - title: "Corner Options"
+  - title: 'Corner Options'
     slugs:
       - rounded
       - rounded-none
     size: md
-  - title: "Background image"
+  - title: 'Background image'
     slugs:
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right
     size: md
-  - title: "Before & After Content"
+  - title: 'Before & After Content'
     slugs:
       - before-content
       - after-content

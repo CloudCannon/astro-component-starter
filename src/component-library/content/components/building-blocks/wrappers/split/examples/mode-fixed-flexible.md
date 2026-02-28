@@ -2,32 +2,32 @@
 title: Fixed Flexible Mode
 spacing:
 blocks:
-  _component: "building-blocks/wrappers/split"
+  _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "accent"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Fixed column
 
             This column has a fixed width.
   secondColumnContentSections:
-    - _component: "page-sections/builders/custom-section"
-      backgroundColor: "highlight"
+    - _component: 'page-sections/builders/custom-section'
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: "building-blocks/core-elements/text"
+        - _component: 'building-blocks/core-elements/text'
           text: |-
             ## Flexible column
 
             This column takes up the remaining space.
-  distributionMode: "fixed-flexible"
+  distributionMode: 'fixed-flexible'
   fixedWidth: null
   minSplitWidth: 500
-  verticalAlignment: "top"
+  verticalAlignment: 'top'
   reverse: false
 ---

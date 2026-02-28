@@ -1,8 +1,8 @@
 ---
-title: "Primary List"
-spacing: "all"
+title: 'Primary List'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/core-elements/list"
+  _component: 'building-blocks/core-elements/list'
   items:
     - text: Lists with icons are helpful for emphasis.
       iconName: check

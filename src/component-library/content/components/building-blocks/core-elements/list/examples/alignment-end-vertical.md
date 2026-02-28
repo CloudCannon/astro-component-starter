@@ -1,8 +1,8 @@
 ---
-title: "End alignment with vertical direction"
-spacing: "all"
+title: 'End alignment with vertical direction'
+spacing: 'all'
 blocks:
-  - _component: "building-blocks/core-elements/list"
+  - _component: 'building-blocks/core-elements/list'
     items:
       - text: First list item
         iconName: check-circle

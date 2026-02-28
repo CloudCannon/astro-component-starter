@@ -1,41 +1,41 @@
 ---
-title: "Primary Contact Form"
-spacing: "all"
+title: 'Primary Contact Form'
+spacing: 'all'
 blocks:
-  _component: "building-blocks/forms/form"
-  action: "/contact"
+  _component: 'building-blocks/forms/form'
+  action: '/contact'
   formBlocks:
-    - _component: "building-blocks/forms/input"
-      label: "Full Name"
-      name: "name"
-      type: "text"
-      placeholder: "Enter your full name"
+    - _component: 'building-blocks/forms/input'
+      label: 'Full Name'
+      name: 'name'
+      type: 'text'
+      placeholder: 'Enter your full name'
       required: true
-    - _component: "building-blocks/forms/select"
-      label: "City"
-      name: "city"
+    - _component: 'building-blocks/forms/select'
+      label: 'City'
+      name: 'city'
       options:
-        - value: "auckland"
-          label: "Auckland"
-        - value: "wellington"
-          label: "Wellington"
-        - value: "christchurch"
-          label: "Christchurch"
-        - value: "hamilton"
-          label: "Hamilton"
-        - value: "dunedin"
-          label: "Dunedin"
-        - value: "tauranga"
-          label: "Tauranga"
-    - _component: "building-blocks/forms/textarea"
-      label: "Message"
-      name: "message"
-      placeholder: "Tell us about your project..."
+        - value: 'auckland'
+          label: 'Auckland'
+        - value: 'wellington'
+          label: 'Wellington'
+        - value: 'christchurch'
+          label: 'Christchurch'
+        - value: 'hamilton'
+          label: 'Hamilton'
+        - value: 'dunedin'
+          label: 'Dunedin'
+        - value: 'tauranga'
+          label: 'Tauranga'
+    - _component: 'building-blocks/forms/textarea'
+      label: 'Message'
+      name: 'message'
+      placeholder: 'Tell us about your project...'
       required: true
-    - _component: "building-blocks/forms/hidden"
-      name: "form-source"
-      value: "contact-page"
-    - _component: "building-blocks/forms/submit"
-      text: "Send Message"
-      variant: "primary"
+    - _component: 'building-blocks/forms/hidden'
+      name: 'form-source'
+      value: 'contact-page'
+    - _component: 'building-blocks/forms/submit'
+      text: 'Send Message'
+      variant: 'primary'
 ---
