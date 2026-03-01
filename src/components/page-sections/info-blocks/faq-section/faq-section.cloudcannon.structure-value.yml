@@ -53,3 +53,5 @@ _structures:
             comment: Content sections for the answer (typically text).
             options:
               structures: _structures.accordionSections
+        _structures_from_glob:
+          - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml
