@@ -110,6 +110,10 @@ export function generateAstroFile(
         const propName = key.replace("_hardcoded_", "");
 
         if (!node[key]) {
+          const modeKey = `_${propName}_mode` as const;
+
+          if (node[modeKey] !== undefined && node[modeKey] !== "prop") return;
+
           const renamedKey = node[`_renamed_${propName}`] || propName;
 
           exposedProps.add(renamedKey);

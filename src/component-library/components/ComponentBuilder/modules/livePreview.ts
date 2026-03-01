@@ -34,7 +34,7 @@ function getHighlighter(): Promise<HighlighterGeneric<any, any>> {
   if (!highlighterPromise) {
     highlighterPromise = import("shiki").then((shiki) =>
       shiki.createHighlighter({
-        themes: ["github-light"],
+        themes: ["github-dark"],
         langs: ["astro", "yaml"],
       })
     );
@@ -148,6 +148,23 @@ export function initLivePreview(
   }
 
   let activeCodeTab = "astro";
+  let currentCodeText = "";
+
+  const builderCopyBtn = document.getElementById("builder-code-copy");
+
+  if (builderCopyBtn) {
+    builderCopyBtn.addEventListener("click", async () => {
+      if (!currentCodeText) return;
+
+      try {
+        await navigator.clipboard.writeText(currentCodeText);
+        builderCopyBtn.classList.add("copied");
+        setTimeout(() => builderCopyBtn.classList.remove("copied"), 2000);
+      } catch {
+        /* noop */
+      }
+    });
+  }
 
   function updateCodeOutput(): void {
     if (!codeContentEl || currentView !== "code") return;
@@ -170,17 +187,36 @@ export function initLivePreview(
       const code = content[activeCodeTab] || "";
       const lang = CODE_TAB_LANG[activeCodeTab] || "text";
 
+      currentCodeText = code;
+
       getHighlighter()
         .then((hl) => {
           if (currentView !== "code") return;
 
-          codeContentEl.innerHTML = hl.codeToHtml(code, {
-            lang,
-            theme: "github-light",
-          });
+          const html = hl.codeToHtml(code, { lang, theme: "github-dark" });
+          const copyBtn = codeContentEl.querySelector(".code-copy-btn");
+
+          if (copyBtn) {
+            const existing = codeContentEl.querySelector("pre");
+
+            if (existing) existing.remove();
+            copyBtn.insertAdjacentHTML("afterend", html);
+          } else {
+            codeContentEl.innerHTML = html;
+          }
         })
         .catch(() => {
-          codeContentEl.innerHTML = `<pre><code>${escapeHtml(code)}</code></pre>`;
+          const copyBtn = codeContentEl.querySelector(".code-copy-btn");
+          const fallback = `<pre><code>${escapeHtml(code)}</code></pre>`;
+
+          if (copyBtn) {
+            const existing = codeContentEl.querySelector("pre");
+
+            if (existing) existing.remove();
+            copyBtn.insertAdjacentHTML("afterend", fallback);
+          } else {
+            codeContentEl.innerHTML = fallback;
+          }
         });
     } catch {
       codeContentEl.innerHTML = "<pre><code>// Error generating code preview</code></pre>";

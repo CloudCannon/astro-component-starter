@@ -25,8 +25,8 @@ _structures:
         icon: place_item
         value:
           _component: building-blocks/wrappers/accordion/accordion-item
-          title: null
-          contentSections: null
+          title: My Title
+          contentSections: []
         _inputs:
           title:
             comment: The title of the accordion item.

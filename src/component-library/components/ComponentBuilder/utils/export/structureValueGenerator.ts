@@ -34,7 +34,7 @@ export function generateStructureValue(
     label: "",
   };
 
-  const requiredStructures = new Map<string, unknown>();
+  const requiredStructureGlobs = new Set<string>();
 
   function buildMapItemExample(
     node: BuilderNode | null,
@@ -161,7 +161,10 @@ export function generateStructureValue(
         Array.isArray(node[key]) &&
         shouldUseMapPattern(node[key] as BuilderNode[], metadataMap, cleanNode._component);
 
-      if (isExposed || isInFreeformMode || arrayUsesMapPattern) {
+      const hasMode = node[modeKey] !== undefined;
+      const isSlotInComponentMode = hasMode && !isInFreeformMode;
+
+      if (!isSlotInComponentMode && (isExposed || isInFreeformMode || arrayUsesMapPattern)) {
         const renamedKey = node[`_renamed_${key}`] || key;
 
         if (Array.isArray(cleanNode[key])) {
@@ -185,11 +188,10 @@ export function generateStructureValue(
 
               if (match) {
                 const structureName = match[1];
-                const structureDef = componentInfo.structureValue?._structures?.[structureName];
 
-                if (structureDef && !requiredStructures.has(structureName)) {
-                  requiredStructures.set(structureName, structureDef);
-                }
+                requiredStructureGlobs.add(
+                  `/.cloudcannon/structures/${structureName}.cloudcannon.structures.yml`
+                );
               }
             }
           }
@@ -243,13 +245,8 @@ export function generateStructureValue(
     ];
   }
 
-  if (requiredStructures.size > 0) {
-    const structures: Record<string, unknown> = {};
-
-    for (const [name, def] of requiredStructures.entries()) {
-      structures[name] = def;
-    }
-    structureValue._structures = structures;
+  if (requiredStructureGlobs.size > 0) {
+    structureValue._structures_from_glob = Array.from(requiredStructureGlobs);
   }
 
   return yaml.dump(structureValue, {

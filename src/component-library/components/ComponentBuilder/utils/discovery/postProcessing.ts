@@ -107,7 +107,11 @@ export function registerVirtualComponents(
               ? `${parentMetadata.childComponent.name}.astro`
               : `${toPascalCase(virtualPath.split("/").pop() || virtualPath)}.astro`,
             inputs: mergedInputs,
-            structureValue: null,
+            structureValue: {
+              label: (valueItem.label as string) || undefined,
+              icon: (previewObj?.icon as string) || undefined,
+              value: valueObj as Record<string, unknown>,
+            },
             supportsSlots: virtualSlots.length > 0,
             description: "",
             icon: (previewObj?.icon as string) || "",

@@ -57,6 +57,9 @@ export function generateCloudCannonInputs(
       const isHardcoded = originalNode ? originalNode[`_hardcoded_${propName}`] !== false : true;
       const modeKey = `_${propName}_mode` as const;
       const isInFreeformMode = originalNode && originalNode[modeKey] === "prop";
+      const hasMode = originalNode && originalNode[modeKey] !== undefined;
+
+      if (hasMode && !isInFreeformMode) return;
 
       if (!isHardcoded || isInFreeformMode) {
         const renamedKey = originalNode?.[`_renamed_${propName}`] || propName;

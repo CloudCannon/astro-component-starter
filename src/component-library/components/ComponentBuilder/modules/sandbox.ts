@@ -105,6 +105,18 @@ function renderComponentNode(node: ComponentNode, index: number): HTMLElement {
   return container;
 }
 
+const PREVIEW_PROP_KEYS = ["title", "text", "label", "name", "heading"];
+
+/** Return the first non-empty string prop suitable for a preview subtitle. */
+function getPreviewText(node: ComponentNode): string | null {
+  for (const key of PREVIEW_PROP_KEYS) {
+    const val = node[key];
+
+    if (typeof val === "string" && val) return val;
+  }
+  return null;
+}
+
 /** Create component header with name and actions */
 function createComponentHeader(node: ComponentNode, componentInfo: ComponentInfo): HTMLElement {
   const header = document.createElement("div");
@@ -116,6 +128,16 @@ function createComponentHeader(node: ComponentNode, componentInfo: ComponentInfo
   name.className = "sandbox-item-name";
 
   name.appendChild(document.createTextNode(componentInfo.displayName));
+
+  const previewText = getPreviewText(node);
+
+  if (previewText) {
+    const preview = document.createElement("span");
+
+    preview.className = "sandbox-item-preview";
+    preview.textContent = previewText;
+    name.appendChild(preview);
+  }
 
   const actions = document.createElement("div");
 

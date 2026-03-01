@@ -506,37 +506,6 @@ class BuilderState {
     }
   }
 
-  /** Load a template tree, replacing the current tree */
-  loadTemplate(tree: ComponentNode[]): void {
-    this._componentTree = tree;
-    this.migrateNodeIds(this._componentTree);
-    this._selectedComponentId = null;
-    this._history = [];
-    this._redoStack = [];
-    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
-    this.saveToLocalStorage();
-    this.emit("treeChange");
-    this.emit("selectionChange");
-  }
-
-  /** Clear localStorage and reset to a fresh root component */
-  clearAndReset(): void {
-    this._componentTree = [];
-    this._selectedComponentId = null;
-    this._history = [];
-    this._redoStack = [];
-
-    try {
-      localStorage.removeItem(BuilderState.STORAGE_KEY);
-    } catch {
-      // Storage unavailable
-    }
-
-    this.initializeRootComponent();
-    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
-    this.emit("selectionChange");
-  }
-
   /**
    * Force-expose a slot prop when the component has a `childComponent` metadata pattern
    * (e.g. Accordion → accordion-item) AND every item has the same component.

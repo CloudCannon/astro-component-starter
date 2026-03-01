@@ -14,7 +14,6 @@ import { showExportConfigModal } from "./modules/exportModal";
 import { initLivePreview } from "./modules/livePreview";
 import { getExposedPropCount, renderPropEditor } from "./modules/propEditor";
 import { renderSandbox, setRenderCallback } from "./modules/sandbox";
-import { showTemplatePicker } from "./modules/templates";
 import { builderState } from "./state";
 import type { BuilderData } from "./types";
 import { generateExport } from "./utils/exportGenerator";
@@ -98,42 +97,6 @@ function initializeBuilder(): void {
     e.preventDefault();
     e.stopPropagation();
     handleExport();
-  });
-
-  // Templates button
-  const templatesBtn = document.getElementById("templates-btn");
-
-  templatesBtn?.addEventListener("click", () => {
-    const hasContent = builderState.componentTree.some((node) => {
-      const info = builderState.getComponentInfo(node._component);
-
-      if (!info?.slots) return false;
-
-      return info.slots.some((slot) => {
-        const children = node[slot.propName];
-
-        return Array.isArray(children) && children.length > 0;
-      });
-    });
-
-    if (hasContent && !confirm("Load a template? This will replace your current work.")) {
-      return;
-    }
-
-    showTemplatePicker((tree) => {
-      builderState.loadTemplate(tree);
-      render();
-    });
-  });
-
-  // Clear / Start Over button
-  const clearBtn = document.getElementById("clear-btn");
-
-  clearBtn?.addEventListener("click", () => {
-    if (confirm("Start over? This will clear your current work.")) {
-      builderState.clearAndReset();
-      render();
-    }
   });
 
   // Update sidebar based on selection

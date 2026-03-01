@@ -134,11 +134,35 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
   // Preview panel elements
   const previewPanel = document.getElementById("export-preview-panel");
   const previewCodeEl = document.querySelector("#export-preview-code-content code");
+  const lineNumbersEl = document.getElementById("export-line-numbers");
   const previewTabs = document.querySelectorAll(".export-preview-tab");
   const downloadBtn = document.getElementById("export-download-btn");
 
   let previewData: { astro: string; inputs: string; structureValue: string } | null = null;
   let activeTab = "astro";
+
+  const exportCopyBtn = document.getElementById("export-code-copy");
+
+  if (exportCopyBtn) {
+    exportCopyBtn.addEventListener("click", async () => {
+      if (!previewData) return;
+
+      const text =
+        activeTab === "astro"
+          ? previewData.astro
+          : activeTab === "inputs"
+            ? previewData.inputs
+            : previewData.structureValue;
+
+      try {
+        await navigator.clipboard.writeText(text);
+        exportCopyBtn.classList.add("copied");
+        setTimeout(() => exportCopyBtn.classList.remove("copied"), 2000);
+      } catch {
+        /* noop */
+      }
+    });
+  }
 
   function showPreviewTab(tab: string): void {
     activeTab = tab;
@@ -156,6 +180,12 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
           : previewData.structureValue;
 
     previewCodeEl.textContent = content;
+
+    if (lineNumbersEl) {
+      const lineCount = content.split("\n").length;
+
+      lineNumbersEl.textContent = Array.from({ length: lineCount }, (_, i) => i + 1).join("\n");
+    }
   }
 
   previewTabs.forEach((tab) => {
