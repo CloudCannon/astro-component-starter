@@ -1,4 +1,3 @@
-import node from "@astrojs/node";
 import sitemap from "@astrojs/sitemap";
 import editableRegions from "@cloudcannon/editable-regions/astro-integration";
 import icon from "astro-icon";
@@ -13,7 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   site: "https://example.com", // TODO: Update to your production URL
-  adapter: node({ mode: "standalone" }),
+  output: "static",
   build: {
     inlineStylesheets: "always",
   },
