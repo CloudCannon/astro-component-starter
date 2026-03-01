@@ -3,7 +3,13 @@
   "type": "module",
   "version": "1.0.0",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
-  "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
+  "keywords": [
+    "design-system",
+    "astro",
+    "components",
+    "css",
+    "design-tokens"
+  ],
   "author": "Your Name",
   "license": "MIT",
   "scripts": {
@@ -24,8 +30,7 @@
     "lint:css": "stylelint \"**/*.{css,pcss,astro}\"",
     "lint:css:fix": "stylelint \"**/*.{css,pcss,astro}\" --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write .",
-    "prepare": "husky"
+    "format:fix": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.12",
@@ -64,7 +69,6 @@
     "eslint-plugin-jsonc": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-yml": "^1.18.0",
-    "husky": "^9.1.7",
     "jsonc-eslint-parser": "^2.4.0",
     "prettier": "^3.6.2",
     "prettier-plugin-astro": "^0.14.1",
