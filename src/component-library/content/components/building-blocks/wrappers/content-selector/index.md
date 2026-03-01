@@ -9,7 +9,6 @@ slots:
       name: ContentSelectorPanel
       props:
         - title
-        - groupName (optional)
         - contentSections/slot
 
 examples:

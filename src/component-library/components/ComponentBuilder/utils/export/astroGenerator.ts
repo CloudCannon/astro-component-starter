@@ -508,6 +508,9 @@ function formatComponentBlock(
       if (childComponentMeta && childPropInfo) {
         const childComponentName = childComponentMeta.name;
         const childComponentPath = getChildComponentPath(componentPath, childComponentMeta.name);
+        const legacyChildWrapperPath = childComponentPath.endsWith("-panel")
+          ? childComponentPath.replace(/-panel$/, "-item")
+          : "";
 
         const childPropsList = childPropInfo.regularProps.map((prop) => {
           const renamedKey = templateOriginal?.[`_renamed_${prop}`] || prop;
@@ -546,9 +549,12 @@ function formatComponentBlock(
 
         const slotProp = childPropInfo.slotProps[0] || "contentSections";
         const isTemplateChildWrapper = templateNode._component === childComponentPath;
+        const isLegacyChildWrapper =
+          Boolean(legacyChildWrapperPath) && templateNode._component === legacyChildWrapperPath;
+        const isTemplateWrapperLike = isTemplateChildWrapper || isLegacyChildWrapper;
         let innerContent = "";
 
-        if (isTemplateChildWrapper && !allSlotPropsInPropMode) {
+        if (isTemplateWrapperLike && !allSlotPropsInPropMode) {
           const grandchildren = templateNode[slotProp] as ComponentNode[] | undefined;
           const originalGrandchildren = templateOriginal?.[slotProp] as BuilderNode[] | undefined;
 
@@ -568,7 +574,7 @@ function formatComponentBlock(
               )
               .join("\n");
           }
-        } else if (!isTemplateChildWrapper) {
+        } else if (!isTemplateWrapperLike) {
           innerContent = formatComponentBlock(
             templateNode,
             indentLevel + 3,

@@ -23,7 +23,7 @@ _structures:
       - label: Content Selector Item
         icon: place_item
         value:
-          _component: building-blocks/wrappers/content-selector/content-selector-item
+          _component: building-blocks/wrappers/content-selector/content-selector-panel
           title: Section Title
           contentSections: []
         preview:
