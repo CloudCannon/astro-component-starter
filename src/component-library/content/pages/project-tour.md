@@ -28,11 +28,11 @@ This is the foundational concept. Every component ships with three files:
 ```
 src/components/.../button/
 ├── Button.astro                           # The component itself
-├── button.cloudcannon.inputs.yml          # What editors see and can change
-└── button.cloudcannon.structure-value.yml  # Defaults and picker metadata
+├── button.cloudcannon.inputs.yml          # How individual editor inputs are configured
+└── button.cloudcannon.structure-value.yml  # How the component is configured in CloudCannon
 ```
 
-**`Button.astro`** is a standard Astro component: props, HTML, scoped styles. Nothing unusual here.
+**`Button.astro`** is a standard Astro component: props, HTML, styles, and optional scripts all live together in one file.
 
 **`button.cloudcannon.inputs.yml`** defines the editing interface. It tells CloudCannon what inputs to show for each prop: text fields, dropdowns, switches, image pickers, and more:
 
@@ -77,6 +77,18 @@ Components live in `src/components/` and are grouped by purpose:
 - **Navigation** (`navigation/`): Header, footer, mobile nav, sidebar nav.
 
 The key relationship: **building blocks** are composed into **page sections**. A `FeatureSplit` page section, for example, internally uses `CustomSection`, `Split`, `Heading`, `Text`, and `Image` building blocks, but editors just see inputs for heading, text, and image.
+
+### What is `customSection`?
+
+[customSection](/component-library/components/page-sections/builders/custom-section/) is the base-level wrapper used by page sections. It controls the structural layout options shared by sections:
+
+- Content width
+- Vertical and horizontal padding
+- Background styling
+
+Every Page Section starts with a `customSection` wrapper. This gives editors a consistent layout foundation while still allowing each section to contain its own nested component structure.
+
+Editors can also add a `customSection` directly in CloudCannon using **Add Page Section**. This gives complete freedom to build a more complex nested structure from scratch in the Visual Editor.
 
 ## How pages work
 

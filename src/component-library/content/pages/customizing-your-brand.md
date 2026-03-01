@@ -72,7 +72,7 @@ Open `src/styles/variables/_fonts.css`:
 }
 ```
 
-Swap these with your brand fonts. If headings and body text should use different families, give `--font-headings` its own stack.
+Swap these with your brand fonts. If headings and body text should use different families, give `--font-headings` its own stack. If you're using custom web fonts, also load/import them in `src/layouts/BaseLayout.astro` so those font-family variables can actually render your chosen typefaces.
 
 The size scale is also here: `--font-size-xs` through `--font-size-4xl` for body text, plus a separate heading scale.
 
@@ -123,6 +123,16 @@ When building or modifying components, use the matching layer:
 - **Building block components** → `@layer components`
 - **Page section components** → `@layer page-sections`
 - **Custom overrides** → `@layer overrides`
+
+## Customizing individual components
+
+Every component in this starter is yours to extend. The HTML, CSS, and JavaScript all live together in a single `.astro` file, so everything you need to customize is in one place.
+
+Open any component and you'll find the markup at the top, scoped styles in a `<style>` tag, and optional interactivity in a `<script>` tag. Change the HTML structure, tweak the styles, add behavior, make it your own.
+
+If a component is close to what you need, don't feel boxed in by the defaults. Reshape it to match your brand and product requirements.
+
+When editing styles, keep using and extend the design tokens (like `var(--color-brand)` and spacing variables) so your changes stay consistent with the rest of the system.
 
 ## Next up
 

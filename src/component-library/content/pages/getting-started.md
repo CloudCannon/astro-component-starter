@@ -73,50 +73,10 @@ This means **adding a new component to the visual editor is automatic**: just in
 
 The `_snippets_from_glob` setting discovers `.cloudcannon.snippets.yml` files, which let editors insert components while editing MDX content (like blog posts) through CloudCannon's snippet picker.
 
-## Editable regions reference
+## Editable regions
 
-Editable regions are what make the live preview interactive. They're `data-*` attributes you add to your component's HTML:
-
-### Text editing
-
-```html
-<Heading data-prop="heading" text="{heading}" />
-```
-
-`data-prop="heading"` tells CloudCannon that clicking this element should edit the `heading` prop. Works for headings, text, and any text-based content.
-
-### Image editing
-
-```html
-<image
-  data-prop-src="imageSource"
-  data-prop-alt="imageAlt"
-  data-editable="image"
-  source="{imageSource}"
-  alt="{imageAlt}"
-/>
-```
-
-`data-editable="image"` enables the image picker. `data-prop-src` and `data-prop-alt` map to the source and alt text props.
-
-### Array editing
-
-```html
-<ButtonGroup
-  buttonSections="{buttonSections}"
-  data-children-prop="buttonSections"
-  editable="{true}"
-/>
-```
-
-`data-children-prop="buttonSections"` tells CloudCannon this element contains an array of child components that can be added, removed, and reordered inline.
-
-### Array items and containers
-
-The `renderBlock.astro` utility automatically adds `data-editable="array-item"` to each rendered block, and page layouts add `data-editable="array"` to section containers. You generally don't need to set these yourself; they're handled by the framework.
-
-See the existing page section components (like [Feature Split](/component-library/components/page-sections/features/feature-split/) or [CTA Center](/component-library/components/page-sections/ctas/cta-center/)) for working examples of all these patterns.
+Editable regions are the `data-*` attributes that make the visual preview interactive — they connect each HTML element to a component prop so editors can click and edit inline. For a full walkthrough of text, image, and array editing, see [Making Components Visually Editable](/component-library/making-components-visually-editable/).
 
 ## What's next
 
-You've got your site connected, your components are visually editable, and you know how the configuration works. From here, the best thing to do is **browse all the components** in the sidebar. Each one has documentation, examples, and property details to help you build your site.
+You've got your site connected and the configuration in place. From here, the best thing to do is **browse all the components** in the sidebar. Each one has documentation, examples, and property details to help you build your site.

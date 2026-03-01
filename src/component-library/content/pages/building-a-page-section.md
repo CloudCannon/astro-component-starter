@@ -94,15 +94,27 @@ pageSections:
 
 Or add it in CloudCannon by clicking "Add Page Section" and picking "Info Block" from the list.
 
+## Build it with Component Builder
+
+Prefer visual composition over hand-writing files? Use the [Component Builder](/component-library/component-builder/) to scaffold this faster:
+
+1. Open the Component Builder and choose your building blocks (for example, Heading + Text inside a section wrapper).
+2. Configure labels and default content so the section is clear in the CloudCannon picker.
+3. Export the generated package.
+4. Move the exported files into `src/components/page-sections/<group>/<component-name>/`.
+5. Confirm the `_component` path in the generated structure-value file matches the folder path.
+
+After that, add the section in CloudCannon from "Add Page Section" just like any hand-built component.
+
 ## Going further
 
 This was intentionally minimal. When you're ready to add more, look at the existing page sections for patterns:
 
 - **[CTA Center](/component-library/components/page-sections/ctas/cta-center/)** adds buttons, color schemes, and background options
-- **[Feature Split](/component-library/components/page-sections/features/feature-split/)** shows a two-column layout with images and conditional rendering
+- **[FAQ Section](/component-library/components/page-sections/info-blocks/faq-section/)** uses accordion items with expand/collapse behavior
 
 Each one follows the same three-file pattern, just with more props and building blocks composed together.
 
 ## Next up
 
-Building components by hand gives you full control. For a faster way to prototype, head to [Using the Component Builder](/component-library/component-builder/) to drag-and-drop building blocks and export complete component packages.
+Your component renders on the page, but editors can't click on it to make changes yet. Head to [Making Components Visually Editable](/component-library/making-components-visually-editable/) to wire up the editing experience.

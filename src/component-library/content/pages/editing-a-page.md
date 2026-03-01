@@ -54,19 +54,23 @@ Every other key in a section block is a prop passed directly to that component. 
 
 ## Editing in CloudCannon
 
-Here's where it gets interesting. The exact same page you just edited in code can be edited visually in CloudCannon:
+The exact same page you just edited in code can also be edited visually in CloudCannon. Here's a quick first run:
 
-- **Click on text** in the preview to edit it inline: headings, body text, buttons
-- **Open a component** in the sidebar to see its inputs: text fields, dropdowns, image pickers, toggles
-- **Drag sections** to reorder them
-- **Add new sections** from the component picker. Every page section is available with sensible defaults.
-- **Watch changes** appear in the live preview as you make them
+### 1. Connect your repository
 
-The visual editor reads and writes the same frontmatter you just edited by hand. There's no separate content format. It's the same `pageSections` array, the same props, the same components.
+Head to [cloudcannon.com](https://cloudcannon.com/) and sign up for a free account. From the dashboard, add a new site and connect this site. If your site is already in a repository, you can pull it in here, and any edits made in CloudCannon will push back to your repo so everything stays in sync. Or you can upload your Astro project folder directly.
 
-This is the core idea: developers build components and define the editing experience through CloudCannon config files. Editors manage content visually without touching code. Both work with the same source of truth.
+### 2. Make your first visual edit
 
-> **Want to try the visual editor yourself?** Jump to [Setting Up CloudCannon](/component-library/getting-started/) to connect your site, then come back here.
+Open the site, Go to Pages in the sidebar and find the home page. Then try one quick change:
+
+- **Click a heading or paragraph** in the preview and edit it inline
+- **Select a section** in the sidebar to update its fields (text, images, options)
+- **Drag sections** to reorder your page layout
+
+As you edit, CloudCannon updates the same frontmatter you used in code. It's still the same `pageSections` array and the same component props, just with a visual interface on top.
+
+This is the core idea: developers build the components and editing controls, while content editors work visually. Both workflows use the same source of truth in your repository.
 
 ## Next up
 
