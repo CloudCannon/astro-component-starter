@@ -26,14 +26,15 @@ export default defineConfig({
   },
   integrations: [
     {
-      name: "force-static-build",
+      name: "builder-preview-dev-only",
       hooks: {
-        "astro:route:setup": ({ route }) => {
-          if (
-            route.component.includes("builder-preview") &&
-            !process.argv.includes("dev")
-          ) {
-            route.prerender = true;
+        "astro:config:setup": ({ command, injectRoute }) => {
+          if (command === "dev") {
+            injectRoute({
+              pattern: "/component-library/builder-preview",
+              entrypoint: "./src/component-library/pages/builder-preview.astro",
+              prerender: false,
+            });
           }
         },
       },

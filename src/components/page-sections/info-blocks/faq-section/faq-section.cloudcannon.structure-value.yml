@@ -52,29 +52,4 @@ _structures:
             label: Answer Content
             comment: Content sections for the answer (typically text).
             options:
-              structures:
-                - label: Text
-                  icon: text_fields
-                  value:
-                    _component: building-blocks/core-elements/text
-                    text: Answer text goes here.
-                  preview:
-                    text:
-                      - key: text
-                      - Text content
-                  _inputs:
-                    text:
-                      type: markdown
-                      comment: The answer text content.
-                      options:
-                        blockquote: false
-                        bold: true
-                        format:
-                        italic: true
-                        link: true
-                        strike: false
-                        subscript: true
-                        superscript: true
-                        underline: false
-                        bulletedlist: false
-                        numberedlist: false
+              structures: _structures.accordionSections

@@ -106,6 +106,87 @@ Prefer visual composition over hand-writing files? Use the [Component Builder](/
 
 After that, add the section in CloudCannon from "Add Page Section" just like any hand-built component.
 
+## Choosing how much control editors get
+
+The InfoBlock above is a **structured component** — it has a fixed layout with specific props. That's one end of a spectrum. At the other end is giving editors complete freedom to compose their own layouts. Most real projects use a mix of both, and there's a useful middle ground too.
+
+### Structured components: developer controls the layout
+
+This is the pattern you just built. The developer decides the layout, picks the building blocks, and chooses which props to expose. Editors fill in the content but can't change the structure.
+
+CTA Center is a good example:
+
+```astro
+<CustomSection maxContentWidth="lg" paddingVertical={paddingVertical} {...htmlAttributes}>
+  <Heading level="h2" size="xl" alignX="center" data-prop="heading" text={heading} />
+  <Text alignX="center" data-prop="subtext" text={subtext} />
+  <ButtonGroup
+    buttonSections={buttonSections}
+    alignX="center"
+    editable={true}
+    data-children-prop="buttonSections"
+  />
+</CustomSection>
+```
+
+The heading is always centered, always `h2`, always above the subtext. Editors can change the text and add buttons, but the layout is locked. This is the right choice when you want consistency — a CTA should always look like a CTA.
+
+### Custom Section: editor builds everything
+
+At the other end of the spectrum is `CustomSection` used directly as a page section. Instead of a fixed layout, it exposes a `contentSections` array where editors can add any building block they want — text, images, grids, accordions, carousels, forms, and more.
+
+```yaml
+- _component: page-sections/builders/custom-section
+  label: My custom layout
+  contentSections:
+    - _component: building-blocks/core-elements/heading
+      text: Build it your way
+      level: h2
+      size: lg
+    - _component: building-blocks/wrappers/split
+      # ... two-column layout with whatever they put inside
+  maxContentWidth: 2xl
+  paddingVertical: md
+  colorScheme: inherit
+  backgroundColor: base
+```
+
+There's no predefined structure. Editors have full access to all available building blocks and compose them freely. This is powerful for one-off layouts, landing pages, or teams with design-savvy editors who want maximum flexibility.
+
+The trade-off is less consistency. Every instance of a Custom Section can look completely different, and editors need to understand the building blocks well enough to compose them effectively.
+
+### The middle ground: structure with flexible content areas
+
+Many components land between these extremes. They have a fixed outer structure — a heading, some wrapper layout — but contain an array where editors can add components.
+
+FAQ Section is a good example. The developer defines the overall section with a heading and an accordion wrapper. Each accordion item has a title (structured) and a `contentSections` array (flexible):
+
+```yaml
+- _component: page-sections/info-blocks/faq-section
+  heading: Frequently asked questions
+  items:
+    - title: How does this work?
+      contentSections:
+        - _component: building-blocks/core-elements/text
+          text: Editors can add any content they want inside each FAQ item.
+```
+
+The section always looks like an FAQ — heading on top, accordion below, consistent spacing. But inside each accordion item, editors can add whatever blocks they need. They're not limited to plain text; they could drop in images, code blocks, or nested grids if the content calls for it.
+
+Content Selector (tabs) follows the same pattern. The developer defines the tabbed interface. Editors control the tab titles and can compose the content within each panel freely.
+
+Team Grid takes a more constrained version of this approach. Editors can add and remove team members from the grid, but each team member follows a fixed structure (name, role, bio, photo). There's no `contentSections` inside each item — just specific fields.
+
+### Which approach to use
+
+There's no single right answer. Most projects use all three:
+
+- **Structured components** for sections that should always look consistent — CTAs, heroes, pricing tables, testimonials. The developer makes the design decisions once and editors stay within those guardrails.
+- **Custom Section** for pages where editors need full creative control, or as a quick way to prototype layouts before committing to a structured component.
+- **Hybrid components** for sections that need a recognizable structure but flexible content within it — FAQs, tabbed content, feature grids, team pages.
+
+A common workflow: start with Custom Section to let editors experiment, then once a layout pattern stabilizes, extract it into a structured component with the right props and defaults. The three-file pattern is the same either way.
+
 ## Troubleshooting
 
 **Component doesn't appear on the page.** Check that the `_component` path in your page frontmatter exactly matches the folder path under `src/components/`. The path is case-sensitive and uses the kebab-case folder name, not the PascalCase filename. If the path is wrong, `renderBlock` logs a warning to the console listing all available components.
