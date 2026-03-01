@@ -12,7 +12,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // https://astro.build/config
 export default defineConfig({
   site: "https://example.com", // TODO: Update to your production URL
-  output: "static",
   build: {
     inlineStylesheets: "always",
   },
@@ -26,6 +25,19 @@ export default defineConfig({
     domains: ["picsum.photos"],
   },
   integrations: [
+    {
+      name: "force-static-build",
+      hooks: {
+        "astro:route:setup": ({ route }) => {
+          if (
+            route.component.includes("builder-preview") &&
+            !process.argv.includes("dev")
+          ) {
+            route.prerender = true;
+          }
+        },
+      },
+    },
     editableRegions(),
     icon({
       iconDir: path.resolve(__dirname, "src/icons"),

@@ -256,6 +256,16 @@ ${componentUsage}
 </style>`;
 }
 
+function getAttributeSortKey(prop: string): string {
+  if (prop.startsWith("{...")) return "\uffff" + prop;
+  const match = prop.match(/^([a-zA-Z_][\w:.-]*)/);
+  return match ? match[1].toLowerCase() : prop.toLowerCase();
+}
+
+function sortPropsList(props: string[]): string[] {
+  return [...props].sort((a, b) => getAttributeSortKey(a).localeCompare(getAttributeSortKey(b)));
+}
+
 function formatComponentBlock(
   block: ComponentNode,
   indentLevel: number,
@@ -426,9 +436,10 @@ function formatComponentBlock(
     propsList.push(...extraAttributes);
   }
 
+  const sortedPropsList = sortPropsList(propsList);
   const formattedProps =
-    propsList.length > 0
-      ? `\n${propsList.map((prop) => `${indent}  ${prop}`).join("\n")}\n${indent}`
+    sortedPropsList.length > 0
+      ? `\n${sortedPropsList.map((prop) => `${indent}  ${prop}`).join("\n")}\n${indent}`
       : "";
 
   // --- Determine Astro slot names from component slot metadata ---
@@ -542,9 +553,10 @@ function formatComponentBlock(
         });
 
         const childIndent = "  ".repeat(indentLevel + 2);
+        const sortedChildPropsList = sortPropsList(childPropsList);
         const formattedChildProps =
-          childPropsList.length > 0
-            ? `\n${childPropsList.map((p) => `${childIndent}  ${p}`).join("\n")}\n${childIndent}`
+          sortedChildPropsList.length > 0
+            ? `\n${sortedChildPropsList.map((p) => `${childIndent}  ${p}`).join("\n")}\n${childIndent}`
             : "";
 
         const slotProp = childPropInfo.slotProps[0] || "contentSections";
@@ -701,7 +713,7 @@ ${indent}</${componentName}>`;
 ${indent}</${componentName}>`;
   }
 
-  return propsList.length > 0
+  return sortedPropsList.length > 0
     ? `${indent}<${componentName}${formattedProps}/>`
     : `${indent}<${componentName} />`;
 }
