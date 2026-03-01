@@ -54,19 +54,25 @@ Every other key in a section block is a prop passed directly to that component. 
 
 ## Editing in CloudCannon
 
-The exact same page you just edited in code can also be edited visually in CloudCannon. Here's a quick first run:
+The exact same page you just edited in code can also be edited visually in CloudCannon.
 
-### 1. Connect your repository
+### Connect your site
 
-Head to [cloudcannon.com](https://cloudcannon.com/) and sign up for a free account. From the dashboard, add a new site and connect this site. If your site is already in a repository, you can pull it in here, and any edits made in CloudCannon will push back to your repo so everything stays in sync. Or you can upload your Astro project folder directly.
+1. Head to <a href="https://cloudcannon.com/" target="_blank" rel="noopener">cloudcannon.com</a> and sign up for a free account.
+2. Click **Add new site** and choose **Build with your own files**.
+3. Name your site, select your Git provider, and connect the repository containing this project.
+4. Wait for the build to complete.
 
-### 2. Make your first visual edit
+The project ships with a `cloudcannon.config.yml` that configures all collections, components, and editing behavior. CloudCannon reads this automatically — no additional setup needed.
 
-Open the site, Go to Pages in the sidebar and find the home page. Then try one quick change:
+### Make your first visual edit
+
+Once the build succeeds, go to **Pages** in the sidebar and open the home page. Then try:
 
 - **Click a heading or paragraph** in the preview and edit it inline
 - **Select a section** in the sidebar to update its fields (text, images, options)
 - **Drag sections** to reorder your page layout
+- **Add a new section** by clicking "Add Page Section" at the bottom of the sidebar
 
 As you edit, CloudCannon updates the same frontmatter you used in code. It's still the same `pageSections` array and the same component props, just with a visual interface on top.
 

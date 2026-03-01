@@ -5,7 +5,9 @@ contentSections: []
 
 # Making Components Visually Editable
 
-You've built a page section. It renders on the page and works in code. Now let's make it editable in CloudCannon's visual editor so content editors can click, type, and drag directly on the live preview.
+You've built a page section. It renders on the page and works in code. Now let's make it fully editable in CloudCannon's visual editor so content editors can click, type, and drag directly on the live preview.
+
+If you followed the previous guide, you already used `data-prop` on the `Heading` and `Text` building blocks. That was enough to get basic editing working. This page explains the full picture: what those attributes do, how they connect to CloudCannon, and how to handle images and arrays too.
 
 ## What are editable regions?
 

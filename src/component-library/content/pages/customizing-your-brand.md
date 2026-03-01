@@ -59,7 +59,7 @@ For example, on a light-themed page, you can drop in a dark section:
 
 Setting `colorScheme: dark` adds `data-theme="dark"` to that section's HTML element. CSS picks up the dark theme variables, and the entire section (text, backgrounds, buttons, borders) switches to your dark palette. The next section reverts to whatever theme it specifies.
 
-This is why both theme files matter from day one. Even if your site is primarily light, any section can flip to dark (and back). When you customize `_dark.css`, you're defining what those contrast sections look like. Editors can toggle this per-section through the `colorScheme` input in CloudCannon.
+This is why both theme files are important. Even if your site is primarily light, any section can flip to dark (and back). When you customize `_dark.css`, you're defining what those contrast sections look like. Editors can toggle this per-section through the `colorScheme` input in CloudCannon.
 
 ## Changing fonts
 

@@ -120,4 +120,4 @@ Unzip the files into the appropriate directory under `src/components/` and your 
 
 ## Next up
 
-If you haven't already, head to [Setting Up CloudCannon](/component-library/getting-started/) to connect your site and see your components working in the visual editor.
+If you haven't connected your site to CloudCannon yet, see the setup steps in [Editing a Page](/component-library/editing-a-page/) to get the visual editor running.

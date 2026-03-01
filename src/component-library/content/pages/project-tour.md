@@ -13,6 +13,17 @@ This is a **starter template**, not a package you install from npm. You've clone
 
 What makes this starter different from a typical Astro project is that every component is **built for visual editing** in [CloudCannon](https://cloudcannon.com/). Developers build and customize components in code. Editors manage content visually: clicking, dragging, and typing directly on the page. Same components, two interfaces.
 
+## Run it locally
+
+The project requires Node.js 24+ (specified in `.nvmrc`). From the project root:
+
+```bash
+npm install
+npm run dev
+```
+
+This starts the Astro dev server with hot reloading. Open [localhost:4321](http://localhost:4321) to view your site locally.
+
 ## Design principles
 
 **Intentionally unbranded.** The starter ships with a neutral, gray-based design on purpose. It's meant to disappear into whatever brand you bring to it. Update a few CSS variables in the theme files and the entire site shifts to match your colors, fonts, and personality.
@@ -126,6 +137,10 @@ Here's a quick map of where things live:
 | `src/styles/base/`       | CSS reset, typography defaults, form styles                     |
 | `src/data/`              | Site-wide data: navigation links, SEO config, footer content    |
 | `src/component-library/` | These docs; can be excluded from production builds              |
+
+## Removing components you don't need
+
+Every component is independent. To remove one, delete its entire folder (e.g. `src/components/page-sections/heroes/hero-split/`). The build will still work — `renderBlock` only resolves components that are referenced in your page frontmatter. Just make sure no page is using the deleted component's `_component` path, and that no other component imports it directly. Navigation components (`src/components/navigation/`) are referenced in layouts, so check those imports before deleting.
 
 ## Next up
 

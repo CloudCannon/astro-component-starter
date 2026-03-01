@@ -13,7 +13,7 @@ These docs help you explore what ships with the starter, understand how the piec
 
 ## Learning path
 
-New here? Follow these guides in order to go from first clone to building your own components:
+New here? Follow these guides in order to go from first clone to building your own visually editable components:
 
 1. **[Project Tour](/component-library/project-tour/)**: Understand the directory structure, how components are organized, and the three-file pattern that makes everything visually editable.
 
@@ -23,7 +23,7 @@ New here? Follow these guides in order to go from first clone to building your o
 
 4. **[Building a Page Section](/component-library/building-a-page-section/)**: Create a new component from scratch: the Astro file, the CloudCannon config, everything. This is where the architecture clicks.
 
-5. **[Setting Up CloudCannon](/component-library/getting-started/)**: Connect your repo, configure the build, and make your first visual edit.
+5. **[Visually Edit Components](/component-library/visually-edit-components/)**: Wire up editable regions so content editors can click, type, and drag directly on the live preview.
 
 ## Component Builder
 
