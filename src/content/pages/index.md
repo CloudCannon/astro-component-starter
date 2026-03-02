@@ -2,6 +2,9 @@
 _schema: default
 title: Astro Component Starter
 pageSections:
+  - _component: page-sections/info-blocks/section-intro
+    heading: Ready to get started?
+    subtext: Everything you need is right here.
   - _component: page-sections/heroes/hero-center
     eyebrow:
     heading: The Astro Component Starter for building any site

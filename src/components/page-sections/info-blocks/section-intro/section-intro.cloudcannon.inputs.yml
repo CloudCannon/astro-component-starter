@@ -1,0 +1,6 @@
+heading:
+  type: text
+  comment: The main headline.
+subtext:
+  type: text
+  comment: Supporting text beneath the headline.

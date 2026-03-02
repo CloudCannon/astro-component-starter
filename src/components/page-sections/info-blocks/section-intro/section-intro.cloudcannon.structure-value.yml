@@ -1,0 +1,18 @@
+label: Section Intro
+icon: info
+description: Centered section with a headline and supporting text.
+value:
+  _component: page-sections/info-blocks/section-intro
+  heading: Your heading here
+  subtext: Add some supporting text.
+preview:
+  text:
+    - Section Intro
+  subtext:
+    - key: heading
+  icon: info
+picker_preview:
+  text: Section Intro
+  subtext: Centered section with a headline and supporting text.
+_inputs_from_glob:
+  - /src/components/page-sections/info-blocks/section-intro/section-intro.cloudcannon.inputs.yml
