@@ -1,0 +1,59 @@
+---
+import "@component-docs/styles/component-docs.css";
+import "@styles/style.css";
+import { z } from "zod/v4";
+
+const libraryLayoutSchema = z.object({
+  frontmatter: z
+    .object({
+      title: z.string().optional(),
+      contentSections: z.array(z.any()).optional(),
+    })
+    .optional(),
+});
+
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import MobileNavLayout from "@component-docs/layouts/MobileNavLayout.astro";
+import SidebarNavLayout from "@component-docs/layouts/SidebarNavLayout.astro";
+import RenderBlock from "@components/utils/renderBlock.astro";
+const props = libraryLayoutSchema.parse(Astro.props);
+const pageTitle = props.frontmatter?.title || "Component Library";
+const contentSections = props.frontmatter?.contentSections || [];
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <style is:inline>
+      @layer reset, base, components, page-sections, utils, overrides;
+    </style>
+    {import.meta.env.DEV ? <script type="module" src="/@vite/client" /> : null}
+    <title>{pageTitle}</title>
+    <slot name="head" />
+  </head>
+  <body class="component-docs">
+    <MobileNavLayout />
+    <CustomSection
+      maxContentWidth="2xl"
+      paddingHorizontal="md"
+      paddingVertical="none"
+      class="library-container"
+    >
+      <SidebarNavLayout />
+      <main class="main">
+        <div data-editable="array" data-children-prop="contentSections">
+          <RenderBlock contentSections={contentSections} />
+        </div>
+        <slot />
+      </main>
+    </CustomSection>
+    <script>
+      import "@choctawnationofoklahoma/lite-vimeo";
+      import "@justinribeiro/lite-youtube";
+    </script>
+  </body>
+</html>

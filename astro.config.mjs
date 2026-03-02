@@ -31,8 +31,8 @@ export default defineConfig({
         "astro:config:setup": ({ command, injectRoute }) => {
           if (command === "dev") {
             injectRoute({
-              pattern: "/component-library/builder-preview",
-              entrypoint: "./src/component-library/pages/builder-preview.astro",
+              pattern: "/component-docs/builder-preview",
+              entrypoint: "./src/component-docs/pages/builder-preview.astro",
               prerender: false,
             });
           }
@@ -47,10 +47,10 @@ export default defineConfig({
       filter: (page) => {
         // Always exclude component library from sitemap if disabled
         if (process.env.DISABLE_COMPONENT_LIBRARY === "true") {
-          return !page.includes("/component-library");
+          return !page.includes("/component-docs");
         }
         // If not disabled, still exclude from sitemap (existing behavior)
-        return !page.includes("/component-library");
+        return !page.includes("/component-docs");
       },
     }),
     mdx(),
@@ -77,7 +77,7 @@ export default defineConfig({
         "@data": path.resolve(__dirname, "src/data"),
         "@content": path.resolve(__dirname, "src/content"),
         "@assets": path.resolve(__dirname, "src/assets"),
-        "@component-library": path.resolve(__dirname, "src/component-library"),
+        "@component-docs": path.resolve(__dirname, "src/component-docs"),
         "@layouts": path.resolve(__dirname, "src/layouts"),
         "@component-utils": path.resolve(__dirname, "src/components/utils"),
         "@styles": path.resolve(__dirname, "src/styles"),

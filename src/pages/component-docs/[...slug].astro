@@ -1,0 +1,66 @@
+---
+import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set
+  if (process.env.DISABLE_COMPONENT_LIBRARY === "true") {
+    return [
+      {
+        params: { slug: undefined },
+        props: { isDisabled: true },
+      },
+    ];
+  }
+
+  const pages = (await getCollection("docs-pages")) as any[];
+
+  const paths: Array<{ params: { slug?: string }; props: { page: any } }> = [];
+
+  pages.forEach((page: any) => {
+    if (page.id === "index") {
+      paths.push({
+        params: { slug: undefined },
+        props: { page },
+      });
+    } else {
+      paths.push({
+        params: { slug: page.id },
+        props: { page },
+      });
+    }
+  });
+
+  return paths;
+}
+
+const { page, isDisabled = false } = Astro.props;
+const { Content } = isDisabled ? { Content: null } : await render(page);
+---
+
+<LibraryLayout frontmatter={isDisabled ? { title: "Component Docs" } : page.data}>
+  {
+    isDisabled ? (
+      <section class="component-docs-disabled">
+        <h1>Component Docs Available in Local Development</h1>
+        <p>
+          The component docs are disabled in this production build to keep the generated site lean.
+        </p>
+        <p>
+          Run <code>npm run dev</code> and open <code>/component-docs/</code> locally to browse the full
+          docs, examples, and Component Builder.
+        </p>
+      </section>
+    ) : (
+      <Content />
+    )
+  }
+</LibraryLayout>
+
+<style>
+  .component-docs-disabled {
+    margin: 0 auto;
+    max-width: 50rem;
+    padding: var(--spacing-4xl) var(--spacing-lg);
+  }
+</style>

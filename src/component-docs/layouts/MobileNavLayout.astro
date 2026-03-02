@@ -1,0 +1,22 @@
+---
+import Icon from "@core-elements/icon/Icon.astro";
+import Mobile from "@components/navigation/mobile/Mobile.astro";
+import navData from "../data/nav.json";
+import { generateNavData } from "../utils/navGenerator.js";
+
+const mobileNavData = await generateNavData(navData);
+---
+
+<div class="library-mobile-nav">
+  <Icon name="library/logo" size="none" class="sidebar-logo" />
+  <Mobile navData={mobileNavData}>
+    <span slot="logo">
+      <Icon
+        name="library/logo"
+        size="none"
+        class="component-docs-sidebar-logo"
+        style="height: 35px; width: auto;"
+      />
+    </span>
+  </Mobile>
+</div>

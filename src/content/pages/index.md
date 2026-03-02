@@ -12,7 +12,7 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         hideText: false
-        link: /component-library/
+        link: /component-docs/
         iconName: ''
         iconPosition: before
         variant: primary
@@ -35,7 +35,7 @@ pageSections:
       approach. You get fast pages, simple routing, and a component system that
       stays easy to use as your site grows.
     buttonSections: []
-    imageSource: /src/assets/images/component-library/website-feature.svg
+    imageSource: /src/assets/images/component-docs/website-feature.svg
     imageAlt: Website Feature
     imageAspectRatio: none
     imageRounded: false
@@ -51,7 +51,7 @@ pageSections:
       Editors can click, change, and rearrange content right on the page without
       touching the code or guessing where anything lives.
     buttonSections: []
-    imageSource: /src/assets/images/component-library/website-split.svg
+    imageSource: /src/assets/images/component-docs/website-split.svg
     imageAlt: Website Split
     imageAspectRatio: none
     imageRounded: false
@@ -67,7 +67,7 @@ pageSections:
       instant. Your users get instant page loads. You get a modern developer
       experience.
     buttonSections: []
-    imageSource: /src/assets/images/component-library/website-hero.svg
+    imageSource: /src/assets/images/component-docs/website-hero.svg
     imageAlt: Website Hero
     imageAspectRatio: none
     imageRounded: false
@@ -82,7 +82,7 @@ pageSections:
       descriptions of every property, and clear guidance without having to dig
       through source files.
     buttonSections: []
-    imageSource: /src/assets/images/component-library/website-documented.svg
+    imageSource: /src/assets/images/component-docs/website-documented.svg
     imageAlt: Website Hero
     imageAspectRatio: none
     imageRounded: false
@@ -145,7 +145,7 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         hideText: false
-        link: /component-library/
+        link: /component-docs/
         iconName: ''
         iconPosition: before
         variant: primary

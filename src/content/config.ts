@@ -71,12 +71,12 @@ const pagesCollection = defineCollection({
 });
 
 const docsPagesCollection = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/component-library/content/pages" }),
+  loader: glob({ pattern: "**/*.md", base: "./src/component-docs/content/pages" }),
   schema: docsPageSchema,
 });
 
 const docsComponentsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/component-library/content/components" }),
+  loader: glob({ pattern: "**/*.md", base: "./src/component-docs/content/components" }),
   schema: docsComponentSchema,
 });
 

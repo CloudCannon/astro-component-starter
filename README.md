@@ -22,7 +22,7 @@ Your site is now running at `http://localhost:4321`.
 ## What You'll See
 
 - **Your site** at [localhost:4321](http://localhost:4321), a fully working demo with pages, blog, and navigation
-- **Component docs** at [localhost:4321/component-library/](http://localhost:4321/component-library/), documentation, examples, and a visual builder for every component
+- **Component docs** at [localhost:4321/component-docs/](http://localhost:4321/component-docs/), documentation, examples, and a visual builder for every component
 
 ## The Three-File Pattern
 
@@ -47,7 +47,7 @@ src/
 ├── styles/              # Design tokens, themes, base styles
 │   ├── variables/       # Colors, fonts, spacing, widths
 │   └── themes/          # Light and dark theme definitions
-└── component-library/   # Built-in docs (can be excluded from production builds)
+└── component-docs/   # Built-in docs (can be excluded from production builds)
 ```
 
 ## Available Scripts
@@ -69,7 +69,7 @@ src/
 
 ## Learn More
 
-Head to the [component docs](http://localhost:4321/component-library/) in your dev server for a guided tour, examples for every component, and a visual component builder.
+Head to the [component docs](http://localhost:4321/component-docs/) in your dev server for a guided tour, examples for every component, and a visual component builder.
 
 ## License
 

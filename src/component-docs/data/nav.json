@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Home",
+    "path": "/component-docs/"
+  },
+  {
+    "name": "Getting Started",
+    "path": "#",
+    "children": [
+      {
+        "name": "Project Tour",
+        "path": "/component-docs/project-tour/"
+      },
+      {
+        "name": "Editing a Page",
+        "path": "/component-docs/editing-a-page/"
+      },
+      {
+        "name": "Customizing Your Brand",
+        "path": "/component-docs/customizing-your-brand/"
+      },
+      {
+        "name": "Building a Page Section",
+        "path": "/component-docs/building-a-page-section/"
+      },
+      {
+        "name": "Visually Edit Components",
+        "path": "/component-docs/visually-edit-components/"
+      }
+    ]
+  },
+  {
+    "name": "Component Builder",
+    "path": "/component-docs/component-builder/"
+  },
+  {
+    "group": "Building Blocks",
+    "subcategoryOrder": ["core-elements", "wrappers", "forms"]
+  },
+  {
+    "group": "Page Sections",
+    "subcategoryOrder": ["heroes", "features", "info-blocks", "people", "ctas", "builders"]
+  },
+  {
+    "group": "Navigation"
+  }
+]

@@ -30,7 +30,7 @@ _structures:
           name: Team member name
           role: Job title
           bio: Brief bio or description of the team member.
-          imageSource: /src/assets/images/component-library/profile.jpg
+          imageSource: /src/assets/images/component-docs/profile.jpg
           imageAlt: Team member photo
         preview:
           text:

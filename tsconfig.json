@@ -13,7 +13,7 @@
       "@features/*": ["src/components/page-sections/features/*"],
       "@builders/*": ["src/components/page-sections/builders/*"],
       "@component-utils/*": ["src/components/utils/*"],
-      "@component-library/*": ["src/component-library/*"],
+      "@component-docs/*": ["src/component-docs/*"],
       "@layouts/*": ["src/layouts/*"],
       "@styles/*": ["src/styles/*"],
       "@data/*": ["src/data/*"],
