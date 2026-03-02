@@ -1,46 +1,73 @@
 ---
 import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
-import { discoverComponents } from "@component-docs/components/ComponentBuilder/utils/componentDiscovery";
-import {
-  getComponentMetadataMap,
-  getNestedBlockProperties,
-} from "@component-docs/components/ComponentViewer/utils/componentMetadata";
-import ComponentBuilder from "@component-docs/components/ComponentBuilder/ComponentBuilder.astro";
+import Page from "@layouts/Page.astro";
 
-export async function getStaticPaths() {
-  // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set
-  if (process.env.DISABLE_COMPONENT_LIBRARY === "true") {
-    return [];
-  }
-
-  return [{ params: {} }];
-}
-
-// Load all component data at build time
-const componentDiscovery = await discoverComponents();
-const metadataMap = await getComponentMetadataMap();
-const nestedBlockProperties = await getNestedBlockProperties();
-
-// Convert Map to plain object for JSON serialization
-const metadataMapObj: Record<string, any> = {};
-
-metadataMap.forEach((value, key) => {
-  metadataMapObj[key] = value;
-});
-
-const nestedBlockPropertiesArray = Array.from(nestedBlockProperties);
-
+const isDisabled = process.env.DISABLE_COMPONENT_LIBRARY === "true";
 const ssrEnabled = import.meta.env.DEV;
+
+let componentDiscovery: any = null;
+let metadataMapObj: Record<string, any> = {};
+let nestedBlockPropertiesArray: any[] = [];
+let BuilderComponent: any = null;
+
+if (!isDisabled) {
+  const componentBuilderModule = await import(
+    "@component-docs/components/ComponentBuilder/ComponentBuilder.astro"
+  );
+  const componentDiscoveryModule = await import(
+    "@component-docs/components/ComponentBuilder/utils/componentDiscovery"
+  );
+  const componentMetadataModule = await import(
+    "@component-docs/components/ComponentViewer/utils/componentMetadata"
+  );
+
+  BuilderComponent = componentBuilderModule.default;
+  componentDiscovery = await componentDiscoveryModule.discoverComponents();
+
+  const metadataMap = await componentMetadataModule.getComponentMetadataMap();
+  const nestedBlockProperties = await componentMetadataModule.getNestedBlockProperties();
+
+  metadataMap.forEach((value: any, key: string) => {
+    metadataMapObj[key] = value;
+  });
+
+  nestedBlockPropertiesArray = Array.from(nestedBlockProperties);
+}
 ---
 
-<LibraryLayout frontmatter={{ title: "Component Builder", contentSections: [] }}>
-  <ComponentBuilder
-    components={componentDiscovery.components}
-    componentsByCategory={componentDiscovery.byCategory}
-    metadataMap={metadataMapObj}
-    nestedBlockProperties={nestedBlockPropertiesArray}
-    nestingRules={componentDiscovery.nestingRules}
-    pageSectionCategories={componentDiscovery.pageSectionCategories}
-    ssrEnabled={ssrEnabled}
-  />
-</LibraryLayout>
+{
+  isDisabled ? (
+    <Page frontmatter={{ title: "Component Builder" }}>
+      <section class="component-docs-disabled">
+        <h1>Component Builder Available in Local Development</h1>
+        <p>
+          The Component Builder is disabled in this production build to keep the generated site lean.
+        </p>
+        <p>
+          Run <code>npm run dev</code> and open <code>/component-docs/component-builder/</code> locally
+          to use the full builder experience.
+        </p>
+      </section>
+    </Page>
+  ) : (
+    <LibraryLayout frontmatter={{ title: "Component Builder", contentSections: [] }}>
+      <BuilderComponent
+        components={componentDiscovery.components}
+        componentsByCategory={componentDiscovery.byCategory}
+        metadataMap={metadataMapObj}
+        nestedBlockProperties={nestedBlockPropertiesArray}
+        nestingRules={componentDiscovery.nestingRules}
+        pageSectionCategories={componentDiscovery.pageSectionCategories}
+        ssrEnabled={ssrEnabled}
+      />
+    </LibraryLayout>
+  )
+}
+
+<style>
+  .component-docs-disabled {
+    margin: 0 auto;
+    max-width: 50rem;
+    padding: var(--spacing-4xl) var(--spacing-lg);
+  }
+</style>
