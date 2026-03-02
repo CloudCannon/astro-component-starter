@@ -127,16 +127,16 @@ This is the same structure CloudCannon reads and writes when editors add, remove
 
 Here's a quick map of where things live:
 
-| Directory                | What's there                                                    |
-| ------------------------ | --------------------------------------------------------------- |
-| `src/components/`        | All 40+ components (building blocks, page sections, navigation) |
-| `src/content/pages/`     | Your site's pages as Markdown with `pageSections` arrays        |
-| `src/content/blog/`      | Blog posts in MDX                                               |
-| `src/styles/variables/`  | Design tokens: colors, fonts, spacing, widths                   |
-| `src/styles/themes/`     | Light and dark theme definitions                                |
-| `src/styles/base/`       | CSS reset, typography defaults, form styles                     |
-| `src/data/`              | Site-wide data: navigation links, SEO config, footer content    |
-| `src/component-docs/` | These docs; can be excluded from production builds              |
+| Directory               | What's there                                                    |
+| ----------------------- | --------------------------------------------------------------- |
+| `src/components/`       | All 40+ components (building blocks, page sections, navigation) |
+| `src/content/pages/`    | Your site's pages as Markdown with `pageSections` arrays        |
+| `src/content/blog/`     | Blog posts in MDX                                               |
+| `src/styles/variables/` | Design tokens: colors, fonts, spacing, widths                   |
+| `src/styles/themes/`    | Light and dark theme definitions                                |
+| `src/styles/base/`      | CSS reset, typography defaults, form styles                     |
+| `src/data/`             | Site-wide data: navigation links, SEO config, footer content    |
+| `src/component-docs/`   | These docs; can be excluded from production builds              |
 
 ## Removing components you don't need
 

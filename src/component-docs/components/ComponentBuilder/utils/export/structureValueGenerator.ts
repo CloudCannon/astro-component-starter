@@ -197,7 +197,6 @@ export function generateStructureValue(
               value[renamedKey] = [];
             }
           }
-
         } else if (value[renamedKey] === undefined) {
           value[renamedKey] = stripRuntimeIds(cleanNode[key]);
         }
