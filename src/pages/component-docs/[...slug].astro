@@ -1,5 +1,6 @@
 ---
 import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
+import Page from "@layouts/Page.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
@@ -38,9 +39,9 @@ const { page, isDisabled = false } = Astro.props;
 const { Content } = isDisabled ? { Content: null } : await render(page);
 ---
 
-<LibraryLayout frontmatter={isDisabled ? { title: "Component Docs" } : page.data}>
-  {
-    isDisabled ? (
+{
+  isDisabled ? (
+    <Page frontmatter={{ title: "Component Docs" }}>
       <section class="component-docs-disabled">
         <h1>Component Docs Available in Local Development</h1>
         <p>
@@ -51,11 +52,13 @@ const { Content } = isDisabled ? { Content: null } : await render(page);
           full docs, examples, and Component Builder.
         </p>
       </section>
-    ) : (
+    </Page>
+  ) : (
+    <LibraryLayout frontmatter={page.data}>
       <Content />
-    )
-  }
-</LibraryLayout>
+    </LibraryLayout>
+  )
+}
 
 <style>
   .component-docs-disabled {

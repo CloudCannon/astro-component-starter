@@ -10,6 +10,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "DISABLE_COMPONENT_LIBRARY=true astro build",
+    "build:with-library": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "npm run lint && npm run format",
