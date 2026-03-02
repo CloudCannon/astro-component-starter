@@ -6,7 +6,13 @@ import Text from "@core-elements/text/Text.astro";
 const { heading = "", subtext = "", _component, ...rest } = Astro.props;
 ---
 
-<CustomSection maxContentWidth="xl" paddingHorizontal="lg" paddingVertical="4xl" {...rest}>
+<CustomSection
+  maxContentWidth="xl"
+  paddingHorizontal="lg"
+  paddingVertical="4xl"
+  editable={false}
+  {...rest}
+>
   <Heading level="h1" size="2xl" alignX="center" data-prop="heading" text={heading} />
   <Text alignX="center" data-prop="subtext" text={subtext} />
 </CustomSection>
