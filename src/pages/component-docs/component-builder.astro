@@ -11,15 +11,12 @@ let nestedBlockPropertiesArray: any[] = [];
 let BuilderComponent: any = null;
 
 if (!isDisabled) {
-  const componentBuilderModule = await import(
-    "@component-docs/components/ComponentBuilder/ComponentBuilder.astro"
-  );
-  const componentDiscoveryModule = await import(
-    "@component-docs/components/ComponentBuilder/utils/componentDiscovery"
-  );
-  const componentMetadataModule = await import(
-    "@component-docs/components/ComponentViewer/utils/componentMetadata"
-  );
+  const componentBuilderModule =
+    await import("@component-docs/components/ComponentBuilder/ComponentBuilder.astro");
+  const componentDiscoveryModule =
+    await import("@component-docs/components/ComponentBuilder/utils/componentDiscovery");
+  const componentMetadataModule =
+    await import("@component-docs/components/ComponentViewer/utils/componentMetadata");
 
   BuilderComponent = componentBuilderModule.default;
   componentDiscovery = await componentDiscoveryModule.discoverComponents();
@@ -41,11 +38,15 @@ if (!isDisabled) {
       <section class="component-docs-disabled">
         <h1>Component Builder Available in Local Development</h1>
         <p>
-          The Component Builder is disabled in this production build to keep the generated site lean.
+          The Component Builder is disabled in this production build to keep the generated site
+          lean.
         </p>
         <p>
-          Run <code>npm run dev</code> and open <code>/component-docs/component-builder/</code> locally
-          to use the full builder experience.
+          Run <code>npm run dev</code> and open <code>/component-docs/component-builder/</code>{" "}
+          locally to use the full builder experience.
+        </p>
+        <p>
+          To include component docs in a static build, run <code>npm run build:with-library</code>.
         </p>
       </section>
     </Page>
