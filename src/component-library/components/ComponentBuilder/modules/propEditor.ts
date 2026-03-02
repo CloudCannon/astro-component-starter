@@ -73,9 +73,13 @@ export function renderPropEditor(
       const parentMetadata = builderState.getMetadata(parentNode._component);
 
       if (parentMetadata?.childComponent?.props) {
+        const allowedProps = DEFAULT_EXPOSED_PROPS[componentInfo.name];
+
         for (const prop of parentMetadata.childComponent.props) {
           if (!prop.endsWith("/slot")) {
-            forcedChildComponentProps.add(prop);
+            if (!allowedProps || allowedProps.includes(prop)) {
+              forcedChildComponentProps.add(prop);
+            }
           }
         }
       }

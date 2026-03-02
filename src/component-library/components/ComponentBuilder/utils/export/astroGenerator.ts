@@ -527,11 +527,13 @@ function formatComponentBlock(
           ? childComponentPath.replace(/-panel$/, "-item")
           : "";
 
-        const childPropsList = childPropInfo.regularProps.map((prop) => {
-          const renamedKey = templateOriginal?.[`_renamed_${prop}`] || prop;
+        const childPropsList = childPropInfo.regularProps
+          .filter((prop) => templateOriginal?.[`_hardcoded_${prop}`] === false)
+          .map((prop) => {
+            const renamedKey = templateOriginal?.[`_renamed_${prop}`] || prop;
 
-          return `${prop}={${singularName}.${renamedKey}}`;
-        });
+            return `${prop}={${singularName}.${renamedKey}}`;
+          });
 
         childPropsList.push(`data-editable="array-item"`);
         childPropsList.push(`data-id="${childComponentPath}"`);
@@ -539,8 +541,10 @@ function formatComponentBlock(
         // Check if any slot props on the template child are in page-building mode
         for (const sp of childPropInfo.slotProps) {
           const spModeKey = `_${sp}_mode` as keyof typeof templateOriginal;
+          const isInPropMode = templateOriginal?.[spModeKey] === "prop";
+          const isExposed = templateOriginal?.[`_hardcoded_${sp}`] === false;
 
-          if (templateOriginal?.[spModeKey] === "prop") {
+          if (isInPropMode || isExposed) {
             const renamedKey = templateOriginal?.[`_renamed_${sp}`] || sp;
 
             childPropsList.push(`${sp}={${singularName}.${renamedKey}}`);
@@ -571,7 +575,9 @@ function formatComponentBlock(
         let innerContent = "";
 
         if (isTemplateWrapperLike && !allSlotPropsInPropMode) {
-          const grandchildren = templateNode[slotProp] as ComponentNode[] | undefined;
+          const grandchildren = Array.isArray(templateNode[slotProp])
+            ? (templateNode[slotProp] as ComponentNode[])
+            : undefined;
           const originalGrandchildren = templateOriginal?.[slotProp] as BuilderNode[] | undefined;
 
           if (grandchildren && grandchildren.length > 0) {

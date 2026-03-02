@@ -218,8 +218,10 @@ export function initLivePreview(
             codeContentEl.innerHTML = fallback;
           }
         });
-    } catch {
-      codeContentEl.innerHTML = "<pre><code>// Error generating code preview</code></pre>";
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+
+      codeContentEl.innerHTML = `<pre><code>// Error generating code preview\n// ${escapeHtml(message)}</code></pre>`;
     }
   }
 

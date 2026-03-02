@@ -523,7 +523,8 @@ class BuilderState {
           if (slotHasSameComponentInEveryItem(node, slot.propName)) {
             node[`_hardcoded_${slot.propName}`] = false;
 
-            // Force-expose non-slot child component props (e.g. title) on each child node
+            // Force-expose non-slot child component props (e.g. title) on each child node,
+            // but respect DEFAULT_EXPOSED_PROPS when an entry exists for the child.
             const childProps = metadata.childComponent.props || [];
             const regularProps = childProps.filter((p) => !p.endsWith("/slot"));
             const children = node[slot.propName] as ComponentNode[] | undefined;
@@ -531,8 +532,15 @@ class BuilderState {
             if (regularProps.length > 0 && children) {
               for (const child of children) {
                 if (child && typeof child === "object") {
+                  const childInfo = this.getComponentInfo(child._component);
+                  const allowedProps = childInfo
+                    ? DEFAULT_EXPOSED_PROPS[childInfo.name]
+                    : undefined;
+
                   for (const prop of regularProps) {
-                    child[`_hardcoded_${prop}`] = false;
+                    if (!allowedProps || allowedProps.includes(prop)) {
+                      child[`_hardcoded_${prop}`] = false;
+                    }
                   }
                 }
               }

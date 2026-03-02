@@ -39,6 +39,7 @@ export const DEFAULT_EXPOSED_PROPS: Record<string, string[]> = {
   heading: ["text"],
   icon: ["name"],
   image: ["source"],
+  "list-item": ["text"],
   "simple-text": ["text"],
   testimonial: ["text", "authorName", "authorDescription"],
   text: ["text"],

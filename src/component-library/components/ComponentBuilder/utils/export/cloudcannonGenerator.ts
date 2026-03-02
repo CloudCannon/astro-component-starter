@@ -92,6 +92,8 @@ export function generateCloudCannonInputs(
 
         if (childPropInfo) {
           for (const prop of childPropInfo.regularProps) {
+            if (firstChild?.[`_hardcoded_${prop}`] !== false) continue;
+
             const renamedPropKey = firstChild?.[`_renamed_${prop}`] || prop;
 
             if (!objectFields[renamedPropKey]) {

@@ -36,6 +36,20 @@ export function generateStructureValue(
 
   const requiredStructureGlobs = new Set<string>();
 
+  function addRequiredStructureGlob(
+    componentInfo: ComponentInfo | undefined,
+    propName: string
+  ): void {
+    const structuresRef = componentInfo?.inputs?.[propName]?.options?.structures;
+
+    if (typeof structuresRef !== "string") return;
+    const match = structuresRef.match(/_structures\.(\w+)/);
+
+    if (match) {
+      requiredStructureGlobs.add(`/.cloudcannon/structures/${match[1]}.cloudcannon.structures.yml`);
+    }
+  }
+
   function buildMapItemExample(
     node: BuilderNode | null,
     cleanNode: ComponentNode | null
@@ -123,6 +137,7 @@ export function generateStructureValue(
         }
 
         // Freeform array prop on a map item stays as an exposed array value.
+        addRequiredStructureGlob(componentInfo, key);
         example[renamedKey] = stripRuntimeIds(cleanValue);
         continue;
       }
@@ -168,6 +183,10 @@ export function generateStructureValue(
         const renamedKey = node[`_renamed_${key}`] || key;
 
         if (Array.isArray(cleanNode[key])) {
+          if (!arrayUsesMapPattern) {
+            addRequiredStructureGlob(componentInfo, key);
+          }
+
           if (!value[renamedKey]) {
             if (arrayUsesMapPattern && (node[key] as BuilderNode[]).length > 0) {
               const childNode = (node[key] as BuilderNode[])[0];
@@ -179,22 +198,6 @@ export function generateStructureValue(
             }
           }
 
-          if (isInFreeformMode && componentInfo) {
-            const inputConfig = componentInfo.inputs?.[key];
-            const structuresRef = inputConfig?.options?.structures;
-
-            if (structuresRef && typeof structuresRef === "string") {
-              const match = structuresRef.match(/_structures\.(\w+)/);
-
-              if (match) {
-                const structureName = match[1];
-
-                requiredStructureGlobs.add(
-                  `/.cloudcannon/structures/${structureName}.cloudcannon.structures.yml`
-                );
-              }
-            }
-          }
         } else if (value[renamedKey] === undefined) {
           value[renamedKey] = stripRuntimeIds(cleanNode[key]);
         }
