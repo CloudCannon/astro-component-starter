@@ -1,0 +1,19 @@
+label: Section Info
+icon: star
+description: Section Info description
+value:
+  _component: page-sections/info-blocks/section-info
+  label: ''
+  heading: My Heading
+  subtext: My text goes here.
+preview:
+  text:
+    - Section Info
+  subtext:
+    - key: heading
+  icon: star
+picker_preview:
+  text: Section Info
+  subtext: Section Info description
+_inputs_from_glob:
+  - /src/components/page-sections/info-blocks/section-info/section-info.cloudcannon.inputs.yml

@@ -1,0 +1,51 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Text from "@core-elements/text/Text.astro";
+
+const {
+  label,
+  editable = true,
+  class: className,
+  _component,
+  heading,
+  subtext,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  backgroundColor="base"
+  backgroundImage={{"source":"","alt":"","positionVertical":"","positionHorizontal":""}}
+  class:list={["section-info", className]}
+  colorScheme="inherit"
+  editable={false}
+  label=""
+  maxContentWidth="2xl"
+  paddingHorizontal="md"
+  paddingVertical="md"
+  {...htmlAttributes}
+>
+  <Heading
+    alignX="start"
+    data-prop="heading"
+    iconName=""
+    iconPosition="before"
+    level="h2"
+    size="default"
+    text={heading}
+  />
+  <Text
+    alignX="start"
+    data-prop="subtext"
+    text={subtext}
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .section-info {
+     
+    }
+  }
+</style>

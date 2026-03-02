@@ -1,0 +1,23 @@
+label:
+  type: text
+  comment: Label for the component
+heading:
+  comment: The text content of the heading.
+  type: textarea
+subtext:
+  comment: The content for the text component (Markdown format). Leave empty to use slot content instead.
+  type: markdown
+  options:
+    blockquote: false
+    bold: true
+    format: p h1 h2 h3 h4 h5 h6 pre
+    italic: true
+    link: true
+    strike: false
+    subscript: true
+    superscript: true
+    underline: false
+    bulletedlist: true
+    numberedlist: true
+    indent: true
+    outdent: true
