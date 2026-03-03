@@ -9,37 +9,40 @@ const {
 ---
 
 <div
-  class:list={["embed-wrapper", `ratio-${aspectRatio}`, className]}
-  set:html={html}
+  class:list={["embed-wrapper", className]}
   {...htmlAttributes}
-/>
+>
+  <div class:list={["embed-content", `ratio-${aspectRatio}`]} set:html={html} />
+</div>
 
 <style is:global>
   @layer components {
     .embed-wrapper {
       margin-top: var(--spacing-lg);
 
-      > iframe {
-        border: none;
-        display: block;
-        height: 100%;
-        width: 100%;
-      }
+      > .embed-content {
+        > iframe {
+          border: none;
+          display: block;
+          height: 100%;
+          width: 100%;
+        }
 
-      &.ratio-square {
-        aspect-ratio: var(--ratio-square);
-      }
+        &.ratio-square {
+          aspect-ratio: var(--ratio-square);
+        }
 
-      &.ratio-landscape {
-        aspect-ratio: var(--ratio-landscape);
-      }
+        &.ratio-landscape {
+          aspect-ratio: var(--ratio-landscape);
+        }
 
-      &.ratio-portrait {
-        aspect-ratio: var(--ratio-portrait);
-      }
+        &.ratio-portrait {
+          aspect-ratio: var(--ratio-portrait);
+        }
 
-      &.ratio-widescreen {
-        aspect-ratio: var(--ratio-widescreen);
+        &.ratio-widescreen {
+          aspect-ratio: var(--ratio-widescreen);
+        }
       }
     }
   }

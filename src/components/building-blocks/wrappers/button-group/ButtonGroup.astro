@@ -38,10 +38,10 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["button-group", direction === "column" ? "column" : "row", alignClass, className]}
+  class:list={["button-group", className]}
   {...htmlAttributes}
 >
-  <div class="button-group__items" {...arrayDataAttributes}>
+  <div class:list={["button-group__items", direction === "column" ? "column" : "row", alignClass]} {...arrayDataAttributes}>
     <slot>
       {
         buttonSections && buttonSections.length > 0 && (
@@ -67,39 +67,27 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
         gap: var(--spacing-sm);
         justify-content: flex-start;
         width: 100%;
-      }
 
-      &.column {
-        > .button-group__items {
+        &.column {
           flex-direction: column;
-        }
 
-        &.align-start {
-          > .button-group__items {
+          &.align-start {
             align-items: flex-start;
           }
-        }
 
-        &.align-end {
-          > .button-group__items {
+          &.align-end {
             align-items: flex-end;
           }
         }
-      }
 
-      &.row {
-        > .button-group__items {
+        &.row {
           flex-direction: row;
-        }
 
-        &.align-center {
-          > .button-group__items {
+          &.align-center {
             justify-content: center;
           }
-        }
 
-        &.align-end {
-          > .button-group__items {
+          &.align-end {
             justify-content: flex-end;
           }
         }

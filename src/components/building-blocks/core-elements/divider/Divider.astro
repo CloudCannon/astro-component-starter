@@ -3,52 +3,56 @@ const { paddingVertical = "md", class: className, _component, ...htmlAttributes 
 ---
 
 <div
-  class:list={["divider", className, `padding-y-${paddingVertical}`]}
+  class:list={["divider", className]}
   {...htmlAttributes}
   aria-hidden="true"
 >
-  <hr class="rule" />
+  <div class:list={["divider-inner", `padding-y-${paddingVertical}`]}>
+    <hr class="rule" />
+  </div>
 </div>
 
 <style is:global>
   @layer components {
     .divider {
-      &.padding-y-none {
-        padding: 0;
-      }
+      > .divider-inner {
+        &.padding-y-none {
+          padding: 0;
+        }
 
-      &.padding-y-xs {
-        padding-block: var(--spacing-xs);
-      }
+        &.padding-y-xs {
+          padding-block: var(--spacing-xs);
+        }
 
-      &.padding-y-sm {
-        padding-block: var(--spacing-sm);
-      }
+        &.padding-y-sm {
+          padding-block: var(--spacing-sm);
+        }
 
-      &.padding-y-md {
-        padding-block: var(--spacing-md);
-      }
+        &.padding-y-md {
+          padding-block: var(--spacing-md);
+        }
 
-      &.padding-y-lg {
-        padding-block: var(--spacing-lg);
-      }
+        &.padding-y-lg {
+          padding-block: var(--spacing-lg);
+        }
 
-      &.padding-y-xl {
-        padding-block: var(--spacing-xl);
-      }
+        &.padding-y-xl {
+          padding-block: var(--spacing-xl);
+        }
 
-      &.padding-y-2xl {
-        padding-block: var(--spacing-2xl);
-      }
+        &.padding-y-2xl {
+          padding-block: var(--spacing-2xl);
+        }
 
-      &.padding-y-3xl {
-        padding-block: var(--spacing-3xl);
-      }
+        &.padding-y-3xl {
+          padding-block: var(--spacing-3xl);
+        }
 
-      > .rule {
-        border: 0;
-        border-top: 2px solid var(--color-border-subtle);
-        margin: 0;
+        > .rule {
+          border: 0;
+          border-top: 2px solid var(--color-border-subtle);
+          margin: 0;
+        }
       }
     }
   }

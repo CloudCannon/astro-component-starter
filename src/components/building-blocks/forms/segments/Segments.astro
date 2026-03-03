@@ -20,7 +20,7 @@ const inputType = multiple ? "checkbox" : "radio";
 ---
 
 <fieldset
-  class:list={["segments", iconOnly && "icon-only", multiple && "multiple", className]}
+  class:list={["segments", className]}
   role={multiple ? "group" : "radiogroup"}
   aria-labelledby={title ? `${groupId}-legend` : undefined}
   {...htmlAttributes}
@@ -37,7 +37,7 @@ const inputType = multiple ? "checkbox" : "radio";
       </legend>
     )
   }
-  <div class="segments-options" role="presentation">
+  <div class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]} role="presentation">
     {
       options.map((option, index: number) => (
         <label class="segments-option">
@@ -179,7 +179,7 @@ const inputType = multiple ? "checkbox" : "radio";
         border-inline-start: 0;
       }
 
-      &.icon-only .segments-option .segment .segment-icon {
+      > .segments-options.icon-only .segments-option .segment .segment-icon {
         margin-block: var(--spacing-xs);
       }
     }

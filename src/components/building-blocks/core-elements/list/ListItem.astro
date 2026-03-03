@@ -23,44 +23,48 @@ const textDataAttributes = effectiveDataProp
 ---
 
 <li
-  class:list={["item", showIcon && iconName && "list-item-has-icon", className]}
+  class:list={["item", className]}
   {...htmlAttributes}
 >
-  {
-    showIcon && iconName && (
-      <Icon name={iconName} color={iconColor} size="none" class="list-icon" aria-hidden="true" />
-    )
-  }
-  <p {...textDataAttributes}>
-    {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
-  </p>
+  <span class:list={["item-inner", showIcon && iconName && "list-item-has-icon"]}>
+    {
+      showIcon && iconName && (
+        <Icon name={iconName} color={iconColor} size="none" class="list-icon" aria-hidden="true" />
+      )
+    }
+    <p {...textDataAttributes}>
+      {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
+    </p>
+  </span>
 </li>
 
 <style is:global>
   @layer components {
     .item {
-      &.list-item-has-icon {
-        display: block;
-      }
-
-      > p {
-        display: inline;
-        font-size: inherit;
-        margin: 0;
-      }
-
-      > .list-icon {
-        display: inline-block;
-        flex-shrink: 0;
-        height: 1em;
-        margin-right: var(--spacing-em-xs);
-        vertical-align: -0.15em;
-        width: 1em;
-
-        svg {
+      > .item-inner {
+        &.list-item-has-icon {
           display: block;
-          height: 100%;
-          width: 100%;
+        }
+
+        > p {
+          display: inline;
+          font-size: inherit;
+          margin: 0;
+        }
+
+        > .list-icon {
+          display: inline-block;
+          flex-shrink: 0;
+          height: 1em;
+          margin-right: var(--spacing-em-xs);
+          vertical-align: -0.15em;
+          width: 1em;
+
+          svg {
+            display: block;
+            height: 100%;
+            width: 100%;
+          }
         }
       }
     }

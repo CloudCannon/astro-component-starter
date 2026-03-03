@@ -183,8 +183,8 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 
       carousel.setAttribute("data-embla-initialized", "true");
 
-      const prevButton = inner.querySelector(".prev") as HTMLButtonElement;
-      const nextButton = inner.querySelector(".next") as HTMLButtonElement;
+      const prevButton = inner.querySelector(".prev > .button-inner") as HTMLButtonElement;
+      const nextButton = inner.querySelector(".next > .button-inner") as HTMLButtonElement;
 
       const updateButtons = () => {
         if (prevButton) prevButton.disabled = !embla.canScrollPrev();
@@ -273,8 +273,8 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           margin-top: var(--spacing-sm);
         }
 
-        > .controls-wrapper > .prev,
-        > .controls-wrapper > .next {
+        > .controls-wrapper > .prev > .button-inner,
+        > .controls-wrapper > .next > .button-inner {
           background-color: var(--color-bg);
           border-radius: var(--radius-full);
           flex-shrink: 0;

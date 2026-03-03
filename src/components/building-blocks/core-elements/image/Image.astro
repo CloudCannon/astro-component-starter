@@ -137,48 +137,51 @@ if (
 ---
 
 <div
-  class:list={[
-    "image",
-    aspectRatio && "ratio",
-    aspectRatio && `ratio-${aspectRatio}`,
-    positionClass,
-    rounded && "rounded",
-    background && "background",
-    className,
-  ]}
+  class:list={["image", className]}
   {...htmlAttributes}
 >
-  {
-    shouldRenderOptimizedPicture ? (
-      <Picture
-        src={imageSrc}
-        alt={normalizedAlt}
-        widths={filteredWidths}
-        sizes={sizes}
-        formats={["webp"]}
-        width={finalWidth}
-        height={finalHeight}
-        fit={useFit}
-        position={usePosition}
-        loading={priority ? "eager" : "lazy"}
-        decoding={priority ? "sync" : "async"}
-        fetchpriority={priority ? "high" : undefined}
-        {...dataAttributes}
-      />
-    ) : (
-      <picture {...dataAttributes}>
-        <img
-          src={source}
+  <div
+    class:list={[
+      "image-inner",
+      aspectRatio && "ratio",
+      aspectRatio && `ratio-${aspectRatio}`,
+      positionClass,
+      rounded && "rounded",
+      background && "background",
+    ]}
+  >
+    {
+      shouldRenderOptimizedPicture ? (
+        <Picture
+          src={imageSrc}
           alt={normalizedAlt}
+          widths={filteredWidths}
+          sizes={sizes}
+          formats={["webp"]}
+          width={finalWidth}
+          height={finalHeight}
+          fit={useFit}
+          position={usePosition}
           loading={priority ? "eager" : "lazy"}
           decoding={priority ? "sync" : "async"}
           fetchpriority={priority ? "high" : undefined}
-          width={width}
-          height={height}
+          {...dataAttributes}
         />
-      </picture>
-    )
-  }
+      ) : (
+        <picture {...dataAttributes}>
+          <img
+            src={source}
+            alt={normalizedAlt}
+            loading={priority ? "eager" : "lazy"}
+            decoding={priority ? "sync" : "async"}
+            fetchpriority={priority ? "high" : undefined}
+            width={width}
+            height={height}
+          />
+        </picture>
+      )
+    }
+  </div>
 </div>
 
 <style is:global>
@@ -188,104 +191,113 @@ if (
       margin-top: var(--spacing-lg);
       overflow: hidden;
 
-      &.ratio-square {
-        aspect-ratio: var(--ratio-square);
-      }
-
-      &.ratio-landscape {
-        aspect-ratio: var(--ratio-landscape);
-      }
-
-      &.ratio-portrait {
-        aspect-ratio: var(--ratio-portrait);
-      }
-
-      &.ratio-widescreen {
-        aspect-ratio: var(--ratio-widescreen);
-      }
-
-      &.ratio-horizontal-strip {
-        aspect-ratio: var(--ratio-horizontal-strip);
-      }
-
-      &.ratio {
-        picture {
-          height: 100%;
-        }
-
-        img {
-          height: 100%;
-          object-fit: cover;
-          object-position: center center;
-        }
-      }
-
-      &.background {
+      &:has(> .image-inner.background) {
         inset: 0;
         margin-top: 0;
         position: absolute;
+      }
 
-        > picture {
-          height: 100%;
+      > .image-inner {
+        overflow: hidden;
+
+        &.ratio-square {
+          aspect-ratio: var(--ratio-square);
         }
 
-        > picture > img {
+        &.ratio-landscape {
+          aspect-ratio: var(--ratio-landscape);
+        }
+
+        &.ratio-portrait {
+          aspect-ratio: var(--ratio-portrait);
+        }
+
+        &.ratio-widescreen {
+          aspect-ratio: var(--ratio-widescreen);
+        }
+
+        &.ratio-horizontal-strip {
+          aspect-ratio: var(--ratio-horizontal-strip);
+        }
+
+        &.ratio {
+          picture {
+            height: 100%;
+          }
+
+          img {
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+          }
+        }
+
+        &.background {
           height: 100%;
-          object-fit: cover;
+          width: 100%;
+
+          > picture {
+            height: 100%;
+          }
+
+          > picture > img {
+            height: 100%;
+            object-fit: cover;
+            width: 100%;
+          }
+        }
+
+        picture {
+          display: block;
+          margin-block: auto;
           width: 100%;
         }
-      }
 
-      picture {
-        display: block;
-        margin-block: auto;
-        width: 100%;
-      }
+        img {
+          display: block;
+          height: auto;
+          width: 100%;
+        }
 
-      img {
-        display: block;
-        height: auto;
-        width: 100%;
-      }
+        &.position-center-center img {
+          object-position: center center;
+        }
 
-      &.position-center-center img {
-        object-position: center center;
-      }
+        &.position-top-center img {
+          object-position: center top;
+        }
 
-      &.position-top-center img {
-        object-position: center top;
-      }
+        &.position-bottom-center img {
+          object-position: center bottom;
+        }
 
-      &.position-bottom-center img {
-        object-position: center bottom;
-      }
+        &.position-center-left img {
+          object-position: left center;
+        }
 
-      &.position-center-left img {
-        object-position: left center;
-      }
+        &.position-center-right img {
+          object-position: right center;
+        }
 
-      &.position-center-right img {
-        object-position: right center;
-      }
+        &.position-top-left img {
+          object-position: left top;
+        }
 
-      &.position-top-left img {
-        object-position: left top;
-      }
+        &.position-top-right img {
+          object-position: right top;
+        }
 
-      &.position-top-right img {
-        object-position: right top;
-      }
+        &.position-bottom-left img {
+          object-position: left bottom;
+        }
 
-      &.position-bottom-left img {
-        object-position: left bottom;
-      }
+        &.position-bottom-right img {
+          object-position: right bottom;
+        }
 
-      &.position-bottom-right img {
-        object-position: right bottom;
-      }
-
-      &.rounded {
-        border-radius: var(--radius-lg);
+        &.rounded {
+          border-radius: var(--radius-lg);
+        }
       }
     }
   }

@@ -19,6 +19,5 @@ blocks:
       link: https://x.com/
     - icon: social/instagram
       link: https://instagram.com/
-  footerText: '&copy; 2025 My Site Inc. All rights reserved.'
-
+  footerText: '&copy; 2026 My Site Inc. All rights reserved.'
 ---
