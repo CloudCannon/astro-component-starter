@@ -19,8 +19,8 @@ _structures:
     values:
       - label: Definition List Item
         value:
-          title: ""
-          text: ""
+          title: "My Definition Title"
+          text: "My Definition Content"
         preview:
           icon: list
           text:
