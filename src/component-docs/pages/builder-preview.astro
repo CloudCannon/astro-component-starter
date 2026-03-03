@@ -3,7 +3,6 @@ import Component from "@components/utils/renderBlock.astro";
 import type { ContentBlock } from "../../types";
 import "@styles/style.css";
 
-/** Render on each request so query param ?tree=... is available (dev/preview only). */
 export const prerender = false;
 
 let contentSections: ContentBlock[] = [];
