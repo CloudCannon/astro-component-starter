@@ -4,7 +4,7 @@ overview: 'Groups buttons into rows or columns with even spacing and alignment. 
 slots:
   - title: default
     description: The contents for the the ButtonGroup.
-    fallback_for: buttons
+    fallback_for: buttonSections
 examples:
   - title: Direction
     slugs:

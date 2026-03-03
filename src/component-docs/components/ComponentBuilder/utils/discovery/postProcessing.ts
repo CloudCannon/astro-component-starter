@@ -123,6 +123,94 @@ export function registerVirtualComponents(
     }
   }
 
+  // Some wrapper components intentionally omit `_component` from inline structure values
+  // (e.g. Grid items / Carousel slides). For those, synthesize the virtual child component
+  // from docs metadata so the builder can still add/edit repeatable wrapper items.
+  for (const component of components) {
+    const parentMetadata = metadataMap.get(component.path) || metadataMap.get(component.name);
+    const childMeta = parentMetadata?.childComponent;
+
+    if (!childMeta?.name) continue;
+
+    const childKebab = toKebabCase(childMeta.name);
+    const virtualPath = `${component.path}/${childKebab}`;
+    const alreadyRegistered =
+      components.some((c) => c.path === virtualPath) ||
+      virtualComponents.some((c) => c.path === virtualPath);
+
+    if (alreadyRegistered) continue;
+
+    const repeatableSlot = component.slots?.find((slot) => slot.isRepeatable);
+    const slotStructureName = repeatableSlot?.structureName;
+    const structureDef = slotStructureName
+      ? (component.structureValue?._structures?.[slotStructureName] as
+          | Record<string, unknown>
+          | undefined)
+      : undefined;
+    const firstValue = Array.isArray(structureDef?.values)
+      ? (structureDef.values[0] as Record<string, unknown> | undefined)
+      : undefined;
+    const valueObj = (firstValue?.value as Record<string, unknown> | undefined) || {};
+    const valueInputs =
+      (firstValue?._inputs as Record<string, Record<string, unknown>> | undefined) || {};
+    const virtualSlots: SlotDefinition[] = [];
+
+    for (const [propName, inputDef] of Object.entries(valueInputs)) {
+      if (
+        typeof inputDef === "object" &&
+        inputDef !== null &&
+        "type" in inputDef &&
+        inputDef.type === "array" &&
+        "options" in inputDef &&
+        typeof inputDef.options === "object" &&
+        inputDef.options !== null &&
+        "structures" in inputDef.options &&
+        typeof (inputDef.options as Record<string, unknown>).structures === "string"
+      ) {
+        const nestedStructureName = (
+          (inputDef.options as Record<string, unknown>).structures as string
+        ).replace("_structures.", "");
+
+        virtualSlots.push({
+          propName,
+          label: propName.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase()),
+          allowedComponents: [],
+          structureName: nestedStructureName,
+        });
+      }
+    }
+
+    const mergedInputs: Record<string, InputConfig> = {};
+
+    for (const [key, val] of Object.entries(valueObj)) {
+      if (key.startsWith("_")) continue;
+
+      if (valueInputs[key] && typeof valueInputs[key] === "object") {
+        mergedInputs[key] = valueInputs[key] as InputConfig;
+      } else {
+        mergedInputs[key] = (val as InputConfig) || {};
+      }
+    }
+
+    log(`Registering metadata virtual component: ${virtualPath}`);
+    virtualComponents.push({
+      path: virtualPath,
+      category: component.category,
+      name: childKebab,
+      displayName: childMeta.name.replace(/([a-z])([A-Z])/g, "$1 $2"),
+      fileName: `${childMeta.name}.astro`,
+      inputs: mergedInputs,
+      structureValue: {
+        value: valueObj,
+      },
+      supportsSlots: virtualSlots.length > 0,
+      description: "",
+      icon: "",
+      slots: virtualSlots.length > 0 ? virtualSlots : undefined,
+      isVirtual: true,
+    });
+  }
+
   return virtualComponents;
 }
 
@@ -145,6 +233,17 @@ export function populateAllowedComponentsForSlots(
             nestingRules,
             log
           );
+          if (slot.isRepeatable) {
+            const wrapperVirtualChildren = components
+              .filter((c) => c.isVirtual && c.path.startsWith(`${component.path}/`))
+              .map((c) => c.path);
+
+            for (const childPath of wrapperVirtualChildren) {
+              if (!slot.allowedComponents.includes(childPath)) {
+                slot.allowedComponents.push(childPath);
+              }
+            }
+          }
           log("-> Allowed components:", slot.allowedComponents);
         }
       }
