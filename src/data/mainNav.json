@@ -18,7 +18,7 @@
       "children": []
     }
   ],
-  "buttons": [
+  "buttonSections": [
     {
       "_component": "building-blocks/core-elements/button",
       "text": "Search",

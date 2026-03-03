@@ -19,11 +19,11 @@ subtext:
     underline: false
     bulletedlist: false
     numberedlist: false
-buttons:
+buttonSections:
   type: array
   comment: Button blocks for calls to action.
   options:
-    structures: _structures.buttons
+    structures: _structures.buttonSections
 colorScheme:
   type: select
   comment: Color scheme theme for the hero.

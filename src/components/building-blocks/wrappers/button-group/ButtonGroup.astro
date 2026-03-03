@@ -1,11 +1,11 @@
 ---
+import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
-import Button from "@core-elements/button/Button.astro";
 
 const {
   direction = "row",
   alignX = "start",
-  buttons,
+  buttonSections,
   "data-children-prop": childrenDataProp,
   editable = false,
   class: className,
@@ -14,7 +14,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "buttons" : null);
+const effectiveChildrenProp = childrenDataProp ?? (editable ? "buttonSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -31,11 +31,10 @@ const alignMap = {
 
 const alignClass = alignMap[alignX as keyof typeof alignMap] ?? "align-start";
 
-const normalizedButtons: Array<Record<string, unknown>> = Array.isArray(buttons) ? buttons : [];
-const hasButtons = normalizedButtons.length > 0;
+const hasButtonSections = buttonSections?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 
-if (!_component && !hasButtons && !hasSlotContent) return;
+if (!_component && !hasButtonSections && !hasSlotContent) return;
 ---
 
 <div
@@ -45,14 +44,9 @@ if (!_component && !hasButtons && !hasSlotContent) return;
   <div class="button-group__items" {...arrayDataAttributes}>
     <slot>
       {
-        normalizedButtons.map((button) => (
-          <Button
-            data-editable={effectiveChildrenProp ? "array-item" : undefined}
-            data-id="building-blocks/core-elements/button"
-            editable={!!effectiveChildrenProp}
-            {...button}
-          />
-        ))
+        buttonSections && buttonSections.length > 0 && (
+          <Component contentSections={buttonSections} editable={!!effectiveChildrenProp} />
+        )
       }
     </slot>
   </div>

@@ -11,6 +11,9 @@ blocks:
     positionVertical: bottom
     positionHorizontal: right
   contentSections:
-    - alignX: end
+    - _component: building-blocks/core-elements/text
+      alignX: end
       text: Build bold. Launch fast.
+
+
 ---

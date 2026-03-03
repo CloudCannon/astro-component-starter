@@ -13,4 +13,5 @@ examples:
   - slugs:
       - without-label
     size: sm
+
 ---

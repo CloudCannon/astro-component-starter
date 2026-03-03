@@ -7,4 +7,5 @@ blocks:
   name: 'terms_agreement'
   checked: false
   required: true
+
 ---

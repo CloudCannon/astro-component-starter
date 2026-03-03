@@ -14,4 +14,5 @@ examples:
   - slugs:
       - suffix
     size: sm
+
 ---

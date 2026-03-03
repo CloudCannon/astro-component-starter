@@ -7,4 +7,5 @@ blocks:
   alt: 'Castle'
   aspectRatio: square
   style: 'max-width: 400px;'
+
 ---

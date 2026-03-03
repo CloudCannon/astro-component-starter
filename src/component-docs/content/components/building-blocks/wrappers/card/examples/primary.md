@@ -7,9 +7,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: This is a card
+    - _component: building-blocks/core-elements/heading
+      text: This is a card
       level: h3
-    - text: This is a basic card component. It provides ways of setting background, a border, rounded corners, and can be configured as a clickable block.
+    - _component: building-blocks/core-elements/text
+      text: This is a basic card component. It provides ways of setting background, a border, rounded corners, and can be configured as a clickable block.
   label: ''
   colorScheme: light
   backgroundColor: base
@@ -23,4 +25,6 @@ blocks:
   showBeforeAfter: false
   beforeContentSections: []
   afterContentSections: []
+
+
 ---

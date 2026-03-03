@@ -7,7 +7,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: 'Borderless Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Borderless Card'
       level: h3
-    - text: 'This card has no border applied.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card has no border applied.'
+
+
 ---

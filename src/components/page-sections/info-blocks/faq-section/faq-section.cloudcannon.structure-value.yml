@@ -33,7 +33,8 @@ _structures:
         value:
           title: Question text
           contentSections:
-            - text: Answer text goes here.
+            - _component: building-blocks/core-elements/text
+              text: Answer text goes here.
         preview:
           text:
             - key: title

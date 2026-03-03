@@ -5,4 +5,5 @@ blocks:
   _component: 'building-blocks/core-elements/icon'
   name: cube
   size: lg
+
 ---

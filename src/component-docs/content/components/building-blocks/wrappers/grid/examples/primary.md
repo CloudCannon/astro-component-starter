@@ -7,18 +7,30 @@ blocks:
   layout: start
   items:
     - contentSections:
-        - text: Grid Item 1
+        - _component: building-blocks/core-elements/heading
+          text: Grid Item 1
           level: h3
-        - text: This is the first grid item with a heading and simple text. The grid component centers items and provides flexible width options.
+        - _component: building-blocks/core-elements/text
+          text: This is the first grid item with a heading and simple text. The grid component centers items and provides flexible width options.
     - contentSections:
-        - text: Grid Item 2
+        - _component: building-blocks/core-elements/heading
+          text: Grid Item 2
           level: h3
-        - text: This is the second grid item. Items can have equal or unequal widths.
+        - _component: building-blocks/core-elements/text
+          text: This is the second grid item. Items can have equal or unequal widths.
     - contentSections:
-        - text: Grid Item 3
+        - _component: building-blocks/core-elements/heading
+          text: Grid Item 3
           level: h3
-        - text: This is the third grid item. The layout is responsive and adapts to different screen sizes.
+        - _component: building-blocks/core-elements/text
+          text: This is the third grid item. The layout is responsive and adapts to different screen sizes.
   label: ''
   maxItemWidth: 400
   gap: md
+
+
+
+
+
+
 ---

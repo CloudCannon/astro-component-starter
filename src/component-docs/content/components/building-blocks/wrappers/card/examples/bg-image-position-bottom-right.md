@@ -11,7 +11,11 @@ blocks:
     positionVertical: bottom
     positionHorizontal: right
   contentSections:
-    - text: 'Bottom Right Position'
+    - _component: building-blocks/core-elements/heading
+      text: 'Bottom Right Position'
       level: h3
-    - text: "This card's background image is positioned at the bottom-right corner."
+    - _component: building-blocks/core-elements/text
+      text: "This card's background image is positioned at the bottom-right corner."
+
+
 ---

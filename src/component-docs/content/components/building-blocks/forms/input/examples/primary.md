@@ -8,4 +8,5 @@ blocks:
   type: 'email'
   placeholder: 'Enter your email'
   required: true
+
 ---

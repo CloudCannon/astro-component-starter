@@ -7,6 +7,9 @@ blocks:
   paddingHorizontal: lg
   paddingVertical: lg
   contentSections:
-    - text: This Custom Section has lg padding.
+    - _component: building-blocks/core-elements/heading
+      text: This Custom Section has lg padding.
       level: h2
+
+
 ---

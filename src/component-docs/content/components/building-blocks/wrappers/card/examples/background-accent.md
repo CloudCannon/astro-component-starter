@@ -7,7 +7,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: 'Accent Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Accent Card'
       level: h3
-    - text: 'This card uses the accent background color.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses the accent background color.'
+
+
 ---

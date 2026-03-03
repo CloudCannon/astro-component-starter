@@ -7,7 +7,11 @@ blocks:
   paddingVertical: sm
   backgroundColor: surface
   contentSections:
-    - text: 'sm padding'
+    - _component: building-blocks/core-elements/heading
+      text: 'sm padding'
       level: h3
-    - text: 'This card uses sm padding for a very compact appearance.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses sm padding for a very compact appearance.'
+
+
 ---

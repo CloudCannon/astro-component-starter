@@ -6,7 +6,10 @@ blocks:
   backgroundColor: 'surface'
   maxContentWidth: md
   contentSections:
-    - text: This card has md max content width.
+    - _component: building-blocks/core-elements/heading
+      text: This card has md max content width.
       level: h3
       alignX: center
+
+
 ---

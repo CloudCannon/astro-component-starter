@@ -6,7 +6,10 @@ blocks:
   backgroundColor: 'surface'
   maxContentWidth: lg
   contentSections:
-    - text: This card has lg max content width.
+    - _component: building-blocks/core-elements/heading
+      text: This card has lg max content width.
       level: h3
       alignX: center
+
+
 ---

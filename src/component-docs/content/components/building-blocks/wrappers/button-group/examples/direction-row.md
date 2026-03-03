@@ -5,11 +5,15 @@ blocks:
   _component: 'building-blocks/wrappers/button-group'
   direction: row
   alignX: start
-  buttons:
-    - text: 'Button A'
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: 'Button A'
       variant: secondary
-    - text: 'Button B'
+    - _component: building-blocks/core-elements/button
+      text: 'Button B'
       variant: secondary
-    - text: 'Button C'
+    - _component: building-blocks/core-elements/button
+      text: 'Button C'
       variant: secondary
+
 ---

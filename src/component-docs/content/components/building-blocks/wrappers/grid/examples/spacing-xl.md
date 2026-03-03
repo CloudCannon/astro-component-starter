@@ -9,30 +9,46 @@ blocks:
   maxItemWidth: 300
   items:
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Item 1'
+            - _component: building-blocks/core-elements/heading
+              text: 'Item 1'
               level: h3
-            - text: 'Extra large spacing creates significant separation.'
+            - _component: building-blocks/core-elements/text
+              text: 'Extra large spacing creates significant separation.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Item 2'
+            - _component: building-blocks/core-elements/heading
+              text: 'Item 2'
               level: h3
-            - text: 'Perfect for highlighting important content.'
+            - _component: building-blocks/core-elements/text
+              text: 'Perfect for highlighting important content.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Item 3'
+            - _component: building-blocks/core-elements/heading
+              text: 'Item 3'
               level: h3
-            - text: 'Creates a premium, spacious layout feel.'
+            - _component: building-blocks/core-elements/text
+              text: 'Creates a premium, spacious layout feel.'
+
+
+
+
+
+
+
 ---

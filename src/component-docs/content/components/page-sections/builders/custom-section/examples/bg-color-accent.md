@@ -7,6 +7,9 @@ blocks:
   paddingVertical: 'lg'
   paddingHorizontal: 'lg'
   contentSections:
-    - text: Accent background color
+    - _component: building-blocks/core-elements/heading
+      text: Accent background color
       level: h2
+
+
 ---

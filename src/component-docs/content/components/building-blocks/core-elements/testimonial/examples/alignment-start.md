@@ -8,4 +8,5 @@ blocks:
     authorDescription: 'Author'
     authorImage: /src/assets/images/component-docs/profile.jpg
     alignX: start
+
 ---

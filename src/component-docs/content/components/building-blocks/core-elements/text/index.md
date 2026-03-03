@@ -8,4 +8,5 @@ slots:
 examples:
   - slugs:
       - align
+
 ---

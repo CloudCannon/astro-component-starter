@@ -4,8 +4,9 @@ description: Arranges buttons side by side with consistent spacing.
 value:
   _component: building-blocks/wrappers/button-group
   label: null
-  buttons:
-    - text: My Button
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: My Button
       hideText: false
       link: ""
       iconName: ""

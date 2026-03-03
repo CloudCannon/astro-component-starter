@@ -6,4 +6,5 @@ blocks:
   label: 'Upload files'
   name: 'files'
   multiple: true
+
 ---

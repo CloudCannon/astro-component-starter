@@ -8,7 +8,11 @@ blocks:
   paddingHorizontal: md
   paddingVertical: md
   contentSections:
-    - text: 'Rounded Custom Section'
+    - _component: building-blocks/core-elements/heading
+      text: 'Rounded Custom Section'
       level: h3
-    - text: 'This Custom Section has rounded corners applied.'
+    - _component: building-blocks/core-elements/text
+      text: 'This Custom Section has rounded corners applied.'
+
+
 ---

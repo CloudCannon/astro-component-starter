@@ -20,4 +20,5 @@ blocks:
     - icon: social/instagram
       link: https://instagram.com/
   footerText: '&copy; 2025 My Site Inc. All rights reserved.'
+
 ---

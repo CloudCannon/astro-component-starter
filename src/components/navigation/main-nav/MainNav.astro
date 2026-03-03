@@ -4,13 +4,18 @@ import Bar from "@components/navigation/bar/Bar.astro";
 import Mobile from "@components/navigation/mobile/Mobile.astro";
 import Image from "@core-elements/image/Image.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
-import type { NavButton } from "../../../../types";
+
+type NavButton = {
+  text?: string;
+  href?: string;
+  [key: string]: unknown;
+};
 
 const {
   logoSource,
   logoAlt = "logo",
   navData = [],
-  buttons = [] as NavButton[],
+  buttonSections = [] as NavButton[],
   class: className,
   _component,
   ...htmlAttributes
@@ -18,7 +23,7 @@ const {
 
 const mobileNavData = [
   ...navData,
-  ...buttons.map((button) => ({
+  ...buttonSections.map((button: NavButton) => ({
     name: button.text || "Button",
     path: button.href || "#",
     children: [],
@@ -44,7 +49,7 @@ const mobileNavData = [
       direction="row"
       align="center"
       class="desktop-button-group"
-      buttons={buttons}
+      buttonSections={buttonSections}
       editable={false}
     />
   </div>

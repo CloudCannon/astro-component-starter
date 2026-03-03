@@ -5,10 +5,13 @@ blocks:
   _component: building-blocks/wrappers/button-group
   direction: row
   alignX: start
-  buttons:
-    - text: Primary Action
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: Primary Action
       variant: primary
-    - text: Secondary Action
+    - _component: building-blocks/core-elements/button
+      text: Secondary Action
       variant: secondary
   label: ''
+
 ---

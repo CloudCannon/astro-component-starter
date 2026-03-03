@@ -16,4 +16,5 @@ blocks:
     - value: 'promotions'
       label: 'Receive promotions'
       checked: false
+
 ---

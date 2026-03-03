@@ -8,33 +8,50 @@ blocks:
   minSlideWidth: 200
   slides:
     - contentSections:
-        - paddingHorizontal: xs
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: xs
           paddingVertical: none
           contentSections:
-            - source: /src/assets/images/component-docs/quiet-street.jpg
+            - _component: building-blocks/core-elements/image
+              source: /src/assets/images/component-docs/quiet-street.jpg
               alt: 'Quiet Street'
     - contentSections:
-        - paddingHorizontal: xs
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: xs
           paddingVertical: none
           contentSections:
-            - source: /src/assets/images/component-docs/sunset.jpg
+            - _component: building-blocks/core-elements/image
+              source: /src/assets/images/component-docs/sunset.jpg
               alt: 'Sunset'
     - contentSections:
-        - paddingHorizontal: xs
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: xs
           paddingVertical: none
           contentSections:
-            - source: /src/assets/images/component-docs/sheep.jpg
+            - _component: building-blocks/core-elements/image
+              source: /src/assets/images/component-docs/sheep.jpg
               alt: 'Sheep'
     - contentSections:
-        - paddingHorizontal: xs
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: xs
           paddingVertical: none
           contentSections:
-            - source: /src/assets/images/component-docs/castle.jpg
+            - _component: building-blocks/core-elements/image
+              source: /src/assets/images/component-docs/castle.jpg
               alt: 'Castle'
     - contentSections:
-        - paddingHorizontal: xs
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: xs
           paddingVertical: none
           contentSections:
-            - source: /src/assets/images/component-docs/dunedin-cliff.jpg
+            - _component: building-blocks/core-elements/image
+              source: /src/assets/images/component-docs/dunedin-cliff.jpg
               alt: 'Dunedin Cliff'
+
+
+
+
+
+
+
 ---

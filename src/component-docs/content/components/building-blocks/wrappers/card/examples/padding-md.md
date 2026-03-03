@@ -7,7 +7,11 @@ blocks:
   paddingVertical: md
   backgroundColor: surface
   contentSections:
-    - text: 'md Padding'
+    - _component: building-blocks/core-elements/heading
+      text: 'md Padding'
       level: h3
-    - text: 'This card uses md padding for balanced spacing and readability.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses md padding for balanced spacing and readability.'
+
+
 ---

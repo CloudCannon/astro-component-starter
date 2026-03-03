@@ -7,7 +7,11 @@ blocks:
   paddingVertical: xl
   backgroundColor: surface
   contentSections:
-    - text: 'xl Padding'
+    - _component: building-blocks/core-elements/heading
+      text: 'xl Padding'
       level: h3
-    - text: 'This card uses xl padding for generous spacing and visual impact.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses xl padding for generous spacing and visual impact.'
+
+
 ---

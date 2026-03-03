@@ -7,6 +7,9 @@ blocks:
   paddingVertical: 'lg'
   paddingHorizontal: 'lg'
   contentSections:
-    - text: No background color (transparent)
+    - _component: building-blocks/core-elements/heading
+      text: No background color (transparent)
       level: h2
+
+
 ---

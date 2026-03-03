@@ -7,7 +7,11 @@ blocks:
   paddingVertical: 2xl
   backgroundColor: surface
   contentSections:
-    - text: '2xl Padding'
+    - _component: building-blocks/core-elements/heading
+      text: '2xl Padding'
       level: h3
-    - text: 'This card uses 2xl padding for maximum spacing and dramatic visual presence.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses 2xl padding for maximum spacing and dramatic visual presence.'
+
+
 ---

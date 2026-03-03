@@ -9,7 +9,7 @@ import Split from "@wrappers/split/Split.astro";
 const {
   heading = "",
   subtext = "",
-  buttons = [],
+  buttonSections = [],
   imageSource = "",
   imageAlt = "",
   reverse = false,
@@ -47,11 +47,11 @@ const {
       </Heading>
       <Text data-prop="subtext" text={subtext} />
       <ButtonGroup
-        class="buttons"
-        buttons={buttons}
+        class="buttonSections"
+        buttonSections={buttonSections}
         direction="row"
         alignX="start"
-        data-children-prop="buttons"
+        data-children-prop="buttonSections"
       />
     </Fragment>
     <Fragment slot="second">

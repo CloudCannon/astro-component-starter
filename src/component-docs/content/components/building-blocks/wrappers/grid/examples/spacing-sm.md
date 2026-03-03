@@ -9,30 +9,46 @@ blocks:
   maxItemWidth: 300
   items:
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Item 1'
+            - _component: building-blocks/core-elements/heading
+              text: 'Item 1'
               level: h3
-            - text: 'Small spacing provides subtle separation.'
+            - _component: building-blocks/core-elements/text
+              text: 'Small spacing provides subtle separation.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Item 2'
+            - _component: building-blocks/core-elements/heading
+              text: 'Item 2'
               level: h3
-            - text: 'Good for related content groups.'
+            - _component: building-blocks/core-elements/text
+              text: 'Good for related content groups.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Item 3'
+            - _component: building-blocks/core-elements/heading
+              text: 'Item 3'
               level: h3
-            - text: 'Maintains visual connection between items.'
+            - _component: building-blocks/core-elements/text
+              text: 'Maintains visual connection between items.'
+
+
+
+
+
+
+
 ---

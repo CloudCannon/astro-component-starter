@@ -4,20 +4,24 @@ spacing:
 blocks:
   _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - backgroundColor: 'accent'
+    - _component: building-blocks/wrappers/card
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - text: |-
+        - _component: building-blocks/core-elements/text
+          text: |-
             ## Fixed column
 
             This column has a fixed width.
   secondColumnContentSections:
-    - backgroundColor: 'highlight'
+    - _component: building-blocks/wrappers/card
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - text: |-
+        - _component: building-blocks/core-elements/text
+          text: |-
             ## Flexible column
 
             This column takes up the remaining space.
@@ -26,4 +30,7 @@ blocks:
   minSplitWidth: 500
   verticalAlignment: 'top'
   reverse: false
+
+
+
 ---

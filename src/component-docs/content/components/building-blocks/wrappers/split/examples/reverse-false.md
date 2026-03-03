@@ -4,20 +4,24 @@ spacing:
 blocks:
   _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - backgroundColor: 'accent'
+    - _component: building-blocks/wrappers/card
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - text: |-
+        - _component: building-blocks/core-elements/text
+          text: |-
             ## Side A
 
             This is content for side A.
   secondColumnContentSections:
-    - backgroundColor: 'highlight'
+    - _component: building-blocks/wrappers/card
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - text: |-
+        - _component: building-blocks/core-elements/text
+          text: |-
             ## Side B
 
             This is content for side B.
@@ -25,4 +29,7 @@ blocks:
   fixedWidth: null
   verticalAlignment: 'top'
   reverse: false
+
+
+
 ---

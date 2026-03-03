@@ -7,6 +7,9 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: This Custom Section has sm padding.
+    - _component: building-blocks/core-elements/heading
+      text: This Custom Section has sm padding.
       level: h2
+
+
 ---

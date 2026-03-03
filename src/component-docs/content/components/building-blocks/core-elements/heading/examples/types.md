@@ -20,4 +20,5 @@ blocks:
   - _component: 'building-blocks/core-elements/heading'
     text: This is an h6 heading
     level: h6
+
 ---

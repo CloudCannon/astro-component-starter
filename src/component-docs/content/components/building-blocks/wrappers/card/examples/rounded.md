@@ -8,7 +8,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: 'Rounded Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Rounded Card'
       level: h3
-    - text: 'This card has rounded corners applied.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card has rounded corners applied.'
+
+
 ---

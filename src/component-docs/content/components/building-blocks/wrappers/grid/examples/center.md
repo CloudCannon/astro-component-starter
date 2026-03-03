@@ -8,39 +8,51 @@ blocks:
   maxItemWidth: 350
   items:
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Feature One'
+            - _component: building-blocks/core-elements/heading
+              text: 'Feature One'
               level: h3
-            - text: 'The center-aligned layout sizes items within the min/max width provided.'
+            - _component: building-blocks/core-elements/text
+              text: 'The center-aligned layout sizes items within the min/max width provided.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Feature Two'
+            - _component: building-blocks/core-elements/heading
+              text: 'Feature Two'
               level: h3
-            - text: 'Items are centered if there is extra whitespace.'
+            - _component: building-blocks/core-elements/text
+              text: 'Items are centered if there is extra whitespace.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Feature Three'
+            - _component: building-blocks/core-elements/heading
+              text: 'Feature Three'
               level: h3
-            - text: 'You can ensure all items are always equal in a center-aligned layout by giving it the same value for min and max width.'
+            - _component: building-blocks/core-elements/text
+              text: 'You can ensure all items are always equal in a center-aligned layout by giving it the same value for min and max width.'
     - contentSections:
-        - paddingHorizontal: md
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - text: 'Feature Four'
+            - _component: building-blocks/core-elements/heading
+              text: 'Feature Four'
               level: h3
-            - text: "You can make it more flexible by using different min/max widths, but keep in mind the last row might be larger if there's an uneven number of items."
+            - _component: building-blocks/core-elements/text
+              text: "You can make it more flexible by using different min/max widths, but keep in mind the last row might be larger if there's an uneven number of items."
 ---

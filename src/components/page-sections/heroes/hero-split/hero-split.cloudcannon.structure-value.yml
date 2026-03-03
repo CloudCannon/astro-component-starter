@@ -9,8 +9,9 @@ value:
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: Hero image
   imageAspectRatio: none
-  buttons:
-    - text: My Button
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: My Button
       hideText: false
       link: ""
       iconName: ""

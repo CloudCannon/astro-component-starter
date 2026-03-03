@@ -6,4 +6,5 @@ blocks:
   label: 'Message'
   name: 'message'
   placeholder: 'Enter your message here...'
+
 ---

@@ -18,7 +18,7 @@ pageSections:
     subtext: >-
       Built on web fundamentals. Easy to customize, fast to use,
       and simple to maintain.
-    buttons:
+    buttonSections:
       - _component: building-blocks/core-elements/button
         text: Explore Components
         link: /component-docs/

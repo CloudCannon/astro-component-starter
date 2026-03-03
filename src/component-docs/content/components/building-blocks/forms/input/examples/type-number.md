@@ -7,4 +7,5 @@ blocks:
   name: 'age'
   type: 'number'
   placeholder: 'Enter your age'
+
 ---

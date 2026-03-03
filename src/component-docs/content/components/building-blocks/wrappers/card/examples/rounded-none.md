@@ -8,7 +8,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: 'Square Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Square Card'
       level: h3
-    - text: 'This card has square corners (rounded disabled).'
+    - _component: building-blocks/core-elements/text
+      text: 'This card has square corners (rounded disabled).'
+
+
 ---

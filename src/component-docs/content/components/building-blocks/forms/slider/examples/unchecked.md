@@ -6,4 +6,5 @@ blocks:
   label: 'Enable dark mode'
   name: 'dark_mode'
   checked: false
+
 ---

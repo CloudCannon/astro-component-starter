@@ -7,7 +7,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: 'Base Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Base Card'
       level: h3
-    - text: 'This card uses the base background color (page background color)'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses the base background color (page background color)'
+
+
 ---

@@ -64,9 +64,9 @@ Some components contain arrays of child components, like a row of buttons or a s
 
 ```astro
 <ButtonGroup
-  buttons={buttons}
+  buttonSections={buttonSections}
   alignX="center"
-  data-children-prop="buttons"
+  data-children-prop="buttonSections"
 />
 ```
 
@@ -81,9 +81,9 @@ Here's [CTA Center](/component-docs/components/page-sections/ctas/cta-center/) a
   <Heading level="h2" size="xl" alignX="center" data-prop="heading" text={heading} />
   <Text alignX="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
-    buttons={buttons}
+    buttonSections={buttonSections}
     alignX="center"
-    data-children-prop="buttons"
+    data-children-prop="buttonSections"
   />
 </CustomSection>
 ```

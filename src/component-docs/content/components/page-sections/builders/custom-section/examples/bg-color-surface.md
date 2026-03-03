@@ -7,6 +7,9 @@ blocks:
   paddingVertical: 'lg'
   paddingHorizontal: 'lg'
   contentSections:
-    - text: Surface background color
+    - _component: building-blocks/core-elements/heading
+      text: Surface background color
       level: h2
+
+
 ---

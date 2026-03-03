@@ -1,11 +1,11 @@
 label:
   comment: Optional label for the button group to help identify it in the editor.
   type: text
-buttons:
+buttonSections:
   type: array
   comment: Array of button components to render within the group.
   options:
-    structures: _structures.buttons
+    structures: _structures.buttonSections
 direction:
   comment: Direction of button layout.
   type: select

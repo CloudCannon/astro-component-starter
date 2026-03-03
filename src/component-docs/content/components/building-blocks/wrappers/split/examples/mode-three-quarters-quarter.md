@@ -4,20 +4,24 @@ spacing:
 blocks:
   _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - backgroundColor: 'accent'
+    - _component: building-blocks/wrappers/card
+      backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - text: |-
+        - _component: building-blocks/core-elements/text
+          text: |-
             ## Three quarters column
 
             This column takes up 75% of the available space.
   secondColumnContentSections:
-    - backgroundColor: 'highlight'
+    - _component: building-blocks/wrappers/card
+      backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - text: |-
+        - _component: building-blocks/core-elements/text
+          text: |-
             ## Quarter column
 
             This column takes up 25% of the available space.
@@ -25,4 +29,7 @@ blocks:
   fixedWidth: null
   verticalAlignment: 'top'
   reverse: false
+
+
+
 ---

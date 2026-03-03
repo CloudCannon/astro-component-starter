@@ -7,7 +7,11 @@ blocks:
   paddingVertical: lg
   backgroundColor: surface
   contentSections:
-    - text: 'lg Padding'
+    - _component: building-blocks/core-elements/heading
+      text: 'lg Padding'
       level: h3
-    - text: 'This card uses lg padding for a more spacious, breathable layout.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses lg padding for a more spacious, breathable layout.'
+
+
 ---

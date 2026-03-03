@@ -7,4 +7,5 @@ blocks:
   name: 'name'
   type: 'text'
   placeholder: 'Enter your full name'
+
 ---

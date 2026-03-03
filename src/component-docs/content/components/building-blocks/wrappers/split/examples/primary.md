@@ -4,12 +4,14 @@ spacing: null
 blocks:
   _component: building-blocks/wrappers/split
   firstColumnContentSections:
-    - text: |-
+    - _component: building-blocks/core-elements/text
+      text: |-
         ## Side A
 
         This is content for side A.
   secondColumnContentSections:
-    - text: |-
+    - _component: building-blocks/core-elements/text
+      text: |-
         ## Side B
 
         This is content for side B.
@@ -19,4 +21,6 @@ blocks:
   reverse: false
   label: ''
   minSplitWidth: 700
+
+
 ---

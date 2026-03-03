@@ -7,7 +7,8 @@ blocks:
   paddingHorizontal: md
   paddingVertical: md
   contentSections:
-    - text: This is a Heading inside a Custom Section.
+    - _component: building-blocks/core-elements/heading
+      text: This is a Heading inside a Custom Section.
       level: h2
   label: ''
   maxContentWidth: 2xl
@@ -18,4 +19,6 @@ blocks:
     positionVertical: top
     positionHorizontal: center
   rounded: false
+
+
 ---

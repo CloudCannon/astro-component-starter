@@ -13,7 +13,7 @@ navData:
   comment: "Array of navigation items to render in the navigation bar."
   options:
     structures: _structures.navItemLevel1
-buttons:
+buttonSections:
   type: array
   comment: "Array of button components to display in the navigation bar. See the Button component documentation for more information."
 _structures:

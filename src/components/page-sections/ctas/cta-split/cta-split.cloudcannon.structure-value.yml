@@ -7,8 +7,9 @@ value:
   subtext: Subtext placeholder text that will be replaced with actual content.
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: CTA image
-  buttons:
-    - text: My Button
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: My Button
       hideText: false
       link: ""
       iconName: ""

@@ -7,6 +7,9 @@ blocks:
   paddingVertical: 'lg'
   paddingHorizontal: 'lg'
   contentSections:
-    - text: Highlight background color
+    - _component: building-blocks/core-elements/heading
+      text: Highlight background color
       level: h2
+
+
 ---

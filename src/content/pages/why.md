@@ -18,7 +18,7 @@ pageSections:
     imageSource: /src/assets/images/component-docs/sunset.jpg
     imageAlt: Sunset
     imageAspectRatio: portrait
-    buttons: []
+    buttonSections: []
     reverse: true
     colorScheme: light
     backgroundColor: base
@@ -32,25 +32,29 @@ pageSections:
     items:
       - title: How does the Component Starter work?
         contentSections:
-          - text: >-
+          - _component: building-blocks/core-elements/text
+            text: >-
               We give you [straightforward building blocks](/component-docs/)
               without hiding anything behind layers of abstraction. You see
               everything that's happening, and stay in control.
       - title: What's included in the Component Starter?
         contentSections:
-          - text: >-
+          - _component: building-blocks/core-elements/text
+            text: >-
               Lean HTML, CSS, and small touches of vanilla JavaScript. No dead
               weight, no surprise dependencies, just the pieces you actually
               need to build great pages.
       - title: How is the Component Starter so fast?
         contentSections:
-          - text: >-
+          - _component: building-blocks/core-elements/text
+            text: >-
               Performance comes from keeping things lightweight. The framework
               handles image optimization and responsive patterns so your site
               stays quick without extra work.
       - title: Can I customize the Component Starter?
         contentSections:
-          - text: >-
+          - _component: building-blocks/core-elements/text
+            text: >-
               Every part of the Component Starter is meant to be opened, read,
               and edited. You shape it to fit your project instead of working
               around someone else's opinions. Start by [browsing the
@@ -63,14 +67,17 @@ pageSections:
   - _component: page-sections/builders/custom-section
     label: ''
     contentSections:
-      - size: md
-      - text: Mix and match your components
+      - _component: building-blocks/core-elements/spacer
+        size: md
+      - _component: building-blocks/core-elements/heading
+        text: Mix and match your components
         level: h2
         size: default
         alignX: center
         iconName:
         iconPosition: before
-      - text: >-
+      - _component: building-blocks/core-elements/text
+        text: >-
           With custom sections, you can create components for almost any use
           case.
         alignX: center
@@ -201,18 +208,22 @@ pageSections:
       target="_blank" rel="noopener">configure with CloudCannon forms</a>.
     formAction: ./
     formBlocks:
-      - label: Name
+      - _component: building-blocks/forms/input
+        label: Name
         name: name
         type: text
         required: true
-      - label: Email
+      - _component: building-blocks/forms/input
+        label: Email
         name: email
         type: email
         required: true
-      - label: Message
+      - _component: building-blocks/forms/textarea
+        label: Message
         name: message
         required: true
-      - text: Send message
+      - _component: building-blocks/forms/submit
+        text: Send message
         variant: primary
         size: md
         iconPosition: before

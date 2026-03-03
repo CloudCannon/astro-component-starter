@@ -6,7 +6,7 @@ value:
   logoSource: ""
   logoAlt: "Logo"
   navData: []
-  buttons: []
+  buttonSections: []
 preview:
   text:
     - Main Nav

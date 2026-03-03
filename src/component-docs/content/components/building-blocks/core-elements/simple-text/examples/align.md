@@ -11,4 +11,5 @@ blocks:
   - _component: 'building-blocks/core-elements/simple-text'
     text: '**End** aligned'
     alignX: end
+
 ---

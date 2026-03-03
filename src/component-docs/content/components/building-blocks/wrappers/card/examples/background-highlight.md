@@ -7,7 +7,11 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - text: 'Highlight Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Highlight Card'
       level: h3
-    - text: 'This card uses the highlight background color.'
+    - _component: building-blocks/core-elements/text
+      text: 'This card uses the highlight background color.'
+
+
 ---

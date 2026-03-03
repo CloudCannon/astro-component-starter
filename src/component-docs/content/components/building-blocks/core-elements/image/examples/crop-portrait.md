@@ -7,4 +7,5 @@ blocks:
   alt: 'Castle'
   aspectRatio: portrait
   style: 'max-width: 300px;'
+
 ---

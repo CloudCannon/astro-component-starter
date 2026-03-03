@@ -6,4 +6,5 @@ blocks:
   label: 'Enable notifications'
   name: 'notifications'
   checked: false
+
 ---

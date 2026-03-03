@@ -60,7 +60,7 @@ export function formatComponentWithSlots(
     delete props.formBlocks;
     delete props.firstColumnContentSections;
     delete props.secondColumnContentSections;
-    delete props.buttons;
+    delete props.buttonSections;
     delete props.slides;
   } else if (componentPath.includes("split")) {
     delete props.firstColumnContentSections;
@@ -109,7 +109,7 @@ export function formatComponentWithSlots(
   const items = block.items;
 
   const nestedBlocks =
-    block.contentSections || block.navBlocks || block.formBlocks || block.buttons;
+    block.contentSections || block.navBlocks || block.formBlocks || block.buttonSections;
 
   if (nestedBlocks && supportsSlots) {
     propsString = Object.entries(props)

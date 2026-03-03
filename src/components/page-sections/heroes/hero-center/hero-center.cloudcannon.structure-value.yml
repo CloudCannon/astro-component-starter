@@ -6,8 +6,9 @@ value:
   eyebrow: Eyebrow text
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
-  buttons:
-    - text: My Button
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: My Button
       hideText: false
       link: ""
       iconName: ""

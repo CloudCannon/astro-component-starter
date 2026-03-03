@@ -8,7 +8,11 @@ blocks:
   backgroundColor: accent
   link: '#'
   contentSections:
-    - text: 'Clickable Card'
+    - _component: building-blocks/core-elements/heading
+      text: 'Clickable Card'
       level: h3
-    - text: 'This entire card is clickable! Perfect for navigation cards or feature highlights.'
+    - _component: building-blocks/core-elements/text
+      text: 'This entire card is clickable! Perfect for navigation cards or feature highlights.'
+
+
 ---

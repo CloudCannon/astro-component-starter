@@ -34,4 +34,5 @@ blocks:
     text: "Below is a divider with '3xl' padding."
   - _component: 'building-blocks/core-elements/divider'
     paddingVertical: 3xl
+
 ---
