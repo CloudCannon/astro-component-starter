@@ -29,11 +29,11 @@ imageSource:
 imageAlt:
   type: text
   comment: Alt text describing the CTA image.
-buttonSections:
+buttons:
   type: array
   comment: Buttons for calls-to-action.
   options:
-    structures: _structures.buttonSections
+    structures: _structures.buttons
 reverse:
   type: switch
   comment: Reverse the order so buttons appear before the copy.

@@ -10,7 +10,7 @@ const {
   logoSource,
   logoAlt = "logo",
   navData = [],
-  buttonSections = [] as NavButton[],
+  buttons = [] as NavButton[],
   class: className,
   _component,
   ...htmlAttributes
@@ -18,7 +18,7 @@ const {
 
 const mobileNavData = [
   ...navData,
-  ...buttonSections.map((button) => ({
+  ...buttons.map((button) => ({
     name: button.text || "Button",
     path: button.href || "#",
     children: [],
@@ -44,7 +44,7 @@ const mobileNavData = [
       direction="row"
       align="center"
       class="desktop-button-group"
-      buttonSections={buttonSections}
+      buttons={buttons}
       editable={false}
     />
   </div>

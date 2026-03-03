@@ -9,39 +9,30 @@ blocks:
   maxItemWidth: 300
   items:
     - contentSections:
-        - _component: 'building-blocks/wrappers/card'
-          paddingHorizontal: md
+        - paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - _component: 'building-blocks/core-elements/heading'
-              text: 'Item 1'
+            - text: 'Item 1'
               level: h3
-            - _component: 'building-blocks/core-elements/text'
-              text: 'Extra small spacing creates tight, compact layouts.'
+            - text: 'Extra small spacing creates tight, compact layouts.'
     - contentSections:
-        - _component: 'building-blocks/wrappers/card'
-          paddingHorizontal: md
+        - paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - _component: 'building-blocks/core-elements/heading'
-              text: 'Item 2'
+            - text: 'Item 2'
               level: h3
-            - _component: 'building-blocks/core-elements/text'
-              text: 'Perfect for dense information displays.'
+            - text: 'Perfect for dense information displays.'
     - contentSections:
-        - _component: 'building-blocks/wrappers/card'
-          paddingHorizontal: md
+        - paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - _component: 'building-blocks/core-elements/heading'
-              text: 'Item 3'
+            - text: 'Item 3'
               level: h3
-            - _component: 'building-blocks/core-elements/text'
-              text: 'Minimal gaps between grid items.'
+            - text: 'Minimal gaps between grid items.'
 ---

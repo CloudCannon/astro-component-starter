@@ -9,7 +9,7 @@ value:
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: Hero image
   imageAspectRatio: none
-  buttonSections:
+  buttons:
     - text: My Button
       hideText: false
       link: ""

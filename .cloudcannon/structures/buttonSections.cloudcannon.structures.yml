@@ -1,4 +1,4 @@
-buttonSections:
+buttons:
   id_key: _component
   style: modal
   values_from_glob:

@@ -21,7 +21,7 @@ Aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratio
 
 ```astro
 ---
-const { heading = "", subtext = "", buttonSections = [], ...rest } = Astro.props;
+const { heading = "", subtext = "", buttons = [], ...rest } = Astro.props;
 ---
 
 <CustomSection {...rest}>
@@ -33,7 +33,7 @@ const { heading = "", subtext = "", buttonSections = [], ...rest } = Astro.props
     )
   }
   {subtext && <SimpleText size="md">{subtext}</SimpleText>}
-  {buttonSections?.length > 0 && <ButtonGroup buttonSections={buttonSections} />}
+  {buttons?.length > 0 && <ButtonGroup buttons={buttons} />}
 </CustomSection>
 ```
 
@@ -44,7 +44,7 @@ Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cu
 Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
 
 <CtaSplit
-  buttonSections={[
+  buttons={[
     {
       _component: "building-blocks/core-elements/button",
       text: "Explore Components",

@@ -7,7 +7,6 @@ blocks:
   paddingHorizontal: xs
   paddingVertical: xs
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: This Custom Section has xs padding.
+    - text: This Custom Section has xs padding.
       level: h2
 ---

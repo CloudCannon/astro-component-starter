@@ -127,10 +127,10 @@ CTA Center is a good example:
   <Heading level="h2" size="xl" alignX="center" data-prop="heading" text={heading} />
   <Text alignX="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
-    buttonSections={buttonSections}
+    buttons={buttons}
     alignX="center"
     editable={true}
-    data-children-prop="buttonSections"
+    data-children-prop="buttons"
   />
 </CustomSection>
 ```

@@ -5,14 +5,12 @@ blocks:
   _component: 'building-blocks/forms/form'
   action: '/contact'
   formBlocks:
-    - _component: 'building-blocks/forms/input'
-      label: 'Full Name'
+    - label: 'Full Name'
       name: 'name'
       type: 'text'
       placeholder: 'Enter your full name'
       required: true
-    - _component: 'building-blocks/forms/select'
-      label: 'City'
+    - label: 'City'
       name: 'city'
       options:
         - value: 'auckland'
@@ -27,15 +25,12 @@ blocks:
           label: 'Dunedin'
         - value: 'tauranga'
           label: 'Tauranga'
-    - _component: 'building-blocks/forms/textarea'
-      label: 'Message'
+    - label: 'Message'
       name: 'message'
       placeholder: 'Tell us about your project...'
       required: true
-    - _component: 'building-blocks/forms/hidden'
-      name: 'form-source'
+    - name: 'form-source'
       value: 'contact-page'
-    - _component: 'building-blocks/forms/submit'
-      text: 'Send Message'
+    - text: 'Send Message'
       variant: 'primary'
 ---

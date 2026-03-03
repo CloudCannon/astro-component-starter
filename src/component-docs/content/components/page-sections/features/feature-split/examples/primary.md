@@ -7,7 +7,7 @@ blocks:
   heading: 'Guide every release with accountable workflows'
   subtext: 'Pair the story of your launch with concrete capabilities—so execs get the narrative while implementers see the proof.'
   reverse: true
-  buttonSections:
+  buttons:
     - text: 'Book a live tour'
       variant: primary
       size: md

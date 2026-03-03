@@ -47,11 +47,11 @@ imageAspectRatio:
         name: Portrait (3:4)
       - id: widescreen
         name: Widescreen (16:9)
-buttonSections:
+buttons:
   type: array
   comment: Array of button components for call-to-action buttons. See the Button component documentation for more information.
   options:
-    structures: _structures.buttonSections
+    structures: _structures.buttons
 reverse:
   type: switch
   comment: Whether to reverse the order of content and image (image first, content second).

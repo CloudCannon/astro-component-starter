@@ -6,8 +6,7 @@ blocks:
   backgroundColor: 'surface'
   maxContentWidth: xl
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: This Custom Section has xl max content width.
+    - text: This Custom Section has xl max content width.
       level: h2
       alignX: center
       style: 'border: 1px solid var(--color-border)'

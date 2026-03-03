@@ -4,24 +4,20 @@ spacing:
 blocks:
   _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: 'page-sections/builders/custom-section'
-      backgroundColor: 'accent'
+    - backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: 'building-blocks/core-elements/text'
-          text: |-
+        - text: |-
             ## Flexible column
 
             This column takes up the remaining space.
   secondColumnContentSections:
-    - _component: 'page-sections/builders/custom-section'
-      paddingHorizontal: sm
+    - paddingHorizontal: sm
       paddingVertical: sm
       backgroundColor: 'highlight'
       contentSections:
-        - _component: 'building-blocks/core-elements/text'
-          text: |-
+        - text: |-
             ## Fixed column
 
             This column has a fixed width.

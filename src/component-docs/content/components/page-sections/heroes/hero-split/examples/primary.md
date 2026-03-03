@@ -9,14 +9,12 @@ blocks:
   reverse: true
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: 'Cliffs and rugged coastline near Dunedin, New Zealand, with yellow flowering shrubs in the foreground and waves crashing against the rocks below.'
-  buttonSections:
-    - _component: 'building-blocks/core-elements/button'
-      text: 'Explore Dunedin'
+  buttons:
+    - text: 'Explore Dunedin'
       variant: 'primary'
       size: 'md'
       link: '/about'
-    - _component: 'building-blocks/core-elements/button'
-      text: 'Learn More'
+    - text: 'Learn More'
       variant: 'secondary'
       size: 'md'
       link: '/learn'

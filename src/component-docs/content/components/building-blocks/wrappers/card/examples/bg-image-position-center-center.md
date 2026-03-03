@@ -11,9 +11,7 @@ blocks:
     positionVertical: center
     positionHorizontal: center
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: 'Center Position'
+    - text: 'Center Position'
       level: h3
-    - _component: 'building-blocks/core-elements/text'
-      text: "This card's background image is centered both horizontally and vertically."
+    - text: "This card's background image is centered both horizontally and vertically."
 ---

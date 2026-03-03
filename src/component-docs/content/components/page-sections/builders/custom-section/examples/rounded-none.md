@@ -8,9 +8,7 @@ blocks:
   paddingHorizontal: md
   paddingVertical: md
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: 'Square Custom Section'
+    - text: 'Square Custom Section'
       level: h3
-    - _component: 'building-blocks/core-elements/text'
-      text: 'This Custom Section has square corners (rounded disabled).'
+    - text: 'This Custom Section has square corners (rounded disabled).'
 ---

@@ -9,39 +9,30 @@ blocks:
   maxItemWidth: 300
   items:
     - contentSections:
-        - _component: 'building-blocks/wrappers/card'
-          paddingHorizontal: md
+        - paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - _component: 'building-blocks/core-elements/heading'
-              text: 'Item 1'
+            - text: 'Item 1'
               level: h3
-            - _component: 'building-blocks/core-elements/text'
-              text: 'Medium spacing is the default option.'
+            - text: 'Medium spacing is the default option.'
     - contentSections:
-        - _component: 'building-blocks/wrappers/card'
-          paddingHorizontal: md
+        - paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - _component: 'building-blocks/core-elements/heading'
-              text: 'Item 2'
+            - text: 'Item 2'
               level: h3
-            - _component: 'building-blocks/core-elements/text'
-              text: 'Provides balanced visual breathing room.'
+            - text: 'Provides balanced visual breathing room.'
     - contentSections:
-        - _component: 'building-blocks/wrappers/card'
-          paddingHorizontal: md
+        - paddingHorizontal: md
           paddingVertical: md
           rounded: true
           border: true
           contentSections:
-            - _component: 'building-blocks/core-elements/heading'
-              text: 'Item 3'
+            - text: 'Item 3'
               level: h3
-            - _component: 'building-blocks/core-elements/text'
-              text: 'Works well for most content layouts.'
+            - text: 'Works well for most content layouts.'
 ---

@@ -7,22 +7,18 @@ blocks:
   subtext: "Fill out the form below and we'll get back to you as soon as possible."
   formAction: './'
   formBlocks:
-    - _component: 'building-blocks/forms/input'
-      label: 'Name'
+    - label: 'Name'
       name: 'name'
       type: text
       required: true
-    - _component: 'building-blocks/forms/input'
-      label: 'Email'
+    - label: 'Email'
       name: 'email'
       type: email
       required: true
-    - _component: 'building-blocks/forms/textarea'
-      label: 'Message'
+    - label: 'Message'
       name: 'message'
       required: true
-    - _component: 'building-blocks/forms/submit'
-      text: 'Send message'
+    - text: 'Send message'
       variant: primary
   imageSource: /src/assets/images/component-docs/sunset.jpg
   imageAlt: 'Contact us.'

@@ -9,7 +9,7 @@ pageSections:
       This paginated blog index displays a grid of article cards, each waiting
       to be populated with genuine posts once your content strategy moves beyond
       placeholder text.
-    buttonSections: []
+    buttons: []
     colorScheme: light
     backgroundColor: base
 description: >-

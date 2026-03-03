@@ -19,11 +19,11 @@ subtext:
     underline: false
     bulletedlist: false
     numberedlist: false
-buttonSections:
+buttons:
   type: array
   comment: Calls-to-action shown beneath the copy block.
   options:
-    structures: _structures.buttonSections
+    structures: _structures.buttons
 imageSource:
   type: image
   comment: Optional image displayed above the feature list.

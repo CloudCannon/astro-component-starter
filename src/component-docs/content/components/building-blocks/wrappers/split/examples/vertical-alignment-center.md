@@ -4,13 +4,11 @@ spacing:
 blocks:
   _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: 'page-sections/builders/custom-section'
-      backgroundColor: 'accent'
+    - backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: 'building-blocks/core-elements/text'
-          text: |-
+        - text: |-
             ## Side A
 
             This is verbose content for side A. We're making this column longer so we can highlight how the alignment works.
@@ -19,13 +17,11 @@ blocks:
 
             And here's even more text to really drive the point home.
   secondColumnContentSections:
-    - _component: 'page-sections/builders/custom-section'
-      backgroundColor: 'highlight'
+    - backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: 'building-blocks/core-elements/text'
-          text: |-
+        - text: |-
             ## Side B
 
             This is content for side B.

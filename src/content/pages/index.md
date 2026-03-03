@@ -8,17 +8,15 @@ pageSections:
     subtext: >-
       Built on web fundamentals. Easy to customize, fast to use, and simple to
       maintain.
-    buttonSections:
-      - _component: building-blocks/core-elements/button
-        text: Explore Components
+    buttons:
+      - text: Explore Components
         hideText: false
         link: /component-docs/
         iconName: ''
         iconPosition: before
         variant: primary
         size: md
-      - _component: building-blocks/core-elements/button
-        text: View in GitHub
+      - text: View in GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
         iconName: ''
@@ -34,7 +32,7 @@ pageSections:
       The Component Starter takes full advantage of Astro's zero-JS-by-default
       approach. You get fast pages, simple routing, and a component system that
       stays easy to use as your site grows.
-    buttonSections: []
+    buttons: []
     imageSource: /src/assets/images/component-docs/website-feature.svg
     imageAlt: Website Feature
     imageAspectRatio: none
@@ -50,7 +48,7 @@ pageSections:
       Editor. Developers can create and style custom Page Sections with Astro.
       Editors can click, change, and rearrange content right on the page without
       touching the code or guessing where anything lives.
-    buttonSections: []
+    buttons: []
     imageSource: /src/assets/images/component-docs/website-split.svg
     imageAlt: Website Split
     imageAspectRatio: none
@@ -66,7 +64,7 @@ pageSections:
       Your components render to static HTML, keeping bundles lean and pages
       instant. Your users get instant page loads. You get a modern developer
       experience.
-    buttonSections: []
+    buttons: []
     imageSource: /src/assets/images/component-docs/website-hero.svg
     imageAlt: Website Hero
     imageAspectRatio: none
@@ -81,7 +79,7 @@ pageSections:
       Each component comes with straightforward docs, real examples, full
       descriptions of every property, and clear guidance without having to dig
       through source files.
-    buttonSections: []
+    buttons: []
     imageSource: /src/assets/images/component-docs/website-documented.svg
     imageAlt: Website Hero
     imageAspectRatio: none
@@ -97,36 +95,31 @@ pageSections:
     minItemWidth: 280
     maxItemWidth: 360
     features:
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Web fundamentals
+      - title: Web fundamentals
         description: >-
           Semantic HTML. Lean CSS. JavaScript only when it's needed. The stack
           is boring by design, and that’s exactly why it works.
         iconName: cube
         iconColor: blue
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Built for speed
+      - title: Built for speed
         description: >-
           Static-rendered, minimal payloads, zero waste. Built to be extremely
           fast from the first byte.
         iconName: bolt
         iconColor: yellow
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Everything just fits
+      - title: Everything just fits
         description: >-
           Simple, predictable components that play nice together. Build bigger
           pieces without creating a maintenance mess.
         iconName: puzzle-piece
         iconColor: green
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Controlled editing
+      - title: Controlled editing
         description: >-
           Enough freedom for editors to move fast. Enough structure for
           developers to sleep at night.
         iconName: pencil
         iconColor: purple
-      - _component: page-sections/features/feature-grid/feature-item
-        title: Adaptable
+      - title: Adaptable
         description: >-
           Purposefully plain styling. The whole component starter adapts to your
           designs without a fight.
@@ -141,17 +134,15 @@ pageSections:
       Browse the complete Astro Component Starter and see live examples of every
       component in action. All components are ready to use in CloudCannon and
       are fully customizable.
-    buttonSections:
-      - _component: building-blocks/core-elements/button
-        text: Explore Components
+    buttons:
+      - text: Explore Components
         hideText: false
         link: /component-docs/
         iconName: ''
         iconPosition: before
         variant: primary
         size: md
-      - _component: building-blocks/core-elements/button
-        text: View in GitHub
+      - text: View in GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
         iconName: ''

@@ -11,7 +11,7 @@ const {
   eyebrow = "",
   heading = "",
   subtext = "",
-  buttonSections = [],
+  buttons = [],
   imageSource = "",
   imageAlt = "",
   imageAspectRatio = "portrait",
@@ -57,10 +57,10 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
       <Text class="subtext" data-prop="subtext" text={subtext} />
       <ButtonGroup
         class="feature-buttons"
-        buttonSections={buttonSections}
+        buttons={buttons}
         direction="row"
         alignX="start"
-        data-children-prop="buttonSections"
+        data-children-prop="buttons"
       />
     </Fragment>
     <Image

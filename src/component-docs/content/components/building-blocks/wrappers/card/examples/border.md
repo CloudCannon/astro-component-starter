@@ -7,9 +7,7 @@ blocks:
   paddingHorizontal: sm
   paddingVertical: sm
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: 'Border Card'
+    - text: 'Border Card'
       level: h3
-    - _component: 'building-blocks/core-elements/text'
-      text: 'This card has a border applied.'
+    - text: 'This card has a border applied.'
 ---

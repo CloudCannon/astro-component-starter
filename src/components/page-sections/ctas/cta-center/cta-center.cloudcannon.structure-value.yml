@@ -5,7 +5,7 @@ value:
   _component: page-sections/ctas/cta-center
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
-  buttonSections:
+  buttons:
     - text: My Button
       hideText: false
       link: ""

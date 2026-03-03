@@ -9,7 +9,7 @@ const {
   eyebrow = "",
   heading = "",
   subtext = "",
-  buttonSections = [],
+  buttons = [],
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
@@ -33,7 +33,7 @@ const {
     {heading}
   </Heading>
   <Text alignX="center" class="subtext" data-prop="subtext" text={subtext} />
-  <ButtonGroup class="buttons" buttonSections={buttonSections} alignX="center" data-children-prop="buttonSections" />
+  <ButtonGroup class="buttons" buttons={buttons} alignX="center" data-children-prop="buttons" />
 </CustomSection>
 
 <style is:global>

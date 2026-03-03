@@ -9,15 +9,14 @@ pageSections:
       Everything on your site is just one search away. (Free static search
       courtesy of <a href="https://pagefind.app/" target="_blank"
       rel="noopener">Pagefind</a> 💙)
-    buttonSections: []
+    buttons: []
     colorScheme: light
     backgroundColor: base
     paddingVertical: 4xl
   - _component: page-sections/builders/custom-section
     label: ''
     contentSections:
-      - _component: building-blocks/core-elements/embed
-        html: |
+      - html: |
           <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
           <script src="/pagefind/pagefind-ui.js"></script>
           <div id="search"></div>

@@ -18,7 +18,7 @@ ctaCenter:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: buttonSections
+      - editor_key: buttons
         type: array
         optional: true
       - editor_key: colorScheme

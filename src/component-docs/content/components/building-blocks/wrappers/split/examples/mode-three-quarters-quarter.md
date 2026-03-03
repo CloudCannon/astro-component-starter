@@ -4,24 +4,20 @@ spacing:
 blocks:
   _component: 'building-blocks/wrappers/split'
   firstColumnContentSections:
-    - _component: 'page-sections/builders/custom-section'
-      backgroundColor: 'accent'
+    - backgroundColor: 'accent'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: 'building-blocks/core-elements/text'
-          text: |-
+        - text: |-
             ## Three quarters column
 
             This column takes up 75% of the available space.
   secondColumnContentSections:
-    - _component: 'page-sections/builders/custom-section'
-      backgroundColor: 'highlight'
+    - backgroundColor: 'highlight'
       paddingHorizontal: sm
       paddingVertical: sm
       contentSections:
-        - _component: 'building-blocks/core-elements/text'
-          text: |-
+        - text: |-
             ## Quarter column
 
             This column takes up 25% of the available space.

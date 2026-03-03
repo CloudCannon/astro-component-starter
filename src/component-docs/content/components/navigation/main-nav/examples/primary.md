@@ -24,16 +24,14 @@ blocks:
     - name: 'Contact'
       path: '#'
       children: []
-  buttonSections:
-    - _component: 'building-blocks/core-elements/button'
-      link: '#'
+  buttons:
+    - link: '#'
       variant: 'ghost'
       size: lg
       text: Search
       hideText: true
       iconName: magnifying-glass
-    - _component: 'building-blocks/core-elements/button'
-      link: '#'
+    - link: '#'
       text: 'Careers'
       variant: 'ghost'
       iconName: 'arrow-top-right-on-square'

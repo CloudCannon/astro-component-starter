@@ -11,9 +11,7 @@ blocks:
     positionVertical: top
     positionHorizontal: left
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: 'Top Left Position'
+    - text: 'Top Left Position'
       level: h3
-    - _component: 'building-blocks/core-elements/text'
-      text: "This card's background image is positioned at the top-left corner."
+    - text: "This card's background image is positioned at the top-left corner."
 ---

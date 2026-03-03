@@ -7,7 +7,7 @@ import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 const {
   heading = "",
   subtext = "",
-  buttonSections = [],
+  buttons = [],
   colorScheme = "inherit",
   backgroundColor,
   paddingVertical = "4xl",
@@ -32,8 +32,8 @@ const {
   <Text alignX="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
     class="buttons"
-    buttonSections={buttonSections}
+    buttons={buttons}
     alignX="center"
-    data-children-prop="buttonSections"
+    data-children-prop="buttons"
   />
 </CustomSection>

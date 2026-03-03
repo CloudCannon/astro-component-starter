@@ -8,7 +8,6 @@ blocks:
   paddingVertical: md
   colorScheme: dark
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: This heading and Custom Section have a dark color scheme.
+    - text: This heading and Custom Section have a dark color scheme.
       level: h2
 ---

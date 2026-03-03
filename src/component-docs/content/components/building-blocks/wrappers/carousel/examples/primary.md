@@ -4,32 +4,23 @@ spacing: null
 blocks:
   _component: building-blocks/wrappers/carousel
   slides:
-    - _component: building-blocks/wrappers/carousel/carousel-slide
-      contentSections:
-        - _component: building-blocks/core-elements/heading
-          text: Slide 1
+    - contentSections:
+        - text: Slide 1
           level: h2
           alignX: center
-        - _component: building-blocks/core-elements/text
-          alignX: center
+        - alignX: center
           text: This is the first slide of the carousel.
-    - _component: building-blocks/wrappers/carousel/carousel-slide
-      contentSections:
-        - _component: building-blocks/core-elements/heading
-          text: Slide 2
+    - contentSections:
+        - text: Slide 2
           level: h2
           alignX: center
-        - _component: building-blocks/core-elements/text
-          text: This is the second slide of the carousel.
+        - text: This is the second slide of the carousel.
           alignX: center
-    - _component: building-blocks/wrappers/carousel/carousel-slide
-      contentSections:
-        - _component: building-blocks/core-elements/heading
-          text: Slide 3
+    - contentSections:
+        - text: Slide 3
           level: h2
           alignX: center
-        - _component: building-blocks/core-elements/text
-          text: This is the third slide of the carousel.
+        - text: This is the third slide of the carousel.
           alignX: center
   label: ''
   autoPlay: false

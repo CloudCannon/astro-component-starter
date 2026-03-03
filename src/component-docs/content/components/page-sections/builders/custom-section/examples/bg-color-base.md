@@ -7,7 +7,6 @@ blocks:
   paddingVertical: 'lg'
   paddingHorizontal: 'lg'
   contentSections:
-    - _component: 'building-blocks/core-elements/heading'
-      text: Base background color (page background color)
+    - text: Base background color (page background color)
       level: h2
 ---
