@@ -70,50 +70,50 @@ if (!_component && !hasSlides && !hasSlotContent) return;
   class:list={carouselClasses}
   role="region"
   aria-label="Carousel"
-  style={carouselStyles}
   {...htmlAttributes}
-  {...dataAttributes}
 >
-  <div class="viewport">
-    <div class="track" {...arrayDataAttributes}>
-      <slot>
-        {
-          slides?.map((slide: SlideProps, index: number) => (
-            <CarouselSlide
-              {...slide}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/carousel/carousel-slide"
-              editable={!!effectiveChildrenProp}
-              aria-label={`Slide ${index + 1} of ${slides.length}`}
-            />
-          ))
-        }
-      </slot>
+  <div class="carousel-inner" style={carouselStyles} {...dataAttributes}>
+    <div class="viewport">
+      <div class="track" {...arrayDataAttributes}>
+        <slot>
+          {
+            slides?.map((slide: SlideProps, index: number) => (
+              <CarouselSlide
+                {...slide}
+                data-editable="array-item"
+                data-id="building-blocks/wrappers/carousel/carousel-slide"
+                editable={!!effectiveChildrenProp}
+                aria-label={`Slide ${index + 1} of ${slides.length}`}
+              />
+            ))
+          }
+        </slot>
+      </div>
     </div>
-  </div>
 
-  <div class="controls-wrapper">
-    <Button
-      iconName="arrow-left"
-      size="md"
-      variant="tertiary"
-      hideText={true}
-      aria-label="Previous slide"
-      class="prev"
-      element="button"
-    />
+    <div class="controls-wrapper">
+      <Button
+        iconName="arrow-left"
+        size="md"
+        variant="tertiary"
+        hideText={true}
+        aria-label="Previous slide"
+        class="prev"
+        element="button"
+      />
 
-    <div class="indicators"></div>
+      <div class="indicators"></div>
 
-    <Button
-      iconName="arrow-right"
-      size="md"
-      variant="tertiary"
-      hideText={true}
-      aria-label="Next slide"
-      class="next"
-      element="button"
-    />
+      <Button
+        iconName="arrow-right"
+        size="md"
+        variant="tertiary"
+        hideText={true}
+        aria-label="Next slide"
+        class="next"
+        element="button"
+      />
+    </div>
   </div>
 </section>
 
@@ -130,36 +130,37 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         return;
       }
 
-      const viewport = carousel.querySelector(".viewport") as HTMLElement;
+      const inner = carousel.querySelector(".carousel-inner");
+      const viewport = inner?.querySelector(".viewport") as HTMLElement;
       const track = viewport?.querySelector(".track");
       const slides = track?.querySelectorAll(".slide");
-      const controlsWrapper = carousel.querySelector(".controls-wrapper");
+      const controlsWrapper = inner?.querySelector(".controls-wrapper");
       const indicatorsContainer = controlsWrapper?.querySelector(".indicators");
 
-      if (!viewport || !track || !slides || !slides.length) {
+      if (!inner || !viewport || !track || !slides || !slides.length) {
         console.warn("Carousel: Missing required elements");
         return;
       }
 
-      const loop = carousel.hasAttribute("data-loop");
-      const slidesToScroll = carousel.hasAttribute("data-slides-to-scroll")
-        ? Number(carousel.getAttribute("data-slides-to-scroll")) || "auto"
+      const loop = inner.hasAttribute("data-loop");
+      const slidesToScroll = inner.hasAttribute("data-slides-to-scroll")
+        ? Number(inner.getAttribute("data-slides-to-scroll")) || "auto"
         : "auto";
-      const alignAttr = carousel.getAttribute("data-align");
+      const alignAttr = inner.getAttribute("data-align");
       const align =
         alignAttr === "start" || alignAttr === "center" || alignAttr === "end"
           ? (alignAttr as "start" | "center" | "end")
           : "start";
 
       const plugins = [];
-      if (carousel.hasAttribute("data-autoplay")) {
-        const autoplayInterval = Number(carousel.getAttribute("data-autoplay")) * 1000 || 3000;
+      if (inner.hasAttribute("data-autoplay")) {
+        const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
         plugins.push(Autoplay({ delay: autoplayInterval, stopOnInteraction: false }));
       }
 
       let watchDrag = true;
-      if (carousel.hasAttribute("data-autoscroll")) {
-        const scrollValue = parseFloat(carousel.getAttribute("data-autoscroll") || "1");
+      if (inner.hasAttribute("data-autoscroll")) {
+        const scrollValue = parseFloat(inner.getAttribute("data-autoscroll") || "1");
         const speed = isNaN(scrollValue) ? 1 : scrollValue;
         plugins.push(AutoScroll({ speed }));
         watchDrag = false;
@@ -180,12 +181,10 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         plugins
       );
 
-      // Mark this carousel as initialized
       carousel.setAttribute("data-embla-initialized", "true");
 
-      // Navigation
-      const prevButton = carousel.querySelector(".prev") as HTMLButtonElement;
-      const nextButton = carousel.querySelector(".next") as HTMLButtonElement;
+      const prevButton = inner.querySelector(".prev") as HTMLButtonElement;
+      const nextButton = inner.querySelector(".next") as HTMLButtonElement;
 
       const updateButtons = () => {
         if (prevButton) prevButton.disabled = !embla.canScrollPrev();
@@ -241,84 +240,87 @@ if (!_component && !hasSlides && !hasSlotContent) return;
   @layer components {
     .carousel {
       margin-top: var(--spacing-lg);
-      position: relative;
       width: 100%;
-      --slide-width: 100%;
-      --min-slide-width: 0px;
 
-      > .viewport {
-        overflow: hidden;
+      > .carousel-inner {
         position: relative;
-        width: 100%;
-      }
+        --slide-width: 100%;
+        --min-slide-width: 0px;
 
-      > .viewport > .track {
-        display: flex;
-        flex-wrap: nowrap;
-
-        > .slide {
-          flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
-          flex-shrink: 0;
+        > .viewport {
+          overflow: hidden;
+          position: relative;
           width: 100%;
         }
-      }
 
-      > .controls-wrapper {
-        align-items: center;
-        display: flex;
-        gap: var(--spacing-md);
-        justify-content: center;
-        margin-bottom: var(--spacing-sm);
-        margin-top: var(--spacing-sm);
-      }
+        > .viewport > .track {
+          display: flex;
+          flex-wrap: nowrap;
 
-      > .controls-wrapper > .prev,
-      > .controls-wrapper > .next {
-        background-color: var(--color-bg);
-        border-radius: var(--radius-full);
-        flex-shrink: 0;
-        pointer-events: auto;
-
-        &:hover {
-          background-color: var(--color-bg-surface);
+          > .slide {
+            flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
+            flex-shrink: 0;
+            width: 100%;
+          }
         }
-      }
 
-      > .controls-wrapper > .indicators {
-        display: flex;
-        gap: var(--spacing-sm);
-        justify-content: center;
-      }
-
-      > .controls-wrapper > .indicators > .indicator {
-        aspect-ratio: 1/1;
-        border: none;
-        border-radius: var(--radius-full);
-        cursor: pointer;
-        min-height: 0;
-        min-width: 0;
-        padding: 0;
-        transition:
-          transform var(--animation-normal) ease,
-          background-color var(--animation-normal) ease;
-        width: 8px;
-
-        &[data-selected="true"] {
-          background-color: var(--color-brand-muted);
-          transform: scale(1.2);
+        > .controls-wrapper {
+          align-items: center;
+          display: flex;
+          gap: var(--spacing-md);
+          justify-content: center;
+          margin-bottom: var(--spacing-sm);
+          margin-top: var(--spacing-sm);
         }
-      }
 
-      &[data-show-indicators="false"] {
-        > .controls-wrapper > .indicators {
-          display: none;
-        }
-      }
-
-      &[data-show-arrows="false"] {
         > .controls-wrapper > .prev,
         > .controls-wrapper > .next {
-          display: none;
+          background-color: var(--color-bg);
+          border-radius: var(--radius-full);
+          flex-shrink: 0;
+          pointer-events: auto;
+
+          &:hover {
+            background-color: var(--color-bg-surface);
+          }
+        }
+
+        > .controls-wrapper > .indicators {
+          display: flex;
+          gap: var(--spacing-sm);
+          justify-content: center;
+        }
+
+        > .controls-wrapper > .indicators > .indicator {
+          aspect-ratio: 1/1;
+          border: none;
+          border-radius: var(--radius-full);
+          cursor: pointer;
+          min-height: 0;
+          min-width: 0;
+          padding: 0;
+          transition:
+            transform var(--animation-normal) ease,
+            background-color var(--animation-normal) ease;
+          width: 8px;
+
+          &[data-selected="true"] {
+            background-color: var(--color-brand-muted);
+            transform: scale(1.2);
+          }
+        }
+
+        &[data-show-indicators="false"] {
+          > .controls-wrapper > .indicators {
+            display: none;
+          }
+        }
+
+        &[data-show-arrows="false"] {
+          > .controls-wrapper > .prev,
+          > .controls-wrapper > .next {
+            display: none;
+          }
         }
       }
     }

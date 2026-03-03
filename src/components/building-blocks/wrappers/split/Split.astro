@@ -70,18 +70,20 @@ const splitId = `split-${crypto.randomUUID()}`;
 ---
 
 <section
-  class:list={[
-    "split",
-    `align-${verticalAlignment}`,
-    finalDistributionMode,
-    className,
-    `gap-${gap}`,
-    { reversed: reverse },
-  ]}
-  data-split-id={splitId}
-  style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
+  class:list={["split", className]}
   {...htmlAttributes}
 >
+  <div
+    class:list={[
+      "split-inner",
+      `align-${verticalAlignment}`,
+      finalDistributionMode,
+      `gap-${gap}`,
+      { reversed: reverse },
+    ]}
+    data-split-id={splitId}
+    style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
+  >
   <div class="pane first" {...arrayDataAttributesFirst}>
     {
       reverse ? (
@@ -116,6 +118,7 @@ const splitId = `split-${crypto.randomUUID()}`;
       )
     }
   </div>
+  </div>
 </section>
 
 {
@@ -124,16 +127,16 @@ const splitId = `split-${crypto.randomUUID()}`;
       is:inline
       set:html={`
     @container (max-width: ${minSplitWidth}px) {
-      .split[data-split-id="${splitId}"] {
+      .split-inner[data-split-id="${splitId}"] {
         grid-template-columns: var(--split-columns-mobile);
       }
       ${
         reverseOrderOnMobile
           ? `
-      .split.reversed[data-split-id="${splitId}"] .pane.first {
+      .split-inner.reversed[data-split-id="${splitId}"] .pane.first {
         order: 2;
       }
-      .split.reversed[data-split-id="${splitId}"] .pane.second {
+      .split-inner.reversed[data-split-id="${splitId}"] .pane.second {
         order: 1;
       }
       `
@@ -148,133 +151,134 @@ const splitId = `split-${crypto.randomUUID()}`;
 <style is:global>
   @layer components {
     .split {
-      --split-columns-mobile: 1fr;
-      --split-columns-desktop: 1fr 1fr;
-      --split-fixed-width: auto;
-
-      display: grid;
-      gap: var(--spacing-lg);
-      grid-template-columns: var(--split-columns-desktop);
       margin-top: var(--spacing-lg);
 
-      &.gap-xs {
-        gap: var(--spacing-xs);
-      }
-
-      &.gap-sm {
-        gap: var(--spacing-sm);
-      }
-
-      &.gap-md {
-        gap: var(--spacing-md);
-      }
-
-      &.gap-lg {
-        gap: var(--spacing-lg);
-      }
-
-      &.gap-xl {
-        gap: var(--spacing-xl);
-      }
-
-      &.gap-2xl {
-        gap: var(--spacing-2xl);
-      }
-
-      &.gap-3xl {
-        gap: var(--spacing-3xl);
-      }
-
-      &.align-top {
-        align-items: start;
-      }
-
-      &.align-center {
-        align-items: center;
-      }
-
-      &.align-bottom {
-        align-items: end;
-      }
-
-      &.align-stretch {
-        align-items: stretch;
-
-        > .pane > [data-editable="array-item"]:only-child > *,
-        > .pane > :not([data-editable="array-item"]):only-child {
-          height: 100%;
-        }
-      }
-
-      & .pane {
-        container-type: inline-size;
-        min-width: 0;
-        overflow-wrap: break-word;
-        word-wrap: break-word;
-
-        > [data-editable="array-item"]:first-child > *:first-child,
-        > :not([data-editable="array-item"]):first-child {
-          margin-top: 0 !important;
-        }
-      }
-
-      &.half {
+      > .split-inner {
+        --split-columns-mobile: 1fr;
         --split-columns-desktop: 1fr 1fr;
-      }
+        --split-fixed-width: auto;
 
-      &.third-two-thirds {
-        --split-columns-desktop: 1fr 2fr;
-      }
+        display: grid;
+        gap: var(--spacing-lg);
+        grid-template-columns: var(--split-columns-desktop);
 
-      &.two-thirds-third {
-        --split-columns-desktop: 2fr 1fr;
-      }
-
-      &.quarter-three-quarters {
-        --split-columns-desktop: 1fr 3fr;
-      }
-
-      &.three-quarters-quarter {
-        --split-columns-desktop: 3fr 1fr;
-      }
-
-      &.fixed-flexible {
-        --split-columns-desktop: var(--split-fixed-width) 1fr;
-      }
-
-      &.flexible-fixed {
-        --split-columns-desktop: 1fr var(--split-fixed-width);
-      }
-    }
-
-    @media (width < 640px) {
-      .split {
         &.gap-xs {
           gap: var(--spacing-xs);
         }
 
         &.gap-sm {
-          gap: var(--spacing-xs);
-        }
-
-        &.gap-md {
           gap: var(--spacing-sm);
         }
 
+        &.gap-md {
+          gap: var(--spacing-md);
+        }
+
         &.gap-lg {
-          gap: var(--spacing-md);
-        }
-
-        &.gap-xl {
-          gap: var(--spacing-md);
-        }
-
-        &.gap-2xl {
           gap: var(--spacing-lg);
         }
 
-        &.gap-3xl {
+        &.gap-xl {
           gap: var(--spacing-xl);
+        }
+
+        &.gap-2xl {
+          gap: var(--spacing-2xl);
+        }
+
+        &.gap-3xl {
+          gap: var(--spacing-3xl);
+        }
+
+        &.align-top {
+          align-items: start;
+        }
+
+        &.align-center {
+          align-items: center;
+        }
+
+        &.align-bottom {
+          align-items: end;
+        }
+
+        &.align-stretch {
+          align-items: stretch;
+
+          > .pane > [data-editable="array-item"]:only-child > *,
+          > .pane > :not([data-editable="array-item"]):only-child {
+            height: 100%;
+          }
+        }
+
+        & .pane {
+          container-type: inline-size;
+          min-width: 0;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+
+          > [data-editable="array-item"]:first-child > *:first-child,
+          > :not([data-editable="array-item"]):first-child {
+            margin-top: 0 !important;
+          }
+        }
+
+        &.half {
+          --split-columns-desktop: 1fr 1fr;
+        }
+
+        &.third-two-thirds {
+          --split-columns-desktop: 1fr 2fr;
+        }
+
+        &.two-thirds-third {
+          --split-columns-desktop: 2fr 1fr;
+        }
+
+        &.quarter-three-quarters {
+          --split-columns-desktop: 1fr 3fr;
+        }
+
+        &.three-quarters-quarter {
+          --split-columns-desktop: 3fr 1fr;
+        }
+
+        &.fixed-flexible {
+          --split-columns-desktop: var(--split-fixed-width) 1fr;
+        }
+
+        &.flexible-fixed {
+          --split-columns-desktop: 1fr var(--split-fixed-width);
+        }
+
+        @media (width < 640px) {
+          &.gap-xs {
+            gap: var(--spacing-xs);
+          }
+
+          &.gap-sm {
+            gap: var(--spacing-xs);
+          }
+
+          &.gap-md {
+            gap: var(--spacing-sm);
+          }
+
+          &.gap-lg {
+            gap: var(--spacing-md);
+          }
+
+          &.gap-xl {
+            gap: var(--spacing-md);
+          }
+
+          &.gap-2xl {
+            gap: var(--spacing-lg);
+          }
+
+          &.gap-3xl {
+            gap: var(--spacing-xl);
+          }
         }
       }
     }

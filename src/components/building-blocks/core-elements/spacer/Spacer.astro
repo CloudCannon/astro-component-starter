@@ -8,12 +8,13 @@ const {
 } = Astro.props;
 ---
 
-<div class:list={["spacer", className, `size-${size}`]} {...htmlAttributes} aria-hidden="true">
+<div class:list={["spacer", className]} {...htmlAttributes} aria-hidden="true">
+  <div class:list={["spacer-inner", `size-${size}`]}></div>
 </div>
 
 <style is:global>
   @layer components {
-    .spacer {
+    .spacer > .spacer-inner {
       height: 0;
 
       &.size-xs {

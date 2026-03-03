@@ -33,18 +33,17 @@ const arrayDataAttributes = effectiveChildrenProp
 if (!_component && !hasItems && !usesItemsArray) return;
 ---
 
-<div
-  class:list={[
-    "list",
-    `size-${size}`,
-    `direction-${direction}`,
-    `alignment-${alignX}`,
-    `type-${listType}`,
-    className,
-  ]}
-  {...htmlAttributes}
->
-  <ListTag role="list" {...arrayDataAttributes}>
+<div class:list={["list", className]} {...htmlAttributes}>
+  <ListTag
+    role="list"
+    class:list={[
+      `size-${size}`,
+      `direction-${direction}`,
+      `alignment-${alignX}`,
+      `type-${listType}`,
+    ]}
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         items?.map((item: ItemProps) => (
@@ -64,92 +63,80 @@ if (!_component && !hasItems && !usesItemsArray) return;
 <style is:global>
   @layer components {
     .list {
-      & > :where(ul, ol) {
+      margin-top: var(--spacing-lg);
+
+      > :where(ul, ol) {
         display: flex;
         flex-direction: column;
         gap: var(--spacing-em-sm);
         margin: 0;
-        margin-top: var(--spacing-lg);
-        padding-inline-start: var(--spacing-md);
-      }
 
-      &.direction-horizontal {
-        & > :where(ul, ol) {
+        padding-inline-start: var(--spacing-md);
+
+        &.direction-horizontal {
           flex-flow: row wrap;
           gap: var(--spacing-em-sm);
         }
-      }
 
-      &.type-bullet {
-        & > :where(ul, ol) {
+        &.type-bullet {
           list-style: disc;
         }
-      }
 
-      &.type-numbered {
-        & > :where(ul, ol) {
+        &.type-numbered {
           list-style: decimal;
         }
-      }
 
-      &.type-bullet,
-      &.type-numbered {
-        &.direction-horizontal > :where(ul, ol) > li:not(:first-child) {
+        &.type-bullet.direction-horizontal > li:not(:first-child),
+        &.type-numbered.direction-horizontal > li:not(:first-child) {
           margin-inline-start: var(--spacing-lg);
         }
-      }
 
-      &.type-icon {
-        & > :where(ul, ol) {
+        &.type-icon {
           list-style: none;
           padding: 0;
         }
-      }
 
-      &.alignment-end {
-        & > :where(ul, ol) {
+        &.alignment-end {
           align-items: flex-end;
           justify-content: flex-end;
         }
-      }
 
-      &.alignment-center {
-        & > :where(ul, ol) {
+        &.alignment-center {
           align-items: center;
           justify-content: center;
         }
-      }
 
-      &.size-xs {
-        font-size: var(--font-size-xs);
-      }
+        &.size-xs {
+          font-size: var(--font-size-xs);
+        }
 
-      &.size-sm {
-        font-size: var(--font-size-sm);
-      }
+        &.size-sm {
+          font-size: var(--font-size-sm);
+        }
 
-      &.size-md {
-        font-size: var(--font-size-md);
-      }
+        &.size-md {
+          font-size: var(--font-size-md);
+        }
 
-      &.size-lg {
-        font-size: var(--font-size-lg);
-      }
+        &.size-lg {
+          font-size: var(--font-size-lg);
+        }
 
-      &.size-xl {
-        font-size: var(--font-size-xl);
-      }
+        &.size-xl {
+          font-size: var(--font-size-xl);
+        }
 
-      &.size-2xl {
-        font-size: var(--font-size-2xl);
-      }
+        &.size-2xl {
+          font-size: var(--font-size-2xl);
+        }
 
-      &.size-3xl {
-        font-size: var(--font-size-3xl);
-      }
+        &.size-3xl {
+          font-size: var(--font-size-3xl);
+        }
 
-      &.size-4xl {
-        font-size: var(--font-size-4xl);
+        &.size-4xl {
+          font-size: var(--font-size-4xl);
+        }
       }
     }
   }

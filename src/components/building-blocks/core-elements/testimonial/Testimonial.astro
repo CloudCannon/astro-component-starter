@@ -29,111 +29,120 @@ const authorNameDataAttributes = effectiveAuthorNameProp
   ? { "data-editable": "text", "data-prop": effectiveAuthorNameProp }
   : {};
 
-const effectiveAuthorDescProp = customDataPropAuthorDescription ?? (editable ? "authorDescription" : null);
+const effectiveAuthorDescProp =
+  customDataPropAuthorDescription ?? (editable ? "authorDescription" : null);
 const authorDescriptionDataAttributes = effectiveAuthorDescProp
   ? { "data-editable": "text", "data-prop": effectiveAuthorDescProp }
   : {};
 ---
 
-<blockquote class:list={["testimonial", `alignment-${alignX}`, className]} {...htmlAttributes}>
-  <div class="quote" {...textDataAttributes}>
-    <slot>
-      {text && <Fragment set:html={MarkdownText} />}
-    </slot>
-  </div>
-  <div class="author">
-    <Image
-      source={authorImage}
-      alt={authorName}
-      width={100}
-      height={100}
-      class="author-image"
-      data-prop-src="authorImage"
-      data-prop-alt="authorName"
-    />
-    <cite class="author-content">
-      <strong class="name" {...authorNameDataAttributes}>
-        {authorName}
-      </strong>
-      {
-        authorDescription && (
-          <>
-            <br />
-            <span class="description" {...authorDescriptionDataAttributes}>
-              {authorDescription}
-            </span>
-          </>
-        )
-      }
-    </cite>
+<blockquote class:list={["testimonial", className]} {...htmlAttributes}>
+  <div class:list={["testimonial-inner", `alignment-${alignX}`]}>
+    <div class="quote" {...textDataAttributes}>
+      <slot>
+        {text && <Fragment set:html={MarkdownText} />}
+      </slot>
+    </div>
+    <div class="author">
+      <Image
+        source={authorImage}
+        alt={authorName}
+        width={100}
+        height={100}
+        class="author-image"
+        data-prop-src="authorImage"
+        data-prop-alt="authorName"
+      />
+      <cite class="author-content">
+        <strong class="name" {...authorNameDataAttributes}>
+          {authorName}
+        </strong>
+        {
+          authorDescription && (
+            <>
+              <br />
+              <span class="description" {...authorDescriptionDataAttributes}>
+                {authorDescription}
+              </span>
+            </>
+          )
+        }
+      </cite>
+    </div>
   </div>
 </blockquote>
 
 <style is:global>
   @layer components {
     .testimonial {
-      background: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-em-sm);
+      border-inline-start: 0;
       margin: 0;
       margin-top: var(--spacing-lg);
-      padding: var(--spacing-md);
+      padding-inline-start: 0;
 
-      &.alignment-center {
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-      > .quote {
-        margin: 0;
-
-        * {
-          font-size: var(--font-size-2xl);
-        }
-
-        *:first-child {
-          margin-top: 0;
-        }
-
-        *:last-child {
-          margin-bottom: 0;
-        }
-
-        *:first-child::before {
-          content: "\201C";
-        }
-
-        *:last-child::after {
-          content: "\201D";
-        }
-      }
-
-      > .author {
-        align-items: center;
+      > .testimonial-inner {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
         display: flex;
-        gap: var(--spacing-md);
-        margin-top: var(--spacing-md);
+        flex-direction: column;
+        gap: var(--spacing-em-sm);
+        padding: var(--spacing-md);
 
-        > .author-content {
-          font-style: normal;
-          text-align: start;
+        &.alignment-center {
+          align-items: center;
+          justify-content: center;
+          text-align: center;
         }
 
-        > .author-image {
-          aspect-ratio: var(--ratio-square);
-          height: 80px;
-          width: 80px;
+        > .quote {
+          margin: 0;
 
-          picture {
-            border-radius: var(--radius-full);
-            overflow: hidden;
+          * {
+            font-size: var(--font-size-2xl);
           }
 
-          img {
-            height: 100%;
+          *:first-child {
+            margin-top: 0;
+          }
+
+          *:last-child {
+            margin-bottom: 0;
+          }
+
+          *:first-child::before {
+            content: "\201C";
+          }
+
+          *:last-child::after {
+            content: "\201D";
+          }
+        }
+
+        > .author {
+          align-items: center;
+          display: flex;
+          gap: var(--spacing-md);
+          margin-top: var(--spacing-md);
+
+          > .author-content {
+            font-style: normal;
+            text-align: start;
+          }
+
+          > .author-image {
+            aspect-ratio: var(--ratio-square);
+            height: 80px;
+            width: 80px;
+
+            picture {
+              border-radius: var(--radius-full);
+              overflow: hidden;
+            }
+
+            img {
+              height: 100%;
+            }
           }
         }
       }

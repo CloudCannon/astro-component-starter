@@ -28,64 +28,70 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasText && !hasSlotContent) return;
 ---
 
-<p
-  class:list={["simple-text", size && `size-${size}`, `align-${alignX}`, className]}
+<div
+  class:list={["simple-text", className]}
   {...htmlAttributes}
 >
-  <span class="simple-text-inner" {...textDataAttributes}>
-    <slot>
-      {text && <Fragment set:html={MarkdownText} />}
-    </slot>
-  </span>
-</p>
+  <p class:list={["simple-text-content", size && `size-${size}`, `align-${alignX}`]}>
+    <span class="simple-text-inner" {...textDataAttributes}>
+      <slot>
+        {text && <Fragment set:html={MarkdownText} />}
+      </slot>
+    </span>
+  </p>
+</div>
 
 <style is:global>
   @layer components {
     .simple-text {
       margin-top: var(--spacing-lg);
 
-      &.size-xs {
-        font-size: var(--font-size-xs);
-      }
+      > .simple-text-content {
+        margin: 0;
 
-      &.size-sm {
-        font-size: var(--font-size-sm);
-      }
+        &.size-xs {
+          font-size: var(--font-size-xs);
+        }
 
-      &.size-md {
-        font-size: var(--font-size-md);
-      }
+        &.size-sm {
+          font-size: var(--font-size-sm);
+        }
 
-      &.size-lg {
-        font-size: var(--font-size-lg);
-      }
+        &.size-md {
+          font-size: var(--font-size-md);
+        }
 
-      &.size-xl {
-        font-size: var(--font-size-xl);
-      }
+        &.size-lg {
+          font-size: var(--font-size-lg);
+        }
 
-      &.size-2xl {
-        font-size: var(--font-size-2xl);
-      }
+        &.size-xl {
+          font-size: var(--font-size-xl);
+        }
 
-      &.size-3xl {
-        font-size: var(--font-size-3xl);
-      }
+        &.size-2xl {
+          font-size: var(--font-size-2xl);
+        }
 
-      &.size-4xl {
-        font-size: var(--font-size-4xl);
-      }
+        &.size-3xl {
+          font-size: var(--font-size-3xl);
+        }
 
-      &.align-start {
-        text-align: start;
-      }
+        &.size-4xl {
+          font-size: var(--font-size-4xl);
+        }
 
-      &.align-center {
-        text-align: center;
-      }
+        &.align-start {
+          text-align: start;
+        }
 
-      &.align-end {
-        text-align: end;
+        &.align-center {
+          text-align: center;
+        }
+
+        &.align-end {
+          text-align: end;
+        }
       }
     }
   }

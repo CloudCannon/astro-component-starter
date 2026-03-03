@@ -33,11 +33,15 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <section
-  class:list={["content-selector", `nav-${navigationPosition}`, className]}
-  data-uid={uniqueId}
+  class:list={["content-selector", className]}
   {...htmlAttributes}
 >
-  <div class="content-selector-items" role="tablist" {...arrayDataAttributes}>
+  <div
+    class:list={["content-selector-items", `nav-${navigationPosition}`]}
+    data-uid={uniqueId}
+    role="tablist"
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         items?.map((item: ContentSelectorItem, index: number) => (
@@ -66,108 +70,104 @@ if (!_component && !hasItems && !hasSlotContent) return;
       > .content-selector-items {
         border: 0 solid var(--color-bg-muted);
         width: 100%;
-      }
-
-      .content-selector-tab {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        display: block;
-        padding: var(--spacing-md);
-        position: relative;
-        transition: background-color var(--animation-normal) ease-in-out;
-        width: 100%;
-
-        &::before {
-          background: transparent;
-          content: "";
-          position: absolute;
-          transition:
-            transform var(--animation-normal),
-            background var(--animation-normal);
-        }
-
-        &:hover {
-          background: var(--color-state-hover);
-        }
-
-        > .content-selector-tab-heading {
-          margin: 0;
-        }
-      }
-
-      .content-selector-item > .content-selector-input:checked + .content-selector-tab::before {
-        background: var(--color-border-strong);
-      }
-
-      .content-selector-item
-        > .content-selector-input:checked
-        + .content-selector-tab
-        + .content-selector-panel {
-        display: block;
-      }
-
-      &:not(:has(.content-selector-item > .content-selector-input:checked))
-        .content-selector-item:first-of-type
-        > .content-selector-tab::before {
-        background: var(--color-border-strong);
-      }
-
-      &:not(:has(.content-selector-item > .content-selector-input:checked))
-        .content-selector-item:first-of-type
-        > .content-selector-panel {
-        display: block;
-      }
-
-      &.nav-start {
-        > .content-selector-items {
-          column-gap: var(--spacing-em-lg);
-          display: grid;
-          grid-template-columns: minmax(10rem, 20rem) minmax(0, 1fr);
-        }
 
         .content-selector-tab {
-          border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
-          grid-column: 1;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          display: block;
+          padding: var(--spacing-md);
+          position: relative;
+          transition: background-color var(--animation-normal) ease-in-out;
+          width: 100%;
 
           &::before {
-            inset-block: 0;
-            inset-inline-start: calc(var(--content-selector-border-width) * -1);
-            width: var(--content-selector-border-width);
+            background: transparent;
+            content: "";
+            position: absolute;
+            transition:
+              transform var(--animation-normal),
+              background var(--animation-normal);
+          }
+
+          &:hover {
+            background: var(--color-state-hover);
+          }
+
+          > .content-selector-tab-heading {
+            margin: 0;
           }
         }
 
-        .content-selector-panel {
-          grid-column: 2;
-          grid-row: 1 / span 999;
-          padding: 0 var(--spacing-md);
-          width: 100%;
-        }
-      }
-
-      &.nav-top {
-        > .content-selector-items {
-          border-bottom-width: var(--content-selector-border-width);
-          display: flex;
-          flex-wrap: wrap;
+        .content-selector-item > .content-selector-input:checked + .content-selector-tab::before {
+          background: var(--color-border-strong);
         }
 
-        .content-selector-tab {
-          width: fit-content;
+        .content-selector-item
+          > .content-selector-input:checked
+          + .content-selector-tab
+          + .content-selector-panel {
+          display: block;
+        }
 
-          &::before {
-            height: var(--content-selector-border-width);
-            inset-block: 100%;
-            inset-inline-start: 0;
+        &:not(:has(.content-selector-item > .content-selector-input:checked))
+          .content-selector-item:first-of-type
+          > .content-selector-tab::before {
+          background: var(--color-border-strong);
+        }
+
+        &:not(:has(.content-selector-item > .content-selector-input:checked))
+          .content-selector-item:first-of-type
+          > .content-selector-panel {
+          display: block;
+        }
+
+        &.nav-start {
+          column-gap: var(--spacing-em-lg);
+          display: grid;
+          grid-template-columns: minmax(10rem, 20rem) minmax(0, 1fr);
+
+          .content-selector-tab {
+            border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
+            grid-column: 1;
+
+            &::before {
+              inset-block: 0;
+              inset-inline-start: calc(var(--content-selector-border-width) * -1);
+              width: var(--content-selector-border-width);
+            }
+          }
+
+          .content-selector-panel {
+            grid-column: 2;
+            grid-row: 1 / span 999;
+            padding: 0 var(--spacing-md);
             width: 100%;
           }
         }
 
-        .content-selector-panel {
-          flex-basis: 100%;
-          margin-top: var(--spacing-md);
-          padding: 0 var(--spacing-md);
-          width: 100%;
+        &.nav-top {
+          border-bottom-width: var(--content-selector-border-width);
+          display: flex;
+          flex-wrap: wrap;
+
+          .content-selector-tab {
+            width: fit-content;
+
+            &::before {
+              height: var(--content-selector-border-width);
+              inset-block: 100%;
+              inset-inline-start: 0;
+              width: 100%;
+            }
+          }
+
+          .content-selector-panel {
+            flex-basis: 100%;
+            margin-top: var(--spacing-md);
+            padding: 0 var(--spacing-md);
+            width: 100%;
+          }
         }
       }
     }

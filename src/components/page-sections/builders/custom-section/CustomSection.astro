@@ -40,29 +40,31 @@ const arrayDataAttributes = effectiveChildrenProp && hasContentSections
 ---
 
 <section
-  class:list={["custom-section", rounded && "rounded", className]}
-  data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+  class:list={["custom-section", className]}
   {...htmlAttributes}
 >
-  <Image
-    class:list={["background-image"]}
-    source={source}
-    alt={alt}
-    priority={priority}
-    editable={hasContentSections && !!effectiveChildrenProp}
-    data-prop-src="backgroundImage.source"
-    data-prop-alt="backgroundImage.alt"
-    positionVertical={positionVertical}
-    positionHorizontal={positionHorizontal}
-    background={true}
-  />
-  {
-    backgroundColor && (
-      <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
-    )
-  }
+  <div
+    class:list={["outer-content", rounded && "rounded"]}
+    data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+  >
+    <Image
+      class:list={["background-image"]}
+      source={source}
+      alt={alt}
+      priority={priority}
+      editable={hasContentSections && !!effectiveChildrenProp}
+      data-prop-src="backgroundImage.source"
+      data-prop-alt="backgroundImage.alt"
+      positionVertical={positionVertical}
+      positionHorizontal={positionHorizontal}
+      background={true}
+    />
+    {
+      backgroundColor && (
+        <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
+      )
+    }
 
-  <div class="outer-content">
     <div
       class:list={[
         "content",
@@ -82,217 +84,208 @@ const arrayDataAttributes = effectiveChildrenProp && hasContentSections
 <style is:global>
   @layer components {
     .custom-section {
-      position: relative;
-    }
+      > .outer-content {
+        height: 100%;
+        position: relative;
 
-    .custom-section.rounded {
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-    }
+        &.rounded {
+          border-radius: var(--radius-xl);
+          overflow: hidden;
+        }
 
-    .custom-section > .outer-content {
-      height: 100%;
-    }
+        > .content {
+          container-type: inline-size;
+          height: 100%;
+          margin-inline: auto;
+          position: relative;
+          z-index: var(--layer-1);
 
-    .custom-section > .outer-content > .content {
-      container-type: inline-size;
-      height: 100%;
-      margin-inline: auto;
-      position: relative;
-      z-index: var(--layer-1);
-    }
+          > [data-editable="array-item"]:first-child > *:first-child,
+          > :not([data-editable="array-item"]):first-child {
+            margin-top: 0 !important;
+          }
 
-    .custom-section
-      > .outer-content
-      > .content
-      > [data-editable="array-item"]:first-child
-      > *:first-child,
-    .custom-section > .outer-content > .content > :not([data-editable="array-item"]):first-child {
-      margin-top: 0 !important;
-    }
+          > [data-editable="array-item"]:last-child > *:last-child,
+          > :not([data-editable="array-item"]):last-child {
+            margin-bottom: 0 !important;
+          }
 
-    .custom-section
-      > .outer-content
-      > .content
-      > [data-editable="array-item"]:last-child
-      > *:last-child,
-    .custom-section > .outer-content > .content > :not([data-editable="array-item"]):last-child {
-      margin-bottom: 0 !important;
-    }
+          &.pad-x-xs {
+            padding-inline: var(--spacing-xs);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-xs {
-      padding-inline: var(--spacing-xs);
-    }
+          &.pad-x-sm {
+            padding-inline: var(--spacing-sm);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-sm {
-      padding-inline: var(--spacing-sm);
-    }
+          &.pad-x-md {
+            padding-inline: var(--spacing-md);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-md {
-      padding-inline: var(--spacing-md);
-    }
+          &.pad-x-lg {
+            padding-inline: var(--spacing-lg);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-lg {
-      padding-inline: var(--spacing-lg);
-    }
+          &.pad-x-xl {
+            padding-inline: var(--spacing-xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-xl {
-      padding-inline: var(--spacing-xl);
-    }
+          &.pad-x-2xl {
+            padding-inline: var(--spacing-2xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-2xl {
-      padding-inline: var(--spacing-2xl);
-    }
+          &.pad-x-3xl {
+            padding-inline: var(--spacing-3xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-3xl {
-      padding-inline: var(--spacing-3xl);
-    }
+          &.pad-x-4xl {
+            padding-inline: var(--spacing-4xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-4xl {
-      padding-inline: var(--spacing-4xl);
-    }
+          &.pad-x-5xl {
+            padding-inline: var(--spacing-5xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-5xl {
-      padding-inline: var(--spacing-5xl);
-    }
+          &.pad-x-6xl {
+            padding-inline: var(--spacing-6xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-x-6xl {
-      padding-inline: var(--spacing-6xl);
-    }
+          &.pad-y-xs {
+            padding-block: var(--spacing-xs);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-xs {
-      padding-block: var(--spacing-xs);
-    }
+          &.pad-y-sm {
+            padding-block: var(--spacing-sm);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-sm {
-      padding-block: var(--spacing-sm);
-    }
+          &.pad-y-md {
+            padding-block: var(--spacing-md);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-md {
-      padding-block: var(--spacing-md);
-    }
+          &.pad-y-lg {
+            padding-block: var(--spacing-lg);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-lg {
-      padding-block: var(--spacing-lg);
-    }
+          &.pad-y-xl {
+            padding-block: var(--spacing-xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-xl {
-      padding-block: var(--spacing-xl);
-    }
+          &.pad-y-2xl {
+            padding-block: var(--spacing-2xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-2xl {
-      padding-block: var(--spacing-2xl);
-    }
+          &.pad-y-3xl {
+            padding-block: var(--spacing-3xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-3xl {
-      padding-block: var(--spacing-3xl);
-    }
+          &.pad-y-4xl {
+            padding-block: var(--spacing-4xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-4xl {
-      padding-block: var(--spacing-4xl);
-    }
+          &.pad-y-5xl {
+            padding-block: var(--spacing-5xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-5xl {
-      padding-block: var(--spacing-5xl);
-    }
+          &.pad-y-6xl {
+            padding-block: var(--spacing-6xl);
+          }
 
-    .custom-section > .outer-content > .content.pad-y-6xl {
-      padding-block: var(--spacing-6xl);
-    }
+          @media (width < 640px) {
+            &.pad-y-xs {
+              padding-block: var(--spacing-xs);
+            }
 
-    @media (width < 640px) {
-      .custom-section > .outer-content > .content.pad-y-xs {
-        padding-block: var(--spacing-xs);
+            &.pad-y-sm {
+              padding-block: var(--spacing-xs);
+            }
+
+            &.pad-y-md {
+              padding-block: var(--spacing-sm);
+            }
+
+            &.pad-y-lg {
+              padding-block: var(--spacing-md);
+            }
+
+            &.pad-y-xl {
+              padding-block: var(--spacing-md);
+            }
+
+            &.pad-y-2xl {
+              padding-block: var(--spacing-lg);
+            }
+
+            &.pad-y-3xl {
+              padding-block: var(--spacing-xl);
+            }
+
+            &.pad-y-4xl {
+              padding-block: var(--spacing-2xl);
+            }
+
+            &.pad-y-5xl {
+              padding-block: var(--spacing-3xl);
+            }
+
+            &.pad-y-6xl {
+              padding-block: var(--spacing-4xl);
+            }
+          }
+
+          &.max-width-xs {
+            max-width: var(--content-width-xs);
+          }
+
+          &.max-width-sm {
+            max-width: var(--content-width-sm);
+          }
+
+          &.max-width-md {
+            max-width: var(--content-width-md);
+          }
+
+          &.max-width-lg {
+            max-width: var(--content-width-lg);
+          }
+
+          &.max-width-xl {
+            max-width: var(--content-width-xl);
+          }
+
+          &.max-width-2xl {
+            max-width: var(--content-width-2xl);
+          }
+
+          &.max-width-3xl {
+            max-width: var(--content-width-3xl);
+          }
+        }
+
+        > .background {
+          inset: 0;
+          position: absolute;
+        }
+
+        > .background-image {
+          z-index: var(--layer-1);
+        }
+
+        > .bg-base {
+          background-color: var(--color-bg);
+        }
+
+        > .bg-surface {
+          background-color: var(--color-bg-surface);
+        }
+
+        > .bg-accent {
+          background-color: var(--color-bg-accent);
+        }
+
+        > .bg-highlight {
+          background-color: var(--color-bg-highlight);
+        }
       }
-
-      .custom-section > .outer-content > .content.pad-y-sm {
-        padding-block: var(--spacing-xs);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-md {
-        padding-block: var(--spacing-sm);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-lg {
-        padding-block: var(--spacing-md);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-xl {
-        padding-block: var(--spacing-md);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-2xl {
-        padding-block: var(--spacing-lg);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-3xl {
-        padding-block: var(--spacing-xl);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-4xl {
-        padding-block: var(--spacing-2xl);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-5xl {
-        padding-block: var(--spacing-3xl);
-      }
-
-      .custom-section > .outer-content > .content.pad-y-6xl {
-        padding-block: var(--spacing-4xl);
-      }
-    }
-
-    .custom-section > .outer-content > .content.max-width-xs {
-      max-width: var(--content-width-xs);
-    }
-
-    .custom-section > .outer-content > .content.max-width-sm {
-      max-width: var(--content-width-sm);
-    }
-
-    .custom-section > .outer-content > .content.max-width-md {
-      max-width: var(--content-width-md);
-    }
-
-    .custom-section > .outer-content > .content.max-width-lg {
-      max-width: var(--content-width-lg);
-    }
-
-    .custom-section > .outer-content > .content.max-width-xl {
-      max-width: var(--content-width-xl);
-    }
-
-    .custom-section > .outer-content > .content.max-width-2xl {
-      max-width: var(--content-width-2xl);
-    }
-
-    .custom-section > .outer-content > .content.max-width-3xl {
-      max-width: var(--content-width-3xl);
-    }
-
-    .custom-section > .background {
-      inset: 0;
-      position: absolute;
-    }
-
-    .custom-section > .background-image {
-      z-index: var(--layer-1);
-    }
-
-    .custom-section > .bg-base {
-      background-color: var(--color-bg);
-    }
-
-    .custom-section > .bg-surface {
-      background-color: var(--color-bg-surface);
-    }
-
-    .custom-section > .bg-accent {
-      background-color: var(--color-bg-accent);
-    }
-
-    .custom-section > .bg-highlight {
-      background-color: var(--color-bg-highlight);
     }
   }
 </style>

@@ -26,8 +26,8 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasText && !hasSlotContent) return;
 ---
 
-<div class:list={["text", className, `align-${alignX}`]} {...htmlAttributes}>
-  <div class="text-inner" {...textDataAttributes}>
+<div class:list={["text", className]} {...htmlAttributes}>
+  <div class:list={["text-inner", `align-${alignX}`]} {...textDataAttributes}>
     <slot>
       {text && <Fragment set:html={markdownContent} />}
     </slot>
@@ -39,16 +39,18 @@ if (!_component && !hasText && !hasSlotContent) return;
     .text {
       margin-top: var(--spacing-lg);
 
-      &.align-start {
-        text-align: start;
-      }
+      > .text-inner {
+        &.align-start {
+          text-align: start;
+        }
 
-      &.align-center {
-        text-align: center;
-      }
+        &.align-center {
+          text-align: center;
+        }
 
-      &.align-end {
-        text-align: end;
+        &.align-end {
+          text-align: end;
+        }
       }
     }
   }

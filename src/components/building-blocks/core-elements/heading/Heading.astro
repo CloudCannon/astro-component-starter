@@ -34,36 +34,38 @@ if (!_component && !hasText && !hasSlotContent) return;
 ---
 
 <Tag
-  class:list={["heading", size && `size-${size}`, `align-${alignX}`, className]}
+  class:list={["heading", className]}
   {...htmlAttributes}
 >
-  {
-    iconPosition == "before" && (
-      <Icon
-        name={iconName}
-        size="none"
-        class="heading-icon"
-        aria-hidden="true"
-        role="presentation"
-      />
-    )
-  }
-  <span class="heading-text" {...textDataAttributes}>
-    <slot>
-      {text && <Fragment set:html={MarkdownText} />}
-    </slot>
+  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignX}`]}>
+    {
+      iconPosition == "before" && (
+        <Icon
+          name={iconName}
+          size="none"
+          class="heading-icon"
+          aria-hidden="true"
+          role="presentation"
+        />
+      )
+    }
+    <span class="heading-text" {...textDataAttributes}>
+      <slot>
+        {text && <Fragment set:html={MarkdownText} />}
+      </slot>
+    </span>
+    {
+      iconPosition === "after" && (
+        <Icon
+          name={iconName}
+          size="none"
+          class="heading-icon heading-icon-after"
+          aria-hidden="true"
+          role="presentation"
+        />
+      )
+    }
   </span>
-  {
-    iconPosition === "after" && (
-      <Icon
-        name={iconName}
-        size="none"
-        class="heading-icon heading-icon-after"
-        aria-hidden="true"
-        role="presentation"
-      />
-    )
-  }
 </Tag>
 
 <style is:global>
@@ -71,58 +73,62 @@ if (!_component && !hasText && !hasSlotContent) return;
     .heading {
       margin-top: var(--spacing-lg);
 
-      .heading-icon {
-        bottom: 0.1em;
-        margin-inline-end: 0.2em;
-        position: relative;
+      > .heading-inner {
+        display: block;
 
-        &.heading-icon-after {
-          margin-inline: 0.2em 0;
+        .heading-icon {
+          bottom: 0.1em;
+          margin-inline-end: 0.2em;
+          position: relative;
+
+          &.heading-icon-after {
+            margin-inline: 0.2em 0;
+          }
         }
-      }
 
-      &.size-xs {
-        font-size: var(--font-size-heading-xs);
-      }
+        &.size-xs {
+          font-size: var(--font-size-heading-xs);
+        }
 
-      &.size-sm {
-        font-size: var(--font-size-heading-sm);
-      }
+        &.size-sm {
+          font-size: var(--font-size-heading-sm);
+        }
 
-      &.size-md {
-        font-size: var(--font-size-heading-md);
-      }
+        &.size-md {
+          font-size: var(--font-size-heading-md);
+        }
 
-      &.size-lg {
-        font-size: var(--font-size-heading-lg);
-      }
+        &.size-lg {
+          font-size: var(--font-size-heading-lg);
+        }
 
-      &.size-xl {
-        font-size: var(--font-size-heading-xl);
-      }
+        &.size-xl {
+          font-size: var(--font-size-heading-xl);
+        }
 
-      &.size-2xl {
-        font-size: var(--font-size-heading-2xl);
-      }
+        &.size-2xl {
+          font-size: var(--font-size-heading-2xl);
+        }
 
-      &.size-3xl {
-        font-size: var(--font-size-heading-3xl);
-      }
+        &.size-3xl {
+          font-size: var(--font-size-heading-3xl);
+        }
 
-      &.size-4xl {
-        font-size: var(--font-size-heading-4xl);
-      }
+        &.size-4xl {
+          font-size: var(--font-size-heading-4xl);
+        }
 
-      &.align-start {
-        text-align: start;
-      }
+        &.align-start {
+          text-align: start;
+        }
 
-      &.align-center {
-        text-align: center;
-      }
+        &.align-center {
+          text-align: center;
+        }
 
-      &.align-end {
-        text-align: end;
+        &.align-end {
+          text-align: end;
+        }
       }
     }
   }

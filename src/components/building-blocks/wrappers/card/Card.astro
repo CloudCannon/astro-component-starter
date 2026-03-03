@@ -60,108 +60,232 @@ const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeCon
 const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterContentSections;
 ---
 
-<Tag
+<div
+  class:list={["card", className]}
   {...htmlAttributes}
-  {...link && { href: link }}
-  class:list={["card", rounded && "rounded", border && "border", className]}
-  data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
 >
-  <Image
-    class:list={["background-image"]}
-    source={source}
-    alt={alt}
-    data-prop-src="backgroundImage.source"
-    data-prop-alt="backgroundImage.alt"
-    positionVertical={positionVertical}
-    positionHorizontal={positionHorizontal}
-    background={true}
-  />
-  {
-    backgroundColor && (
+  <Tag
+    {...link && { href: link }}
+    class:list={["card-inner", rounded && "rounded", border && "border"]}
+    data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+  >
+    <Image
+      class:list={["background-image"]}
+      source={source}
+      alt={alt}
+      data-prop-src="backgroundImage.source"
+      data-prop-alt="backgroundImage.alt"
+      positionVertical={positionVertical}
+      positionHorizontal={positionHorizontal}
+      background={true}
+    />
+    {
+      backgroundColor && (
+        <div
+          aria-hidden="true"
+          class:list={["background", backgroundColor && `bg-${backgroundColor}`]}
+        />
+      )
+    }
+
+    {
+      (usesBeforeContentSections || hasBeforeSlot) && (
+        <div class="before-content" {...arrayDataAttributesBefore}>
+          <slot name="before">
+            {beforeContentSections && (
+              <Component contentSections={beforeContentSections} editable={!!effectiveBeforeProp} />
+            )}
+          </slot>
+        </div>
+      )
+    }
+
+    <div class="card-outer-content">
       <div
-        aria-hidden="true"
-        class:list={["background", backgroundColor && `bg-${backgroundColor}`]}
-      />
-    )
-  }
-
-  {
-    (usesBeforeContentSections || hasBeforeSlot) && (
-      <div class="before-content" {...arrayDataAttributesBefore}>
-        <slot name="before">
-          {beforeContentSections && (
-            <Component contentSections={beforeContentSections} editable={!!effectiveBeforeProp} />
-          )}
+        class:list={[
+          "card-content",
+          paddingHorizontal && `pad-x-${paddingHorizontal}`,
+          paddingVertical && `pad-y-${paddingVertical}`,
+          maxContentWidth && `max-width-${maxContentWidth}`,
+        ]}
+        {...arrayDataAttributes}
+      >
+        <slot>
+          {contentSections && <Component contentSections={contentSections} editable={!!effectiveChildrenProp} />}
         </slot>
       </div>
-    )
-  }
-
-  <div class="card-outer-content">
-    <div
-      class:list={[
-        "card-content",
-        paddingHorizontal && `pad-x-${paddingHorizontal}`,
-        paddingVertical && `pad-y-${paddingVertical}`,
-        maxContentWidth && `max-width-${maxContentWidth}`,
-      ]}
-      {...arrayDataAttributes}
-    >
-      <slot>
-        {contentSections && <Component contentSections={contentSections} editable={!!effectiveChildrenProp} />}
-      </slot>
     </div>
-  </div>
 
-  {
-    (usesAfterContentSections || hasAfterSlot) && (
-      <div class="after-content" {...arrayDataAttributesAfter}>
-        <slot name="after">
-          {afterContentSections && (
-            <Component contentSections={afterContentSections} editable={!!effectiveAfterProp} />
-          )}
-        </slot>
-      </div>
-    )
-  }
-</Tag>
+    {
+      (usesAfterContentSections || hasAfterSlot) && (
+        <div class="after-content" {...arrayDataAttributesAfter}>
+          <slot name="after">
+            {afterContentSections && (
+              <Component contentSections={afterContentSections} editable={!!effectiveAfterProp} />
+            )}
+          </slot>
+        </div>
+      )
+    }
+  </Tag>
+</div>
 
 <style is:global>
   @layer components {
-    a.card:hover {
-      transform: scale(1.05);
-    }
-
     .card {
-      color: inherit;
       display: block;
       margin-top: var(--spacing-lg);
-      overflow: hidden;
-      position: relative;
-      text-decoration: none;
-      transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
 
-      &.rounded {
-        border-radius: var(--radius-md);
+      > a.card-inner:hover {
+        transform: scale(1.05);
       }
 
-      &.border {
-        border: 1px solid var(--color-border);
-      }
-
-      > .card-outer-content {
-        height: 100%;
+      > .card-inner {
+        color: inherit;
+        display: block;
+        overflow: hidden;
         position: relative;
-        z-index: var(--layer-2);
+        text-decoration: none;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
 
-        > .card-content {
-          container-type: inline-size;
+        &.rounded {
+          border-radius: var(--radius-md);
+        }
+
+        &.border {
+          border: 1px solid var(--color-border);
+        }
+
+        > .card-outer-content {
           height: 100%;
-          margin-inline: auto;
           position: relative;
-          z-index: var(--layer-1);
+          z-index: var(--layer-2);
+
+          > .card-content {
+            container-type: inline-size;
+            height: 100%;
+            margin-inline: auto;
+            position: relative;
+            z-index: var(--layer-1);
+
+            > *:first-child {
+              margin-top: 0 !important;
+            }
+
+            > *:last-child {
+              margin-bottom: 0 !important;
+            }
+
+            &.pad-x-xs {
+              padding-inline: var(--spacing-xs);
+            }
+
+            &.pad-x-sm {
+              padding-inline: var(--spacing-sm);
+            }
+
+            &.pad-x-md {
+              padding-inline: var(--spacing-md);
+            }
+
+            &.pad-x-lg {
+              padding-inline: var(--spacing-lg);
+            }
+
+            &.pad-x-xl {
+              padding-inline: var(--spacing-xl);
+            }
+
+            &.pad-x-2xl {
+              padding-inline: var(--spacing-2xl);
+            }
+
+            &.pad-y-xs {
+              padding-block: var(--spacing-xs);
+            }
+
+            &.pad-y-sm {
+              padding-block: var(--spacing-sm);
+            }
+
+            &.pad-y-md {
+              padding-block: var(--spacing-md);
+            }
+
+            &.pad-y-lg {
+              padding-block: var(--spacing-lg);
+            }
+
+            &.pad-y-xl {
+              padding-block: var(--spacing-xl);
+            }
+
+            &.pad-y-2xl {
+              padding-block: var(--spacing-2xl);
+            }
+
+            &.max-width-xs {
+              max-width: var(--content-width-xs);
+            }
+
+            &.max-width-sm {
+              max-width: var(--content-width-sm);
+            }
+
+            &.max-width-md {
+              max-width: var(--content-width-md);
+            }
+
+            &.max-width-lg {
+              max-width: var(--content-width-lg);
+            }
+
+            &.max-width-xl {
+              max-width: var(--content-width-xl);
+            }
+
+            &.max-width-2xl {
+              max-width: var(--content-width-2xl);
+            }
+
+            &.max-width-3xl {
+              max-width: var(--content-width-3xl);
+            }
+
+            @media (width < 640px) {
+              &.pad-y-xs {
+                padding-block: var(--spacing-xs);
+              }
+
+              &.pad-y-sm {
+                padding-block: var(--spacing-xs);
+              }
+
+              &.pad-y-md {
+                padding-block: var(--spacing-sm);
+              }
+
+              &.pad-y-lg {
+                padding-block: var(--spacing-md);
+              }
+
+              &.pad-y-xl {
+                padding-block: var(--spacing-md);
+              }
+
+              &.pad-y-2xl {
+                padding-block: var(--spacing-lg);
+              }
+            }
+          }
+        }
+
+        > .before-content,
+        > .after-content {
+          position: relative;
+          z-index: var(--layer-2);
 
           > *:first-child {
             margin-top: 0 !important;
@@ -170,149 +294,31 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           > *:last-child {
             margin-bottom: 0 !important;
           }
-
-          &.pad-x-xs {
-            padding-inline: var(--spacing-xs);
-          }
-
-          &.pad-x-sm {
-            padding-inline: var(--spacing-sm);
-          }
-
-          &.pad-x-md {
-            padding-inline: var(--spacing-md);
-          }
-
-          &.pad-x-lg {
-            padding-inline: var(--spacing-lg);
-          }
-
-          &.pad-x-xl {
-            padding-inline: var(--spacing-xl);
-          }
-
-          &.pad-x-2xl {
-            padding-inline: var(--spacing-2xl);
-          }
-
-          &.pad-y-xs {
-            padding-block: var(--spacing-xs);
-          }
-
-          &.pad-y-sm {
-            padding-block: var(--spacing-sm);
-          }
-
-          &.pad-y-md {
-            padding-block: var(--spacing-md);
-          }
-
-          &.pad-y-lg {
-            padding-block: var(--spacing-lg);
-          }
-
-          &.pad-y-xl {
-            padding-block: var(--spacing-xl);
-          }
-
-          &.pad-y-2xl {
-            padding-block: var(--spacing-2xl);
-          }
-
-          &.max-width-xs {
-            max-width: var(--content-width-xs);
-          }
-
-          &.max-width-sm {
-            max-width: var(--content-width-sm);
-          }
-
-          &.max-width-md {
-            max-width: var(--content-width-md);
-          }
-
-          &.max-width-lg {
-            max-width: var(--content-width-lg);
-          }
-
-          &.max-width-xl {
-            max-width: var(--content-width-xl);
-          }
-
-          &.max-width-2xl {
-            max-width: var(--content-width-2xl);
-          }
-
-          &.max-width-3xl {
-            max-width: var(--content-width-3xl);
-          }
-        }
-      }
-
-      > .before-content,
-      > .after-content {
-        position: relative;
-        z-index: var(--layer-2);
-
-        > *:first-child {
-          margin-top: 0 !important;
         }
 
-        > *:last-child {
-          margin-bottom: 0 !important;
-        }
-      }
-
-      > .background {
-        inset: 0;
-        position: absolute;
-      }
-
-      > .background-image {
-        z-index: var(--layer-1);
-      }
-
-      > .bg-base {
-        background-color: var(--color-bg);
-      }
-
-      > .bg-surface {
-        background-color: var(--color-bg-surface);
-      }
-
-      > .bg-accent {
-        background-color: var(--color-bg-accent);
-      }
-
-      > .bg-highlight {
-        background-color: var(--color-bg-highlight);
-      }
-    }
-
-    @media (width < 640px) {
-      .card > .card-outer-content > .card-content {
-        &.pad-y-xs {
-          padding-block: var(--spacing-xs);
+        > .background {
+          inset: 0;
+          position: absolute;
         }
 
-        &.pad-y-sm {
-          padding-block: var(--spacing-xs);
+        > .background-image {
+          z-index: var(--layer-1);
         }
 
-        &.pad-y-md {
-          padding-block: var(--spacing-sm);
+        > .bg-base {
+          background-color: var(--color-bg);
         }
 
-        &.pad-y-lg {
-          padding-block: var(--spacing-md);
+        > .bg-surface {
+          background-color: var(--color-bg-surface);
         }
 
-        &.pad-y-xl {
-          padding-block: var(--spacing-md);
+        > .bg-accent {
+          background-color: var(--color-bg-accent);
         }
 
-        &.pad-y-2xl {
-          padding-block: var(--spacing-lg);
+        > .bg-highlight {
+          background-color: var(--color-bg-highlight);
         }
       }
     }
