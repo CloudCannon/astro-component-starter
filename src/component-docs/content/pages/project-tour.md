@@ -9,16 +9,27 @@ Welcome to the Astro Component Starter. Before you start building, let's walk th
 
 ## What is this?
 
-This is a **starter template**, not a package you install from npm. You've cloned it, and now every file is yours. Modify components, delete what you don't need, add your own. There's no package dependency to manage. You own the source code and decide when (or if) to pull in future improvements from the core repo.
+This is a **starter template** you scaffold with `npx create-astro-component-starter my-site-name`. Once generated, every file is yours. Modify components, delete what you don't need, add your own. There's no package dependency to manage for your component source code. You own the code and decide when (or if) to pull in future improvements from the core repo.
 
 What makes this starter different from a typical Astro project is that every component is **built for visual editing** in [CloudCannon](https://cloudcannon.com/). Developers build and customize components in code. Editors manage content visually: clicking, dragging, and typing directly on the page. Same components, two interfaces.
 
 ## Run it locally
 
-The project requires Node.js 24+ (specified in `.nvmrc`). From the project root:
+The project requires Node.js 24+ (specified in `.nvmrc`).
+
+To create a new project:
 
 ```bash
-npm install
+npx create-astro-component-starter my-site-name
+cd my-site-name
+npm run dev
+```
+
+The CLI downloads the latest starter, configures the starter repo as `upstream`, and runs `npm install` for you.
+
+If you're already inside an existing starter project, from the project root run:
+
+```bash
 npm run dev
 ```
 

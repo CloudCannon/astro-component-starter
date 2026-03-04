@@ -9,13 +9,14 @@ The design is intentionally unbranded so it can morph into any brand you want. C
 ## Quick Start
 
 ```bash
-git clone https://github.com/CloudCannon/astro-component-starter
-cd astro-component-starter
-npm install
+npx create-astro-component-starter my-site-name
+cd my-site-name
 npm run dev
 ```
 
 Your site is now running at `http://localhost:4321`.
+
+This command scaffolds the latest starter into a local project folder, sets the starter repo as `upstream`, and installs dependencies automatically.
 
 **Make your first change:** Open `src/content/pages/index.md`, change the hero heading, and watch it update in your browser.
 
