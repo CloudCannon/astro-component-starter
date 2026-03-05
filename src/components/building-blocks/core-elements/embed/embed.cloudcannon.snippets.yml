@@ -1,15 +1,20 @@
 embed:
-  template: mdx_component
+  template: mdx_paired_component
   inline: false
   preview:
     text:
       - Embed
+    subtext:
+      - key: html
     icon: data_object
   definitions:
-    component_name: Embed
+    component_name: embed
+    content_key: html
     named_args:
-      - editor_key: html
+      - editor_key: id
         type: string
+        optional: true
+        remove_empty: true
       - editor_key: aspectRatio
         type: string
         optional: true
