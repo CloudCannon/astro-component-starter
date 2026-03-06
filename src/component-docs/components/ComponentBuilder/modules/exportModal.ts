@@ -40,6 +40,7 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
   const componentNameInput = document.getElementById("component-name") as HTMLInputElement;
   const pathPreview = document.getElementById("component-path-preview");
   const closeBtnContainer = document.getElementById("export-config-close");
+
   if (!pageSectionCategoryField) return;
 
   // Populate page-section categories

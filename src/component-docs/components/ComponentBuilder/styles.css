@@ -626,8 +626,8 @@
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
     margin-bottom: var(--spacing-md);
+    overflow-wrap: break-word;
     padding: var(--spacing-md);
-    word-wrap: break-word;
   }
 
   .prop-field-header {
