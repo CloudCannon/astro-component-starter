@@ -29,6 +29,10 @@ const { page } = Astro.props;
 const { Content } = await render(page);
 ---
 
-<Page frontmatter={page.data} mainNav={mainNavData} footer={footerData}>
+<Page
+  frontmatter={page.data}
+  mainNav={mainNavData}
+  footer={footerData}
+>
   <Content />
 </Page>

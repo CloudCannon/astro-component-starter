@@ -7,5 +7,4 @@ blocks:
   name: 'eventdate'
   min: '2026-02-01'
   max: '2026-02-28'
-
 ---

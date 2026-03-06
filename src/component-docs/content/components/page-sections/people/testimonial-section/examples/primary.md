@@ -9,5 +9,4 @@ blocks:
   authorImage: /src/assets/images/component-docs/profile.jpg
   paddingVertical: sm
   backgroundColor: surface
-
 ---

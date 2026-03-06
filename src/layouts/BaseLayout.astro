@@ -19,17 +19,37 @@ const pageImage = props.image || seoData.logoSource;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html
+  lang="en"
+  data-theme="light"
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
+    <meta
+      name="generator"
+      content={Astro.generator}
+    />
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
 
-    {import.meta.env.DEV ? <script type="module" src="/@vite/client" /> : null}
+    {
+      import.meta.env.DEV ? (
+        <script
+          type="module"
+          src="/@vite/client"
+        />
+      ) : null
+    }
 
     <script>
       if (window.inEditorMode) {
@@ -62,7 +82,12 @@ const pageImage = props.image || seoData.logoSource;
 
     <StructuredData site={seoData} />
 
-    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
+    <link
+      rel="sitemap"
+      type="application/xml"
+      title="Sitemap"
+      href="/sitemap-index.xml"
+    />
 
     <slot name="head" />
   </head>

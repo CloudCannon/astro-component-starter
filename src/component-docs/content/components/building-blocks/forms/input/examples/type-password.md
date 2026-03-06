@@ -7,5 +7,4 @@ blocks:
   name: 'password'
   type: 'password'
   placeholder: 'Enter your password'
-
 ---

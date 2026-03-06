@@ -12,6 +12,4 @@ blocks:
       level: h3
     - _component: building-blocks/core-elements/text
       text: 'This card uses lg padding for a more spacious, breathable layout.'
-
-
 ---

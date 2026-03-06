@@ -21,6 +21,4 @@ blocks:
         - _component: building-blocks/core-elements/text
           text: |-
             You can share and collaborate with others at any time.
-
-
 ---

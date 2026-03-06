@@ -20,7 +20,10 @@ const {
       videoid={`${id}`}
       {...htmlAttributes}
     >
-      <a class="lite-vimeo-fallback" href={`https://vimeo.com/${id}`}>
+      <a
+        class="lite-vimeo-fallback"
+        href={`https://vimeo.com/${id}`}
+      >
         Watch on Vimeo: "{title}"
       </a>
     </lite-vimeo>
@@ -31,7 +34,10 @@ const {
       videoid={`${id}`}
       {...htmlAttributes}
     >
-      <a class="lite-youtube-fallback" href={`https://www.youtube.com/watch?v=${id}`}>
+      <a
+        class="lite-youtube-fallback"
+        href={`https://www.youtube.com/watch?v=${id}`}
+      >
         Watch on YouTube: "{title}"
       </a>
     </lite-youtube>
@@ -43,7 +49,10 @@ const {
       class:list={["video", className]}
       {...htmlAttributes}
     >
-      <source src={`${source}`} type="video/mp4" />
+      <source
+        src={`${source}`}
+        type="video/mp4"
+      />
       Your browser does not support the HTML5 video element.
     </video>
   )

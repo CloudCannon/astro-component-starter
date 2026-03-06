@@ -24,5 +24,4 @@ blocks:
       iconSize: 'sm'
       iconBackground: 'none'
       checked: false
-
 ---

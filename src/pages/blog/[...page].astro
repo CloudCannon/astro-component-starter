@@ -123,10 +123,17 @@ const pageDescription =
               );
             })}
           </Grid>
-          <Pagination page={page} showArrows={true} style="margin-top: var(--spacing-2xl);" />
+          <Pagination
+            page={page}
+            showArrows={true}
+            style="margin-top: var(--spacing-2xl);"
+          />
         </>
       ) : (
-        <SimpleText alignX="center" style="margin-top: var(--spacing-2xl);">
+        <SimpleText
+          alignX="center"
+          style="margin-top: var(--spacing-2xl);"
+        >
           No blog posts yet. Check back soon!
         </SimpleText>
       )

@@ -8,5 +8,4 @@ blocks:
     alignX: start
     color: blue
     background: true
-
 ---

@@ -15,5 +15,4 @@ blocks:
     - _component: building-blocks/core-elements/button
       text: 'Button C'
       variant: secondary
-
 ---

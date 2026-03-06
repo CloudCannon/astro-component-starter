@@ -9,5 +9,4 @@ blocks:
     source: ''
     thumbnail: ''
     style: 'max-width: 600px'
-
 ---

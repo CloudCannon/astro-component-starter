@@ -32,7 +32,10 @@ function createNavItemData(item, level, parentGroupId) {
 }
 ---
 
-<nav class:list={["bar", className]} {...htmlAttributes}>
+<nav
+  class:list={["bar", className]}
+  {...htmlAttributes}
+>
   <ul class="bar-list">
     {
       navData.map((item) => {
@@ -41,7 +44,10 @@ function createNavItemData(item, level, parentGroupId) {
         if (!itemData.hasChildren) {
           return (
             <li class="nav-item">
-              <a href={itemData.path} aria-current={itemData.isCurrent ? "page" : undefined}>
+              <a
+                href={itemData.path}
+                aria-current={itemData.isCurrent ? "page" : undefined}
+              >
                 {itemData.name}
               </a>
             </li>
@@ -69,7 +75,11 @@ function createNavItemData(item, level, parentGroupId) {
             >
               {itemData.name}
               <span class="nav-item-icon">
-                <Icon name="chevron-right" size="none" aria-hidden="true" />
+                <Icon
+                  name="chevron-right"
+                  size="none"
+                  aria-hidden="true"
+                />
               </span>
             </label>
             <div
@@ -117,7 +127,11 @@ function createNavItemData(item, level, parentGroupId) {
                       >
                         {childData.name}
                         <span class="nav-item-icon">
-                          <Icon name="chevron-right" size="none" aria-hidden="true" />
+                          <Icon
+                            name="chevron-right"
+                            size="none"
+                            aria-hidden="true"
+                          />
                         </span>
                       </label>
                       <div

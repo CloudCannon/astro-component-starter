@@ -21,7 +21,10 @@ function hasCurrentChild(item) {
 }
 ---
 
-<nav class:list={["side", className]} {...htmlAttributes}>
+<nav
+  class:list={["side", className]}
+  {...htmlAttributes}
+>
   <ul class="side-list">
     {
       navData.map((item) => {
@@ -55,7 +58,11 @@ function hasCurrentChild(item) {
               >
                 {item.name}
                 <span class="nav-item-icon">
-                  <Icon name="chevron-right" size="none" aria-hidden="true" />
+                  <Icon
+                    name="chevron-right"
+                    size="none"
+                    aria-hidden="true"
+                  />
                 </span>
               </label>
               <div
@@ -96,7 +103,11 @@ function hasCurrentChild(item) {
                           >
                             {child.name}
                             <span class="nav-item-icon">
-                              <Icon name="chevron-right" size="none" aria-hidden="true" />
+                              <Icon
+                                name="chevron-right"
+                                size="none"
+                                aria-hidden="true"
+                              />
                             </span>
                           </label>
                           <div
@@ -148,7 +159,10 @@ function hasCurrentChild(item) {
         } else {
           return (
             <li class="nav-item">
-              <a href={item.path || "#"} aria-current={isCurrent ? "page" : undefined}>
+              <a
+                href={item.path || "#"}
+                aria-current={isCurrent ? "page" : undefined}
+              >
                 {item.name}
               </a>
             </li>

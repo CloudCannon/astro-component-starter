@@ -50,11 +50,23 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     reverseOrderOnMobile={true}
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow" text={eyebrow} />
-      <Heading level="h2" size="lg" data-prop="heading">
+      <SimpleText
+        class="eyebrow"
+        data-prop="eyebrow"
+        text={eyebrow}
+      />
+      <Heading
+        level="h2"
+        size="lg"
+        data-prop="heading"
+      >
         {heading}
       </Heading>
-      <Text class="subtext" data-prop="subtext" text={subtext} />
+      <Text
+        class="subtext"
+        data-prop="subtext"
+        text={subtext}
+      />
       <ButtonGroup
         class="feature-buttons"
         buttonSections={buttonSections}

@@ -19,10 +19,16 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
 <div class:list={["select", className]}>
   {
     label && (
-      <label for={fieldId} class="label">
+      <label
+        for={fieldId}
+        class="label"
+      >
         {label}
         {required && (
-          <span class="select-required" aria-label="required">
+          <span
+            class="select-required"
+            aria-label="required"
+          >
             *
           </span>
         )}
@@ -39,7 +45,10 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
   >
     {
       placeholder && (
-        <option value="" disabled>
+        <option
+          value=""
+          disabled
+        >
           {placeholder}
         </option>
       )

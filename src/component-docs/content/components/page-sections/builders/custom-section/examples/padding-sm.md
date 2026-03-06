@@ -10,6 +10,4 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: This Custom Section has sm padding.
       level: h2
-
-
 ---

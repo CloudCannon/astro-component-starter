@@ -261,8 +261,9 @@ ${componentUsage}
 }
 
 function getAttributeSortKey(prop: string): string {
-  if (prop.startsWith("{...")) return "\uffff" + prop;
+  if (prop.startsWith("{...")) return `\uffff${prop}`;
   const match = prop.match(/^([a-zA-Z_][\w:.-]*)/);
+
   return match ? match[1].toLowerCase() : prop.toLowerCase();
 }
 

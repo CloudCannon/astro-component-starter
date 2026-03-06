@@ -13,5 +13,4 @@ blocks:
     direction: horizontal
     alignX: start
     size: 3xl
-
 ---

@@ -13,5 +13,4 @@ blocks:
     * List
     * Too!
   alignX: start
-
 ---

@@ -16,5 +16,4 @@ blocks:
       label: 'High'
     - value: 'urgent'
       label: 'Urgent'
-
 ---

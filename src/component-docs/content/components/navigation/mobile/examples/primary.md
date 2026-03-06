@@ -72,5 +72,4 @@ blocks:
     - name: 'Contact'
       path: '#'
       children: []
-
 ---

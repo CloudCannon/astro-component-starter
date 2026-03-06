@@ -13,5 +13,4 @@ blocks:
       next: '/4'
       last: '/10'
   showArrows: true'
-
 ---

@@ -33,7 +33,4 @@ blocks:
   fixedWidth: null
   verticalAlignment: 'bottom'
   reverse: false
-
-
-
 ---

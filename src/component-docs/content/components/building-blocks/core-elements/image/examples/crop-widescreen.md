@@ -7,5 +7,4 @@ blocks:
   alt: 'Castle'
   aspectRatio: widescreen
   style: 'max-width: 600px;'
-
 ---

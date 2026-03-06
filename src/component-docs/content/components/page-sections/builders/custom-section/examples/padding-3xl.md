@@ -10,6 +10,4 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: This Custom Section has 3xl padding.
       level: h2
-
-
 ---

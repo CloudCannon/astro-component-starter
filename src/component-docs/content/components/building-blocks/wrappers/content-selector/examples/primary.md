@@ -39,6 +39,4 @@ blocks:
           alignX: start
           size: md
   label: ''
-
-
 ---

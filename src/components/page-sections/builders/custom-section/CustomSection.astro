@@ -40,7 +40,10 @@ const arrayDataAttributes =
     : {};
 ---
 
-<section class:list={["custom-section", className]} {...htmlAttributes}>
+<section
+  class:list={["custom-section", className]}
+  {...htmlAttributes}
+>
   <div
     class:list={["outer-content", rounded && "rounded"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
@@ -75,7 +78,10 @@ const arrayDataAttributes =
       <slot>
         {
           contentSections && (
-            <Component contentSections={contentSections} editable={!!effectiveChildrenProp} />
+            <Component
+              contentSections={contentSections}
+              editable={!!effectiveChildrenProp}
+            />
           )
         }
       </slot>

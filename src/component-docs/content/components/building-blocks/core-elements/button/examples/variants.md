@@ -22,5 +22,4 @@ blocks:
     variant: text
     text: Text
     style: 'margin-inline-end: var(--spacing-sm);'
-
 ---

@@ -23,8 +23,14 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div class:list={["definition-list", className]} {...htmlAttributes}>
-  <dl class:list={[`alignment-${alignX}`]} {...arrayDataAttributes}>
+<div
+  class:list={["definition-list", className]}
+  {...htmlAttributes}
+>
+  <dl
+    class:list={[`alignment-${alignX}`]}
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         items?.map((item: ItemProps) => (

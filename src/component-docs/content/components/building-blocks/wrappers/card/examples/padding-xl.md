@@ -12,6 +12,4 @@ blocks:
       level: h3
     - _component: building-blocks/core-elements/text
       text: 'This card uses xl padding for generous spacing and visual impact.'
-
-
 ---

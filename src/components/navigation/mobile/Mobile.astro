@@ -44,7 +44,12 @@ function createNavItemData(item, level, parentGroupId) {
 }
 ---
 
-<input type="checkbox" id={toggleId} class="nav-toggle" autocomplete="off" />
+<input
+  type="checkbox"
+  id={toggleId}
+  class="nav-toggle"
+  autocomplete="off"
+/>
 <label
   for={toggleId}
   class="nav-hamburger mobile-button"
@@ -61,7 +66,11 @@ function createNavItemData(item, level, parentGroupId) {
   />
 </label>
 
-<nav class:list={["mobile", className]} data-toggle-id={toggleId} {...htmlAttributes}>
+<nav
+  class:list={["mobile", className]}
+  data-toggle-id={toggleId}
+  {...htmlAttributes}
+>
   <div class="mobile-header">
     <div class="mobile-logo">
       <slot name="logo">
@@ -101,7 +110,10 @@ function createNavItemData(item, level, parentGroupId) {
           if (!itemData.hasChildren) {
             return (
               <li class="nav-item">
-                <a href={itemData.path} aria-current={itemData.isCurrent ? "page" : undefined}>
+                <a
+                  href={itemData.path}
+                  aria-current={itemData.isCurrent ? "page" : undefined}
+                >
                   {itemData.name}
                 </a>
               </li>
@@ -130,7 +142,11 @@ function createNavItemData(item, level, parentGroupId) {
               >
                 {itemData.name}
                 <span class="nav-item-icon">
-                  <Icon name="chevron-right" size="none" aria-hidden="true" />
+                  <Icon
+                    name="chevron-right"
+                    size="none"
+                    aria-hidden="true"
+                  />
                 </span>
               </label>
               <div
@@ -179,7 +195,11 @@ function createNavItemData(item, level, parentGroupId) {
                         >
                           {childData.name}
                           <span class="nav-item-icon">
-                            <Icon name="chevron-right" size="none" aria-hidden="true" />
+                            <Icon
+                              name="chevron-right"
+                              size="none"
+                              aria-hidden="true"
+                            />
                           </span>
                         </label>
                         <div

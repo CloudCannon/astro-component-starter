@@ -33,7 +33,10 @@ if (!_component && !hasText && !hasSlotContent) return;
   {...htmlAttributes}
 >
   <p class:list={["simple-text-content", size && `size-${size}`, `align-${alignX}`]}>
-    <span class="simple-text-inner" {...textDataAttributes}>
+    <span
+      class="simple-text-inner"
+      {...textDataAttributes}
+    >
       <slot>
         {text && <Fragment set:html={MarkdownText} />}
       </slot>

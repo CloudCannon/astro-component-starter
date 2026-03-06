@@ -6,5 +6,4 @@ blocks:
   label: 'Upload Image'
   name: 'image'
   accept: '.jpg,.jpeg,.png,.gif,.webp,.svg,.avif'
-
 ---

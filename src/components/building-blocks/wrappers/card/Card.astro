@@ -60,7 +60,10 @@ const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeCon
 const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterContentSections;
 ---
 
-<div class:list={["card", className]} {...htmlAttributes}>
+<div
+  class:list={["card", className]}
+  {...htmlAttributes}
+>
   <Tag
     {...link && { href: link }}
     class:list={["card-inner", rounded && "rounded", border && "border"]}
@@ -87,10 +90,16 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
     {
       (usesBeforeContentSections || hasBeforeSlot) && (
-        <div class="before-content" {...arrayDataAttributesBefore}>
+        <div
+          class="before-content"
+          {...arrayDataAttributesBefore}
+        >
           <slot name="before">
             {beforeContentSections && (
-              <Component contentSections={beforeContentSections} editable={!!effectiveBeforeProp} />
+              <Component
+                contentSections={beforeContentSections}
+                editable={!!effectiveBeforeProp}
+              />
             )}
           </slot>
         </div>
@@ -110,7 +119,10 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         <slot>
           {
             contentSections && (
-              <Component contentSections={contentSections} editable={!!effectiveChildrenProp} />
+              <Component
+                contentSections={contentSections}
+                editable={!!effectiveChildrenProp}
+              />
             )
           }
         </slot>
@@ -119,10 +131,16 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
     {
       (usesAfterContentSections || hasAfterSlot) && (
-        <div class="after-content" {...arrayDataAttributesAfter}>
+        <div
+          class="after-content"
+          {...arrayDataAttributesAfter}
+        >
           <slot name="after">
             {afterContentSections && (
-              <Component contentSections={afterContentSections} editable={!!effectiveAfterProp} />
+              <Component
+                contentSections={afterContentSections}
+                editable={!!effectiveAfterProp}
+              />
             )}
           </slot>
         </div>

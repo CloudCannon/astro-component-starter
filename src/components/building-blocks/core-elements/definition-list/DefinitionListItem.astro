@@ -28,15 +28,25 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && ((!hasTitle && !hasTitleSlotContent) || (!hasText && !hasSlotContent))) return;
 ---
 
-<div class="definition-list-item" {...htmlAttributes}>
-  <dt class:list={["title", className]} role="term" {...titleDataAttributes}>
+<div
+  class="definition-list-item"
+  {...htmlAttributes}
+>
+  <dt
+    class:list={["title", className]}
+    role="term"
+    {...titleDataAttributes}
+  >
     <span {...titleDataAttributes}>
       <slot name="title">
         {title}
       </slot>
     </span>
   </dt>
-  <dd class:list={["content", className]} role="definition">
+  <dd
+    class:list={["content", className]}
+    role="definition"
+  >
     <span {...contentDataAttributes}>
       <slot>
         {text}

@@ -9,5 +9,4 @@ examples:
       - vimeo
     size: xl
     title: Video Types
-
 ---

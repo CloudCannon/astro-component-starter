@@ -7,5 +7,4 @@ blocks:
   alt: 'Dunedin Cliff'
   style: 'max-width: 500px;'
   rounded: false
-
 ---

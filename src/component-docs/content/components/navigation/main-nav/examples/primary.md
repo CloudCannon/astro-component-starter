@@ -40,5 +40,4 @@ blocks:
       iconPosition: 'after'
       _target: 'blank'
       rel: 'noopener noreferrer'
-
 ---

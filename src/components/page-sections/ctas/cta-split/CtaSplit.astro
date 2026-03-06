@@ -42,10 +42,17 @@ const {
     minSplitWidth={640}
   >
     <Fragment slot="first">
-      <Heading level="h2" size="xl" data-prop="heading">
+      <Heading
+        level="h2"
+        size="xl"
+        data-prop="heading"
+      >
         {heading}
       </Heading>
-      <Text data-prop="subtext" text={subtext} />
+      <Text
+        data-prop="subtext"
+        text={subtext}
+      />
       <ButtonGroup
         class="buttonSections"
         buttonSections={buttonSections}

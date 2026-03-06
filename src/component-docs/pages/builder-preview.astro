@@ -21,10 +21,16 @@ if (Astro.request.url) {
 }
 ---
 
-<html lang="en" data-theme="light">
+<html
+  lang="en"
+  data-theme="light"
+>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
     <title>Builder Preview</title>
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
@@ -33,7 +39,10 @@ if (Astro.request.url) {
   <body style="margin: 0;">
     {
       contentSections.length > 0 ? (
-        <Component contentSections={contentSections} editable={false} />
+        <Component
+          contentSections={contentSections}
+          editable={false}
+        />
       ) : (
         <p style="color: #94a3b8; padding: 2rem; text-align: center;">
           Preview will appear here when you add components.

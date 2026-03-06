@@ -37,5 +37,4 @@ blocks:
       bio: 'Jordan uncovers user insights that shape our product decisions and improve experiences.'
       imageSource: /src/assets/images/component-docs/profile5.jpg
       imageAlt: 'Jordan Martinez'
-
 ---

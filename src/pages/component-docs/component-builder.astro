@@ -6,7 +6,7 @@ const isDisabled = process.env.DISABLE_COMPONENT_LIBRARY === "true";
 const ssrEnabled = import.meta.env.DEV;
 
 let componentDiscovery: any = null;
-let metadataMapObj: Record<string, any> = {};
+const metadataMapObj: Record<string, any> = {};
 let nestedBlockPropertiesArray: any[] = [];
 let BuilderComponent: any = null;
 

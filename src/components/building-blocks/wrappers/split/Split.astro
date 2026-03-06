@@ -70,7 +70,10 @@ const finalDistributionMode = reverse
 const splitId = `split-${crypto.randomUUID()}`;
 ---
 
-<section class:list={["split", className]} {...htmlAttributes}>
+<section
+  class:list={["split", className]}
+  {...htmlAttributes}
+>
   <div
     class:list={[
       "split-inner",
@@ -82,35 +85,53 @@ const splitId = `split-${crypto.randomUUID()}`;
     data-split-id={splitId}
     style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
   >
-    <div class="pane first" {...arrayDataAttributesFirst}>
+    <div
+      class="pane first"
+      {...arrayDataAttributesFirst}
+    >
       {
         reverse ? (
           <slot name="second">
             {firstSplitBlocks && (
-              <Component contentSections={firstSplitBlocks} editable={firstPaneEditable} />
+              <Component
+                contentSections={firstSplitBlocks}
+                editable={firstPaneEditable}
+              />
             )}
           </slot>
         ) : (
           <slot name="first">
             {firstSplitBlocks && (
-              <Component contentSections={firstSplitBlocks} editable={firstPaneEditable} />
+              <Component
+                contentSections={firstSplitBlocks}
+                editable={firstPaneEditable}
+              />
             )}
           </slot>
         )
       }
     </div>
-    <div class="pane second" {...arrayDataAttributesSecond}>
+    <div
+      class="pane second"
+      {...arrayDataAttributesSecond}
+    >
       {
         reverse ? (
           <slot name="first">
             {secondSplitBlocks && (
-              <Component contentSections={secondSplitBlocks} editable={secondPaneEditable} />
+              <Component
+                contentSections={secondSplitBlocks}
+                editable={secondPaneEditable}
+              />
             )}
           </slot>
         ) : (
           <slot name="second">
             {secondSplitBlocks && (
-              <Component contentSections={secondSplitBlocks} editable={secondPaneEditable} />
+              <Component
+                contentSections={secondSplitBlocks}
+                editable={secondPaneEditable}
+              />
             )}
           </slot>
         )

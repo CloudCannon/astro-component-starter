@@ -11,5 +11,4 @@ blocks:
     alignX: start
     size: md
     listType: numbered
-
 ---

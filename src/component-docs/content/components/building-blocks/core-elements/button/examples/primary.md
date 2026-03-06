@@ -6,5 +6,4 @@ blocks:
   variant: 'primary'
   size: 'md'
   text: 'Try it now!'
-
 ---

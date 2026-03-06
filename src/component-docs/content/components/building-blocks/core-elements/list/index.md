@@ -48,5 +48,4 @@ examples:
     title: Sizes
   - slugs:
       - icon-colors
-
 ---

@@ -13,5 +13,4 @@ blocks:
     direction: horizontal
     alignX: end
     size: md
-
 ---

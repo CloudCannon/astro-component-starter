@@ -66,7 +66,11 @@ const getPageUrl = (pageNum: number) => {
 };
 ---
 
-<nav class:list={["pagination", className]} aria-label="Pagination Navigation" {...htmlAttributes}>
+<nav
+  class:list={["pagination", className]}
+  aria-label="Pagination Navigation"
+  {...htmlAttributes}
+>
   {
     showArrows && currentPage > 1 && (
       <a
@@ -74,7 +78,10 @@ const getPageUrl = (pageNum: number) => {
         class="pagination-arrow pagination-prev"
         aria-label="Go to previous page"
       >
-        <Icon name="arrow-left" size="sm" />
+        <Icon
+          name="arrow-left"
+          size="sm"
+        />
       </a>
     )
   }
@@ -88,11 +95,18 @@ const getPageUrl = (pageNum: number) => {
       const pageNum = startPage + i + 1;
 
       return pageNum === currentPage ? (
-        <span class="current" aria-current="page" aria-label={`Page ${pageNum}, current page`}>
+        <span
+          class="current"
+          aria-current="page"
+          aria-label={`Page ${pageNum}, current page`}
+        >
           {pageNum}
         </span>
       ) : (
-        <a href={getPageUrl(pageNum)} aria-label={`Go to page ${pageNum}`}>
+        <a
+          href={getPageUrl(pageNum)}
+          aria-label={`Go to page ${pageNum}`}
+        >
           {pageNum}
         </a>
       );
@@ -115,7 +129,10 @@ const getPageUrl = (pageNum: number) => {
         class="pagination-arrow pagination-next"
         aria-label="Go to next page"
       >
-        <Icon name="arrow-right" size="sm" />
+        <Icon
+          name="arrow-right"
+          size="sm"
+        />
       </a>
     )
   }

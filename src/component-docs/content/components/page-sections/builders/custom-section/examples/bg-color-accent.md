@@ -10,6 +10,4 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: Accent background color
       level: h2
-
-
 ---

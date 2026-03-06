@@ -22,5 +22,4 @@ blocks:
     text: 'Text Submit'
     variant: 'text'
     style: 'margin-inline-end: var(--spacing-sm);'
-
 ---

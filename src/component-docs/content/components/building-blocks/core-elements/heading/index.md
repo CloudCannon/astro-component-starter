@@ -17,5 +17,4 @@ examples:
       - align
   - slugs:
       - icons
-
 ---

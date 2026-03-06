@@ -39,7 +39,10 @@ const hasIcon = iconName?.trim().length > 0;
 if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
 ---
 
-<span class:list={["button", className]} {...htmlAttributes}>
+<span
+  class:list={["button", className]}
+  {...htmlAttributes}
+>
   <Tag
     class:list={[
       "button-inner",
@@ -50,10 +53,16 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
     ]}
     {...tagProps}
   >
-    <Icon name={iconName} size="none" />
+    <Icon
+      name={iconName}
+      size="none"
+    />
     {
       !hideText && (
-        <span class="label-text" {...textDataAttributes}>
+        <span
+          class="label-text"
+          {...textDataAttributes}
+        >
           <slot>{text}</slot>
         </span>
       )

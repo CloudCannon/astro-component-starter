@@ -11,5 +11,4 @@ examples:
   - slugs:
       - required
     size: md
-
 ---

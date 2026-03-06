@@ -8,5 +8,4 @@ examples:
       - ratio-landscape
       - ratio-portrait
       - ratio-widescreen
-
 ---

@@ -9,7 +9,12 @@ const {
 } = Astro.props;
 ---
 
-<option value={value} selected={selected} disabled={disabled} {...htmlAttributes}>
+<option
+  value={value}
+  selected={selected}
+  disabled={disabled}
+  {...htmlAttributes}
+>
   {label}
   <slot />
 </option>

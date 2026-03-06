@@ -16,10 +16,24 @@ const arrayDataAttributes = effectiveChildrenProp
   : {};
 ---
 
-<div class:list={["slide", className]} role="group" {...htmlAttributes}>
-  <div class="slide__content" {...arrayDataAttributes}>
+<div
+  class:list={["slide", className]}
+  role="group"
+  {...htmlAttributes}
+>
+  <div
+    class="slide__content"
+    {...arrayDataAttributes}
+  >
     <slot>
-      {contentSections && <Component contentSections={contentSections} editable={!!effectiveChildrenProp} />}
+      {
+        contentSections && (
+          <Component
+            contentSections={contentSections}
+            editable={!!effectiveChildrenProp}
+          />
+        )
+      }
     </slot>
   </div>
 </div>

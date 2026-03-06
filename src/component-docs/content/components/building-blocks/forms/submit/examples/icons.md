@@ -19,5 +19,4 @@ blocks:
     hideText: true
     variant: tertiary
     style: 'margin-inline-end: var(--spacing-sm);'
-
 ---

@@ -44,10 +44,27 @@ const {
     class="hero-split"
   >
     <Fragment slot="first">
-      <SimpleText class="eyebrow" data-prop="eyebrow" text={eyebrow} />
-      <Heading level="h1" size="2xl" data-prop="heading">{heading}</Heading>
-      <Text class="subtext" data-prop="subtext" text={subtext} />
-      <ButtonGroup class="buttons-container" buttonSections={buttonSections} data-children-prop="buttonSections" />
+      <SimpleText
+        class="eyebrow"
+        data-prop="eyebrow"
+        text={eyebrow}
+      />
+      <Heading
+        level="h1"
+        size="2xl"
+        data-prop="heading"
+        >{heading}</Heading
+      >
+      <Text
+        class="subtext"
+        data-prop="subtext"
+        text={subtext}
+      />
+      <ButtonGroup
+        class="buttons-container"
+        buttonSections={buttonSections}
+        data-children-prop="buttonSections"
+      />
     </Fragment>
     <Fragment slot="second">
       <Image

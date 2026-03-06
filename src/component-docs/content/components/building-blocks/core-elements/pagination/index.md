@@ -4,5 +4,4 @@ overview: "Navigation for paginated content. Works directly with Astro's paginat
 examples:
   - slugs:
       - with-arrows
-
 ---

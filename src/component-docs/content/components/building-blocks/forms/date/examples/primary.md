@@ -5,5 +5,4 @@ blocks:
   _component: 'building-blocks/forms/date'
   label: 'Select Date'
   name: 'date'
-
 ---

@@ -17,10 +17,16 @@ const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
 <div class:list={["input", className]}>
   {
     label && (
-      <label for={fieldId} class="label">
+      <label
+        for={fieldId}
+        class="label"
+      >
         {label}
         {required && (
-          <span class="input-required" aria-label="required">
+          <span
+            class="input-required"
+            aria-label="required"
+          >
             *
           </span>
         )}

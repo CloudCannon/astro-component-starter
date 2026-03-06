@@ -49,12 +49,21 @@ const builderData = {
 >
   <!-- Template for reusable Slider component -->
   <template id="slider-template">
-    <Slider id="slider-template-id" name="slider-template" />
+    <Slider
+      id="slider-template-id"
+      name="slider-template"
+    />
   </template>
 
   <!-- Templates for reusable Button components -->
   <template id="button-ghost-template">
-    <Button element="button" text="Button" variant="ghost" size="sm" class="sandbox-item-btn" />
+    <Button
+      element="button"
+      text="Button"
+      variant="ghost"
+      size="sm"
+      class="sandbox-item-btn"
+    />
   </template>
 
   <template id="button-delete-template">
@@ -96,33 +105,81 @@ const builderData = {
     </div>
   </div>
 
-  <div class="builder-view-toggle" id="builder-view-toggle">
-    <button type="button" class="builder-view-tab active" data-view="build">Build</button>
+  <div
+    class="builder-view-toggle"
+    id="builder-view-toggle"
+  >
+    <button
+      type="button"
+      class="builder-view-tab active"
+      data-view="build"
+      >Build</button
+    >
     <button
       type="button"
       class="builder-view-tab"
       data-view="preview"
       id="preview-tab-btn"
-      style="display: none;">Preview</button
+      style="display: none;"
+      >Preview</button
     >
-    <button type="button" class="builder-view-tab" data-view="code">Code</button>
+    <button
+      type="button"
+      class="builder-view-tab"
+      data-view="code"
+      >Code</button
+    >
   </div>
 
-  <div class="builder-preview-container" id="builder-preview-container" style="display: none;">
+  <div
+    class="builder-preview-container"
+    id="builder-preview-container"
+    style="display: none;"
+  >
     <!-- Preview iframe injected here by JS -->
   </div>
 
-  <div class="builder-code-container" id="builder-code-container" style="display: none;">
-    <div class="builder-code-tabs" id="builder-code-tabs">
-      <button type="button" class="builder-code-tab active" data-code-tab="astro">Astro</button>
-      <button type="button" class="builder-code-tab" data-code-tab="inputs">Inputs YAML</button>
-      <button type="button" class="builder-code-tab" data-code-tab="structure"
+  <div
+    class="builder-code-container"
+    id="builder-code-container"
+    style="display: none;"
+  >
+    <div
+      class="builder-code-tabs"
+      id="builder-code-tabs"
+    >
+      <button
+        type="button"
+        class="builder-code-tab active"
+        data-code-tab="astro"
+        >Astro</button
+      >
+      <button
+        type="button"
+        class="builder-code-tab"
+        data-code-tab="inputs"
+        >Inputs YAML</button
+      >
+      <button
+        type="button"
+        class="builder-code-tab"
+        data-code-tab="structure"
         >Structure Value</button
       >
     </div>
     <div class="builder-code-content">
-      <button type="button" class="code-copy-btn" id="builder-code-copy" aria-label="Copy code">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <button
+        type="button"
+        class="code-copy-btn"
+        id="builder-code-copy"
+        aria-label="Copy code"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+        >
           <path
             d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"
           ></path>
@@ -135,29 +192,48 @@ const builderData = {
     </div>
   </div>
 
-  <div class="builder-layout" id="builder-layout">
+  <div
+    class="builder-layout"
+    id="builder-layout"
+  >
     <!-- Main Builder Area -->
     <main class="builder-main">
       <div class="sandbox-container">
-        <div class="sandbox" id="sandbox">
+        <div
+          class="sandbox"
+          id="sandbox"
+        >
           <!-- Rendered by JavaScript -->
         </div>
       </div>
     </main>
 
     <!-- Properties Sidebar (Right) -->
-    <aside class="prop-sidebar" id="prop-sidebar">
-      <div class="sidebar-header" id="sidebar-header">
+    <aside
+      class="prop-sidebar"
+      id="prop-sidebar"
+    >
+      <div
+        class="sidebar-header"
+        id="sidebar-header"
+      >
         <div id="sidebar-title">Component Props</div>
       </div>
-      <div class="sidebar-content" id="sidebar-content">
+      <div
+        class="sidebar-content"
+        id="sidebar-content"
+      >
         <p class="sidebar-empty">Select a component to edit its properties</p>
       </div>
     </aside>
   </div>
 
   <!-- Export Configuration Modal -->
-  <div class="export-config-overlay" id="export-config-overlay" style="display: none;">
+  <div
+    class="export-config-overlay"
+    id="export-config-overlay"
+    style="display: none;"
+  >
     <div class="export-config-modal">
       <div class="export-config-header">
         <h2>Export Component</h2>
@@ -166,15 +242,24 @@ const builderData = {
       <div class="export-config-content">
         <div class="export-config-field">
           <label for="component-type">Component Type</label>
-          <select id="component-type" class="export-config-select">
+          <select
+            id="component-type"
+            class="export-config-select"
+          >
             <option value="page-section">Page Section</option>
             <option value="building-block">Building Block</option>
           </select>
         </div>
 
-        <div class="export-config-field" id="page-section-category-field">
+        <div
+          class="export-config-field"
+          id="page-section-category-field"
+        >
           <label for="page-section-category">Category</label>
-          <select id="page-section-category" class="export-config-select">
+          <select
+            id="page-section-category"
+            class="export-config-select"
+          >
             <!-- Populated by JavaScript -->
           </select>
           <div class="export-config-field-note">Or enter a custom category:</div>
@@ -186,9 +271,16 @@ const builderData = {
           />
         </div>
 
-        <div class="export-config-field" id="building-block-category-field" style="display: none;">
+        <div
+          class="export-config-field"
+          id="building-block-category-field"
+          style="display: none;"
+        >
           <label for="building-block-category">Category</label>
-          <select id="building-block-category" class="export-config-select">
+          <select
+            id="building-block-category"
+            class="export-config-select"
+          >
             <option value="core-elements">Core Elements</option>
             <option value="forms">Forms</option>
             <option value="wrappers">Wrappers</option>
@@ -211,17 +303,44 @@ const builderData = {
           <code id="component-path-preview">page-sections/my-category/my-component</code>
         </div>
       </div>
-      <div class="export-preview-panel" id="export-preview-panel" style="display: none;">
+      <div
+        class="export-preview-panel"
+        id="export-preview-panel"
+        style="display: none;"
+      >
         <div class="export-preview-tabs">
-          <button class="export-preview-tab active" data-tab="astro" type="button">Astro</button>
-          <button class="export-preview-tab" data-tab="inputs" type="button">Inputs YAML</button>
-          <button class="export-preview-tab" data-tab="structure" type="button"
+          <button
+            class="export-preview-tab active"
+            data-tab="astro"
+            type="button"
+            >Astro</button
+          >
+          <button
+            class="export-preview-tab"
+            data-tab="inputs"
+            type="button"
+            >Inputs YAML</button
+          >
+          <button
+            class="export-preview-tab"
+            data-tab="structure"
+            type="button"
             >Structure Value</button
           >
         </div>
         <div class="export-preview-code">
-          <button type="button" class="code-copy-btn" id="export-code-copy" aria-label="Copy code">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <button
+            type="button"
+            class="code-copy-btn"
+            id="export-code-copy"
+            aria-label="Copy code"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="currentColor"
+            >
               <path
                 d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"
               ></path>

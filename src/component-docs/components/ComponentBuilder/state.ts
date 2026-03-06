@@ -522,12 +522,14 @@ class BuilderState {
       for (const key of Object.keys(node)) {
         if (key.startsWith("_hardcoded_") && !node[key]) {
           const original = key.replace("_hardcoded_", "");
-          names.add(((node[`_renamed_${original}`] as string) || original));
+
+          names.add((node[`_renamed_${original}`] as string) || original);
         }
 
         if (key.endsWith("_mode") && node[key] === "prop") {
           const original = key.replace("_mode", "").substring(1);
-          names.add(((node[`_renamed_${original}`] as string) || original));
+
+          names.add((node[`_renamed_${original}`] as string) || original);
         }
       }
 
@@ -555,6 +557,7 @@ class BuilderState {
       if (existingNames.has(currentName)) {
         let suffix = 2;
         let candidate = `${original}_${suffix}`;
+
         while (existingNames.has(candidate)) {
           suffix++;
           candidate = `${original}_${suffix}`;

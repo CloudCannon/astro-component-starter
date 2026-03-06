@@ -13,5 +13,4 @@ blocks:
     direction: vertical
     alignX: center
     size: md
-
 ---

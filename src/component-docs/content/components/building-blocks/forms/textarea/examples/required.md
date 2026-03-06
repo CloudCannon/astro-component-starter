@@ -7,5 +7,4 @@ blocks:
   name: 'comments'
   placeholder: 'Please provide your comments...'
   required: true
-
 ---

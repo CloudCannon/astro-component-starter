@@ -32,11 +32,23 @@ const {
       verticalAlignment="center"
     >
       <Fragment slot="first">
-        <SimpleText class="eyebrow" data-prop="eyebrow" text={eyebrow} />
-        <Heading level="h2" size="lg" style="margin-top: 0;" data-prop="title">
+        <SimpleText
+          class="eyebrow"
+          data-prop="eyebrow"
+          text={eyebrow}
+        />
+        <Heading
+          level="h2"
+          size="lg"
+          style="margin-top: 0;"
+          data-prop="title"
+        >
           {title}
         </Heading>
-        <Text data-prop="description" text={description} />
+        <Text
+          data-prop="description"
+          text={description}
+        />
       </Fragment>
       <Image
         slot="second"
