@@ -26,18 +26,6 @@ testimonialSection:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: alignX
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: maxContentWidth
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingHorizontal
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: paddingVertical
         type: string
         optional: true

@@ -7,9 +7,6 @@ value:
   authorName: Richard Johnson
   authorDescription: CEO, Tech Innovations
   authorImage: /src/assets/images/component-docs/profile.jpg
-  alignX: center
-  maxContentWidth: xl
-  paddingHorizontal: xl
   paddingVertical: sm
   colorScheme: inherit
   backgroundColor: surface

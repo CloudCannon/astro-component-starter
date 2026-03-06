@@ -22,22 +22,6 @@ featureGrid:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: align
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: gap
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: minItemWidth
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: maxItemWidth
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: features
         type: array
       - editor_key: colorScheme
