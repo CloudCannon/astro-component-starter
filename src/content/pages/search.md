@@ -22,9 +22,25 @@ pageSections:
           <script src="/pagefind/pagefind-ui.js"></script>
           <div id="search"></div>
           <script>
-              window.addEventListener('DOMContentLoaded', (event) => {
+              const initSearch = () => {
+                  const searchEl = document.getElementById('search');
+                  if (!searchEl || typeof PagefindUI === 'undefined') return;
+
+                  const currentUrl = window.location.href;
+                  if (searchEl.dataset.pagefindInitialized === currentUrl) return;
+
+                  searchEl.dataset.pagefindInitialized = currentUrl;
+                  searchEl.innerHTML = '';
                   new PagefindUI({ element: "#search", showSubResults: true });
-              });
+              };
+
+              if (document.readyState === "loading") {
+                  document.addEventListener('DOMContentLoaded', initSearch, { once: true });
+              } else {
+                  initSearch();
+              }
+
+              document.addEventListener('astro:page-load', initSearch);
           </script>
         aspectRatio: landscape
     maxContentWidth: xl

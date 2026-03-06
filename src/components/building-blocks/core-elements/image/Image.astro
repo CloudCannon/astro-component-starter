@@ -38,6 +38,7 @@ const {
   class: className,
   "data-prop-src": customDataPropSrc,
   "data-prop-alt": customDataPropAlt,
+  "data-editable": customDataEditable,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -52,7 +53,7 @@ const normalizedAlt = alt || "";
 const isEditable = editable || customDataPropSrc != null || customDataPropAlt != null;
 const dataAttributes = isEditable
   ? {
-      "data-editable": "image",
+      "data-editable": customDataEditable || "image",
       "data-prop-src": customDataPropSrc || "source",
       "data-prop-alt": customDataPropAlt || "alt",
     }

@@ -161,6 +161,10 @@ function createNavItemData(item, level, parentGroupId) {
 </nav>
 
 <script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  let barGlobalHandlersBound = false;
+
   function updateAriaStates(toggle, isExpanded) {
     const contentId = toggle.getAttribute("aria-controls");
     const content = document.getElementById(contentId || "");
@@ -235,39 +239,47 @@ function createNavItemData(item, level, parentGroupId) {
 
   // Initialize bar navigation
   function initBarNavigation() {
-    // Handle clicks outside bar navigation to close dropdowns
-    document.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      if (!target) return;
+    if (!barGlobalHandlersBound) {
+      // Handle clicks outside bar navigation to close dropdowns
+      document.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+        if (!target) return;
 
-      const clickedBar = target.closest(".bar");
+        const clickedBar = target.closest(".bar");
 
-      // Only close dropdowns if clicking completely outside the bar
-      if (!clickedBar) {
-        document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
-          const checkbox = toggle as HTMLInputElement;
-          if (checkbox.checked) {
-            checkbox.checked = false;
-            updateAriaStates(checkbox, false);
-          }
-        });
-      }
-    });
+        // Only close dropdowns if clicking completely outside the bar
+        if (!clickedBar) {
+          document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
+            const checkbox = toggle as HTMLInputElement;
+            if (checkbox.checked) {
+              checkbox.checked = false;
+              updateAriaStates(checkbox, false);
+            }
+          });
+        }
+      });
 
-    // Handle escape key to close all dropdowns
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
-          if (toggle.checked) {
-            toggle.checked = false;
-            updateAriaStates(toggle, false);
-          }
-        });
-      }
-    });
+      // Handle escape key to close all dropdowns
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
+            if (toggle.checked) {
+              toggle.checked = false;
+              updateAriaStates(toggle, false);
+            }
+          });
+        }
+      });
+
+      barGlobalHandlersBound = true;
+    }
 
     // Initialize all bar navigation instances
     document.querySelectorAll(".bar").forEach((barNav) => {
+      const navElement = barNav as HTMLElement;
+      if (navElement.dataset.barInitialized === "true") return;
+      navElement.dataset.barInitialized = "true";
+
       barNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
         const isChecked = toggle.checked;
         updateAriaStates(toggle, isChecked);
@@ -292,7 +304,7 @@ function createNavItemData(item, level, parentGroupId) {
     });
   }
 
-  initBarNavigation();
+  onPageLoad(initBarNavigation);
 </script>
 
 <style>

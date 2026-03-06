@@ -19,10 +19,7 @@ if (!_component && !isValidName) {
 }
 ---
 
-<div
-  class:list={["icon", className]}
-  {...htmlAttributes}
->
+<div class:list={["icon", className]} {...htmlAttributes}>
   <span
     class:list={[
       "icon-inner",
@@ -40,20 +37,14 @@ if (!_component && !isValidName) {
 <style>
   @layer components {
     .icon {
-      display: inline-block;
+      display: block;
       line-height: 0;
       vertical-align: middle;
-
-      &:has(> .icon-inner.align-start),
-      &:has(> .icon-inner.align-center),
-      &:has(> .icon-inner.align-end) {
-        display: block;
-      }
 
       > .icon-inner {
         border-radius: var(--radius-xs);
         color: inherit;
-        display: inline-block;
+        display: block;
         line-height: 0;
         vertical-align: middle;
 

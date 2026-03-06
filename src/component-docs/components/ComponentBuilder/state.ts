@@ -77,33 +77,64 @@ class BuilderState {
       categories: Object.keys(data.componentsByCategory),
     });
 
-    const restored = this.loadFromLocalStorage();
+    try {
+      const restored = this.loadFromLocalStorage();
 
-    if (!restored) {
+      if (!restored) {
+        this.initializeRootComponent();
+      }
+
+      this._lastTreeSnapshot = JSON.stringify(this._componentTree);
+      this.runValidation();
+    } catch (error) {
+      // Recover from stale/invalid persisted state after upgrades.
+      console.warn("[ComponentBuilder] Failed to initialize from saved state. Resetting.", error);
+      this.resetState();
+      this.clearPersistedState();
       this.initializeRootComponent();
+      this._lastTreeSnapshot = JSON.stringify(this._componentTree);
+      this.runValidation();
     }
-
-    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
-
-    this.runValidation();
   }
 
   /** Initialize the default root component (custom-section) */
   private initializeRootComponent(): void {
     const customSectionInfo = this._components.find((c) => c.path === ROOT_COMPONENT_PATH);
+    const fallbackRoot = this._components.find((c) => c.category === "page-builders");
+    const rootInfo = customSectionInfo || fallbackRoot;
 
-    if (!customSectionInfo) {
+    if (!rootInfo) {
       throw new Error(
         `[ComponentBuilder] Root component not found: ${ROOT_COMPONENT_PATH}. ` +
           `Available components: ${this._components.map((c) => c.path).join(", ")}`
       );
     }
 
-    const customSection = this.createComponentNode(customSectionInfo);
+    const customSection = this.createComponentNode(rootInfo);
 
     customSection._isRootComponent = true;
     this._componentTree.push(customSection);
     this.emit("treeChange");
+  }
+
+  /** Clear in-memory state so builder can recover cleanly. */
+  private resetState(): void {
+    this._componentTree = [];
+    this._selectedComponentId = null;
+    this._componentIdCounter = 0;
+    this._dragSource = null;
+    this._history = [];
+    this._redoStack = [];
+    this._lastTreeSnapshot = "[]";
+  }
+
+  /** Best-effort clear of persisted builder state. */
+  private clearPersistedState(): void {
+    try {
+      localStorage.removeItem(BuilderState.STORAGE_KEY);
+    } catch {
+      // Storage may be unavailable in private mode.
+    }
   }
 
   /** Create a new component node with default props */

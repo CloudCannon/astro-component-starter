@@ -164,14 +164,6 @@ const builderData = {
         <div id="export-config-close"></div>
       </div>
       <div class="export-config-content">
-        <div class="export-config-field">
-          <label for="component-type">Component Type</label>
-          <select id="component-type" class="export-config-select">
-            <option value="page-section">Page Section</option>
-            <option value="building-block">Building Block</option>
-          </select>
-        </div>
-
         <div class="export-config-field" id="page-section-category-field">
           <label for="page-section-category">Category</label>
           <select id="page-section-category" class="export-config-select">
@@ -184,15 +176,6 @@ const builderData = {
             class="export-config-input"
             placeholder="e.g., testimonials"
           />
-        </div>
-
-        <div class="export-config-field" id="building-block-category-field" style="display: none;">
-          <label for="building-block-category">Category</label>
-          <select id="building-block-category" class="export-config-select">
-            <option value="core-elements">Core Elements</option>
-            <option value="forms">Forms</option>
-            <option value="wrappers">Wrappers</option>
-          </select>
         </div>
 
         <div class="export-config-field">
@@ -211,44 +194,7 @@ const builderData = {
           <code id="component-path-preview">page-sections/my-category/my-component</code>
         </div>
       </div>
-      <div class="export-preview-panel" id="export-preview-panel" style="display: none;">
-        <div class="export-preview-tabs">
-          <button class="export-preview-tab active" data-tab="astro" type="button">Astro</button>
-          <button class="export-preview-tab" data-tab="inputs" type="button">Inputs YAML</button>
-          <button class="export-preview-tab" data-tab="structure" type="button"
-            >Structure Value</button
-          >
-        </div>
-        <div class="export-preview-code">
-          <button type="button" class="code-copy-btn" id="export-code-copy" aria-label="Copy code">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path
-                d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"
-              ></path>
-              <path
-                d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"
-              ></path>
-            </svg>
-          </button>
-          <pre
-            id="export-preview-code-content"><span class="line-numbers" id="export-line-numbers" /><code /></pre>
-        </div>
-      </div>
       <div class="export-config-footer">
-        <Button
-          element="button"
-          text="Cancel"
-          variant="ghost"
-          size="md"
-          id="export-config-cancel"
-        />
-        <Button
-          element="button"
-          text="Preview"
-          variant="ghost"
-          size="md"
-          id="export-config-confirm"
-        />
         <Button
           element="button"
           text="Download ZIP"
@@ -264,7 +210,3 @@ const builderData = {
 <script>
   import "./index";
 </script>
-
-<style is:global>
-  @import "./styles.css";
-</style>
