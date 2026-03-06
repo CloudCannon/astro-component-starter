@@ -156,5 +156,35 @@ pageSections:
     colorScheme: dark
     backgroundColor: surface
     rounded: false
+  - _component: page-sections/builders/custom-section
+    label: ''
+    contentSections:
+      - _component: building-blocks/core-elements/image
+        source: /src/assets/images/component-docs/dunedin-cliff.jpg
+        alt: ''
+        sizes: '(max-width: 1280px) 100vw, 1280px'
+        widths:
+          - 640
+          - 1280
+          - 2560
+        width:
+        height:
+        rounded: false
+        aspectRatio: none
+        positionVertical: center
+        positionHorizontal: center
+        priority: false
+    maxContentWidth: 2xl
+    paddingHorizontal: md
+    paddingVertical: md
+    colorScheme: inherit
+    backgroundColor: base
+    backgroundImage:
+      source: ''
+      alt: ''
+      positionVertical: top
+      positionHorizontal: center
+    rounded: false
+    editable: true
 description: ''
 ---
