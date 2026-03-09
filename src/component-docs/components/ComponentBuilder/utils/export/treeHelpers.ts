@@ -74,7 +74,8 @@ export function stripRuntimeIds(value: unknown): unknown {
     const result: Record<string, unknown> = {};
 
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
-      if (key.startsWith("_") || key === "editable" || key === "useDefaultEditableBinding") continue;
+      if (key.startsWith("_") || key === "editable" || key === "useDefaultEditableBinding")
+        continue;
       result[key] = stripRuntimeIds(val);
     }
 

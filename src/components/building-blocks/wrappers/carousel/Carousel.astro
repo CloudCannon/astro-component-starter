@@ -46,8 +46,7 @@ if (autoScroll) {
   dataAttributes["data-show-arrows"] = "false";
 }
 
-const effectiveChildrenProp =
-  childrenDataProp ?? (useDefaultEditableBinding ? "slides" : null);
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "slides" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};

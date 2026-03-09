@@ -21,8 +21,7 @@ if (!htmlAttributes.id && label) {
 const uniqueId = crypto.randomUUID();
 const groupName = `tabs-${uniqueId}`;
 
-const effectiveChildrenProp =
-  childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};

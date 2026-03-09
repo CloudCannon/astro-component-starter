@@ -32,8 +32,7 @@ const gridStyles = [
   .filter(Boolean)
   .join("; ");
 
-const effectiveChildrenProp =
-  childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
   : {};
