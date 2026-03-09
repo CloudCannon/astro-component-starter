@@ -4,7 +4,7 @@ import type { ContentBlock } from "../../types";
 
 export interface Props {
   contentSections: ContentBlock[];
-  editable?: boolean;
+  useDefaultEditableBinding?: boolean;
 }
 
 type AstroComponent = (_props: Record<string, unknown>) => unknown;
@@ -32,7 +32,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   components[componentName] = (obj as Record<string, AstroComponent>).default;
 });
 
-const { contentSections, editable = true } = Astro.props;
+const { contentSections, useDefaultEditableBinding = true } = Astro.props;
 ---
 
 {
@@ -50,10 +50,10 @@ const { contentSections, editable = true } = Astro.props;
 
     return Component ? (
       <Component
-        data-editable={editable ? "array-item" : undefined}
+        data-editable={useDefaultEditableBinding ? "array-item" : undefined}
         data-id={block._component}
         {...block}
-        editable={editable}
+        useDefaultEditableBinding={useDefaultEditableBinding}
       />
     ) : null;
   })

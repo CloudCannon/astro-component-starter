@@ -67,7 +67,13 @@ export function generateStructureValue(
 
     // Real value keys currently present on the node.
     Object.keys(node).forEach((key) => {
-      if (!key.startsWith("_") && key !== "class" && key !== "className" && key !== "editable") {
+      if (
+        !key.startsWith("_") &&
+        key !== "class" &&
+        key !== "className" &&
+        key !== "editable" &&
+        key !== "useDefaultEditableBinding"
+      ) {
         candidateKeys.add(key);
       }
     });
@@ -164,7 +170,13 @@ export function generateStructureValue(
     const componentInfo = components.find((c) => c.path === cleanNode._component);
 
     Object.keys(node).forEach((key) => {
-      if (key.startsWith("_") || key === "class" || key === "className" || key === "editable") {
+      if (
+        key.startsWith("_") ||
+        key === "class" ||
+        key === "className" ||
+        key === "editable" ||
+        key === "useDefaultEditableBinding"
+      ) {
         return;
       }
 

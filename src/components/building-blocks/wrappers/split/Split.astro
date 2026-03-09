@@ -12,7 +12,7 @@ const {
   fixedWidth,
   minSplitWidth = 700,
   gap = "lg",
-  editable = false,
+  useDefaultEditableBinding = false,
   class: className,
   label,
   "data-first-prop": customFirstDataProp,
@@ -25,9 +25,10 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-const effectiveFirstProp = customFirstDataProp ?? (editable ? "firstColumnContentSections" : null);
+const effectiveFirstProp =
+  customFirstDataProp ?? (useDefaultEditableBinding ? "firstColumnContentSections" : null);
 const effectiveSecondProp =
-  customSecondDataProp ?? (editable ? "secondColumnContentSections" : null);
+  customSecondDataProp ?? (useDefaultEditableBinding ? "secondColumnContentSections" : null);
 
 // Get content blocks and prop names based on reverse setting
 const firstSplitBlocks = reverse ? secondColumnContentSections : firstColumnContentSections;
@@ -95,7 +96,7 @@ const splitId = `split-${crypto.randomUUID()}`;
             {firstSplitBlocks && (
               <Component
                 contentSections={firstSplitBlocks}
-                editable={firstPaneEditable}
+                useDefaultEditableBinding={firstPaneEditable}
               />
             )}
           </slot>
@@ -104,7 +105,7 @@ const splitId = `split-${crypto.randomUUID()}`;
             {firstSplitBlocks && (
               <Component
                 contentSections={firstSplitBlocks}
-                editable={firstPaneEditable}
+                useDefaultEditableBinding={firstPaneEditable}
               />
             )}
           </slot>
@@ -121,7 +122,7 @@ const splitId = `split-${crypto.randomUUID()}`;
             {secondSplitBlocks && (
               <Component
                 contentSections={secondSplitBlocks}
-                editable={secondPaneEditable}
+                useDefaultEditableBinding={secondPaneEditable}
               />
             )}
           </slot>
@@ -130,7 +131,7 @@ const splitId = `split-${crypto.randomUUID()}`;
             {secondSplitBlocks && (
               <Component
                 contentSections={secondSplitBlocks}
-                editable={secondPaneEditable}
+                useDefaultEditableBinding={secondPaneEditable}
               />
             )}
           </slot>

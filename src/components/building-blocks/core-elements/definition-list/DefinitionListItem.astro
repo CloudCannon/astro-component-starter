@@ -3,19 +3,19 @@ const {
   title,
   text,
   class: className,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-prop-title": customDataPropTitle,
   "data-prop-content": customDataPropContent,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveTitleProp = customDataPropTitle ?? (editable ? "title" : null);
+const effectiveTitleProp = customDataPropTitle ?? (useDefaultEditableBinding ? "title" : null);
 const titleDataAttributes = effectiveTitleProp
   ? { "data-editable": "text", "data-prop": effectiveTitleProp }
   : {};
 
-const effectiveContentProp = customDataPropContent ?? (editable ? "text" : null);
+const effectiveContentProp = customDataPropContent ?? (useDefaultEditableBinding ? "text" : null);
 const contentDataAttributes = effectiveContentProp
   ? { "data-editable": "text", "data-prop": effectiveContentProp }
   : {};

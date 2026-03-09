@@ -6,7 +6,7 @@ const {
   size = "md",
   alignX = "start",
   class: className,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-prop": customDataProp,
   _component,
   ...htmlAttributes
@@ -17,7 +17,7 @@ let MarkdownText = text ? md.renderInline(text) : "";
 
 MarkdownText = MarkdownText.replace(/\n/g, "<br />");
 
-const effectiveDataProp = customDataProp ?? (editable ? "text" : null);
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};

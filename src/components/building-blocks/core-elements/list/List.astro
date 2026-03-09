@@ -11,7 +11,7 @@ const {
   listType = "icon",
   class: className,
   "data-children-prop": childrenDataProp,
-  editable = false,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -25,7 +25,8 @@ const showIcons = listType === "icon";
 
 if (!_component && !hasItems && !hasSlotContent) return;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "items" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -53,7 +54,7 @@ if (!_component && !hasItems && !usesItemsArray) return;
           <ListItem
             data-id="building-blocks/core-elements/list/list-item"
             data-editable="array-item"
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
             showIcon={showIcons}
             {...item}
           />

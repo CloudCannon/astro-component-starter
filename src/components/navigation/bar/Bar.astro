@@ -1,7 +1,13 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
 
-const { navData = [], class: className, _component, ...htmlAttributes } = Astro.props;
+const {
+  navData = [],
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
 
 const navInstanceId = crypto.randomUUID();
 

@@ -1,5 +1,12 @@
 ---
-const { name, value, class: className, _component, ...htmlAttributes } = Astro.props;
+const {
+  name,
+  value,
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
 ---
 
 <input

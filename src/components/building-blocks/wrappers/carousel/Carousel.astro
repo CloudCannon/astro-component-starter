@@ -19,7 +19,7 @@ const {
   style = "",
   label,
   "data-children-prop": childrenDataProp,
-  editable = false,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -46,7 +46,8 @@ if (autoScroll) {
   dataAttributes["data-show-arrows"] = "false";
 }
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "slides" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "slides" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -89,7 +90,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
                 {...slide}
                 data-editable="array-item"
                 data-id="building-blocks/wrappers/carousel/carousel-slide"
-                editable={!!effectiveChildrenProp}
+                useDefaultEditableBinding={!!effectiveChildrenProp}
                 aria-label={`Slide ${index + 1} of ${slides.length}`}
               />
             ))

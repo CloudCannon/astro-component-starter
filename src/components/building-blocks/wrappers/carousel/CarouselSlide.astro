@@ -3,14 +3,15 @@ import Component from "@components/utils/renderBlock.astro";
 
 const {
   contentSections = [],
-  editable = false,
+  useDefaultEditableBinding = false,
   class: className,
   _component,
   "data-children-prop": childrenDataProp,
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "contentSections" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -30,7 +31,7 @@ const arrayDataAttributes = effectiveChildrenProp
         contentSections && (
           <Component
             contentSections={contentSections}
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
           />
         )
       }

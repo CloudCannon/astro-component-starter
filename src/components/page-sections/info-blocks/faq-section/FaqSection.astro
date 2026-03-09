@@ -11,6 +11,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   class: className,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -24,6 +25,7 @@ const {
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  useDefaultEditableBinding={useDefaultEditableBinding}
 >
   <Heading
     level="h2"

@@ -20,6 +20,7 @@ const {
   backgroundColor,
   paddingVertical = "4xl",
   class: className,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -32,6 +33,7 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   class:list={["hero", className]}
+  useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <Split

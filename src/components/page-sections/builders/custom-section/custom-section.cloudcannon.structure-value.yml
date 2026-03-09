@@ -16,7 +16,7 @@ value:
     positionVertical: top
     positionHorizontal: center
   rounded: false
-  editable: true
+  useDefaultEditableBinding: true
 preview:
   text:
     - Custom Section

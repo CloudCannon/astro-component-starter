@@ -8,7 +8,7 @@ const {
   navigationPosition = "start",
   class: className,
   label,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
   _component,
   ...htmlAttributes
@@ -21,7 +21,8 @@ if (!htmlAttributes.id && label) {
 const uniqueId = crypto.randomUUID();
 const groupName = `tabs-${uniqueId}`;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "items" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -52,7 +53,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
             checked={index === 0}
             groupName={groupName}
             navigationPosition={navigationPosition}
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
             data-editable="array-item"
           />
         ))

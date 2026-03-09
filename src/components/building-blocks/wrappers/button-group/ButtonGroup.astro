@@ -7,14 +7,15 @@ const {
   alignX = "start",
   buttonSections,
   "data-children-prop": childrenDataProp,
-  editable = false,
+  useDefaultEditableBinding = false,
   class: className,
   label,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "buttonSections" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "buttonSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -50,7 +51,7 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
         buttonSections && buttonSections.length > 0 && (
           <Component
             contentSections={buttonSections}
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
           />
         )
       }

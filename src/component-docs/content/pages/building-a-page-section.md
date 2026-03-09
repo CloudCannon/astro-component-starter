@@ -19,7 +19,7 @@ import CustomSection from '@builders/custom-section/CustomSection.astro';
 import Heading from '@core-elements/heading/Heading.astro';
 import Text from '@core-elements/text/Text.astro';
 
-const { heading = '', subtext = '', _component, editable = true, ...htmlAttributes } = Astro.props;
+const { heading = '', subtext = '', _component, ...htmlAttributes } = Astro.props;
 ---
 
 <CustomSection
@@ -129,7 +129,6 @@ CTA Center is a good example:
   <ButtonGroup
     buttonSections={buttonSections}
     alignX="center"
-    editable={true}
     data-children-prop="buttonSections"
   />
 </CustomSection>

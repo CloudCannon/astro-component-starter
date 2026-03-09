@@ -19,7 +19,7 @@ const {
   rounded = false,
   border = false,
   class: className,
-  editable = false,
+  useDefaultEditableBinding = false,
   _component,
   "data-children-prop": childrenDataProp,
   "data-children-prop-before": childrenDataPropBefore,
@@ -38,17 +38,20 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "contentSections" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
 
-const effectiveBeforeProp = childrenDataPropBefore ?? (editable ? "beforeContentSections" : null);
+const effectiveBeforeProp =
+  childrenDataPropBefore ?? (useDefaultEditableBinding ? "beforeContentSections" : null);
 const arrayDataAttributesBefore = effectiveBeforeProp
   ? { "data-editable": "array", "data-prop": effectiveBeforeProp }
   : {};
 
-const effectiveAfterProp = childrenDataPropAfter ?? (editable ? "afterContentSections" : null);
+const effectiveAfterProp =
+  childrenDataPropAfter ?? (useDefaultEditableBinding ? "afterContentSections" : null);
 const arrayDataAttributesAfter = effectiveAfterProp
   ? { "data-editable": "array", "data-prop": effectiveAfterProp }
   : {};
@@ -98,7 +101,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             {beforeContentSections && (
               <Component
                 contentSections={beforeContentSections}
-                editable={!!effectiveBeforeProp}
+                useDefaultEditableBinding={!!effectiveBeforeProp}
               />
             )}
           </slot>
@@ -121,7 +124,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             contentSections && (
               <Component
                 contentSections={contentSections}
-                editable={!!effectiveChildrenProp}
+                useDefaultEditableBinding={!!effectiveChildrenProp}
               />
             )
           }
@@ -139,7 +142,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             {afterContentSections && (
               <Component
                 contentSections={afterContentSections}
-                editable={!!effectiveAfterProp}
+                useDefaultEditableBinding={!!effectiveAfterProp}
               />
             )}
           </slot>

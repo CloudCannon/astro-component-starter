@@ -6,12 +6,13 @@ const {
   formBlocks = [],
   class: className,
   _component,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "formBlocks" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "formBlocks" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -36,7 +37,7 @@ if (!_component && !hasFormBlocks && !usesFormBlocks) return;
         formBlocks && (
           <RenderBlock
             contentSections={formBlocks}
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
           />
         )
       }

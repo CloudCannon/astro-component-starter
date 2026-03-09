@@ -8,12 +8,13 @@ const {
   alignX = "start",
   class: className,
   "data-children-prop": childrenDataProp,
-  editable = false,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "items" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -37,7 +38,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           <DefinitionListItem
             data-id="building-blocks/core-elements/definition-list/definition-list-item"
             data-editable="array-item"
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
             {...item}
           />
         ))

@@ -1,7 +1,14 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
 
-const { page, class: className, showArrows = false, _component, ...htmlAttributes } = Astro.props;
+const {
+  page,
+  class: className,
+  showArrows = false,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
 const maxVisiblePages = 5;
 
 if (!page || page.lastPage <= 1) {

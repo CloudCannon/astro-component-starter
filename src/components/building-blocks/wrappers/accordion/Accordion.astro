@@ -9,7 +9,7 @@ const {
   openFirst,
   singleOpen = false,
   label,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
   _component,
   ...htmlAttributes
@@ -23,7 +23,8 @@ if (!htmlAttributes.id) {
 
 const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefined;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "items" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -48,7 +49,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
             <AccordionItem
               isOpen={isFirst}
               accordionName={accordionName}
-              editable={!!effectiveChildrenProp}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
               data-editable="array-item"
               data-id="building-blocks/wrappers/accordion/accordion-item"
               {...item}

@@ -295,6 +295,7 @@ function formatComponentBlock(
   delete props._isRootComponent;
   delete props._nodeId;
   delete props.editable;
+  delete props.useDefaultEditableBinding;
 
   const metadata = metadataMap[componentPath];
   const componentInfo = components.find((c) => c.path === componentPath);

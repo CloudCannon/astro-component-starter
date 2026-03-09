@@ -13,7 +13,7 @@ const {
   backgroundColor,
   backgroundImage,
   rounded = false,
-  editable = false,
+  useDefaultEditableBinding = false,
   class: className,
   _component,
   "data-children-prop": childrenDataProp,
@@ -33,7 +33,8 @@ if (!htmlAttributes.id && label) {
 }
 
 const hasContentSections = contentSections !== undefined;
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "contentSections" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes =
   effectiveChildrenProp && hasContentSections
     ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
@@ -53,7 +54,7 @@ const arrayDataAttributes =
       source={source}
       alt={alt}
       priority={priority}
-      editable={hasContentSections && !!effectiveChildrenProp}
+      useDefaultEditableBinding={hasContentSections && !!effectiveChildrenProp}
       data-prop-src="backgroundImage.source"
       data-prop-alt="backgroundImage.alt"
       positionVertical={positionVertical}
@@ -80,7 +81,7 @@ const arrayDataAttributes =
           contentSections && (
             <Component
               contentSections={contentSections}
-              editable={!!effectiveChildrenProp}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
             />
           )
         }

@@ -11,13 +11,13 @@ const {
   link,
   element = "a",
   class: className,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-prop": customDataProp,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveDataProp = customDataProp ?? (editable ? "text" : null);
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};

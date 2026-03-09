@@ -41,7 +41,7 @@ if (Astro.request.url) {
       contentSections.length > 0 ? (
         <Component
           contentSections={contentSections}
-          editable={false}
+          useDefaultEditableBinding={false}
         />
       ) : (
         <p style="color: #94a3b8; padding: 2rem; text-align: center;">

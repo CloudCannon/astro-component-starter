@@ -5,7 +5,7 @@ import Heading from "@core-elements/heading/Heading.astro";
 const {
   title,
   contentSections,
-  editable = false,
+  useDefaultEditableBinding = false,
   checked = false,
   groupName = "content-selector-tabs",
   navigationPosition = "start",
@@ -19,7 +19,8 @@ const tabId = `tab-${uniqueId}`;
 const panelId = `panel-${uniqueId}`;
 const tabLabelId = `tablabel-${uniqueId}`;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "contentSections" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -67,7 +68,7 @@ const arrayDataAttributes = effectiveChildrenProp
           contentSections && (
             <RenderBlock
               contentSections={contentSections}
-              editable={!!effectiveChildrenProp}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
             />
           )
         }

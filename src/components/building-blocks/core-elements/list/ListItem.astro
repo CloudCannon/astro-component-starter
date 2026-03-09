@@ -8,7 +8,7 @@ const {
   iconColor = "default",
   showIcon = true,
   class: className,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-prop": customDataProp,
   _component,
   ...htmlAttributes
@@ -16,7 +16,7 @@ const {
 
 const md = new MarkdownIt({ html: true });
 
-const effectiveDataProp = customDataProp ?? (editable ? "text" : null);
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};

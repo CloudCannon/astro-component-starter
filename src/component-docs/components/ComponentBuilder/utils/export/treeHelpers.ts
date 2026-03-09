@@ -74,7 +74,7 @@ export function stripRuntimeIds(value: unknown): unknown {
     const result: Record<string, unknown> = {};
 
     for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
-      if (key.startsWith("_") || key === "editable") continue;
+      if (key.startsWith("_") || key === "editable" || key === "useDefaultEditableBinding") continue;
       result[key] = stripRuntimeIds(val);
     }
 
@@ -153,7 +153,8 @@ export function cleanComponentTree(tree: ComponentNode[]): ComponentNode[] {
         key === "_nodeId" ||
         key === "_component" ||
         key === "_isRootComponent" ||
-        key === "editable"
+        key === "editable" ||
+        key === "useDefaultEditableBinding"
       ) {
         return;
       }

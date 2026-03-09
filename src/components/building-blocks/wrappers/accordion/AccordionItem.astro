@@ -5,7 +5,7 @@ import Icon from "@core-elements/icon/Icon.astro";
 const {
   title,
   contentSections,
-  editable = false,
+  useDefaultEditableBinding = false,
   isOpen = false,
   accordionName,
   _component,
@@ -13,7 +13,8 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const effectiveChildrenProp = childrenDataProp ?? (editable ? "contentSections" : null);
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
@@ -42,7 +43,7 @@ const arrayDataAttributes = effectiveChildrenProp
         contentSections && (
           <RenderBlock
             contentSections={contentSections}
-            editable={!!effectiveChildrenProp}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
           />
         )
       }

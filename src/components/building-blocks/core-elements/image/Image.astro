@@ -34,7 +34,7 @@ const {
   positionVertical = "center",
   positionHorizontal = "center",
   background = false,
-  editable = false,
+  useDefaultEditableBinding = false,
   class: className,
   "data-prop-src": customDataPropSrc,
   "data-prop-alt": customDataPropAlt,
@@ -49,7 +49,8 @@ if (!_component && !hasValidSrc) {
 }
 
 const normalizedAlt = alt || "";
-const isEditable = editable || customDataPropSrc != null || customDataPropAlt != null;
+const isEditable =
+  useDefaultEditableBinding || customDataPropSrc != null || customDataPropAlt != null;
 const dataAttributes = isEditable
   ? {
       "data-editable": "image",

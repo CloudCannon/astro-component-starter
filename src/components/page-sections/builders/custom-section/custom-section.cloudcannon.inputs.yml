@@ -145,7 +145,7 @@ backgroundImage.positionHorizontal:
 rounded:
   type: switch
   comment: Whether to apply rounded corners to the custom section.
-editable:
+useDefaultEditableBinding:
   type: switch
-  comment: Whether the custom section is editable.
+  comment: Whether the custom section should use its default editable bindings.
   hidden: true

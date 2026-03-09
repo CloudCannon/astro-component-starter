@@ -8,7 +8,7 @@ const {
   alignX = "center",
   authorImage = "",
   class: className,
-  editable = false,
+  useDefaultEditableBinding = false,
   "data-prop": customDataProp,
   "data-prop-author-name": customDataPropAuthorName,
   "data-prop-author-description": customDataPropAuthorDescription,
@@ -19,18 +19,19 @@ const {
 const md = MarkdownIt({ html: true });
 const MarkdownText = text ? md.render(text) : "";
 
-const effectiveDataProp = customDataProp ?? (editable ? "text" : null);
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-const effectiveAuthorNameProp = customDataPropAuthorName ?? (editable ? "authorName" : null);
+const effectiveAuthorNameProp =
+  customDataPropAuthorName ?? (useDefaultEditableBinding ? "authorName" : null);
 const authorNameDataAttributes = effectiveAuthorNameProp
   ? { "data-editable": "text", "data-prop": effectiveAuthorNameProp }
   : {};
 
 const effectiveAuthorDescProp =
-  customDataPropAuthorDescription ?? (editable ? "authorDescription" : null);
+  customDataPropAuthorDescription ?? (useDefaultEditableBinding ? "authorDescription" : null);
 const authorDescriptionDataAttributes = effectiveAuthorDescProp
   ? { "data-editable": "text", "data-prop": effectiveAuthorDescProp }
   : {};

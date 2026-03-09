@@ -21,6 +21,7 @@ const {
   backgroundColor,
   paddingVertical = "4xl",
   class: className,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -37,6 +38,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   data-feature-split-id={featureSplitId}
+  useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <Split
