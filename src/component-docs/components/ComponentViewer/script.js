@@ -1,7 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { onPageLoad } from "../../../components/utils/onPageLoad";
+
+function initializeComponentViewers() {
   const componentViewers = document.querySelectorAll(".component-viewer");
 
   componentViewers.forEach((viewer) => {
+    if (viewer.hasAttribute("data-viewer-initialized")) return;
+    viewer.setAttribute("data-viewer-initialized", "true");
+
     const segments = {
       deviceSize: viewer.querySelector('[data-action="device-size-toggle"]'),
       direction: viewer.querySelector('[data-action="direction-toggle"]'),
@@ -194,10 +199,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     setTimeout(syncCodeViewHeight, 200);
   });
-});
+}
 
 // Copy code functionality
-document.addEventListener("DOMContentLoaded", () => {
+let copyCodeHandlerBound = false;
+
+function initializeCopyCode() {
+  if (copyCodeHandlerBound) return;
+  copyCodeHandlerBound = true;
+
   document.addEventListener("click", async (event) => {
     const button = event.target.closest('[data-action="copy-code"]');
 
@@ -247,4 +257,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+}
+
+onPageLoad(() => {
+  initializeComponentViewers();
+  initializeCopyCode();
 });

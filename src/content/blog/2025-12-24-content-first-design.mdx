@@ -17,25 +17,7 @@ Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit la
 
 At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
 
-Aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem:
-
-```astro
----
-const { heading = "", subtext = "", buttonSections = [], ...rest } = Astro.props;
----
-
-<CustomSection {...rest}>
-  {
-    heading && (
-      <Heading level="h2" size="xl">
-        {heading}
-      </Heading>
-    )
-  }
-  {subtext && <SimpleText size="md">{subtext}</SimpleText>}
-  {buttons?.length > 0 && <ButtonGroup buttonSections={buttonSections} />}
-</CustomSection>
-```
+Aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem.
 
 Sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
 

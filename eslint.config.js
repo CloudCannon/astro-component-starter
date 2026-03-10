@@ -5,8 +5,8 @@ import eslintPluginAstro from "eslint-plugin-astro";
 import jsoncPlugin from "eslint-plugin-jsonc";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import ymlPlugin from "eslint-plugin-yml";
-import jsoncParser from "jsonc-eslint-parser";
-import yamlParser from "yaml-eslint-parser";
+import * as jsoncParser from "jsonc-eslint-parser";
+import * as yamlParser from "yaml-eslint-parser";
 
 export default [
   // Base ESLint recommended rules

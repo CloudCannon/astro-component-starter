@@ -128,6 +128,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
   import EmblaCarousel from "embla-carousel";
   import AutoScroll from "embla-carousel-auto-scroll";
   import Autoplay from "embla-carousel-autoplay";
+  import { onPageLoad } from "@component-utils/onPageLoad";
 
   function setupCarousels() {
     const carousels = document.querySelectorAll(".carousel");
@@ -193,6 +194,13 @@ if (!_component && !hasSlides && !hasSlotContent) return;
       const prevButton = inner.querySelector(".prev > .button-inner") as HTMLButtonElement;
       const nextButton = inner.querySelector(".next > .button-inner") as HTMLButtonElement;
 
+      if (prevButton) {
+        prevButton.style.borderRadius = "9999px";
+      }
+      if (nextButton) {
+        nextButton.style.borderRadius = "9999px";
+      }
+
       const updateButtons = () => {
         if (prevButton) prevButton.disabled = !embla.canScrollPrev();
         if (nextButton) nextButton.disabled = !embla.canScrollNext();
@@ -234,13 +242,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
     });
   }
 
-  // Initialize carousels when the page loads
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setupCarousels);
-  } else {
-    setupCarousels();
-  }
-  document.addEventListener("astro:page-load", setupCarousels);
+  onPageLoad(setupCarousels);
 </script>
 
 <style>
@@ -283,7 +285,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         > .controls-wrapper > :global(.prev) > :global(.button-inner),
         > .controls-wrapper > :global(.next) > :global(.button-inner) {
           background-color: var(--color-bg);
-          border-radius: var(--radius-full);
+          border-radius: 9999px;
           flex-shrink: 0;
           pointer-events: auto;
 

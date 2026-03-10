@@ -9,6 +9,8 @@
  * @module index
  */
 
+import "./styles.css";
+import { onPageLoad } from "../../../components/utils/onPageLoad";
 import { debugLog } from "./constants";
 import { showExportConfigModal } from "./modules/exportModal";
 import { initLivePreview } from "./modules/livePreview";
@@ -53,10 +55,12 @@ function initializeBuilder(): void {
   const sandbox = document.getElementById("sandbox");
   const sidebarContent = document.getElementById("sidebar-content");
   const sidebarTitle = document.getElementById("sidebar-title");
-  const exportBtn = document.getElementById("export-btn") as HTMLButtonElement;
+  const exportBtn = document.getElementById("export-btn") as HTMLElement;
   const exportBar = document.querySelector(".export-bar") as HTMLElement;
+  const exportBtnInner = exportBtn?.querySelector(".button-inner") as HTMLButtonElement | null;
+  const exportBtnLabel = exportBtn?.querySelector(".label-text") as HTMLElement | null;
 
-  if (!sandbox || !sidebarContent || !sidebarTitle || !exportBtn || !exportBar) {
+  if (!sandbox || !sidebarContent || !sidebarTitle || !exportBtn || !exportBar || !exportBtnInner) {
     console.error("[ComponentBuilder] Missing required DOM elements");
     return;
   }
@@ -151,24 +155,30 @@ function initializeBuilder(): void {
 
     // Disable if no components
     if (!hasComponents) {
-      exportBtn.disabled = true;
+      exportBtn.setAttribute("disabled", "");
+      exportBtnInner.disabled = true;
       exportBtn.classList.remove("has-errors");
+      if (exportBtnLabel) exportBtnLabel.textContent = "Export Component";
       return;
     }
 
     // Show error state if validation fails
     if (!validation.isValid) {
-      exportBtn.disabled = false; // Keep enabled to show errors
+      exportBtn.removeAttribute("disabled");
+      exportBtnInner.disabled = false; // Keep enabled to show errors
       exportBtn.classList.add("has-errors");
 
       // Update button text to show error count
       const errorCount = validation.duplicateProps.length;
 
-      exportBtn.textContent = `Export Component (${errorCount} error${errorCount > 1 ? "s" : ""})`;
+      if (exportBtnLabel) {
+        exportBtnLabel.textContent = `Export Component (${errorCount} error${errorCount > 1 ? "s" : ""})`;
+      }
     } else {
-      exportBtn.disabled = false;
+      exportBtn.removeAttribute("disabled");
+      exportBtnInner.disabled = false;
       exportBtn.classList.remove("has-errors");
-      exportBtn.textContent = "Export Component";
+      if (exportBtnLabel) exportBtnLabel.textContent = "Export Component";
     }
   }
 
@@ -294,9 +304,4 @@ function initializeBuilder(): void {
   updateValidationPanel();
 }
 
-// Initialize when DOM is ready
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initializeBuilder);
-} else {
-  initializeBuilder();
-}
+onPageLoad(initializeBuilder);

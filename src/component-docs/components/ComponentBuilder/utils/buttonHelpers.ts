@@ -58,7 +58,8 @@ export function createDeleteButton(onClick: () => void): HTMLElement {
   }
 
   const clone = buttonDeleteTemplate.content.cloneNode(true) as DocumentFragment;
-  const button = clone.querySelector("button") as HTMLButtonElement;
+  const root = clone.firstElementChild as HTMLElement | null;
+  const button = clone.querySelector("button") as HTMLButtonElement | null;
 
   if (!button) {
     console.error("[ButtonHelper] Failed to clone delete button template");
@@ -71,7 +72,7 @@ export function createDeleteButton(onClick: () => void): HTMLElement {
 
   button.addEventListener("click", onClick);
 
-  return button;
+  return root ?? button;
 }
 
 export function createCloseButton(onClick: () => void): HTMLElement {
@@ -92,7 +93,8 @@ export function createCloseButton(onClick: () => void): HTMLElement {
   }
 
   const clone = buttonCloseTemplate.content.cloneNode(true) as DocumentFragment;
-  const button = clone.querySelector("button") as HTMLButtonElement;
+  const root = clone.firstElementChild as HTMLElement | null;
+  const button = clone.querySelector("button") as HTMLButtonElement | null;
 
   if (!button) {
     console.error("[ButtonHelper] Failed to clone close button template");
@@ -107,5 +109,5 @@ export function createCloseButton(onClick: () => void): HTMLElement {
   button.setAttribute("aria-label", "Close");
   button.addEventListener("click", onClick);
 
-  return button;
+  return root ?? button;
 }

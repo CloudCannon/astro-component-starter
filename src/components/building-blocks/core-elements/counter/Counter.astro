@@ -34,8 +34,10 @@ const duration = 500;
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const counters = document.querySelectorAll(".counter > .number");
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  const initCounters = () => {
+    const counters = document.querySelectorAll(".counter .number");
     if (!counters.length) return;
 
     const io = new IntersectionObserver(
@@ -73,7 +75,9 @@ const duration = 500;
 
       requestAnimationFrame(step);
     }
-  });
+  };
+
+  onPageLoad(initCounters);
 </script>
 
 <style>

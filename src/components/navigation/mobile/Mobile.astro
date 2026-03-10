@@ -245,6 +245,8 @@ function createNavItemData(item, level, parentGroupId) {
 </nav>
 
 <script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
   // Create overlays container for proper z-index stacking
   function getOrCreateOverlaysContainer() {
     let container = document.getElementById("overlays-container");
@@ -258,115 +260,123 @@ function createNavItemData(item, level, parentGroupId) {
   }
 
   // Initialize mobile navigation instances
-  const allMobileNavs = document.querySelectorAll(".mobile");
-  const overlaysContainer = getOrCreateOverlaysContainer();
+  function initMobileNavigation() {
+    const allMobileNavs = document.querySelectorAll(".mobile");
+    const overlaysContainer = getOrCreateOverlaysContainer();
 
-  allMobileNavs.forEach((nav) => {
-    // Add a class to indicate JS is available
-    nav.classList.add("js-enabled");
+    allMobileNavs.forEach((nav) => {
+      const navElement = nav as HTMLElement;
+      if (navElement.dataset.mobileInitialized === "true") return;
+      navElement.dataset.mobileInitialized = "true";
 
-    // Move entire nav to overlays container for proper z-index stacking
-    overlaysContainer.appendChild(nav);
+      // Add a class to indicate JS is available
+      nav.classList.add("js-enabled");
 
-    // Find the toggle for this specific nav instance
-    const toggleId = nav.getAttribute("data-toggle-id");
-    const toggle = document.getElementById(toggleId);
-    const hamburger = document.querySelector(`label[for="${toggleId}"].nav-hamburger`);
+      // Move entire nav to overlays container for proper z-index stacking
+      overlaysContainer.appendChild(nav);
 
-    // Handle navigation toggle state and accessibility
-    function handleNavToggle(isOpen) {
-      if (isOpen) {
-        nav.setAttribute("aria-hidden", "false");
-        nav.style.transform = "translateX(0)";
-        document.body.style.overflow = "hidden";
-        nav.querySelector(".mobile-close")?.focus();
-      } else {
-        nav.setAttribute("aria-hidden", "true");
-        nav.style.transform = "translateX(-100%)";
-        document.body.style.overflow = "";
-        hamburger?.focus();
+      // Find the toggle for this specific nav instance
+      const toggleId = nav.getAttribute("data-toggle-id");
+      const toggle = document.getElementById(toggleId);
+      const hamburger = document.querySelector(`label[for="${toggleId}"].nav-hamburger`);
+
+      // Handle navigation toggle state and accessibility
+      function handleNavToggle(isOpen) {
+        if (isOpen) {
+          nav.setAttribute("aria-hidden", "false");
+          nav.style.transform = "translateX(0)";
+          document.body.style.overflow = "hidden";
+          nav.querySelector(".mobile-close")?.focus();
+        } else {
+          nav.setAttribute("aria-hidden", "true");
+          nav.style.transform = "translateX(-100%)";
+          document.body.style.overflow = "";
+          hamburger?.focus();
+        }
       }
-    }
 
-    // Handle hamburger button interactions
-    if (hamburger && toggle) {
-      const toggleHandler = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggle.checked = !toggle.checked;
-        handleNavToggle(toggle.checked);
+      // Handle hamburger button interactions
+      if (hamburger && toggle) {
+        const toggleHandler = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle.checked = !toggle.checked;
+          handleNavToggle(toggle.checked);
+        };
+
+        hamburger.addEventListener("click", toggleHandler);
+        hamburger.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            toggleHandler(e);
+          }
+        });
+      }
+
+      // Handle close button interactions
+      const closeButton = nav.querySelector(".mobile-close");
+      if (closeButton && toggle) {
+        const closeHandler = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggle.checked = false;
+          handleNavToggle(false);
+        };
+
+        closeButton.addEventListener("click", closeHandler);
+        closeButton.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            closeHandler(e);
+          }
+        });
+      }
+
+      // Handle toggle state changes
+      if (toggle) {
+        toggle.addEventListener("change", (e) => {
+          handleNavToggle(e.target.checked);
+        });
+      }
+
+      // Handle dropdown interactions using event delegation
+      const handleDropdownToggle = (e) => {
+        const trigger = e.target?.closest(".nav-item-trigger");
+        if (!trigger) return;
+
+        const radioName = trigger.getAttribute("for");
+        let dropdownToggle = null;
+
+        if (radioName) {
+          dropdownToggle = document.getElementById(radioName);
+        } else {
+          const parent = trigger.closest(".nav-item");
+          dropdownToggle = parent?.querySelector(".nav-item-toggle");
+        }
+
+        if (dropdownToggle) {
+          e.preventDefault();
+          dropdownToggle.checked = !dropdownToggle.checked;
+          dropdownToggle.dispatchEvent(new Event("change"));
+        }
       };
 
-      hamburger.addEventListener("click", toggleHandler);
-      hamburger.addEventListener("keydown", (e) => {
+      nav.addEventListener("click", handleDropdownToggle);
+      nav.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
-          toggleHandler(e);
+          handleDropdownToggle(e);
         }
       });
-    }
 
-    // Handle close button interactions
-    const closeButton = nav.querySelector(".mobile-close");
-    if (closeButton && toggle) {
-      const closeHandler = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggle.checked = false;
-        handleNavToggle(false);
-      };
-
-      closeButton.addEventListener("click", closeHandler);
-      closeButton.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          closeHandler(e);
+      // Handle escape key to close navigation
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && toggle?.checked) {
+          toggle.checked = false;
+          handleNavToggle(false);
         }
       });
-    }
-
-    // Handle toggle state changes
-    if (toggle) {
-      toggle.addEventListener("change", (e) => {
-        handleNavToggle(e.target.checked);
-      });
-    }
-
-    // Handle dropdown interactions using event delegation
-    const handleDropdownToggle = (e) => {
-      const trigger = e.target?.closest(".nav-item-trigger");
-      if (!trigger) return;
-
-      const radioName = trigger.getAttribute("for");
-      let dropdownToggle = null;
-
-      if (radioName) {
-        dropdownToggle = document.getElementById(radioName);
-      } else {
-        const parent = trigger.closest(".nav-item");
-        dropdownToggle = parent?.querySelector(".nav-item-toggle");
-      }
-
-      if (dropdownToggle) {
-        e.preventDefault();
-        dropdownToggle.checked = !dropdownToggle.checked;
-        dropdownToggle.dispatchEvent(new Event("change"));
-      }
-    };
-
-    nav.addEventListener("click", handleDropdownToggle);
-    nav.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        handleDropdownToggle(e);
-      }
     });
+  }
 
-    // Handle escape key to close navigation
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && toggle?.checked) {
-        toggle.checked = false;
-        handleNavToggle(false);
-      }
-    });
-  });
+  onPageLoad(initMobileNavigation);
 </script>
 
 <style>

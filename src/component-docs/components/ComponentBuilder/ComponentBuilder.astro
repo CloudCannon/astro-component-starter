@@ -240,17 +240,6 @@ const builderData = {
         <div id="export-config-close"></div>
       </div>
       <div class="export-config-content">
-        <div class="export-config-field">
-          <label for="component-type">Component Type</label>
-          <select
-            id="component-type"
-            class="export-config-select"
-          >
-            <option value="page-section">Page Section</option>
-            <option value="building-block">Building Block</option>
-          </select>
-        </div>
-
         <div
           class="export-config-field"
           id="page-section-category-field"
@@ -271,22 +260,6 @@ const builderData = {
           />
         </div>
 
-        <div
-          class="export-config-field"
-          id="building-block-category-field"
-          style="display: none;"
-        >
-          <label for="building-block-category">Category</label>
-          <select
-            id="building-block-category"
-            class="export-config-select"
-          >
-            <option value="core-elements">Core Elements</option>
-            <option value="forms">Forms</option>
-            <option value="wrappers">Wrappers</option>
-          </select>
-        </div>
-
         <div class="export-config-field">
           <label for="component-name">Component Name</label>
           <input
@@ -298,9 +271,15 @@ const builderData = {
           <div class="export-config-field-note">Use kebab-case (lowercase with hyphens)</div>
         </div>
 
-        <div class="export-config-preview">
-          <div class="export-config-preview-label">Component Path:</div>
-          <code id="component-path-preview">page-sections/my-category/my-component</code>
+        <div class="export-config-preview-group">
+          <div class="export-config-preview-label">
+            After downloading, unzip the file and place the component in:
+          </div>
+          <div class="export-config-preview">
+            <code id="component-path-preview"
+              >/src/components/page-sections/my-category/my-component</code
+            >
+          </div>
         </div>
       </div>
       <div
@@ -356,20 +335,6 @@ const builderData = {
       <div class="export-config-footer">
         <Button
           element="button"
-          text="Cancel"
-          variant="ghost"
-          size="md"
-          id="export-config-cancel"
-        />
-        <Button
-          element="button"
-          text="Preview"
-          variant="ghost"
-          size="md"
-          id="export-config-confirm"
-        />
-        <Button
-          element="button"
           text="Download ZIP"
           variant="primary"
           size="md"
@@ -383,7 +348,3 @@ const builderData = {
 <script>
   import "./index";
 </script>
-
-<style is:global>
-  @import "./styles.css";
-</style>

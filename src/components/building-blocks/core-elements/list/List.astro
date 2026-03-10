@@ -78,7 +78,7 @@ if (!_component && !hasItems && !usesItemsArray) return;
 
         &.direction-horizontal {
           flex-flow: row wrap;
-          gap: var(--spacing-em-sm);
+          gap: var(--spacing-em-md);
         }
 
         &.type-bullet {
@@ -89,9 +89,9 @@ if (!_component && !hasItems && !usesItemsArray) return;
           list-style: decimal;
         }
 
-        &.type-bullet.direction-horizontal > :global(li:not(:first-child)),
-        &.type-numbered.direction-horizontal > :global(li:not(:first-child)) {
-          margin-inline-start: var(--spacing-lg);
+        &.type-bullet.direction-horizontal,
+        &.type-numbered.direction-horizontal {
+          gap: var(--spacing-em-2xl);
         }
 
         &.type-icon {

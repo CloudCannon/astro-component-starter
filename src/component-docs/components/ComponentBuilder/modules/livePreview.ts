@@ -9,11 +9,10 @@
  * @module livePreview
  */
 
-import type { HighlighterGeneric } from "shiki";
-
 import { builderState } from "../state";
 import type { ComponentNode } from "../types";
 import { generateExportPreview } from "../utils/exportGenerator";
+import { createHighlighter } from "shiki/bundle/web";
 
 type ViewMode = "build" | "preview" | "code";
 
@@ -28,16 +27,23 @@ const DEFAULT_COMPONENT_NAME = "my-component";
 
 // Shiki highlighter — lazily loaded and cached
 
-let highlighterPromise: Promise<HighlighterGeneric<any, any>> | null = null;
+type CodeHighlighter = {
+  codeToHtml: (code: string, options: { lang: string; theme: string }) => string;
+};
 
-function getHighlighter(): Promise<HighlighterGeneric<any, any>> {
+let highlighterPromise: Promise<CodeHighlighter> | null = null;
+
+function getHighlighter(): Promise<CodeHighlighter> {
   if (!highlighterPromise) {
-    highlighterPromise = import("shiki").then((shiki) =>
-      shiki.createHighlighter({
-        themes: ["github-dark"],
-        langs: ["astro", "yaml"],
-      })
-    );
+    // Use a static import so Vite bundles this reliably in dev.
+    highlighterPromise = createHighlighter({
+      themes: ["github-dark"],
+      langs: ["astro", "yaml"],
+    }).catch((error) => {
+      // Allow retry if initialization fails once.
+      highlighterPromise = null;
+      throw error;
+    });
   }
 
   return highlighterPromise;
@@ -48,6 +54,13 @@ const CODE_TAB_LANG: Record<string, string> = {
   inputs: "yaml",
   structure: "yaml",
 };
+
+function createCodeMarkup(renderedHtml: string, code: string): string {
+  const lineCount = Math.max(code.split("\n").length, 1);
+  const lineNumbers = Array.from({ length: lineCount }, (_, i) => `<span>${i + 1}</span>`).join("");
+
+  return `<div class="builder-code-render"><div class="builder-code-lines" aria-hidden="true">${lineNumbers}</div><div class="builder-code-html">${renderedHtml}</div></div>`;
+}
 
 function cleanTree(nodes: ComponentNode[]): Record<string, unknown>[] {
   return nodes.map((node) => {
@@ -193,11 +206,12 @@ export function initLivePreview(
         .then((hl) => {
           if (currentView !== "code") return;
 
-          const html = hl.codeToHtml(code, { lang, theme: "github-dark" });
+          const highlighted = hl.codeToHtml(code, { lang, theme: "github-dark" });
+          const html = createCodeMarkup(highlighted, code);
           const copyBtn = codeContentEl.querySelector(".code-copy-btn");
 
           if (copyBtn) {
-            const existing = codeContentEl.querySelector("pre");
+            const existing = codeContentEl.querySelector(".builder-code-render, pre");
 
             if (existing) existing.remove();
             copyBtn.insertAdjacentHTML("afterend", html);
@@ -205,18 +219,23 @@ export function initLivePreview(
             codeContentEl.innerHTML = html;
           }
         })
-        .catch(() => {
+        .catch((error) => {
+          const message = error instanceof Error ? error.message : String(error);
           const copyBtn = codeContentEl.querySelector(".code-copy-btn");
-          const fallback = `<pre><code>${escapeHtml(code)}</code></pre>`;
+          const errorMarkup = `<div class="builder-code-error">Shiki failed to load: ${escapeHtml(message)}</div>`;
 
           if (copyBtn) {
-            const existing = codeContentEl.querySelector("pre");
+            const existing = codeContentEl.querySelector(
+              ".builder-code-render, pre, .builder-code-error"
+            );
 
             if (existing) existing.remove();
-            copyBtn.insertAdjacentHTML("afterend", fallback);
+            copyBtn.insertAdjacentHTML("afterend", errorMarkup);
           } else {
-            codeContentEl.innerHTML = fallback;
+            codeContentEl.innerHTML = errorMarkup;
           }
+
+          console.error("[ComponentBuilder] Shiki highlight failed.", error);
         });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";

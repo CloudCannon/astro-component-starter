@@ -52,6 +52,24 @@
     gap: var(--spacing-md);
   }
 
+  /* Keep primary export action styled even if token vars are missing. */
+  #export-btn > .button-inner {
+    background: var(--color-bg-brand, #0f172a);
+    border: 1px solid transparent;
+    color: var(--color-text-on-brand, #fff);
+  }
+
+  #export-btn > .button-inner:hover,
+  #export-btn > .button-inner:focus {
+    background: var(--color-bg-brand-muted, #1e293b);
+    color: var(--color-text-on-brand, #fff);
+  }
+
+  #export-btn[disabled] > .button-inner {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
   .builder-layout {
     display: grid;
     gap: 0;
@@ -157,21 +175,48 @@
   }
 
   .builder-code-content {
+    background: #0d1117;
     color-scheme: dark;
     max-height: 70vh;
     min-height: 400px;
     overflow: auto;
     position: relative;
 
+    .builder-code-render {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      min-width: max-content;
+    }
+
+    .builder-code-lines {
+      background: #161b22;
+      border-right: 1px solid #30363d;
+      color: #6e7681;
+      font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 12px 10px 12px 14px;
+      text-align: right;
+      user-select: none;
+    }
+
+    .builder-code-lines > span {
+      display: block;
+      min-width: 3ch;
+    }
+
+    .builder-code-html {
+      min-width: 0;
+    }
+
     pre {
       font-size: 13px !important;
       line-height: 1.6 !important;
       margin: 0 !important;
-      padding: 12px 0 !important;
+      padding: 12px 16px !important;
     }
 
     code {
-      counter-reset: line;
       font-family: var(
         --font-mono,
         "SF Mono",
@@ -182,18 +227,17 @@
       ) !important;
     }
 
-    .line {
-      &::before {
-        color: #6e7681;
-        content: counter(line);
-        counter-increment: line;
-        display: inline-block;
-        margin-right: 16px;
-        padding-left: 16px;
-        text-align: right;
-        user-select: none;
-        width: 3ch;
-      }
+    .builder-code-error {
+      background: #2d1117;
+      border: 1px solid #f85149;
+      border-radius: 6px;
+      color: #ffa198;
+      font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+      font-size: 12px;
+      margin: 12px;
+      overflow-wrap: anywhere;
+      padding: 12px;
+      white-space: pre-wrap;
     }
   }
 
@@ -582,8 +626,8 @@
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
     margin-bottom: var(--spacing-md);
+    overflow-wrap: break-word;
     padding: var(--spacing-md);
-    word-wrap: break-word;
   }
 
   .prop-field-header {
@@ -963,20 +1007,28 @@
   font-size: var(--font-size-xs);
 }
 
+.export-config-preview-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
 .export-config-preview {
   background: var(--cb-preview-bg);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-xs);
   padding: var(--spacing-md);
+
+  code {
+    display: block;
+  }
 }
 
 .export-config-preview-label {
-  color: var(--cb-preview-label-color);
-  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.05em;
-  margin-bottom: var(--spacing-sm);
-  text-transform: uppercase;
+  margin-bottom: 0;
 }
 
 .export-config-field {
@@ -999,7 +1051,7 @@
    ============================================ */
 
 /* Export button error state */
-#export-btn.has-errors {
+#export-btn.has-errors > .button-inner {
   background-color: var(--cb-danger);
   border-color: var(--cb-danger);
 
@@ -1159,11 +1211,10 @@
   color: #ccc;
   cursor: pointer;
   display: flex;
-  float: right;
   justify-content: center;
   opacity: 0;
   padding: 6px;
-  position: sticky;
+  position: absolute;
   right: 8px;
   top: 8px;
   transition:

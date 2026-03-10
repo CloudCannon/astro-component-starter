@@ -180,11 +180,17 @@ function hasCurrentChild(item) {
 </nav>
 
 <script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
   function setupSideNavigation() {
     const sideNavs = document.querySelectorAll(".side");
     if (!sideNavs.length) return;
 
     sideNavs.forEach((sideNav) => {
+      const navElement = sideNav as HTMLElement;
+      if (navElement.dataset.sideInitialized === "true") return;
+      navElement.dataset.sideInitialized = "true";
+
       // Handle radio button changes
       sideNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
         toggle.addEventListener("change", (e) => {
@@ -243,7 +249,7 @@ function hasCurrentChild(item) {
       });
     });
   }
-  setupSideNavigation();
+  onPageLoad(setupSideNavigation);
 
   setTimeout(() => {
     const initialNavItems = document.querySelectorAll(".nav-item-content-initial");
