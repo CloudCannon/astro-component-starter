@@ -362,16 +362,17 @@ function createNavItemData(item, level, parentGroupId) {
         transition: background var(--animation-normal) ease-in-out;
         white-space: nowrap;
 
-        &[aria-current="page"] {
-          text-decoration: underline dotted;
-          text-decoration-color: var(--color-text-muted);
-          text-underline-offset: 3px;
-        }
-
         &:hover {
           background: var(--color-state-hover);
           color: var(--color-text-strong);
         }
+      }
+
+      .nav-item > a[aria-current="page"],
+      .nav-item > .nav-item-trigger[aria-current="page"] {
+        text-decoration: underline dotted;
+        text-decoration-color: var(--color-text-muted);
+        text-underline-offset: 3px;
       }
 
       .nav-item-trigger {

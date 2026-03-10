@@ -27,18 +27,18 @@ const sideNavData = await generateNavData(navData);
   <Side navData={sideNavData} />
 </div>
 
-<style>
+<style is:global>
   .sidebar-logo-container {
     align-items: center;
     display: flex;
     justify-content: space-between;
     margin-top: 5px;
 
-    :global(.icon) {
+    .icon {
       flex: 1;
       max-width: 138px;
 
-      :global(svg) {
+      svg {
         height: 100%;
         width: 100%;
       }
