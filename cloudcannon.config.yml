@@ -4,7 +4,7 @@ collections_config:
     glob:
       - "**/*.md"
     url: /[full_slug]/
-    icon: laptop_mac
+    icon: web
     _enabled_editors:
       - visual
     add_options:
@@ -28,9 +28,11 @@ collections_config:
     glob:
       - "**/*.mdx"
     url: /blog/[full_slug]/
+    disable_url: false
     icon: article
     _enabled_editors:
       - content
+      - visual
     add_options:
       - name: Add New Blog Post
         schema: default
