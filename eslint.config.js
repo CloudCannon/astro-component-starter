@@ -98,7 +98,7 @@ export default [
       // Astro-specific rules
       "astro/no-conflict-set-directives": "error",
       "astro/no-unused-define-vars-in-style": "error",
-      "astro/no-unused-css-selector": "warn",
+      "astro/no-unused-css-selector": "off",
       "astro/prefer-class-list-directive": "warn",
       "astro/prefer-split-class-list": "warn",
       "astro/sort-attributes": "off",

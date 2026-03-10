@@ -39,12 +39,11 @@ function getHighlighter(): Promise<CodeHighlighter> {
     highlighterPromise = createHighlighter({
       themes: ["github-dark"],
       langs: ["astro", "yaml"],
-    })
-      .catch((error) => {
-        // Allow retry if initialization fails once.
-        highlighterPromise = null;
-        throw error;
-      });
+    }).catch((error) => {
+      // Allow retry if initialization fails once.
+      highlighterPromise = null;
+      throw error;
+    });
   }
 
   return highlighterPromise;
@@ -226,7 +225,9 @@ export function initLivePreview(
           const errorMarkup = `<div class="builder-code-error">Shiki failed to load: ${escapeHtml(message)}</div>`;
 
           if (copyBtn) {
-            const existing = codeContentEl.querySelector(".builder-code-render, pre, .builder-code-error");
+            const existing = codeContentEl.querySelector(
+              ".builder-code-render, pre, .builder-code-error"
+            );
 
             if (existing) existing.remove();
             copyBtn.insertAdjacentHTML("afterend", errorMarkup);

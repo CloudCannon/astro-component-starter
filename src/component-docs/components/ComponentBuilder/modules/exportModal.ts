@@ -70,11 +70,7 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
   pageSectionCategoryField.style.display = "flex";
 
   // Update preview on input changes
-  [
-    componentNameInput,
-    pageSectionCategorySelect,
-    customCategoryInput,
-  ].forEach((el) => {
+  [componentNameInput, pageSectionCategorySelect, customCategoryInput].forEach((el) => {
     el.addEventListener("input", () => {
       updatePreview();
     });
