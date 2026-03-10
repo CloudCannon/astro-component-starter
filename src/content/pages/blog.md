@@ -15,5 +15,4 @@ pageSections:
     buttonSections: []
     colorScheme: light
     backgroundColor: base
-
 ---
