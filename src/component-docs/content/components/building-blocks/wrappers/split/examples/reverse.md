@@ -29,7 +29,4 @@ blocks:
   fixedWidth: null
   verticalAlignment: 'top'
   reverse: true
-
-
-
 ---

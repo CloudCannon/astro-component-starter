@@ -36,9 +36,15 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
   : {};
 ---
 
-<blockquote class:list={["testimonial", className]} {...htmlAttributes}>
+<blockquote
+  class:list={["testimonial", className]}
+  {...htmlAttributes}
+>
   <div class:list={["testimonial-inner", `alignment-${alignX}`]}>
-    <div class="quote" {...textDataAttributes}>
+    <div
+      class="quote"
+      {...textDataAttributes}
+    >
       <slot>
         {text && <Fragment set:html={MarkdownText} />}
       </slot>
@@ -54,14 +60,20 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
         data-prop-alt="authorName"
       />
       <cite class="author-content">
-        <strong class="name" {...authorNameDataAttributes}>
+        <strong
+          class="name"
+          {...authorNameDataAttributes}
+        >
           {authorName}
         </strong>
         {
           authorDescription && (
             <>
               <br />
-              <span class="description" {...authorDescriptionDataAttributes}>
+              <span
+                class="description"
+                {...authorDescriptionDataAttributes}
+              >
                 {authorDescription}
               </span>
             </>

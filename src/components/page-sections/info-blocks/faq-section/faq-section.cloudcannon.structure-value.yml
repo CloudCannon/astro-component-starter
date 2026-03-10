@@ -4,13 +4,7 @@ description: Section displaying frequently asked questions in an accordion forma
 value:
   _component: page-sections/info-blocks/faq-section
   heading: Frequently Asked Questions
-  headingLevel: h2
-  headingSize: lg
-  singleOpen: true
-  openFirst: false
   items: []
-  maxContentWidth: xl
-  paddingHorizontal: xl
   paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base

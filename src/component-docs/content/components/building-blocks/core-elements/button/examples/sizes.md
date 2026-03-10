@@ -17,5 +17,4 @@ blocks:
     size: lg
     text: 'Large'
     style: 'margin-inline-end: var(--spacing-sm);'
-
 ---

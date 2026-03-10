@@ -33,10 +33,4 @@ blocks:
   autoScroll: false
   slideWidthPercent: 100
   minSlideWidth: 0
-
-
-
-
-
-
 ---

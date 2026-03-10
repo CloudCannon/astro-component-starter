@@ -22,7 +22,7 @@ featureSplit:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: buttons
+      - editor_key: buttonSections
         type: array
         optional: true
       - editor_key: imageSource

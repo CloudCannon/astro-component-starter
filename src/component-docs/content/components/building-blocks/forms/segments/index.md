@@ -17,5 +17,4 @@ examples:
       - multiple
   - slugs:
       - required
-
 ---

@@ -11,6 +11,4 @@ blocks:
       level: h2
       alignX: center
       style: 'border: 1px solid var(--color-border)'
-
-
 ---

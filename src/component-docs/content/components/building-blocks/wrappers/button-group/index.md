@@ -17,5 +17,4 @@ examples:
       - alignment-center
       - alignment-end
     size: sm
-
 ---

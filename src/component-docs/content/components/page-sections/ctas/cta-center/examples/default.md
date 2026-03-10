@@ -11,5 +11,4 @@ blocks:
       variant: primary
       size: md
       link: '/start'
-
 ---

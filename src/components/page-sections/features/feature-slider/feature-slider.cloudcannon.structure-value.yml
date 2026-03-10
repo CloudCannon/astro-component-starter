@@ -9,8 +9,6 @@ value:
 preview:
   text:
     - Feature Slider
-  subtext:
-    - key: heading
   icon: view_carousel
 picker_preview:
   text: Feature Slider

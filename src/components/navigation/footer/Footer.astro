@@ -19,7 +19,10 @@ const {
 } = Astro.props;
 ---
 
-<footer class="footer" {...htmlAttributes}>
+<footer
+  class="footer"
+  {...htmlAttributes}
+>
   <CustomSection
     maxContentWidth="2xl"
     paddingHorizontal="md"
@@ -28,10 +31,18 @@ const {
   >
     <div class="footer-content">
       <div class="content-container">
-        <Image source={logoSource} alt={logoAlt} class="footer-logo" editable={false} />
+        <Image
+          source={logoSource}
+          alt={logoAlt}
+          class="footer-logo"
+          editable={false}
+        />
       </div>
       <div class="content-container">
-        <Bar navData={links} editable={false} />
+        <Bar
+          navData={links}
+          editable={false}
+        />
       </div>
     </div>
 
@@ -39,10 +50,18 @@ const {
 
     <div class="footer-content">
       <div class="content-container">
-        <Text class="footer-legal-text" text={footerText || ""} data-prop="" editable={false} />
+        <Text
+          class="footer-legal-text"
+          text={footerText || ""}
+          data-prop=""
+          editable={false}
+        />
       </div>
       <div class="content-container">
-        <ButtonGroup alignX="end" editable={false}>
+        <ButtonGroup
+          alignX="end"
+          editable={false}
+        >
           {
             socials.map((social) => (
               <Button

@@ -12,7 +12,10 @@ const {
   class:list={["embed-wrapper", className]}
   {...htmlAttributes}
 >
-  <div class:list={["embed-content", `ratio-${aspectRatio}`]} set:html={html} />
+  <div
+    class:list={["embed-content", `ratio-${aspectRatio}`]}
+    set:html={html}
+  />
 </div>
 
 <style>

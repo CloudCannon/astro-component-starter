@@ -17,5 +17,4 @@ blocks:
     - value: 'sms'
       label: 'SMS'
       checked: false
-
 ---

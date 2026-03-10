@@ -16,10 +16,16 @@ const fieldId = htmlAttributes.id || `textarea-${crypto.randomUUID()}`;
 <div class:list={["textarea", className]}>
   {
     label && (
-      <label for={fieldId} class="label">
+      <label
+        for={fieldId}
+        class="label"
+      >
         {label}
         {required && (
-          <span class="textarea-required" aria-label="required">
+          <span
+            class="textarea-required"
+            aria-label="required"
+          >
             *
           </span>
         )}
@@ -33,7 +39,8 @@ const fieldId = htmlAttributes.id || `textarea-${crypto.randomUUID()}`;
     required={required}
     aria-required={required}
     class="field"
-    {...htmlAttributes}>{value}</textarea
+    {...htmlAttributes}
+    >{value}</textarea
   >
 </div>
 

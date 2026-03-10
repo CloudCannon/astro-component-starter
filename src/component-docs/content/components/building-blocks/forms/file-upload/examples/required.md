@@ -7,5 +7,4 @@ blocks:
   name: 'document'
   accept: '.pdf,.doc,.docx'
   required: true
-
 ---

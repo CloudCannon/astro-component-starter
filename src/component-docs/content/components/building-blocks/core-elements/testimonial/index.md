@@ -16,5 +16,4 @@ examples:
   - slugs:
       - author-description
     size: sm
-
 ---

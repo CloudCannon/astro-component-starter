@@ -30,7 +30,4 @@ blocks:
   minSplitWidth: 500
   verticalAlignment: 'top'
   reverse: false
-
-
-
 ---

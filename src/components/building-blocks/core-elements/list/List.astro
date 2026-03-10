@@ -33,7 +33,10 @@ const arrayDataAttributes = effectiveChildrenProp
 if (!_component && !hasItems && !usesItemsArray) return;
 ---
 
-<div class:list={["list", className]} {...htmlAttributes}>
+<div
+  class:list={["list", className]}
+  {...htmlAttributes}
+>
   <ListTag
     role="list"
     class:list={[

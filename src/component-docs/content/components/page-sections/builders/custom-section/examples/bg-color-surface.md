@@ -10,6 +10,4 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: Surface background color
       level: h2
-
-
 ---

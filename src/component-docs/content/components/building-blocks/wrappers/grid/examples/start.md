@@ -79,11 +79,4 @@ blocks:
               level: h3
             - _component: building-blocks/core-elements/text
               text: 'It adapts to different screen sizes while maintaining alignment between grid items.'
-
-
-
-
-
-
-
 ---

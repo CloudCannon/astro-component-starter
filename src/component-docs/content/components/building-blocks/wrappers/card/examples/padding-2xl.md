@@ -12,6 +12,4 @@ blocks:
       level: h3
     - _component: building-blocks/core-elements/text
       text: 'This card uses 2xl padding for maximum spacing and dramatic visual presence.'
-
-
 ---

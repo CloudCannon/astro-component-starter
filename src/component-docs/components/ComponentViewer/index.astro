@@ -65,7 +65,10 @@ const formattedCodeCache = await Promise.all(
 );
 ---
 
-<div class="component-viewer" data-viewer-id={viewerId}>
+<div
+  class="component-viewer"
+  data-viewer-id={viewerId}
+>
   <div class:list={["previews", size && `viewer-size-${size}`]}>
     {
       component_examples.map((example: any, idx: number) => {
@@ -80,8 +83,14 @@ const formattedCodeCache = await Promise.all(
 
         return (
           <>
-            <div id={exampleId} class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}>
-              <div class="examples" style={bodyPadding}>
+            <div
+              id={exampleId}
+              class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}
+            >
+              <div
+                class="examples"
+                style={bodyPadding}
+              >
                 {blocksArray.map((block) => {
                   const componentPath = block._component;
                   const Component = components[componentPath];
@@ -96,8 +105,14 @@ const formattedCodeCache = await Promise.all(
               </div>
             </div>
 
-            <div class="code" id={`astro-code-${exampleId}`}>
-              <div class="code-header" data-theme="dark">
+            <div
+              class="code"
+              id={`astro-code-${exampleId}`}
+            >
+              <div
+                class="code-header"
+                data-theme="dark"
+              >
                 <Button
                   variant="primary"
                   text="Copy Astro Code"
@@ -116,8 +131,14 @@ const formattedCodeCache = await Promise.all(
                 style="height: 100%; padding: var(--spacing-sm);"
               />
             </div>
-            <div class="code frontmatter-code" id={`frontmatter-code-${exampleId}`}>
-              <div class="code-header" data-theme="dark">
+            <div
+              class="code frontmatter-code"
+              id={`frontmatter-code-${exampleId}`}
+            >
+              <div
+                class="code-header"
+                data-theme="dark"
+              >
                 <Button
                   variant="primary"
                   text="Copy Frontmatter Code"
@@ -145,14 +166,23 @@ const formattedCodeCache = await Promise.all(
   {
     component_examples.length > 0 && (
       <nav class="controls">
-        <div class="resize-handle" title="Drag to resize" />
+        <div
+          class="resize-handle"
+          title="Drag to resize"
+        />
         <div>
           {component_examples.length > 1 && (
             <>
-              <label for={`${viewerId}-examples`} class="visually-hidden">
+              <label
+                for={`${viewerId}-examples`}
+                class="visually-hidden"
+              >
                 Examples:
               </label>
-              <select class="example-select" id={`${viewerId}-examples`}>
+              <select
+                class="example-select"
+                id={`${viewerId}-examples`}
+              >
                 {component_examples.map((example: any, idx: number) => {
                   const exampleName = example.data.title;
                   const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;

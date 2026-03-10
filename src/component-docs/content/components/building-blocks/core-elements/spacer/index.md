@@ -4,5 +4,4 @@ overview: 'A layout utility for adding adjustable vertical spacing between conte
 examples:
   - slugs:
       - size
-
 ---

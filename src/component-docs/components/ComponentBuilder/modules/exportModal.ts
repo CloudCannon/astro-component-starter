@@ -2,7 +2,7 @@
  * Export Modal Module
  *
  * Controls the export configuration modal where the user chooses a
- * component type, category, and name before triggering the ZIP download.
+ * page-section category and name before triggering the ZIP download.
  *
  * @module exportModal
  */
@@ -63,7 +63,7 @@ export function showExportConfigModal(onExport: (config: ExportConfig) => void):
     const sanitizedName = nameValue.toLowerCase().replace(/[^a-z0-9-]/g, "-");
 
     if (pathPreview) {
-      pathPreview.textContent = `page-sections/${category}/${sanitizedName}`;
+      pathPreview.textContent = `/src/components/page-sections/${category}/${sanitizedName}`;
     }
   }
 

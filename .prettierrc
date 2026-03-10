@@ -4,7 +4,11 @@
     {
       "files": "*.astro",
       "options": {
-        "parser": "astro"
+        "parser": "astro",
+        "printWidth": 100,
+        "singleAttributePerLine": true,
+        "objectWrap": "preserve",
+        "trailingComma": "es5"
       }
     },
     {
@@ -18,6 +22,16 @@
       "files": "*.md",
       "options": {
         "singleQuote": true
+      }
+    },
+    {
+      "files": "*.mdx",
+      "options": {
+        "parser": "mdx",
+        "printWidth": 1000,
+        "objectWrap": "collapse",
+        "trailingComma": "none",
+        "embeddedLanguageFormatting": "off"
       }
     }
   ],

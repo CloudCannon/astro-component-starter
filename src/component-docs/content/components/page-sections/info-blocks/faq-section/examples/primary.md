@@ -27,6 +27,4 @@ blocks:
           size: md
   paddingVertical: 4xl
   backgroundColor: base
-
-
 ---

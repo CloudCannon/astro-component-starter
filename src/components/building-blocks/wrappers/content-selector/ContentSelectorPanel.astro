@@ -25,7 +25,10 @@ const arrayDataAttributes = effectiveChildrenProp
   : {};
 ---
 
-<div class="content-selector-item" {...htmlAttributes}>
+<div
+  class="content-selector-item"
+  {...htmlAttributes}
+>
   <input
     type="radio"
     name={groupName}
@@ -49,10 +52,25 @@ const arrayDataAttributes = effectiveChildrenProp
       class="content-selector-tab-heading"
     />
   </label>
-  <div class="content-selector-panel" id={panelId} role="tabpanel" aria-labelledby={tabLabelId}>
-    <div class="content-selector-panel-content" {...arrayDataAttributes}>
+  <div
+    class="content-selector-panel"
+    id={panelId}
+    role="tabpanel"
+    aria-labelledby={tabLabelId}
+  >
+    <div
+      class="content-selector-panel-content"
+      {...arrayDataAttributes}
+    >
       <slot>
-        {contentSections && <RenderBlock contentSections={contentSections} editable={!!effectiveChildrenProp} />}
+        {
+          contentSections && (
+            <RenderBlock
+              contentSections={contentSections}
+              editable={!!effectiveChildrenProp}
+            />
+          )
+        }
       </slot>
     </div>
   </div>

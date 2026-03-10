@@ -10,6 +10,4 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: Base background color (page background color)
       level: h2
-
-
 ---

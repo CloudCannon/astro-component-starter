@@ -19,16 +19,31 @@ const arrayDataAttributes = effectiveChildrenProp
   : {};
 ---
 
-<details class="accordion-item" open={isOpen} name={accordionName} {...htmlAttributes}>
+<details
+  class="accordion-item"
+  open={isOpen}
+  name={accordionName}
+  {...htmlAttributes}
+>
   <summary class="accordion-item-title">
     <span class="accordion-item-title-text">{title}</span>
-    <Icon name="chevron-down" size="none" class="accordion-item-icon" />
+    <Icon
+      name="chevron-down"
+      size="none"
+      class="accordion-item-icon"
+    />
   </summary>
-  <div class="accordion-item-detail" {...arrayDataAttributes}>
+  <div
+    class="accordion-item-detail"
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         contentSections && (
-          <RenderBlock contentSections={contentSections} editable={!!effectiveChildrenProp} />
+          <RenderBlock
+            contentSections={contentSections}
+            editable={!!effectiveChildrenProp}
+          />
         )
       }
     </slot>

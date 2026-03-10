@@ -21,5 +21,4 @@ blocks:
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: 'Product team reviewing plans together'
   imageRounded: true
-
 ---

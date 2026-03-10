@@ -19,5 +19,4 @@ blocks:
       - title: SKU
         text: TB-X1-2024
     alignX: center
-
 ---

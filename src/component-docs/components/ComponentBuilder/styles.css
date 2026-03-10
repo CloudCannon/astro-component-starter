@@ -1007,20 +1007,28 @@
   font-size: var(--font-size-xs);
 }
 
+.export-config-preview-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
 .export-config-preview {
   background: var(--cb-preview-bg);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-xs);
   padding: var(--spacing-md);
+
+  code {
+    display: block;
+  }
 }
 
 .export-config-preview-label {
-  color: var(--cb-preview-label-color);
-  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.05em;
-  margin-bottom: var(--spacing-sm);
-  text-transform: uppercase;
+  margin-bottom: 0;
 }
 
 .export-config-field {

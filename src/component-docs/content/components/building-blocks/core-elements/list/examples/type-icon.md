@@ -14,5 +14,4 @@ blocks:
   alignX: start
   size: md
   listType: icon
-
 ---

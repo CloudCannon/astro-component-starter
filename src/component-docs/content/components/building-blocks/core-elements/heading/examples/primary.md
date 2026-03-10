@@ -9,5 +9,4 @@ blocks:
   alignX: start
   iconName: null
   iconPosition: before
-
 ---

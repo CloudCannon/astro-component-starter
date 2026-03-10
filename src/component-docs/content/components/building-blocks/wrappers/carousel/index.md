@@ -20,5 +20,4 @@ examples:
   - slugs:
       - width-percentage
     size: lg
-
 ---

@@ -16,5 +16,4 @@ blocks:
       variant: secondary
       size: md
       link: '/docs'
-
 ---

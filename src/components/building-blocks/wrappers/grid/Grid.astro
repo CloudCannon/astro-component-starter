@@ -43,8 +43,15 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div class:list={["grid", className]} {...htmlAttributes}>
-  <div {...arrayDataAttributes} class:list={["grid-inner", `layout-${layout}`]} style={gridStyles}>
+<div
+  class:list={["grid", className]}
+  {...htmlAttributes}
+>
+  <div
+    {...arrayDataAttributes}
+    class:list={["grid-inner", `layout-${layout}`]}
+    style={gridStyles}
+  >
     <slot>
       {
         items?.map((item: ItemProps) => (

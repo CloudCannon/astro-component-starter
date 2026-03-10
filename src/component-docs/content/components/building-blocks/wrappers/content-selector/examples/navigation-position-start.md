@@ -52,6 +52,4 @@ blocks:
           link: #
           variant: secondary
           size: md
-
-
 ---

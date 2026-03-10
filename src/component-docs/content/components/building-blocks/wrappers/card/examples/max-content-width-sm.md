@@ -10,6 +10,4 @@ blocks:
       text: This card has sm max content width.
       level: h3
       alignX: center
-
-
 ---

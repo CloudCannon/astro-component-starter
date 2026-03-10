@@ -14,7 +14,10 @@ const fieldId = htmlAttributes.id || `slider-${crypto.randomUUID()}`;
 ---
 
 <div class:list={["slider", className]}>
-  <label class="slider-container" for={fieldId}>
+  <label
+    class="slider-container"
+    for={fieldId}
+  >
     <span class="slider-switch">
       <input
         type="checkbox"
@@ -34,7 +37,10 @@ const fieldId = htmlAttributes.id || `slider-${crypto.randomUUID()}`;
         <span class="slider-label">
           {label}
           {required && (
-            <span class="slider-required" aria-label="required">
+            <span
+              class="slider-required"
+              aria-label="required"
+            >
               *
             </span>
           )}

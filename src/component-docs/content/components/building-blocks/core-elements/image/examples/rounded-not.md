@@ -6,5 +6,4 @@ blocks:
   source: /src/assets/images/component-docs/quiet-street.jpg
   alt: 'Quiet Street'
   style: 'max-width: 500px;'
-
 ---

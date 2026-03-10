@@ -19,5 +19,4 @@ blocks:
       - title: Sunday
         text: Closed
     alignX: start
-
 ---

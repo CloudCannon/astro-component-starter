@@ -18,5 +18,4 @@ blocks:
       variant: secondary
       size: md
       link: '/invite'
-
 ---

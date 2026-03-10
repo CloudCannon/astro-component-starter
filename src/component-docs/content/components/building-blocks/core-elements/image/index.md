@@ -22,5 +22,4 @@ examples:
     slugs:
       - rounded
       - rounded-not
-
 ---

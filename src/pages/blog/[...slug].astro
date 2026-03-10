@@ -57,7 +57,11 @@ const date = post.data.date.toLocaleDateString("en-US", {
 });
 ---
 
-<Page title={post.data.title} description={post.data.description} image={post.data.image}>
+<Page
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image}
+>
   <CustomSection
     maxContentWidth="xl"
     paddingHorizontal="lg"
@@ -74,7 +78,12 @@ const date = post.data.date.toLocaleDateString("en-US", {
       {date} • {post.data.author}
     </SimpleText>
 
-    <Heading data-prop="title" level="h1" size="2xl" style="margin-bottom: var(--spacing-xs);">
+    <Heading
+      data-prop="title"
+      level="h1"
+      size="2xl"
+      style="margin-bottom: var(--spacing-xs);"
+    >
       {post.data.title}
     </Heading>
 
@@ -105,7 +114,11 @@ const date = post.data.date.toLocaleDateString("en-US", {
       )
     }
 
-    <div class="post" data-editable="text" data-prop="@content">
+    <div
+      class="post"
+      data-editable="text"
+      data-prop="@content"
+    >
       <Content components={mdxComponents} />
     </div>
   </CustomSection>

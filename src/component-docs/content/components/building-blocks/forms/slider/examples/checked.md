@@ -6,5 +6,4 @@ blocks:
   label: 'Enable email notifications'
   name: 'email_notifications'
   checked: true
-
 ---

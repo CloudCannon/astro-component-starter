@@ -49,7 +49,10 @@ if (!_component && !hasText && !hasSlotContent) return;
         />
       )
     }
-    <span class="heading-text" {...textDataAttributes}>
+    <span
+      class="heading-text"
+      {...textDataAttributes}
+    >
       <slot>
         {text && <Fragment set:html={MarkdownText} />}
       </slot>

@@ -22,16 +22,36 @@ const contentSections = props.frontmatter?.contentSections || [];
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light">
+<html
+  lang="en"
+  data-theme="light"
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="viewport"
+      content="width=device-width"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/favicon.svg"
+    />
+    <meta
+      name="generator"
+      content={Astro.generator}
+    />
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
-    {import.meta.env.DEV ? <script type="module" src="/@vite/client" /> : null}
+    {
+      import.meta.env.DEV ? (
+        <script
+          type="module"
+          src="/@vite/client"
+        />
+      ) : null
+    }
     <title>{pageTitle}</title>
     <slot name="head" />
   </head>
@@ -45,7 +65,10 @@ const contentSections = props.frontmatter?.contentSections || [];
     >
       <SidebarNavLayout />
       <main class="main">
-        <div data-editable="array" data-children-prop="contentSections">
+        <div
+          data-editable="array"
+          data-children-prop="contentSections"
+        >
           <RenderBlock contentSections={contentSections} />
         </div>
         <slot />

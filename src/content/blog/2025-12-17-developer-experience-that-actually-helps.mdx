@@ -1,12 +1,14 @@
 ---
-title: "Developer Experience Without the Hype"
-description: "Good DX means less thinking, not more tooling."
-date: 2025-12-17
-author: "Tom Rodriguez"
-image: "/src/assets/images/component-docs/sheep.jpg"
-tags: ["Developer Experience", "Workflow"]
+_schema: default
+title: Developer Experience Without the Hype
+description: Good DX means less thinking, not more tooling.
+date: 2025-12-17T00:00:00Z
+author: Tom Rodriguez
+image: /src/assets/images/component-docs/sheep.jpg
+tags:
+  - Developer Experience
+  - Workflow
 ---
-
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
@@ -14,13 +16,10 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.
 
 <TestimonialSection
-  authorDescription="CEO, Tech Innovations"
-  authorImage="/src/assets/images/component-docs/profile.jpg"
-  authorName="Richard Johnson"
-  paddingVertical="sm"
-  text="This framework has completely changed the way we build. The sites come together fast, they run
+text=
+"This framework has completely changed the way we build. The sites come together fast, they run
   even faster, and the whole process feels effortless. I couldn't be happier with the results."
-  class="wide"
+ authorName="Richard Johnson" authorDescription="CEO, Tech Innovations" authorImage="/src/assets/images/component-docs/profile.jpg" paddingVertical="sm" class="wide"
 />
 
 Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.
@@ -29,22 +28,4 @@ At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praese
 
 Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
 
-<CtaForm
-  formAction="./"
-  heading="Get in touch with us"
-  imageAlt="Contact us."
-  imageSource="/src/assets/images/component-docs/sunset.jpg"
-  subtext="Fill out the form below and we'll get back to you as soon as possible."
-  rounded="true"
-  colorScheme="dark"
-  backgroundColor="base"
-  class="wide"
-  style="margin-top: var(--spacing-xl);"
->
-  <Form action="./">
-    <Input label="Name" name="name" required type="text" />
-    <Input label="Email" name="email" required type="email" />
-    <Textarea label="Message" name="message" required />
-    <Submit variant="primary">Send message</Submit>
-  </Form>
-</CtaForm>
+<CtaForm heading="Get in touch with us" subtext="Fill out the form below and we'll get back to you as soon as possible." formAction="./" formBlocks={[{ _component: "building-blocks/forms/input", label: "Name", name: "name", type: "text", placeholder: null, required: false, value: null }, { _component: "building-blocks/forms/input", label: "email", name: "email", type: "email", placeholder: null, required: false, value: null }, { _component: "building-blocks/forms/textarea", label: "Message", name: "message", required: false, placeholder: null, value: null }, { _component: "building-blocks/forms/submit", text: "Send Message", variant: "primary", size: "md", iconName: null, iconPosition: "before", hideText: false, disabled: false }]} imageSource="/src/assets/images/component-docs/sunset.jpg" imageAlt="Contact us." colorScheme="dark" backgroundColor="base" rounded={true} class="wide" style="margin-top: var(--spacing-xl);"/>

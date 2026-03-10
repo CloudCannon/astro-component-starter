@@ -19,6 +19,4 @@ blocks:
       alt: 'Dunedin Cliff'
       aspectRatio: widescreen
   style: 'max-width: 400px; margin-inline: auto;'
-
-
 ---

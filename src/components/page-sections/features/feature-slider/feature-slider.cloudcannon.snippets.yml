@@ -4,24 +4,10 @@ featureSlider:
   preview:
     text:
       - Feature Slider
-    subtext:
-      - key: heading
     icon: view_carousel
   definitions:
     component_name: FeatureSlider
     named_args:
-      - editor_key: eyebrow
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: heading
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: subtext
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: slides
         type: array
       - editor_key: colorScheme

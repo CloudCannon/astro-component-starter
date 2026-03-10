@@ -33,7 +33,4 @@ blocks:
   fixedWidth: null
   verticalAlignment: 'stretch'
   reverse: false
-
-
-
 ---

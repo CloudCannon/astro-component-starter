@@ -25,6 +25,4 @@ blocks:
   showBeforeAfter: false
   beforeContentSections: []
   afterContentSections: []
-
-
 ---

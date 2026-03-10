@@ -14,29 +14,8 @@ faqSection:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: headingLevel
-        type: number
-        optional: true
-      - editor_key: headingSize
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: singleOpen
-        type: boolean
-        optional: true
-      - editor_key: openFirst
-        type: boolean
-        optional: true
       - editor_key: items
         type: array
-      - editor_key: maxContentWidth
-        type: string
-        optional: true
-        remove_empty: true
-      - editor_key: paddingHorizontal
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: paddingVertical
         type: string
         optional: true

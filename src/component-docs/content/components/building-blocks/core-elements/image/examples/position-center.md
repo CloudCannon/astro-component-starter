@@ -9,5 +9,4 @@ blocks:
   positionVertical: center
   positionHorizontal: center
   style: 'max-width: 400px;'
-
 ---

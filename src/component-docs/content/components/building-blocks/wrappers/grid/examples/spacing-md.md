@@ -44,11 +44,4 @@ blocks:
               level: h3
             - _component: building-blocks/core-elements/text
               text: 'Works well for most content layouts.'
-
-
-
-
-
-
-
 ---

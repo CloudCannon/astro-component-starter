@@ -34,7 +34,10 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div class:list={["accordion"]} {...htmlAttributes}>
+<div
+  class:list={["accordion"]}
+  {...htmlAttributes}
+>
   <div {...arrayDataAttributes}>
     <slot>
       {

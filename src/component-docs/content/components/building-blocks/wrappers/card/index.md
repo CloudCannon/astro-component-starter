@@ -65,5 +65,4 @@ examples:
       - before-content
       - after-content
     size: md
-
 ---

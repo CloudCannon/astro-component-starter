@@ -7,5 +7,4 @@ blocks:
     authorName: 'Riley James'
     authorDescription: 'VP of Product, TechCompany'
     alignX: start
-
 ---

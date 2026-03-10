@@ -18,5 +18,4 @@ examples:
   - title: Single Open
     slugs:
       - single-open
-
 ---

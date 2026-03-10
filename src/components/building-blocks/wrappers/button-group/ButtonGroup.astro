@@ -41,11 +41,17 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
   class:list={["button-group", className]}
   {...htmlAttributes}
 >
-  <div class:list={["button-group__items", direction === "column" ? "column" : "row", alignClass]} {...arrayDataAttributes}>
+  <div
+    class:list={["button-group__items", direction === "column" ? "column" : "row", alignClass]}
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         buttonSections && buttonSections.length > 0 && (
-          <Component contentSections={buttonSections} editable={!!effectiveChildrenProp} />
+          <Component
+            contentSections={buttonSections}
+            editable={!!effectiveChildrenProp}
+          />
         )
       }
     </slot>

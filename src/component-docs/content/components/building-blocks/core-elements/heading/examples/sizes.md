@@ -34,5 +34,4 @@ blocks:
     text: This h1 heading size is 4xl
     level: h1
     size: 4xl
-
 ---

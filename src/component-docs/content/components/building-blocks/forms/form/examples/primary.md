@@ -38,5 +38,4 @@ blocks:
     - _component: 'building-blocks/forms/submit'
       text: 'Send Message'
       variant: 'primary'
-
 ---

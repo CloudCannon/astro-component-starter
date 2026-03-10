@@ -8,5 +8,4 @@ blocks:
   type: 'text'
   placeholder: 'Enter your full name'
   required: true
-
 ---

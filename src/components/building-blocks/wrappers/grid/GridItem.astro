@@ -16,10 +16,23 @@ const arrayDataAttributes = effectiveChildrenProp
   : {};
 ---
 
-<div class:list={["grid-item", className]} {...htmlAttributes}>
-  <div class="grid-item-content" {...arrayDataAttributes}>
+<div
+  class:list={["grid-item", className]}
+  {...htmlAttributes}
+>
+  <div
+    class="grid-item-content"
+    {...arrayDataAttributes}
+  >
     <slot>
-      {contentSections && <RenderBlock contentSections={contentSections} editable={!!effectiveChildrenProp} />}
+      {
+        contentSections && (
+          <RenderBlock
+            contentSections={contentSections}
+            editable={!!effectiveChildrenProp}
+          />
+        )
+      }
     </slot>
   </div>
 </div>

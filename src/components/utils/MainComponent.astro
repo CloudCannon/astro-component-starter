@@ -4,6 +4,11 @@ import Components from "@components/utils/renderBlock.astro";
 const { sections } = Astro.props;
 ---
 
-<div data-pagefind-body data-editable="array" data-prop="sections" data-component-key="_component">
+<div
+  data-pagefind-body
+  data-editable="array"
+  data-prop="sections"
+  data-component-key="_component"
+>
   <Components contentSections={sections} />
 </div>

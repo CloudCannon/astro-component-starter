@@ -17,5 +17,4 @@ blocks:
       variant: tertiary
       size: md
       link: '/chat'
-
 ---

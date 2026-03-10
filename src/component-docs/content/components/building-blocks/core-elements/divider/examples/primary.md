@@ -8,5 +8,4 @@ blocks:
     paddingVertical: 'md'
   - _component: 'building-blocks/core-elements/text'
     text: 'There is a **divider** above this text.'
-
 ---

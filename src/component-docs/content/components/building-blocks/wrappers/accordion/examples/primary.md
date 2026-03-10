@@ -19,6 +19,4 @@ blocks:
   label: ''
   openFirst: false
   singleOpen: false
-
-
 ---

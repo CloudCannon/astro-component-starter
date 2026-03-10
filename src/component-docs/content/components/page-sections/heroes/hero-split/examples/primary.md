@@ -20,5 +20,4 @@ blocks:
       variant: 'secondary'
       size: 'md'
       link: '/learn'
-
 ---

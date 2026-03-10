@@ -21,6 +21,4 @@ blocks:
   reverse: false
   label: ''
   minSplitWidth: 700
-
-
 ---

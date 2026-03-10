@@ -27,17 +27,26 @@ const inputType = multiple ? "checkbox" : "radio";
 >
   {
     title && (
-      <legend id={`${groupId}-legend`} class="legend">
+      <legend
+        id={`${groupId}-legend`}
+        class="legend"
+      >
         {title}
         {required && (
-          <span class="segments-required" aria-label="required">
+          <span
+            class="segments-required"
+            aria-label="required"
+          >
             *
           </span>
         )}
       </legend>
     )
   }
-  <div class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]} role="presentation">
+  <div
+    class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}
+    role="presentation"
+  >
     {
       options.map((option, index: number) => (
         <label class="segments-option">
@@ -59,7 +68,12 @@ const inputType = multiple ? "checkbox" : "radio";
             title={iconOnly && option.label ? option.label : undefined}
           >
             {option.icon && (
-              <Icon name={option.icon} size="none" class="segment-icon" aria-hidden="true" />
+              <Icon
+                name={option.icon}
+                size="none"
+                class="segment-icon"
+                aria-hidden="true"
+              />
             )}
             {option.label && !iconOnly && <span class="segment-label">{option.label}</span>}
           </span>

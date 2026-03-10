@@ -16,10 +16,16 @@ const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
 <div class:list={["file-upload", className]}>
   {
     label && (
-      <label for={fieldId} class="label">
+      <label
+        for={fieldId}
+        class="label"
+      >
         {label}
         {required && (
-          <span class="file-upload-required" aria-label="required">
+          <span
+            class="file-upload-required"
+            aria-label="required"
+          >
             *
           </span>
         )}

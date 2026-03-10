@@ -4,5 +4,4 @@ overview: 'A simple visual separator for dividing content sections. Renders a ho
 examples:
   - slugs:
       - padding
-
 ---

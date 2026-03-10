@@ -30,5 +30,4 @@ blocks:
     text: "There is a '3xl' spacer below."
   - _component: 'building-blocks/core-elements/spacer'
     size: 3xl
-
 ---

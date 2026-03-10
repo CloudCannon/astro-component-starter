@@ -7,5 +7,4 @@ blocks:
   prefix: $
   suffix: +
   alignX: center
-
 ---

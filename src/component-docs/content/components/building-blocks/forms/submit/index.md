@@ -9,5 +9,4 @@ examples:
       - sizes
   - slugs:
       - icons
-
 ---

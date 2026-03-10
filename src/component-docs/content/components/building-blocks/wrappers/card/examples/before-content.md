@@ -19,6 +19,4 @@ blocks:
     - _component: building-blocks/core-elements/text
       text: "The image above is placed in the beforeContentSections area, which sits outside the card's internal padding. This is perfect for hero images or visual headers."
   style: 'max-width: 400px; margin-inline: auto;'
-
-
 ---

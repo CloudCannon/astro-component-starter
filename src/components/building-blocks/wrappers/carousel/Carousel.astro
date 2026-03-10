@@ -72,9 +72,16 @@ if (!_component && !hasSlides && !hasSlotContent) return;
   aria-label="Carousel"
   {...htmlAttributes}
 >
-  <div class="carousel-inner" style={carouselStyles} {...dataAttributes}>
+  <div
+    class="carousel-inner"
+    style={carouselStyles}
+    {...dataAttributes}
+  >
     <div class="viewport">
-      <div class="track" {...arrayDataAttributes}>
+      <div
+        class="track"
+        {...arrayDataAttributes}
+      >
         <slot>
           {
             slides?.map((slide: SlideProps, index: number) => (
