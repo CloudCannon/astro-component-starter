@@ -15,20 +15,6 @@ Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
 
 Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur.
 
-Here's a typical pattern:
-
-```javascript
-// accordion.js - only loads when accordion is on the page
-export function initAccordion(element) {
-  const button = element.querySelector("button");
-  const content = element.querySelector(".content");
-
-  button.addEventListener("click", () => {
-    content.classList.toggle("is-open");
-  });
-}
-```
-
 Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores.
 
 <Image source="/src/assets/images/component-docs/castle.jpg" rounded={true} aspectRatio="landscape" alt="JavaScript architecture illustration" />
