@@ -21,7 +21,7 @@ pageSections:
     imageAspectRatio: portrait
     buttonSections: []
     reverse: true
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
     paddingVertical: 4xl
   - _component: page-sections/info-blocks/faq-section
@@ -63,7 +63,7 @@ pageSections:
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 4xl
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: none
   - _component: page-sections/builders/custom-section
     label: ''

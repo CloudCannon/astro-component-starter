@@ -11,7 +11,7 @@ pageSections:
       courtesy of <a href="https://pagefind.app/" target="_blank"
       rel="noopener">Pagefind</a> 💙)
     buttonSections: []
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
     paddingVertical: 4xl
   - _component: page-sections/builders/custom-section
@@ -47,7 +47,7 @@ pageSections:
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 2xl
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
     backgroundImage:
       source: ''

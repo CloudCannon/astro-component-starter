@@ -13,6 +13,6 @@ pageSections:
       to be populated with genuine posts once your content strategy moves beyond
       placeholder text.
     buttonSections: []
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
 ---

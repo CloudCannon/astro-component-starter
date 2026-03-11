@@ -17,7 +17,7 @@ value:
       variant: primary
       size: md
   reverse: false
-  colorScheme: light
+  colorScheme: inherit
   backgroundColor: base
   rounded: false
 preview:

@@ -26,7 +26,7 @@ pageSections:
         iconPosition: before
         variant: secondary
         size: md
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/features/feature-split
     eyebrow: Built for Astro
@@ -41,7 +41,7 @@ pageSections:
     imageAspectRatio: none
     imageRounded: false
     reverse: false
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/features/feature-split
     eyebrow: CloudCannon Ready
@@ -57,7 +57,7 @@ pageSections:
     imageAspectRatio: none
     imageRounded: false
     reverse: true
-    colorScheme:
+    colorScheme: inherit
     backgroundColor:
     paddingVertical: lg
   - _component: page-sections/features/feature-split
@@ -73,7 +73,7 @@ pageSections:
     imageAspectRatio: none
     imageRounded: false
     reverse: false
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/features/feature-split
     eyebrow: Documentation
@@ -88,7 +88,7 @@ pageSections:
     imageAspectRatio: none
     imageRounded: false
     reverse: true
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/features/feature-grid
     eyebrow: Principles
@@ -128,7 +128,7 @@ pageSections:
           designs without a fight.
         iconName: paint-brush
         iconColor: pink
-    colorScheme: light
+    colorScheme: inherit
     backgroundColor: surface
     align: center
   - _component: page-sections/ctas/cta-center
