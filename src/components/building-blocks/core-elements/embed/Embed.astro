@@ -7,6 +7,9 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const slot = await Astro.slots.render("default");
+const content = slot || html;
 ---
 
 <div
@@ -15,7 +18,7 @@ const {
 >
   <div
     class:list={["embed-content", `ratio-${aspectRatio}`]}
-    set:html={html}
+    set:html={content}
   />
 </div>
 
