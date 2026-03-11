@@ -54,6 +54,18 @@ export default defineConfig({
     editableRegions(),
     icon({
       iconDir: path.resolve(__dirname, "src/icons"),
+      svgoOptions: {
+        plugins: [
+          {
+            name: "preset-default",
+            params: {
+              overrides: {
+                cleanupIDs: false,
+              },
+            },
+          },
+        ],
+      },
     }),
     sitemap({
       filter: (page) => {
