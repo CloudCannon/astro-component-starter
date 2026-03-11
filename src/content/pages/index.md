@@ -157,5 +157,4 @@ pageSections:
     colorScheme: dark
     backgroundColor: surface
     rounded: false
-description: ''
 ---
