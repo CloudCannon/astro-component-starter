@@ -34,7 +34,7 @@
     "@cloudcannon/editable-regions": "^0.0.12",
     "@justinribeiro/lite-youtube": "^1.9.0",
     "@types/js-yaml": "^4.0.9",
-    "astro": "^6.0.1",
+    "astro": "^6.0.5",
     "astro-icon": "^1.1.5",
     "astro-seo": "^1.1.0",
     "embla-carousel": "^8.6.0",
