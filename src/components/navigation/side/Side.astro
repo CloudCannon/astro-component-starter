@@ -62,7 +62,7 @@ function hasCurrentChild(item) {
                 tabindex="0"
                 aria-current={isCurrent ? "page" : undefined}
               >
-                {item.name}
+                <span class="nav-item-label">{item.name}</span>
                 <span class="nav-item-icon">
                   <Icon
                     name="chevron-right"
@@ -107,7 +107,7 @@ function hasCurrentChild(item) {
                             tabindex="0"
                             aria-current={childIsCurrent ? "page" : undefined}
                           >
-                            {child.name}
+                            <span class="nav-item-label">{child.name}</span>
                             <span class="nav-item-icon">
                               <Icon
                                 name="chevron-right"
@@ -136,7 +136,7 @@ function hasCurrentChild(item) {
                                           isCurrentPage(grandChild) ? "page" : undefined
                                         }
                                       >
-                                        {grandChild.name}
+                                        <span class="nav-item-label">{grandChild.name}</span>
                                       </a>
                                     </li>
                                   ))
@@ -152,7 +152,7 @@ function hasCurrentChild(item) {
                             href={child.path || "#"}
                             aria-current={childIsCurrent ? "page" : undefined}
                           >
-                            {child.name}
+                            <span class="nav-item-label">{child.name}</span>
                           </a>
                         </li>
                       );
@@ -169,7 +169,7 @@ function hasCurrentChild(item) {
                 href={item.path || "#"}
                 aria-current={isCurrent ? "page" : undefined}
               >
-                {item.name}
+                <span class="nav-item-label">{item.name}</span>
               </a>
             </li>
           );
@@ -294,13 +294,14 @@ function hasCurrentChild(item) {
               color: var(--color-text-strong);
             }
           }
-
-          &[aria-current="page"] {
-            text-decoration: underline dotted;
-            text-decoration-color: var(--color-text-muted);
-            text-underline-offset: 3px;
-          }
         }
+      }
+
+      .nav-item a[aria-current="page"] .nav-item-label,
+      .nav-item .nav-item-trigger[aria-current="page"] .nav-item-label {
+        text-decoration: underline dotted;
+        text-decoration-color: var(--color-text-muted);
+        text-underline-offset: 3px;
       }
 
       .nav-item-toggle {
