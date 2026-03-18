@@ -73,9 +73,11 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
 <style>
   @layer components {
     .button {
-      display: contents;
+      display: inline-flex;
+      max-width: 100%;
+      vertical-align: middle;
 
-      .button-inner {
+      > .button-inner {
         align-items: center;
         background-color: var(--color-bg-surface);
         border: 1px solid var(--color-border);
@@ -95,7 +97,6 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
         transition-duration: var(--animation-normal);
         transition-property: background-color, color, border-color;
         transition-timing-function: ease-in-out;
-        vertical-align: middle;
 
         &:hover {
           background-color: var(--color-bg-muted);
