@@ -63,6 +63,92 @@ if (!_component && !hasItems && !hasSlotContent) return;
   </div>
 </section>
 
+<script>
+  import { onPageLoad } from "@components/utils/onPageLoad";
+
+  function updatePanelAriaState(input: HTMLInputElement, isSelected: boolean) {
+    const tab = input.nextElementSibling;
+    const panel = tab?.nextElementSibling;
+
+    if (!(tab instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
+
+    tab.setAttribute("aria-selected", isSelected.toString());
+    panel.setAttribute("aria-hidden", (!isSelected).toString());
+  }
+
+  function syncContentSelectorAriaState(contentSelector: HTMLElement) {
+    const inputs = Array.from(
+      contentSelector.querySelectorAll<HTMLInputElement>(".content-selector-input")
+    );
+
+    if (!inputs.length) return;
+
+    let selectedInput = inputs.find((input) => input.checked);
+
+    if (!selectedInput) {
+      [selectedInput] = inputs;
+      selectedInput.checked = true;
+    }
+
+    inputs.forEach((input) => {
+      updatePanelAriaState(input, input === selectedInput);
+    });
+  }
+
+  function handleInputChange(event: Event) {
+    const input = event.currentTarget;
+
+    if (!(input instanceof HTMLInputElement)) return;
+
+    const contentSelector = input.closest(".content-selector-items");
+
+    if (!(contentSelector instanceof HTMLElement)) return;
+
+    syncContentSelectorAriaState(contentSelector);
+  }
+
+  function handleTabKeydown(event: Event) {
+    if (!(event instanceof KeyboardEvent)) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+
+    event.preventDefault();
+
+    const tab = event.currentTarget;
+
+    if (!(tab instanceof HTMLLabelElement)) return;
+
+    const inputId = tab.getAttribute("for");
+    const input = inputId ? document.getElementById(inputId) : null;
+
+    if (!(input instanceof HTMLInputElement)) return;
+
+    input.checked = true;
+    input.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function initContentSelectors() {
+    document.querySelectorAll(".content-selector-items").forEach((contentSelector) => {
+      if (!(contentSelector instanceof HTMLElement)) return;
+
+      syncContentSelectorAriaState(contentSelector);
+
+      if (contentSelector.dataset.contentSelectorInitialized === "true") return;
+
+      contentSelector.querySelectorAll(".content-selector-input").forEach((input) => {
+        input.addEventListener("change", handleInputChange);
+      });
+
+      contentSelector.querySelectorAll(".content-selector-tab").forEach((tab) => {
+        tab.addEventListener("keydown", handleTabKeydown);
+      });
+
+      contentSelector.dataset.contentSelectorInitialized = "true";
+    });
+  }
+
+  onPageLoad(initContentSelectors);
+</script>
+
 <style>
   @layer components {
     .content-selector {
@@ -110,7 +196,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
 
         &.nav-top {
-          border-bottom-width: var(--content-selector-border-width);
           display: flex;
           flex-wrap: wrap;
 
@@ -119,11 +204,16 @@ if (!_component && !hasItems && !hasSlotContent) return;
             width: fit-content;
 
             &::before {
+              background: var(--color-bg-muted);
               height: var(--content-selector-border-width);
               inset-block: 100%;
               inset-inline-start: 0;
               width: 100%;
             }
+          }
+
+          :global(.content-selector-input:checked + .content-selector-tab)::before {
+            background: var(--color-border-strong);
           }
 
           :global(.content-selector-panel) {

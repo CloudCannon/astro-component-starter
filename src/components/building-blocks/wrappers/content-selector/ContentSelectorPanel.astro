@@ -46,6 +46,8 @@ const arrayDataAttributes = effectiveChildrenProp
     for={tabId}
     role="tab"
     aria-controls={panelId}
+    aria-selected={checked ? "true" : "false"}
+    tabindex="0"
   >
     <Heading
       text={title}
@@ -73,6 +75,7 @@ const arrayDataAttributes = effectiveChildrenProp
     id={panelId}
     role="tabpanel"
     aria-labelledby={tabLabelId}
+    aria-hidden={checked ? "false" : "true"}
   >
     <div
       class="content-selector-panel-content"
