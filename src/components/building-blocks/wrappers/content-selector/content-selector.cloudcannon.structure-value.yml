@@ -36,6 +36,14 @@ _structures:
           title:
             type: text
             comment: The heading for the content panel.
+          subText:
+            type: text
+            comment: Optional supporting text shown beneath the item heading.
+          iconName:
+            comment: The name of the icon to display.
+            type: select
+            options:
+              values: _select_data.icons
           contentSections:
             type: array
             options:

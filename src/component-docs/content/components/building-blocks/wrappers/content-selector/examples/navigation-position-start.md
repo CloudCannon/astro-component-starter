@@ -6,8 +6,8 @@ blocks:
   navigationPosition: start
   items:
     - title: FAQ
-      sub_text: Common questions
-      icon_name: question-mark-circle
+      subText: Common questions
+      iconName: question-mark-circle
       contentSections:
         - _component: building-blocks/core-elements/heading
           text: 'Frequently asked questions'
@@ -21,8 +21,8 @@ blocks:
           alignX: start
           size: md
     - title: Shipping
-      sub_text: How we deliver
-      icon_name: truck
+      subText: How we deliver
+      iconName: truck
       contentSections:
         - _component: building-blocks/core-elements/text
           text: |
@@ -40,8 +40,8 @@ blocks:
           alignX: start
           size: md
     - title: Returns
-      sub_text: Easy and fair
-      icon_name: arrow-path
+      subText: Easy and fair
+      iconName: arrow-path
       contentSections:
         - _component: building-blocks/core-elements/text
           text: '30‑day returns. Unused items only. Full refund once received.'

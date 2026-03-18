@@ -81,12 +81,9 @@ if (!_component && !hasText && !hasSlotContent) return;
 
         :global(.heading-icon) {
           bottom: 0.1em;
-          margin-inline-end: 0.2em;
+          display: inline-block;
           position: relative;
-
-          &:global(.heading-icon-after) {
-            margin-inline: 0.2em 0;
-          }
+          vertical-align: middle;
         }
 
         &.size-xs {
