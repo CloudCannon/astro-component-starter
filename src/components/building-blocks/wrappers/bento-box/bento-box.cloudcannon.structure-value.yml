@@ -39,26 +39,26 @@ _structures:
             type: select
             options:
               values:
-                - id: 1
+                - id: "1"
                   name: 1 Column
-                - id: 2
+                - id: "2"
                   name: 2 Columns
-                - id: 3
+                - id: "3"
                   name: 3 Columns
-                - id: 4
+                - id: "4"
                   name: 4 Columns
           rowSpan:
             comment: Number of rows this item spans.
             type: select
             options:
               values:
-                - id: 1
+                - id: "1"
                   name: 1 Row
-                - id: 2
+                - id: "2"
                   name: 2 Rows
-                - id: 3
+                - id: "3"
                   name: 3 Rows
-                - id: 4
+                - id: "4"
                   name: 4 Rows
           contentSections:
             type: array

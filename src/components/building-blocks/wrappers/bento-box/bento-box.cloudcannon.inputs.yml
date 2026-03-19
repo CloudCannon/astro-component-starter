@@ -6,11 +6,11 @@ columns:
   type: select
   options:
     values:
-      - id: 2
+      - id: "2"
         name: 2 Columns
-      - id: 3
+      - id: "3"
         name: 3 Columns
-      - id: 4
+      - id: "4"
         name: 4 Columns
 minRowHeight:
   comment: The minimum height for each row in pixels.
