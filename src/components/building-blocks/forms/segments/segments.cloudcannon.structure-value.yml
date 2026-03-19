@@ -3,7 +3,7 @@ icon: radio_button_partial
 description: Segmented control form field with connected buttons.
 value:
   _component: building-blocks/forms/segments
-  title: null
+  title: My Segments
   name: my_segments
   required: false
   options: []

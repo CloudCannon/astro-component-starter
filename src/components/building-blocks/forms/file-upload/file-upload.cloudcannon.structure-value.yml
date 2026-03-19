@@ -3,8 +3,8 @@ icon: upload
 description: Form field for uploading files.
 value:
   _component: building-blocks/forms/file-upload
-  label: null
-  name: null
+  label: My File Upload
+  name: my_file_upload
   required: false
   accept: null
   multiple: false

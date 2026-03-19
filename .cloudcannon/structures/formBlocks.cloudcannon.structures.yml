@@ -4,3 +4,5 @@ formBlocks:
   values_from_glob:
     - /src/components/building-blocks/forms/**/*.cloudcannon.structure-value.yml
     - "!/src/components/building-blocks/forms/form/form.cloudcannon.structure-value.yml"
+    - "!/src/components/building-blocks/forms/segments/segments.cloudcannon.structure-value.yml"
+    - "!/src/components/building-blocks/forms/slider/slider.cloudcannon.structure-value.yml"
