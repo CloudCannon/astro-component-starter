@@ -14,6 +14,7 @@
   --font-size-2xl: 1.625rem;
   --font-size-3xl: 1.875rem;
   --font-size-4xl: 2.25rem;
+  --font-size-5xl: 2.625rem;
 
   --font-size-heading-xs: 1.125rem;
   --font-size-heading-sm: 1.375rem;
@@ -23,6 +24,7 @@
   --font-size-heading-2xl: 3.75rem;
   --font-size-heading-3xl: 4.625rem;
   --font-size-heading-4xl: 5.5rem;
+  --font-size-heading-5xl: 6.375rem;
 
   --font-weight-normal: 400;
   --font-weight-semibold: 600;
