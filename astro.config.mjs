@@ -85,6 +85,7 @@ export default defineConfig({
     },
     css: {
       devSourcemap: true,
+      transformer: "lightningcss",
     },
     resolve: {
       alias: {

@@ -20,8 +20,7 @@ const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
     if (
       mutation.type === "attributes" &&
-      (mutation.attributeName === "data-col-span" ||
-        mutation.attributeName === "data-row-span")
+      (mutation.attributeName === "data-col-span" || mutation.attributeName === "data-row-span")
     ) {
       syncBentoBoxSpans(mutation.target);
     }
@@ -34,9 +33,7 @@ const observer = new MutationObserver((mutations) => {
           syncBentoBoxSpans(node);
         }
 
-        for (const child of node.querySelectorAll(
-          "[data-col-span], [data-row-span]",
-        )) {
+        for (const child of node.querySelectorAll("[data-col-span], [data-row-span]")) {
           syncBentoBoxSpans(child);
         }
       }
