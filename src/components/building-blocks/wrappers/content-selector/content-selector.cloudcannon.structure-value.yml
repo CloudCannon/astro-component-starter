@@ -36,7 +36,7 @@ _structures:
           title:
             type: text
             comment: The heading for the content panel.
-          subText:
+          subtext:
             type: text
             comment: Optional supporting text shown beneath the item heading.
           iconName:

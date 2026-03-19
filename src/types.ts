@@ -24,7 +24,7 @@ export interface SegmentOption {
 
 export interface ContentSelectorItem {
   title?: string;
-  subText?: string;
+  subtext?: string;
   iconName?: string;
   contentSections?: ContentBlock[];
   _component?: string;

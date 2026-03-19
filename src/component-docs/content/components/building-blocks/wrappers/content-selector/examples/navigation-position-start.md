@@ -6,7 +6,7 @@ blocks:
   navigationPosition: start
   items:
     - title: FAQ
-      subText: Common questions
+      subtext: Common questions
       iconName: question-mark-circle
       contentSections:
         - _component: building-blocks/core-elements/heading
@@ -21,7 +21,7 @@ blocks:
           alignX: start
           size: md
     - title: Shipping
-      subText: How we deliver
+      subtext: How we deliver
       iconName: truck
       contentSections:
         - _component: building-blocks/core-elements/text
@@ -40,7 +40,7 @@ blocks:
           alignX: start
           size: md
     - title: Returns
-      subText: Easy and fair
+      subtext: Easy and fair
       iconName: arrow-path
       contentSections:
         - _component: building-blocks/core-elements/text

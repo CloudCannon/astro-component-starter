@@ -4,7 +4,7 @@ import Heading from "@core-elements/heading/Heading.astro";
 
 const {
   title,
-  subText,
+  subtext,
   iconName,
   contentSections,
   useDefaultEditableBinding = false,
@@ -58,14 +58,14 @@ const arrayDataAttributes = effectiveChildrenProp
       class="content-selector-tab-heading"
     />
     {
-      subText && (
+      subtext && (
         <span
           class:list={[
             "content-selector-tab-subtext",
             `align-${navigationPosition === "top" ? "center" : "start"}`,
           ]}
         >
-          {subText}
+          {subtext}
         </span>
       )
     }
