@@ -24,3 +24,23 @@ required:
 value:
   type: text
   comment: The default value for the input field.
+iconName:
+  type: select
+  comment: The name of the icon to display. See the Icon component documentation for more information.
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+iconPosition:
+  type: select
+  comment: The position of the icon relative to the input field.
+  hidden: "!iconName"
+  options:
+    values:
+      - id: before
+        name: Before
+      - id: after
+        name: After

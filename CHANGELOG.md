@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Input component now supports optional leading and trailing icons in ACS.
+
 ### Fixed
 
 - Icon component no longer exposes an unsupported `4xl` size option.

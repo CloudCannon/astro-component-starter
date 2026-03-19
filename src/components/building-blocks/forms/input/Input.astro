@@ -1,4 +1,6 @@
 ---
+import Icon from "@core-elements/icon/Icon.astro";
+
 const {
   label,
   name,
@@ -6,16 +8,23 @@ const {
   placeholder,
   required = false,
   value,
+  iconName,
+  iconPosition = "before",
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
+const fieldId = customId || `input-${crypto.randomUUID()}`;
+const hasIcon = iconName?.trim().length > 0;
 ---
 
-<div class:list={["input", className]}>
+<div
+  class:list={["input", className]}
+  {...htmlAttributes}
+>
   {
     label && (
       <label
@@ -34,17 +43,40 @@ const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
       </label>
     )
   }
-  <input
-    type={type}
-    name={name}
-    id={fieldId}
-    placeholder={placeholder}
-    required={required}
-    aria-required={required}
-    value={value}
-    class="field"
-    {...htmlAttributes}
-  />
+  {
+    hasIcon ? (
+      <span class:list={["field-shell", iconPosition === "after" && "icon-after"]}>
+        <Icon
+          name={iconName}
+          size="none"
+          class="input-icon"
+          aria-hidden="true"
+          role="presentation"
+        />
+        <input
+          type={type}
+          name={name}
+          id={fieldId}
+          placeholder={placeholder}
+          required={required}
+          aria-required={required}
+          value={value}
+          class="field"
+        />
+      </span>
+    ) : (
+      <input
+        type={type}
+        name={name}
+        id={fieldId}
+        placeholder={placeholder}
+        required={required}
+        aria-required={required}
+        value={value}
+        class="field"
+      />
+    )
+  }
 </div>
 
 <style>
@@ -60,6 +92,48 @@ const fieldId = htmlAttributes.id || `input-${crypto.randomUUID()}`;
       .input-required {
         color: var(--color-error);
         margin-inline-end: var(--spacing-em-xs);
+      }
+
+      .field-shell {
+        align-items: center;
+        background-color: var(--color-bg);
+        border: 1px solid var(--color-border-inputs);
+        border-radius: var(--radius-xs);
+        display: flex;
+        gap: var(--spacing-em-sm);
+        padding-inline: var(--spacing-em-sm);
+        transition:
+          border-color var(--animation-normal) ease-in-out,
+          box-shadow var(--animation-normal) ease-in-out;
+
+        &:focus-within {
+          border-color: var(--color-brand);
+          box-shadow: 0 0 0 3px var(--color-focus-ring);
+        }
+
+        &.icon-after {
+          flex-direction: row-reverse;
+        }
+
+        :global(.input-icon) {
+          color: var(--color-text-muted);
+          flex-shrink: 0;
+          font-size: 1.25em;
+        }
+
+        > .field {
+          background-color: transparent;
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+          flex: 1 1 auto;
+          min-width: 0;
+          padding-inline: 0;
+
+          &:focus {
+            box-shadow: none;
+          }
+        }
       }
     }
   }
