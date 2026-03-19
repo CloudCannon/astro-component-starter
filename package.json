@@ -1,7 +1,7 @@
 {
   "name": "astro-component-starter",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
   "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
   "author": "Your Name",
