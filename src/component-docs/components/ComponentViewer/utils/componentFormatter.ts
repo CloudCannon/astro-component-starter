@@ -275,102 +275,6 @@ ${indent}</${componentName}>`;
     return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
 ${itemsContent}
 ${indent}</${componentName}>`;
-  } else if (items && componentPath.includes("grid")) {
-    // Handle grid items as slot content
-    const itemsArray = Array.isArray(items) ? items : [items];
-    const itemComponentName = "GridItem";
-
-    const itemsContent = itemsArray
-      .map((item) => {
-        const itemProps = { ...item };
-
-        delete itemProps.contentSections; // Remove contentSections from props since it goes in the slot
-
-        const itemPropsString = Object.entries(itemProps)
-          .sort(([a], [b]) => a.localeCompare(b)) // Sort attributes alphabetically
-          .map(([key, value]) => {
-            if (typeof value === "string") {
-              return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : "";
-            } else if (typeof value === "number") {
-              return `${key}={${value}}`;
-            }
-            return `${key}="${String(value)}"`;
-          })
-          .filter(Boolean)
-          .join(" ");
-
-        const itemContent = item.contentSections
-          ? (Array.isArray(item.contentSections) ? item.contentSections : [item.contentSections])
-              .map((nestedBlock) =>
-                formatComponentWithSlots(
-                  nestedBlock,
-                  indentLevel + 2,
-                  componentMetadata,
-                  nestedBlockProperties
-                )
-              )
-              .join("\n")
-          : "";
-
-        return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""}>
-${itemContent}
-${indent}  </${itemComponentName}>`;
-      })
-      .join("\n");
-
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
-${itemsContent}
-${indent}</${componentName}>`;
-  } else if (items && componentPath.includes("accordion")) {
-    // Handle accordion items as slot content
-    const itemsArray = Array.isArray(items) ? items : [items];
-    const itemComponentName = "AccordionItem";
-
-    const itemsContent = itemsArray
-      .map((item) => {
-        const itemProps = { ...item };
-
-        delete itemProps.contentSections; // Remove contentSections from props since it goes in the slot
-
-        const itemPropsString = Object.entries(itemProps)
-          .sort(([a], [b]) => a.localeCompare(b)) // Sort attributes alphabetically
-          .map(([key, value]) => {
-            if (typeof value === "string") {
-              return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : "";
-            } else if (typeof value === "number") {
-              return `${key}={${value}}`;
-            }
-            return `${key}="${String(value)}"`;
-          })
-          .filter(Boolean)
-          .join(" ");
-
-        const itemContent = item.contentSections
-          ? (Array.isArray(item.contentSections) ? item.contentSections : [item.contentSections])
-              .map((nestedBlock) =>
-                formatComponentWithSlots(
-                  nestedBlock,
-                  indentLevel + 2,
-                  componentMetadata,
-                  nestedBlockProperties
-                )
-              )
-              .join("\n")
-          : "";
-
-        return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""}>
-${itemContent}
-${indent}  </${itemComponentName}>`;
-      })
-      .join("\n");
-
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
-${itemsContent}
-${indent}</${componentName}>`;
   } else if (items && componentPath.includes("content-selector")) {
     // Handle content selector items as slot content
     const itemsArray = Array.isArray(items) ? items : [items];
@@ -447,19 +351,31 @@ ${indent}  </${itemComponentName}>`;
     return `${indent}<${componentName}${containerPropsString ? ` ${containerPropsString}` : ""}>
 ${itemsContent}
 ${indent}</${componentName}>`;
-  } else if (block.slides && componentPath.includes("carousel")) {
-    // Handle carousel slides as slot content
-    const slidesArray = Array.isArray(block.slides) ? block.slides : [block.slides];
-    const slideComponentName = "CarouselSlide";
+  } else if (metadata?.childComponent && metadata?.fallbackFor && block[metadata.fallbackFor]) {
+    const fallbackItems = block[metadata.fallbackFor];
+    const itemsArray = Array.isArray(fallbackItems) ? fallbackItems : [fallbackItems];
+    const itemComponentName = metadata.childComponent.name;
 
-    const slidesContent = slidesArray
-      .map((slide) => {
-        const slideProps = { ...slide };
+    const slotProps = new Set<string>();
 
-        delete slideProps.contentSections; // Remove contentSections from props since it goes in the slot
+    if (metadata.childComponent.props) {
+      for (const prop of metadata.childComponent.props) {
+        if (prop.endsWith("/slot")) {
+          slotProps.add(prop.replace("/slot", ""));
+        }
+      }
+    }
 
-        const slidePropsString = Object.entries(slideProps)
-          .sort(([a], [b]) => a.localeCompare(b)) // Sort attributes alphabetically
+    const itemsContent = itemsArray
+      .map((item) => {
+        const itemProps = { ...item };
+
+        for (const slotProp of slotProps) {
+          delete itemProps[slotProp];
+        }
+
+        const itemPropsString = Object.entries(itemProps)
+          .sort(([a], [b]) => a.localeCompare(b))
           .map(([key, value]) => {
             if (typeof value === "string") {
               return `${key}="${value}"`;
@@ -473,53 +389,38 @@ ${indent}</${componentName}>`;
           .filter(Boolean)
           .join(" ");
 
-        const slideContent = slide.contentSections
-          ? (Array.isArray(slide.contentSections) ? slide.contentSections : [slide.contentSections])
-              .map((nestedBlock) =>
-                formatComponentWithSlots(nestedBlock, indentLevel + 2, componentMetadata)
-              )
-              .join("\n")
-          : "";
+        const slotContentParts: string[] = [];
 
-        return `${indent}  <${slideComponentName}${slidePropsString ? ` ${slidePropsString}` : ""}>
-${slideContent}
-${indent}  </${slideComponentName}>`;
-      })
-      .join("\n");
+        for (const slotProp of slotProps) {
+          if (item[slotProp]) {
+            const nestedBlocks = Array.isArray(item[slotProp]) ? item[slotProp] : [item[slotProp]];
 
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
-${slidesContent}
-${indent}</${componentName}>`;
-  } else if (block.options && componentPath.includes("select")) {
-    // Handle select options as slot content
-    const optionsArray = Array.isArray(block.options) ? block.options : [block.options];
-    const optionComponentName = "SelectOption";
-
-    const optionsContent = optionsArray
-      .map((option) => {
-        const optionProps = { ...option };
-
-        const optionPropsString = Object.entries(optionProps)
-          .sort(([a], [b]) => a.localeCompare(b)) // Sort attributes alphabetically
-          .map(([key, value]) => {
-            if (typeof value === "string") {
-              return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : "";
-            } else if (typeof value === "number") {
-              return `${key}={${value}}`;
+            for (const nestedBlock of nestedBlocks) {
+              slotContentParts.push(
+                formatComponentWithSlots(
+                  nestedBlock,
+                  indentLevel + 2,
+                  componentMetadata,
+                  nestedBlockProperties
+                )
+              );
             }
-            return `${key}="${String(value)}"`;
-          })
-          .filter(Boolean)
-          .join(" ");
+          }
+        }
+        const slotContent = slotContentParts.join("\n");
 
-        return `${indent}  <${optionComponentName}${optionPropsString ? ` ${optionPropsString}` : ""} />`;
+        if (slotContent) {
+          return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""}>
+${slotContent}
+${indent}  </${itemComponentName}>`;
+        } else {
+          return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""} />`;
+        }
       })
       .join("\n");
 
     return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
-${optionsContent}
+${itemsContent}
 ${indent}</${componentName}>`;
   } else if (textContent) {
     let htmlContent = textContent;

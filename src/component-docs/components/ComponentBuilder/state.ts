@@ -128,6 +128,17 @@ class BuilderState {
     this._lastTreeSnapshot = "[]";
   }
 
+  /** Reset everything back to the initial state (empty tree with root component). */
+  reset(): void {
+    this.resetState();
+    this.clearPersistedState();
+    this.initializeRootComponent();
+    this._lastTreeSnapshot = JSON.stringify(this._componentTree);
+    this.runValidation();
+    this.emit("selectionChange");
+    this.saveToLocalStorage();
+  }
+
   /** Best-effort clear of persisted builder state. */
   private clearPersistedState(): void {
     try {

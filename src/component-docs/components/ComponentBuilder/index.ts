@@ -103,6 +103,18 @@ function initializeBuilder(): void {
     handleExport();
   });
 
+  // Reset button handler
+  const resetBtn = document.getElementById("reset-btn");
+
+  resetBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Reset the builder? All current progress will be lost.")) return;
+    builderState.reset();
+    const buildTab = document.querySelector('[data-view="build"]') as HTMLElement | null;
+    buildTab?.click();
+  });
+
   // Update sidebar based on selection
   function updateSidebar(): void {
     // These are guaranteed to exist by the check above

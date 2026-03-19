@@ -251,7 +251,7 @@ ${propsDestructuring}
 
 ${componentUsage}
 
-<style is:global>
+<style>
   @layer page-sections {
     .${componentName} {
      

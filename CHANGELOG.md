@@ -8,17 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Reset button in Component Builder that clears all state and returns to the Build tab.
 - Masonry component for column-based layouts where items flow into columns with varying heights, creating a Pinterest-style arrangement.
 - Bento Box component for asymmetric grid layouts where items can span multiple columns and rows.
 - Input component now supports optional leading and trailing icons in ACS.
 
 ### Changed
 
+- Exported Astro components now use scoped `<style>` instead of `<style is:global>`.
 - CSS uses Vite’s default pipeline (PostCSS for processing, esbuild for minification) instead of opting into Lightning CSS for transform while minifying with esbuild.
 - Raised Vite `chunkSizeWarningLimit` to 1024 kB so builds don’t warn on expected large chunks (e.g. Shiki in component docs).
 
 ### Fixed
 
+- ComponentViewer Astro code preview now renders child items for BentoBox and Masonry components instead of showing self-closing tags.
 - Component Builder sandbox delete button styles: replace Sass-style `&-delete` nesting with a flat `.sandbox-item-btn.sandbox-item-btn-delete` selector so esbuild CSS minify doesn’t warn on invalid nesting.
 
 - SVGO icon optimization: use `cleanupIds` override (SVGO 4 plugin name) so disabling ID cleanup no longer prints a preset warning at build time.
