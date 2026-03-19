@@ -4,7 +4,7 @@ description: A grid layout where items can span multiple columns and rows.
 value:
   _component: building-blocks/wrappers/bento-box
   label: ""
-  columns: 3
+  columns: "3"
   minRowHeight: 200
   items: []
   gap: md
