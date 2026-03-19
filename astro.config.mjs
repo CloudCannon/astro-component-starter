@@ -60,7 +60,7 @@ export default defineConfig({
             name: "preset-default",
             params: {
               overrides: {
-                cleanupIDs: false,
+                cleanupIds: false,
               },
             },
           },
@@ -80,12 +80,11 @@ export default defineConfig({
     mdx(),
   ],
   vite: {
+    build: {
+      chunkSizeWarningLimit: 1024,
+    },
     css: {
       devSourcemap: true,
-      transformer: "lightningcss",
-    },
-    build: {
-      cssMinify: "lightningcss",
     },
     resolve: {
       alias: {

@@ -303,14 +303,13 @@
     }
   }
 
-  .sandbox-item-btn {
-    &-delete {
+  .sandbox-item-btn.sandbox-item-btn-delete {
+    color: var(--cb-danger);
+
+    &:hover {
+      background: var(--cb-danger-bg-light);
+      border-color: var(--cb-danger-light);
       color: var(--cb-danger);
-      &:hover {
-        background: var(--cb-danger-bg-light);
-        border-color: var(--cb-danger-light);
-        color: var(--cb-danger);
-      }
     }
   }
 
