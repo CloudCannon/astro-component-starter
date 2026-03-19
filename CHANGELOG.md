@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Bento Box item column/row span changes now update visually in the CloudCannon editor.
+
 - Icon component no longer exposes an unsupported `4xl` size option.
 - Image component no longer converts SVGs to WebP — SVGs are now served as-is.
 - Button component no longer relies on `display: contents` on its root wrapper.
