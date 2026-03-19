@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Bento Box component for asymmetric grid layouts where items can span multiple columns and rows.
 - Input component now supports optional leading and trailing icons in ACS.
 
 ### Fixed

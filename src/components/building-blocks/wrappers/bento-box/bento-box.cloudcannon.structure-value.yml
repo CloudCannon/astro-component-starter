@@ -1,0 +1,67 @@
+label: Bento Box
+icon: dashboard
+description: A grid layout where items can span multiple columns and rows.
+value:
+  _component: building-blocks/wrappers/bento-box
+  label: ""
+  columns: 3
+  minRowHeight: 200
+  items: []
+  gap: md
+preview:
+  text:
+    - Bento Box
+  subtext:
+    - key: label
+  icon: dashboard
+picker_preview:
+  text: Bento Box
+  subtext: A grid layout where items can span multiple columns and rows.
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/bento-box/bento-box.cloudcannon.inputs.yml
+_structures:
+  bentoBoxItems:
+    values:
+      - label: Bento Box Item
+        value:
+          colSpan: 1
+          rowSpan: 1
+          contentSections: []
+        preview:
+          icon: dashboard_customize
+          text: Bento Box Item
+          subtext:
+            - template: '{colSpan}x{rowSpan} — Contains {contentSections|array_length} content {"block"|pluralize=contentSections}'
+            - Add content blocks to this bento item
+        _inputs:
+          colSpan:
+            comment: Number of columns this item spans.
+            type: select
+            options:
+              values:
+                - id: 1
+                  name: 1 Column
+                - id: 2
+                  name: 2 Columns
+                - id: 3
+                  name: 3 Columns
+                - id: 4
+                  name: 4 Columns
+          rowSpan:
+            comment: Number of rows this item spans.
+            type: select
+            options:
+              values:
+                - id: 1
+                  name: 1 Row
+                - id: 2
+                  name: 2 Rows
+                - id: 3
+                  name: 3 Rows
+                - id: 4
+                  name: 4 Rows
+          contentSections:
+            type: array
+            comment: Content sections to render within this bento box item.
+            options:
+              structures: _structures.bentoBoxSections

@@ -1,0 +1,42 @@
+label:
+  comment: Optional label for the bento box to help identify it in the editor.
+  type: text
+columns:
+  comment: The number of columns in the bento grid.
+  type: select
+  options:
+    values:
+      - id: 2
+        name: 2 Columns
+      - id: 3
+        name: 3 Columns
+      - id: 4
+        name: 4 Columns
+minRowHeight:
+  comment: The minimum height for each row in pixels.
+  type: number
+items:
+  label: Bento Box Items
+  comment: Array of bento box items, each with configurable column and row spans.
+  type: array
+  options:
+    structures: _structures.bentoBoxItems
+gap:
+  comment: The gap between bento box items.
+  type: select
+  options:
+    values:
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl

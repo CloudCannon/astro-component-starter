@@ -1,0 +1,163 @@
+---
+import { slugifyLabel } from "@components/utils/slugify";
+import BentoBoxItem from "./BentoBoxItem.astro";
+
+type ItemProps = Record<string, unknown>;
+
+const {
+  columns = 3,
+  minRowHeight = 200,
+  gap = "md",
+  label,
+  items = [],
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const bentoStyles = `--min-row-height: ${minRowHeight}px`;
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
+  : {};
+
+const hasItems = items?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasItems && !hasSlotContent) return;
+---
+
+<div
+  class:list={["bento-box", className]}
+  {...htmlAttributes}
+>
+  <div
+    {...arrayDataAttributes}
+    class:list={["bento-box-inner", `columns-${columns}`, `gap-${gap}`]}
+    style={bentoStyles}
+  >
+    <slot>
+      {
+        items?.map((item: ItemProps) => (
+          <BentoBoxItem
+            data-id="building-blocks/wrappers/bento-box/bento-box-item"
+            data-editable="array-item"
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...item}
+          />
+        ))
+      }
+    </slot>
+  </div>
+</div>
+
+<style>
+  @layer components {
+    .bento-box {
+      container-type: inline-size;
+      margin-top: var(--spacing-lg);
+      width: 100%;
+
+      > .bento-box-inner {
+        display: grid;
+        grid-auto-rows: minmax(var(--min-row-height, 200px), auto);
+        width: 100%;
+
+        &.columns-2 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        &.columns-3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        &.columns-4 {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        &.gap-xs {
+          gap: var(--spacing-xs);
+        }
+
+        &.gap-sm {
+          gap: var(--spacing-sm);
+        }
+
+        &.gap-md {
+          gap: var(--spacing-md);
+        }
+
+        &.gap-lg {
+          gap: var(--spacing-lg);
+        }
+
+        &.gap-xl {
+          gap: var(--spacing-xl);
+        }
+
+        &.gap-2xl {
+          gap: var(--spacing-2xl);
+        }
+
+        &.gap-3xl {
+          gap: var(--spacing-3xl);
+        }
+
+        > :global(.bento-box-item) {
+          min-width: 0;
+        }
+
+        @container (max-width: 700px) {
+          &.columns-3,
+          &.columns-4 {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          > :global(.bento-box-item) {
+            grid-column: span 1 !important;
+            grid-row: span 1 !important;
+          }
+
+          &.gap-lg {
+            gap: var(--spacing-md);
+          }
+
+          &.gap-xl {
+            gap: var(--spacing-md);
+          }
+
+          &.gap-2xl {
+            gap: var(--spacing-lg);
+          }
+
+          &.gap-3xl {
+            gap: var(--spacing-xl);
+          }
+        }
+
+        @container (max-width: 450px) {
+          &.columns-2,
+          &.columns-3,
+          &.columns-4 {
+            grid-template-columns: 1fr;
+          }
+
+          &.gap-sm {
+            gap: var(--spacing-xs);
+          }
+
+          &.gap-md {
+            gap: var(--spacing-sm);
+          }
+        }
+      }
+    }
+  }
+</style>

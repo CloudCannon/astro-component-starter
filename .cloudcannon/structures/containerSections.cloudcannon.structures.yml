@@ -8,6 +8,7 @@ containerSections:
     - /src/components/building-blocks/wrappers/card/card.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/button-group/button-group.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/accordion/accordion.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/bento-box/bento-box.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/carousel/carousel.cloudcannon.structure-value.yml
     - /src/components/building-blocks/forms/form/form.cloudcannon.structure-value.yml
     - /src/components/building-blocks/core-elements/**/*.cloudcannon.structure-value.yml

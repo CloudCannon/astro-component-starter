@@ -1,0 +1,69 @@
+---
+import RenderBlock from "@components/utils/renderBlock.astro";
+
+const {
+  colSpan = 1,
+  rowSpan = 1,
+  contentSections,
+  useDefaultEditableBinding = false,
+  class: className,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+
+const cellStyles = [
+  Number(colSpan) > 1 && `grid-column: span ${colSpan}`,
+  Number(rowSpan) > 1 && `grid-row: span ${rowSpan}`,
+]
+  .filter(Boolean)
+  .join("; ");
+---
+
+<div
+  class:list={["bento-box-item", className]}
+  style={cellStyles || undefined}
+  {...htmlAttributes}
+>
+  <div
+    class="bento-box-item-content"
+    {...arrayDataAttributes}
+  >
+    <slot>
+      {
+        contentSections && (
+          <RenderBlock
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )
+      }
+    </slot>
+  </div>
+</div>
+
+<style>
+  @layer components {
+    .bento-box-item {
+      container-type: inline-size;
+
+      > .bento-box-item-content {
+        height: 100%;
+      }
+
+      > .bento-box-item-content > :global(*:only-child) {
+        height: 100%;
+      }
+
+      > .bento-box-item-content > :global(*:first-child) {
+        margin-top: 0 !important;
+      }
+    }
+  }
+</style>
