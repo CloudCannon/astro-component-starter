@@ -4,7 +4,7 @@ description: A column-based layout where items flow into columns with varying he
 value:
   _component: building-blocks/wrappers/masonry
   label: ""
-  columns: 3
+  columns: "3"
   items: []
   gap: md
 preview:

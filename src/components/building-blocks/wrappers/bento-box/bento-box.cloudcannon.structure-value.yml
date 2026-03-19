@@ -24,8 +24,8 @@ _structures:
     values:
       - label: Bento Box Item
         value:
-          colSpan: 1
-          rowSpan: 1
+          colSpan: "1"
+          rowSpan: "1"
           contentSections: []
         preview:
           icon: dashboard_customize

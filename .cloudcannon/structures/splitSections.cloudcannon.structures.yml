@@ -3,6 +3,7 @@ splitSections:
   style: modal
   values_from_glob:
     - /src/components/building-blocks/wrappers/bento-box/bento-box.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/masonry/masonry.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/grid/grid.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/content-selector/content-selector.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/card/card.cloudcannon.structure-value.yml
