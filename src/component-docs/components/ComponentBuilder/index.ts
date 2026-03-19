@@ -112,6 +112,7 @@ function initializeBuilder(): void {
     if (!confirm("Reset the builder? All current progress will be lost.")) return;
     builderState.reset();
     const buildTab = document.querySelector('[data-view="build"]') as HTMLElement | null;
+
     buildTab?.click();
   });
 
