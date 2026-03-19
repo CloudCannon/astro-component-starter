@@ -7,7 +7,7 @@ value:
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
   buttonSections: []
-  imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+  imageSource: /src/assets/images/component-docs/quiet-street.jpg
   imageAlt: Feature image
   imageAspectRatio: portrait
   imageRounded: true
