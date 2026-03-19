@@ -63,18 +63,9 @@ This is why both theme files are important. Even if your site is primarily light
 
 ## Changing fonts
 
-Open `src/styles/variables/_fonts.css`:
+**Families and loading:** edit `site-fonts.mjs` at the project root. That file is the single source of truth for [Astro’s Fonts config](https://docs.astro.build/en/guides/fonts/) and for which families get `<Font />` tags via `src/layouts/SiteFonts.astro`. Change `name`, `provider` (for example `fontProviders.fontsource()` or `fontProviders.local()`), `weights`, and `cssVariable` there. Keep `cssVariable` aligned with how you use tokens in CSS: defaults are `--font-body` and `--font-headings`.
 
-```css
-:where(:root) {
-  --font-body: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, ...;
-  --font-headings: var(--font-body);
-}
-```
-
-Swap these with your brand fonts. If headings and body text should use different families, give `--font-headings` its own stack. If you're using custom web fonts, also load/import them in `src/layouts/BaseLayout.astro` so those font-family variables can actually render your chosen typefaces.
-
-The size scale is also here: `--font-size-xs` through `--font-size-4xl` for body text, plus a separate heading scale.
+**Sizes and weights:** open `src/styles/variables/_fonts.css` for the size scale (`--font-size-xs` through `--font-size-4xl`, plus the heading scale) and `--font-weight-*` tokens—not for the font family names.
 
 ## The base color palette
 

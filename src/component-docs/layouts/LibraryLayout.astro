@@ -1,6 +1,7 @@
 ---
 import "@component-docs/styles/component-docs.css";
 import "@styles/style.css";
+import SiteFonts from "@layouts/SiteFonts.astro";
 import { z } from "zod/v4";
 
 const libraryLayoutSchema = z.object({
@@ -44,6 +45,7 @@ const contentSections = props.frontmatter?.contentSections || [];
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
+    <SiteFonts />
     {
       import.meta.env.DEV ? (
         <script

@@ -2,6 +2,7 @@
 import Component from "@components/utils/renderBlock.astro";
 import type { ContentBlock } from "../../types";
 import "@styles/style.css";
+import SiteFonts from "@layouts/SiteFonts.astro";
 
 export const prerender = false;
 
@@ -35,6 +36,7 @@ if (Astro.request.url) {
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
+    <SiteFonts />
   </head>
   <body style="margin: 0;">
     {

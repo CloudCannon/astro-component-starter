@@ -1,0 +1,8 @@
+---
+import { siteFonts } from "../../site-fonts.mjs";
+import { Font } from "astro:assets";
+---
+
+{
+  siteFonts.map((entry) => <Font cssVariable={entry.cssVariable} />)
+}

@@ -2,6 +2,7 @@
 import StructuredData from "@components/utils/StructuredData.astro";
 import seoData from "@data/seo.json";
 import "@styles/style.css";
+import SiteFonts from "@layouts/SiteFonts.astro";
 import { SEO } from "astro-seo";
 
 export interface Props {
@@ -41,6 +42,8 @@ const pageImage = props.image || seoData.logoSource;
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
+
+    <SiteFonts />
 
     {
       import.meta.env.DEV ? (
