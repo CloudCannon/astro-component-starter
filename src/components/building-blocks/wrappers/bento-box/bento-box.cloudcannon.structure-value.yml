@@ -5,7 +5,7 @@ value:
   _component: building-blocks/wrappers/bento-box
   label: ""
   columns: "3"
-  minRowHeight: 200
+  minRowHeight: 150
   items: []
   gap: md
 preview:

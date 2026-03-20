@@ -67,6 +67,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
       > .bento-box-inner {
         display: grid;
+        grid-auto-flow: dense;
         grid-auto-rows: minmax(var(--min-row-height, 200px), auto);
         width: 100%;
 
