@@ -13,6 +13,8 @@ const {
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
+  popovertarget,
+  popovertargetaction,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -26,6 +28,11 @@ const Tag = element as any;
 
 const tagProps: Record<string, any> =
   Tag === "a" && link ? { href: link } : Tag === "button" ? { type: "button" } : {};
+
+if (popovertarget) {
+  tagProps.popovertarget = popovertarget;
+  if (popovertargetaction) tagProps.popovertargetaction = popovertargetaction;
+}
 
 if (hideText) {
   tagProps["aria-label"] = htmlAttributes["aria-label"] || text;

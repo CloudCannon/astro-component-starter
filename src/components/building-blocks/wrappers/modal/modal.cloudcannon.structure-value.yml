@@ -1,0 +1,23 @@
+label: Modal
+icon: open_in_new
+description: Dialog overlay triggered by a button, for focused content or actions.
+value:
+  _component: building-blocks/wrappers/modal
+  label: null
+  triggerText: Open
+  triggerVariant: primary
+  triggerSize: md
+  triggerIconName: null
+  size: md
+  contentSections: []
+preview:
+  text:
+    - Modal
+  subtext:
+    - key: label
+  icon: open_in_new
+picker_preview:
+  text: Modal
+  subtext: Dialog overlay triggered by a button, for focused content or actions.
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/modal/modal.cloudcannon.inputs.yml

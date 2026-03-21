@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Bento Box component for asymmetric grid layouts where items can span multiple columns and rows.
 - Input component now supports optional leading and trailing icons in ACS.
 - Font setup is centralized in `site-fonts.mjs` with `SiteFonts.astro`
+- Modal component for dialog overlays, using the Popover API with CSS animations and minimal JS for accessibility.
+- Button component now supports `popovertarget` and `popovertargetaction` props, forwarding them to the inner element.
 
 ### Changed
 

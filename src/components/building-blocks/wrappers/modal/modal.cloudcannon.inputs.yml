@@ -1,0 +1,60 @@
+label:
+  type: text
+  comment: Accessible label for the modal dialog.
+triggerText:
+  type: text
+  comment: Text displayed on the button that opens the modal.
+triggerVariant:
+  type: select
+  comment: Visual style of the trigger button.
+  options:
+    values:
+      - id: primary
+        name: Primary
+      - id: secondary
+        name: Secondary
+      - id: tertiary
+        name: Tertiary
+      - id: ghost
+        name: Ghost
+      - id: text
+        name: Text
+triggerSize:
+  type: select
+  comment: Size of the trigger button.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+triggerIconName:
+  type: select
+  comment: Optional icon for the trigger button.
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+size:
+  type: select
+  comment: Maximum width of the modal dialog.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+contentSections:
+  type: array
+  comment: Content blocks displayed inside the modal.
+  options:
+    structures: _structures.modalSections
