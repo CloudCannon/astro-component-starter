@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Reset button in Component Builder that clears all state and returns to the Build tab.
-- Masonry component for column-based layouts where items flow into columns with varying heights, creating a Pinterest-style arrangement.
 - Bento Box component for asymmetric grid layouts where items can span multiple columns and rows.
 - Input component now supports optional leading and trailing icons in ACS.
 - Font setup is centralized in `site-fonts.mjs` with `SiteFonts.astro`
