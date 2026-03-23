@@ -34,15 +34,15 @@ Use the browser or fetch tool to load each page of the source site. For each pag
 
 For each section, note:
 
-| Observation | Record |
-| --- | --- |
-| Layout type | Centered, split (text + image), grid of cards, accordion, slider |
-| Heading text | Exact text |
-| Body text | Exact text (preserve line breaks) |
-| Images | URLs, descriptions for alt text |
-| Buttons | Label text, link target, primary vs secondary |
-| Background | Light, dark, colored, image |
-| Repeating items | Count, fields per item (title, description, icon, image) |
+| Observation     | Record                                                           |
+| --------------- | ---------------------------------------------------------------- |
+| Layout type     | Centered, split (text + image), grid of cards, accordion, slider |
+| Heading text    | Exact text                                                       |
+| Body text       | Exact text (preserve line breaks)                                |
+| Images          | URLs, descriptions for alt text                                  |
+| Buttons         | Label text, link target, primary vs secondary                    |
+| Background      | Light, dark, colored, image                                      |
+| Repeating items | Count, fields per item (title, description, icon, image)         |
 
 ---
 
@@ -79,30 +79,32 @@ For each section identified in Step 1, match it to an existing page section or f
 
 ### Section mapping table
 
-| Source section pattern | Component to use | `_component` path |
-| --- | --- | --- |
-| **Centered hero** (heading + subtext + buttons) | Hero Center | `page-sections/heroes/hero-center` |
-| **Split hero** (text + image side by side) | Hero Split | `page-sections/heroes/hero-split` |
-| **Feature grid** (grid of items with icons/titles) | Feature Grid | `page-sections/features/feature-grid` |
-| **Feature showcase** (text + image alternating) | Feature Split | `page-sections/features/feature-split` |
-| **Feature carousel** (sliding cards) | Feature Slider | `page-sections/features/feature-slider` |
-| **Centered CTA** (heading + buttons) | CTA Center | `page-sections/ctas/cta-center` |
-| **Split CTA** (text + image + buttons) | CTA Split | `page-sections/ctas/cta-split` |
-| **Contact form** (form + image) | CTA Form | `page-sections/ctas/cta-form` |
-| **FAQ / accordion** | FAQ Section | `page-sections/info-blocks/faq-section` |
-| **Team members grid** | Team Grid | `page-sections/people/team-grid` |
-| **Testimonial / quote** | Testimonial Section | `page-sections/people/testimonial-section` |
-| **Custom content** (doesn't fit above) | Custom Section | `page-sections/builders/custom-section` |
-| **Unique layout** (nothing fits) | **Create new** | Use [screenshot-to-component skill](../screenshot-to-component/SKILL.md) |
+| Source section pattern                             | Component to use    | `_component` path                                                        |
+| -------------------------------------------------- | ------------------- | ------------------------------------------------------------------------ |
+| **Centered hero** (heading + subtext + buttons)    | Hero Center         | `page-sections/heroes/hero-center`                                       |
+| **Split hero** (text + image side by side)         | Hero Split          | `page-sections/heroes/hero-split`                                        |
+| **Feature grid** (grid of items with icons/titles) | Feature Grid        | `page-sections/features/feature-grid`                                    |
+| **Feature showcase** (text + image alternating)    | Feature Split       | `page-sections/features/feature-split`                                   |
+| **Feature carousel** (sliding cards)               | Feature Slider      | `page-sections/features/feature-slider`                                  |
+| **Centered CTA** (heading + buttons)               | CTA Center          | `page-sections/ctas/cta-center`                                          |
+| **Split CTA** (text + image + buttons)             | CTA Split           | `page-sections/ctas/cta-split`                                           |
+| **Contact form** (form + image)                    | CTA Form            | `page-sections/ctas/cta-form`                                            |
+| **FAQ / accordion**                                | FAQ Section         | `page-sections/info-blocks/faq-section`                                  |
+| **Team members grid**                              | Team Grid           | `page-sections/people/team-grid`                                         |
+| **Testimonial / quote**                            | Testimonial Section | `page-sections/people/testimonial-section`                               |
+| **Custom content** (doesn't fit above)             | Custom Section      | `page-sections/builders/custom-section`                                  |
+| **Unique layout** (nothing fits)                   | **Create new**      | Use [screenshot-to-component skill](../screenshot-to-component/SKILL.md) |
 
 ### Decision: reuse vs create new
 
 **Reuse an existing component when:**
+
 - The source section's layout matches an existing component's structure
 - Minor visual differences can be handled by props (colorScheme, backgroundColor, reverse, alignment)
 - Content fields map cleanly to the component's props
 
 **Create a new component when:**
+
 - The layout is fundamentally different from all existing components
 - The section has unique interactive behavior not covered by existing wrappers
 - The data shape doesn't fit any existing component's prop structure
@@ -163,13 +165,13 @@ Create a `.md` file in `src/content/pages/` for each page.
 
 ### Visual treatment mapping
 
-| Source appearance | `colorScheme` | `backgroundColor` |
-| --- | --- | --- |
-| White / light background | `inherit` | `base` |
-| Light gray background | `inherit` | `surface` |
-| Dark background with light text | `dark` | `surface` |
-| Brand-colored background | `inherit` | `accent` or `highlight` |
-| Transparent / no background | `inherit` | `none` |
+| Source appearance               | `colorScheme` | `backgroundColor`       |
+| ------------------------------- | ------------- | ----------------------- |
+| White / light background        | `inherit`     | `base`                  |
+| Light gray background           | `inherit`     | `surface`               |
+| Dark background with light text | `dark`        | `surface`               |
+| Brand-colored background        | `inherit`     | `accent` or `highlight` |
+| Transparent / no background     | `inherit`     | `none`                  |
 
 ### Alternating sections
 
@@ -193,13 +195,13 @@ pageSections:
 When migrating multiple feature sections, alternate `reverse` to create a zigzag layout:
 
 ```yaml
-  - _component: page-sections/features/feature-split
-    reverse: false
-    backgroundColor: base
-  - _component: page-sections/features/feature-split
-    reverse: true
-    backgroundColor: base
-    paddingVertical: lg
+- _component: page-sections/features/feature-split
+  reverse: false
+  backgroundColor: base
+- _component: page-sections/features/feature-split
+  reverse: true
+  backgroundColor: base
+  paddingVertical: lg
 ```
 
 Refer to the [page-content-authoring skill](../page-content-authoring/SKILL.md) for the full component catalog and prop reference.

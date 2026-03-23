@@ -239,24 +239,25 @@ if (!_component && !hasItems && !hasSlotContent) return;
 - **Compose existing components**: Prefer using existing building blocks (Button, Heading, Text, Icon, Image, Card, Grid, ButtonGroup, etc.) over writing custom HTML with manual styling. This keeps behavior and styling consistent across the library.
 - **CSS-first**: Core interactions must work without JavaScript. Use native HTML and CSS mechanisms first, then layer JS as progressive enhancement only for things that are not possible with CSS alone. The table below maps common interactions to the correct technique:
 
-| Interaction | Technique | Example in codebase |
-| --- | --- | --- |
-| Modal / popup / dropdown | Popover API (`popover="auto"`, `popovertarget`) | `Modal.astro` |
-| Expand / collapse | `<details>` / `<summary>` with optional `name` for single-open | `AccordionItem.astro` |
-| Tabs / content switcher | Hidden radio inputs + `:checked` sibling selectors + `:has()` fallback | `ContentSelector.astro` |
-| Enter/exit animations | `@starting-style` + `allow-discrete` transitions | `Modal.astro` popover transitions |
-| Conditional visibility | `:has()` selector or checkbox/radio toggle | `ContentSelector.astro`, `Image.astro` |
-| Hover / focus effects | `:hover`, `:focus-visible`, `:focus-within` pseudo-classes | Card hover states |
-| Scroll-driven layouts | `scroll-snap-type` / `scroll-snap-align` | — |
-| Responsive layout shifts | Container queries (`container-type: inline-size`, `@container`) | `FeatureSplit.astro` |
+| Interaction              | Technique                                                              | Example in codebase                    |
+| ------------------------ | ---------------------------------------------------------------------- | -------------------------------------- |
+| Modal / popup / dropdown | Popover API (`popover="auto"`, `popovertarget`)                        | `Modal.astro`                          |
+| Expand / collapse        | `<details>` / `<summary>` with optional `name` for single-open         | `AccordionItem.astro`                  |
+| Tabs / content switcher  | Hidden radio inputs + `:checked` sibling selectors + `:has()` fallback | `ContentSelector.astro`                |
+| Enter/exit animations    | `@starting-style` + `allow-discrete` transitions                       | `Modal.astro` popover transitions      |
+| Conditional visibility   | `:has()` selector or checkbox/radio toggle                             | `ContentSelector.astro`, `Image.astro` |
+| Hover / focus effects    | `:hover`, `:focus-visible`, `:focus-within` pseudo-classes             | Card hover states                      |
+| Scroll-driven layouts    | `scroll-snap-type` / `scroll-snap-align`                               | —                                      |
+| Responsive layout shifts | Container queries (`container-type: inline-size`, `@container`)        | `FeatureSplit.astro`                   |
+
 - **Client-side JavaScript**: When CSS alone can't handle the interaction and you need JS, use a `<script>` tag with the `onPageLoad` utility. This ensures the init function runs on first load and on Astro page navigations, while preventing duplicate runs for the same URL:
 
 ```astro
 <script>
-  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { onPageLoad } from '@component-utils/onPageLoad';
 
   onPageLoad(() => {
-    const elements = document.querySelectorAll(".my-component");
+    const elements = document.querySelectorAll('.my-component');
     if (!elements.length) return;
 
     elements.forEach((el) => {

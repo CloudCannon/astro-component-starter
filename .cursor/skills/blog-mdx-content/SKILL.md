@@ -13,9 +13,9 @@ Blog posts are MDX files in `src/content/blog/`. They support standard Markdown 
 
 Posts live at `src/content/blog/{filename}.mdx`. The filename becomes the URL slug:
 
-| File | URL |
-| --- | --- |
-| `src/content/blog/my-first-post.mdx` | `/blog/my-first-post/` |
+| File                                                  | URL                                     |
+| ----------------------------------------------------- | --------------------------------------- |
+| `src/content/blog/my-first-post.mdx`                  | `/blog/my-first-post/`                  |
 | `src/content/blog/2025-10-15-launch-announcement.mdx` | `/blog/2025-10-15-launch-announcement/` |
 
 ### Frontmatter schema
@@ -34,14 +34,14 @@ tags:
 ---
 ```
 
-| Field | Type | Required | Default |
-| --- | --- | --- | --- |
-| `title` | string | Yes | — |
-| `description` | string | Yes | — |
-| `date` | date | Yes | — |
-| `author` | string | No | `"Anonymous"` |
-| `image` | string | No | — |
-| `tags` | string[] | No | `[]` |
+| Field         | Type     | Required | Default       |
+| ------------- | -------- | -------- | ------------- |
+| `title`       | string   | Yes      | —             |
+| `description` | string   | Yes      | —             |
+| `date`        | date     | Yes      | —             |
+| `author`      | string   | No       | `"Anonymous"` |
+| `image`       | string   | No       | —             |
+| `tags`        | string[] | No       | `[]`          |
 
 The `_schema: default` line tells CloudCannon to use the blog post schema (`.cloudcannon/schemas/blog-post.mdx`).
 
@@ -54,7 +54,7 @@ const blogPostSchema = z.object({
   title: z.string(),
   description: z.string(),
   date: z.coerce.date(),
-  author: z.string().default("Anonymous"),
+  author: z.string().default('Anonymous'),
   image: z.string().optional(),
   tags: z.array(z.string()).default([]),
 });
@@ -75,7 +75,7 @@ description: A great post.
 date: 2025-10-15
 ---
 
-This is a paragraph with **bold** and *italic* text.
+This is a paragraph with **bold** and _italic_ text.
 
 ## A Heading
 
@@ -94,18 +94,25 @@ All building block and page section components are automatically available in bl
 ```mdx
 Here is an inline image:
 
-<Image source="/src/assets/images/photo.jpg" rounded={true} aspectRatio="landscape" alt="Photo description" />
+<Image
+  source="/src/assets/images/photo.jpg"
+  rounded={true}
+  aspectRatio="landscape"
+  alt="Photo description"
+/>
 
 And a full-width CTA section:
 
 <CtaCenter
-  buttonSections={[{
-    _component: "building-blocks/core-elements/button",
-    text: "Get Started",
-    variant: "primary",
-    size: "md",
-    link: "/"
-  }]}
+  buttonSections={[
+    {
+      _component: 'building-blocks/core-elements/button',
+      text: 'Get Started',
+      variant: 'primary',
+      size: 'md',
+      link: '/',
+    },
+  ]}
   colorScheme="dark"
   backgroundColor="base"
   heading="Ready to start?"
@@ -120,13 +127,13 @@ And a full-width CTA section:
 
 The blog renderer (`src/pages/blog/[...slug].astro`) uses `import.meta.glob` to load all components from `building-blocks` and `page-sections`. The component name in MDX is the **PascalCase filename** without the `.astro` extension:
 
-| File | MDX component name |
-| --- | --- |
-| `Image.astro` | `<Image />` |
-| `CtaCenter.astro` | `<CtaCenter />` |
+| File                       | MDX component name       |
+| -------------------------- | ------------------------ |
+| `Image.astro`              | `<Image />`              |
+| `CtaCenter.astro`          | `<CtaCenter />`          |
 | `TestimonialSection.astro` | `<TestimonialSection />` |
-| `FeatureGrid.astro` | `<FeatureGrid />` |
-| `CustomSection.astro` | `<CustomSection />` |
+| `FeatureGrid.astro`        | `<FeatureGrid />`        |
+| `CustomSection.astro`      | `<CustomSection />`      |
 
 ### Full-width elements
 
@@ -182,13 +189,15 @@ Elements that automatically get full width: `<pre>` (code blocks), `.image`, `.v
 <CtaCenter
   heading="Call to action"
   subtext="Supporting text."
-  buttonSections={[{
-    _component: "building-blocks/core-elements/button",
-    text: "Learn More",
-    variant: "primary",
-    size: "md",
-    link: "/page/"
-  }]}
+  buttonSections={[
+    {
+      _component: 'building-blocks/core-elements/button',
+      text: 'Learn More',
+      variant: 'primary',
+      size: 'md',
+      link: '/page/',
+    },
+  ]}
   colorScheme="dark"
   backgroundColor="base"
   rounded={true}
@@ -203,8 +212,8 @@ Elements that automatically get full width: `<pre>` (code blocks), `.image`, `.v
 <FeatureGrid
   heading="Key points"
   features={[
-    { title: "Point 1", description: "Details.", iconName: "bolt", iconColor: "blue" },
-    { title: "Point 2", description: "Details.", iconName: "shield-check", iconColor: "green" }
+    { title: 'Point 1', description: 'Details.', iconName: 'bolt', iconColor: 'blue' },
+    { title: 'Point 2', description: 'Details.', iconName: 'shield-check', iconColor: 'green' },
   ]}
   colorScheme="inherit"
   backgroundColor="surface"
@@ -270,23 +279,23 @@ ctaCenter:
 
 ### Key snippet fields
 
-| Field | Purpose |
-| --- | --- |
-| `template` | Always `mdx_component` for MDX components |
-| `inline` | `false` for block-level components |
-| `preview` | How the snippet appears in the editor |
-| `definitions.component_name` | PascalCase component name for MDX output |
-| `definitions.named_args` | Maps editor fields to component props |
-| `_inputs_from_glob` | Reuses the component's CloudCannon input definitions |
+| Field                        | Purpose                                              |
+| ---------------------------- | ---------------------------------------------------- |
+| `template`                   | Always `mdx_component` for MDX components            |
+| `inline`                     | `false` for block-level components                   |
+| `preview`                    | How the snippet appears in the editor                |
+| `definitions.component_name` | PascalCase component name for MDX output             |
+| `definitions.named_args`     | Maps editor fields to component props                |
+| `_inputs_from_glob`          | Reuses the component's CloudCannon input definitions |
 
 ### Named arg types
 
-| `type` | MDX output | Notes |
-| --- | --- | --- |
-| `string` | `prop="value"` | Use `remove_empty: true` to omit empty strings |
-| `boolean` | `prop={true}` | Omitted when false |
-| `array` | `prop={[...]}` | Do not use `remove_empty` |
-| `number` | `prop={42}` | — |
+| `type`    | MDX output     | Notes                                          |
+| --------- | -------------- | ---------------------------------------------- |
+| `string`  | `prop="value"` | Use `remove_empty: true` to omit empty strings |
+| `boolean` | `prop={true}`  | Omitted when false                             |
+| `array`   | `prop={[...]}` | Do not use `remove_empty`                      |
+| `number`  | `prop={42}`    | —                                              |
 
 ### Creating a snippet for a new page section
 
@@ -334,6 +343,7 @@ pageSections:
 ### Post card display
 
 Each post card shows:
+
 - Featured image (if `image` is set)
 - Date and author
 - Title (as h3)
@@ -353,7 +363,7 @@ The blog collection is configured in `cloudcannon.config.yml`:
 blog:
   path: src/content/blog
   glob:
-    - "**/*.mdx"
+    - '**/*.mdx'
   url: /blog/[full_slug]/
   icon: article
   _enabled_editors:
@@ -364,7 +374,7 @@ blog:
       name: New Blog Post
       path: .cloudcannon/schemas/blog-post.mdx
   create:
-    path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
+    path: '[relative_base_path]/{filename|slugify|lowercase}.mdx'
   new_preview_url: /blog/
 ```
 

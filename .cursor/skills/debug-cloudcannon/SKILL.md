@@ -35,12 +35,12 @@ The `_component` value in YAML must exactly match the resulting registry key.
 
 **Examples:**
 
-| File path | Registry key |
-| --- | --- |
-| `page-sections/heroes/hero-center/HeroCenter.astro` | `page-sections/heroes/hero-center` |
-| `building-blocks/core-elements/button/Button.astro` | `building-blocks/core-elements/button` |
-| `building-blocks/wrappers/grid/GridItem.astro` | `building-blocks/wrappers/grid/grid-item` |
-| `navigation/footer/Footer.astro` | `navigation/footer` |
+| File path                                           | Registry key                              |
+| --------------------------------------------------- | ----------------------------------------- |
+| `page-sections/heroes/hero-center/HeroCenter.astro` | `page-sections/heroes/hero-center`        |
+| `building-blocks/core-elements/button/Button.astro` | `building-blocks/core-elements/button`    |
+| `building-blocks/wrappers/grid/GridItem.astro`      | `building-blocks/wrappers/grid/grid-item` |
+| `navigation/footer/Footer.astro`                    | `navigation/footer`                       |
 
 ### Component editable region (Page.astro)
 
@@ -63,12 +63,7 @@ This tells CloudCannon: "this div renders the `main-component` component, and it
 Adds the array-level editable attributes:
 
 ```astro
-<div
-  data-pagefind-body
-  data-editable="array"
-  data-prop="sections"
-  data-component-key="_component"
->
+<div data-pagefind-body data-editable="array" data-prop="sections" data-component-key="_component">
   <Components contentSections={sections} />
 </div>
 ```
@@ -98,12 +93,12 @@ When `useDefaultEditableBinding` is `true` (default), renderBlock stamps each re
 
 The `_component` value in YAML must match the key that `renderBlock` generates. Common mistakes:
 
-| Wrong | Correct | Why |
-| --- | --- | --- |
-| `heroes/hero-center` | `page-sections/heroes/hero-center` | Missing category prefix |
-| `page-sections/heroes/HeroCenter` | `page-sections/heroes/hero-center` | PascalCase instead of kebab-case |
+| Wrong                                  | Correct                                | Why                              |
+| -------------------------------------- | -------------------------------------- | -------------------------------- |
+| `heroes/hero-center`                   | `page-sections/heroes/hero-center`     | Missing category prefix          |
+| `page-sections/heroes/HeroCenter`      | `page-sections/heroes/hero-center`     | PascalCase instead of kebab-case |
 | `building-blocks/core-elements/Button` | `building-blocks/core-elements/button` | PascalCase instead of kebab-case |
-| `page-sections/hero-center` | `page-sections/heroes/hero-center` | Missing subcategory |
+| `page-sections/hero-center`            | `page-sections/heroes/hero-center`     | Missing subcategory              |
 
 **Fix:** Check the console warning — it logs all available component keys. Find the correct key in that list.
 
@@ -117,9 +112,9 @@ The `_component` value in YAML must match the key that `renderBlock` generates. 
 
 The deduplication logic expects the kebab version of the filename to match the parent directory name. If they don't match, the registry key includes both:
 
-| Structure | Key |
-| --- | --- |
-| `hero-center/HeroCenter.astro` | `hero-center` (deduplicated) |
+| Structure                      | Key                                          |
+| ------------------------------ | -------------------------------------------- |
+| `hero-center/HeroCenter.astro` | `hero-center` (deduplicated)                 |
 | `hero-center/HeroBanner.astro` | `hero-center/hero-banner` (not deduplicated) |
 
 **Fix:** Rename the component file to match its directory (e.g., `HeroCenter.astro` in `hero-center/`).
@@ -148,7 +143,11 @@ Text and image elements need editable bindings to be clickable. Without them, Cl
 
 <!-- Array fields -->
 <Grid data-children-prop="items">
-  {items.map((item) => <ItemComponent data-editable="array-item" data-id="path/to/child" {...item} />)}
+  {
+    items.map((item) => (
+      <ItemComponent data-editable="array-item" data-id="path/to/child" {...item} />
+    ))
+  }
 </Grid>
 ```
 
@@ -158,10 +157,10 @@ See the [editable-regions skill](../editable-regions/SKILL.md) for the full refe
 
 The `data-prop` value must exactly match the prop name that maps to a frontmatter key.
 
-| Wrong | Correct | Why |
-| --- | --- | --- |
-| `data-prop="title"` | `data-prop="heading"` | Prop is named `heading` in the component |
-| `data-prop="image"` | `data-prop-src="imageSource"` | Images use `data-prop-src` not `data-prop` |
+| Wrong                                            | Correct                                      | Why                                         |
+| ------------------------------------------------ | -------------------------------------------- | ------------------------------------------- |
+| `data-prop="title"`                              | `data-prop="heading"`                        | Prop is named `heading` in the component    |
+| `data-prop="image"`                              | `data-prop-src="imageSource"`                | Images use `data-prop-src` not `data-prop`  |
 | `data-children-prop="features"` on wrong element | On the wrapper (`Grid`, `ButtonGroup`, etc.) | Must be on the element that holds the array |
 
 **3. `useDefaultEditableBinding` not propagating**
@@ -205,20 +204,20 @@ Every component needs a `{slug}.cloudcannon.structure-value.yml` file. The `_com
 
 Components appear in pickers based on which structure files reference them. Structure files are in `.cloudcannon/structures/`.
 
-| Structure file | What it controls |
-| --- | --- |
-| `pageSections` | Top-level page sections (glob: all page-section structure-values) |
-| `containerSections` | Content inside custom sections |
-| `splitSections` | Content inside split layouts |
-| `gridItemSections` | Content inside grid items |
-| `cardSections` | Content inside cards |
-| `accordionSections` | Content inside accordion items |
-| `modalSections` | Content inside modals |
-| `carouselSections` | Content inside carousels |
-| `contentSelectorSections` | Content inside content selector panels |
-| `bentoBoxSections` | Content inside bento box items |
-| `buttonSections` | Buttons only |
-| `formBlocks` | Form field components |
+| Structure file            | What it controls                                                  |
+| ------------------------- | ----------------------------------------------------------------- |
+| `pageSections`            | Top-level page sections (glob: all page-section structure-values) |
+| `containerSections`       | Content inside custom sections                                    |
+| `splitSections`           | Content inside split layouts                                      |
+| `gridItemSections`        | Content inside grid items                                         |
+| `cardSections`            | Content inside cards                                              |
+| `accordionSections`       | Content inside accordion items                                    |
+| `modalSections`           | Content inside modals                                             |
+| `carouselSections`        | Content inside carousels                                          |
+| `contentSelectorSections` | Content inside content selector panels                            |
+| `bentoBoxSections`        | Content inside bento box items                                    |
+| `buttonSections`          | Buttons only                                                      |
+| `formBlocks`              | Form field components                                             |
 
 **Page sections** are auto-included via glob:
 
@@ -243,6 +242,7 @@ pageSections:
 A syntax error in the structure-value or inputs file silently prevents the component from loading.
 
 **Fix:** Validate the YAML syntax. Common issues:
+
 - Missing quotes around strings with special characters
 - Incorrect indentation
 - Missing required fields (`label`, `value`, `_component`)
@@ -276,6 +276,7 @@ The component editable region in `Page.astro` must correctly reference the compo
   data-component="utils/main-component"
   data-prop-sections="pageSections"
 >
+</div>
 ```
 
 If `data-prop-sections` doesn't match the frontmatter key name, CloudCannon can't push updates.
@@ -285,7 +286,7 @@ If `data-prop-sections` doesn't match the frontmatter key name, CloudCannon can'
 The `editableRegions()` integration must be in `astro.config.mjs`:
 
 ```js
-import editableRegions from "@cloudcannon/editable-regions/astro-integration";
+import editableRegions from '@cloudcannon/editable-regions/astro-integration';
 
 export default defineConfig({
   integrations: [
@@ -304,8 +305,8 @@ export default defineConfig({
 ```astro
 <script>
   if (window.inEditorMode) {
-    import("../../live-editing");
-    import("../../editor-live-sync");
+    import('../../live-editing');
+    import('../../editor-live-sync');
   }
 </script>
 ```
@@ -372,7 +373,7 @@ When debugging any CloudCannon issue, work through this checklist:
 To see all registered component keys, temporarily add this to `renderBlock.astro`:
 
 ```js
-console.log("Registered components:", Object.keys(components));
+console.log('Registered components:', Object.keys(components));
 ```
 
 Or check the console when a component fails to resolve — the warning already lists all available keys.

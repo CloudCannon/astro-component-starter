@@ -33,20 +33,20 @@ pageSections:
 
 ### Required fields
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `title` | string | Page title (used in `<title>` via `seo.json` template) |
-| `pageSections` | array | Ordered list of section blocks to render |
+| Field          | Type   | Purpose                                                |
+| -------------- | ------ | ------------------------------------------------------ |
+| `title`        | string | Page title (used in `<title>` via `seo.json` template) |
+| `pageSections` | array  | Ordered list of section blocks to render               |
 
 ### Optional fields
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `_schema` | string | CloudCannon schema (use `default`) |
-| `description` | string | Meta description |
-| `keywords` | string[] | Meta keywords |
-| `image` | string | OG image path |
-| `canonical` | string | Canonical URL override |
+| Field         | Type     | Purpose                            |
+| ------------- | -------- | ---------------------------------- |
+| `_schema`     | string   | CloudCannon schema (use `default`) |
+| `description` | string   | Meta description                   |
+| `keywords`    | string[] | Meta keywords                      |
+| `image`       | string   | OG image path                      |
+| `canonical`   | string   | Canonical URL override             |
 
 ### How pages render
 
@@ -62,10 +62,10 @@ The `_component` value in each section is a path key that `renderBlock.astro` us
 
 ### File naming and URLs
 
-| File path | URL |
-| --- | --- |
-| `src/content/pages/index.md` | `/` |
-| `src/content/pages/about.md` | `/about/` |
+| File path                                  | URL                     |
+| ------------------------------------------ | ----------------------- |
+| `src/content/pages/index.md`               | `/`                     |
+| `src/content/pages/about.md`               | `/about/`               |
 | `src/content/pages/services/consulting.md` | `/services/consulting/` |
 
 The `blog` slug is excluded from the catch-all route (it has its own route).
@@ -98,14 +98,14 @@ Full-width centered hero with heading, subtext, and buttons.
   backgroundColor: base
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `eyebrow` | text | Small text above heading |
-| `heading` | text | Main headline |
-| `subtext` | markdown | Supporting text |
-| `buttonSections` | array | Button components |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop              | Type     | Options / Notes                                  |
+| ----------------- | -------- | ------------------------------------------------ |
+| `eyebrow`         | text     | Small text above heading                         |
+| `heading`         | text     | Main headline                                    |
+| `subtext`         | markdown | Supporting text                                  |
+| `buttonSections`  | array    | Button components                                |
+| `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
 #### hero-split
 
@@ -131,18 +131,18 @@ Split layout hero with text on one side and image on the other.
   backgroundColor: base
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `eyebrow` | text | Small text above heading |
-| `heading` | text | Main headline |
-| `subtext` | markdown | Supporting text |
-| `imageSource` | image | Path to image |
-| `imageAlt` | text | Alt text |
-| `imageAspectRatio` | select | `none`, `square`, `landscape`, `portrait`, `widescreen` |
-| `buttonSections` | array | Button components |
-| `reverse` | switch | Flip image/text sides |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop               | Type     | Options / Notes                                         |
+| ------------------ | -------- | ------------------------------------------------------- |
+| `eyebrow`          | text     | Small text above heading                                |
+| `heading`          | text     | Main headline                                           |
+| `subtext`          | markdown | Supporting text                                         |
+| `imageSource`      | image    | Path to image                                           |
+| `imageAlt`         | text     | Alt text                                                |
+| `imageAspectRatio` | select   | `none`, `square`, `landscape`, `portrait`, `widescreen` |
+| `buttonSections`   | array    | Button components                                       |
+| `reverse`          | switch   | Flip image/text sides                                   |
+| `colorScheme`      | select   | `inherit`, `light`, `dark`                              |
+| `backgroundColor`  | select   | `none`, `base`, `surface`, `accent`, `highlight`        |
 
 ---
 
@@ -177,17 +177,17 @@ Responsive grid of feature items with icons and descriptions.
   backgroundColor: surface
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `eyebrow` | text | Small text above heading |
-| `heading` | text | Section headline |
-| `subtext` | markdown | Supporting text |
-| `align` | select | `start`, `center` |
-| `gap` | select | `sm`, `md`, `lg`, `xl`, `2xl`, `3xl` |
-| `minItemWidth` / `maxItemWidth` | number | Grid item size constraints (px) |
-| `features` | array | Items with `title`, `description`, `iconName`, `iconColor` |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop                            | Type     | Options / Notes                                            |
+| ------------------------------- | -------- | ---------------------------------------------------------- |
+| `eyebrow`                       | text     | Small text above heading                                   |
+| `heading`                       | text     | Section headline                                           |
+| `subtext`                       | markdown | Supporting text                                            |
+| `align`                         | select   | `start`, `center`                                          |
+| `gap`                           | select   | `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`                       |
+| `minItemWidth` / `maxItemWidth` | number   | Grid item size constraints (px)                            |
+| `features`                      | array    | Items with `title`, `description`, `iconName`, `iconColor` |
+| `colorScheme`                   | select   | `inherit`, `light`, `dark`                                 |
+| `backgroundColor`               | select   | `none`, `base`, `surface`, `accent`, `highlight`           |
 
 Feature item fields: `title` (text), `description` (markdown), `iconName` (from icon set), `iconColor` (`default`, `blue`, `green`, `yellow`, `orange`, `red`, `purple`, `pink`, `cyan`).
 
@@ -211,19 +211,19 @@ Split layout pairing text with an image.
   backgroundColor: base
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `eyebrow` | text | Small text above heading |
-| `heading` | text | Section headline |
-| `subtext` | markdown | Supporting text |
-| `buttonSections` | array | Button components |
-| `imageSource` | image | Path to image |
-| `imageAlt` | text | Alt text |
-| `imageAspectRatio` | select | `none`, `portrait`, `square`, `landscape`, `widescreen` |
-| `imageRounded` | switch | Round image corners |
-| `reverse` | switch | Flip image/text sides |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop               | Type     | Options / Notes                                         |
+| ------------------ | -------- | ------------------------------------------------------- |
+| `eyebrow`          | text     | Small text above heading                                |
+| `heading`          | text     | Section headline                                        |
+| `subtext`          | markdown | Supporting text                                         |
+| `buttonSections`   | array    | Button components                                       |
+| `imageSource`      | image    | Path to image                                           |
+| `imageAlt`         | text     | Alt text                                                |
+| `imageAspectRatio` | select   | `none`, `portrait`, `square`, `landscape`, `widescreen` |
+| `imageRounded`     | switch   | Round image corners                                     |
+| `reverse`          | switch   | Flip image/text sides                                   |
+| `colorScheme`      | select   | `inherit`, `light`, `dark`                              |
+| `backgroundColor`  | select   | `none`, `base`, `surface`, `accent`, `highlight`        |
 
 #### feature-slider
 
@@ -246,14 +246,14 @@ Carousel of feature cards with images.
   backgroundColor: surface
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `eyebrow` | text | Small text above heading |
-| `heading` | text | Section headline |
-| `subtext` | textarea | Supporting text |
-| `slides` | array | Slide items (see below) |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop              | Type     | Options / Notes                                  |
+| ----------------- | -------- | ------------------------------------------------ |
+| `eyebrow`         | text     | Small text above heading                         |
+| `heading`         | text     | Section headline                                 |
+| `subtext`         | textarea | Supporting text                                  |
+| `slides`          | array    | Slide items (see below)                          |
+| `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
 Slide item fields: `eyebrow` (text), `title` (text), `description` (markdown), `imageSource` (image), `imageAlt` (text), `minSplitWidth` (number).
 
@@ -281,14 +281,14 @@ Centered call-to-action with headline, text, and buttons.
   rounded: false
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `heading` | text | CTA headline |
-| `subtext` | markdown | Supporting text |
-| `buttonSections` | array | Button components |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
-| `rounded` | switch | Round section corners |
+| Prop              | Type     | Options / Notes                                  |
+| ----------------- | -------- | ------------------------------------------------ |
+| `heading`         | text     | CTA headline                                     |
+| `subtext`         | markdown | Supporting text                                  |
+| `buttonSections`  | array    | Button components                                |
+| `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
+| `rounded`         | switch   | Round section corners                            |
 
 #### cta-split
 
@@ -313,17 +313,17 @@ Split layout CTA with image on one side.
   rounded: false
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `heading` | text | CTA headline |
-| `subtext` | markdown | Supporting text |
-| `imageSource` | image | Path to image |
-| `imageAlt` | text | Alt text |
-| `buttonSections` | array | Button components |
-| `reverse` | switch | Flip sides |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
-| `rounded` | switch | Round section corners |
+| Prop              | Type     | Options / Notes                                  |
+| ----------------- | -------- | ------------------------------------------------ |
+| `heading`         | text     | CTA headline                                     |
+| `subtext`         | markdown | Supporting text                                  |
+| `imageSource`     | image    | Path to image                                    |
+| `imageAlt`        | text     | Alt text                                         |
+| `buttonSections`  | array    | Button components                                |
+| `reverse`         | switch   | Flip sides                                       |
+| `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
+| `rounded`         | switch   | Round section corners                            |
 
 #### cta-form
 
@@ -361,17 +361,17 @@ Split layout with a form and an image.
   backgroundColor: base
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `heading` | text | Form section headline |
-| `subtext` | markdown | Supporting text |
-| `formAction` | url | Form submission URL |
-| `formBlocks` | array | Form field components |
-| `imageSource` | image | Path to image |
-| `imageAlt` | text | Alt text |
-| `reverse` | switch | Flip form/image sides |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop              | Type     | Options / Notes                                  |
+| ----------------- | -------- | ------------------------------------------------ |
+| `heading`         | text     | Form section headline                            |
+| `subtext`         | markdown | Supporting text                                  |
+| `formAction`      | url      | Form submission URL                              |
+| `formBlocks`      | array    | Form field components                            |
+| `imageSource`     | image    | Path to image                                    |
+| `imageAlt`        | text     | Alt text                                         |
+| `reverse`         | switch   | Flip form/image sides                            |
+| `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
 ---
 
@@ -406,18 +406,18 @@ Accordion-style FAQ section.
   backgroundColor: none
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `heading` | text | Section headline |
-| `headingLevel` | select | `h1`–`h6` |
-| `headingSize` | select | `xs`, `sm`, `md`, `lg`, `xl`, `2xl` |
-| `singleOpen` | switch | Only one item open at a time |
-| `openFirst` | switch | First item open by default |
-| `items` | array | FAQ items with `title` and `contentSections` |
-| `maxContentWidth` | select | `sm`–`2xl` |
-| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop                                    | Type   | Options / Notes                                  |
+| --------------------------------------- | ------ | ------------------------------------------------ |
+| `heading`                               | text   | Section headline                                 |
+| `headingLevel`                          | select | `h1`–`h6`                                        |
+| `headingSize`                           | select | `xs`, `sm`, `md`, `lg`, `xl`, `2xl`              |
+| `singleOpen`                            | switch | Only one item open at a time                     |
+| `openFirst`                             | switch | First item open by default                       |
+| `items`                                 | array  | FAQ items with `title` and `contentSections`     |
+| `maxContentWidth`                       | select | `sm`–`2xl`                                       |
+| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                    |
+| `colorScheme`                           | select | `inherit`, `light`, `dark`                       |
+| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight` |
 
 Each FAQ item has `title` (text) and `contentSections` (array of building blocks, typically `building-blocks/core-elements/text`).
 
@@ -445,14 +445,14 @@ Responsive grid of team member cards.
   backgroundColor: surface
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `eyebrow` | text | Small text above heading |
-| `heading` | text | Section headline |
-| `subtext` | textarea | Supporting text |
-| `teamMembers` | array | Team member items (see below) |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop              | Type     | Options / Notes                                  |
+| ----------------- | -------- | ------------------------------------------------ |
+| `eyebrow`         | text     | Small text above heading                         |
+| `heading`         | text     | Section headline                                 |
+| `subtext`         | textarea | Supporting text                                  |
+| `teamMembers`     | array    | Team member items (see below)                    |
+| `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
 Team member fields: `name` (text), `role` (text), `bio` (textarea), `imageSource` (image), `imageAlt` (text).
 
@@ -475,17 +475,17 @@ Single testimonial with author info.
   backgroundColor: surface
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `text` | markdown | Testimonial quote |
-| `authorName` | text | Author name |
-| `authorDescription` | text | Author title/role |
-| `authorImage` | image | Author photo |
-| `alignX` | select | `center`, `start`, `end` |
-| `maxContentWidth` | select | `sm`–`2xl` |
-| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
+| Prop                                    | Type     | Options / Notes                                  |
+| --------------------------------------- | -------- | ------------------------------------------------ |
+| `text`                                  | markdown | Testimonial quote                                |
+| `authorName`                            | text     | Author name                                      |
+| `authorDescription`                     | text     | Author title/role                                |
+| `authorImage`                           | image    | Author photo                                     |
+| `alignX`                                | select   | `center`, `start`, `end`                         |
+| `maxContentWidth`                       | select   | `sm`–`2xl`                                       |
+| `paddingHorizontal` / `paddingVertical` | select   | Spacing sizes                                    |
+| `colorScheme`                           | select   | `inherit`, `light`, `dark`                       |
+| `backgroundColor`                       | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
 ---
 
@@ -521,16 +521,16 @@ Flexible container for composing any building blocks. Use when no specific page 
   rounded: false
 ```
 
-| Prop | Type | Options / Notes |
-| --- | --- | --- |
-| `label` | text | Section label (also becomes anchor ID) |
-| `contentSections` | array | Any building blocks |
-| `maxContentWidth` | select | `xs`–`3xl` |
-| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes |
-| `colorScheme` | select | `inherit`, `light`, `dark` |
-| `backgroundColor` | select | `none`, `base`, `surface`, `accent`, `highlight` |
-| `backgroundImage` | object | `source`, `alt`, `positionVertical`, `positionHorizontal` |
-| `rounded` | switch | Round section corners |
+| Prop                                    | Type   | Options / Notes                                           |
+| --------------------------------------- | ------ | --------------------------------------------------------- |
+| `label`                                 | text   | Section label (also becomes anchor ID)                    |
+| `contentSections`                       | array  | Any building blocks                                       |
+| `maxContentWidth`                       | select | `xs`–`3xl`                                                |
+| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                             |
+| `colorScheme`                           | select | `inherit`, `light`, `dark`                                |
+| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`          |
+| `backgroundImage`                       | object | `source`, `alt`, `positionVertical`, `positionHorizontal` |
+| `rounded`                               | switch | Round section corners                                     |
 
 ---
 
@@ -549,12 +549,12 @@ Buttons appear in `buttonSections` arrays across many page sections.
   size: md
 ```
 
-| Prop | Values |
-| --- | --- |
-| `variant` | `primary`, `secondary`, `tertiary`, `ghost` |
-| `size` | `sm`, `md`, `lg` |
-| `iconPosition` | `before`, `after` |
-| `hideText` | `true` / `false` (icon-only button) |
+| Prop           | Values                                      |
+| -------------- | ------------------------------------------- |
+| `variant`      | `primary`, `secondary`, `tertiary`, `ghost` |
+| `size`         | `sm`, `md`, `lg`                            |
+| `iconPosition` | `before`, `after`                           |
+| `hideText`     | `true` / `false` (icon-only button)         |
 
 ---
 
@@ -564,12 +564,12 @@ Buttons appear in `buttonSections` arrays across many page sections.
 
 ```yaml
 pageSections:
-  - _component: page-sections/heroes/hero-center      # or hero-split
-  - _component: page-sections/features/feature-grid    # key benefits
-  - _component: page-sections/features/feature-split   # detailed feature 1
-  - _component: page-sections/features/feature-split   # detailed feature 2 (reverse: true)
+  - _component: page-sections/heroes/hero-center # or hero-split
+  - _component: page-sections/features/feature-grid # key benefits
+  - _component: page-sections/features/feature-split # detailed feature 1
+  - _component: page-sections/features/feature-split # detailed feature 2 (reverse: true)
   - _component: page-sections/people/testimonial-section
-  - _component: page-sections/ctas/cta-center          # closing CTA
+  - _component: page-sections/ctas/cta-center # closing CTA
 ```
 
 ### About / Why page
@@ -610,13 +610,13 @@ These two props control section appearance and work together:
 
 ### Common combinations
 
-| Visual effect | `colorScheme` | `backgroundColor` |
-| --- | --- | --- |
-| White section | `inherit` | `base` |
-| Light gray section | `inherit` | `surface` |
-| Dark section | `dark` | `surface` |
-| Colored accent section | `inherit` | `accent` |
-| Alternating sections | alternate `base` and `surface` | — |
+| Visual effect          | `colorScheme`                  | `backgroundColor` |
+| ---------------------- | ------------------------------ | ----------------- |
+| White section          | `inherit`                      | `base`            |
+| Light gray section     | `inherit`                      | `surface`         |
+| Dark section           | `dark`                         | `surface`         |
+| Colored accent section | `inherit`                      | `accent`          |
+| Alternating sections   | alternate `base` and `surface` | —                 |
 
 ---
 

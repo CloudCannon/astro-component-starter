@@ -30,19 +30,19 @@ CSS layer order (declared in `BaseLayout.astro`):
 
 ### Spacing (`src/styles/variables/_spacing.css`)
 
-| Token | Value |
-| --- | --- |
-| `--spacing-none` | 0 |
-| `--spacing-xs` | 0.25rem |
-| `--spacing-sm` | 0.5rem |
-| `--spacing-md` | 1rem |
-| `--spacing-lg` | 1.5rem |
-| `--spacing-xl` | 2rem |
-| `--spacing-2xl` | 3rem |
-| `--spacing-3xl` | 4rem |
-| `--spacing-4xl` | 5rem |
-| `--spacing-5xl` | 6rem |
-| `--spacing-6xl` | 7rem |
+| Token            | Value   |
+| ---------------- | ------- |
+| `--spacing-none` | 0       |
+| `--spacing-xs`   | 0.25rem |
+| `--spacing-sm`   | 0.5rem  |
+| `--spacing-md`   | 1rem    |
+| `--spacing-lg`   | 1.5rem  |
+| `--spacing-xl`   | 2rem    |
+| `--spacing-2xl`  | 3rem    |
+| `--spacing-3xl`  | 4rem    |
+| `--spacing-4xl`  | 5rem    |
+| `--spacing-5xl`  | 6rem    |
+| `--spacing-6xl`  | 7rem    |
 
 There are also `--spacing-em-*` variants (same scale in `em` units) for font-relative spacing.
 
@@ -50,47 +50,47 @@ There are also `--spacing-em-*` variants (same scale in `em` units) for font-rel
 
 **Body font sizes** (scale down on screens < 640px):
 
-| Token | Desktop | Mobile |
-| --- | --- | --- |
-| `--font-size-xs` | 0.75rem | 0.625rem |
-| `--font-size-sm` | 0.875rem | 0.75rem |
-| `--font-size-md` | 1rem | 0.875rem |
-| `--font-size-lg` | 1.125rem | 1rem |
-| `--font-size-xl` | 1.375rem | 1.125rem |
+| Token             | Desktop  | Mobile   |
+| ----------------- | -------- | -------- |
+| `--font-size-xs`  | 0.75rem  | 0.625rem |
+| `--font-size-sm`  | 0.875rem | 0.75rem  |
+| `--font-size-md`  | 1rem     | 0.875rem |
+| `--font-size-lg`  | 1.125rem | 1rem     |
+| `--font-size-xl`  | 1.375rem | 1.125rem |
 | `--font-size-2xl` | 1.625rem | 1.375rem |
 | `--font-size-3xl` | 1.875rem | 1.625rem |
-| `--font-size-4xl` | 2.25rem | 1.875rem |
-| `--font-size-5xl` | 2.625rem | — |
+| `--font-size-4xl` | 2.25rem  | 1.875rem |
+| `--font-size-5xl` | 2.625rem | —        |
 
 **Heading font sizes** (scale down on screens < 640px):
 
-| Token | Desktop | Mobile |
-| --- | --- | --- |
-| `--font-size-heading-xs` | 1.125rem | 1rem |
-| `--font-size-heading-sm` | 1.375rem | 1.25rem |
-| `--font-size-heading-md` | 1.75rem | 1.5rem |
-| `--font-size-heading-lg` | 2.25rem | 1.875rem |
-| `--font-size-heading-xl` | 2.875rem | 2.375rem |
-| `--font-size-heading-2xl` | 3.75rem | 3rem |
-| `--font-size-heading-3xl` | 4.625rem | 3.75rem |
-| `--font-size-heading-4xl` | 5.5rem | 4.25rem |
-| `--font-size-heading-5xl` | 6.375rem | — |
+| Token                     | Desktop  | Mobile   |
+| ------------------------- | -------- | -------- |
+| `--font-size-heading-xs`  | 1.125rem | 1rem     |
+| `--font-size-heading-sm`  | 1.375rem | 1.25rem  |
+| `--font-size-heading-md`  | 1.75rem  | 1.5rem   |
+| `--font-size-heading-lg`  | 2.25rem  | 1.875rem |
+| `--font-size-heading-xl`  | 2.875rem | 2.375rem |
+| `--font-size-heading-2xl` | 3.75rem  | 3rem     |
+| `--font-size-heading-3xl` | 4.625rem | 3.75rem  |
+| `--font-size-heading-4xl` | 5.5rem   | 4.25rem  |
+| `--font-size-heading-5xl` | 6.375rem | —        |
 
 **Font weights:**
 
-| Token | Value |
-| --- | --- |
-| `--font-weight-normal` | 400 |
-| `--font-weight-semibold` | 600 |
-| `--font-weight-bold` | 700 |
+| Token                    | Value |
+| ------------------------ | ----- |
+| `--font-weight-normal`   | 400   |
+| `--font-weight-semibold` | 600   |
+| `--font-weight-bold`     | 700   |
 
 **Font families** (set via `site-fonts.mjs`, see font configuration below):
 
-| Token | Default |
-| --- | --- |
-| `--font-body` | Inter (Google Fonts) |
+| Token             | Default                |
+| ----------------- | ---------------------- |
+| `--font-body`     | Inter (Google Fonts)   |
 | `--font-headings` | Raleway (Google Fonts) |
-| `--font-mono` | System monospace stack |
+| `--font-mono`     | System monospace stack |
 
 ### Colors (`src/styles/variables/_colors.css`)
 
@@ -98,93 +98,93 @@ Raw palette values — not used directly in components. Components use semantic 
 
 **Gray scale:**
 
-| Token | Value |
-| --- | --- |
-| `--gray-0` | #fff |
-| `--gray-1` | #eaeaea |
-| `--gray-2` | #d4d4d4 |
-| `--gray-3` | #bfbfbf |
-| `--gray-4` | #aaa |
-| `--gray-5` | #949494 |
-| `--gray-6` | #7f7f7f |
-| `--gray-7` | #6a6a6a |
-| `--gray-8` | #555 |
-| `--gray-9` | #404040 |
+| Token       | Value   |
+| ----------- | ------- |
+| `--gray-0`  | #fff    |
+| `--gray-1`  | #eaeaea |
+| `--gray-2`  | #d4d4d4 |
+| `--gray-3`  | #bfbfbf |
+| `--gray-4`  | #aaa    |
+| `--gray-5`  | #949494 |
+| `--gray-6`  | #7f7f7f |
+| `--gray-7`  | #6a6a6a |
+| `--gray-8`  | #555    |
+| `--gray-9`  | #404040 |
 | `--gray-10` | #2a2a2a |
 | `--gray-11` | #151515 |
-| `--gray-12` | #000 |
+| `--gray-12` | #000    |
 
 **Accent colors:**
 
-| Color | Light variant | Dark variant |
-| --- | --- | --- |
-| Blue | `--blue-light` (#e8f4fd) | `--blue-dark` (#3b82f6) |
-| Green | `--green-light` (#e8fce9) | `--green-dark` (#10b981) |
+| Color  | Light variant              | Dark variant              |
+| ------ | -------------------------- | ------------------------- |
+| Blue   | `--blue-light` (#e8f4fd)   | `--blue-dark` (#3b82f6)   |
+| Green  | `--green-light` (#e8fce9)  | `--green-dark` (#10b981)  |
 | Yellow | `--yellow-light` (#fef9e7) | `--yellow-dark` (#fbbf24) |
 | Orange | `--orange-light` (#fef3e7) | `--orange-dark` (#f97316) |
-| Red | `--red-light` (#fee8e8) | `--red-dark` (#ef4444) |
+| Red    | `--red-light` (#fee8e8)    | `--red-dark` (#ef4444)    |
 | Purple | `--purple-light` (#f3e8ff) | `--purple-dark` (#a855f7) |
-| Pink | `--pink-light` (#fde8f2) | `--pink-dark` (#ec4899) |
-| Cyan | `--cyan-light` (#e8fffe) | `--cyan-dark` (#06b6d4) |
+| Pink   | `--pink-light` (#fde8f2)   | `--pink-dark` (#ec4899)   |
+| Cyan   | `--cyan-light` (#e8fffe)   | `--cyan-dark` (#06b6d4)   |
 
 ### Border radius (`src/styles/variables/_radius.css`)
 
-| Token | Value |
-| --- | --- |
-| `--radius-none` | 0 |
-| `--radius-xs` | 4px |
-| `--radius-sm` | 8px |
-| `--radius-md` | 12px |
-| `--radius-lg` | 16px |
-| `--radius-xl` | 24px |
-| `--radius-2xl` | 32px |
-| `--radius-3xl` | 48px |
-| `--radius-4xl` | 64px |
+| Token           | Value  |
+| --------------- | ------ |
+| `--radius-none` | 0      |
+| `--radius-xs`   | 4px    |
+| `--radius-sm`   | 8px    |
+| `--radius-md`   | 12px   |
+| `--radius-lg`   | 16px   |
+| `--radius-xl`   | 24px   |
+| `--radius-2xl`  | 32px   |
+| `--radius-3xl`  | 48px   |
+| `--radius-4xl`  | 64px   |
 | `--radius-full` | 9999px |
 
 ### Content widths (`src/styles/variables/_content-widths.css`)
 
-| Token | Value |
-| --- | --- |
-| `--content-width-xs` | 350px |
-| `--content-width-sm` | 480px |
-| `--content-width-md` | 640px |
-| `--content-width-lg` | 768px |
-| `--content-width-xl` | 1024px |
+| Token                 | Value  |
+| --------------------- | ------ |
+| `--content-width-xs`  | 350px  |
+| `--content-width-sm`  | 480px  |
+| `--content-width-md`  | 640px  |
+| `--content-width-lg`  | 768px  |
+| `--content-width-xl`  | 1024px |
 | `--content-width-2xl` | 1280px |
 | `--content-width-3xl` | 1536px |
 
 ### Animations (`src/styles/variables/_animations.css`)
 
-| Token | Value |
-| --- | --- |
-| `--animation-fast` | 100ms |
+| Token                | Value |
+| -------------------- | ----- |
+| `--animation-fast`   | 100ms |
 | `--animation-normal` | 200ms |
-| `--animation-slow` | 500ms |
+| `--animation-slow`   | 500ms |
 
 ### Aspect ratios (`src/styles/variables/_aspects.css`)
 
-| Token | Value |
-| --- | --- |
-| `--ratio-square` | 1 / 1 |
-| `--ratio-landscape` | 4 / 3 |
-| `--ratio-portrait` | 3 / 4 |
-| `--ratio-widescreen` | 16 / 9 |
+| Token                      | Value  |
+| -------------------------- | ------ |
+| `--ratio-square`           | 1 / 1  |
+| `--ratio-landscape`        | 4 / 3  |
+| `--ratio-portrait`         | 3 / 4  |
+| `--ratio-widescreen`       | 16 / 9 |
 | `--ratio-horizontal-strip` | 16 / 5 |
 
 ### Z-index layers (`src/styles/variables/_layers.css`)
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--layer-0` | 0 | Default |
-| `--layer-1` | 10 | Raised content |
-| `--layer-2` | 20 | Sticky headers |
-| `--layer-3` | 30 | Dropdowns, modals |
-| `--layer-4` | 40 | Sticky headers, notifications |
-| `--layer-5` | 50 | Popovers, tooltips |
-| `--layer-6` | 60 | Overlays |
-| `--layer-7` | 100 | High priority |
-| `--layer-8` | 1000 | Critical UI |
+| Token       | Value | Use                           |
+| ----------- | ----- | ----------------------------- |
+| `--layer-0` | 0     | Default                       |
+| `--layer-1` | 10    | Raised content                |
+| `--layer-2` | 20    | Sticky headers                |
+| `--layer-3` | 30    | Dropdowns, modals             |
+| `--layer-4` | 40    | Sticky headers, notifications |
+| `--layer-5` | 50    | Popovers, tooltips            |
+| `--layer-6` | 60    | Overlays                      |
+| `--layer-7` | 100   | High priority                 |
+| `--layer-8` | 1000  | Critical UI                   |
 
 ---
 
@@ -195,7 +195,7 @@ The theme files map raw palette values to semantic tokens. Components use semant
 ### Light theme (`src/styles/themes/_light.css`)
 
 ```css
-[data-theme="light"] {
+[data-theme='light'] {
   color-scheme: light;
 
   --color-brand: var(--gray-12);
@@ -238,7 +238,7 @@ The theme files map raw palette values to semantic tokens. Components use semant
 ### Dark theme (`src/styles/themes/_dark.css`)
 
 ```css
-[data-theme="dark"] {
+[data-theme='dark'] {
   color-scheme: dark;
 
   --color-brand: var(--gray-0);
@@ -282,9 +282,10 @@ The theme files map raw palette values to semantic tokens. Components use semant
 
 ```astro
 <div
-  class:list={["outer-content", rounded && "rounded"]}
-  data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+  class:list={['outer-content', rounded && 'rounded']}
+  data-theme={colorScheme && colorScheme !== 'inherit' ? colorScheme : undefined}
 >
+</div>
 ```
 
 When `colorScheme` is `"dark"`, all descendant elements resolve semantic tokens from `[data-theme="dark"]`. When `"inherit"`, no `data-theme` is set and the section uses whatever theme the parent provides (the document root is `data-theme="light"` by default, set in `BaseLayout.astro`).
@@ -303,12 +304,12 @@ When a brand needs variables that don't exist yet, extend the system rather than
 
 ### Where to add new values
 
-| What you're adding | Where to put it |
-| --- | --- |
-| Raw palette color (hex value shared across themes) | `src/styles/variables/_colors.css` |
-| Semantic color that changes per theme | Both `src/styles/themes/_light.css` and `_dark.css` |
-| New spacing/radius/width value | Appropriate file in `src/styles/variables/` |
-| Entirely new token category | New file in `src/styles/variables/`, import in `_variables.css` |
+| What you're adding                                 | Where to put it                                                 |
+| -------------------------------------------------- | --------------------------------------------------------------- |
+| Raw palette color (hex value shared across themes) | `src/styles/variables/_colors.css`                              |
+| Semantic color that changes per theme              | Both `src/styles/themes/_light.css` and `_dark.css`             |
+| New spacing/radius/width value                     | Appropriate file in `src/styles/variables/`                     |
+| Entirely new token category                        | New file in `src/styles/variables/`, import in `_variables.css` |
 
 ### Example: adding a brand accent color
 
@@ -375,22 +376,22 @@ Fonts are managed in a single file: `site-fonts.mjs` at the project root. This f
 
 ```js
 // site-fonts.mjs
-import { fontProviders } from "astro/config";
+import { fontProviders } from 'astro/config';
 
 export const siteFonts = [
   {
-    name: "Inter",
-    cssVariable: "--font-body",
+    name: 'Inter',
+    cssVariable: '--font-body',
     provider: fontProviders.google(),
     weights: [400, 600, 700],
-    styles: ["normal"],
+    styles: ['normal'],
   },
   {
-    name: "Raleway",
-    cssVariable: "--font-headings",
+    name: 'Raleway',
+    cssVariable: '--font-headings',
     provider: fontProviders.google(),
     weights: [400, 600, 700],
-    styles: ["normal"],
+    styles: ['normal'],
   },
 ];
 ```
@@ -409,18 +410,18 @@ Example switching to a custom font pair:
 ```js
 export const siteFonts = [
   {
-    name: "Open Sans",
-    cssVariable: "--font-body",
+    name: 'Open Sans',
+    cssVariable: '--font-body',
     provider: fontProviders.google(),
     weights: [400, 600, 700],
-    styles: ["normal"],
+    styles: ['normal'],
   },
   {
-    name: "Montserrat",
-    cssVariable: "--font-headings",
+    name: 'Montserrat',
+    cssVariable: '--font-headings',
     provider: fontProviders.google(),
     weights: [400, 600, 700],
-    styles: ["normal"],
+    styles: ['normal'],
   },
 ];
 ```

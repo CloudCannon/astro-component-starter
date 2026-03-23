@@ -9,11 +9,11 @@ Site-wide data (navigation, footer, SEO) lives in JSON files under `src/data/`. 
 
 ## Data files overview
 
-| File | Purpose | Consumed by |
-| --- | --- | --- |
+| File                    | Purpose           | Consumed by                      |
+| ----------------------- | ----------------- | -------------------------------- |
 | `src/data/mainNav.json` | Header navigation | `MainNav.astro` via `Page.astro` |
-| `src/data/footer.json` | Footer content | `Footer.astro` via `Page.astro` |
-| `src/data/seo.json` | SEO defaults | `BaseLayout.astro` |
+| `src/data/footer.json`  | Footer content    | `Footer.astro` via `Page.astro`  |
+| `src/data/seo.json`     | SEO defaults      | `BaseLayout.astro`               |
 
 ---
 
@@ -65,22 +65,22 @@ Site-wide data (navigation, footer, SEO) lives in JSON files under `src/data/`. 
 
 ### Fields
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `logoSource` | string | Path to logo image (static `/images/` or asset path) |
-| `logoAlt` | string | Alt text for logo |
-| `navData` | array | Navigation items (up to 3 levels deep) |
-| `buttonSections` | array | Action buttons in the nav bar (e.g., search, CTA) |
+| Field            | Type   | Purpose                                              |
+| ---------------- | ------ | ---------------------------------------------------- |
+| `logoSource`     | string | Path to logo image (static `/images/` or asset path) |
+| `logoAlt`        | string | Alt text for logo                                    |
+| `navData`        | array  | Navigation items (up to 3 levels deep)               |
+| `buttonSections` | array  | Action buttons in the nav bar (e.g., search, CTA)    |
 
 ### Navigation item shape
 
 Each item in `navData` has:
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `name` | string | Display text |
-| `path` | string | URL path (use trailing slash) |
-| `children` | array | Child nav items (same shape, up to 3 levels) |
+| Field      | Type   | Purpose                                      |
+| ---------- | ------ | -------------------------------------------- |
+| `name`     | string | Display text                                 |
+| `path`     | string | URL path (use trailing slash)                |
+| `children` | array  | Child nav items (same shape, up to 3 levels) |
 
 Three nesting levels are supported. CloudCannon provides structure definitions for each level (`navItemLevel1`, `navItemLevel2`, `navItemLevel3`) in the nav component's inputs file.
 
@@ -139,27 +139,27 @@ The nav is sticky-positioned at the top of the page with `z-index: var(--layer-2
 
 ### Fields
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `logoSource` | string | Path to footer logo |
-| `logoAlt` | string | Alt text for logo |
-| `links` | array | Footer navigation links |
-| `socials` | array | Social media icon links |
-| `footerText` | string | Copyright / legal text |
+| Field        | Type   | Purpose                 |
+| ------------ | ------ | ----------------------- |
+| `logoSource` | string | Path to footer logo     |
+| `logoAlt`    | string | Alt text for logo       |
+| `links`      | array  | Footer navigation links |
+| `socials`    | array  | Social media icon links |
+| `footerText` | string | Copyright / legal text  |
 
 ### Link item shape
 
-| Field | Type | Purpose |
-| --- | --- | --- |
+| Field  | Type   | Purpose      |
+| ------ | ------ | ------------ |
 | `name` | string | Display text |
-| `path` | string | URL path |
+| `path` | string | URL path     |
 
 ### Social item shape
 
-| Field | Type | Purpose |
-| --- | --- | --- |
+| Field  | Type   | Purpose                                        |
+| ------ | ------ | ---------------------------------------------- |
 | `icon` | string | Icon name from icon set (use `social/` prefix) |
-| `link` | string | Full URL to social profile |
+| `link` | string | Full URL to social profile                     |
 
 ### Available social icons
 
@@ -201,14 +201,14 @@ Check `src/icons/social/` for the full list of available SVGs.
 
 ### Fields
 
-| Field | Type | Purpose |
-| --- | --- | --- |
-| `name` | string | Site name (used in structured data) |
-| `url` | string | Production URL (used in structured data, canonical links) |
-| `description` | string | Fallback meta description |
-| `logoSource` | string | Fallback OG image |
-| `titleFormat` | string | Title template — `{title}` is replaced with page title |
-| `twitterHandle` | string | Twitter/X handle for social cards |
+| Field           | Type   | Purpose                                                   |
+| --------------- | ------ | --------------------------------------------------------- |
+| `name`          | string | Site name (used in structured data)                       |
+| `url`           | string | Production URL (used in structured data, canonical links) |
+| `description`   | string | Fallback meta description                                 |
+| `logoSource`    | string | Fallback OG image                                         |
+| `titleFormat`   | string | Title template — `{title}` is replaced with page title    |
+| `twitterHandle` | string | Twitter/X handle for social cards                         |
 
 ### How it's consumed
 
@@ -253,7 +253,7 @@ The `data` collection in `cloudcannon.config.yml` makes all JSON files editable:
 data:
   path: src/data
   glob:
-    - "**/*.json"
+    - '**/*.json'
   icon: database
   _enabled_editors:
     - data
@@ -265,11 +265,11 @@ Editors see a "Data" section in CloudCannon with entries for `mainNav`, `footer`
 
 CloudCannon uses structure files in `.cloudcannon/structures/` to define the shape of array items:
 
-| Structure file | Used for |
-| --- | --- |
+| Structure file                       | Used for                    |
+| ------------------------------------ | --------------------------- |
 | `navData.cloudcannon.structures.yml` | Navigation items (3 levels) |
-| `links.cloudcannon.structures.yml` | Footer links |
-| `socials.cloudcannon.structures.yml` | Social media links |
+| `links.cloudcannon.structures.yml`   | Footer links                |
+| `socials.cloudcannon.structures.yml` | Social media links          |
 
 These are loaded globally via `_structures_from_glob` in `cloudcannon.config.yml`.
 
@@ -282,6 +282,7 @@ The nav component also defines its own inline structures in `main-nav.cloudcanno
 ### Step 1: Update SEO data
 
 Edit `src/data/seo.json`:
+
 - Set `name` to the site name
 - Set `url` to the production URL
 - Set `description` to the default meta description
@@ -293,6 +294,7 @@ Also update `site` in `astro.config.mjs` to match the production URL.
 ### Step 2: Update navigation
 
 Edit `src/data/mainNav.json`:
+
 - Replace `logoSource` with the site's logo path (place the SVG in `public/images/`)
 - Set `logoAlt`
 - Replace `navData` with the site's navigation structure
@@ -301,6 +303,7 @@ Edit `src/data/mainNav.json`:
 ### Step 3: Update footer
 
 Edit `src/data/footer.json`:
+
 - Replace `logoSource` and `logoAlt`
 - Replace `links` with footer navigation
 - Replace `socials` with actual social media links
