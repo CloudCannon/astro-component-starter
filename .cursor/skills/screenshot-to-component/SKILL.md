@@ -65,12 +65,7 @@ Note the visual characteristics — these map to design tokens later:
 
 ### Interactions
 
-Identify dynamic behavior:
-- Accordion / expandable sections
-- Tabs / content switcher
-- Carousel / slider with arrows/dots
-- Modal / popup
-- Hover effects on cards
+Identify dynamic behavior (accordion, tabs, modal, carousel, hover effects, etc.) and map each to a CSS-first technique. See the CSS-first convention table in the [create-component skill](../create-component/SKILL.md) for the full mapping. If an existing wrapper handles the behavior, compose it rather than reimplementing.
 
 ---
 
@@ -207,12 +202,12 @@ Always compose from existing building blocks. Never write raw HTML when a buildi
 
 ### Editable bindings
 
-Every text prop and array prop needs CloudCannon editable bindings:
+Every text prop, image prop, and array prop needs CloudCannon editable bindings so editors can update content in the visual preview. Follow the [editable-regions skill](../editable-regions/SKILL.md) for the full reference. The key patterns for page sections:
 
-- **Text fields**: Add `data-prop="propName"` on the building block. The building block handles `data-editable="text"` internally.
-- **Array containers**: Add `data-children-prop="propName"` on the wrapper (Grid, Carousel, etc.). The wrapper handles `data-editable="array"` internally.
-- **Array items**: Add `data-editable="array-item"` and `data-id="{full-component-path}"` on each child.
-- **Image props**: Add `data-prop-src="imageSource"` and `data-prop-alt="imageAlt"` on the Image component.
+- **Text**: `data-prop="propName"` on `Heading`, `Text`, `SimpleText`, `Button`
+- **Images**: `data-prop-src="sourceProp"` + `data-prop-alt="altProp"` on `Image`
+- **Arrays**: `data-children-prop="propName"` on wrapper (`Grid`, `ButtonGroup`, etc.)
+- **Array items**: `data-editable="array-item"` + `data-id="{component-path}"` on each mapped child
 
 ### Translating visual characteristics to design tokens
 

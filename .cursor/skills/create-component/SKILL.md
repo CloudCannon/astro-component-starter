@@ -237,10 +237,41 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ## Key Astro conventions
 
 - **Compose existing components**: Prefer using existing building blocks (Button, Heading, Text, Icon, Image, Card, Grid, ButtonGroup, etc.) over writing custom HTML with manual styling. This keeps behavior and styling consistent across the library.
-- **CSS-first**: Implement all visual behavior with CSS (transitions, animations, show/hide via Popover API, `:has()`, `details`/`summary`, scroll-snap, etc.). JavaScript should only be used for progressive enhancements like managing ARIA attributes or focus return — never for core layout, styling, or interactions that CSS/HTML can handle.
+- **CSS-first**: Core interactions must work without JavaScript. Use native HTML and CSS mechanisms first, then layer JS as progressive enhancement only for things that are not possible with CSS alone. The table below maps common interactions to the correct technique:
+
+| Interaction | Technique | Example in codebase |
+| --- | --- | --- |
+| Modal / popup / dropdown | Popover API (`popover="auto"`, `popovertarget`) | `Modal.astro` |
+| Expand / collapse | `<details>` / `<summary>` with optional `name` for single-open | `AccordionItem.astro` |
+| Tabs / content switcher | Hidden radio inputs + `:checked` sibling selectors + `:has()` fallback | `ContentSelector.astro` |
+| Enter/exit animations | `@starting-style` + `allow-discrete` transitions | `Modal.astro` popover transitions |
+| Conditional visibility | `:has()` selector or checkbox/radio toggle | `ContentSelector.astro`, `Image.astro` |
+| Hover / focus effects | `:hover`, `:focus-visible`, `:focus-within` pseudo-classes | Card hover states |
+| Scroll-driven layouts | `scroll-snap-type` / `scroll-snap-align` | — |
+| Responsive layout shifts | Container queries (`container-type: inline-size`, `@container`) | `FeatureSplit.astro` |
+- **Client-side JavaScript**: When CSS alone can't handle the interaction and you need JS, use a `<script>` tag with the `onPageLoad` utility. This ensures the init function runs on first load and on Astro page navigations, while preventing duplicate runs for the same URL:
+
+```astro
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  onPageLoad(() => {
+    const elements = document.querySelectorAll(".my-component");
+    if (!elements.length) return;
+
+    elements.forEach((el) => {
+      // Progressive enhancement logic here
+    });
+  });
+</script>
+```
+
+Always query for elements inside the callback, guard with an early return if none are found, and keep the script minimal — it should enhance, not replace, the CSS-first behavior.
+
 - **Standard props**: Always destructure `_component`, `class: className`, `useDefaultEditableBinding`, `"data-prop"` (text) or `"data-children-prop"` (arrays), and `...htmlAttributes`.
+- **Root element rules**: Spread `{...htmlAttributes}` on the root element so `renderBlock.astro` can pass through `data-editable="array-item"` and `data-id`. Never put a `data-editable` attribute on the root element — it would conflict with the one injected by `renderBlock`. Never use `display: contents` on the root element as it breaks editable array-item regions.
 - **Early return guard**: `if (!_component && !hasContent) return;` — prevents empty rendering when used programmatically. When `_component` is set (placed via CloudCannon), always render so the editor can interact.
-- **Editable bindings**: Use `data-editable="text"` + `data-prop` for text fields; `data-editable="array"` + `data-prop` for arrays; `data-editable="array-item"` + `data-id` on child items. See templates above.
+- **Editable bindings**: Follow the [editable-regions skill](../editable-regions/SKILL.md) for all editable region patterns. In short: pass `data-prop` on text building blocks, `data-children-prop` on array wrappers, `data-prop-src`/`data-prop-alt` on images, and `data-editable="array-item"` + `data-id` on mapped child items.
 - **Scoped styles**: Use `@layer components` for building blocks, `@layer page-sections` for page sections. Use CSS custom properties for all values. Use `class:list` for conditional classes. Use `:global()` when targeting children from other components.
 
 ## CloudCannon structures registration
