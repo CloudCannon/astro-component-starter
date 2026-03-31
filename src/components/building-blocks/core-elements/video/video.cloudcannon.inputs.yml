@@ -17,10 +17,12 @@ id:
 source:
   type: file
   label: Video Source
-  comment: Used for locally hosted videos - Must be mp4 as this is supported by all modern browsers.
+  comment: Used for locally hosted videos - Select a video file; matching sibling formats with the same filename are added as additional sources automatically.
   options:
     accepts_mime_types:
       - video/mp4
+      - video/webm
+      - video/ogg
     paths:
       uploads: public/videos
       static: public
