@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Logo aspect ratios in main nav stay visually balanced across desktop and mobile states.
+- Third-level main nav items now use distinct styling to separate from second-level items.
 - Text blocks now trim top margin from their first child and bottom margin from their last child for more consistent wrapper spacing.
 - Modal examples now use `custom-section` for inner spacing, and the modal wrapper no longer applies default body padding itself.
 

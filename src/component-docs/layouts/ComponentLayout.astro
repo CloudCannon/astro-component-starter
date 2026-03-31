@@ -11,8 +11,9 @@ const meta = {
   title: configData?.label || frontmatter.title,
 };
 
-const md = new MarkdownIt({ html: true });
+const md = MarkdownIt({ html: true });
 const overviewHtml = frontmatter.overview ? md.render(frontmatter.overview) : null;
+const defaultExampleSize = frontmatter.defaultSize || "md";
 
 const primaryExample = examples.find(
   (example: any) => example && example.id && example.id.includes("/primary")
@@ -39,7 +40,7 @@ const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
   return {
     title: exampleConfig.title,
     examples: sortedExamples,
-    size: exampleConfig.size,
+    size: exampleConfig.size || defaultExampleSize,
   };
 });
 ---
@@ -53,6 +54,7 @@ const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
       <ComponentViewer
         component_examples={[primaryExample]}
         title={meta.title}
+        size={defaultExampleSize}
         componentKey={componentKey}
       />
     )

@@ -17,7 +17,22 @@ blocks:
           children: []
         - name: 'Documentation'
           path: '#'
-          children: []
+          children:
+            - name: 'Getting Started'
+              path: '#'
+              children: []
+            - name: 'Components'
+              path: '#'
+              children:
+                - name: 'Navigation'
+                  path: '#'
+                  children: []
+                - name: 'Forms'
+                  path: '#'
+                  children: []
+                - name: 'Layout'
+                  path: '#'
+                  children: []
         - name: 'Support'
           path: '#'
           children: []
