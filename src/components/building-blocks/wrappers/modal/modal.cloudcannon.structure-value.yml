@@ -4,6 +4,7 @@ description: Dialog overlay triggered by a button, for focused content or action
 value:
   _component: building-blocks/wrappers/modal
   label: null
+  header: null
   triggerText: Open
   triggerVariant: primary
   triggerSize: md

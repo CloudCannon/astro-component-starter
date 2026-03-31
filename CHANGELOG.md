@@ -6,9 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Modal wrapper now supports an optional header title shown in the sticky top bar.
+
 ### Changed
 
 - Logo aspect ratios in main nav stay visually balanced across desktop and mobile states.
+- Text blocks now trim top margin from their first child and bottom margin from their last child for more consistent wrapper spacing.
+- Modal examples now use `custom-section` for inner spacing, and the modal wrapper no longer applies default body padding itself.
+
+### Fixed
+
+- Opening a modal now locks page scrolling until the modal is closed.
 
 ## [1.0.1] - 2026-03-19
 

@@ -1,6 +1,9 @@
 label:
   type: text
   comment: Accessible label for the modal dialog.
+header:
+  type: text
+  comment: Optional heading displayed at the top of the modal.
 triggerText:
   type: text
   comment: Text displayed on the button that opens the modal.

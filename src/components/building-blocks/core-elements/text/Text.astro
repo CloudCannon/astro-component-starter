@@ -46,6 +46,14 @@ if (!_component && !hasText && !hasSlotContent) return;
       margin-top: var(--spacing-lg);
 
       > .text-inner {
+        > :global(*:first-child) {
+          margin-top: 0 !important;
+        }
+
+        > :global(*:last-child) {
+          margin-bottom: 0 !important;
+        }
+
         &.align-start {
           text-align: start;
         }
