@@ -1,5 +1,6 @@
 ---
 import StructuredData from "@components/utils/StructuredData.astro";
+import { resolveImageSource } from "@component-utils/resolveImageSource";
 import seoData from "@data/seo.json";
 import "@styles/style.css";
 import SiteFonts from "@layouts/SiteFonts.astro";
@@ -16,7 +17,7 @@ export interface Props {
 const props = Astro.props;
 const formattedTitle = seoData.titleFormat.replace("{title}", props.title);
 const pageDescription = props.description || seoData.description;
-const pageImage = props.image || seoData.logoSource;
+const pageImage = resolveImageSource(props.image || seoData.logoSource);
 ---
 
 <!doctype html>

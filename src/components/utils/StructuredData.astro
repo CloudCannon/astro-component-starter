@@ -1,4 +1,6 @@
 ---
+import { resolveImageSource } from "@component-utils/resolveImageSource";
+
 export interface Props {
   site: {
     name: string;
@@ -9,13 +11,14 @@ export interface Props {
 }
 
 const { site } = Astro.props;
+const logoUrl = new URL(resolveImageSource(site.logoSource), site.url).toString();
 
 const structuredData: Record<string, any> = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: site.name,
   url: site.url,
-  logo: site.url + site.logoSource,
+  logo: logoUrl,
   description: site.description,
 };
 ---
