@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots when indicators are enabled.
 - Modal wrapper now supports an optional header title shown in the sticky top bar.
 
 ### Changed
@@ -20,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Carousel: `loop={false}` now disables Embla loop; `data-loop="false"` was previously treated as enabled because we only checked attribute presence.
 - Opening a modal now locks page scrolling until the modal is closed.
 
 ## [1.0.1] - 2026-03-19

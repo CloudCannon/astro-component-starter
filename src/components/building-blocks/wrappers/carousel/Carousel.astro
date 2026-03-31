@@ -10,6 +10,8 @@ const {
   autoPlay = false,
   autoScroll = false,
   showIndicators = true,
+  /** `"dots"` (default) or `"fraction"` (e.g. `1/3`). */
+  indicatorStyle = "dots",
   showArrows = true,
   loop = true,
   align = "center",
@@ -30,8 +32,11 @@ if (!htmlAttributes.id && label) {
 
 const dataAttributes: Record<string, string> = {};
 
-dataAttributes["data-show-indicators"] = String(showIndicators);
-dataAttributes["data-show-arrows"] = String(showArrows);
+const effectiveShowIndicators = autoScroll ? false : showIndicators;
+const effectiveShowArrows = autoScroll ? false : showArrows;
+
+dataAttributes["data-show-indicators"] = String(effectiveShowIndicators);
+dataAttributes["data-show-arrows"] = String(effectiveShowArrows);
 dataAttributes["data-loop"] = String(loop);
 dataAttributes["data-align"] = String(align);
 dataAttributes["data-slides-to-scroll"] = String(slidesToScroll);
@@ -42,8 +47,6 @@ if (autoPlay) {
 
 if (autoScroll) {
   dataAttributes["data-autoscroll"] = "1";
-  dataAttributes["data-show-indicators"] = "false";
-  dataAttributes["data-show-arrows"] = "false";
 }
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "slides" : null);
@@ -69,7 +72,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 <section
   class:list={carouselClasses}
   role="region"
-  aria-label="Carousel"
+  aria-label={label || "Carousel"}
   {...htmlAttributes}
 >
   <div
@@ -98,37 +101,54 @@ if (!_component && !hasSlides && !hasSlotContent) return;
       </div>
     </div>
 
-    <div class="controls-wrapper">
-      <Button
-        iconName="arrow-left"
-        size="md"
-        variant="tertiary"
-        hideText={true}
-        aria-label="Previous slide"
-        class="prev"
-        element="button"
-      />
+    {
+      (effectiveShowArrows || effectiveShowIndicators) && (
+        <div class="controls-wrapper">
+          {effectiveShowArrows && (
+            <Button
+              iconName="arrow-left"
+              size="none"
+              variant="tertiary"
+              hideText={true}
+              aria-label="Previous slide"
+              class="prev"
+              element="button"
+            />
+          )}
 
-      <div class="indicators"></div>
+          {effectiveShowIndicators &&
+            (indicatorStyle === "fraction" ? (
+              <div
+                class="carousel-fraction"
+                aria-live="polite"
+                aria-atomic="true"
+              />
+            ) : (
+              <div class="indicators" />
+            ))}
 
-      <Button
-        iconName="arrow-right"
-        size="md"
-        variant="tertiary"
-        hideText={true}
-        aria-label="Next slide"
-        class="next"
-        element="button"
-      />
-    </div>
+          {effectiveShowArrows && (
+            <Button
+              iconName="arrow-right"
+              size="none"
+              variant="tertiary"
+              hideText={true}
+              aria-label="Next slide"
+              class="next"
+              element="button"
+            />
+          )}
+        </div>
+      )
+    }
   </div>
 </section>
 
 <script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
   import EmblaCarousel from "embla-carousel";
   import AutoScroll from "embla-carousel-auto-scroll";
   import Autoplay from "embla-carousel-autoplay";
-  import { onPageLoad } from "@component-utils/onPageLoad";
 
   function setupCarousels() {
     const carousels = document.querySelectorAll(".carousel");
@@ -144,13 +164,14 @@ if (!_component && !hasSlides && !hasSlotContent) return;
       const slides = track?.querySelectorAll(".slide");
       const controlsWrapper = inner?.querySelector(".controls-wrapper");
       const indicatorsContainer = controlsWrapper?.querySelector(".indicators");
+      const fractionEl = controlsWrapper?.querySelector(".carousel-fraction");
 
       if (!inner || !viewport || !track || !slides || !slides.length) {
         console.warn("Carousel: Missing required elements");
         return;
       }
 
-      const loop = inner.hasAttribute("data-loop");
+      const loop = inner.getAttribute("data-loop") !== "false";
       const slidesToScroll = inner.hasAttribute("data-slides-to-scroll")
         ? Number(inner.getAttribute("data-slides-to-scroll")) || "auto"
         : "auto";
@@ -239,6 +260,21 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         embla.on("reInit", renderDots);
         renderDots();
       }
+
+      if (fractionEl) {
+        const updateFraction = () => {
+          const snaps = embla.scrollSnapList().length;
+          const current = embla.selectedScrollSnap() + 1;
+          const safeTotal = Math.max(snaps, 1);
+          const safeCurrent = Math.min(current, safeTotal);
+          fractionEl.textContent = `${safeCurrent}/${safeTotal}`;
+          fractionEl.setAttribute("aria-label", `Slide ${safeCurrent} of ${safeTotal}`);
+        };
+
+        embla.on("select", updateFraction);
+        embla.on("reInit", updateFraction);
+        updateFraction();
+      }
     });
   }
 
@@ -280,6 +316,11 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           justify-content: center;
           margin-bottom: var(--spacing-sm);
           margin-top: var(--spacing-sm);
+
+          :global(svg) {
+            width: 18px;
+            height: 18px;
+          }
         }
 
         > .controls-wrapper > :global(.prev) > :global(.button-inner),
@@ -320,15 +361,26 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         }
 
         &[data-show-indicators="false"] {
-          > .controls-wrapper > .indicators {
+          > .controls-wrapper > .indicators,
+          > .controls-wrapper > .carousel-fraction {
             display: none;
           }
         }
 
+        > .controls-wrapper > .carousel-fraction {
+          color: var(--color-text-muted);
+          flex-shrink: 0;
+          font-size: var(--font-size-sm);
+          font-variant-numeric: tabular-nums;
+          line-height: 1.2;
+          min-width: 3ch;
+          text-align: center;
+        }
+
         &[data-show-arrows="false"] {
-          > .controls-wrapper > :global(.prev),
-          > .controls-wrapper > :global(.next) {
-            display: none;
+          :global(.controls-wrapper > .prev),
+          :global(.controls-wrapper > .next) {
+            display: none !important;
           }
         }
       }

@@ -9,6 +9,7 @@ value:
   autoScroll: false
   loop: true
   showIndicators: true
+  indicatorStyle: dots
   showArrows: true
   align: center
   slidesToScroll: auto

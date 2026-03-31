@@ -1,6 +1,6 @@
 ---
 title: Carousel
-overview: 'A carousel for displaying multiple slides of content. Supports autoplay and auto-scroll options, with configurable slide widths and minimum sizes to maintain responsive layouts.'
+overview: 'A carousel for displaying multiple slides of content. Supports autoplay and auto-scroll options, dot or fraction indicators (e.g. 1/3), and configurable slide widths and minimum sizes to maintain responsive layouts.'
 
 slots:
   - title: default
@@ -19,5 +19,9 @@ examples:
     size: lg
   - slugs:
       - width-percentage
+    size: lg
+  - title: Fraction indicator
+    slugs:
+      - fraction
     size: lg
 ---
