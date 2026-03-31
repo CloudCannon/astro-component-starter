@@ -15,6 +15,13 @@ type Props = {
     keywords?: string[];
     image?: string;
     canonical?: string;
+    type?: "website" | "article";
+    article?: {
+      publishedTime?: string;
+      modifiedTime?: string;
+      author?: string | string[];
+      tags?: string[];
+    };
     pageSections?: ContentBlock[];
   };
   title?: string;
@@ -22,6 +29,13 @@ type Props = {
   keywords?: string[];
   image?: string;
   canonical?: string;
+  type?: "website" | "article";
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string | string[];
+    tags?: string[];
+  };
   mainNav?: Record<string, unknown>;
   footer?: Record<string, unknown>;
 };
@@ -33,6 +47,8 @@ const {
   keywords: keywordsProp,
   image: imageProp,
   canonical: canonicalProp,
+  type: typeProp,
+  article: articleProp,
   mainNav = mainNavData,
   footer = footerData,
 } = Astro.props as Props;
@@ -42,6 +58,8 @@ const description = frontmatter?.description ?? descriptionProp;
 const keywords = frontmatter?.keywords ?? keywordsProp;
 const image = frontmatter?.image ?? imageProp;
 const canonical = frontmatter?.canonical ?? canonicalProp;
+const type = frontmatter?.type ?? typeProp;
+const article = frontmatter?.article ?? articleProp;
 const sections = frontmatter?.pageSections ?? [];
 ---
 
@@ -51,6 +69,8 @@ const sections = frontmatter?.pageSections ?? [];
   keywords={keywords}
   image={image}
   canonical={canonical}
+  type={type}
+  article={article}
 >
   <MainNavigation {...mainNav} />
 

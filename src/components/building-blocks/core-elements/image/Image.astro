@@ -1,25 +1,6 @@
 ---
 import { Picture } from "astro:assets";
-
-const ASPECT_RATIO_MAP: Record<string, number> = {
-  square: 1,
-  landscape: 4 / 3,
-  portrait: 3 / 4,
-  widescreen: 16 / 9,
-  "horizontal-strip": 16 / 5,
-};
-
-const POSITION_MAP: Record<string, string> = {
-  "top-left": "northwest",
-  "top-center": "north",
-  "top-right": "northeast",
-  "center-left": "west",
-  "center-center": "center",
-  "center-right": "east",
-  "bottom-left": "southwest",
-  "bottom-center": "south",
-  "bottom-right": "southeast",
-};
+import { prepareImageData } from "../../../utils/image";
 
 const {
   source,
@@ -60,87 +41,15 @@ const dataAttributes = isEditable
   : {};
 
 const positionClass = `position-${positionVertical}-${positionHorizontal}`;
-const isLocalSource = typeof source === "string" && source.startsWith("/src/");
-const isSvg = typeof source === "string" && source.toLowerCase().endsWith(".svg");
-
-let imageSrc = source;
-let imageWidth = width;
-let imageHeight = height;
-let shouldRenderOptimizedPicture = false;
-
-if (isLocalSource) {
-  const imageFiles = import.meta.glob("/src/assets/images/**/*", {
-    import: "default",
-    eager: true,
-  }) as Record<string, any>;
-
-  const imageKey = Object.keys(imageFiles).find((key) => key.endsWith(source));
-
-  if (imageKey && imageFiles[imageKey]) {
-    if (isSvg) {
-      imageSrc = imageFiles[imageKey].src;
-      imageWidth = imageWidth || imageFiles[imageKey].width;
-      imageHeight = imageHeight || imageFiles[imageKey].height;
-    } else {
-      imageSrc = imageFiles[imageKey];
-      imageWidth = imageWidth || imageSrc.width;
-      imageHeight = imageHeight || imageSrc.height;
-      shouldRenderOptimizedPicture = true;
-    }
-  } else {
-    console.warn(`Local image not found for path: ${source}`);
-  }
-}
-
-let finalWidth = imageWidth;
-let finalHeight = imageHeight;
-let useFit = undefined;
-let usePosition = undefined;
-let filteredWidths = widths;
-
-if (
-  aspectRatio &&
-  aspectRatio !== "none" &&
-  shouldRenderOptimizedPicture &&
-  imageSrc &&
-  imageWidth
-) {
-  const targetAspect = ASPECT_RATIO_MAP[aspectRatio];
-
-  if (targetAspect) {
-    let maxWidth: number;
-    let maxHeight: number;
-
-    if (targetAspect === 1 && imageHeight) {
-      const dimension = Math.min(imageWidth, imageHeight);
-
-      maxWidth = dimension;
-      maxHeight = dimension;
-    } else if (imageHeight) {
-      const heightFromWidth = imageWidth / targetAspect;
-
-      if (heightFromWidth <= imageHeight) {
-        maxWidth = imageWidth;
-        maxHeight = Math.round(imageWidth / targetAspect);
-      } else {
-        maxWidth = Math.round(imageHeight * targetAspect);
-        maxHeight = imageHeight;
-      }
-    } else {
-      maxWidth = imageWidth;
-      maxHeight = Math.round(imageWidth / targetAspect);
-    }
-
-    finalWidth = maxWidth;
-    finalHeight = maxHeight;
-    filteredWidths = widths.filter((w: number) => w <= maxWidth);
-    useFit = "cover";
-
-    const positionKey = `${positionVertical}-${positionHorizontal}`;
-
-    usePosition = POSITION_MAP[positionKey] || "center";
-  }
-}
+const preparedImage = prepareImageData({
+  source,
+  width,
+  height,
+  widths,
+  aspectRatio,
+  positionVertical,
+  positionHorizontal,
+});
 ---
 
 <div
@@ -158,17 +67,17 @@ if (
     ]}
   >
     {
-      shouldRenderOptimizedPicture ? (
+      preparedImage.shouldRenderOptimizedPicture ? (
         <Picture
-          src={imageSrc}
+          src={preparedImage.imageSrc}
           alt={normalizedAlt}
-          widths={filteredWidths}
+          widths={preparedImage.filteredWidths}
           sizes={sizes}
           formats={["webp"]}
-          width={finalWidth}
-          height={finalHeight}
-          fit={useFit}
-          position={usePosition}
+          width={preparedImage.finalWidth}
+          height={preparedImage.finalHeight}
+          fit={preparedImage.useFit}
+          position={preparedImage.usePosition}
           loading={priority ? "eager" : "lazy"}
           decoding={priority ? "sync" : "async"}
           fetchpriority={priority ? "high" : undefined}
@@ -177,13 +86,13 @@ if (
       ) : (
         <picture>
           <img
-            src={imageSrc}
+            src={preparedImage.imageSrc}
             alt={normalizedAlt}
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? "sync" : "async"}
             fetchpriority={priority ? "high" : undefined}
-            width={imageWidth}
-            height={imageHeight}
+            width={preparedImage.imageWidth}
+            height={preparedImage.imageHeight}
             {...dataAttributes}
           />
         </picture>

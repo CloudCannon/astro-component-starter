@@ -1,0 +1,145 @@
+---
+import { resolveImageSource } from "@component-utils/resolveImageSource";
+
+interface SiteSeoData {
+  name: string;
+  url: string;
+  logoSource: string;
+  description: string;
+  titleFormat: string;
+}
+
+interface ArticleSeoData {
+  publishedTime?: string | null;
+  modifiedTime?: string | null;
+  author?: string | string[] | null;
+  tags?: string[] | null;
+}
+
+export interface Props {
+  site: SiteSeoData;
+  title: string;
+  description?: string | null;
+  keywords?: string[] | null;
+  image?: string | null;
+  canonical?: string | null;
+  type?: "website" | "article";
+  article?: ArticleSeoData | null;
+}
+
+const {
+  site,
+  title,
+  description,
+  keywords,
+  image,
+  canonical,
+  type: pageType = "website",
+  article,
+} = Astro.props;
+const formattedTitle = site.titleFormat.replace("{title}", title);
+const pageDescription = description || site.description;
+const pageImage = resolveImageSource(image || site.logoSource);
+const canonicalUrl = canonical || Astro.url.href;
+const siteUrl = Astro.site || new URL(site.url);
+const pageImageUrl = pageImage ? new URL(pageImage, siteUrl).href : undefined;
+const keywordContent = keywords?.filter(Boolean).join(", ");
+const articleAuthors = Array.isArray(article?.author)
+  ? article.author.filter(Boolean)
+  : article?.author
+    ? [article.author]
+    : [];
+const articleTags = article?.tags?.filter(Boolean) ?? [];
+---
+
+<title>{formattedTitle}</title>
+<link
+  rel="canonical"
+  href={canonicalUrl}
+/>
+<meta
+  property="og:type"
+  content={pageType}
+/>
+<meta
+  property="og:title"
+  content={formattedTitle}
+/>
+<meta
+  property="og:url"
+  content={canonicalUrl}
+/>
+<meta
+  property="og:site_name"
+  content={site.name}
+/>
+{
+  pageDescription ? (
+    <>
+      <meta
+        name="description"
+        content={pageDescription}
+      />
+      <meta
+        property="og:description"
+        content={pageDescription}
+      />
+    </>
+  ) : null
+}
+{
+  keywordContent ? (
+    <meta
+      name="keywords"
+      content={keywordContent}
+    />
+  ) : null
+}
+{
+  pageImageUrl ? (
+    <>
+      <meta
+        property="og:image"
+        content={pageImageUrl}
+      />
+    </>
+  ) : null
+}
+{
+  pageType === "article" ? (
+    <>
+      {
+        article?.publishedTime ? (
+          <meta
+            property="article:published_time"
+            content={article.publishedTime}
+          />
+        ) : null
+      }
+      {
+        article?.modifiedTime ? (
+          <meta
+            property="article:modified_time"
+            content={article.modifiedTime}
+          />
+        ) : null
+      }
+      {
+        articleAuthors.map((author) => (
+          <meta
+            property="article:author"
+            content={author}
+          />
+        ))
+      }
+      {
+        articleTags.map((tag) => (
+          <meta
+            property="article:tag"
+            content={tag}
+          />
+        ))
+      }
+    </>
+  ) : null
+}

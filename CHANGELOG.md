@@ -18,11 +18,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Text blocks now trim top margin from their first child and bottom margin from their last child for more consistent wrapper spacing.
 - Modal examples now use `custom-section` for inner spacing, and the modal wrapper no longer applies default body padding itself.
 - Local video sources now automatically include matching sibling formats like `.webm` and `.ogv` when they share the selected file's basename.
+- Base layout now renders SEO meta tags directly without relying on the `astro-seo` package.
+- Blog posts now emit `og:type="article"` plus article-specific Open Graph metadata.
 
 ### Fixed
 
 - Carousel: `loop={false}` now disables Embla loop; `data-loop="false"` was previously treated as enabled because we only checked attribute presence.
 - Opening a modal now locks page scrolling until the modal is closed.
+- Image component now always keeps at least one valid responsive width candidate, even when the source image is smaller than the default breakpoints.
+- Structured data no longer emits an empty `description` field when the site SEO description has not been set.
 
 ## [1.0.1] - 2026-03-19
 

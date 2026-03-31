@@ -35,7 +35,7 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog");
 
   return posts.map((post: CollectionEntry<"blog">) => {
-    const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
+    const slug = post.id.replace(/\.mdx?$/, "");
 
     return {
       params: { slug },
@@ -55,12 +55,19 @@ const date = post.data.date.toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+const article = {
+  publishedTime: post.data.date.toISOString(),
+  author: post.data.author,
+  tags: post.data.tags,
+};
 ---
 
 <Page
   title={post.data.title}
   description={post.data.description}
   image={post.data.image}
+  type="article"
+  article={article}
 >
   <CustomSection
     maxContentWidth="xl"

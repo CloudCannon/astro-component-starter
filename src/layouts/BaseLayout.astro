@@ -1,10 +1,9 @@
 ---
+import SeoHead from "@components/utils/SeoHead.astro";
 import StructuredData from "@components/utils/StructuredData.astro";
-import { resolveImageSource } from "@component-utils/resolveImageSource";
 import seoData from "@data/seo.json";
 import "@styles/style.css";
 import SiteFonts from "@layouts/SiteFonts.astro";
-import { SEO } from "astro-seo";
 
 export interface Props {
   title: string;
@@ -12,12 +11,16 @@ export interface Props {
   keywords?: string[] | null;
   image?: string | null;
   canonical?: string | null;
+  type?: "website" | "article";
+  article?: {
+    publishedTime?: string | null;
+    modifiedTime?: string | null;
+    author?: string | string[] | null;
+    tags?: string[] | null;
+  } | null;
 }
 
 const props = Astro.props;
-const formattedTitle = seoData.titleFormat.replace("{title}", props.title);
-const pageDescription = props.description || seoData.description;
-const pageImage = resolveImageSource(props.image || seoData.logoSource);
 ---
 
 <!doctype html>
@@ -62,27 +65,15 @@ const pageImage = resolveImageSource(props.image || seoData.logoSource);
       }
     </script>
 
-    <SEO
-      title={formattedTitle}
-      description={pageDescription}
-      openGraph={{
-        basic: {
-          title: formattedTitle,
-          type: "website",
-          image: pageImage,
-        },
-        optional: {
-          description: pageDescription,
-        },
-      }}
-      extend={{
-        link: [
-          {
-            rel: "canonical",
-            href: props.canonical || Astro.url.href,
-          },
-        ],
-      }}
+    <SeoHead
+      site={seoData}
+      title={props.title}
+      description={props.description}
+      keywords={props.keywords}
+      image={props.image}
+      canonical={props.canonical}
+      type={props.type}
+      article={props.article}
     />
 
     <StructuredData site={seoData} />
