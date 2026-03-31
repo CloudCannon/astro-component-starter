@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Changed
+
+- Logo aspect ratios in main nav stay visually balanced across desktop and mobile states.
+
 ## [1.0.1] - 2026-03-19
 
 ### Added

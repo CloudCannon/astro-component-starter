@@ -40,7 +40,10 @@ const mobileNavData = [
   {...htmlAttributes}
   useDefaultEditableBinding={false}
 >
-  <a href="/">
+  <a
+    href="/"
+    class="main-nav-logo-link"
+  >
     <Image
       source={logoSource}
       class="main-nav-logo"
@@ -75,7 +78,7 @@ const mobileNavData = [
   @layer page-sections {
     .main-nav {
       background-color: var(--color-bg);
-      padding-block: var(--spacing-md);
+      padding-block: 0;
       position: sticky;
       top: 0;
       z-index: var(--layer-2);
@@ -85,10 +88,6 @@ const mobileNavData = [
         @container (max-width: 768px) {
           display: none;
         }
-      }
-
-      .main-nav-logo {
-        margin-top: 0 !important;
       }
 
       .nav-hamburger.mobile-button {
@@ -103,10 +102,37 @@ const mobileNavData = [
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-md);
+        height: 5rem;
 
-        > a > .image img {
-          height: 1.8em;
-          max-width: min(20em, 100%);
+        > .main-nav-logo-link {
+          align-items: center;
+          display: flex;
+          flex: 0 1 min(11rem, 100%);
+          min-width: 0;
+          width: min(11rem, 100%);
+        }
+
+        > .main-nav-logo-link > .main-nav-logo {
+          display: flex;
+          margin-top: 0 !important;
+          max-width: none;
+          width: 100%;
+        }
+
+        > .main-nav-logo-link > .main-nav-logo > .image-inner {
+          width: 100%;
+        }
+
+        > .main-nav-logo-link > .main-nav-logo picture {
+          display: block;
+          width: 100%;
+        }
+
+        > .main-nav-logo-link > .main-nav-logo img,
+        > .main-nav-logo-link > .main-nav-logo svg {
+          display: block;
+          height: 2rem;
+          max-width: 100%;
           width: auto;
         }
 
