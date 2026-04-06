@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Button now forwards link attributes (`target`, `rel`, etc.) and button attributes (`type`, `disabled`, form overrides, etc.) to the inner `<a>` / `<button>` instead of the wrapper, so external links and submit buttons behave correctly.
 - Carousel: `loop={false}` now disables Embla loop; `data-loop="false"` was previously treated as enabled because we only checked attribute presence.
 - Opening a modal now locks page scrolling until the modal is closed.
 - Image component now always keeps at least one valid responsive width candidate, even when the source image is smaller than the default breakpoints.

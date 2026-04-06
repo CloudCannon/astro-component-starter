@@ -39,6 +39,40 @@ if (hideText) {
   delete htmlAttributes["aria-label"];
 }
 
+const tagKeys = new Set<string>(["id", "tabindex", "tabIndex"]);
+
+if (Tag === "a" && link) {
+  for (const k of ["target", "rel", "download", "hreflang", "referrerpolicy", "ping"]) {
+    tagKeys.add(k);
+  }
+}
+if (Tag === "button") {
+  for (const k of [
+    "type",
+    "disabled",
+    "name",
+    "value",
+    "form",
+    "formaction",
+    "formenctype",
+    "formmethod",
+    "formnovalidate",
+    "formtarget",
+    "autofocus",
+  ]) {
+    tagKeys.add(k);
+  }
+}
+
+const restAttrs = htmlAttributes as Record<string, any>;
+
+for (const key of tagKeys) {
+  if (key in restAttrs) {
+    tagProps[key] = restAttrs[key];
+    delete restAttrs[key];
+  }
+}
+
 const hasText = text?.trim().length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const hasIcon = iconName?.trim().length > 0;
