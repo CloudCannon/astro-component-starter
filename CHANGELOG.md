@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `maxContentWidth` select on Custom Section and Card now includes a **None** option (`none`) so content can span without a max-width token cap.
 - Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots when indicators are enabled.
 - Modal wrapper now supports an optional header title shown in the sticky top bar.
 
