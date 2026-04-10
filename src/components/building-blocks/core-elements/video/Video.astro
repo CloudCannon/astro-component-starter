@@ -3,7 +3,7 @@ import type { VideoSource } from "@component-utils/discoverVideoSources";
 
 const {
   type,
-  id,
+  videoId,
   title,
   source,
   thumbnail,
@@ -28,12 +28,12 @@ if (type === "local-source" && source) {
     <lite-vimeo
       class:list={["video", className]}
       videotitle={`${title}`}
-      videoid={`${id}`}
+      videoid={`${videoId}`}
       {...htmlAttributes}
     >
       <a
         class="lite-vimeo-fallback"
-        href={`https://vimeo.com/${id}`}
+        href={`https://vimeo.com/${videoId}`}
       >
         Watch on Vimeo: "{title}"
       </a>
@@ -42,12 +42,12 @@ if (type === "local-source" && source) {
     <lite-youtube
       class:list={["video", className]}
       videotitle={`${title}`}
-      videoid={`${id}`}
+      videoid={`${videoId}`}
       {...htmlAttributes}
     >
       <a
         class="lite-youtube-fallback"
-        href={`https://www.youtube.com/watch?v=${id}`}
+        href={`https://www.youtube.com/watch?v=${videoId}`}
       >
         Watch on YouTube: "{title}"
       </a>

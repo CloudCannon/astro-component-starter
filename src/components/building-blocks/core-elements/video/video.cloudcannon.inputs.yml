@@ -11,9 +11,9 @@ type:
 title:
   type: text
   comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
-id:
+videoId:
   type: text
-  comment: Used for externally hosted videos - Enter the YouTube or Vimeo id.
+  comment: Used for externally hosted videos - Enter the YouTube or Vimeo video ID.
 source:
   type: file
   label: Video Source

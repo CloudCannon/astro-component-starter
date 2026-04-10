@@ -8,14 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Modal scrollbar now only applies to the body content, keeping the header fixed outside the scroll area.
 - List items with icons now align wrapped text to the text column instead of wrapping under the icon.
 
 ### Changed
 
+- **Breaking:** Renamed the Video component's `id` prop to `videoId` to avoid conflicts with the HTML `id` attribute. The same rename applies to the Video Modal component.
 - Default font provider switched from `fontProviders.google()` to `fontProviders.fontsource()` in `site-fonts.mjs`, using local `@fontsource` packages instead of fetching from Google Fonts.
 
 ### Added
 
+- Video Modal wrapper component with autoplay on open, pause on close, and support for YouTube, Vimeo, and local video sources.
 - Image Carousel wrapper component with synchronized thumbnail navigation, configurable aspect ratios, per-image positioning, and responsive image optimization, built on Embla Carousel.
 - Video component supports `background` mode (`background={true}`) for rendering decorative looping background video with autoplay, mute, and `prefers-reduced-motion` handling.
 - Custom Section and Card `background` object supports an `overlay` value (-1 to 1) that renders a semi-transparent lighten/darken layer over the background image or video.
