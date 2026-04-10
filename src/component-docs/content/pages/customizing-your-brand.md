@@ -63,7 +63,7 @@ This is why both theme files are important. Even if your site is primarily light
 
 ## Changing fonts
 
-**Families and loading:** edit `site-fonts.mjs` at the project root. That file is the single source of truth for [Astro’s Fonts config](https://docs.astro.build/en/guides/fonts/) and for which families get `<Font />` tags via `src/layouts/SiteFonts.astro`. Change `name`, `provider` (for example `fontProviders.fontsource()` or `fontProviders.local()`), `weights`, and `cssVariable` there. Keep `cssVariable` aligned with how you use tokens in CSS: defaults are `--font-body` and `--font-headings`.
+**Families and loading:** install the font locally with `npm install @fontsource/<font-name>`, then edit `site-fonts.mjs` at the project root. That file is the single source of truth for [Astro’s Fonts config](https://docs.astro.build/en/guides/fonts/) and for which families get `<Font />` tags via `src/layouts/SiteFonts.astro`. Change `name`, `weights`, and `cssVariable` there. The default provider is `fontProviders.fontsource()` which resolves from the installed `@fontsource` packages. For proprietary fonts not on Fontsource, use `fontProviders.local()` with `.woff2` files in `src/assets/fonts/`. Keep `cssVariable` aligned with how you use tokens in CSS: defaults are `--font-body` and `--font-headings`.
 
 **Sizes and weights:** open `src/styles/variables/_fonts.css` for the size scale (`--font-size-xs` through `--font-size-4xl`, plus the heading scale) and `--font-weight-*` tokens—not for the font family names.
 
