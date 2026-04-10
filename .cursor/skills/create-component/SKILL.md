@@ -508,4 +508,4 @@ blocks:
 
 ## CustomSection props reference
 
-Page sections wrap content in `CustomSection` from `@builders/custom-section/CustomSection.astro`. Key props: `maxContentWidth` (`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`xs`..`6xl`, default `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `backgroundImage` (object), `rounded` (boolean), `label` (string, also used as anchor ID), `useDefaultEditableBinding` (boolean).
+Page sections wrap content in `CustomSection` from `@builders/custom-section/CustomSection.astro`. Key props: `maxContentWidth` (`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`xs`..`6xl`, default `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `background` (object: `type` `none`/`image`/`video`, shared positioning, plus image or video fields), `rounded` (boolean), `label` (string, also used as anchor ID), `useDefaultEditableBinding` (boolean).

@@ -8,12 +8,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Video component supports `background` mode (`background={true}`) for rendering decorative looping background video with autoplay, mute, and `prefers-reduced-motion` handling.
+- Custom Section and Card `background` object supports an `overlay` value (-1 to 1) that renders a semi-transparent lighten/darken layer over the background image or video.
 - `maxContentWidth` select on Custom Section and Card now includes a **None** option (`none`) so content can span without a max-width token cap.
 - Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots when indicators are enabled.
 - Modal wrapper now supports an optional header title shown in the sticky top bar.
 
 ### Changed
 
+- Custom Section and Card: `backgroundImage` and `backgroundVideo` are merged into one **`background`** object (`type`: `image` | `video`, shared `positionVertical` / `positionHorizontal`, `priority` for images, `imageSource` / `imageAlt`, `videoSource`). Default type is `image`; leave `imageSource` empty for no background.
 - Logo aspect ratios in main nav stay visually balanced across desktop and mobile states.
 - Third-level main nav items now use distinct styling to separate from second-level items.
 - Text blocks now trim top margin from their first child and bottom margin from their last child for more consistent wrapper spacing.

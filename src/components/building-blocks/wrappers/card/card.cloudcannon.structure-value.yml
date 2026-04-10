@@ -10,11 +10,15 @@ value:
   paddingVertical: sm
   colorScheme: inherit
   backgroundColor: base
-  backgroundImage:
-    source: null
-    alt: null
+  background:
+    type: image
     positionVertical: top
     positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
   link: null
   rounded: false
   border: false

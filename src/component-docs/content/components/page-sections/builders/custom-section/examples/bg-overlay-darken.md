@@ -1,5 +1,5 @@
 ---
-title: Bottom right background image
+title: Background overlay darken
 spacing:
 blocks:
   _component: 'page-sections/builders/custom-section'
@@ -8,15 +8,13 @@ blocks:
   colorScheme: dark
   background:
     type: image
-    positionVertical: bottom
-    positionHorizontal: right
-    priority: false
+    positionVertical: center
+    positionHorizontal: center
     imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
     imageAlt: 'Dunedin cliffside'
-    overlay: -0.3
+    overlay: -0.5
   contentSections:
     - _component: building-blocks/core-elements/heading
       alignX: end
       text: Build bold. Launch fast.
-      level: h3
 ---

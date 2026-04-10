@@ -15,11 +15,6 @@ blocks:
   label: ''
   colorScheme: light
   backgroundColor: base
-  backgroundImage:
-    source: null
-    alt: null
-    positionVertical: top
-    positionHorizontal: center
   link: ''
   rounded: false
   showBeforeAfter: false

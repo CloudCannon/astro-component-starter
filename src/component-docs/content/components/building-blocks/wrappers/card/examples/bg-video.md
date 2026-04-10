@@ -1,5 +1,5 @@
 ---
-title: Center center background image
+title: Background video
 spacing:
 blocks:
   _component: 'building-blocks/wrappers/card'
@@ -7,16 +7,15 @@ blocks:
   paddingHorizontal: sm
   colorScheme: dark
   background:
-    type: image
+    type: video
     positionVertical: center
     positionHorizontal: center
-    imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
-    imageAlt: 'Dunedin cliffside'
-    overlay: -0.3
+    videoSource: /videos/component-docs/glass.mp4
+    overlay: -0.5
   contentSections:
     - _component: building-blocks/core-elements/heading
-      text: 'Center Position'
+      text: 'Background Video'
       level: h3
     - _component: building-blocks/core-elements/text
-      text: "This card's background image is centered both horizontally and vertically."
+      text: "This card has a looping background video behind its content."
 ---

@@ -1,5 +1,5 @@
 ---
-title: Center center background image
+title: Background overlay darken
 spacing:
 blocks:
   _component: 'building-blocks/wrappers/card'
@@ -12,11 +12,11 @@ blocks:
     positionHorizontal: center
     imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
     imageAlt: 'Dunedin cliffside'
-    overlay: -0.3
+    overlay: -0.5
   contentSections:
     - _component: building-blocks/core-elements/heading
-      text: 'Center Position'
+      text: 'Darkened Overlay'
       level: h3
     - _component: building-blocks/core-elements/text
-      text: "This card's background image is centered both horizontally and vertically."
+      text: "A dark overlay makes light text easier to read over a background image."
 ---

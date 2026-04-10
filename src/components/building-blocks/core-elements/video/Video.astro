@@ -7,6 +7,7 @@ const {
   title,
   source,
   thumbnail,
+  background = false,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -51,6 +52,24 @@ if (type === "local-source" && source) {
         Watch on YouTube: "{title}"
       </a>
     </lite-youtube>
+  ) : background ? (
+    <div class:list={["video", "background", className]} aria-hidden="true" {...htmlAttributes}>
+      <video
+        preload="metadata"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster={thumbnail}
+      >
+        {localVideoSources.map(({ src, type: sourceType }) => (
+          <source
+            src={src}
+            type={sourceType}
+          />
+        ))}
+      </video>
+    </div>
   ) : (
     <video
       preload="none"
@@ -75,6 +94,27 @@ if (type === "local-source" && source) {
     .video {
       display: block;
       margin-top: var(--spacing-lg);
+
+      &.background {
+        inset: 0;
+        margin-top: 0;
+        overflow: hidden;
+        pointer-events: none;
+        position: absolute;
+
+        > video {
+          height: 100%;
+          object-fit: cover;
+          object-position: var(--background-position, center center);
+          width: 100%;
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .video.background {
+        display: none;
+      }
     }
   }
 </style>

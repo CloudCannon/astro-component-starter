@@ -513,24 +513,28 @@ Flexible container for composing any building blocks. Use when no specific page 
   paddingVertical: md
   colorScheme: inherit
   backgroundColor: base
-  backgroundImage:
-    source: ''
-    alt: ''
+  background:
+    type: image
     positionVertical: top
     positionHorizontal: center
+    priority: false
+    imageSource: ''
+    imageAlt: ''
+    videoSource: null
+    overlay: 0
   rounded: false
 ```
 
-| Prop                                    | Type   | Options / Notes                                           |
-| --------------------------------------- | ------ | --------------------------------------------------------- |
-| `label`                                 | text   | Section label (also becomes anchor ID)                    |
-| `contentSections`                       | array  | Any building blocks                                       |
-| `maxContentWidth`                       | select | `xs`–`3xl`                                                |
-| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                             |
-| `colorScheme`                           | select | `inherit`, `light`, `dark`                                |
-| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`          |
-| `backgroundImage`                       | object | `source`, `alt`, `positionVertical`, `positionHorizontal` |
-| `rounded`                               | switch | Round section corners                                     |
+| Prop                                    | Type   | Options / Notes                                                                                                                                 |
+| --------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`                                 | text   | Section label (also becomes anchor ID)                                                                                                          |
+| `contentSections`                       | array  | Any building blocks                                                                                                                             |
+| `maxContentWidth`                       | select | `xs`–`3xl`                                                                                                                                      |
+| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                                                                                                                   |
+| `colorScheme`                           | select | `inherit`, `light`, `dark`                                                                                                                      |
+| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                                                |
+| `background`                            | object | `type`: `image` \| `video`; shared `positionVertical` / `positionHorizontal`; `overlay` (-1 to 1, darken/lighten); image: `imageSource`, `imageAlt`, `priority`; video: `videoSource` |
+| `rounded`                               | switch | Round section corners                                                                                                                           |
 
 ---
 

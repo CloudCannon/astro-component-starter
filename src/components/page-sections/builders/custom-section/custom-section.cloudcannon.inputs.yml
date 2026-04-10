@@ -95,35 +95,28 @@ backgroundColor:
         name: Accent
       - id: highlight
         name: Highlight
-backgroundImage:
+background:
   type: object
-  comment: Background image configuration for the custom section.
+  comment: Optional background still image or looping HTML5 video (self-hosted). Shared positioning applies to whichever type you choose. Video is hidden when the user prefers reduced motion.
   options:
     preview:
-      icon: image
+      icon: wallpaper
       text:
-        - key: alt
-        - Background Image
+        - Background
       subtext:
-        - key: source
-        - Add an image source
-      image:
-        - key: source
-backgroundImage.source:
-  comment: URL or path to the background image.
-  type: image
+        - key: type
+background.type:
+  type: select
+  label: Background type
+  comment: A cover image or a muted autoplay video.
   options:
-    paths:
-      uploads: src/assets/images
-      static: ""
-    resize_style: contain
-    width: 1920
-    height: 1280
-backgroundImage.alt:
-  comment: Alt text for the background image.
-  type: textarea
-backgroundImage.positionVertical:
-  comment: Vertical position of the background image.
+    values:
+      - id: image
+        name: Image
+      - id: video
+        name: Video
+background.positionVertical:
+  comment: Vertical focal point (object-position for video; image position for pictures).
   type: select
   options:
     values:
@@ -133,8 +126,8 @@ backgroundImage.positionVertical:
         name: Center
       - id: bottom
         name: Bottom
-backgroundImage.positionHorizontal:
-  comment: Horizontal position of the background image.
+background.positionHorizontal:
+  comment: Horizontal focal point (object-position for video; image position for pictures).
   type: select
   options:
     values:
@@ -144,6 +137,46 @@ backgroundImage.positionHorizontal:
         name: Center
       - id: right
         name: Right
+background.priority:
+  type: switch
+  label: Prioritize image load
+  comment: When using a background image, load it eagerly (use for above-the-fold sections).
+  hidden: "background.type !== 'image'"
+background.imageSource:
+  comment: URL or path to the background image.
+  type: image
+  hidden: "background.type !== 'image'"
+  options:
+    paths:
+      uploads: src/assets/images
+      static: ""
+    resize_style: contain
+    width: 1920
+    height: 1280
+background.imageAlt:
+  comment: Alt text for the background image.
+  type: textarea
+  hidden: "background.type !== 'image'"
+background.videoSource:
+  type: file
+  label: Video source
+  comment: Path to a video under public/ (e.g. uploads). Sibling formats with the same basename are added automatically when present.
+  hidden: "background.type !== 'video'"
+  options:
+    accepts_mime_types:
+      - video/mp4
+      - video/webm
+      - video/ogg
+    paths:
+      uploads: public/videos
+      static: public
+background.overlay:
+  type: range
+  comment: "Overlay in front of the background (-1 to 1). Negative values darken, positive values lighten."
+  options:
+    min: -1
+    max: 1
+    step: 0.1
 rounded:
   type: switch
   comment: Whether to apply rounded corners to the custom section.

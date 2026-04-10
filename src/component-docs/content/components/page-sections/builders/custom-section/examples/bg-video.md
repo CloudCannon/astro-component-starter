@@ -1,22 +1,19 @@
 ---
-title: Center center background image
+title: Background video
 spacing:
 blocks:
   _component: 'page-sections/builders/custom-section'
-  paddingVertical: 2xl
+  paddingVertical: 4xl
   paddingHorizontal: md
   colorScheme: dark
   background:
-    type: image
+    type: video
     positionVertical: center
     positionHorizontal: center
-    priority: false
-    imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
-    imageAlt: 'Dunedin cliffside'
-    overlay: -0.3
+    videoSource: /videos/component-docs/glass.mp4
+    overlay: -0.5
   contentSections:
     - _component: building-blocks/core-elements/heading
       alignX: end
-      text: Build bold. Launch fast.
-      level: h3
+      text: Build bold.
 ---

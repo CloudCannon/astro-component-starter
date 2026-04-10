@@ -2,6 +2,7 @@
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
+import Video from "@core-elements/video/Video.astro";
 
 const {
   label,
@@ -13,7 +14,7 @@ const {
   paddingVertical,
   colorScheme = "inherit",
   backgroundColor,
-  backgroundImage,
+  background,
   link,
   showBeforeAfter = true,
   rounded = false,
@@ -28,11 +29,15 @@ const {
 } = Astro.props;
 
 const {
-  source = "",
-  alt = "",
+  type: bgType = "image",
   positionVertical = "top",
   positionHorizontal = "center",
-} = backgroundImage || {};
+  priority = false,
+  imageSource = "",
+  imageAlt = "",
+  videoSource = "",
+  overlay = 0,
+} = background || {};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -72,14 +77,34 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
     class:list={["card-inner", rounded && "rounded", border && "border"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
   >
-    <Image
-      class:list={["background-image"]}
-      source={source}
-      alt={alt}
-      positionVertical={positionVertical}
-      positionHorizontal={positionHorizontal}
-      background={true}
-    />
+    {bgType === "image" && (
+      <Image
+        class:list={["background-image"]}
+        source={imageSource}
+        alt={imageAlt}
+        priority={priority}
+        positionVertical={positionVertical}
+        positionHorizontal={positionHorizontal}
+        background={true}
+      />
+    )}
+    {bgType === "video" && (
+      <Video
+        type="local-source"
+        source={videoSource}
+        background={true}
+        style={{ '--background-position': `${positionHorizontal} ${positionVertical}` }}
+      />
+    )}
+    {overlay !== 0 && (
+      <div
+        class="background-overlay"
+        aria-hidden="true"
+        style={{
+          backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`
+        }}
+      />
+    )}
     {
       backgroundColor && (
         <div
@@ -321,12 +346,22 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           }
         }
 
+        > .background-overlay {
+          inset: 0;
+          position: absolute;
+          z-index: var(--layer-1);
+        }
+
         > .background {
           inset: 0;
           position: absolute;
         }
 
         > :global(.background-image) {
+          z-index: var(--layer-1);
+        }
+
+        > :global(.background-video) {
           z-index: var(--layer-1);
         }
 

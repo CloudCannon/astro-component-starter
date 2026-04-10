@@ -87,11 +87,6 @@ pageSections:
     paddingVertical: md
     colorScheme: dark
     backgroundColor: surface
-    backgroundImage:
-      source: ''
-      alt: ''
-      positionVertical: top
-      positionHorizontal: center
     rounded: false
   - _component: page-sections/features/feature-slider
     slides:

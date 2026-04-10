@@ -538,6 +538,6 @@ Import via `@builders/custom-section/CustomSection.astro`. Every page section wr
 | `paddingVertical`   | xs through 6xl                         | 4xl     |
 | `colorScheme`       | inherit, light, dark                   | inherit |
 | `backgroundColor`   | none, base, surface, accent, highlight | —       |
-| `backgroundImage`   | object with `source`, `alt`            | —       |
+| `background`        | object: `type` (`none`/`image`/`video`), positioning, image or video fields | —       |
 | `rounded`           | boolean                                | false   |
 | `label`             | string (also used as anchor ID)        | —       |

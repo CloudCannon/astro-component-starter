@@ -13,10 +13,5 @@ blocks:
   label: ''
   maxContentWidth: 2xl
   colorScheme: inherit
-  backgroundImage:
-    source: ''
-    alt: ''
-    positionVertical: top
-    positionHorizontal: center
   rounded: false
 ---

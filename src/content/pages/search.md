@@ -49,10 +49,5 @@ pageSections:
     paddingVertical: 2xl
     colorScheme: inherit
     backgroundColor: base
-    backgroundImage:
-      source: ''
-      alt: ''
-      positionVertical: top
-      positionHorizontal: center
     rounded: false
 ---
