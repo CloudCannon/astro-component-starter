@@ -49,7 +49,8 @@ const textDataAttributes = effectiveDataProp
     .item {
       > .item-inner {
         &.list-item-has-icon {
-          display: block;
+          display: flex;
+          align-items: baseline;
         }
 
         > p {
@@ -63,7 +64,7 @@ const textDataAttributes = effectiveDataProp
           flex-shrink: 0;
           height: 1em;
           margin-inline-end: var(--spacing-em-xs);
-          vertical-align: -0.15em;
+          translate: 0 0.15em;
           width: 1em;
 
           :global(svg) {

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- List items with icons now align wrapped text to the text column instead of wrapping under the icon.
+
 ### Changed
 
 - Default font provider switched from `fontProviders.google()` to `fontProviders.fontsource()` in `site-fonts.mjs`, using local `@fontsource` packages instead of fetching from Google Fonts.
