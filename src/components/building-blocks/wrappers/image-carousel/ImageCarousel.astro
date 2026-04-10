@@ -1,0 +1,321 @@
+---
+import Image from "@core-elements/image/Image.astro";
+import Button from "@core-elements/button/Button.astro";
+import { slugifyLabel } from "@components/utils/slugify";
+
+type ImageItem = {
+  source: string;
+  alt?: string;
+  positionVertical?: string;
+  positionHorizontal?: string;
+};
+
+const {
+  images = [],
+  showArrows = true,
+  loop = true,
+  aspectRatio = "landscape",
+  sizes = "(max-width: 1280px) 100vw, 1280px",
+  widths = [640, 1280, 2560],
+  label,
+  "data-children-prop": childrenDataProp,
+  useDefaultEditableBinding = false,
+  class: className,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "images" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+
+const hasImages = images?.length > 0;
+
+if (!_component && !hasImages) return;
+
+---
+
+<section
+  class:list={["image-carousel", className]}
+  role="region"
+  aria-label={label || "Image carousel"}
+  data-loop={String(loop)}
+  {...htmlAttributes}
+>
+  {
+    showArrows && (
+      <div class="arrow arrow-prev">
+        <Button
+          iconName="chevron-left"
+          size="none"
+          variant="ghost"
+          hideText={true}
+          aria-label="Previous image"
+          class="prev"
+          element="button"
+        />
+      </div>
+    )
+  }
+
+  <div class="carousel-content">
+    <div class="main-viewport">
+      <div class="main-track" {...arrayDataAttributes}>
+        {
+          images.map((img: ImageItem, index: number) => (
+            <div
+              class="main-slide"
+              data-editable="array-item"
+              data-id="building-blocks/wrappers/image-carousel/image-carousel-item"
+            >
+              <Image
+                source={img.source}
+                alt={img.alt || ""}
+                aspectRatio={aspectRatio}
+                positionVertical={img.positionVertical}
+                positionHorizontal={img.positionHorizontal}
+                sizes={sizes}
+                widths={widths}
+                useDefaultEditableBinding={!!effectiveChildrenProp}
+                priority={index === 0}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class:list={["thumbs-strip", aspectRatio && `thumbs-ratio-${aspectRatio}`]}>
+      {
+        images.map((img: ImageItem, index: number) => (
+          <button
+            type="button"
+            class="thumb"
+            aria-label={`View image ${index + 1}`}
+            data-index={index}
+            data-selected={index === 0 ? "true" : "false"}
+          >
+            <Image
+              source={img.source}
+              alt={img.alt || ""}
+              aspectRatio={aspectRatio}
+              positionVertical={img.positionVertical}
+              positionHorizontal={img.positionHorizontal}
+              widths={[128, 256]}
+              sizes="96px"
+            />
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  {
+    showArrows && (
+      <div class="arrow arrow-next">
+        <Button
+          iconName="chevron-right"
+          size="none"
+          variant="ghost"
+          hideText={true}
+          aria-label="Next image"
+          class="next"
+          element="button"
+        />
+      </div>
+    )
+  }
+</section>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import EmblaCarousel from "embla-carousel";
+
+  function setupImageCarousels() {
+    const carousels = document.querySelectorAll(".image-carousel");
+
+    carousels.forEach((carousel) => {
+      if (carousel.hasAttribute("data-embla-initialized")) return;
+
+      const mainViewport = carousel.querySelector(".main-viewport") as HTMLElement;
+      const mainTrack = mainViewport?.querySelector(".main-track");
+      const mainSlides = mainTrack?.querySelectorAll(".main-slide");
+      const thumbButtons = carousel.querySelectorAll(".thumb");
+
+      if (!mainViewport || !mainTrack || !mainSlides?.length || !thumbButtons.length) {
+        return;
+      }
+
+      const loop = carousel.getAttribute("data-loop") !== "false";
+
+      const mainEmbla = EmblaCarousel(mainViewport, {
+        loop,
+        align: "start",
+        duration: 20,
+        startIndex: 0,
+        skipSnaps: false,
+      });
+
+      carousel.setAttribute("data-embla-initialized", "true");
+
+      let isInitialUpdate = true;
+      const updateSelectedThumb = () => {
+        const selected = mainEmbla.selectedScrollSnap();
+        thumbButtons.forEach((btn, i) => {
+          const isSelected = i === selected;
+          btn.setAttribute("data-selected", isSelected.toString());
+          if (isSelected && !isInitialUpdate) {
+            btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+          }
+        });
+        isInitialUpdate = false;
+      };
+
+      thumbButtons.forEach((btn, index) => {
+        btn.addEventListener("click", () => {
+          mainEmbla.scrollTo(index);
+        });
+      });
+
+      mainEmbla.on("select", updateSelectedThumb);
+
+      const prevButton = carousel.querySelector(".arrow-prev .button-inner") as HTMLButtonElement;
+      const nextButton = carousel.querySelector(".arrow-next .button-inner") as HTMLButtonElement;
+
+      if (prevButton) {
+        prevButton.addEventListener("click", () => mainEmbla.scrollPrev());
+      }
+      if (nextButton) {
+        nextButton.addEventListener("click", () => mainEmbla.scrollNext());
+      }
+
+      updateSelectedThumb();
+    });
+  }
+
+  onPageLoad(setupImageCarousels);
+</script>
+
+<style>
+  @layer components {
+    .image-carousel {
+      align-items: center;
+      display: flex;
+      gap: var(--spacing-xs);
+      margin-top: var(--spacing-lg);
+      width: 100%;
+
+      > .arrow {
+        flex-shrink: 0;
+
+        :global(.button-inner) {
+          border-radius: var(--radius-xs);
+
+          :global(svg) {
+            height: 28px;
+            width: 28px;
+          }
+        }
+      }
+
+      > .carousel-content {
+        flex: 1;
+        min-width: 0;
+
+        > .main-viewport {
+          overflow: hidden;
+          width: 100%;
+
+          > .main-track {
+            display: flex;
+            flex-wrap: nowrap;
+
+            > .main-slide {
+              flex: 0 0 100%;
+              min-width: 0;
+
+              :global(.image) {
+                margin-top: 0;
+              }
+            }
+          }
+        }
+
+        > .thumbs-strip {
+          display: flex;
+          gap: var(--spacing-xs);
+          margin-inline: auto;
+          margin-top: var(--spacing-sm);
+          max-width: 100%;
+          overflow-x: auto;
+          scrollbar-width: none;
+          width: fit-content;
+
+          &.thumbs-ratio-square { --thumb-ratio: var(--ratio-square); }
+          &.thumbs-ratio-landscape { --thumb-ratio: var(--ratio-landscape); }
+          &.thumbs-ratio-portrait { --thumb-ratio: var(--ratio-portrait); }
+          &.thumbs-ratio-widescreen { --thumb-ratio: var(--ratio-widescreen); }
+          &.thumbs-ratio-horizontal-strip { --thumb-ratio: var(--ratio-horizontal-strip); }
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          > .thumb {
+            appearance: none;
+            aspect-ratio: var(--thumb-ratio, var(--ratio-landscape));
+            background: none;
+            border: 2px solid transparent;
+            border-radius: var(--radius-xs);
+            box-sizing: content-box;
+            cursor: pointer;
+            flex: 0 0 auto;
+            height: 64px;
+            overflow: hidden;
+            padding: 0;
+            transition: border-color var(--animation-fast) ease,
+              opacity var(--animation-fast) ease;
+
+            &[data-selected="true"] {
+              border-color: var(--color-brand);
+            }
+
+            &:not([data-selected="true"]) {
+              opacity: 0.6;
+            }
+
+            &:hover {
+              opacity: 1;
+            }
+
+            :global(.image) {
+              margin-top: 0;
+            }
+
+            :global(.image),
+            :global(.image-inner),
+            :global(picture),
+            :global(img) {
+              display: block;
+              height: 100%;
+              width: 100%;
+            }
+
+            :global(.image-inner) {
+              aspect-ratio: unset;
+            }
+
+            :global(img) {
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>

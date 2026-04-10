@@ -1,0 +1,80 @@
+label: Image Carousel
+icon: gallery_thumbnail
+description: Displays images in a carousel with a thumbnail strip for navigation.
+value:
+  _component: building-blocks/wrappers/image-carousel
+  label: ""
+  images: []
+  showArrows: true
+  loop: true
+  aspectRatio: landscape
+  sizes: "(max-width: 1280px) 100vw, 1280px"
+  widths:
+    - 640
+    - 1280
+    - 2560
+preview:
+  text:
+    - Image Carousel
+  subtext:
+    - key: label
+  icon: gallery_thumbnail
+picker_preview:
+  text: Image Carousel
+  subtext: Displays images in a carousel with a thumbnail strip for navigation.
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/image-carousel/image-carousel.cloudcannon.inputs.yml
+_structures:
+  imageCarouselImages:
+    values:
+      - label: Image
+        icon: image
+        value:
+          source: ""
+          alt: ""
+          positionVertical: center
+          positionHorizontal: center
+        preview:
+          image:
+            - key: source
+          text:
+            - key: alt
+            - Image
+          subtext:
+            - key: source
+        _inputs:
+          source:
+            type: image
+            comment: Image source.
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ''
+              resize_style: contain
+              width: 1920
+              height: 1280
+          alt:
+            type: text
+            comment: Alt text describing the image.
+          positionVertical:
+            type: select
+            comment: Vertical positioning of the image within the frame.
+            options:
+              values:
+                - id: top
+                  name: Top
+                - id: center
+                  name: Center
+                - id: bottom
+                  name: Bottom
+          positionHorizontal:
+            type: select
+            comment: Horizontal positioning of the image within the frame.
+            options:
+              values:
+                - id: left
+                  name: Left
+                - id: center
+                  name: Center
+                - id: right
+                  name: Right
