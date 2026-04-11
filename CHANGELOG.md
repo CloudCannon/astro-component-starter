@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Updated Twitter references to X (updated social link URL in footer data).
 - Video component `thumbnail` / `<video poster>` uses `resolveVideoPosterSource` so `/src/assets/images/...` posters are optimized with `getImage`, scaled to fit within 1920×1080 (aspect preserved). CloudCannon thumbnail uploads for Video target `src/assets/images` (aligned with Image inputs). Public or absolute poster URLs are unchanged.
 - CloudCannon image uploads default to `src/assets/images` on the `pages` and `blog` collections (blog Content Editor uses the same via `_editables.content.paths`). There is no top-level `paths.uploads`, so video file inputs keep uploading to `public/videos` as configured on each input.
 - Blog Content Editor disables the native image toolbar button; authors add images via the Image snippet (`<Image />`) for consistent options and paths.
