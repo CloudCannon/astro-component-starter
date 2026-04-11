@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- List list items support an optional `link` URL; when set, only the text is wrapped in the anchor so the label is clickable while the icon stays decorative (outside the link). CloudCannon includes a URL input on each list item.
 - Team Grid exposes a `layout` prop (default `start`) that maps to the inner `Grid` layout (`start` | `center`), with matching CloudCannon select input.
 - Main site header and footer now include a **Components** link to `/component-docs/` so the component library is easy to find while browsing (not only via in-page CTAs).
 - Select component now displays a custom chevron-down icon replacing the native browser arrow (`appearance: none`), and supports an optional leading `iconName` prop for consistency with the Input component.

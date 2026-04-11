@@ -39,6 +39,9 @@ _structures:
           image:
             - template: src/icons/{iconName}.svg
         _inputs:
+          link:
+            type: url
+            comment: Optional URL. When set, only the text is linked; the icon stays outside the anchor (e.g. table of contents or external services).
           text:
             type: markdown
             comment: The text to display in the list item.

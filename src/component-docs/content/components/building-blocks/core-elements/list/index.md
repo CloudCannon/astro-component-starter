@@ -1,6 +1,6 @@
 ---
 title: List
-overview: 'Displays a list with icons, bullets, or numbers as markers. Supports vertical or horizontal layouts, custom styling, alignment, and markdown formatting.'
+overview: 'Displays a list with icons, bullets, or numbers as markers. Supports vertical or horizontal layouts, custom styling, alignment, markdown formatting, and optional per-item links on the text (icons stay outside the anchor).'
 slots:
   - title: default
     description: The content inside the List.
@@ -11,6 +11,7 @@ slots:
         - iconName
         - iconColor
         - showIcon
+        - link
         - text/slot
 examples:
   - slugs:
@@ -48,4 +49,8 @@ examples:
     title: Sizes
   - slugs:
       - icon-colors
+    title: Icon colors
+  - slugs:
+      - item-links
+    title: Linked items
 ---
