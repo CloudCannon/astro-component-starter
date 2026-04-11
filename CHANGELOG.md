@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Carousel indicator dots now use presentational `<div>` elements instead of `<button>`, fixing invalid `aria-selected` on buttons and removing unnecessary touch-target assessments.
+- Navigation dropdown `<label>` triggers no longer use invalid `role="button"`.
 - Modal scrollbar now only applies to the body content, keeping the header fixed outside the scroll area.
 - List items with icons now align wrapped text to the text column instead of wrapping under the icon.
 

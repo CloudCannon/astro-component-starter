@@ -237,12 +237,9 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         const renderDots = () => {
           indicatorsContainer.innerHTML = "";
           embla.scrollSnapList().forEach((_, index) => {
-            const dot = document.createElement("button");
+            const dot = document.createElement("div");
             dot.className = "indicator";
-            dot.setAttribute("type", "button");
-            dot.setAttribute("aria-label", `Go to position ${index + 1}`);
             dot.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
-            dot.setAttribute("aria-selected", (index === embla.selectedScrollSnap()).toString());
             dot.addEventListener("click", () => embla.scrollTo(index));
             indicatorsContainer.appendChild(dot);
           });
@@ -252,7 +249,6 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           indicatorsContainer.querySelectorAll(".indicator").forEach((dot, index) => {
             const isSelected = index === embla.selectedScrollSnap();
             dot.setAttribute("data-selected", isSelected.toString());
-            dot.setAttribute("aria-selected", isSelected.toString());
           });
         };
 
@@ -343,6 +339,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 
         > .controls-wrapper > .indicators > :global(.indicator) {
           aspect-ratio: 1/1;
+          background-color: var(--color-border);
           border: none;
           border-radius: var(--radius-full);
           cursor: pointer;
