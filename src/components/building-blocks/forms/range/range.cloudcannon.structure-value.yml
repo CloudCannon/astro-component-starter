@@ -1,0 +1,24 @@
+label: Range
+icon: linear_scale
+description: Slider input for selecting a numeric value within a range.
+value:
+  _component: building-blocks/forms/range
+  label: My range
+  name: my_range
+  min: 0
+  max: 100
+  step: 1
+  value: 50
+  required: false
+  showValue: true
+preview:
+  text:
+    - Range
+  subtext:
+    - key: label
+  icon: linear_scale
+picker_preview:
+  text: Range
+  subtext: Slider input for selecting a numeric value within a range.
+_inputs_from_glob:
+  - /src/components/building-blocks/forms/range/range.cloudcannon.inputs.yml
