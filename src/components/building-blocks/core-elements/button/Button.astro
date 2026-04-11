@@ -4,6 +4,7 @@ import Icon from "@core-elements/icon/Icon.astro";
 const {
   text,
   iconName,
+  iconColor = "default",
   iconPosition = "before",
   hideText = false,
   variant = "primary",
@@ -92,6 +93,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
   >
     <Icon
       name={iconName}
+      color={iconColor}
       size="none"
     />
     {

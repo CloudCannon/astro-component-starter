@@ -8,6 +8,7 @@ value:
   size: default
   alignmentHorizontal: start
   iconName: null
+  iconColor: default
   iconPosition: before
 preview:
   icon: title

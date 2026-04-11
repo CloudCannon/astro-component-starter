@@ -17,4 +17,8 @@ examples:
       - navigation-position-top
       - navigation-position-start
     size: lg
+  - title: 'Icon Colors'
+    slugs:
+      - icon-colors
+    size: lg
 ---

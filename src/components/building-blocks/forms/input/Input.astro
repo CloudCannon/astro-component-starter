@@ -9,6 +9,7 @@ const {
   required = false,
   value,
   iconName,
+  iconColor = "default",
   iconPosition = "before",
   id: customId,
   class: className,
@@ -48,6 +49,7 @@ const hasIcon = iconName?.trim().length > 0;
       <span class:list={["field-shell", iconPosition === "after" && "icon-after"]}>
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="input-icon"
           aria-hidden="true"

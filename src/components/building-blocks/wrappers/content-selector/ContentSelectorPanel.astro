@@ -6,6 +6,7 @@ const {
   title,
   subtext,
   iconName,
+  iconColor,
   contentSections,
   useDefaultEditableBinding = false,
   checked = false,
@@ -54,6 +55,7 @@ const arrayDataAttributes = effectiveChildrenProp
       level="h3"
       size="sm"
       iconName={iconName}
+      iconColor={iconColor}
       alignmentHorizontal={navigationPosition === "top" ? "center" : "start"}
       class="content-selector-tab-heading"
     />
@@ -135,7 +137,8 @@ const arrayDataAttributes = effectiveChildrenProp
     .content-selector-tab-subtext {
       color: var(--color-text-muted);
       display: block;
-      font-size: var(--font-size-body-sm);
+      font-size: var(--font-size-body-xs);
+      font-weight: var(--font-weight-normal);
       margin-top: var(--spacing-2xs);
 
       &.align-center {

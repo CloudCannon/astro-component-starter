@@ -8,6 +8,7 @@ const {
   size,
   alignmentHorizontal = "start",
   iconName,
+  iconColor = "default",
   iconPosition = "before",
   class: className,
   useDefaultEditableBinding = false,
@@ -42,6 +43,7 @@ if (!_component && !hasText && !hasSlotContent) return;
       iconPosition == "before" && (
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="heading-icon"
           aria-hidden="true"
@@ -61,6 +63,7 @@ if (!_component && !hasText && !hasSlotContent) return;
       iconPosition === "after" && (
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="heading-icon heading-icon-after"
           aria-hidden="true"

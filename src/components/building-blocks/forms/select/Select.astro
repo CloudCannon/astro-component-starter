@@ -10,6 +10,7 @@ const {
   required = false,
   value,
   iconName,
+  iconColor = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -44,6 +45,7 @@ const hasLeadingIcon = iconName?.trim().length > 0;
       hasLeadingIcon && (
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="select-icon"
           aria-hidden="true"

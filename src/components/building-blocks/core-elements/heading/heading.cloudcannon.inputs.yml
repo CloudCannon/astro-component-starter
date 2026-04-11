@@ -51,6 +51,30 @@ iconName:
   type: select
   options:
     values: _select_data.icons
+iconColor:
+  type: select
+  comment: The color of the icon.
+  hidden: "!iconName"
+  options:
+    values:
+      - id: default
+        name: Default
+      - id: blue
+        name: Blue
+      - id: green
+        name: Green
+      - id: yellow
+        name: Yellow
+      - id: orange
+        name: Orange
+      - id: red
+        name: Red
+      - id: purple
+        name: Purple
+      - id: pink
+        name: Pink
+      - id: cyan
+        name: Cyan
 iconPosition:
   comment: The position of the icon relative to the text.
   type: select

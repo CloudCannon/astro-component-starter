@@ -22,4 +22,7 @@ examples:
   - slugs:
       - icon
     size: md
+  - slugs:
+      - icon-color
+    size: md
 ---

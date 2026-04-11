@@ -80,4 +80,4 @@ This is the core idea: developers build the components and editing controls, whi
 
 ## Next up
 
-Now that you can edit pages, let's make the starter look like your brand. Head to [Customizing Your Brand](/component-docs/customizing-your-brand/) to update colors, fonts, and spacing across your entire site.
+Now that you can edit pages, let's look at the blog. Head to [Editing the Blog](/component-docs/editing-the-blog/) to learn how to create posts, customize the blog index, and embed components in your articles.

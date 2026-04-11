@@ -16,6 +16,7 @@ value:
   placeholder: null
   value: null
   iconName: null
+  iconColor: default
 preview:
   text:
     - Select

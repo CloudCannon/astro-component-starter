@@ -14,4 +14,6 @@ examples:
     size: sm
   - slugs:
       - icons
+  - slugs:
+      - icon-colors
 ---
