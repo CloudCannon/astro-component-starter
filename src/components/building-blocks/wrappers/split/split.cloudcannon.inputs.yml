@@ -61,6 +61,8 @@ gap:
   type: select
   options:
     values:
+      - id: none
+        name: None
       - id: xs
         name: Extra Small
       - id: sm

@@ -83,6 +83,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
           grid-template-columns: repeat(4, 1fr);
         }
 
+        &.gap-none {
+          gap: 0;
+        }
+
         &.gap-xs {
           gap: var(--spacing-xs);
         }

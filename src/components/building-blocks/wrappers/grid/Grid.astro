@@ -26,7 +26,7 @@ if (!htmlAttributes.id && label) {
 const gridStyles = [
   `--min-item-width: ${minItemWidth}px`,
   `--max-item-width: ${maxItemWidth}px`,
-  `--grid-spacing: var(--spacing-${gap})`,
+  `--grid-spacing: ${gap === "none" ? "0px" : `var(--spacing-${gap})`}`,
   userStyle,
 ]
   .filter(Boolean)
