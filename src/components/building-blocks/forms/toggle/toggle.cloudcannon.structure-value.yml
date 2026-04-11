@@ -1,21 +1,21 @@
-label: Slider
+label: Toggle
 icon: toggle_on
 description: Toggle switch form field for binary choices.
 value:
-  _component: building-blocks/forms/slider
-  label: My slider
-  name: my_slider
+  _component: building-blocks/forms/toggle
+  label: My toggle
+  name: my_toggle
   checked: false
   required: false
   value: on
 preview:
   text:
-    - Slider
+    - Toggle
   subtext:
     - key: label
   icon: toggle_on
 picker_preview:
-  text: Slider
+  text: Toggle
   subtext: Toggle switch form field for binary choices.
 _inputs_from_glob:
-  - /src/components/building-blocks/forms/slider/slider.cloudcannon.inputs.yml
+  - /src/components/building-blocks/forms/toggle/toggle.cloudcannon.inputs.yml

@@ -57,8 +57,10 @@ function initializeBuilder(): void {
   const sidebarTitle = document.getElementById("sidebar-title");
   const exportBtn = document.getElementById("export-btn") as HTMLElement;
   const exportBar = document.querySelector(".export-bar") as HTMLElement;
-  const exportBtnInner = exportBtn?.querySelector(".button-inner") as HTMLButtonElement | null;
-  const exportBtnLabel = exportBtn?.querySelector(".label-text") as HTMLElement | null;
+  const exportBtnInner = (exportBtn?.classList.contains("button-inner")
+    ? exportBtn
+    : exportBtn?.querySelector(".button-inner")) as HTMLButtonElement | null;
+  const exportBtnLabel = exportBtnInner?.querySelector(".label-text") as HTMLElement | null;
 
   if (!sandbox || !sidebarContent || !sidebarTitle || !exportBtn || !exportBar || !exportBtnInner) {
     console.error("[ComponentBuilder] Missing required DOM elements");

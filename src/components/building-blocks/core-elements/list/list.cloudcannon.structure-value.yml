@@ -7,12 +7,15 @@ value:
     - text: List item 1
       iconName: check
       iconColor: default
+      link:
     - text: List item 2
       iconName: lock-closed
       iconColor: default
+      link:
     - text: List item 3
       iconName: briefcase
       iconColor: default
+      link:
   direction: vertical
   alignmentHorizontal: start
   size: md
@@ -34,6 +37,7 @@ _structures:
           text: "List item"
           iconName: ""
           iconColor: default
+          link:
         preview:
           icon: text_fields
           image:

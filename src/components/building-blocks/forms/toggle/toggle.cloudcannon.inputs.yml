@@ -1,0 +1,15 @@
+label:
+  type: text
+  comment: The label text for the toggle field.
+name:
+  type: text
+  comment: The name attribute for the toggle field.
+checked:
+  type: switch
+  comment: Whether the toggle is checked by default.
+required:
+  type: switch
+  comment: Whether the field is required.
+value:
+  type: text
+  comment: The value submitted when the toggle is checked.

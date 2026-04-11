@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle` — updated component path, CSS class names, CloudCannon config, doc pages, and all internal usages in ComponentBuilder
+
 ### Added
 
 - List list items support an optional `link` URL; when set, only the text is wrapped in the anchor so the label is clickable while the icon stays decorative (outside the link). CloudCannon includes a URL input on each list item.

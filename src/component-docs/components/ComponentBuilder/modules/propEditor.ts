@@ -13,7 +13,7 @@
 
 import { builderState } from "../state";
 import type { ComponentInfo, ComponentNode, InputConfig } from "../types";
-import { createSlider } from "../utils/sliderHelpers";
+import { createToggle } from "../utils/toggleHelpers";
 import { slotHasSameComponentInEveryItem } from "../utils/shared";
 import { DEFAULT_EXPOSED_PROPS } from "../constants";
 
@@ -221,7 +221,7 @@ function createPropField(
   // Toggle (Expose) — not shown for forced props; they are always exposed.
   if (!isForcedProp) {
     const toggle = createFieldToggle(isHardcoded, (exposed) => {
-      // Delay state update to allow slider animation to complete (350ms)
+      // Delay state update to allow toggle animation to complete (350ms)
       setTimeout(() => {
         builderState.updateNodeProperty(node._nodeId, `_hardcoded_${propName}`, !exposed);
       }, 350);
@@ -299,7 +299,7 @@ function createFieldToggle(
   toggleLabel.className = "prop-field-toggle-label";
   toggleLabel.textContent = "Expose";
 
-  const toggle = createSlider(!isHardcoded, (checked) => onToggle(checked));
+  const toggle = createToggle(!isHardcoded, (checked) => onToggle(checked));
 
   toggleWrapper.appendChild(toggleLabel);
   toggleWrapper.appendChild(toggle);
@@ -564,7 +564,7 @@ function createSelectInput(
 
 /** Create boolean/switch input */
 function createBooleanInput(propName: string, value: boolean, node: ComponentNode): HTMLElement {
-  return createSlider(!!value, (checked) => {
+  return createToggle(!!value, (checked) => {
     builderState.updateNodeProperty(node._nodeId, propName, checked);
   });
 }

@@ -9,7 +9,7 @@
 
 import type { ComponentInfo, ComponentMetadata, NestingRules } from "./types";
 import Button from "../../../components/building-blocks/core-elements/button/Button.astro";
-import Slider from "../../../components/building-blocks/forms/slider/Slider.astro";
+import Toggle from "../../../components/building-blocks/forms/toggle/Toggle.astro";
 
 interface Props {
   components: ComponentInfo[];
@@ -47,11 +47,11 @@ const builderData = {
   data-builder-data={JSON.stringify(builderData)}
   data-ssr-enabled={String(ssrEnabled)}
 >
-  <!-- Template for reusable Slider component -->
-  <template id="slider-template">
-    <Slider
-      id="slider-template-id"
-      name="slider-template"
+  <!-- Template for reusable Toggle component -->
+  <template id="toggle-template">
+    <Toggle
+      id="toggle-template-id"
+      name="toggle-template"
     />
   </template>
 
