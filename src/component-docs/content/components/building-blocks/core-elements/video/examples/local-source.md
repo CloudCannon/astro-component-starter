@@ -6,6 +6,6 @@ blocks:
     type: local-source
     title: 'Glass Pour'
     source: /videos/component-docs/glass.mp4
-    thumbnail: /images/component-docs/video-placeholder.jpg
+    thumbnail: /src/assets/images/component-docs/video-placeholder.jpg
     style: 'max-width: 600px'
 ---

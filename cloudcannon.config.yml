@@ -19,6 +19,8 @@ collections_config:
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.md"
     new_preview_url: /
+    paths:
+      uploads: src/assets/images
     _inputs:
       title:
         type: text
@@ -45,6 +47,8 @@ collections_config:
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
     new_preview_url: /blog/
+    paths:
+      uploads: src/assets/images
     _inputs:
       title:
         type: text
@@ -70,6 +74,11 @@ collections_config:
       tags:
         type: array
         comment: Tags relevant to this post's content.
+    _editables:
+      content:
+        image: false
+        paths:
+          uploads: src/assets/images
   data:
     path: src/data
     glob:

@@ -163,7 +163,7 @@ background.imageAlt:
 background.videoSource:
   type: file
   label: Video source
-  comment: Path to a video under public/ (e.g. uploads). Sibling formats with the same basename are added automatically when present.
+  comment: Path to a video under public/videos. Sibling formats with the same basename are added automatically when present.
   hidden: "background.type !== 'video'"
   options:
     accepts_mime_types:

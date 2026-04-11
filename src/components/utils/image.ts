@@ -1,4 +1,8 @@
+import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
+
+const VIDEO_POSTER_MAX_WIDTH = 1920;
+const VIDEO_POSTER_MAX_HEIGHT = 1080;
 
 type ImageModule = string | ImageMetadata;
 
@@ -101,6 +105,53 @@ export function resolveImageSource(source: string) {
   }
 
   return typeof resolvedImage === "string" ? resolvedImage : resolvedImage.src;
+}
+
+/** Local `/src/assets/...` posters: `getImage` scaled to max 1920×1080 (aspect preserved). Other URLs unchanged. */
+export async function resolveVideoPosterSource(source: string): Promise<string> {
+  const trimmed = source.trim();
+
+  if (!trimmed.startsWith("/src/")) {
+    return trimmed;
+  }
+
+  const resolvedImage = getLocalImageAsset(trimmed);
+
+  if (!resolvedImage) {
+    return trimmed;
+  }
+
+  if (typeof resolvedImage === "string") {
+    return resolvedImage;
+  }
+
+  if (trimmed.toLowerCase().endsWith(".svg")) {
+    return resolvedImage.src;
+  }
+
+  const w = resolvedImage.width;
+  const h = resolvedImage.height;
+
+  if (!w || !h) {
+    const { src } = await getImage({
+      src: resolvedImage,
+      width: VIDEO_POSTER_MAX_WIDTH,
+    });
+
+    return src;
+  }
+
+  const scale = Math.min(1, VIDEO_POSTER_MAX_WIDTH / w, VIDEO_POSTER_MAX_HEIGHT / h);
+  const outW = Math.max(1, Math.round(w * scale));
+  const outH = Math.max(1, Math.round(h * scale));
+
+  const { src } = await getImage({
+    src: resolvedImage,
+    width: outW,
+    height: outH,
+  });
+
+  return src;
 }
 
 export function prepareImageData({

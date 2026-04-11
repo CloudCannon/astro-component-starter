@@ -2,11 +2,15 @@ image:
   template: mdx_component
   inline: false
   preview:
+    view: gallery
     text:
       - Image
     subtext:
       - key: alt
     icon: image
+    gallery:
+      image:
+        - key: source
   definitions:
     component_name: Image
     named_args:

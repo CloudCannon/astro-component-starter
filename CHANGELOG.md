@@ -8,11 +8,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Video component `thumbnail` / `<video poster>` uses `resolveVideoPosterSource` so `/src/assets/images/...` posters are optimized with `getImage`, scaled to fit within 1920×1080 (aspect preserved). CloudCannon thumbnail uploads for Video target `src/assets/images` (aligned with Image inputs). Public or absolute poster URLs are unchanged.
+- CloudCannon image uploads default to `src/assets/images` on the `pages` and `blog` collections (blog Content Editor uses the same via `_editables.content.paths`). There is no top-level `paths.uploads`, so video file inputs keep uploading to `public/videos` as configured on each input.
+- Blog Content Editor disables the native image toolbar button; authors add images via the Image snippet (`<Image />`) for consistent options and paths.
+- Image MDX snippet picker preview uses gallery view with a large preview from the `source` field.
 - Standardized layout prop naming to a consistent noun-first convention: `alignX` renamed to `alignmentHorizontal`, `verticalAlignment` renamed to `alignmentVertical`, Carousel `align` renamed to `alignmentHorizontal`, and Modal `header` renamed to `heading`.
 - FeatureGrid heading/text alignment is now configurable via the `alignmentHorizontal` prop instead of being hardcoded to `center`.
 
 ### Added
 
+- `public/videos/` (with `.gitkeep`) as the expected location for self-hosted videos referenced by Video, Video Modal, and background video fields.
 - Blog tags on posts link to a paginated tag archive at `/blog/tag/{slug}/`, where `{slug}` is derived from each tag with `slugifyLabel` (e.g. `Content Strategy` → `/blog/tag/content-strategy/`). New route: `src/pages/blog/tag/[tag]/[...page].astro`.
 - All page sections that wrap `CustomSection` now accept the same shell props as Custom Section: `sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `backgroundColor`, `background` (image/video with overlay), and `rounded`. CloudCannon inputs are shared via `custom-section-wrapper.cloudcannon.inputs.yml` (merged first in `_inputs_from_glob`). `sectionLabel` maps to Custom Section’s `label` and avoids clashing with FAQ’s accordion `label`.
 

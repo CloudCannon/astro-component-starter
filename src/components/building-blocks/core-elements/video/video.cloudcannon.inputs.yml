@@ -28,15 +28,15 @@ source:
       static: public
 thumbnail:
   type: image
-  comment: Used for locally hosted videos - The image displayed before the video plays or while it is loading.
+  comment: Poster image before the video plays. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
   options:
     accepts_mime_types:
       - image/jpeg
       - image/png
       - image/webp
     paths:
-      uploads: public/images
-      static: public
+      uploads: src/assets/images
+      static: ""
     resize_style: contain
     width: 1920
-    height: 1280
+    height: 1080

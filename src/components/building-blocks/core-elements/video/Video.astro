@@ -1,4 +1,5 @@
 ---
+import { resolveVideoPosterSource } from "@component-utils/image";
 import type { VideoSource } from "@component-utils/discoverVideoSources";
 
 const {
@@ -13,6 +14,13 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const trimmedThumbnail =
+  typeof thumbnail === "string" && thumbnail.trim() !== "" ? thumbnail.trim() : "";
+
+const posterUrl = trimmedThumbnail
+  ? await resolveVideoPosterSource(trimmedThumbnail)
+  : undefined;
 
 let localVideoSources: VideoSource[] = [];
 
@@ -60,7 +68,7 @@ if (type === "local-source" && source) {
         muted
         loop
         playsinline
-        poster={thumbnail}
+        poster={posterUrl}
       >
         {localVideoSources.map(({ src, type: sourceType }) => (
           <source
@@ -74,7 +82,7 @@ if (type === "local-source" && source) {
     <video
       preload="none"
       controls
-      poster={thumbnail}
+      poster={posterUrl}
       class:list={["video", className]}
       {...htmlAttributes}
     >
