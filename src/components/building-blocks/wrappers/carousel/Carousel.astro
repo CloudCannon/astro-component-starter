@@ -14,7 +14,7 @@ const {
   indicatorStyle = "dots",
   showArrows = true,
   loop = true,
-  align = "center",
+  alignmentHorizontal = "center",
   slidesToScroll = "auto",
   slideWidthPercent = 100,
   minSlideWidth = 0,
@@ -38,7 +38,7 @@ const effectiveShowArrows = autoScroll ? false : showArrows;
 dataAttributes["data-show-indicators"] = String(effectiveShowIndicators);
 dataAttributes["data-show-arrows"] = String(effectiveShowArrows);
 dataAttributes["data-loop"] = String(loop);
-dataAttributes["data-align"] = String(align);
+dataAttributes["data-align"] = String(alignmentHorizontal);
 dataAttributes["data-slides-to-scroll"] = String(slidesToScroll);
 
 if (autoPlay) {

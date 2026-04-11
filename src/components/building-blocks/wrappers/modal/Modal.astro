@@ -5,7 +5,7 @@ import Button from "@core-elements/button/Button.astro";
 
 const {
   label,
-  header,
+  heading,
   triggerText,
   triggerVariant = "primary",
   triggerSize = "md",
@@ -19,7 +19,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || header || `Modal-${crypto.randomUUID()}`;
+const generatedLabel = label || heading || `Modal-${crypto.randomUUID()}`;
 const popoverId = `modal-${slugifyLabel(generatedLabel)}`;
 
 const effectiveChildrenProp =
@@ -27,11 +27,11 @@ const effectiveChildrenProp =
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
-const headerDataAttributes = useDefaultEditableBinding
-  ? { "data-editable": "text", "data-prop": "header" }
+const headingDataAttributes = useDefaultEditableBinding
+  ? { "data-editable": "text", "data-prop": "heading" }
   : {};
 
-const hasHeader = header?.trim().length > 0;
+const hasHeading = heading?.trim().length > 0;
 const hasContentSections = contentSections?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const hasTrigger = triggerText?.trim().length > 0 || triggerIconName?.trim().length > 0;
@@ -61,18 +61,18 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     popover="auto"
     class:list={["modal-popover", `size-${size}`]}
     role="dialog"
-    aria-label={hasHeader ? undefined : label}
-    aria-labelledby={hasHeader ? `${popoverId}-header` : undefined}
+    aria-label={hasHeading ? undefined : label}
+    aria-labelledby={hasHeading ? `${popoverId}-header` : undefined}
   >
-    <div class:list={["modal-header", hasHeader ? "has-header" : "no-header"]}>
+    <div class:list={["modal-header", hasHeading ? "has-header" : "no-header"]}>
       {
-        hasHeader && (
+        hasHeading && (
           <h2
             id={`${popoverId}-header`}
             class="modal-title"
-            {...headerDataAttributes}
+            {...headingDataAttributes}
           >
-            {header}
+            {heading}
           </h2>
         )
       }

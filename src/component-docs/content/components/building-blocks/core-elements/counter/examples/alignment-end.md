@@ -6,5 +6,5 @@ blocks:
   number: 50000
   prefix:
   suffix: '+'
-  alignX: end
+  alignmentHorizontal: end
 ---

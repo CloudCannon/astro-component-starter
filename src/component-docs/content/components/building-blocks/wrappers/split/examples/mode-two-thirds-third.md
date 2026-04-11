@@ -27,6 +27,6 @@ blocks:
             This column takes up 33% of the available space.
   distributionMode: 'two-thirds-third'
   fixedWidth: null
-  verticalAlignment: 'top'
+  alignmentVertical: 'top'
   reverse: false
 ---

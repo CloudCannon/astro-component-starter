@@ -20,6 +20,7 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   background,
+  alignmentHorizontal = "center",
   rounded = false,
   class: className,
   useDefaultEditableBinding = false,
@@ -42,7 +43,7 @@ const {
   {...htmlAttributes}
 >
   <SimpleText
-    alignX="center"
+    alignmentHorizontal={alignmentHorizontal}
     class="eyebrow"
     data-prop="eyebrow"
     text={eyebrow}
@@ -50,14 +51,14 @@ const {
   <Heading
     level="h2"
     size="lg"
-    alignX="center"
+    alignmentHorizontal={alignmentHorizontal}
     data-prop="heading"
   >
     {heading}
   </Heading>
   <Text
     class="feature-grid-subtext"
-    alignX="center"
+    alignmentHorizontal={alignmentHorizontal}
     data-prop="subtext"
     text={subtext}
   />

@@ -74,14 +74,14 @@ pageSections:
         text: Mix and match your components
         level: h2
         size: default
-        alignX: center
+        alignmentHorizontal: center
         iconName:
         iconPosition: before
       - _component: building-blocks/core-elements/text
         text: >-
           With custom sections, you can create components for almost any use
           case.
-        alignX: center
+        alignmentHorizontal: center
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md
@@ -146,7 +146,7 @@ pageSections:
     authorName: John Convincingname
     authorDescription: Founder
     authorImage: /src/assets/images/component-docs/profile.jpg
-    alignX: center
+    alignmentHorizontal: center
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 2xl

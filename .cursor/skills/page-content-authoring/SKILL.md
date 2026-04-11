@@ -467,7 +467,7 @@ Single testimonial with author info.
   authorName: John Smith
   authorDescription: CEO, Acme Corp
   authorImage: /src/assets/images/testimonial.jpg
-  alignX: center
+  alignmentHorizontal: center
   maxContentWidth: xl
   paddingHorizontal: xl
   paddingVertical: 2xl
@@ -481,7 +481,7 @@ Single testimonial with author info.
 | `authorName`                            | text     | Author name                                      |
 | `authorDescription`                     | text     | Author title/role                                |
 | `authorImage`                           | image    | Author photo                                     |
-| `alignX`                                | select   | `center`, `start`, `end`                         |
+| `alignmentHorizontal`                                | select   | `center`, `start`, `end`                         |
 | `maxContentWidth`                       | select   | `sm`–`2xl`                                       |
 | `paddingHorizontal` / `paddingVertical` | select   | Spacing sizes                                    |
 | `colorScheme`                           | select   | `inherit`, `light`, `dark`                       |
@@ -503,11 +503,11 @@ Flexible container for composing any building blocks. Use when no specific page 
       text: Custom content
       level: h2
       size: lg
-      alignX: center
+      alignmentHorizontal: center
     - _component: building-blocks/core-elements/text
       text: >-
         Any combination of building blocks.
-      alignX: center
+      alignmentHorizontal: center
   maxContentWidth: 2xl
   paddingHorizontal: md
   paddingVertical: md

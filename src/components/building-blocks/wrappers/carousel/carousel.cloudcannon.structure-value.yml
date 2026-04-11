@@ -11,7 +11,7 @@ value:
   showIndicators: true
   indicatorStyle: dots
   showArrows: true
-  align: center
+  alignmentHorizontal: center
   slidesToScroll: auto
   slideWidthPercent: 100
   minSlideWidth: 0

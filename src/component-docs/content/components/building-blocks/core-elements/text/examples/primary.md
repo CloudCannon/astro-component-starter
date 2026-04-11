@@ -12,5 +12,5 @@ blocks:
     * This
     * List
     * Too!
-  alignX: start
+  alignmentHorizontal: start
 ---

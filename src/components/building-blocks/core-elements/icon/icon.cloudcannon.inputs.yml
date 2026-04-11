@@ -56,7 +56,7 @@ background:
 inline:
   type: switch
   comment: Display the icon inline instead of block.
-alignX:
+alignmentHorizontal:
   type: select
   comment: Horizontal alignment of the icon.
   options:

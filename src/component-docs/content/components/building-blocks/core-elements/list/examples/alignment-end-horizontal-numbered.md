@@ -8,7 +8,7 @@ blocks:
       - text: Second list item
       - text: Third list item
     direction: horizontal
-    alignX: end
+    alignmentHorizontal: end
     size: md
     listType: numbered
 ---

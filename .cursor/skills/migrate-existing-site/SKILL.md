@@ -122,11 +122,11 @@ When creating new components, use the [screenshot-to-component skill](../screens
       text: Section title
       level: h2
       size: lg
-      alignX: center
+      alignmentHorizontal: center
     - _component: building-blocks/core-elements/text
       text: >-
         Body content here.
-      alignX: center
+      alignmentHorizontal: center
     - _component: building-blocks/wrappers/grid
       minItemWidth: 300
       maxItemWidth: 400

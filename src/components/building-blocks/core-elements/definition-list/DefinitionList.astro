@@ -5,7 +5,7 @@ type ItemProps = Record<string, unknown>;
 
 const {
   items,
-  alignX = "start",
+  alignmentHorizontal = "start",
   class: className,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
@@ -28,7 +28,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   {...htmlAttributes}
 >
   <dl
-    class:list={[`alignment-${alignX}`]}
+    class:list={[`alignment-${alignmentHorizontal}`]}
     {...arrayDataAttributes}
   >
     <slot>

@@ -9,7 +9,7 @@ value:
   distributionMode: half
   fixedWidth: null
   minSplitWidth: 760
-  verticalAlignment: center
+  alignmentVertical: center
   reverse: false
   reverseOrderOnMobile: false
   gap: lg

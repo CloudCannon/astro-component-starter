@@ -35,7 +35,7 @@ size:
         name: 3xl
       - id: 4xl
         name: 4xl
-alignX:
+alignmentHorizontal:
   comment: The horizontal alignment of the text.
   type: select
   options:

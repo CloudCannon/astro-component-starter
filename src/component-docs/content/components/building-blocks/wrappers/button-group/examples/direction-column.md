@@ -4,7 +4,7 @@ spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/button-group'
   direction: column
-  alignX: start
+  alignmentHorizontal: start
   buttonSections:
     - _component: building-blocks/core-elements/button
       text: 'Button A'

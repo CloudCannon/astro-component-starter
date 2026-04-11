@@ -7,5 +7,5 @@ blocks:
     authorName: 'Casey Lin'
     authorDescription: 'Author'
     authorImage: /src/assets/images/component-docs/profile.jpg
-    alignX: start
+    alignmentHorizontal: start
 ---

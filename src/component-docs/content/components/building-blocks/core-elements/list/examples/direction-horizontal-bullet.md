@@ -8,7 +8,7 @@ blocks:
       - text: Second horizontal bullet item
       - text: Third horizontal bullet item
     direction: horizontal
-    alignX: start
+    alignmentHorizontal: start
     size: md
     listType: bullet
 ---

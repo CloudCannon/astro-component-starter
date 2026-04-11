@@ -3,7 +3,7 @@ const {
   number = 0,
   prefix,
   suffix,
-  alignX = "start",
+  alignmentHorizontal = "start",
   size,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -19,7 +19,7 @@ const duration = 500;
   class:list={["counter", className]}
   {...htmlAttributes}
 >
-  <span class:list={["counter-inner", `alignment-${alignX}`, size && `size-${size}`]}>
+  <span class:list={["counter-inner", `alignment-${alignmentHorizontal}`, size && `size-${size}`]}>
     {prefix && <span class="prefix">{prefix}</span>}
     <span
       class="number"

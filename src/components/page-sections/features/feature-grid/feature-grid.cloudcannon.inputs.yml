@@ -19,7 +19,7 @@ subtext:
     underline: false
     bulletedlist: false
     numberedlist: false
-align:
+alignmentHorizontal:
   type: select
   comment: Alignment for the heading and supporting text.
   options:

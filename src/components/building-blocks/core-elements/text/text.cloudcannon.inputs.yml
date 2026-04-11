@@ -15,7 +15,7 @@ text:
     numberedlist: true
     indent: true
     outdent: true
-alignX:
+alignmentHorizontal:
   type: select
   options:
     values:

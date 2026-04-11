@@ -5,7 +5,7 @@ const {
   text,
   authorName,
   authorDescription,
-  alignX = "center",
+  alignmentHorizontal = "center",
   authorImage = "",
   class: className,
   useDefaultEditableBinding = false,
@@ -41,7 +41,7 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
   class:list={["testimonial", className]}
   {...htmlAttributes}
 >
-  <div class:list={["testimonial-inner", `alignment-${alignX}`]}>
+  <div class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}>
     <div
       class="quote"
       {...textDataAttributes}

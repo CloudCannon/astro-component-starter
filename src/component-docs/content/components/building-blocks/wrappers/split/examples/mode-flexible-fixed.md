@@ -28,6 +28,6 @@ blocks:
   distributionMode: 'flexible-fixed'
   fixedWidth: null
   minSplitWidth: 500
-  verticalAlignment: 'top'
+  alignmentVertical: 'top'
   reverse: false
 ---

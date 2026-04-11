@@ -9,7 +9,7 @@ blocks:
     - text: Third bullet list item with *italic text*
     - text: Lists can include formatting and <br> line breaks
   direction: vertical
-  alignX: start
+  alignmentHorizontal: start
   size: md
   listType: bullet
 ---

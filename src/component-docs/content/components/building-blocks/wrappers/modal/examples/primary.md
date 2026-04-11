@@ -17,7 +17,7 @@ blocks:
       contentSections:
         - _component: building-blocks/wrappers/split
           distributionMode: half
-          verticalAlignment: center
+          alignmentVertical: center
           reverse: false
           label: ''
           minSplitWidth: 200

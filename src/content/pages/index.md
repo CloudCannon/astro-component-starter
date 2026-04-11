@@ -130,7 +130,7 @@ pageSections:
         iconColor: pink
     colorScheme: inherit
     backgroundColor: surface
-    align: center
+    alignmentHorizontal: center
   - _component: page-sections/ctas/cta-center
     heading: Ready to start building?
     subtext: >-

@@ -14,7 +14,7 @@ value:
       variant: primary
       size: md
   direction: row
-  alignX: start
+  alignmentHorizontal: start
 preview:
   text:
     - Button Group

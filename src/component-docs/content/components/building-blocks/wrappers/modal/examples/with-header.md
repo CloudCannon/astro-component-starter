@@ -4,7 +4,7 @@ spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/modal'
   label: 'Learn more modal'
-  header: 'Explore next steps'
+  heading: 'Explore next steps'
   triggerVariant: 'primary'
   triggerText: 'Open modal'
   triggerSize: 'md'
@@ -29,12 +29,12 @@ blocks:
             - text: Offer clear follow-up actions that fit the page context.
               iconName: check
           direction: vertical
-          alignX: start
+          alignmentHorizontal: start
           size: md
           listType: icon
         - _component: building-blocks/wrappers/button-group
           direction: row
-          alignX: start
+          alignmentHorizontal: start
           buttonSections:
             - _component: building-blocks/core-elements/button
               text: View details

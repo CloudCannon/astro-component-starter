@@ -29,7 +29,7 @@ authorImage:
     resize_style: contain
     width: 1920
     height: 1280
-alignX:
+alignmentHorizontal:
   type: select
   comment: Horizontal alignment of the testimonial content.
   options:

@@ -32,6 +32,6 @@ blocks:
       iconName: hand-thumb-up
       iconColor: cyan
   direction: vertical
-  alignX: start
+  alignmentHorizontal: start
   size: md
 ---

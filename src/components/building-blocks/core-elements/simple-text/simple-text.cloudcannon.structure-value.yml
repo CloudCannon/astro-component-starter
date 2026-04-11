@@ -4,7 +4,7 @@ description: Paragraph for plain text content with inline markdown formatting.
 value:
   _component: building-blocks/core-elements/simple-text
   text: My text goes here.
-  alignX: start
+  alignmentHorizontal: start
   size: md
 preview:
   text:

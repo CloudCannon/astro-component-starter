@@ -7,7 +7,7 @@ value:
   size: lg
   color: default
   background: true
-  alignX: start
+  alignmentHorizontal: start
 preview:
   text:
     - Icon

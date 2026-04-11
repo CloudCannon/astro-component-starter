@@ -1,10 +1,10 @@
 ---
+import { slugifyLabel } from "@components/utils/slugify";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
-import { slugifyLabel } from "@components/utils/slugify";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 // Automatically import all components from building-blocks and page-sections for MDX
@@ -133,7 +133,16 @@ const article = {
           style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--spacing-sm); margin-bottom: 0;"
         >
           {post.data.tags.map((tag, i) => (
-            <>{i > 0 && " • "}<a class="post-tag-link" href={`/blog/tag/${slugifyLabel(tag.trim())}/`} data-pagefind-filter="Tag">{tag.trim()}</a></>
+            <>
+              {i > 0 && " • "}
+              <a
+                class="post-tag-link"
+                href={`/blog/tag/${slugifyLabel(tag.trim())}/`}
+                data-pagefind-filter="Tag"
+              >
+                {tag.trim()}
+              </a>
+            </>
           ))}
         </p>
       )

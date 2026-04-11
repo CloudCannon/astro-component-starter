@@ -3,7 +3,7 @@ items:
   label: List Items
   options:
     structures: _structures.definitionListItems
-alignX:
+alignmentHorizontal:
   type: select
   comment: The horizontal alignment of the definition list items.
   options:

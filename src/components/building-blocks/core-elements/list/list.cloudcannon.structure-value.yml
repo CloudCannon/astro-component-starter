@@ -14,7 +14,7 @@ value:
       iconName: briefcase
       iconColor: default
   direction: vertical
-  alignX: start
+  alignmentHorizontal: start
   size: md
   listType: icon
 preview:

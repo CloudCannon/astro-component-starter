@@ -6,7 +6,7 @@ const {
   text,
   level = "h2",
   size,
-  alignX = "start",
+  alignmentHorizontal = "start",
   iconName,
   iconPosition = "before",
   class: className,
@@ -37,7 +37,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   class:list={["heading", className]}
   {...htmlAttributes}
 >
-  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignX}`]}>
+  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}>
     {
       iconPosition == "before" && (
         <Icon

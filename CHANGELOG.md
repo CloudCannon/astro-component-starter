@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- Standardized layout prop naming to a consistent noun-first convention: `alignX` renamed to `alignmentHorizontal`, `verticalAlignment` renamed to `alignmentVertical`, Carousel `align` renamed to `alignmentHorizontal`, and Modal `header` renamed to `heading`.
+- FeatureGrid heading/text alignment is now configurable via the `alignmentHorizontal` prop instead of being hardcoded to `center`.
+
 ### Added
 
 - Blog tags on posts link to a paginated tag archive at `/blog/tag/{slug}/`, where `{slug}` is derived from each tag with `slugifyLabel` (e.g. `Content Strategy` → `/blog/tag/content-strategy/`). New route: `src/pages/blog/tag/[tag]/[...page].astro`.

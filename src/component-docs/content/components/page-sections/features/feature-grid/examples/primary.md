@@ -6,7 +6,7 @@ blocks:
   eyebrow: 'Why teams switch'
   heading: 'Operational clarity in every workflow'
   subtext: 'Spotlight the core capabilities that make your product different, with consistent icon cards that wrap automatically on any screen.'
-  align: center
+  alignmentHorizontal: center
   gap: xl
   minItemWidth: 280
   maxItemWidth: 360

@@ -28,7 +28,7 @@ indicatorStyle:
 showArrows:
   comment: Show previous and next arrow buttons.
   type: switch
-align:
+alignmentHorizontal:
   comment: Alignment of slides within the carousel viewport.
   type: select
   options:

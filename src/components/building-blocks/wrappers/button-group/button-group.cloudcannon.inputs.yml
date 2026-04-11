@@ -15,7 +15,7 @@ direction:
         name: Row
       - id: column
         name: Column
-alignX:
+alignmentHorizontal:
   comment: The horizontal alignment of the buttons within the group.
   type: select
   options:

@@ -4,11 +4,11 @@ spacing: 'sides'
 blocks:
   - _component: 'building-blocks/core-elements/text'
     text: '**Start** aligned'
-    alignX: start
+    alignmentHorizontal: start
   - _component: 'building-blocks/core-elements/text'
     text: '**Center** aligned'
-    alignX: center
+    alignmentHorizontal: center
   - _component: 'building-blocks/core-elements/text'
     text: '**End** aligned'
-    alignX: end
+    alignmentHorizontal: end
 ---

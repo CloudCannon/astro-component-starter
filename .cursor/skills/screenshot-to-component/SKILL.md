@@ -152,10 +152,10 @@ const {
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
-  <Heading level="h2" size="lg" alignX="center" data-prop="heading">
+  <Heading level="h2" size="lg" alignmentHorizontal="center" data-prop="heading">
     {heading}
   </Heading>
-  <Text class="service-cards-subtext" alignX="center" data-prop="subtext" text={subtext} />
+  <Text class="service-cards-subtext" alignmentHorizontal="center" data-prop="subtext" text={subtext} />
   <Grid
     gap="lg"
     minItemWidth="300"
@@ -496,15 +496,15 @@ Import via `@core-elements/{slug}/{Name}.astro`.
 
 | Component        | Renders                              | Key props                                                                                                                  |
 | ---------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `Heading`        | Semantic heading (h1-h6)             | `text`, `level` (h1-h6), `size` (xs-5xl), `alignX` (start/center/end)                                                      |
-| `Text`           | Body paragraph, supports markdown    | `text`, `alignX`                                                                                                           |
-| `SimpleText`     | Plain inline text (eyebrows, labels) | `text`, `alignX`                                                                                                           |
+| `Heading`        | Semantic heading (h1-h6)             | `text`, `level` (h1-h6), `size` (xs-5xl), `alignmentHorizontal` (start/center/end)                                                      |
+| `Text`           | Body paragraph, supports markdown    | `text`, `alignmentHorizontal`                                                                                                           |
+| `SimpleText`     | Plain inline text (eyebrows, labels) | `text`, `alignmentHorizontal`                                                                                                           |
 | `Image`          | Responsive optimized image           | `source`, `alt`, `aspectRatio` (square/landscape/portrait/wide/none), `rounded`                                            |
 | `Icon`           | SVG icon from icon set               | `name`, `size` (xs-4xl), `color` (default/blue/green/yellow/orange/red/purple/pink/cyan), `background`                     |
 | `Button`         | Link or button                       | `text`, `link`, `variant` (primary/secondary/tertiary/ghost), `size` (sm/md/lg), `iconName`, `iconPosition` (before/after) |
 | `List`           | Ordered/unordered list               | `items[]`, `ordered`, `iconName`                                                                                           |
 | `DefinitionList` | Term + definition pairs              | `items[]` (term, definition)                                                                                               |
-| `Testimonial`    | Blockquote with author               | `text`, `authorName`, `authorDescription`, `authorImage`, `alignX`                                                         |
+| `Testimonial`    | Blockquote with author               | `text`, `authorName`, `authorDescription`, `authorImage`, `alignmentHorizontal`                                                         |
 | `Embed`          | iframe embed                         | `src`, `title`, `aspectRatio`                                                                                              |
 | `Video`          | YouTube/Vimeo lite embed             | `videoId`, `provider` (youtube/vimeo)                                                                                      |
 | `Counter`        | Animated number counter              | `value`, `suffix`, `label`                                                                                                 |
@@ -518,12 +518,12 @@ Import via `@wrappers/{slug}/{Name}.astro`.
 | Component                                  | Renders             | Key props                                                                                                                                         |
 | ------------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Grid` / `GridItem`                        | Responsive CSS grid | `minItemWidth`, `maxItemWidth`, `gap` (sm-3xl), `items[]`                                                                                         |
-| `Split`                                    | Two-column layout   | `reverse`, `distributionMode` (equal/fixed-flexible/flexible-fixed), `verticalAlignment` (start/center/end), `fixedWidth`, `minSplitWidth`, `gap` |
+| `Split`                                    | Two-column layout   | `reverse`, `distributionMode` (equal/fixed-flexible/flexible-fixed), `alignmentVertical` (start/center/end), `fixedWidth`, `minSplitWidth`, `gap` |
 | `Card`                                     | Content container   | `contentSections[]`, `border`, `rounded`, `link`, `paddingHorizontal`, `paddingVertical`, `backgroundColor`, `colorScheme`                        |
 | `BentoBox` / `BentoBoxItem`                | Spanning grid       | `columns`, `minRowHeight`, `gap`, `items[]`                                                                                                       |
 | `Accordion` / `AccordionItem`              | Expandable panels   | `items[]`, `openFirst`, `singleOpen`                                                                                                              |
 | `Carousel` / `CarouselSlide`               | Sliding content     | `slides[]`, `autoPlay`, `autoScroll`, `loop`, `showArrows`, `showIndicators`, `slideWidthPercent`, `minSlideWidth`                                |
-| `ButtonGroup`                              | Button row/column   | `buttonSections[]`, `direction` (row/column), `alignX` (start/center/end)                                                                         |
+| `ButtonGroup`                              | Button row/column   | `buttonSections[]`, `direction` (row/column), `alignmentHorizontal` (start/center/end)                                                                         |
 | `Modal`                                    | Popover dialog      | `triggerText`, `triggerVariant`, `size`, `contentSections[]`                                                                                      |
 | `ContentSelector` / `ContentSelectorPanel` | Tabbed content      | `items[]`, `navigationPosition`                                                                                                                   |
 

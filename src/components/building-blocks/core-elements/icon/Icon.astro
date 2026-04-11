@@ -6,7 +6,7 @@ const {
   size = "lg",
   color = "default",
   background = false,
-  alignX = "",
+  alignmentHorizontal = "",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -30,7 +30,7 @@ if (!_component && !isValidName) {
       `size-${size}`,
       `color-${color}`,
       background && "background",
-      alignX && `align-${alignX}`,
+      alignmentHorizontal && `align-${alignmentHorizontal}`,
       name?.includes("social/") && "fill",
     ]}
   >

@@ -14,6 +14,6 @@ blocks:
     overlay: -0.5
   contentSections:
     - _component: building-blocks/core-elements/heading
-      alignX: end
+      alignmentHorizontal: end
       text: Build bold.
 ---
