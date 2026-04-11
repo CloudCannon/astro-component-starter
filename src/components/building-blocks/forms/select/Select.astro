@@ -1,4 +1,5 @@
 ---
+import Icon from "@core-elements/icon/Icon.astro";
 import SelectOption from "./SelectOption.astro";
 
 const {
@@ -8,6 +9,7 @@ const {
   placeholder,
   required = false,
   value,
+  iconName,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -15,6 +17,7 @@ const {
 } = Astro.props;
 
 const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
+const hasLeadingIcon = iconName?.trim().length > 0;
 ---
 
 <div class:list={["select", className]}>
@@ -36,38 +39,58 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
       </label>
     )
   }
-  <select
-    name={name}
-    id={fieldId}
-    required={required}
-    aria-required={required}
-    class="field"
-    {...htmlAttributes}
-  >
+  <span class="field-shell">
     {
-      placeholder && (
-        <option
-          value=""
-          disabled
-        >
-          {placeholder}
-        </option>
+      hasLeadingIcon && (
+        <Icon
+          name={iconName}
+          size="none"
+          class="select-icon"
+          aria-hidden="true"
+          role="presentation"
+        />
       )
     }
-    {
-      options.length > 0 ? (
-        options.map((option) => (
-          <SelectOption
-            value={option.value}
-            label={option.label}
-            selected={option.value === value}
-          />
-        ))
-      ) : (
-        <slot />
-      )
-    }
-  </select>
+    <select
+      name={name}
+      id={fieldId}
+      required={required}
+      aria-required={required}
+      class="field"
+      {...htmlAttributes}
+    >
+      {
+        placeholder && (
+          <option
+            value=""
+            disabled
+          >
+            {placeholder}
+          </option>
+        )
+      }
+      {
+        options.length > 0 ? (
+          options.map((option) => (
+            <SelectOption
+              value={option.value}
+              label={option.label}
+              selected={option.value === value}
+            />
+          ))
+        ) : (
+          <slot />
+        )
+      }
+    </select>
+    <Icon
+      name="chevron-down"
+      size="none"
+      class="select-icon select-chevron"
+      aria-hidden="true"
+      role="presentation"
+    />
+  </span>
 </div>
 
 <style>
@@ -83,6 +106,51 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
       .select-required {
         color: var(--color-error);
         margin-inline-end: var(--spacing-em-xs);
+      }
+    }
+
+    .select .field-shell {
+      align-items: center;
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border-inputs);
+      border-radius: var(--radius-xs);
+      display: flex;
+      gap: var(--spacing-em-sm);
+      padding-inline: var(--spacing-em-sm);
+      transition:
+        border-color var(--animation-normal) ease-in-out,
+        box-shadow var(--animation-normal) ease-in-out;
+
+      &:focus-within {
+        border-color: var(--color-brand);
+        box-shadow: 0 0 0 3px var(--color-focus-ring);
+      }
+
+      :global(.select-icon) {
+        color: var(--color-text-muted);
+        flex-shrink: 0;
+        font-size: 1.25em;
+      }
+
+      :global(.select-chevron) {
+        pointer-events: none;
+      }
+
+      > .field {
+        appearance: none;
+        background-color: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        cursor: pointer;
+        flex: 1 1 auto;
+        min-width: 0;
+        padding-inline: 0;
+
+        &:focus {
+          box-shadow: none;
+          outline: none;
+        }
       }
     }
   }

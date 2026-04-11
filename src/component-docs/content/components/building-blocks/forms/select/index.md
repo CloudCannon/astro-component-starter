@@ -19,4 +19,7 @@ examples:
   - slugs:
       - required
     size: md
+  - slugs:
+      - icon
+    size: md
 ---

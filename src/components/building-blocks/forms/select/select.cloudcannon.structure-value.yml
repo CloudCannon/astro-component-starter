@@ -15,6 +15,7 @@ value:
       label: Option 3
   placeholder: null
   value: null
+  iconName: null
 preview:
   text:
     - Select

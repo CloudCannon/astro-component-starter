@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Select component now displays a custom chevron-down icon replacing the native browser arrow (`appearance: none`), and supports an optional leading `iconName` prop for consistency with the Input component.
+
 ### Changed
 
 - Updated Twitter references to X (updated social link URL in footer data).

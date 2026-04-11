@@ -23,3 +23,13 @@ placeholder:
 value:
   type: text
   comment: The default selected value.
+iconName:
+  type: select
+  comment: The name of an optional leading icon. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
