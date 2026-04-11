@@ -38,6 +38,10 @@ teamGrid:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: layout
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: teamMembers
         type: array
       - editor_key: colorScheme
@@ -48,9 +52,6 @@ teamGrid:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: rounded
-        type: boolean
-        optional: true
   _inputs_from_glob:
     - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
     - /src/components/page-sections/people/team-grid/team-grid.cloudcannon.inputs.yml

@@ -19,10 +19,11 @@ const {
   colorScheme = "inherit",
   backgroundColor,
   background,
-  rounded = false,
+  layout = "start",
   useDefaultEditableBinding = false,
   _component,
   class: className,
+  rounded: _roundedOmitted,
   ...htmlAttributes
 } = Astro.props;
 ---
@@ -36,7 +37,6 @@ const {
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
   background={background}
-  rounded={rounded}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
@@ -68,7 +68,7 @@ const {
     minItemWidth={260}
     maxItemWidth={400}
     data-children-prop="teamMembers"
-    layout="start"
+    layout={layout}
   >
     {
       teamMembers.map((member: MemberProps) => (

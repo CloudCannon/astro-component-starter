@@ -1,3 +1,5 @@
+rounded:
+  hidden: true
 eyebrow:
   type: text
   comment: Optional eyebrow text shown above the heading.
@@ -7,6 +9,15 @@ heading:
 subtext:
   type: textarea
   comment: Supporting copy beneath the heading.
+layout:
+  comment: How team member cards align in the grid (matches Grid layout).
+  type: select
+  options:
+    values:
+      - id: start
+        name: Left Aligned
+      - id: center
+        name: Center Aligned
 teamMembers:
   type: array
   label: Team Members

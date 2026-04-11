@@ -8,12 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Team Grid exposes a `layout` prop (default `start`) that maps to the inner `Grid` layout (`start` | `center`), with matching CloudCannon select input.
 - Main site header and footer now include a **Components** link to `/component-docs/` so the component library is easy to find while browsing (not only via in-page CTAs).
 - Select component now displays a custom chevron-down icon replacing the native browser arrow (`appearance: none`), and supports an optional leading `iconName` prop for consistency with the Input component.
 - Split, Bento Box, and Grid components now support `none` as a gap option, allowing columns/items to sit flush against each other with zero spacing.
 
 ### Changed
 
+- Team Grid no longer exposes `rounded`; the section always uses `CustomSection`’s default (no rounded wrapper). The CloudCannon control for `rounded` is hidden for this block, and any legacy `rounded` value in front matter is ignored.
 - Updated Twitter references to X (updated social link URL in footer data).
 - Video component `thumbnail` / `<video poster>` uses `resolveVideoPosterSource` so `/src/assets/images/...` posters are optimized with `getImage`, scaled to fit within 1920×1080 (aspect preserved). CloudCannon thumbnail uploads for Video target `src/assets/images` (aligned with Image inputs). Public or absolute poster URLs are unchanged.
 - CloudCannon image uploads default to `src/assets/images` on the `pages` and `blog` collections (blog Content Editor uses the same via `_editables.content.paths`). There is no top-level `paths.uploads`, so video file inputs keep uploading to `public/videos` as configured on each input.

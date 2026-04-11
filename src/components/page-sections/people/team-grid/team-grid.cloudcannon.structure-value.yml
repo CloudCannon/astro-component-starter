@@ -22,7 +22,6 @@ value:
     imageAlt: ""
     videoSource: null
     overlay: 0
-  rounded: false
 preview:
   text:
     - Team Grid
