@@ -74,6 +74,7 @@ collections_config:
     path: src/data
     glob:
       - "**/*.json"
+    disable_url: true
     icon: database
     _enabled_editors:
       - data

@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- CloudCannon `data` collection (`src/data` JSON) now sets `disable_url: true` so automatic output URL matching does not assign incorrect preview URLs to non-page data files.
 - Carousel indicator dots now use presentational `<div>` elements instead of `<button>`, fixing invalid `aria-selected` on buttons and removing unnecessary touch-target assessments.
 - Navigation dropdown `<label>` triggers no longer use invalid `role="button"`.
 - Modal scrollbar now only applies to the body content, keeping the header fixed outside the scroll area.
