@@ -9,12 +9,10 @@ const {
   variant = "primary",
   size = "md",
   link,
-  element = "a",
+  element,
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
-  popovertarget,
-  popovertargetaction,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -24,22 +22,20 @@ const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-const Tag = element as any;
+const isPopoverLink = link?.startsWith("^");
+const Tag = (element ?? (isPopoverLink || !link ? "button" : "a")) as any;
 
 const tagProps: Record<string, any> =
-  Tag === "a" && link ? { href: link } : Tag === "button" ? { type: "button" } : {};
-
-if (popovertarget) {
-  tagProps.popovertarget = popovertarget;
-  if (popovertargetaction) tagProps.popovertargetaction = popovertargetaction;
-}
+  isPopoverLink
+    ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+    : Tag === "a" && link ? { href: link } : Tag === "button" ? { type: "button" } : {};
 
 if (hideText) {
   tagProps["aria-label"] = htmlAttributes["aria-label"] || text;
   delete htmlAttributes["aria-label"];
 }
 
-const tagKeys = new Set<string>(["id", "tabindex", "tabIndex"]);
+const tagKeys = new Set<string>(["id", "tabindex", "tabIndex", "popovertarget", "popovertargetaction"]);
 
 if (Tag === "a" && link) {
   for (const k of ["target", "rel", "download", "hreflang", "referrerpolicy", "ping"]) {

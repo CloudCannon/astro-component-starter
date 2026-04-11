@@ -61,7 +61,8 @@ const arrayDataAttributesAfter = effectiveAfterProp
   ? { "data-editable": "array", "data-prop": effectiveAfterProp }
   : {};
 
-const Tag = link ? "a" : "div";
+const isPopoverLink = link?.startsWith("^");
+const Tag = link ? (isPopoverLink ? "button" : "a") : "div";
 const hasBeforeSlot = Astro.slots.has("before");
 const hasAfterSlot = Astro.slots.has("after");
 const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeContentSections;
@@ -73,7 +74,9 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
   {...htmlAttributes}
 >
   <Tag
-    {...link && { href: link }}
+    {...(isPopoverLink
+      ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+      : link && { href: link })}
     class:list={["card-inner", rounded && "rounded", border && "border"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
   >
@@ -181,8 +184,19 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
       display: block;
       margin-top: var(--spacing-lg);
 
-      > a.card-inner:hover {
+      > a.card-inner:hover,
+      > button.card-inner:hover {
         transform: scale(1.05);
+      }
+
+      > button.card-inner {
+        appearance: none;
+        background: none;
+        cursor: pointer;
+        font: inherit;
+        padding: 0;
+        text-align: inherit;
+        width: 100%;
       }
 
       > .card-inner {

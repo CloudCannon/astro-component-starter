@@ -14,10 +14,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - **Breaking:** Renamed the Video component's `id` prop to `videoId` to avoid conflicts with the HTML `id` attribute. The same rename applies to the Video Modal component.
+- **Breaking:** Button no longer accepts explicit `popovertarget` / `popovertargetaction` props. Pass them as HTML attributes when using `element="button"`, or use the new `^popover-id` link convention instead.
+- **Breaking:** Button's `element` prop no longer defaults to `"a"`. The tag is now inferred: `<a>` when `link` is set, `<button>` otherwise. Pass `element` explicitly to override (e.g. `element="div"`).
 - Default font provider switched from `fontProviders.google()` to `fontProviders.fontsource()` in `site-fonts.mjs`, using local `@fontsource` packages instead of fetching from Google Fonts.
 
 ### Added
 
+- Button and Card `link` fields now support a `^popover-id` convention (e.g. `^modal-my-video`) to open a modal via the native Popover API instead of navigating. The popover action defaults to `show` so the trigger only opens (never toggles) the modal.
 - Video Modal wrapper component with autoplay on open, pause on close, and support for YouTube, Vimeo, and local video sources.
 - Image Carousel wrapper component with synchronized thumbnail navigation, configurable aspect ratios, per-image positioning, and responsive image optimization, built on Embla Carousel.
 - Video component supports `background` mode (`background={true}`) for rendering decorative looping background video with autoplay, mute, and `prefers-reduced-motion` handling.

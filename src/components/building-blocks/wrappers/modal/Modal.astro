@@ -50,9 +50,8 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         variant={triggerVariant}
         size={triggerSize}
         iconName={triggerIconName}
-        element="button"
+        link={`^${popoverId}`}
         class="modal-trigger"
-        popovertarget={popoverId}
       />
     )
   }
@@ -83,7 +82,6 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         text="Close"
         variant="ghost"
         size="lg"
-        element="button"
         class="modal-close"
         popovertarget={popoverId}
         popovertargetaction="hide"
