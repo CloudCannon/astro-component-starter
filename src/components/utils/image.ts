@@ -1,5 +1,5 @@
-import { getImage } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { getImage } from "astro:assets";
 
 const VIDEO_POSTER_MAX_WIDTH = 1920;
 const VIDEO_POSTER_MAX_HEIGHT = 1080;
@@ -107,7 +107,6 @@ export function resolveImageSource(source: string) {
   return typeof resolvedImage === "string" ? resolvedImage : resolvedImage.src;
 }
 
-/** Local `/src/assets/...` posters: `getImage` scaled to max 1920×1080 (aspect preserved). Other URLs unchanged. */
 export async function resolveVideoPosterSource(source: string): Promise<string> {
   const trimmed = source.trim();
 
