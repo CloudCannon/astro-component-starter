@@ -142,6 +142,7 @@ export function formatComponentWithSlots(
   const hasAnySlotContent =
     supportsSlots &&
     metadata?.slots &&
+    !componentPath.includes("content-selector") &&
     metadata.slots.some((slot) => hasSlotBlocks(block[slot.fallbackFor]));
 
   if (hasAnySlotContent && metadata?.slots) {
@@ -279,11 +280,15 @@ ${indent}</${componentName}>`;
       .join(" ");
 
     const itemsContent = itemsArray
-      .map((item) => {
+      .map((item, index) => {
         const itemProps = { ...item };
 
         delete itemProps._component;
         delete itemProps.contentSections;
+
+        if (index === 0) {
+          itemProps.checked = true;
+        }
 
         const itemPropsString = Object.entries(itemProps)
           .sort(([a], [b]) => a.localeCompare(b))

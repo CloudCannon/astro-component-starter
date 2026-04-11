@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle` — updated component path, CSS class names, CloudCannon config, doc pages, and all internal usages in ComponentBuilder
 
+### Fixed
+
+- **ContentSelector** Astro code generation in docs now works correctly — the generic slot-rendering branch was incorrectly matching content-selector items (which lack `_component`), causing a crash that left the Astro code view blank. The content-selector-specific branch now runs as intended and also adds `checked` to the first `ContentSelectorPanel` so the first tab is visible by default.
+
 ### Added
 
 - New **Range** form component (`building-blocks/forms/range`) — a styled slider input with configurable `min`, `max`, `step`, and `value` props, an optional live value display beside the label, and a `required` setting. Automatically available in the CloudCannon form builder.
