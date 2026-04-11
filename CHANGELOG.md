@@ -8,10 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Blog tags on posts link to a paginated tag archive at `/blog/tag/{slug}/`, where `{slug}` is derived from each tag with `slugifyLabel` (e.g. `Content Strategy` → `/blog/tag/content-strategy/`). New route: `src/pages/blog/tag/[tag]/[...page].astro`.
 - All page sections that wrap `CustomSection` now accept the same shell props as Custom Section: `sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `backgroundColor`, `background` (image/video with overlay), and `rounded`. CloudCannon inputs are shared via `custom-section-wrapper.cloudcannon.inputs.yml` (merged first in `_inputs_from_glob`). `sectionLabel` maps to Custom Section’s `label` and avoids clashing with FAQ’s accordion `label`.
 
 ### Fixed
 
+- Blog post tag line no longer inserts a stray space before commas (trim tag strings; compact fragment markup so Astro does not emit whitespace text nodes between tags).
+- Blog and other slot-only pages are included in the Pagefind index again: `data-pagefind-body` on `MainComponent` caused Pagefind to skip any page without that marker; the layout slot is now wrapped so those pages are indexed.
 - CloudCannon `data` collection (`src/data` JSON) now sets `disable_url: true` so automatic output URL matching does not assign incorrect preview URLs to non-page data files.
 - Carousel indicator dots now use presentational `<div>` elements instead of `<button>`, fixing invalid `aria-selected` on buttons and removing unnecessary touch-target assessments.
 - Navigation dropdown `<label>` triggers no longer use invalid `role="button"`.
@@ -20,6 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Blog index and tag archive share `BlogPostListingGrid.astro` plus `src/utils/blog.ts` (`getBlogPostsSortedByDate`, `loadBlogPageContext`) so the card grid, pagination, and empty state live in one place.
+- Blog post tags are separated with ` • ` instead of commas.
+- Sample blog posts share a small tag vocabulary (`Development`, `Frontend`, `Design`, `Accessibility`) with two tags on most posts and three on the intro and accessibility articles, so tag archives stay populated while posts can sit in multiple categories.
+- Blog Pagefind wiring uses visible markup: `published` / sort on the byline `<time>`, author filter+meta on a span around the author name, `Type:Article` on the post `CustomSection`, tags as comma-separated links when present; blog index uses `Type:Blog` on its section; CMS pages keep `Type:Page` on `MainComponent` (no visually-hidden duplicates).
 - CloudCannon field comments and component docs now note that selectable UI icons are sourced from [Heroicons](https://heroicons.com/).
 - Lowered minimum Node.js version requirement from 24 to 22.
 - **Breaking:** Renamed the Video component's `id` prop to `videoId` to avoid conflicts with the HTML `id` attribute. The same rename applies to the Video Modal component.

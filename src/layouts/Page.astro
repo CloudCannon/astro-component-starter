@@ -86,7 +86,9 @@ const sections = frontmatter?.pageSections ?? [];
         </div>
       )
     }
-    <slot />
+    <div data-pagefind-body>
+      <slot />
+    </div>
   </main>
   <Footer {...footer} />
 </Layout>

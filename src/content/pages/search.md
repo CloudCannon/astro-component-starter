@@ -32,7 +32,24 @@ pageSections:
 
                   searchEl.dataset.pagefindInitialized = currentUrl;
                   searchEl.innerHTML = '';
-                  new PagefindUI({ element: "#search", showSubResults: true });
+                  new PagefindUI({
+                      element: "#search",
+                      showSubResults: true,
+                      showImages: true,
+                      openFilters: ["Type", "Author", "Tag"],
+                      showEmptyFilters: true,
+                      processResult: (result) => {
+                          const published = result.meta?.published;
+                          const author = result.meta?.author;
+                          const lead = [published, author].filter(Boolean).join(" · ");
+                          if (lead) {
+                              result.excerpt = result.excerpt
+                                  ? `${lead} — ${result.excerpt}`
+                                  : lead;
+                          }
+                          return result;
+                      },
+                  });
               };
 
               if (document.readyState === "loading") {

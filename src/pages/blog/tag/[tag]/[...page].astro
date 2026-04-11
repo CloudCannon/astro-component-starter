@@ -1,0 +1,70 @@
+---
+import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
+import Page from "@layouts/Page.astro";
+import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
+import { slugifyLabel } from "@components/utils/slugify";
+import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../../../utils/blog";
+
+type Paginate = (_data: any[], _opts: { pageSize: number; params: Record<string, string> }) => any;
+
+export interface Props {
+  page: { data: any[] };
+}
+
+export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
+  const blogPosts = await getBlogPostsSortedByDate();
+
+  const tagSlugs = new Set<string>();
+  for (const post of blogPosts) {
+    for (const raw of post.data.tags ?? []) {
+      const key = slugifyLabel(raw.trim());
+      if (key) tagSlugs.add(key);
+    }
+  }
+
+  return [...tagSlugs].flatMap((tag) => {
+    const filtered = blogPosts.filter((p: any) =>
+      (p.data.tags ?? []).some((t: string) => slugifyLabel(t.trim()) === tag)
+    );
+
+    return paginate(filtered, { pageSize: 9, params: { tag } });
+  });
+}
+
+const { page } = Astro.props as Props;
+const tagSlug = Astro.params.tag ?? "";
+
+const { blogPage, heroSections } = await loadBlogPageContext();
+
+const baseTitle = blogPage?.data?.title ?? "Blog";
+const displayTag =
+  page.data[0]?.data.tags.find((t: string) => slugifyLabel(t.trim()) === tagSlug)?.trim() ?? tagSlug;
+const pageTitle = `${baseTitle}: ${displayTag}`;
+const pageDescription = `Articles tagged “${displayTag}”.`;
+---
+
+<Page
+  frontmatter={{
+    title: pageTitle,
+    description: pageDescription,
+    pageSections: heroSections,
+  }}
+>
+  <CustomSection
+    maxContentWidth="2xl"
+    paddingHorizontal="lg"
+    paddingVertical="none"
+    colorScheme="inherit"
+    backgroundColor="base"
+    data-pagefind-filter="Type:Blog"
+  >
+    <BlogPostListingGrid
+      page={page}
+      emptyMessage="No posts with this tag."
+      tagBreadcrumb={{
+        allPostsHref: "/blog/",
+        currentLabel: displayTag,
+      }}
+    />
+  </CustomSection>
+</Page>

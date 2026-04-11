@@ -19,6 +19,7 @@ const {
   class: className,
   "data-prop-src": customDataPropSrc,
   "data-prop-alt": customDataPropAlt,
+  imageElementAttributes = {},
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -82,6 +83,7 @@ const preparedImage = prepareImageData({
           decoding={priority ? "sync" : "async"}
           fetchpriority={priority ? "high" : undefined}
           {...dataAttributes}
+          {...imageElementAttributes}
         />
       ) : (
         <picture>
@@ -94,6 +96,7 @@ const preparedImage = prepareImageData({
             width={preparedImage.imageWidth}
             height={preparedImage.imageHeight}
             {...dataAttributes}
+            {...imageElementAttributes}
           />
         </picture>
       )

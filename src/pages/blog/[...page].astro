@@ -1,14 +1,8 @@
 ---
-import Heading from "@core-elements/heading/Heading.astro";
-import Image from "@core-elements/image/Image.astro";
-import Pagination from "@core-elements/pagination/Pagination.astro";
-import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
-import Card from "@wrappers/card/Card.astro";
-import Grid from "@wrappers/grid/Grid.astro";
-import GridItem from "@wrappers/grid/GridItem.astro";
-import { getCollection } from "astro:content";
+import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../utils/blog";
 
 type Paginate = (_data: any[], _opts: { pageSize: number }) => any;
 
@@ -17,30 +11,14 @@ export interface Props {
 }
 
 export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
-  const blogPosts = (await getCollection("blog")).sort(
-    (a: any, b: any) => b.data.date.getTime() - a.data.date.getTime()
-  );
+  const blogPosts = await getBlogPostsSortedByDate();
 
   return paginate(blogPosts, { pageSize: 9 });
 }
 
 const { page } = Astro.props as Props;
 
-// Try to load blog page from pages collection for hero sections
-let blogPage: any;
-let heroSections: any[] = [];
-
-try {
-  const pages = await getCollection("pages");
-
-  blogPage = pages.find((page: any) => page.id === "blog");
-
-  if (blogPage?.data?.pageSections) {
-    heroSections = blogPage.data.pageSections;
-  }
-} catch (e) {
-  console.error("Failed to load blog page data:", e);
-}
+const { blogPage, heroSections } = await loadBlogPageContext();
 
 const pageTitle = blogPage?.data?.title ?? "Blog";
 const pageDescription =
@@ -61,82 +39,11 @@ const pageDescription =
     paddingVertical="none"
     colorScheme="inherit"
     backgroundColor="base"
+    data-pagefind-filter="Type:Blog"
   >
-    {
-      page.data.length > 0 ? (
-        <>
-          <Grid
-            gap="lg"
-            layout="start"
-            minItemWidth="320"
-            maxItemWidth="400"
-            style="margin-top: var(--spacing-2xl)"
-          >
-            {page.data.map((post: any) => {
-              const pubDate = post.data.date.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              });
-
-              // Get slug from id (for glob loader) or slug property (for default loader)
-              const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
-
-              return (
-                <GridItem>
-                  <Card
-                    link={`/blog/${slug}`}
-                    rounded={true}
-                    border={true}
-                    paddingVertical="lg"
-                    paddingHorizontal="lg"
-                  >
-                    {post.data.image && (
-                      <Image
-                        slot="before"
-                        source={post.data.image}
-                        alt={post.data.title}
-                        aspectRatio="landscape"
-                      />
-                    )}
-                    <SimpleText
-                      size="sm"
-                      style="color: var(--color-text-muted); margin-bottom: var(--spacing-xs);"
-                    >
-                      {pubDate} • {post.data.author || "Anonymous"}
-                    </SimpleText>
-                    <Heading
-                      level="h3"
-                      size="md"
-                      style="margin-bottom: var(--spacing-md); margin-top: var(--spacing-sm);"
-                    >
-                      {post.data.title}
-                    </Heading>
-                    <SimpleText
-                      size="sm"
-                      style="color: var(--color-text-muted); margin-top: 0;"
-                    >
-                      {post.data.description}
-                    </SimpleText>
-                  </Card>
-                </GridItem>
-              );
-            })}
-          </Grid>
-          <Pagination
-            page={page}
-            showArrows={true}
-            style="margin-top: var(--spacing-2xl);"
-          />
-        </>
-      ) : (
-        <SimpleText
-          alignX="center"
-          style="margin-top: var(--spacing-2xl);"
-        >
-          No blog posts yet. Check back soon!
-        </SimpleText>
-      )
-    }
+    <BlogPostListingGrid
+      page={page}
+      emptyMessage="No blog posts yet. Check back soon!"
+    />
   </CustomSection>
 </Page>

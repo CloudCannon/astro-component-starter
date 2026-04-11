@@ -4,6 +4,7 @@ import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 // Automatically import all components from building-blocks and page-sections for MDX
@@ -55,6 +56,7 @@ const date = post.data.date.toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+const dateIso = post.data.date.toISOString().slice(0, 10);
 const article = {
   publishedTime: post.data.date.toISOString(),
   author: post.data.author,
@@ -76,17 +78,33 @@ const article = {
     colorScheme="inherit"
     backgroundColor="base"
     class="post-container"
+    data-pagefind-filter="Type:Article"
   >
     <SimpleText
       size="sm"
       style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);"
       data-prop="author"
     >
-      {date} • {post.data.author}
+      <time
+        datetime={dateIso}
+        data-pagefind-meta={`published:${dateIso}`}
+        data-pagefind-sort={`date:${dateIso}`}
+      >
+        {date}
+      </time>
+
+      •
+      <span
+        data-pagefind-filter="Author"
+        data-pagefind-meta="author"
+      >
+        {post.data.author}
+      </span>
     </SimpleText>
 
     <Heading
       data-prop="title"
+      data-pagefind-meta="title"
       level="h1"
       size="2xl"
       style="margin-bottom: var(--spacing-xs);"
@@ -98,11 +116,26 @@ const article = {
       post.data.description && (
         <SimpleText
           data-prop="description"
+          data-pagefind-meta="description"
+          data-pagefind-weight="3"
           size="lg"
           style="color: var(--color-text-muted); margin-bottom: 0; margin-top: var(--spacing-xs);"
         >
           {post.data.description}
         </SimpleText>
+      )
+    }
+
+    {
+      post.data.tags.length > 0 && (
+        <p
+          class="post-tags"
+          style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--spacing-sm); margin-bottom: 0;"
+        >
+          {post.data.tags.map((tag, i) => (
+            <>{i > 0 && " • "}<a class="post-tag-link" href={`/blog/tag/${slugifyLabel(tag.trim())}/`} data-pagefind-filter="Tag">{tag.trim()}</a></>
+          ))}
+        </p>
       )
     }
 
@@ -117,6 +150,9 @@ const article = {
           class="post-image"
           aspectRatio="horizontal-strip"
           positionVertical="center"
+          imageElementAttributes={{
+            "data-pagefind-meta": "image[src], image_alt[alt]",
+          }}
         />
       )
     }
@@ -177,5 +213,17 @@ const article = {
 
   .post-image {
     margin-top: var(--spacing-xl);
+  }
+
+  .post-tags .post-tag-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  .post-tags .post-tag-link:hover {
+    color: var(--color-text-strong);
+    text-decoration-thickness: 2px;
   }
 </style>
