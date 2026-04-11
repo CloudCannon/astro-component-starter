@@ -11,6 +11,10 @@
       "path": "/why/"
     },
     {
+      "name": "Components",
+      "path": "/component-docs/"
+    },
+    {
       "name": "Blog",
       "path": "/blog/"
     }

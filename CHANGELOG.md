@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Main site header and footer now include a **Components** link to `/component-docs/` so the component library is easy to find while browsing (not only via in-page CTAs).
 - Select component now displays a custom chevron-down icon replacing the native browser arrow (`appearance: none`), and supports an optional leading `iconName` prop for consistency with the Input component.
 - Split, Bento Box, and Grid components now support `none` as a gap option, allowing columns/items to sit flush against each other with zero spacing.
 

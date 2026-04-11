@@ -13,6 +13,11 @@
       "children": []
     },
     {
+      "name": "Components",
+      "path": "/component-docs/",
+      "children": []
+    },
+    {
       "name": "Blog",
       "path": "/blog/",
       "children": []
