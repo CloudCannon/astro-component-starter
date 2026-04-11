@@ -3,13 +3,26 @@ icon: format_quote
 description: Section displaying a customer testimonial with author information.
 value:
   _component: page-sections/people/testimonial-section
+  sectionLabel: ""
   text: This framework has completely changed the way we build. The sites come together fast, they run even faster, and the whole process feels effortless. I couldn't be happier with the results.
   authorName: Richard Johnson
   authorDescription: CEO, Tech Innovations
   authorImage: /src/assets/images/component-docs/profile.jpg
+  maxContentWidth: xl
+  paddingHorizontal: lg
   paddingVertical: sm
   colorScheme: inherit
   backgroundColor: surface
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - Testimonial Section
@@ -20,4 +33,5 @@ picker_preview:
   text: Testimonial Section
   subtext: Section with customer testimonial and author details.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/people/testimonial-section/testimonial-section.cloudcannon.inputs.yml

@@ -3,11 +3,24 @@ icon: help_outline
 description: Section displaying frequently asked questions in an accordion format.
 value:
   _component: page-sections/info-blocks/faq-section
+  sectionLabel: ""
   heading: Frequently Asked Questions
   items: []
+  maxContentWidth: xl
+  paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - FAQ Section
@@ -18,6 +31,7 @@ picker_preview:
   text: FAQ Section
   subtext: Accordion of frequently asked questions.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/info-blocks/faq-section/faq-section.cloudcannon.inputs.yml
 _structures:
   faqItems:

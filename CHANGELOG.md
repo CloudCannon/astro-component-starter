@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Changed
+### Added
 
-- Lowered minimum Node.js version requirement from 24 to 22.
+- All page sections that wrap `CustomSection` now accept the same shell props as Custom Section: `sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `backgroundColor`, `background` (image/video with overlay), and `rounded`. CloudCannon inputs are shared via `custom-section-wrapper.cloudcannon.inputs.yml` (merged first in `_inputs_from_glob`). `sectionLabel` maps to Custom Section’s `label` and avoids clashing with FAQ’s accordion `label`.
 
 ### Fixed
 
@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- CloudCannon field comments and component docs now note that selectable UI icons are sourced from [Heroicons](https://heroicons.com/).
+- Lowered minimum Node.js version requirement from 24 to 22.
 - **Breaking:** Renamed the Video component's `id` prop to `videoId` to avoid conflicts with the HTML `id` attribute. The same rename applies to the Video Modal component.
 - **Breaking:** Button no longer accepts explicit `popovertarget` / `popovertargetaction` props. Pass them as HTML attributes when using `element="button"`, or use the new `^popover-id` link convention instead.
 - **Breaking:** Button's `element` prop no longer defaults to `"a"`. The tag is now inferred: `<a>` when `link` is set, `<button>` otherwise. Pass `element` explicitly to override (e.g. `element="div"`).
@@ -31,7 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Video Modal wrapper component with autoplay on open, pause on close, and support for YouTube, Vimeo, and local video sources.
 - Image Carousel wrapper component with synchronized thumbnail navigation, configurable aspect ratios, per-image positioning, and responsive image optimization, built on Embla Carousel.
 - Video component supports `background` mode (`background={true}`) for rendering decorative looping background video with autoplay, mute, and `prefers-reduced-motion` handling.
-- Custom Section and Card `background` object supports an `overlay` value (-1 to 1) that renders a semi-transparent lighten/darken layer over the background image or video.
+- Custom Section and Card `background` object supports an `overlay` value (-1.0 to 1.0) that renders a semi-transparent lighten/darken layer over the background image or video.
 - `maxContentWidth` select on Custom Section and Card now includes a **None** option (`none`) so content can span without a max-width token cap.
 - Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots when indicators are enabled.
 - Modal wrapper now supports an optional header title shown in the sticky top bar.

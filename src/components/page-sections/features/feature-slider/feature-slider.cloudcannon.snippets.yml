@@ -8,6 +8,22 @@ featureSlider:
   definitions:
     component_name: FeatureSlider
     named_args:
+      - editor_key: sectionLabel
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: maxContentWidth
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingHorizontal
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingVertical
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: slides
         type: array
       - editor_key: colorScheme
@@ -18,5 +34,9 @@ featureSlider:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: rounded
+        type: boolean
+        optional: true
   _inputs_from_glob:
+    - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
     - /src/components/page-sections/features/feature-slider/feature-slider.cloudcannon.inputs.yml

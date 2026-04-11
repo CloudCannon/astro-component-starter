@@ -35,7 +35,7 @@ triggerSize:
         name: Large
 triggerIconName:
   type: select
-  comment: Optional icon for the trigger button.
+  comment: Optional icon for the trigger button. Sourced from [Heroicons](https://heroicons.com/).
   options:
     values: _select_data.icons
     preview:

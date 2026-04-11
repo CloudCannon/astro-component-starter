@@ -13,29 +13,3 @@ teamMembers:
   comment: Team member cards rendered in the grid.
   options:
     structures: _structures.teamGridItems
-colorScheme:
-  type: select
-  comment: Color scheme theme applied to the section wrapper.
-  options:
-    values:
-      - id: inherit
-        name: Inherit
-      - id: light
-        name: Light
-      - id: dark
-        name: Dark
-backgroundColor:
-  type: select
-  comment: Background color used behind the grid.
-  options:
-    values:
-      - id: none
-        name: None
-      - id: base
-        name: Base
-      - id: surface
-        name: Surface
-      - id: accent
-        name: Accent
-      - id: highlight
-        name: Highlight

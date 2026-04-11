@@ -40,7 +40,7 @@ _structures:
             type: text
             comment: Optional supporting text shown beneath the item heading.
           iconName:
-            comment: The name of the icon to display.
+            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
             type: select
             options:
               values: _select_data.icons

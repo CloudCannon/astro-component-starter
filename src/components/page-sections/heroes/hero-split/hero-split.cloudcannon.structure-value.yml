@@ -3,6 +3,7 @@ icon: hero
 description: Prominent section block for landing pages.
 value:
   _component: page-sections/heroes/hero-split
+  sectionLabel: ""
   eyebrow: Eyebrow text
   heading: Heading text
   subtext: Subtitle placeholder text that will be replaced with actual content.
@@ -19,8 +20,21 @@ value:
       variant: primary
       size: md
   reverse: false
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - Hero Split
@@ -31,4 +45,5 @@ picker_preview:
   text: Hero Split
   subtext: Prominent section block for landing pages.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/heroes/hero-split/hero-split.cloudcannon.inputs.yml

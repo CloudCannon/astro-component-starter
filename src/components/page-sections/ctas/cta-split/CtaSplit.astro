@@ -13,9 +13,13 @@ const {
   imageSource = "",
   imageAlt = "",
   reverse = false,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
   rounded = false,
   class: className,
   useDefaultEditableBinding = false,
@@ -26,11 +30,13 @@ const {
 
 <CustomSection
   class:list={["cta-split", className]}
-  maxContentWidth="2xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   rounded={rounded}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}

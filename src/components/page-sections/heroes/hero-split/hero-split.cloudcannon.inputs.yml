@@ -55,29 +55,3 @@ buttonSections:
 reverse:
   type: switch
   comment: Whether to reverse the order of content and image (image first, content second).
-colorScheme:
-  type: select
-  comment: Color scheme theme for the hero.
-  options:
-    values:
-      - id: inherit
-        name: Inherit
-      - id: light
-        name: Light
-      - id: dark
-        name: Dark
-backgroundColor:
-  type: select
-  comment: Background color for the hero.
-  options:
-    values:
-      - id: none
-        name: None
-      - id: base
-        name: Base
-      - id: surface
-        name: Surface
-      - id: accent
-        name: Accent
-      - id: highlight
-        name: Highlight

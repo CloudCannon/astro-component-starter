@@ -57,7 +57,7 @@ _structures:
               removeformat: true
           iconName:
             type: select
-            comment: The name of the icon to display from the icon library.
+            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
             hidden: "listType !== 'icon'"
             options:
               values: _select_data.icons

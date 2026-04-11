@@ -3,6 +3,7 @@ icon: hero
 description: Side-by-side CTA with copy on one side and stacked buttons on the other.
 value:
   _component: page-sections/ctas/cta-split
+  sectionLabel: ""
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
@@ -17,8 +18,20 @@ value:
       variant: primary
       size: md
   reverse: false
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
   rounded: false
 preview:
   text:
@@ -30,4 +43,5 @@ picker_preview:
   text: CTA Split
   subtext: Split layout CTA with button stack.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/ctas/cta-split/cta-split.cloudcannon.inputs.yml

@@ -3,6 +3,7 @@ icon: hero
 description: Centered hero with heading, supporting text, and buttons.
 value:
   _component: page-sections/heroes/hero-center
+  sectionLabel: ""
   eyebrow: Eyebrow text
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
@@ -15,8 +16,21 @@ value:
       iconPosition: before
       variant: primary
       size: md
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - Hero Center
@@ -27,4 +41,5 @@ picker_preview:
   text: Hero Center
   subtext: Centered hero with heading, subtext, and buttons.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/heroes/hero-center/hero-center.cloudcannon.inputs.yml

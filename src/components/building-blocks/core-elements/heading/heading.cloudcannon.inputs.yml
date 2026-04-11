@@ -47,7 +47,7 @@ alignX:
       - id: end
         name: End
 iconName:
-  comment: The name of the icon to display.
+  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
   type: select
   options:
     values: _select_data.icons

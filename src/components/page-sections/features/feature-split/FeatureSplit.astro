@@ -17,9 +17,14 @@ const {
   imageAspectRatio = "portrait",
   imageRounded = true,
   reverse = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
+  rounded = false,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -32,11 +37,14 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 
 <CustomSection
   class:list={["feature-split", className]}
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
+  rounded={rounded}
   data-feature-split-id={featureSplitId}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}

@@ -3,9 +3,23 @@ icon: view_carousel
 description: Carousel of feature cards, ideal for showcasing key reasons or benefits.
 value:
   _component: page-sections/features/feature-slider
+  sectionLabel: ""
   slides: []
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - Feature Slider
@@ -14,4 +28,5 @@ picker_preview:
   text: Feature Slider
   subtext: Carousel of feature-focused cards.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/features/feature-slider/feature-slider.cloudcannon.inputs.yml

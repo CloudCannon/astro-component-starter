@@ -30,7 +30,7 @@ size:
         name: Large
 iconName:
   type: select
-  comment: The name of the icon to display. See the Icon component documentation for more information.
+  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
   options:
     values: _select_data.icons
     preview:

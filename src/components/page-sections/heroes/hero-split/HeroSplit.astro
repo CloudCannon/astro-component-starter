@@ -16,9 +16,14 @@ const {
   imageAspectRatio = "none",
   buttonSections = [],
   reverse = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
+  rounded = false,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -27,11 +32,14 @@ const {
 ---
 
 <CustomSection
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
+  rounded={rounded}
   class:list={["hero", className]}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}

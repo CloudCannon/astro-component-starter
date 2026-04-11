@@ -109,6 +109,7 @@ _inputs:
   logoSource:
     type: image
 _select_data:
+  # Selectable UI icons match [Heroicons](https://heroicons.com/); SVGs live in src/icons/.
   icons:
     - id: academic-cap
       name: Academic Cap

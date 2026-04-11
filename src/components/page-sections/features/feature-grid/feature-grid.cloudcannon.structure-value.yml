@@ -3,12 +3,26 @@ icon: apps
 description: Responsive grid layout for highlighting multiple product features.
 value:
   _component: page-sections/features/feature-grid
+  sectionLabel: ""
   eyebrow: Eyebrow text
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
   features: []
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - Feature Grid
@@ -19,6 +33,7 @@ picker_preview:
   text: Feature Grid
   subtext: Grid of feature highlights with icons and descriptions.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/features/feature-grid/feature-grid.cloudcannon.inputs.yml
 _structures:
   featureGridItems:
@@ -59,7 +74,7 @@ _structures:
               numberedlist: false
           iconName:
             type: select
-            comment: Icon displayed with the feature.
+            comment: Icon displayed with the feature. Sourced from [Heroicons](https://heroicons.com/).
             options:
               values: _select_data.icons
               preview:

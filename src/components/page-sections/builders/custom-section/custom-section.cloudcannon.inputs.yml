@@ -172,7 +172,7 @@ background.videoSource:
       static: public
 background.overlay:
   type: range
-  comment: "Overlay in front of the background (-1 to 1). Negative values darken, positive values lighten."
+  comment: "Overlay in front of the background (-1.0 to 1.0). Negative values darken, positive values lighten."
   options:
     min: -1
     max: 1

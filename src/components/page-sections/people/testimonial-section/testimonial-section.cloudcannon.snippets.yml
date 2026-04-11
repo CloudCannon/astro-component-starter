@@ -10,6 +10,22 @@ testimonialSection:
   definitions:
     component_name: TestimonialSection
     named_args:
+      - editor_key: sectionLabel
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: maxContentWidth
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingHorizontal
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingVertical
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: text
         type: string
         optional: true
@@ -26,10 +42,6 @@ testimonialSection:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: paddingVertical
-        type: string
-        optional: true
-        remove_empty: true
       - editor_key: colorScheme
         type: string
         optional: true
@@ -38,5 +50,9 @@ testimonialSection:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: rounded
+        type: boolean
+        optional: true
   _inputs_from_glob:
+    - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
     - /src/components/page-sections/people/testimonial-section/testimonial-section.cloudcannon.inputs.yml

@@ -10,6 +10,22 @@ ctaCenter:
   definitions:
     component_name: CtaCenter
     named_args:
+      - editor_key: sectionLabel
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: maxContentWidth
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingHorizontal
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingVertical
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: heading
         type: string
         optional: true
@@ -33,4 +49,5 @@ ctaCenter:
         type: boolean
         optional: true
   _inputs_from_glob:
+    - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
     - /src/components/page-sections/ctas/cta-center/cta-center.cloudcannon.inputs.yml

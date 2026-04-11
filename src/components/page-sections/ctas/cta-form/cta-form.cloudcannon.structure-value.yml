@@ -3,6 +3,7 @@ icon: hero
 description: Side-by-side CTA with copy and form on one side and image on the other.
 value:
   _component: page-sections/ctas/cta-form
+  sectionLabel: ""
   heading: Get in touch
   subtext: Fill out the form below and we'll get back to you as soon as possible.
   formAction: ./
@@ -27,8 +28,21 @@ value:
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: CTA image
   reverse: false
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
   colorScheme: inherit
   backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    videoSource: null
+    overlay: 0
+  rounded: false
 preview:
   text:
     - CTA Form
@@ -39,4 +53,5 @@ picker_preview:
   text: CTA Form
   subtext: Split layout CTA with form and image.
 _inputs_from_glob:
+  - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
   - /src/components/page-sections/ctas/cta-form/cta-form.cloudcannon.inputs.yml
