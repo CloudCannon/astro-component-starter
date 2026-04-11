@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Component docs Astro code tab now renders all named slots from component metadata as `<Fragment slot="...">` children, so generated Astro matches the preview and frontmatter. Slot fallback props (e.g. `beforeContentSections`, `afterContentSections`) are stripped from JSX attributes and emitted as slot content instead. Fixes Card Before & After examples and removes the Split-specific formatter branch in favour of the generic slot handler.
 - Blog post tag line no longer inserts a stray space before commas (trim tag strings; compact fragment markup so Astro does not emit whitespace text nodes between tags).
 - Blog and other slot-only pages are included in the Pagefind index again: `data-pagefind-body` on `MainComponent` caused Pagefind to skip any page without that marker; the layout slot is now wrapped so those pages are indexed.
 - CloudCannon `data` collection (`src/data` JSON) now sets `disable_url: true` so automatic output URL matching does not assign incorrect preview URLs to non-page data files.
