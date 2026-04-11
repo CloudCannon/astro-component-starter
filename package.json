@@ -77,7 +77,7 @@
     "yaml-eslint-parser": "^2.0.0"
   },
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=22.0.0"
   },
   "optionalDependencies": {
     "@img/sharp-linux-x64": "^0.34.5",
