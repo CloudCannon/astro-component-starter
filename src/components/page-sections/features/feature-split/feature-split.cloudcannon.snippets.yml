@@ -71,5 +71,188 @@ featureSplit:
         type: boolean
         optional: true
   _inputs_from_glob:
-    - /src/components/page-sections/builders/custom-section/custom-section-wrapper.cloudcannon.inputs.yml
     - /src/components/page-sections/features/feature-split/feature-split.cloudcannon.inputs.yml
+  _inputs:
+    sectionLabel:
+      type: text
+      comment: Optional label to identify the section in the editor. When set and no HTML id is provided, an id is derived from this value.
+    maxContentWidth:
+      type: select
+      comment: Maximum width constraint for the content.
+      options:
+        values:
+          - id: none
+            name: None
+          - id: xs
+            name: Extra Small
+          - id: sm
+            name: Small
+          - id: md
+            name: Medium
+          - id: lg
+            name: Large
+          - id: xl
+            name: Extra Large
+          - id: 2xl
+            name: 2xl
+          - id: 3xl
+            name: 3xl
+    paddingHorizontal:
+      type: select
+      comment: Horizontal padding applied to the section content.
+      options:
+        values:
+          - id: none
+            name: None
+          - id: xs
+            name: Extra Small
+          - id: sm
+            name: Small
+          - id: md
+            name: Medium
+          - id: lg
+            name: Large
+          - id: xl
+            name: Extra Large
+          - id: 2xl
+            name: 2xl
+          - id: 3xl
+            name: 3xl
+    paddingVertical:
+      type: select
+      comment: Vertical padding applied to the section content.
+      options:
+        values:
+          - id: none
+            name: None
+          - id: xs
+            name: Extra Small
+          - id: sm
+            name: Small
+          - id: md
+            name: Medium
+          - id: lg
+            name: Large
+          - id: xl
+            name: Extra Large
+          - id: 2xl
+            name: 2xl
+          - id: 3xl
+            name: 3xl
+          - id: 4xl
+            name: 4xl
+          - id: 5xl
+            name: 5xl
+          - id: 6xl
+            name: 6xl
+    colorScheme:
+      type: select
+      comment: Color scheme theme for the section wrapper.
+      options:
+        values:
+          - id: inherit
+            name: Inherit
+          - id: light
+            name: Light
+          - id: dark
+            name: Dark
+    backgroundColor:
+      type: select
+      comment: Solid background color token behind the section content.
+      options:
+        values:
+          - id: none
+            name: None
+          - id: base
+            name: Base
+          - id: surface
+            name: Surface
+          - id: accent
+            name: Accent
+          - id: highlight
+            name: Highlight
+    background:
+      type: object
+      comment: Optional background still image or looping HTML5 video (self-hosted). Shared positioning applies to whichever type you choose. Video is hidden when the user prefers reduced motion.
+      options:
+        preview:
+          icon: wallpaper
+          text:
+            - Background
+          subtext:
+            - key: type
+    background.type:
+      type: select
+      label: Background type
+      comment: A cover image or a muted autoplay video.
+      options:
+        values:
+          - id: image
+            name: Image
+          - id: video
+            name: Video
+    background.positionVertical:
+      comment: Vertical focal point (object-position for video; image position for pictures).
+      type: select
+      options:
+        values:
+          - id: top
+            name: Top
+          - id: center
+            name: Center
+          - id: bottom
+            name: Bottom
+    background.positionHorizontal:
+      comment: Horizontal focal point (object-position for video; image position for pictures).
+      type: select
+      options:
+        values:
+          - id: left
+            name: Left
+          - id: center
+            name: Center
+          - id: right
+            name: Right
+    background.priority:
+      type: switch
+      label: Prioritize image load
+      comment: When using a background image, load it eagerly (use for above-the-fold sections).
+      hidden: "background.type !== 'image'"
+    background.imageSource:
+      comment: URL or path to the background image.
+      type: image
+      hidden: "background.type !== 'image'"
+      options:
+        paths:
+          uploads: src/assets/images
+          static: ""
+        resize_style: contain
+        width: 1920
+        height: 1280
+    background.imageAlt:
+      comment: Alt text for the background image.
+      type: textarea
+      hidden: "background.type !== 'image'"
+    background.videoSource:
+      type: file
+      label: Video source
+      comment: Path to a video under public/videos. Sibling formats with the same basename are added automatically when present.
+      hidden: "background.type !== 'video'"
+      options:
+        accepts_mime_types:
+          - video/mp4
+          - video/webm
+          - video/ogg
+        paths:
+          uploads: public/videos
+          static: public
+    background.overlay:
+      type: range
+      comment: "Overlay in front of the background (-1.0 to 1.0). Negative values darken, positive values lighten."
+      options:
+        min: -1
+        max: 1
+        step: 0.1
+    rounded:
+      type: switch
+      comment: Whether to apply rounded corners to the section wrapper.
