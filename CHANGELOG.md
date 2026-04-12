@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Scoped CSS** fixed broken `:global()` selectors in Carousel, ImageCarousel, ContentSelector, and Segments — lightningcss was preserving `:global()` literally in the output when used in comma lists, `:not(:has())` wraps, or nested blocks. Split all multi-selector `:global()` rules into single-selector rules so lightningcss processes them correctly.
 - **Embed** component now renders iframes in CloudCannon's visual editor — the `html` content is stored in a `data-embed-html` attribute and injected via `editor-live-sync.js`, working around CloudCannon's HTML sanitization that strips iframes from `set:html` output
 - **CloudCannon config** resolved cyclic dependency error in the `pageSections` glob — removed shared `custom-section-wrapper.cloudcannon.inputs.yml` and `custom-section.cloudcannon.inputs.yml`, inlining section wrapper inputs directly into each page-section structure-value and snippet file
 - **Submit** `margin-top` no longer applies outside of forms — the spacing is now scoped to `form .submit` so submit buttons align correctly when displayed inline
