@@ -13,7 +13,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- **Simple Text** CloudCannon input upgraded from `textarea` to `markdown` with restricted inline-only options (bold, italic, link) — editors now get a WYSIWYG toolbar instead of typing raw markdown, while `renderInline()` guarantees no block-level elements in output
 - Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle` — updated component path, CSS class names, CloudCannon config, doc pages, and all internal usages in ComponentBuilder
 
 ### Fixed

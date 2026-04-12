@@ -1,6 +1,6 @@
 label: Simple Text
 icon: view_headline
-description: Paragraph for text content with inline formatting (bold, italic, links).
+description: Paragraph for plain text content with inline markdown formatting.
 value:
   _component: building-blocks/core-elements/simple-text
   text: My text goes here.
@@ -14,6 +14,6 @@ preview:
   icon: view_headline
 picker_preview:
   text: Simple Text
-  subtext: Paragraph for text content with inline formatting (bold, italic, links).
+  subtext: Paragraph for plain text content with inline markdown formatting.
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/simple-text/simple-text.cloudcannon.inputs.yml
