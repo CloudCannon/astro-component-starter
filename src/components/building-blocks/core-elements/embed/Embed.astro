@@ -18,6 +18,7 @@ const content = slot || html;
 >
   <div
     class:list={["embed-content", `ratio-${aspectRatio}`]}
+    data-embed-html={content}
     set:html={content}
   />
 </div>

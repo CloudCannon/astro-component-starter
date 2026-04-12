@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- **Embed** component now renders iframes in CloudCannon's visual editor — the `html` content is stored in a `data-embed-html` attribute and injected via `editor-live-sync.js`, working around CloudCannon's HTML sanitization that strips iframes from `set:html` output
 - **CloudCannon config** resolved cyclic dependency error in the `pageSections` glob — removed shared `custom-section-wrapper.cloudcannon.inputs.yml` and `custom-section.cloudcannon.inputs.yml`, inlining section wrapper inputs directly into each page-section structure-value and snippet file
 - **Submit** `margin-top` no longer applies outside of forms — the spacing is now scoped to `form .submit` so submit buttons align correctly when displayed inline
 - **ContentSelector** Astro code generation in docs now works correctly — the generic slot-rendering branch was incorrectly matching content-selector items (which lack `_component`), causing a crash that left the Astro code view blank. The content-selector-specific branch now runs as intended and also adds `checked` to the first `ContentSelectorPanel` so the first tab is visible by default.
