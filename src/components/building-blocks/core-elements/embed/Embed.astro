@@ -7,10 +7,6 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slot = await Astro.slots.render("default");
-const content = slot || html;
-const encodedContent = content ? btoa(encodeURIComponent(content)) : "";
 ---
 
 <div
@@ -18,7 +14,9 @@ const encodedContent = content ? btoa(encodeURIComponent(content)) : "";
   {...htmlAttributes}
 >
   <div class:list={["embed-content", `ratio-${aspectRatio}`]}>
-    <Fragment set:html={html} />
+    <slot>
+      <Fragment set:html={html} />
+    </slot>
   </div>
 </div>
 

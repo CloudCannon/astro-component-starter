@@ -16,26 +16,13 @@ function syncBentoBoxSpans(target) {
   parent.style.gridRow = rowSpan > 1 ? `span ${rowSpan}` : "";
 }
 
-function syncEmbedHtml(target) {
-  const encoded = target.dataset.embedHtml;
-  if (encoded) {
-    target.innerHTML = decodeURIComponent(atob(encoded));
-  }
-}
-
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
-    if (mutation.type === "attributes") {
-      if (
-        mutation.attributeName === "data-col-span" ||
-        mutation.attributeName === "data-row-span"
-      ) {
-        syncBentoBoxSpans(mutation.target);
-      }
-
-      if (mutation.attributeName === "data-embed-html") {
-        syncEmbedHtml(mutation.target);
-      }
+    if (
+      mutation.type === "attributes" &&
+      (mutation.attributeName === "data-col-span" || mutation.attributeName === "data-row-span")
+    ) {
+      syncBentoBoxSpans(mutation.target);
     }
 
     if (mutation.type === "childList") {
@@ -49,14 +36,6 @@ const observer = new MutationObserver((mutations) => {
         for (const child of node.querySelectorAll("[data-col-span], [data-row-span]")) {
           syncBentoBoxSpans(child);
         }
-
-        if (node.dataset?.embedHtml) {
-          syncEmbedHtml(node);
-        }
-
-        for (const child of node.querySelectorAll("[data-embed-html]")) {
-          syncEmbedHtml(child);
-        }
       }
     }
   }
@@ -64,7 +43,7 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, {
   attributes: true,
-  attributeFilter: ["data-col-span", "data-row-span", "data-embed-html"],
+  attributeFilter: ["data-col-span", "data-row-span"],
   childList: true,
   subtree: true,
 });
