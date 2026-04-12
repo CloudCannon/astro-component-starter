@@ -10,7 +10,7 @@ const {
 
 const slot = await Astro.slots.render("default");
 const content = slot || html;
-const encodedContent = content ? Buffer.from(content).toString("base64") : "";
+const encodedContent = content ? btoa(content) : "";
 ---
 
 <div
