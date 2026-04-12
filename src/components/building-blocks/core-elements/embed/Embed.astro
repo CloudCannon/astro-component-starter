@@ -20,8 +20,9 @@ const encodedContent = content ? btoa(encodeURIComponent(content)) : "";
   <div
     class:list={["embed-content", `ratio-${aspectRatio}`]}
     data-embed-html={encodedContent}
-    set:html={content}
-  />
+  >
+    <Fragment set:html={content} />
+  </div>
 </div>
 
 <style>
