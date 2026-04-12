@@ -8,4 +8,7 @@ slots:
 examples:
   - slugs:
       - align
+  - title: 'Sizes'
+    slugs:
+      - sizes
 ---

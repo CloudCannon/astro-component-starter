@@ -38,6 +38,7 @@ pageSections:
               We give you [straightforward building blocks](/component-docs/)
               without hiding anything behind layers of abstraction. You see
               everything that's happening, and stay in control.
+            size: md
       - title: What's included in the Component Starter?
         contentSections:
           - _component: building-blocks/core-elements/text
@@ -45,6 +46,7 @@ pageSections:
               Lean HTML, CSS, and small touches of vanilla JavaScript. No dead
               weight, no surprise dependencies, just the pieces you actually
               need to build great pages.
+            size: md
       - title: How is the Component Starter so fast?
         contentSections:
           - _component: building-blocks/core-elements/text
@@ -52,6 +54,7 @@ pageSections:
               Performance comes from keeping things lightweight. The framework
               handles image optimization and responsive patterns so your site
               stays quick without extra work.
+            size: md
       - title: Can I customize the Component Starter?
         contentSections:
           - _component: building-blocks/core-elements/text
@@ -60,6 +63,7 @@ pageSections:
               and edited. You shape it to fit your project instead of working
               around someone else's opinions. Start by [browsing the
               components](/component-docs/) to see how they're set up!
+            size: md
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 4xl
@@ -82,6 +86,7 @@ pageSections:
           With custom sections, you can create components for almost any use
           case.
         alignmentHorizontal: center
+        size: md
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md

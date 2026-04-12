@@ -5,6 +5,7 @@ value:
   _component: building-blocks/core-elements/text
   text: My text goes here.
   alignmentHorizontal: start
+  size: md
 preview:
   text:
     - Text

@@ -226,6 +226,7 @@ _structures:
           contentSections:
             - _component: building-blocks/core-elements/text
               text: Answer text goes here.
+              size: md
         preview:
           text:
             - key: title

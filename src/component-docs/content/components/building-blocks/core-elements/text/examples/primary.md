@@ -13,4 +13,5 @@ blocks:
     * List
     * Too!
   alignmentHorizontal: start
+  size: md
 ---

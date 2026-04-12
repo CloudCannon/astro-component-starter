@@ -1,6 +1,18 @@
 text:
   comment: The text content of the simple text (inline markdown only).
-  type: textarea
+  type: markdown
+  options:
+    bold: true
+    italic: true
+    link: true
+    format:
+    blockquote: false
+    strike: false
+    subscript: false
+    superscript: false
+    underline: false
+    bulletedlist: false
+    numberedlist: false
 alignmentHorizontal:
   comment: The horizontal alignment of the text.
   type: select
