@@ -19,7 +19,7 @@ function syncBentoBoxSpans(target) {
 function syncEmbedHtml(target) {
   const encoded = target.dataset.embedHtml;
   if (encoded) {
-    target.innerHTML = atob(encoded);
+    target.innerHTML = decodeURIComponent(atob(encoded));
   }
 }
 
