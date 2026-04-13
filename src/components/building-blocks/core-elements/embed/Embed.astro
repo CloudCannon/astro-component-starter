@@ -20,13 +20,13 @@ const {
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .embed-wrapper {
       margin-top: var(--spacing-lg);
 
       > .embed-content {
-        > :global(iframe) {
+        > iframe {
           border: none;
           display: block;
           height: 100%;

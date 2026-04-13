@@ -58,7 +58,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .bento-box {
       container-type: inline-size;
@@ -115,7 +115,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           gap: var(--spacing-3xl);
         }
 
-        > :global(.bento-box-item) {
+        > .bento-box-item {
           min-width: 0;
         }
 
@@ -125,7 +125,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
             grid-template-columns: repeat(2, 1fr);
           }
 
-          > :global(.bento-box-item) {
+          > .bento-box-item {
             grid-column: span 1 !important;
             grid-row: span 1 !important;
           }

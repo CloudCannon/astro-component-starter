@@ -178,7 +178,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
   </Tag>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .card {
       display: block;
@@ -230,11 +230,11 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             position: relative;
             z-index: var(--layer-1);
 
-            > :global(*:first-child) {
+            > *:first-child {
               margin-top: 0 !important;
             }
 
-            > :global(*:last-child) {
+            > *:last-child {
               margin-bottom: 0 !important;
             }
 
@@ -351,11 +351,11 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           position: relative;
           z-index: var(--layer-2);
 
-          > :global(*:first-child) {
+          > *:first-child {
             margin-top: 0 !important;
           }
 
-          > :global(*:last-child) {
+          > *:last-child {
             margin-bottom: 0 !important;
           }
         }
@@ -371,11 +371,11 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           position: absolute;
         }
 
-        > :global(.background-image) {
+        > .background-image {
           z-index: var(--layer-1);
         }
 
-        > :global(.background-video) {
+        > .background-video {
           z-index: var(--layer-1);
         }
 

@@ -118,9 +118,9 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   )
 }
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.feature-split-layout) {
+    .feature-split-layout {
       container-type: inline-size;
     }
   }

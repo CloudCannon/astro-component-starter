@@ -84,13 +84,13 @@ const {
   </CustomSection>
 </footer>
 
-<style>
+<style is:global>
   @layer page-sections {
     .footer {
       container-type: inline-size;
 
-      :global(.button-group) {
-        &:global(.align-end) {
+      .button-group {
+        &.align-end {
           @container (max-width: 599px) {
             justify-content: center;
           }
@@ -110,7 +110,7 @@ const {
         }
       }
 
-      :global(.footer-legal-text) {
+      .footer-legal-text {
         color: var(--color-text-muted);
         text-align: center;
         @container (min-width: 600px) {
@@ -118,11 +118,11 @@ const {
         }
       }
 
-      :global(.footer-logo) {
+      .footer-logo {
         flex-shrink: 0;
         margin-top: 0 !important;
 
-        :global(img) {
+        img {
           margin-inline: auto;
           margin-bottom: var(--spacing-md);
           max-height: 2em;
@@ -134,7 +134,7 @@ const {
         }
       }
 
-      :global(.bar) :global(.bar-list) {
+      .bar .bar-list {
         flex-flow: column wrap;
         @container (min-width: 600px) {
           flex-direction: row;

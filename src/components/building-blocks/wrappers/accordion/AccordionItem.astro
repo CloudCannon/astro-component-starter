@@ -51,7 +51,7 @@ const arrayDataAttributes = effectiveChildrenProp
   </div>
 </details>
 
-<style>
+<style is:global>
   @layer components {
     .accordion-item {
       border-bottom: 1px solid var(--color-border-subtle);
@@ -82,7 +82,7 @@ const arrayDataAttributes = effectiveChildrenProp
           display: none;
         }
 
-        :global(.accordion-item-icon) {
+        .accordion-item-icon {
           transition: transform var(--animation-normal) ease-out;
         }
       }
@@ -91,14 +91,14 @@ const arrayDataAttributes = effectiveChildrenProp
         padding-inline: var(--spacing-md);
         padding-bottom: var(--spacing-md);
 
-        > :global(*:first-child) {
+        > *:first-child {
           margin-top: 0 !important;
         }
       }
     }
 
     .accordion-item[open] {
-      > .accordion-item-title :global(.accordion-item-icon) {
+      > .accordion-item-title .accordion-item-icon {
         transform: rotate(180deg);
       }
 

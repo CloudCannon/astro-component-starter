@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from "astro:transitions";
+import { fade } from "astro:transitions";
 import "@component-docs/styles/component-docs.css";
 import "@styles/style.css";
 import SiteFonts from "@layouts/SiteFonts.astro";
@@ -56,8 +58,10 @@ const contentSections = props.frontmatter?.contentSections || [];
     }
     <title>{pageTitle}</title>
     <slot name="head" />
+    <ClientRouter />
   </head>
   <body class="component-docs">
+    <div transition:animate={fade({ duration: "0.3s" })}>
     <MobileNavLayout />
     <CustomSection
       maxContentWidth="2xl"
@@ -80,5 +84,6 @@ const contentSections = props.frontmatter?.contentSections || [];
       import "@choctawnationofoklahoma/lite-vimeo";
       import "@justinribeiro/lite-youtube";
     </script>
+    </div>
   </body>
 </html>

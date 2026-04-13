@@ -66,9 +66,9 @@ const {
   />
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.subtext) :global(p) {
+    .subtext p {
       font-size: var(--font-size-lg);
     }
   }

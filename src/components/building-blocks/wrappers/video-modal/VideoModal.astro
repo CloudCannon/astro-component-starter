@@ -125,9 +125,9 @@ if (!_component && !hasVideo) return;
   onPageLoad(setupVideoModals);
 </script>
 
-<style>
+<style is:global>
   @layer components {
-    :global(.video-modal .modal-popover) {
+    .video-modal .modal-popover {
       overflow: hidden;
       width: min(90vw, (85vh - 3rem) * 16 / 9);
     }
@@ -148,7 +148,7 @@ if (!_component && !hasVideo) return;
         background-color: black;
       }
 
-      > .video-modal-embed > :global(iframe) {
+      > .video-modal-embed > iframe {
         border: 0;
         height: 100%;
         width: 100%;

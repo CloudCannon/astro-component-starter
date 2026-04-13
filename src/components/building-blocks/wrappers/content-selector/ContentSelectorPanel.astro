@@ -97,7 +97,7 @@ const arrayDataAttributes = effectiveChildrenProp
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .content-selector-item {
       display: contents;
@@ -129,7 +129,7 @@ const arrayDataAttributes = effectiveChildrenProp
         background: var(--color-state-hover);
       }
 
-      > :global(.content-selector-tab-heading) {
+      > .content-selector-tab-heading {
         margin: 0;
       }
     }
@@ -164,7 +164,7 @@ const arrayDataAttributes = effectiveChildrenProp
       display: none;
     }
 
-    .content-selector-panel-content > :global(*:first-child) {
+    .content-selector-panel-content > *:first-child {
       margin-top: 0 !important;
     }
   }

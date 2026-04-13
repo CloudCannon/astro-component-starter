@@ -143,7 +143,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
   onPageLoad(setupModals);
 </script>
 
-<style>
+<style is:global>
   @layer components {
     .modal {
       display: inline-flex;
@@ -239,7 +239,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       z-index: var(--layer-2);
     }
 
-    .modal-header.no-header :global(.modal-close) {
+    .modal-header.no-header .modal-close {
       position: absolute;
       right: var(--spacing-sm);
       top: var(--spacing-sm);
@@ -257,11 +257,11 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       flex: 1;
       overflow-y: auto;
 
-      > :global(*:first-child) {
+      > *:first-child {
         margin-top: 0 !important;
       }
 
-      > :global(*:last-child) {
+      > *:last-child {
         margin-bottom: 0 !important;
       }
     }

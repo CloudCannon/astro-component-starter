@@ -81,7 +81,7 @@ const hasIcon = iconName?.trim().length > 0;
   }
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .input {
       display: flex;
@@ -117,7 +117,7 @@ const hasIcon = iconName?.trim().length > 0;
           flex-direction: row-reverse;
         }
 
-        :global(.input-icon) {
+        .input-icon {
           color: var(--color-text-muted);
           flex-shrink: 0;
           font-size: 1.25em;

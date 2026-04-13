@@ -95,7 +95,7 @@ const hasLeadingIcon = iconName?.trim().length > 0;
   </span>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .select {
       display: flex;
@@ -128,13 +128,13 @@ const hasLeadingIcon = iconName?.trim().length > 0;
         box-shadow: 0 0 0 3px var(--color-focus-ring);
       }
 
-      :global(.select-icon) {
+      .select-icon {
         color: var(--color-text-muted);
         flex-shrink: 0;
         font-size: 1.25em;
       }
 
-      :global(.select-chevron) {
+      .select-chevron {
         pointer-events: none;
       }
 

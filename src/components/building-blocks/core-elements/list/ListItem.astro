@@ -60,7 +60,7 @@ const hasIcon = showIcon && iconName;
   }
 </li>
 
-<style>
+<style is:global>
   @layer components {
     .item {
       &.list-item-has-icon {
@@ -68,7 +68,7 @@ const hasIcon = showIcon && iconName;
         align-items: baseline;
       }
 
-      > :global(.list-icon) {
+      > .list-icon {
         display: inline-block;
         flex-shrink: 0;
         height: 1em;
@@ -76,7 +76,7 @@ const hasIcon = showIcon && iconName;
         translate: 0 0.15em;
         width: 1em;
 
-        :global(svg) {
+        svg {
           display: block;
           height: 100%;
           width: 100%;

@@ -8,16 +8,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Astro page transitions using `ClientRouter` with a fade animation for smooth navigation between pages
 - `size` prop on the **Text** component (xs through 4xl) — sets the font size of paragraphs and lists; headings retain their own sizing
 - `iconColor` prop on Button, Heading, Input, Select, Submit, and Content Selector components — allows setting the icon color (default, blue, green, yellow, orange, red, purple, pink, cyan) wherever an `iconName` is used. CloudCannon inputs are hidden until an icon is selected.
 
-### Changed
-
-- Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle` — updated component path, CSS class names, CloudCannon config, doc pages, and all internal usages in ComponentBuilder
-
 ### Fixed
 
-- **Scoped CSS** fixed broken `:global()` selectors in Carousel, ImageCarousel, ContentSelector, and Segments — lightningcss was preserving `:global()` literally in the output when used in comma lists, `:not(:has())` wraps, or nested blocks. Split all multi-selector `:global()` rules into single-selector rules so lightningcss processes them correctly.
+- **Icon** component background color now wraps tightly around the icon instead of stretching full width
+
+### Changed
+
+- Dropped `lightningcss` as the CSS transformer — reverted to Vite's default (PostCSS + esbuild). lightningcss did not recognise Astro's `:global()` directive, silently producing broken CSS in comma lists, `:has()`/`:not()` wraps, and nested blocks.
+- Switched all component `<style>` blocks to `<style is:global>` and removed all `:global()` wrappers — simplifies CSS authoring and eliminates the class of bugs where `:global()` was mishandled by preprocessors.
+- Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle` — updated component path, CSS class names, CloudCannon config, doc pages, and all internal usages in ComponentBuilder
 - **Embed** component now renders iframes in CloudCannon's visual editor — the `html` content is stored in a `data-embed-html` attribute and injected via `editor-live-sync.js`, working around CloudCannon's HTML sanitization that strips iframes from `set:html` output
 - **CloudCannon config** resolved cyclic dependency error in the `pageSections` glob — removed shared `custom-section-wrapper.cloudcannon.inputs.yml` and `custom-section.cloudcannon.inputs.yml`, inlining section wrapper inputs directly into each page-section structure-value and snippet file
 - **Submit** `margin-top` no longer applies outside of forms — the spacing is now scoped to `form .submit` so submit buttons align correctly when displayed inline

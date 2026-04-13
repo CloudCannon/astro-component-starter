@@ -201,7 +201,7 @@ if (!_component && !hasImages) return;
   onPageLoad(setupImageCarousels);
 </script>
 
-<style>
+<style is:global>
   @layer components {
     .image-carousel {
       align-items: center;
@@ -213,10 +213,10 @@ if (!_component && !hasImages) return;
       > .arrow {
         flex-shrink: 0;
 
-        :global(.button-inner) {
+        .button-inner {
           border-radius: var(--radius-xs);
 
-          :global(svg) {
+          svg {
             height: 28px;
             width: 28px;
           }
@@ -239,7 +239,7 @@ if (!_component && !hasImages) return;
               flex: 0 0 100%;
               min-width: 0;
 
-              :global(.image) {
+              .image {
                 margin-top: 0;
               }
             }
@@ -293,24 +293,24 @@ if (!_component && !hasImages) return;
               opacity: 1;
             }
 
-            :global(.image) {
+            .image {
               margin-top: 0;
             }
 
-            :global(.image),
-            :global(.image-inner),
-            :global(picture),
-            :global(img) {
+            .image,
+            .image-inner,
+            picture,
+            img {
               display: block;
               height: 100%;
               width: 100%;
             }
 
-            :global(.image-inner) {
+            .image-inner {
               aspect-ratio: unset;
             }
 
-            :global(img) {
+            img {
               object-fit: cover;
             }
           }

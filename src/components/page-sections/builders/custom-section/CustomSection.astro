@@ -114,7 +114,7 @@ const arrayDataAttributes =
   </div>
 </section>
 
-<style>
+<style is:global>
   @layer components {
     .custom-section {
       > .outer-content {
@@ -133,11 +133,11 @@ const arrayDataAttributes =
           position: relative;
           z-index: var(--layer-1);
 
-          > :global(*:first-child) {
+          > *:first-child {
             margin-top: 0 !important;
           }
 
-          > :global(*:last-child) {
+          > *:last-child {
             margin-bottom: 0 !important;
           }
 
@@ -307,11 +307,11 @@ const arrayDataAttributes =
           position: absolute;
         }
 
-        > :global(.background-image) {
+        > .background-image {
           z-index: var(--layer-1);
         }
 
-        > :global(.background-video) {
+        > .background-video {
           z-index: var(--layer-1);
         }
 

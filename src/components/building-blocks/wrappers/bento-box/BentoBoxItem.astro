@@ -50,7 +50,7 @@ const cellStyles = [
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .bento-box-item {
       container-type: inline-size;
@@ -59,11 +59,11 @@ const cellStyles = [
         height: 100%;
       }
 
-      > .bento-box-item-content > :global(*:only-child) {
+      > .bento-box-item-content > *:only-child {
         height: 100%;
       }
 
-      > .bento-box-item-content > :global(*:first-child) {
+      > .bento-box-item-content > *:first-child {
         margin-top: 0 !important;
       }
     }

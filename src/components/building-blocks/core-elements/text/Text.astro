@@ -41,7 +41,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .text {
       margin-top: var(--spacing-lg);
@@ -72,23 +72,23 @@ if (!_component && !hasText && !hasSlotContent) return;
           --text-size: var(--font-size-4xl);
         }
 
-        > :global(p) {
+        > p {
           font-size: var(--text-size, inherit);
         }
 
-        > :global(ul) {
+        > ul {
           font-size: var(--text-size, inherit);
         }
 
-        > :global(ol) {
+        > ol {
           font-size: var(--text-size, inherit);
         }
 
-        > :global(*:first-child) {
+        > *:first-child {
           margin-top: 0 !important;
         }
 
-        > :global(*:last-child) {
+        > *:last-child {
           margin-bottom: 0 !important;
         }
 

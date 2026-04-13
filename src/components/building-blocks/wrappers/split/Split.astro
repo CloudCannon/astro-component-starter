@@ -168,7 +168,7 @@ const splitId = `split-${crypto.randomUUID()}`;
   )
 }
 
-<style>
+<style is:global>
   @layer components {
     .split {
       margin-top: var(--spacing-lg);
@@ -229,7 +229,7 @@ const splitId = `split-${crypto.randomUUID()}`;
         &.align-stretch {
           align-items: stretch;
 
-          > .pane > :global(*:only-child) {
+          > .pane > *:only-child {
             height: 100%;
           }
         }
@@ -239,7 +239,7 @@ const splitId = `split-${crypto.randomUUID()}`;
           min-width: 0;
           overflow-wrap: break-word;
 
-          > :global(*:first-child) {
+          > *:first-child {
             margin-top: 0 !important;
           }
         }

@@ -175,9 +175,9 @@ const {
   </Grid>
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.service-cards-grid) {
+    .service-cards-grid {
       margin-top: var(--spacing-2xl);
     }
   }
@@ -234,18 +234,18 @@ Every text prop, image prop, and array prop needs CloudCannon editable bindings 
 | Thin border                    | `1px solid var(--color-border)`                       |
 | Subtle shadow                  | `box-shadow: 0 1px 3px rgba(0,0,0,0.1)`               |
 
-### Scoped styles
+### Global styles
 
-Use `@layer page-sections` for all styles. Target child building blocks with `:global(.class-name)` when you need to override their spacing or layout:
+Use `<style is:global>` and `@layer page-sections` for all styles. Do NOT use `:global()` — all styles are global so it is not needed:
 
 ```css
-<style>
+<style is:global>
   @layer page-sections {
     .my-section-heading {
       margin-bottom: var(--spacing-lg);
     }
 
-    :global(.my-section-grid) {
+    .my-section-grid {
       margin-top: var(--spacing-2xl);
     }
   }

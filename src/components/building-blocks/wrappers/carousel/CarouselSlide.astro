@@ -39,7 +39,7 @@ const arrayDataAttributes = effectiveChildrenProp
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .slide {
       container-type: inline-size;
@@ -47,7 +47,7 @@ const arrayDataAttributes = effectiveChildrenProp
       flex-shrink: 0;
 
       > .slide__content {
-        > :global(*:first-child) {
+        > *:first-child {
           margin-top: 0 !important;
         }
       }

@@ -52,7 +52,6 @@
     "js-beautify": "^1.15.4",
     "js-yaml": "^4.1.1",
     "jszip": "^3.10.1",
-    "lightningcss": "^1.32.0",
     "markdown-it": "^14.1.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",

@@ -1,4 +1,6 @@
 ---
+import { ClientRouter } from "astro:transitions";
+import { fade } from "astro:transitions";
 import SeoHead from "@components/utils/SeoHead.astro";
 import StructuredData from "@components/utils/StructuredData.astro";
 import seoData from "@data/seo.json";
@@ -86,9 +88,10 @@ const props = Astro.props;
     />
 
     <slot name="head" />
+    <ClientRouter />
   </head>
   <body>
-    <div>
+    <div transition:animate={fade({ duration: "0.3s" })}>
       <slot />
     </div>
     <script>

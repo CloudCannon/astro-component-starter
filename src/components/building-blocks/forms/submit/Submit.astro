@@ -57,9 +57,9 @@ const hasSlot = Astro.slots.has("default");
   )
 }
 
-<style>
+<style is:global>
   @layer components {
-    :global(form .submit) {
+    form .submit {
       margin-top: var(--spacing-md);
     }
   }
