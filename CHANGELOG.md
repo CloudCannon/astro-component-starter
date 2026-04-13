@@ -8,12 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- "Back to site" link as the first item in the component docs mobile navigation
 - Astro page transitions using `ClientRouter` with a fade animation for smooth navigation between pages
 - `size` prop on the **Text** component (xs through 4xl) — sets the font size of paragraphs and lists; headings retain their own sizing
 - `iconColor` prop on Button, Heading, Input, Select, Submit, and Content Selector components — allows setting the icon color (default, blue, green, yellow, orange, red, purple, pink, cyan) wherever an `iconName` is used. CloudCannon inputs are hidden until an icon is selected.
 
 ### Fixed
 
+- Component docs mobile nav logo now matches the main site's logo size and nav bar height
 - **Icon** component background color now wraps tightly around the icon instead of stretching full width
 
 ### Changed

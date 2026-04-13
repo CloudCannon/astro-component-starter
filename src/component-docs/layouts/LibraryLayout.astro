@@ -4,6 +4,7 @@ import { fade } from "astro:transitions";
 import "@component-docs/styles/component-docs.css";
 import "@styles/style.css";
 import SiteFonts from "@layouts/SiteFonts.astro";
+import VideoElements from "@components/utils/VideoElements.astro";
 import { z } from "zod/v4";
 
 const libraryLayoutSchema = z.object({
@@ -80,10 +81,7 @@ const contentSections = props.frontmatter?.contentSections || [];
         <slot />
       </main>
     </CustomSection>
-    <script>
-      import "@choctawnationofoklahoma/lite-vimeo";
-      import "@justinribeiro/lite-youtube";
-    </script>
+    <VideoElements />
     </div>
   </body>
 </html>

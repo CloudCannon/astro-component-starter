@@ -4,7 +4,11 @@ import Mobile from "@components/navigation/mobile/Mobile.astro";
 import navData from "../data/nav.json";
 import { generateNavData } from "../utils/navGenerator.js";
 
-const mobileNavData = await generateNavData(navData);
+const generatedNavData = await generateNavData(navData);
+const mobileNavData = [
+  { name: "← Back to site", path: "/", children: [] },
+  ...generatedNavData,
+];
 ---
 
 <div class="library-mobile-nav">
