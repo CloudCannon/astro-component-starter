@@ -241,26 +241,6 @@ const formattedCodeCache = await Promise.all(
               class="direction-segments"
               data-action="direction-toggle"
             />
-            <Segments
-              name={`theme-mode-${viewerId}`}
-              options={[
-                {
-                  value: "light",
-                  label: "Light Mode",
-                  icon: "sun",
-                  checked: true,
-                },
-                {
-                  value: "dark",
-                  label: "Dark Mode",
-                  icon: "moon",
-                  checked: false,
-                },
-              ]}
-              iconOnly={true}
-              class="theme-segments"
-              data-action="theme-toggle"
-            />
           </div>
           <Segments
             name={`view-mode-${viewerId}`}

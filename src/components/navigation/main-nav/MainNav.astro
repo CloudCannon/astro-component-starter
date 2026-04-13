@@ -2,6 +2,7 @@
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Bar from "@components/navigation/bar/Bar.astro";
 import Mobile from "@components/navigation/mobile/Mobile.astro";
+import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
 import Image from "@core-elements/image/Image.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 
@@ -13,9 +14,11 @@ type NavButton = {
 
 const {
   logoSource,
+  logoAlternateSource,
   logoAlt = "logo",
   navData = [],
   buttonSections = [] as NavButton[],
+  themeToggle = false,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -46,6 +49,7 @@ const mobileNavData = [
   >
     <Image
       source={logoSource}
+      alternateSource={logoAlternateSource}
       class="main-nav-logo"
       alt={logoAlt}
       useDefaultEditableBinding={false}
@@ -57,6 +61,7 @@ const mobileNavData = [
       class="desktop-main-nav"
     />
 
+    {themeToggle && <ThemeToggle />}
     <ButtonGroup
       direction="row"
       align="center"
@@ -67,6 +72,7 @@ const mobileNavData = [
   </div>
   <Mobile
     logoSource={logoSource}
+    logoAlternateSource={logoAlternateSource}
     logoAlt={logoAlt}
     navData={mobileNavData}
     class="mobile-main-nav"

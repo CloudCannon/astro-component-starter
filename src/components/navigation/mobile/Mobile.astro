@@ -5,13 +5,14 @@ import Image from "@core-elements/image/Image.astro";
 
 const {
   logoSource,
+  logoAlternateSource,
   logoAlt,
   navData = [],
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
-} = Astro.props as Props;
+} = Astro.props;
 
 const toggleId = `mobile-toggle-${crypto.randomUUID()}`;
 const navInstanceId = crypto.randomUUID();
@@ -77,18 +78,20 @@ function createNavItemData(item, level, parentGroupId) {
       <slot name="logo">
         <Image
           source={logoSource}
+          alternateSource={logoAlternateSource}
           alt={logoAlt || "Logo"}
           class="mobile-logo-image"
           useDefaultEditableBinding={false}
         />
       </slot>
     </div>
-    <label
-      for={toggleId}
-      class="mobile-close mobile-button"
-      aria-label="Close navigation menu"
-      tabindex="0"
-    >
+    <div class="mobile-header-actions">
+      <label
+        for={toggleId}
+        class="mobile-close mobile-button"
+        aria-label="Close navigation menu"
+        tabindex="0"
+      >
       <Button
         variant="tertiary"
         size="lg"
@@ -98,6 +101,7 @@ function createNavItemData(item, level, parentGroupId) {
         class="mobile-nav-close mobile-nav-button"
       />
     </label>
+    </div>
   </div>
 
   <div class="mobile-content">
@@ -418,6 +422,12 @@ function createNavItemData(item, level, parentGroupId) {
           min-width: 0;
           width: min(11rem, 100%);
         }
+
+        .mobile-header-actions {
+          align-items: center;
+          display: flex;
+          gap: var(--spacing-xs);
+        }
       }
 
       .mobile-content {
@@ -546,7 +556,8 @@ function createNavItemData(item, level, parentGroupId) {
     }
 
     .mobile .mobile-header .mobile-logo .mobile-logo-image img,
-    .mobile .mobile-header .mobile-logo .mobile-logo-image svg {
+    .mobile .mobile-header .mobile-logo .mobile-logo-image svg,
+    .mobile .mobile-header .mobile-logo svg {
       display: block;
       height: 2rem;
       max-width: 100%;

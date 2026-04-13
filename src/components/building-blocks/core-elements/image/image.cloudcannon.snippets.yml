@@ -16,6 +16,10 @@ image:
     named_args:
       - editor_key: source
         type: string
+      - editor_key: alternateSource
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: alt
         type: string
         optional: true

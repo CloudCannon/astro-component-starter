@@ -44,7 +44,6 @@
 
     .device-size-segments,
     .direction-segments,
-    .theme-segments,
     .view-segments {
       .options {
         display: flex;

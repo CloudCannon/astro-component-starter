@@ -19,6 +19,7 @@ const libraryLayoutSchema = z.object({
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import MobileNavLayout from "@component-docs/layouts/MobileNavLayout.astro";
 import SidebarNavLayout from "@component-docs/layouts/SidebarNavLayout.astro";
+import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
 import RenderBlock from "@components/utils/renderBlock.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
@@ -45,6 +46,7 @@ const contentSections = props.frontmatter?.contentSections || [];
       name="generator"
       content={Astro.generator}
     />
+    <ThemeToggleScript />
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>

@@ -1,6 +1,7 @@
 ---
 import Footer from "@components/navigation/footer/Footer.astro";
 import MainNavigation from "@components/navigation/main-nav/MainNav.astro";
+import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
 import MainComponent from "@components/utils/MainComponent.astro";
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
@@ -72,6 +73,7 @@ const sections = frontmatter?.pageSections ?? [];
   type={type}
   article={article}
 >
+  {mainNav.themeToggle && <ThemeToggleScript slot="head" />}
   <MainNavigation {...mainNav} />
 
   <main>

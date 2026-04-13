@@ -1,6 +1,8 @@
 {
-  "logoSource": "/src/assets/images/logo.svg",
+  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
+  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
   "logoAlt": "Logo",
+  "themeToggle": true,
   "navData": [
     {
       "name": "Home",

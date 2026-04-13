@@ -1,0 +1,15 @@
+<script is:inline>
+  (function () {
+    var defaultTheme =
+      document.documentElement.getAttribute("data-theme") || "light";
+    document.documentElement.setAttribute("data-default-theme", defaultTheme);
+    var stored = localStorage.getItem("theme");
+    var theme =
+      stored ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+    if (theme !== defaultTheme) {
+      document.documentElement.setAttribute("data-theme-toggled", "");
+    }
+  })();
+</script>

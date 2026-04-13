@@ -44,6 +44,39 @@ The key variables to update first:
 
 The dark theme lives in `src/styles/themes/_dark.css` and uses the same variable names. Update both to keep your brand consistent across color schemes.
 
+## Light/dark mode toggle
+
+The starter includes an optional theme toggle that lets visitors switch between light and dark mode. Enable it in `src/data/mainNav.json`:
+
+```json
+{
+  "themeToggle": true
+}
+```
+
+When enabled, a sun/moon toggle appears in the main navigation, mobile menu, and component docs sidebar. The toggle:
+
+- **Respects system preference** — if the visitor hasn't made a choice, their OS setting is used
+- **Persists to localStorage** — once toggled, the choice sticks across page loads
+- **Prevents flash** — an inline script in `<head>` applies the stored theme before first paint
+
+The default theme for your site is set in `src/layouts/BaseLayout.astro` on the `<html>` element (`data-theme="light"`). If you want a dark-default site, change this to `data-theme="dark"` and update `_dark.css` to be your primary palette.
+
+### Theme-aware images
+
+Some images — logos, diagrams, illustrations — need a different version for each theme. The **Image** component supports this with the `alternateSource` prop:
+
+```yaml
+- _component: building-blocks/core-elements/image
+  source: /src/assets/images/logo.svg
+  alternateSource: /src/assets/images/logo-dark.svg
+  alt: Logo
+```
+
+The `source` is shown by default. When the visitor toggles the theme, the `alternateSource` is shown instead. Toggling back restores the original. This only responds to the global theme toggle — section-level `colorScheme` changes (like a dark section on a light page) won't swap the image.
+
+The main navigation logo supports this too via `logoAlternateSource` in `src/data/mainNav.json`.
+
 ## How themes work inside components
 
 Themes aren't just a global toggle. They're used **per-section** within your pages. Components like `CustomSection` and `Card` have a `colorScheme` prop that switches the theme for that section and everything inside it.

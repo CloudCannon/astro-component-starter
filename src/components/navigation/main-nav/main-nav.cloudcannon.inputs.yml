@@ -5,6 +5,13 @@ logoSource:
     resize_style: contain
     width: 1920
     height: 1280
+logoAlternateSource:
+  type: image
+  comment: "Optional alternate logo shown when the site theme is toggled. The main logo is shown by default."
+  options:
+    resize_style: contain
+    width: 1920
+    height: 1280
 logoAlt:
   type: text
   comment: "Alt text for the logo image for accessibility."

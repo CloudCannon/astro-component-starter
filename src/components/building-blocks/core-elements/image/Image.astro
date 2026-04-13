@@ -4,6 +4,7 @@ import { prepareImageData } from "../../../utils/image";
 
 const {
   source,
+  alternateSource = null,
   alt,
   sizes = "(max-width: 1280px) 100vw, 1280px",
   widths = [640, 1280, 2560],
@@ -51,6 +52,36 @@ const preparedImage = prepareImageData({
   positionVertical,
   positionHorizontal,
 });
+
+const hasAlternate =
+  alternateSource && typeof alternateSource === "string" && alternateSource.trim() !== "";
+const preparedAlternate = hasAlternate
+  ? prepareImageData({
+      source: alternateSource,
+      width,
+      height,
+      widths,
+      aspectRatio,
+      positionVertical,
+      positionHorizontal,
+    })
+  : null;
+
+const imageEntries = [
+  {
+    prepared: preparedImage,
+    attrs: { ...dataAttributes, ...imageElementAttributes },
+    wrapperClass: hasAlternate ? "image-primary" : null,
+  },
+];
+
+if (hasAlternate) {
+  imageEntries.push({
+    prepared: preparedAlternate!,
+    attrs: { ...imageElementAttributes },
+    wrapperClass: "image-alternate",
+  });
+}
 ---
 
 <div
@@ -68,38 +99,40 @@ const preparedImage = prepareImageData({
     ]}
   >
     {
-      preparedImage.shouldRenderOptimizedPicture ? (
-        <Picture
-          src={preparedImage.imageSrc}
-          alt={normalizedAlt}
-          widths={preparedImage.filteredWidths}
-          sizes={sizes}
-          formats={["webp"]}
-          width={preparedImage.finalWidth}
-          height={preparedImage.finalHeight}
-          fit={preparedImage.useFit}
-          position={preparedImage.usePosition}
-          loading={priority ? "eager" : "lazy"}
-          decoding={priority ? "sync" : "async"}
-          fetchpriority={priority ? "high" : undefined}
-          {...dataAttributes}
-          {...imageElementAttributes}
-        />
-      ) : (
-        <picture>
-          <img
-            src={preparedImage.imageSrc}
+      imageEntries.map(({ prepared, attrs, wrapperClass }) => {
+        const img = prepared.shouldRenderOptimizedPicture ? (
+          <Picture
+            src={prepared.imageSrc}
             alt={normalizedAlt}
+            widths={prepared.filteredWidths}
+            sizes={sizes}
+            formats={["webp"]}
+            width={prepared.finalWidth}
+            height={prepared.finalHeight}
+            fit={prepared.useFit}
+            position={prepared.usePosition}
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? "sync" : "async"}
             fetchpriority={priority ? "high" : undefined}
-            width={preparedImage.imageWidth}
-            height={preparedImage.imageHeight}
-            {...dataAttributes}
-            {...imageElementAttributes}
+            {...attrs}
           />
-        </picture>
-      )
+        ) : (
+          <picture>
+            <img
+              src={prepared.imageSrc}
+              alt={normalizedAlt}
+              loading={priority ? "eager" : "lazy"}
+              decoding={priority ? "sync" : "async"}
+              fetchpriority={priority ? "high" : undefined}
+              width={prepared.imageWidth}
+              height={prepared.imageHeight}
+              {...attrs}
+            />
+          </picture>
+        );
+
+        return wrapperClass ? <div class:list={wrapperClass}>{img}</div> : img;
+      })
     }
   </div>
 </div>
@@ -220,6 +253,18 @@ const preparedImage = prepareImageData({
           border-radius: var(--radius-lg);
         }
       }
+
+      .image-alternate {
+        display: none;
+      }
+    }
+
+    html[data-theme-toggled] .image .image-primary {
+      display: none;
+    }
+
+    html[data-theme-toggled] .image .image-alternate {
+      display: block;
     }
   }
 </style>

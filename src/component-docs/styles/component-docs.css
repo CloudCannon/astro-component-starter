@@ -14,6 +14,7 @@
 
     & .library-sidebar {
       display: none;
+      flex-direction: column;
       flex-shrink: 0;
       height: 100vh;
       overflow-y: auto;
@@ -58,7 +59,14 @@
           width: auto;
         }
       }
+
+      > .library-mobile-nav-actions {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-md);
+      }
     }
+
 
     & .component-viewer {
       & .copy-button {
@@ -98,7 +106,7 @@
       }
 
       & .library-sidebar {
-        display: block;
+        display: flex;
       }
 
       & .library-mobile-nav {

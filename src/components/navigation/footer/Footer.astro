@@ -13,6 +13,7 @@ const {
   socials = [] as SocialLink[],
   footerText = "",
   logoSource,
+  logoAlternateSource,
   logoAlt,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -34,6 +35,7 @@ const {
       <div class="content-container">
         <Image
           source={logoSource}
+          alternateSource={logoAlternateSource}
           alt={logoAlt}
           class="footer-logo"
           useDefaultEditableBinding={false}

@@ -10,7 +10,6 @@ function initializeComponentViewers() {
     const segments = {
       deviceSize: viewer.querySelector('[data-action="device-size-toggle"]'),
       direction: viewer.querySelector('[data-action="direction-toggle"]'),
-      theme: viewer.querySelector('[data-action="theme-toggle"]'),
       view: viewer.querySelector('[data-action="view-toggle"]'),
     };
 
@@ -161,10 +160,6 @@ function initializeComponentViewers() {
         hiddenSegments.style.display = value === "component" ? "flex" : "none";
       }
       setTimeout(syncCodeViewHeight, 50);
-    });
-
-    initSegment(segments.theme, "theme-mode", (value) => {
-      previews.forEach((preview) => preview.setAttribute("data-theme", value));
     });
 
     initSegment(segments.direction, "direction-mode", (value) => {

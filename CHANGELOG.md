@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- `alternateSource` prop on the **Image** component — displays an alternate image when the site theme is toggled, useful for swapping logos or diagrams between light and dark mode
+- Light/dark theme toggle in the main navigation, mobile menu, and component docs sidebar — respects system preference, persists choice to localStorage, and prevents flash of wrong theme on load
 - "Back to site" link as the first item in the component docs mobile navigation
 - Astro page transitions using `ClientRouter` with a fade animation for smooth navigation between pages
 - `size` prop on the **Text** component (xs through 4xl) — sets the font size of paragraphs and lists; headings retain their own sizing

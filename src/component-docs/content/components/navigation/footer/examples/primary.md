@@ -3,7 +3,7 @@ title: 'Footer'
 spacing: 'top'
 blocks:
   _component: 'navigation/footer'
-  logoSource: /src/assets/images/logo.svg
+  logoSource: /src/assets/images/component-docs/acs-logo.svg
   logoAlt: Logo
   links:
     - name: 'Home'
