@@ -539,5 +539,4 @@ Import via `@builders/custom-section/CustomSection.astro`. Every page section wr
 | `colorScheme`       | inherit, light, dark                   | inherit |
 | `backgroundColor`   | none, base, surface, accent, highlight | —       |
 | `background`        | object: `type` (`none`/`image`/`video`), positioning, image or video fields | —       |
-| `rounded`           | boolean                                | false   |
 | `label`             | string (also used as anchor ID)        | —       |

@@ -34,9 +34,6 @@ featureSlider:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: rounded
-        type: boolean
-        optional: true
   _inputs_from_glob:
     - /src/components/page-sections/features/feature-slider/feature-slider.cloudcannon.inputs.yml
   _inputs:
@@ -220,6 +217,3 @@ featureSlider:
         min: -1
         max: 1
         step: 0.1
-    rounded:
-      type: switch
-      comment: Whether to apply rounded corners to the section wrapper.

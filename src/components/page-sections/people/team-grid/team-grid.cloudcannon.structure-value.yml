@@ -214,9 +214,6 @@ _inputs:
       min: -1
       max: 1
       step: 0.1
-  rounded:
-    type: switch
-    comment: Whether to apply rounded corners to the section wrapper.
 _structures:
   teamGridItems:
     values:

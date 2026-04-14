@@ -1,5 +1,3 @@
-rounded:
-  hidden: true
 eyebrow:
   type: text
   comment: Optional eyebrow text shown above the heading.

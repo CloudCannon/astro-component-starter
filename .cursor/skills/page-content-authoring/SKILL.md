@@ -278,7 +278,6 @@ Centered call-to-action with headline, text, and buttons.
       size: md
   colorScheme: dark
   backgroundColor: surface
-  rounded: false
 ```
 
 | Prop              | Type     | Options / Notes                                  |
@@ -288,7 +287,6 @@ Centered call-to-action with headline, text, and buttons.
 | `buttonSections`  | array    | Button components                                |
 | `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
 | `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
-| `rounded`         | switch   | Round section corners                            |
 
 #### cta-split
 
@@ -310,7 +308,6 @@ Split layout CTA with image on one side.
   reverse: false
   colorScheme: inherit
   backgroundColor: base
-  rounded: false
 ```
 
 | Prop              | Type     | Options / Notes                                  |
@@ -323,7 +320,6 @@ Split layout CTA with image on one side.
 | `reverse`         | switch   | Flip sides                                       |
 | `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
 | `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
-| `rounded`         | switch   | Round section corners                            |
 
 #### cta-form
 
@@ -522,7 +518,6 @@ Flexible container for composing any building blocks. Use when no specific page 
     imageAlt: ''
     videoSource: null
     overlay: 0
-  rounded: false
 ```
 
 | Prop                                    | Type   | Options / Notes                                                                                                                                 |
@@ -534,7 +529,6 @@ Flexible container for composing any building blocks. Use when no specific page 
 | `colorScheme`                           | select | `inherit`, `light`, `dark`                                                                                                                      |
 | `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                                                |
 | `background`                            | object | `type`: `image` \| `video`; shared `positionVertical` / `positionHorizontal`; `overlay` (-1 to 1, darken/lighten); image: `imageSource`, `imageAlt`, `priority`; video: `videoSource` |
-| `rounded`                               | switch | Round section corners                                                                                                                           |
 
 ---
 

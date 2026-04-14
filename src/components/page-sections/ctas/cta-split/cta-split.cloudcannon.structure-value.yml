@@ -33,7 +33,6 @@ value:
     imageAlt: ""
     videoSource: null
     overlay: 0
-  rounded: false
 preview:
   text:
     - CTA Split
@@ -226,6 +225,3 @@ _inputs:
       min: -1
       max: 1
       step: 0.1
-  rounded:
-    type: switch
-    comment: Whether to apply rounded corners to the section wrapper.

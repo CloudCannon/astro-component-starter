@@ -6,110 +6,79 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Added
-
-- `alternateSource` prop on the **Image** component — displays an alternate image when the site theme is toggled, useful for swapping logos or diagrams between light and dark mode
-- Light/dark theme toggle in the main navigation, mobile menu, and component docs sidebar — respects system preference, persists choice to localStorage, and prevents flash of wrong theme on load
-- "Back to site" link as the first item in the component docs mobile navigation
-- Astro page transitions using `ClientRouter` with a fade animation for smooth navigation between pages
-- `size` prop on the **Text** component (xs through 4xl) — sets the font size of paragraphs and lists; headings retain their own sizing
-- `iconColor` prop on Button, Heading, Input, Select, Submit, and Content Selector components — allows setting the icon color (default, blue, green, yellow, orange, red, purple, pink, cyan) wherever an `iconName` is used. CloudCannon inputs are hidden until an icon is selected.
-
-### Fixed
-
-- Vite warnings about `node:fs` and `node:path` being externalized for browser compatibility in `discoverVideoSources`
-- Component docs mobile nav logo now matches the main site's logo size and nav bar height
-- **Icon** component background color now wraps tightly around the icon instead of stretching full width
-
-### Changed
-
-- Dropped `lightningcss` as the CSS transformer — reverted to Vite's default (PostCSS + esbuild). lightningcss did not recognise Astro's `:global()` directive, silently producing broken CSS in comma lists, `:has()`/`:not()` wraps, and nested blocks.
-- Switched all component `<style>` blocks to `<style is:global>` and removed all `:global()` wrappers — simplifies CSS authoring and eliminates the class of bugs where `:global()` was mishandled by preprocessors.
-- Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle` — updated component path, CSS class names, CloudCannon config, doc pages, and all internal usages in ComponentBuilder
-- **Embed** component now renders iframes in CloudCannon's visual editor — the `html` content is stored in a `data-embed-html` attribute and injected via `editor-live-sync.js`, working around CloudCannon's HTML sanitization that strips iframes from `set:html` output
-- **CloudCannon config** resolved cyclic dependency error in the `pageSections` glob — removed shared `custom-section-wrapper.cloudcannon.inputs.yml` and `custom-section.cloudcannon.inputs.yml`, inlining section wrapper inputs directly into each page-section structure-value and snippet file
-- **Submit** `margin-top` no longer applies outside of forms — the spacing is now scoped to `form .submit` so submit buttons align correctly when displayed inline
-- **ContentSelector** Astro code generation in docs now works correctly — the generic slot-rendering branch was incorrectly matching content-selector items (which lack `_component`), causing a crash that left the Astro code view blank. The content-selector-specific branch now runs as intended and also adds `checked` to the first `ContentSelectorPanel` so the first tab is visible by default.
+## [1.0.2] - 2026-04-13
 
 ### Added
 
-- New **Range** form component (`building-blocks/forms/range`) — a styled slider input with configurable `min`, `max`, `step`, and `value` props, an optional live value display beside the label, and a `required` setting. Automatically available in the CloudCannon form builder.
-- List list items support an optional `link` URL; when set, only the text is wrapped in the anchor so the label is clickable while the icon stays decorative (outside the link). CloudCannon includes a URL input on each list item.
-- Team Grid exposes a `layout` prop (default `start`) that maps to the inner `Grid` layout (`start` | `center`), with matching CloudCannon select input.
-- Main site header and footer now include a **Components** link to `/component-docs/` so the component library is easy to find while browsing (not only via in-page CTAs).
-- Select component now displays a custom chevron-down icon replacing the native browser arrow (`appearance: none`), and supports an optional leading `iconName` prop for consistency with the Input component.
-- Split, Bento Box, and Grid components now support `none` as a gap option, allowing columns/items to sit flush against each other with zero spacing.
-
-### Changed
-
-- Team Grid no longer exposes `rounded`; the section always uses `CustomSection`’s default (no rounded wrapper). The CloudCannon control for `rounded` is hidden for this block, and any legacy `rounded` value in front matter is ignored.
-- Updated Twitter references to X (updated social link URL in footer data).
-- Video component `thumbnail` / `<video poster>` uses `resolveVideoPosterSource` so `/src/assets/images/...` posters are optimized with `getImage`, scaled to fit within 1920×1080 (aspect preserved). CloudCannon thumbnail uploads for Video target `src/assets/images` (aligned with Image inputs). Public or absolute poster URLs are unchanged.
-- CloudCannon image uploads default to `src/assets/images` on the `pages` and `blog` collections (blog Content Editor uses the same via `_editables.content.paths`). There is no top-level `paths.uploads`, so video file inputs keep uploading to `public/videos` as configured on each input.
-- Blog Content Editor disables the native image toolbar button; authors add images via the Image snippet (`<Image />`) for consistent options and paths.
-- Image MDX snippet picker preview uses gallery view with a large preview from the `source` field.
-- Standardized layout prop naming to a consistent noun-first convention: `alignX` renamed to `alignmentHorizontal`, `verticalAlignment` renamed to `alignmentVertical`, Carousel `align` renamed to `alignmentHorizontal`, and Modal `header` renamed to `heading`.
-- FeatureGrid heading/text alignment is now configurable via the `alignmentHorizontal` prop instead of being hardcoded to `center`.
-
-### Added
-
-- `public/videos/` (with `.gitkeep`) as the expected location for self-hosted videos referenced by Video, Video Modal, and background video fields.
-- Blog tags on posts link to a paginated tag archive at `/blog/tag/{slug}/`, where `{slug}` is derived from each tag with `slugifyLabel` (e.g. `Content Strategy` → `/blog/tag/content-strategy/`). New route: `src/pages/blog/tag/[tag]/[...page].astro`.
-- All page sections that wrap `CustomSection` now accept the same shell props as Custom Section: `sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `backgroundColor`, `background` (image/video with overlay), and `rounded`. CloudCannon inputs are shared via `custom-section-wrapper.cloudcannon.inputs.yml` (merged first in `_inputs_from_glob`). `sectionLabel` maps to Custom Section’s `label` and avoids clashing with FAQ’s accordion `label`.
-
-### Fixed
-
-- Main navigation desktop layout now adds spacing between the nav links (`Bar`) and the header button group (`ButtonGroup`) via flex `gap` on `.nav-end`.
-- Component docs Astro code tab now renders all named slots from component metadata as `<Fragment slot="...">` children, so generated Astro matches the preview and frontmatter. Slot fallback props (e.g. `beforeContentSections`, `afterContentSections`) are stripped from JSX attributes and emitted as slot content instead. Fixes Card Before & After examples and removes the Split-specific formatter branch in favour of the generic slot handler.
-- Blog post tag line no longer inserts a stray space before commas (trim tag strings; compact fragment markup so Astro does not emit whitespace text nodes between tags).
-- Blog and other slot-only pages are included in the Pagefind index again: `data-pagefind-body` on `MainComponent` caused Pagefind to skip any page without that marker; the layout slot is now wrapped so those pages are indexed.
-- CloudCannon `data` collection (`src/data` JSON) now sets `disable_url: true` so automatic output URL matching does not assign incorrect preview URLs to non-page data files.
-- Carousel indicator dots now use presentational `<div>` elements instead of `<button>`, fixing invalid `aria-selected` on buttons and removing unnecessary touch-target assessments.
-- Navigation dropdown `<label>` triggers no longer use invalid `role="button"`.
-- Modal scrollbar now only applies to the body content, keeping the header fixed outside the scroll area.
-- List items with icons now align wrapped text to the text column instead of wrapping under the icon.
-
-### Changed
-
-- Blog index and tag archive share `BlogPostListingGrid.astro` plus `src/utils/blog.ts` (`getBlogPostsSortedByDate`, `loadBlogPageContext`) so the card grid, pagination, and empty state live in one place.
-- Blog post tags are separated with ` • ` instead of commas.
-- Sample blog posts share a small tag vocabulary (`Development`, `Frontend`, `Design`, `Accessibility`) with two tags on most posts and three on the intro and accessibility articles, so tag archives stay populated while posts can sit in multiple categories.
-- Blog Pagefind wiring uses visible markup: `published` / sort on the byline `<time>`, author filter+meta on a span around the author name, `Type:Article` on the post `CustomSection`, tags as comma-separated links when present; blog index uses `Type:Blog` on its section; CMS pages keep `Type:Page` on `MainComponent` (no visually-hidden duplicates).
-- CloudCannon field comments and component docs now note that selectable UI icons are sourced from [Heroicons](https://heroicons.com/).
-- Lowered minimum Node.js version requirement from 24 to 22.
-- **Breaking:** Renamed the Video component's `id` prop to `videoId` to avoid conflicts with the HTML `id` attribute. The same rename applies to the Video Modal component.
-- **Breaking:** Button no longer accepts explicit `popovertarget` / `popovertargetaction` props. Pass them as HTML attributes when using `element="button"`, or use the new `^popover-id` link convention instead.
-- **Breaking:** Button's `element` prop no longer defaults to `"a"`. The tag is now inferred: `<a>` when `link` is set, `<button>` otherwise. Pass `element` explicitly to override (e.g. `element="div"`).
-- Default font provider switched from `fontProviders.google()` to `fontProviders.fontsource()` in `site-fonts.mjs`, using local `@fontsource` packages instead of fetching from Google Fonts.
-
-### Added
-
-- Button and Card `link` fields now support a `^popover-id` convention (e.g. `^modal-my-video`) to open a modal via the native Popover API instead of navigating. The popover action defaults to `show` so the trigger only opens (never toggles) the modal.
+- Light/dark theme toggle — respects system preference, persists choice to localStorage, and prevents flash of wrong theme on load.
+- Astro page transitions using `ClientRouter` with a fade animation for smooth navigation between pages.
 - Video Modal wrapper component with autoplay on open, pause on close, and support for YouTube, Vimeo, and local video sources.
-- Image Carousel wrapper component with synchronized thumbnail navigation, configurable aspect ratios, per-image positioning, and responsive image optimization, built on Embla Carousel.
-- Video component supports `background` mode (`background={true}`) for rendering decorative looping background video with autoplay, mute, and `prefers-reduced-motion` handling.
-- Custom Section and Card `background` object supports an `overlay` value (-1.0 to 1.0) that renders a semi-transparent lighten/darken layer over the background image or video.
-- `maxContentWidth` select on Custom Section and Card now includes a **None** option (`none`) so content can span without a max-width token cap.
-- Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots when indicators are enabled.
+- Image Carousel wrapper component with thumbnail navigation.
+- `alternateSource` prop on the **Image** component — displays an alternate image when the site theme is toggled, useful for swapping logos or diagrams between light and dark mode.
+- `size` prop on the **Text** component (xs through 4xl) — sets the font size of paragraphs and lists; headings retain their own sizing.
+- `iconColor` prop on Button, Heading, Input, Select, Submit, and Content Selector components.
+- New **Range** form component (`building-blocks/forms/range`).
+- List items support an optional `link` URL
+- Team Grid exposes a `layout` prop.
+- Main site header and footer now include a **Components** link to `/component-docs/`.
+- Select component displays a custom chevron-down icon replacing the native browser arrow and supports an optional leading `iconName` prop.
+- Split, Bento Box, and Grid components now support `none` as a gap option.
+- Blog posts now have tags and an archive of all posts with a given tag.
+- All page sections that wrap `CustomSection` now accept the same shell props: `sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `backgroundColor`, and `background` (image/video with overlay).
+- Button and Card `link` fields support a `^popover-id` convention (e.g. `^modal-my-video`) to open a modal via the native Popover API instead of navigating.
+- Video component supports `background` mode for rendering decorative looping background video with autoplay, mute, and `prefers-reduced-motion` handling.
+- Custom Section and Card `background` object supports an `overlay` value (−1.0 to 1.0) that renders a semi-transparent lighten/darken layer over the background image or video.
+- `maxContentWidth` select on Custom Section and Card now includes a **None** option.
+- Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots.
 - Modal wrapper now supports an optional header title shown in the sticky top bar.
 
 ### Changed
 
-- Custom Section and Card: `backgroundImage` and `backgroundVideo` are merged into one **`background`** object (`type`: `image` | `video`, shared `positionVertical` / `positionHorizontal`, `priority` for images, `imageSource` / `imageAlt`, `videoSource`). Default type is `image`; leave `imageSource` empty for no background.
+- **Breaking:** Renamed the Video component's `id` prop to `videoId` to avoid conflicts with the HTML `id` attribute. The same rename applies to the Video Modal component.
+- **Breaking:** Button no longer accepts explicit `popovertarget` / `popovertargetaction` props. Pass them as HTML attributes when using `element="button"`, or use the new `^popover-id` link convention instead.
+- **Breaking:** Button's `element` prop no longer defaults to `"a"`. The tag is now inferred: `<a>` when `link` is set, `<button>` otherwise. Pass `element` explicitly to override.
+- **Breaking:** Standardized layout prop naming — `alignX` → `alignmentHorizontal`, `verticalAlignment` → `alignmentVertical`, Carousel `align` → `alignmentHorizontal`, Modal `header` → `heading`.
+- **Breaking:** Custom Section and Card `backgroundImage` / `backgroundVideo` merged into one `background` object (`type`: `image` | `video`, shared position props, `imageSource` / `imageAlt`, `videoSource`).
+- Dropped `lightningcss` as the CSS transformer — reverted to Vite's default (PostCSS + esbuild).
+- Switched all component `<style>` blocks to `<style is:global>` and removed all `:global()` wrappers.
+- Renamed `building-blocks/forms/slider` component to `building-blocks/forms/toggle`.
+- **Embed** component now renders iframes in the visual editor`.
+- Updated Twitter references to X.
+- Video poster images from `src/assets/images` are now optimized with `getImage`, scaled to fit within 1920×1080.
+- CloudCannon image uploads default to `src/assets/images` on the `pages` and `blog` collections.
+- Blog Content Editor disables the native image toolbar button; authors add images via the Image snippet.
+- FeatureGrid heading/text alignment is now configurable via `alignmentHorizontal` instead of being hardcoded to `center`.
+- Blog Pagefind wiring markup for published date, author, article type, and tags.
+- CloudCannon field comments and component docs now note that selectable UI icons are sourced from [Heroicons](https://heroicons.com/).
+- Lowered minimum Node.js version requirement from 24 to 22.
+- Default font provider switched from `fontProviders.google()` to `fontProviders.fontsource()` in `site-fonts.mjs`.
 - Logo aspect ratios in main nav stay visually balanced across desktop and mobile states.
 - Third-level main nav items now use distinct styling to separate from second-level items.
-- Text blocks now trim top margin from their first child and bottom margin from their last child for more consistent wrapper spacing.
-- Modal examples now use `custom-section` for inner spacing, and the modal wrapper no longer applies default body padding itself.
-- Local video sources now automatically include matching sibling formats like `.webm` and `.ogv` when they share the selected file's basename.
+- Text blocks now trim top margin from their first child and bottom margin from their last child.
+- Modal examples now use `custom-section` for inner spacing; the modal wrapper no longer applies default body padding.
+- Local video sources now automatically include matching sibling formats (`.webm`, `.ogv`).
 - Base layout now renders SEO meta tags directly without relying on the `astro-seo` package.
 - Blog posts now emit `og:type="article"` plus article-specific Open Graph metadata.
 
 ### Fixed
 
-- Button now forwards link attributes (`target`, `rel`, etc.) and button attributes (`type`, `disabled`, form overrides, etc.) to the inner `<a>` / `<button>` instead of the wrapper, so external links and submit buttons behave correctly.
-- Carousel: `loop={false}` now disables Embla loop; `data-loop="false"` was previously treated as enabled because we only checked attribute presence.
+- Vite warnings about `node:fs` and `node:path` being externalized for browser compatibility in `discoverVideoSources`.
+- Component docs mobile nav logo now matches the main site's logo size and nav bar height.
+- **Icon** component background color now wraps tightly around the icon instead of stretching full width.
+- **ContentSelector** Astro code generation in docs now works correctly — the content-selector-specific branch runs as intended and adds `checked` to the first `ContentSelectorPanel`.
+- Main navigation desktop layout now adds spacing between nav links and the header button group via flex `gap`.
+- Component docs Astro code tab now renders all named slots from component metadata as `<Fragment slot="...">` children. Fixes Card Before & After examples.
+- Blog post tag line no longer inserts a stray space before commas.
+- Blog and other slot-only pages are included in the Pagefind index again.
+- CloudCannon `data` collection now sets `disable_url: true` so automatic output URL matching does not assign incorrect preview URLs to non-page data files.
+- Carousel indicator dots now use presentational `<div>` elements instead of `<button>`, fixing invalid `aria-selected`.
+- Navigation dropdown `<label>` triggers no longer use invalid `role="button"`.
+- Modal scrollbar now only applies to the body content, keeping the header fixed outside the scroll area.
+- List items with icons now align wrapped text to the text column instead of wrapping under the icon.
+- Button now forwards link attributes (`target`, `rel`, etc.) and button attributes (`type`, `disabled`, etc.) to the inner element instead of the wrapper.
+- Carousel: `loop={false}` now correctly disables Embla loop.
 - Opening a modal now locks page scrolling until the modal is closed.
-- Image component now always keeps at least one valid responsive width candidate, even when the source image is smaller than the default breakpoints.
+- Image component now always keeps at least one valid responsive width candidate.
 - Structured data no longer emits an empty `description` field when the site SEO description has not been set.
 
 ## [1.0.1] - 2026-03-19
@@ -126,17 +95,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Exported Astro components now use scoped `<style>` instead of `<style is:global>`.
-- CSS uses Vite’s default pipeline (PostCSS for processing, esbuild for minification) instead of opting into Lightning CSS for transform while minifying with esbuild.
-- Raised Vite `chunkSizeWarningLimit` to 1024 kB so builds don’t warn on expected large chunks (e.g. Shiki in component docs).
+- CSS uses Vite's default pipeline (PostCSS for processing, esbuild for minification) instead of opting into Lightning CSS for transform while minifying with esbuild.
+- Raised Vite `chunkSizeWarningLimit` to 1024 kB so builds don't warn on expected large chunks (e.g. Shiki in component docs).
 
 ### Fixed
 
 - ComponentViewer Astro code preview now renders child items for BentoBox and Masonry components instead of showing self-closing tags.
-- Component Builder sandbox delete button styles: replace Sass-style `&-delete` nesting with a flat `.sandbox-item-btn.sandbox-item-btn-delete` selector so esbuild CSS minify doesn’t warn on invalid nesting.
-
+- Component Builder sandbox delete button styles: replace Sass-style `&-delete` nesting with a flat `.sandbox-item-btn.sandbox-item-btn-delete` selector so esbuild CSS minify doesn't warn on invalid nesting.
 - SVGO icon optimization: use `cleanupIds` override (SVGO 4 plugin name) so disabling ID cleanup no longer prints a preset warning at build time.
 - Bento Box item column/row span changes now update visually in the CloudCannon editor.
-
 - Icon component no longer exposes an unsupported `4xl` size option.
 - Image component no longer converts SVGs to WebP — SVGs are now served as-is.
 - Button component no longer relies on `display: contents` on its root wrapper.
