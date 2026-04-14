@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Anchor links on component doc page headings (Overview, Properties, Slots, Examples, and each example group) for deep-linking to specific sections and examples.
+
 ## [1.0.2] - 2026-04-13
 
 ### Added
@@ -58,18 +62,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Modal examples now use `custom-section` for inner spacing; the modal wrapper no longer applies default body padding.
 - Local video sources now automatically include matching sibling formats (`.webm`, `.ogv`).
 - Base layout now renders SEO meta tags directly without relying on the `astro-seo` package.
-- Blog posts now emit `og:type="article"` plus article-specific Open Graph metadata.
+- Blog posts now render `og:type="article"` plus article-specific Open Graph metadata.
 
 ### Fixed
 
-- Vite warnings about `node:fs` and `node:path` being externalized for browser compatibility in `discoverVideoSources`.
 - Component docs mobile nav logo now matches the main site's logo size and nav bar height.
 - **Icon** component background color now wraps tightly around the icon instead of stretching full width.
 - **ContentSelector** Astro code generation in docs now works correctly — the content-selector-specific branch runs as intended and adds `checked` to the first `ContentSelectorPanel`.
 - Main navigation desktop layout now adds spacing between nav links and the header button group via flex `gap`.
 - Component docs Astro code tab now renders all named slots from component metadata as `<Fragment slot="...">` children. Fixes Card Before & After examples.
-- Blog post tag line no longer inserts a stray space before commas.
-- Blog and other slot-only pages are included in the Pagefind index again.
 - CloudCannon `data` collection now sets `disable_url: true` so automatic output URL matching does not assign incorrect preview URLs to non-page data files.
 - Carousel indicator dots now use presentational `<div>` elements instead of `<button>`, fixing invalid `aria-selected`.
 - Navigation dropdown `<label>` triggers no longer use invalid `role="button"`.

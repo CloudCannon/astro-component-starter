@@ -38,7 +38,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   components[componentName] = component;
 });
 
-const viewerId = title.toLowerCase().replace(/\s+/g, "-");
+const viewerId = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const formattedCodeCache = await Promise.all(
   component_examples.map(async (example: any) => {
@@ -186,8 +186,9 @@ const formattedCodeCache = await Promise.all(
                 {component_examples.map((example: any, idx: number) => {
                   const exampleName = example.data.title;
                   const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
+                  const exampleSlug = example.id.split("/").pop() || "";
 
-                  return <option value={exampleId}>{exampleName}</option>;
+                  return <option value={exampleId} data-slug={exampleSlug}>{exampleName}</option>;
                 })}
               </select>
             </>

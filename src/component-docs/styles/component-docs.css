@@ -68,6 +68,25 @@
     }
 
 
+    & .heading-anchor {
+      color: var(--color-text-subtle);
+      font-weight: var(--font-weight-normal);
+      margin-inline-start: 0.25em;
+      opacity: 0;
+      text-decoration: none;
+      transition: opacity var(--animation-normal) ease;
+
+      &:hover {
+        color: var(--color-text-link);
+      }
+    }
+
+    & h2:hover .heading-anchor,
+    & h3:hover .heading-anchor,
+    & .heading-anchor:focus-visible {
+      opacity: 1;
+    }
+
     & .component-viewer {
       & .copy-button {
         position: relative;
