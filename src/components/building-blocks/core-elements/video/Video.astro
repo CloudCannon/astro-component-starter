@@ -26,7 +26,6 @@ let localVideoSources: VideoSource[] = [];
 
 if (type === "local-source" && source) {
   const { discoverVideoSources } = await import("@component-utils/discoverVideoSources");
-
   localVideoSources = await discoverVideoSources(source);
 }
 ---

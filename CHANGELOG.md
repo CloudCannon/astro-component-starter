@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Vite warnings about `node:fs` and `node:path` being externalized for browser compatibility in `discoverVideoSources`
 - Component docs mobile nav logo now matches the main site's logo size and nav bar height
 - **Icon** component background color now wraps tightly around the icon instead of stretching full width
 

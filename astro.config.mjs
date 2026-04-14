@@ -83,6 +83,40 @@ export default defineConfig({
     mdx(),
   ],
   vite: {
+    plugins: [
+      {
+        name: "suppress-node-externalized-warning",
+        config() {
+          return {
+            build: {
+              rollupOptions: {
+                onwarn(warning, defaultHandler) {
+                  if (
+                    warning.message?.includes("externalized for browser compatibility") &&
+                    warning.message?.includes("discoverVideoSources")
+                  )
+                    return;
+                  defaultHandler(warning);
+                },
+              },
+            },
+          };
+        },
+        configResolved(config) {
+          const originalWarn = config.logger.warn;
+
+          config.logger.warn = (msg, options) => {
+            if (
+              typeof msg === "string" &&
+              msg.includes("externalized for browser compatibility") &&
+              msg.includes("discoverVideoSources")
+            )
+              return;
+            originalWarn(msg, options);
+          };
+        },
+      },
+    ],
     build: {
       chunkSizeWarningLimit: 1024,
     },
