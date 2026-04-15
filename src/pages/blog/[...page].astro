@@ -1,4 +1,5 @@
 ---
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
@@ -7,7 +8,7 @@ import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../utils/blog"
 type Paginate = (_data: any[], _opts: { pageSize: number }) => any;
 
 export interface Props {
-  page: { data: any[] };
+  page: { data: any[]; currentPage: number };
 }
 
 export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
@@ -20,10 +21,16 @@ const { page } = Astro.props as Props;
 
 const { blogPage, heroSections } = await loadBlogPageContext();
 
-const pageTitle = blogPage?.data?.title ?? "Blog";
-const pageDescription =
+const basePageTitle = blogPage?.data?.title ?? "Blog";
+const pageTitle =
+  page.currentPage > 1 ? `${basePageTitle} – Page ${page.currentPage}` : basePageTitle;
+const baseDescription =
   blogPage?.data?.description ??
   "Read our latest articles and insights on web development, design, and technology.";
+const pageDescription =
+  page.currentPage > 1
+    ? `${baseDescription} Page ${page.currentPage} of the blog archive.`
+    : baseDescription;
 ---
 
 <Page
@@ -41,6 +48,18 @@ const pageDescription =
     backgroundColor="base"
     data-pagefind-filter="Type:Blog"
   >
+    {
+      page.currentPage > 1 ? (
+        <SimpleText
+          size="md"
+          style="margin-top: var(--spacing-lg); color: var(--color-text-muted); max-width: 42rem;"
+        >
+          You are viewing older posts from the blog archive. The newest articles always appear on
+          page one; use the pagination controls at the bottom to move between pages or return to
+          the first page for the latest updates.
+        </SimpleText>
+      ) : null
+    }
     <BlogPostListingGrid
       page={page}
       emptyMessage="No blog posts yet. Check back soon!"

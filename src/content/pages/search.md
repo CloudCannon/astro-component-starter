@@ -1,15 +1,22 @@
 ---
 _schema: default
 title: Search
-description: Search your site content with fast static search powered by Pagefind.
+description: >-
+  Static Pagefind search across pages and posts—filter by type, author, and tag with no backend.
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
     heading: Search
     subtext: >-
-      Everything on your site is just one search away. (Free static search
-      courtesy of <a href="https://pagefind.app/" target="_blank"
-      rel="noopener">Pagefind</a> 💙)
+      Everything on your site is just one search away. Type a query to match titles and body copy
+      across marketing pages, the blog, and component documentation. Results show excerpts, dates,
+      and authors when available, and you can narrow results using the Type, Author, and Tag
+      filters. This index is built at deploy time with
+      <a href="https://pagefind.app/" target="_blank" rel="noopener">Pagefind</a>, so search stays
+      fast and works on a static host without a database or paid API. 💙
+      Start from the home page or blog if you prefer browsing; search complements navigation when
+      you already know a keyword, a person’s name, or a topic you read about earlier. Results update
+      as you type, and you can clear filters anytime to widen the set again.
     buttonSections: []
     colorScheme: inherit
     backgroundColor: base

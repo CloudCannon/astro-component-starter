@@ -15,6 +15,7 @@ const pageSchema = z.object({
 
 const docsPageSchema = z.object({
   title: z.string(),
+  description: z.string().optional(),
   contentSections: z.array(contentBlockSchema),
 });
 
@@ -96,6 +97,7 @@ const blogPostSchema = z.object({
   author: z.string().default("Anonymous"),
   image: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  keywords: z.array(z.string()).optional(),
 });
 
 const blogCollection = defineCollection({

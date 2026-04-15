@@ -11,6 +11,7 @@ const libraryLayoutSchema = z.object({
   frontmatter: z
     .object({
       title: z.string().optional(),
+      description: z.string().optional(),
       contentSections: z.array(z.any()).optional(),
     })
     .optional(),
@@ -23,6 +24,7 @@ import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleSc
 import RenderBlock from "@components/utils/renderBlock.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
+const pageDescription = props.frontmatter?.description;
 const contentSections = props.frontmatter?.contentSections || [];
 ---
 
@@ -60,6 +62,11 @@ const contentSections = props.frontmatter?.contentSections || [];
       ) : null
     }
     <title>{pageTitle}</title>
+    <meta
+      name="robots"
+      content="noindex"
+    />
+    {pageDescription ? <meta name="description" content={pageDescription} /> : null}
     <slot name="head" />
     <ClientRouter />
   </head>

@@ -21,6 +21,7 @@ export interface Props {
     author?: string | string[] | null;
     tags?: string[] | null;
   } | null;
+  noindex?: boolean;
 }
 
 const props = Astro.props;
@@ -77,6 +78,7 @@ const props = Astro.props;
       canonical={props.canonical}
       type={props.type}
       article={props.article}
+      noindex={props.noindex}
     />
 
     <StructuredData site={seoData} />

@@ -25,6 +25,9 @@ collections_config:
       title:
         type: text
         comment: Controls the metadata title for the page.
+      keywords:
+        type: array
+        comment: Optional meta keywords for this page.
   blog:
     path: src/content/blog
     glob:
@@ -74,6 +77,9 @@ collections_config:
       tags:
         type: array
         comment: Tags relevant to this post's content.
+      keywords:
+        type: array
+        comment: Optional meta keywords for this post.
     _editables:
       content:
         image: false

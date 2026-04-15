@@ -34,24 +34,41 @@ if (!isDisabled) {
 
 {
   isDisabled ? (
-    <Page frontmatter={{ title: "Component Builder" }}>
+    <Page
+      frontmatter={{
+        title: "Component Builder",
+        description:
+          "The interactive Component Builder is available in local development or when you build with the component library enabled (npm run build:with-library).",
+        noindex: true,
+      }}
+    >
       <section class="component-docs-disabled">
         <h1>Component Builder Available in Local Development</h1>
         <p>
-          The Component Builder is disabled in this production build to keep the generated site
-          lean.
+          The Component Builder is disabled in this production build to keep the generated site lean
+          and avoid loading the full component palette, sandbox, and discovery scripts on hosts that
+          only publish marketing pages and blog content.
         </p>
         <p>
           Run <code>npm run dev</code> and open <code>/component-docs/component-builder/</code>{" "}
-          locally to use the full builder experience.
+          locally to drag building blocks into the sandbox, edit props, preview nested layouts, and
+          export a ready-to-drop-in Astro component package with CloudCannon configuration.
         </p>
         <p>
-          To include component docs in a static build, run <code>npm run build:with-library</code>.
+          To ship the builder in static output, run <code>npm run build:with-library</code> so the
+          component library and builder routes are included alongside the rest of the site.
         </p>
       </section>
     </Page>
   ) : (
-    <LibraryLayout frontmatter={{ title: "Component Builder", contentSections: [] }}>
+    <LibraryLayout
+      frontmatter={{
+        title: "Component Builder",
+        contentSections: [],
+        description:
+          "Use the visual Component Builder to drag building blocks, configure props, and export Astro components with CloudCannon config—prototype page sections before writing code by hand.",
+      }}
+    >
       <BuilderComponent
         components={componentDiscovery.components}
         componentsByCategory={componentDiscovery.byCategory}

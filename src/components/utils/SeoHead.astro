@@ -25,6 +25,7 @@ export interface Props {
   canonical?: string | null;
   type?: "website" | "article";
   article?: ArticleSeoData | null;
+  noindex?: boolean;
 }
 
 const {
@@ -36,6 +37,7 @@ const {
   canonical,
   type: pageType = "website",
   article,
+  noindex = false,
 } = Astro.props;
 const formattedTitle = site.titleFormat.replace("{title}", title);
 const pageDescription = description || site.description;
@@ -53,6 +55,14 @@ const articleTags = article?.tags?.filter(Boolean) ?? [];
 ---
 
 <title>{formattedTitle}</title>
+{
+  noindex ? (
+    <meta
+      name="robots"
+      content="noindex"
+    />
+  ) : null
+}
 <link
   rel="canonical"
   href={canonicalUrl}

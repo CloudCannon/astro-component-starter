@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Added
+### Fixed
 
-- Anchor links on component doc page headings (Overview, Properties, Slots, Examples, and each example group) for deep-linking to specific sections and examples.
+### Changed
+
+### Added
 
 ## [1.0.2] - 2026-04-13
 
@@ -35,6 +37,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `maxContentWidth` select on Custom Section and Card now includes a **None** option.
 - Carousel supports `indicatorStyle="fraction"` to show a slide counter (e.g. `1/3`) instead of dots.
 - Modal wrapper now supports an optional header title shown in the sticky top bar.
+- Meta keywords: optional `keywords` string arrays in page and blog post frontmatter; when set, output as `<meta name="keywords">`. CloudCannon inputs and new-page/blog schemas include the field.
+- Custom `404` page (`404.html` when built) with CloudCannon hosting routing in `.cloudcannon/routing.json` and `X-Robots-Tag: noindex, nofollow` for the error page URL.
+- Anchor links on component doc page headings (Overview, Properties, Slots, Examples, and each example group) for deep-linking to specific sections and examples.
 
 ### Changed
 
@@ -63,6 +68,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Local video sources now automatically include matching sibling formats (`.webm`, `.ogv`).
 - Base layout now renders SEO meta tags directly without relying on the `astro-seo` package.
 - Blog posts now render `og:type="article"` plus article-specific Open Graph metadata.
+- Component library routes (`/component-docs/*`) are excluded from the generated sitemap and use `<meta name="robots" content="noindex">` so they are not indexed as public site content.
 
 ### Fixed
 
@@ -81,6 +87,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Opening a modal now locks page scrolling until the modal is closed.
 - Image component now always keeps at least one valid responsive width candidate.
 - Structured data no longer emits an empty `description` field when the site SEO description has not been set.
+- Blog index and tag archive pagination pages now use unique document titles (append “– Page N” for page 2 and up) instead of repeating the first-page title.
 
 ## [1.0.1] - 2026-03-19
 

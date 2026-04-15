@@ -1,5 +1,8 @@
 ---
 title: Component Builder
+description: >-
+  Use the visual Component Builder to drag building blocks, configure props, and export Astro
+  components with CloudCannon config—prototype page sections before writing code by hand.
 contentSections: []
 ---
 
@@ -7,7 +10,7 @@ contentSections: []
 
 The Component Builder is a visual tool for prototyping page sections. Instead of writing code from scratch, you drag building blocks into a sandbox, arrange them, configure their props, and export a complete component package: Astro code and CloudCannon config files included.
 
-It's a great way to experiment with component structures before committing to code.
+It's a great way to experiment with component structures before committing to code. Keep this page open while you read the palette labels so you can map each block to the matching Astro component in the library.
 
 ## Opening the builder
 

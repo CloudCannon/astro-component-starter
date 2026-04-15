@@ -1,4 +1,5 @@
 ---
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
@@ -8,7 +9,7 @@ import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../../../utils
 type Paginate = (_data: any[], _opts: { pageSize: number; params: Record<string, string> }) => any;
 
 export interface Props {
-  page: { data: any[] };
+  page: { data: any[]; currentPage: number };
 }
 
 export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
@@ -39,8 +40,14 @@ const { blogPage, heroSections } = await loadBlogPageContext();
 const baseTitle = blogPage?.data?.title ?? "Blog";
 const displayTag =
   page.data[0]?.data.tags.find((t: string) => slugifyLabel(t.trim()) === tagSlug)?.trim() ?? tagSlug;
-const pageTitle = `${baseTitle}: ${displayTag}`;
-const pageDescription = `Articles tagged “${displayTag}”.`;
+const tagListingTitle = `${baseTitle}: ${displayTag}`;
+const pageTitle =
+  page.currentPage > 1 ? `${tagListingTitle} – Page ${page.currentPage}` : tagListingTitle;
+const baseTagDescription = `Browse every blog post filed under the tag “${displayTag}”, sorted by date.`;
+const pageDescription =
+  page.currentPage > 1
+    ? `${baseTagDescription} Page ${page.currentPage} of this archive.`
+    : baseTagDescription;
 ---
 
 <Page
@@ -58,6 +65,14 @@ const pageDescription = `Articles tagged “${displayTag}”.`;
     backgroundColor="base"
     data-pagefind-filter="Type:Blog"
   >
+    <SimpleText
+      size="md"
+      style="margin-top: var(--spacing-lg); color: var(--color-text-muted); max-width: 42rem;"
+    >
+      Below are every published post that includes this tag. Posts are sorted by date with the
+      newest first. When there are many matches, the list splits across pages—use pagination to see
+      older articles or jump back to the blog home for the full feed.
+    </SimpleText>
     <BlogPostListingGrid
       page={page}
       emptyMessage="No posts with this tag."

@@ -1,0 +1,51 @@
+---
+import Button from "@core-elements/button/Button.astro";
+import footerData from "@data/footer.json";
+import mainNavData from "@data/mainNav.json";
+import seoData from "@data/seo.json";
+import Page from "@layouts/Page.astro";
+
+const canonical = new URL("/404.html", Astro.site ?? seoData.url).href;
+---
+
+<Page
+  title="Page not found"
+  description="This URL does not exist on this site. Use the navigation or go home to find what you need."
+  canonical={canonical}
+  mainNav={mainNavData}
+  footer={footerData}
+>
+  <section class="not-found">
+    <h1>Page not found</h1>
+    <p>Something went wrong, or this page has moved.</p>
+    <Button
+      text="Go to home"
+      link="/"
+      variant="primary"
+      size="md"
+      hideText={false}
+      iconName=""
+      iconPosition="before"
+    />
+  </section>
+</Page>
+
+<style>
+  .not-found {
+    box-sizing: border-box;
+    margin-inline: auto;
+    max-width: 36rem;
+    padding: var(--spacing-4xl) var(--spacing-xl);
+    text-align: center;
+  }
+
+  .not-found h1 {
+    font-size: var(--font-size-3xl);
+    margin: 0 0 var(--spacing-md);
+  }
+
+  .not-found p {
+    color: var(--color-text-muted);
+    margin: 0 0 var(--spacing-xl);
+  }
+</style>

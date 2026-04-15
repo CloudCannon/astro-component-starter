@@ -8,6 +8,8 @@ import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 
 type NavButton = {
   text?: string;
+  /** Button schema uses `link`; legacy entries may use `href`. */
+  link?: string;
   href?: string;
   [key: string]: unknown;
 };
@@ -29,7 +31,7 @@ const mobileNavData = [
   ...navData,
   ...buttonSections.map((button: NavButton) => ({
     name: button.text || "Button",
-    path: button.href || "#",
+    path: button.link || button.href || "#",
     children: [],
   })),
 ];

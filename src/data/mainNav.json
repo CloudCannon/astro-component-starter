@@ -1,7 +1,7 @@
 {
   "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
   "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
-  "logoAlt": "Logo",
+  "logoAlt": "Astro Component Starter",
   "themeToggle": true,
   "navData": [
     {
