@@ -208,32 +208,14 @@ export function initLivePreview(
 
           const highlighted = hl.codeToHtml(code, { lang, theme: "github-dark" });
           const html = createCodeMarkup(highlighted, code);
-          const copyBtn = codeContentEl.querySelector(".code-copy-btn");
 
-          if (copyBtn) {
-            const existing = codeContentEl.querySelector(".builder-code-render, pre");
-
-            if (existing) existing.remove();
-            copyBtn.insertAdjacentHTML("afterend", html);
-          } else {
-            codeContentEl.innerHTML = html;
-          }
+          codeContentEl.innerHTML = html;
         })
         .catch((error) => {
           const message = error instanceof Error ? error.message : String(error);
-          const copyBtn = codeContentEl.querySelector(".code-copy-btn");
           const errorMarkup = `<div class="builder-code-error">Shiki failed to load: ${escapeHtml(message)}</div>`;
 
-          if (copyBtn) {
-            const existing = codeContentEl.querySelector(
-              ".builder-code-render, pre, .builder-code-error"
-            );
-
-            if (existing) existing.remove();
-            copyBtn.insertAdjacentHTML("afterend", errorMarkup);
-          } else {
-            codeContentEl.innerHTML = errorMarkup;
-          }
+          codeContentEl.innerHTML = errorMarkup;
 
           console.error("[ComponentBuilder] Shiki highlight failed.", error);
         });

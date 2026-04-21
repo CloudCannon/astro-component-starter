@@ -35,5 +35,15 @@
   --color-overlay: rgba(0, 0, 0, 0.5);
 
   --color-focus-ring: rgba(0, 87, 255, 0.4);
-  --color-error: #f00;
+
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-bg-subtle: #fef2f2;
+  --color-danger-border-subtle: #fca5a5;
+  --color-info: #2563eb;
+  --color-info-bg-subtle: #eff6ff;
+  --color-info-border-subtle: #bfdbfe;
+  --color-success: #16a34a;
+  --color-success-bg-subtle: #dcfce7;
+  --color-error: var(--color-danger);
 }

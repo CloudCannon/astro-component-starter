@@ -231,7 +231,17 @@ The theme files map raw palette values to semantic tokens. Components use semant
   --color-overlay: rgba(0, 0, 0, 0.5);
 
   --color-focus-ring: rgba(0, 87, 255, 0.4);
-  --color-error: #f00;
+
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-bg-subtle: #fef2f2;
+  --color-danger-border-subtle: #fca5a5;
+  --color-info: #2563eb;
+  --color-info-bg-subtle: #eff6ff;
+  --color-info-border-subtle: #bfdbfe;
+  --color-success: #16a34a;
+  --color-success-bg-subtle: #dcfce7;
+  --color-error: var(--color-danger);
 }
 ```
 
@@ -273,6 +283,17 @@ The theme files map raw palette values to semantic tokens. Components use semant
   --color-overlay: rgba(0, 0, 0, 0.7);
 
   --color-focus-ring: rgba(0, 122, 255, 0.4);
+
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-danger-bg-subtle: rgba(239, 68, 68, 0.12);
+  --color-danger-border-subtle: rgba(239, 68, 68, 0.4);
+  --color-info: #60a5fa;
+  --color-info-bg-subtle: rgba(59, 130, 246, 0.12);
+  --color-info-border-subtle: rgba(59, 130, 246, 0.4);
+  --color-success: #4ade80;
+  --color-success-bg-subtle: rgba(16, 185, 129, 0.15);
+  --color-error: var(--color-danger);
 }
 ```
 

@@ -1,34 +1,30 @@
 .component-builder {
   /* ============================================
      CSS Custom Properties
+
+     Category colors identify component types in the
+     picker and sandbox and intentionally stay consistent
+     across light/dark themes. All other colors resolve
+     from the semantic theme tokens in `src/styles/themes/`.
      ============================================ */
 
-  /* Category Colors */
   --cb-category-builders: #8b5cf6;
   --cb-category-wrappers: #3b82f6;
   --cb-category-core: #10b981;
   --cb-category-forms: #f59e0b;
 
-  /* Background Colors */
-  --cb-bg-muted: #f8fafc;
-
-  /* Status Colors */
-  --cb-danger: #dc2626;
-  --cb-danger-hover: #b91c1c;
-  --cb-danger-light: #fca5a5;
-  --cb-danger-bg-light: #fef2f2;
-  --cb-error: #ef4444;
-
-  /* Misc */
   --cb-modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  --cb-preview-bg: #f8fafc;
-  --cb-preview-label-color: #64748b;
 
   /* ============================================
      Layout & Container
      ============================================ */
   display: flex;
   flex-direction: column;
+
+  /* Allow the builder to shrink below its intrinsic min-content size (e.g.
+     when the code view contains long, non-wrapping lines) so horizontal
+     overflow stays contained inside .builder-code-content's scroll area. */
+  min-width: 0;
   width: 100%;
 
   .export-bar {
@@ -141,6 +137,9 @@
      Code View
      ============================================ */
   .builder-code-container {
+    /* Ensure the code view's scroll container (.builder-code-content) fully
+       contains horizontal overflow instead of expanding the parent. */
+    min-width: 0;
     width: 100%;
   }
 
@@ -174,13 +173,19 @@
     }
   }
 
+  .builder-code-frame {
+    /* Positioning context for the copy button, so it stays pinned to the
+       top-right of the visible code area regardless of the scroll position
+       inside .builder-code-content below. */
+    position: relative;
+  }
+
   .builder-code-content {
     background: #0d1117;
     color-scheme: dark;
     max-height: 70vh;
     min-height: 400px;
     overflow: auto;
-    position: relative;
 
     .builder-code-render {
       display: grid;
@@ -304,12 +309,12 @@
   }
 
   .sandbox-item-btn.sandbox-item-btn-delete {
-    color: var(--cb-danger);
+    color: var(--color-danger);
 
     &:hover {
-      background: var(--cb-danger-bg-light);
-      border-color: var(--cb-danger-light);
-      color: var(--cb-danger);
+      background: var(--color-danger-bg-subtle);
+      border-color: var(--color-danger-border-subtle);
+      color: var(--color-danger);
     }
   }
 
@@ -501,7 +506,7 @@
     z-index: var(--z-index-2);
 
     &::after {
-      background: var(--cb-primary);
+      background: var(--color-info);
       content: "";
       height: 0;
       left: 0;
@@ -518,7 +523,7 @@
     }
 
     &.drop-not-allowed::after {
-      background: var(--cb-error);
+      background: var(--color-danger);
       height: 3px;
     }
   }
@@ -546,12 +551,12 @@
 
       .drop-zone-icon {
         background: var(--color-text);
-        color: white;
+        color: var(--color-text-inverse);
       }
     }
 
     &.drop-not-allowed {
-      border-color: var(--cb-danger);
+      border-color: var(--color-danger);
       cursor: not-allowed;
     }
   }
@@ -621,7 +626,7 @@
      Property Fields
      ============================================ */
   .prop-field {
-    background: var(--cb-bg-muted);
+    background: var(--color-bg-muted);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
     margin-bottom: var(--spacing-md);
@@ -696,16 +701,16 @@
 
   .prop-field-textarea {
     &.error {
-      background: var(--cb-danger-bg-light);
-      border-color: var(--cb-error);
+      background: var(--color-danger-bg-subtle);
+      border-color: var(--color-danger);
     }
   }
 
   .prop-field-force-badge {
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    background: var(--color-info-bg-subtle);
+    border: 1px solid var(--color-info-border-subtle);
     border-radius: var(--radius-xs);
-    color: #2563eb;
+    color: var(--color-info);
     font-size: var(--font-size-xs);
     line-height: 1.4;
     margin-bottom: var(--spacing-md);
@@ -713,9 +718,9 @@
   }
 
   .sidebar-exposed-badge {
-    background: #dcfce7;
+    background: var(--color-success-bg-subtle);
     border-radius: var(--radius-xs);
-    color: #16a34a;
+    color: var(--color-success);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     margin-left: var(--spacing-sm);
@@ -759,9 +764,9 @@
     width: 1.5rem;
 
     &:hover {
-      background: var(--cb-danger-bg-light);
-      border-color: var(--cb-danger-light);
-      color: var(--cb-danger);
+      background: var(--color-danger-bg-subtle);
+      border-color: var(--color-danger-border-subtle);
+      color: var(--color-danger);
     }
   }
 
@@ -1013,7 +1018,7 @@
 }
 
 .export-config-preview {
-  background: var(--cb-preview-bg);
+  background: var(--color-bg-muted);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-xs);
   padding: var(--spacing-md);
@@ -1051,19 +1056,19 @@
 
 /* Export button error state */
 #export-btn.has-errors > .button-inner {
-  background-color: var(--cb-danger);
-  border-color: var(--cb-danger);
+  background-color: var(--color-danger);
+  border-color: var(--color-danger);
 
   &:hover {
-    background-color: var(--cb-danger-hover);
-    border-color: var(--cb-danger-hover);
+    background-color: var(--color-danger-hover);
+    border-color: var(--color-danger-hover);
   }
 }
 
 /* Validation panel */
 .validation-panel {
-  background: var(--cb-danger-bg-light);
-  border: 1px solid var(--cb-danger-light);
+  background: var(--color-danger-bg-subtle);
+  border: 1px solid var(--color-danger-border-subtle);
   border-radius: var(--radius-xs);
   margin-bottom: var(--spacing-lg);
   transition: all var(--animation-normal) ease;
@@ -1072,8 +1077,8 @@
 
 .validation-panel-header {
   align-items: center;
-  border-bottom: 1px solid var(--cb-danger-light);
-  color: var(--cb-danger);
+  border-bottom: 1px solid var(--color-danger-border-subtle);
+  color: var(--color-danger);
   display: flex;
   font-weight: var(--font-weight-semibold);
   gap: var(--spacing-sm);
@@ -1092,14 +1097,14 @@
 
 .validation-error {
   background: var(--color-bg);
-  border: 1px solid var(--cb-danger-light);
+  border: 1px solid var(--color-danger-border-subtle);
   border-radius: var(--radius-xs);
   padding: var(--spacing-md);
 }
 
 .validation-error-header {
   align-items: center;
-  color: var(--cb-danger);
+  color: var(--color-danger);
   display: flex;
   font-weight: var(--font-weight-semibold);
   gap: var(--spacing-sm);
@@ -1168,12 +1173,18 @@
   }
 }
 
+.export-preview-code-frame {
+  /* Positioning context for the copy button, so it stays pinned to the
+     top-right of the visible code area regardless of the scroll position
+     inside .export-preview-code below. */
+  position: relative;
+}
+
 .export-preview-code {
   background: #1e1e1e;
   color-scheme: dark;
   max-height: 300px;
   overflow: auto;
-  position: relative;
 
   pre {
     color: #d4d4d4;
@@ -1234,7 +1245,7 @@
   }
 }
 
-.builder-code-content:hover .code-copy-btn,
-.export-preview-code:hover .code-copy-btn {
+.builder-code-frame:hover .code-copy-btn,
+.export-preview-code-frame:hover .code-copy-btn {
   opacity: 1;
 }

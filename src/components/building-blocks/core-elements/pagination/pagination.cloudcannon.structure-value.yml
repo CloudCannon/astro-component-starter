@@ -5,6 +5,7 @@ structures: []
 value:
   _component: building-blocks/core-elements/pagination
   page: null
+  showArrows: false
 preview:
   text:
     - Pagination
@@ -12,12 +13,5 @@ picker_preview:
   text: Pagination
   subtext: "Navigation component for multi-page content."
   icon: list
-
-_inputs:
-  page:
-    type: object
-    comment: The Astro page object from paginate() function.
-  showArrows:
-    type: boolean
-    comment: Show previous/next arrow buttons.
-    default: false
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/pagination/pagination.cloudcannon.inputs.yml

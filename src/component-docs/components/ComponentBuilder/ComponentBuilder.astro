@@ -174,7 +174,7 @@ const builderData = {
         >Structure Value</button
       >
     </div>
-    <div class="builder-code-content">
+    <div class="builder-code-frame">
       <button
         type="button"
         class="code-copy-btn"
@@ -195,7 +195,9 @@ const builderData = {
           ></path>
         </svg>
       </button>
-      <!-- Populated by JS with shiki-highlighted code -->
+      <div class="builder-code-content">
+        <!-- Populated by JS with shiki-highlighted code -->
+      </div>
     </div>
   </div>
 
@@ -314,7 +316,7 @@ const builderData = {
             >Structure Value</button
           >
         </div>
-        <div class="export-preview-code">
+        <div class="export-preview-code-frame">
           <button
             type="button"
             class="code-copy-btn"
@@ -335,8 +337,10 @@ const builderData = {
               ></path>
             </svg>
           </button>
-          <pre
-            id="export-preview-code-content"><span class="line-numbers" id="export-line-numbers" /><code /></pre>
+          <div class="export-preview-code">
+            <pre
+              id="export-preview-code-content"><span class="line-numbers" id="export-line-numbers" /><code /></pre>
+          </div>
         </div>
       </div>
       <div class="export-config-footer">

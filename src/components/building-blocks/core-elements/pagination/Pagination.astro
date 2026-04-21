@@ -86,7 +86,7 @@ const getPageUrl = (pageNum: number) => {
         aria-label="Go to previous page"
       >
         <Icon
-          name="arrow-left"
+          name="chevron-left"
           size="sm"
         />
       </a>
@@ -137,7 +137,7 @@ const getPageUrl = (pageNum: number) => {
         aria-label="Go to next page"
       >
         <Icon
-          name="arrow-right"
+          name="chevron-right"
           size="sm"
         />
       </a>
@@ -153,37 +153,29 @@ const getPageUrl = (pageNum: number) => {
       justify-content: center;
       margin-top: var(--spacing-lg);
 
-      a,
-      span {
+      > a,
+      > span {
         background-color: var(--color-bg);
         border: 1px solid var(--color-border);
         border-inline-start: none;
         color: var(--color-text-strong);
         font-weight: var(--font-weight-semibold);
+        padding: var(--spacing-sm) var(--spacing-md);
         text-decoration: none;
         transition: background-color var(--animation-normal) ease-in-out;
-
-        &:not(.pagination-arrow) {
-          padding: var(--spacing-sm) var(--spacing-md);
-        }
-
-        &.pagination-arrow .icon {
-          border: none;
-          background-color: transparent;
-        }
 
         &:hover {
           background-color: var(--color-state-hover);
           color: var(--color-text-strong);
         }
 
-        &:first-child:not(.pagination-arrow) {
+        &:first-child {
           border-bottom-left-radius: var(--radius-sm);
           border-inline-start: 1px solid var(--color-border);
           border-top-left-radius: var(--radius-sm);
         }
 
-        &:last-child:not(.pagination-arrow) {
+        &:last-child {
           border-bottom-right-radius: var(--radius-sm);
           border-top-right-radius: var(--radius-sm);
         }
@@ -208,26 +200,14 @@ const getPageUrl = (pageNum: number) => {
 
       .pagination-arrow {
         align-items: center;
-        display: flex;
+        display: inline-flex;
         justify-content: center;
-        min-width: 2.5rem;
 
         .icon {
           align-items: center;
           display: flex;
           justify-content: center;
         }
-      }
-
-      .pagination-prev {
-        border-bottom-left-radius: var(--radius-sm);
-        border-inline-start: 1px solid var(--color-border);
-        border-top-left-radius: var(--radius-sm);
-      }
-
-      .pagination-next {
-        border-bottom-right-radius: var(--radius-sm);
-        border-top-right-radius: var(--radius-sm);
       }
     }
   }
