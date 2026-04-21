@@ -89,6 +89,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Image component now always keeps at least one valid responsive width candidate.
 - Structured data no longer emits an empty `description` field when the site SEO description has not been set.
 - Blog index and tag archive pagination pages now use unique document titles (append “– Page N” for page 2 and up) instead of repeating the first-page title.
+- Content selector mobile views
 
 ## [1.0.1] - 2026-03-19
 

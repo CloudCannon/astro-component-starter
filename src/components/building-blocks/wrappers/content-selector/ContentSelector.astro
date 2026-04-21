@@ -154,6 +154,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   @layer components {
     .content-selector {
       --content-selector-border-width: 1px;
+      container: content-selector / inline-size;
       margin-top: var(--spacing-lg);
 
       > .content-selector-items {
@@ -175,7 +176,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
         &.nav-start {
           column-gap: var(--spacing-em-lg);
           display: grid;
-          grid-template-columns: minmax(10rem, 20rem) minmax(0, 1fr);
+          grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
 
           .content-selector-tab {
             border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
@@ -197,12 +198,16 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
 
         &.nav-top {
-          display: flex;
-          flex-wrap: wrap;
+          display: grid;
+          grid-auto-columns: minmax(max-content, 1fr);
+          grid-auto-flow: column;
+          grid-template-rows: auto auto;
+          overflow-x: auto;
+          scroll-snap-type: x proximity;
 
           .content-selector-tab {
-            order: -1;
-            width: fit-content;
+            grid-row: 1;
+            scroll-snap-align: start;
 
             &::before {
               background: var(--color-bg-muted);
@@ -217,11 +222,91 @@ if (!_component && !hasItems && !hasSlotContent) return;
             background: var(--color-border-strong);
           }
 
+          /*
+           * Keep the panel out of grid column sizing by giving it width: 0
+           * and letting its inner content (which has width: 100cqi and
+           * position: sticky) render over the full visible container width.
+           * This lets the tabs row size to its labels and scroll naturally.
+           */
           .content-selector-panel {
-            flex-basis: 100%;
+            container-type: normal;
+            grid-column: 1;
+            grid-row: 2;
+            overflow: visible;
+            width: 0;
+          }
+
+          .content-selector-panel-content {
+            inset-inline-start: 0;
             margin-top: var(--spacing-md);
             padding: 0 var(--spacing-md);
-            width: 100%;
+            position: sticky;
+            width: 100cqi;
+          }
+        }
+
+        @container content-selector (width < 40rem) {
+          &.nav-start,
+          &.nav-top {
+            column-gap: 0;
+            display: block;
+            overflow-x: visible;
+            scroll-snap-type: none;
+
+            .content-selector-tab {
+              align-items: center;
+              border-block-start: var(--content-selector-border-width) solid
+                var(--color-bg-muted);
+              border-inline-start: 0;
+              display: flex;
+              gap: var(--spacing-sm);
+              justify-content: space-between;
+              padding: var(--spacing-sm) var(--spacing-md);
+              scroll-snap-align: none;
+              width: 100%;
+
+              &::before {
+                content: none;
+              }
+            }
+
+            .content-selector-item:last-of-type .content-selector-tab {
+              border-block-end: var(--content-selector-border-width) solid
+                var(--color-bg-muted);
+            }
+
+            .content-selector-input:checked + .content-selector-tab {
+              background: var(--color-state-hover);
+
+              .content-selector-tab-chevron {
+                transform: rotate(180deg);
+              }
+            }
+
+            .content-selector-tab-chevron {
+              display: block;
+            }
+
+            .content-selector-tab-subtext {
+              display: none;
+            }
+
+            .content-selector-panel {
+              container-type: inline-size;
+              grid-column: auto;
+              grid-row: auto;
+              overflow: visible;
+              padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+              width: 100%;
+            }
+
+            .content-selector-panel-content {
+              inset-inline-start: auto;
+              margin-top: 0;
+              padding: 0;
+              position: static;
+              width: auto;
+            }
           }
         }
       }

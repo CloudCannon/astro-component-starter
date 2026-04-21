@@ -1,6 +1,7 @@
 ---
 import RenderBlock from "@components/utils/renderBlock.astro";
 import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
 
 const {
   title,
@@ -71,6 +72,12 @@ const arrayDataAttributes = effectiveChildrenProp
         </span>
       )
     }
+    <Icon
+      name="chevron-down"
+      size="none"
+      class="content-selector-tab-chevron"
+      aria-hidden="true"
+    />
   </label>
   <div
     class="content-selector-panel"
@@ -148,6 +155,12 @@ const arrayDataAttributes = effectiveChildrenProp
       &.align-start {
         text-align: start;
       }
+    }
+
+    .content-selector-tab-chevron {
+      display: none;
+      flex: 0 0 auto;
+      transition: transform var(--animation-normal) ease-out;
     }
 
     .content-selector-input:checked + .content-selector-tab::before {
