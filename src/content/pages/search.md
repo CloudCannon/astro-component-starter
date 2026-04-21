@@ -29,6 +29,10 @@ pageSections:
                   --pagefind-ui-tag: var(--color-bg-surface);
                   --pagefind-ui-font: var(--font-body);
               }
+              #search .pagefind-ui__search-input::placeholder {
+                  color: var(--color-text-muted);
+                  opacity: 0.6;
+              }
               #search .pagefind-ui__result-tags .pagefind-ui__result-tag,
               #search .pagefind-ui__result-excerpt {
                   color: var(--color-text);
@@ -36,6 +40,10 @@ pageSections:
               #search .pagefind-ui__result-tags .pagefind-ui__result-tag {
                   background: var(--color-bg-surface);
                   border-color: var(--color-border);
+              }
+              #search .pagefind-ui__filters {
+                  display: flex;
+                  flex-direction: column;
               }
           </style>
           <div id="search"></div>
@@ -67,6 +75,19 @@ pageSections:
                           return result;
                       },
                   });
+
+                  const filterOrder = { Type: 1, Tag: 2, Author: 3 };
+                  const reorderFilters = () => {
+                      const blocks = searchEl.querySelectorAll('.pagefind-ui__filter-block');
+                      blocks.forEach((block) => {
+                          const name = block.querySelector('.pagefind-ui__filter-name')?.textContent?.trim();
+                          block.style.order = String(filterOrder[name] ?? 50);
+                      });
+                  };
+
+                  const filterPanel = searchEl.querySelector('.pagefind-ui__filters') ?? searchEl;
+                  new MutationObserver(reorderFilters).observe(filterPanel, { childList: true, subtree: true });
+                  reorderFilters();
               };
 
               if (document.readyState === "loading") {
