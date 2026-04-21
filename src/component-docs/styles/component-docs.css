@@ -51,13 +51,9 @@
 
       > .sidebar-logo {
         height: auto;
-        width: min(11rem, 100%);
-
-        & svg {
-          display: block;
-          height: 2rem;
-          width: auto;
-        }
+        margin-top: 0;
+        max-width: 130px;
+        width: 100%;
       }
 
       > .library-mobile-nav-actions {

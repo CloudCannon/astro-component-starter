@@ -22,7 +22,10 @@ const primaryExample = examples.find(
 const frontmatterExamples = frontmatter.examples || [];
 
 function slugify(text: string): string {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
@@ -68,29 +71,75 @@ const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
   {
     overviewHtml && (
       <>
-        <h2 id="overview">Overview <a href="#overview" class="heading-anchor" aria-label="Link to Overview">#</a></h2>
+        <h2 id="overview">
+          Overview{" "}
+          <a
+            href="#overview"
+            class="heading-anchor"
+            aria-label="Link to Overview"
+          >
+            #
+          </a>
+        </h2>
         <div set:html={overviewHtml} />
       </>
     )
   }
 
-  <h2 id="properties">Properties <a href="#properties" class="heading-anchor" aria-label="Link to Properties">#</a></h2>
+  <h2 id="properties">
+    Properties <a
+      href="#properties"
+      class="heading-anchor"
+      aria-label="Link to Properties"
+      >#</a>
+  </h2>
   <ComponentProperties configData={configData} />
 
   {
     frontmatter.slots && (
       <>
-        <h2 id="slots">Slots <a href="#slots" class="heading-anchor" aria-label="Link to Slots">#</a></h2>
+        <h2 id="slots">
+          Slots{" "}
+          <a
+            href="#slots"
+            class="heading-anchor"
+            aria-label="Link to Slots"
+          >
+            #
+          </a>
+        </h2>
         <ComponentSlots slotData={frontmatter.slots} />
       </>
     )
   }
-  {processedExamples.length > 0 && <h2 id="examples">Examples <a href="#examples" class="heading-anchor" aria-label="Link to Examples">#</a></h2>}
+  {
+    processedExamples.length > 0 && (
+      <h2 id="examples">
+        Examples{" "}
+        <a
+          href="#examples"
+          class="heading-anchor"
+          aria-label="Link to Examples"
+        >
+          #
+        </a>
+      </h2>
+    )
+  }
 
   {
     processedExamples.map((exampleGroup: any) => (
       <>
-        <h3 id={exampleGroup.id}>{exampleGroup.title} <a href={`#${exampleGroup.id}`} class="heading-anchor" aria-label={`Link to ${exampleGroup.title}`}>#</a></h3>
+        <h3 id={exampleGroup.id}>
+          {exampleGroup.title}{" "}
+          <a
+            href={`#${exampleGroup.id}`}
+            class="heading-anchor"
+            aria-label={`Link to ${exampleGroup.title}`}
+          >
+            #
+          </a>
+        </h3>
         {exampleGroup.examples.length > 0 && (
           <ComponentViewer
             component_examples={exampleGroup.examples}

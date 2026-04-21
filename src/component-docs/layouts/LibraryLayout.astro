@@ -70,7 +70,10 @@ const contentSections = props.frontmatter?.contentSections || [];
     <slot name="head" />
     <ClientRouter />
   </head>
-  <body class="component-docs">
+  <body
+    class="component-docs"
+    data-pagefind-ignore
+  >
     <div transition:animate={fade({ duration: "0.3s" })}>
     <MobileNavLayout />
     <CustomSection
