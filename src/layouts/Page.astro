@@ -39,6 +39,7 @@ type Props = {
     tags?: string[];
   };
   noindex?: boolean;
+  disablePagefind?: boolean;
   mainNav?: Record<string, unknown>;
   footer?: Record<string, unknown>;
 };
@@ -53,6 +54,7 @@ const {
   type: typeProp,
   article: articleProp,
   noindex: noindexProp,
+  disablePagefind = false,
   mainNav = mainNavData,
   footer = footerData,
 } = Astro.props as Props;
@@ -81,7 +83,7 @@ const sections = frontmatter?.pageSections ?? [];
   {mainNav.themeToggle && <ThemeToggleScript slot="head" />}
   <MainNavigation {...mainNav} />
 
-  <main>
+  <main {...(disablePagefind ? { "data-pagefind-ignore": "all" } : {})}>
     {
       sections.length > 0 && (
         <div
@@ -93,7 +95,7 @@ const sections = frontmatter?.pageSections ?? [];
         </div>
       )
     }
-    <div data-pagefind-body>
+    <div {...(disablePagefind ? {} : { "data-pagefind-body": true })}>
       <slot />
     </div>
   </main>

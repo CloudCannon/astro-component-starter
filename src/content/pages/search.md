@@ -20,6 +20,24 @@ pageSections:
         html: |
           <link href="/pagefind/pagefind-ui.css" rel="stylesheet">
           <script src="/pagefind/pagefind-ui.js"></script>
+          <style>
+              #search {
+                  --pagefind-ui-primary: var(--color-text-strong);
+                  --pagefind-ui-text: var(--color-text);
+                  --pagefind-ui-background: var(--color-bg);
+                  --pagefind-ui-border: var(--color-border);
+                  --pagefind-ui-tag: var(--color-bg-surface);
+                  --pagefind-ui-font: var(--font-body);
+              }
+              #search .pagefind-ui__result-tags .pagefind-ui__result-tag,
+              #search .pagefind-ui__result-excerpt {
+                  color: var(--color-text);
+              }
+              #search .pagefind-ui__result-tags .pagefind-ui__result-tag {
+                  background: var(--color-bg-surface);
+                  border-color: var(--color-border);
+              }
+          </style>
           <div id="search"></div>
           <script>
               const initSearch = () => {

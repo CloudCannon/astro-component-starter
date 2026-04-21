@@ -39,6 +39,7 @@ const pageDescription =
     description: pageDescription,
     pageSections: heroSections,
   }}
+  disablePagefind={page.currentPage > 1}
 >
   <CustomSection
     maxContentWidth="2xl"
@@ -46,7 +47,6 @@ const pageDescription =
     paddingVertical="none"
     colorScheme="inherit"
     backgroundColor="base"
-    data-pagefind-filter="Type:Blog"
   >
     {
       page.currentPage > 1 ? (
