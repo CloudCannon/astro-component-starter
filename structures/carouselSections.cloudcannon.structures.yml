@@ -1,0 +1,13 @@
+carouselSections:
+  id_key: _component
+  style: modal
+  values_from_glob:
+    - /src/components/building-blocks/wrappers/split/split.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/grid/grid.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/content-selector/content-selector.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/card/card.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/button-group/button-group.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/accordion/accordion.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/forms/form/form.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/core-elements/**/*.cloudcannon.structure-value.yml
+    - "!/src/components/building-blocks/core-elements/button/button.cloudcannon.structure-value.yml"

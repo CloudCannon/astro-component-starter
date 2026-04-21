@@ -1,5 +1,5 @@
 label: Hero Split
-icon: hero
+icon: false
 description: Prominent section block for landing pages.
 value:
   _component: page-sections/heroes/hero-split
@@ -24,9 +24,10 @@ value:
 preview:
   text:
     - Hero Split
+  gallery:
+    image: /images/thumbnails/hero-split.png
   subtext:
     - key: heading
-  icon: hero
 picker_preview:
   text: Hero Split
   subtext: Prominent section block for landing pages.

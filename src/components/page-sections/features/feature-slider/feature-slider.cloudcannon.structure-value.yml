@@ -1,5 +1,5 @@
 label: Feature Slider
-icon: view_carousel
+icon: false
 description: Carousel of feature cards, ideal for showcasing key reasons or benefits.
 value:
   _component: page-sections/features/feature-slider
@@ -9,7 +9,8 @@ value:
 preview:
   text:
     - Feature Slider
-  icon: view_carousel
+  gallery:
+    image: /images/thumbnails/feature-slider.png
 picker_preview:
   text: Feature Slider
   subtext: Carousel of feature-focused cards.

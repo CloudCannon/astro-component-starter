@@ -1,5 +1,5 @@
 label: Feature Split
-icon: view_week
+icon: false
 description: Split layout that pairs narrative content with a focused feature list.
 value:
   _component: page-sections/features/feature-split
@@ -17,9 +17,10 @@ value:
 preview:
   text:
     - Feature Split
+  gallery:
+    image: /images/thumbnails/feature-split.png
   subtext:
     - key: heading
-  icon: view_week
 picker_preview:
   text: Feature Split
   subtext: Split view with story content and supporting feature list.

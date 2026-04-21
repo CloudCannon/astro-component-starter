@@ -1,0 +1,5 @@
+buttonSections:
+  id_key: _component
+  style: modal
+  values_from_glob:
+    - /src/components/building-blocks/core-elements/button/button.cloudcannon.structure-value.yml

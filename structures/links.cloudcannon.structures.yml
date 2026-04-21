@@ -1,0 +1,31 @@
+links:
+  style: modal
+  values:
+    - label: Footer Link
+      icon: link
+      description: A footer link with name and path.
+      value:
+        name: ""
+        path: ""
+      preview:
+        text:
+          - key: name
+          - Footer Link
+        subtext:
+          - key: path
+          - Add path
+      picker_preview:
+        text: Footer Link
+        subtext: A footer link with name and path.
+        icon: link
+      _inputs:
+        name:
+          type: text
+          comment: Display text for the footer link.
+        path:
+          type: url
+          comment: URL path for the footer link.
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true

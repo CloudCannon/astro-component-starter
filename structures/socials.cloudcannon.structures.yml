@@ -1,0 +1,29 @@
+socials:
+  style: modal
+  values:
+    - label: Social Link
+      icon: share
+      description: A social media link with icon and URL.
+      value:
+        icon: ""
+        link: ""
+      preview:
+        text:
+          - key: icon
+          - Social Link
+        subtext:
+          - key: link
+          - Add URL
+      picker_preview:
+        text: Social Link
+        subtext: A social media link with icon and URL.
+        icon: share
+      _inputs:
+        icon:
+          type: select
+          comment: Icon to display for the social media link.
+          options:
+            values: _select_data.icons
+        link:
+          type: text
+          comment: URL for the social media link.

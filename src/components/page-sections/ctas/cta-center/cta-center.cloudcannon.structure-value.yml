@@ -1,5 +1,5 @@
 label: CTA Center
-icon: hero
+icon: false
 description: Centered call-to-action with headline, supporting text, and buttons.
 value:
   _component: page-sections/ctas/cta-center
@@ -22,9 +22,10 @@ preview:
     - CTA Center
   subtext:
     - key: heading
-  icon: hero
 picker_preview:
   text: CTA Center
+  gallery:
+    image: /images/thumbnails/cta-center-cta.png
   subtext: Centered CTA with stacked text and buttons.
 _inputs_from_glob:
   - /src/components/page-sections/ctas/cta-center/cta-center.cloudcannon.inputs.yml

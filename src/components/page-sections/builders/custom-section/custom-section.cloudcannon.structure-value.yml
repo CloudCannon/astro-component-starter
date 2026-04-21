@@ -1,5 +1,5 @@
 label: Custom Section
-icon: star
+icon: false
 description: Used to group and style large sections of a page.
 value:
   _component: page-sections/builders/custom-section
@@ -20,9 +20,10 @@ value:
 preview:
   text:
     - Custom Section
+  gallery:
+    image: /images/thumbnails/custom-section.png
   subtext:
     - key: label
-  icon: width_full
 picker_preview:
   text: Custom Section
   subtext: Used to group and style large sections of a page.

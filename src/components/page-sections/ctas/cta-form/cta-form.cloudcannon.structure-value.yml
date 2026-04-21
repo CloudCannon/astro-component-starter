@@ -1,5 +1,5 @@
 label: CTA Form
-icon: hero
+icon: false
 description: Side-by-side CTA with copy and form on one side and image on the other.
 value:
   _component: page-sections/ctas/cta-form
@@ -32,9 +32,10 @@ value:
 preview:
   text:
     - CTA Form
+  gallery:
+    image: /images/thumbnails/cta-form.png
   subtext:
     - key: heading
-  icon: hero
 picker_preview:
   text: CTA Form
   subtext: Split layout CTA with form and image.
