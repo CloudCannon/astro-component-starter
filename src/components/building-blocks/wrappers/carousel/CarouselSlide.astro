@@ -47,9 +47,15 @@ const arrayDataAttributes = effectiveChildrenProp
       flex-shrink: 0;
 
       > .slide__content {
-        > *:first-child {
-          margin-top: 0 !important;
-        }
+        height: 100%;
+      }
+
+      > .slide__content > *:only-child {
+        height: 100%;
+      }
+
+      > .slide__content > *:first-child {
+        margin-top: 0 !important;
       }
     }
   }

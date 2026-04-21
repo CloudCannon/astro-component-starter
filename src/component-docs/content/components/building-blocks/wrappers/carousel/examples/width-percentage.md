@@ -6,45 +6,54 @@ blocks:
   style: 'max-width: 800px;margin-inline: auto;'
   slideWidthPercent: 33
   minSlideWidth: 200
+  gap: md
   slides:
     - contentSections:
         - _component: building-blocks/wrappers/card
-          paddingHorizontal: xs
-          paddingVertical: none
+          border: true
+          rounded: true
+          paddingHorizontal: sm
+          paddingVertical: sm
           contentSections:
-            - _component: building-blocks/core-elements/image
-              source: /src/assets/images/component-docs/quiet-street.jpg
-              alt: 'Quiet Street'
+            - _component: building-blocks/core-elements/heading
+              text: Starter
+              level: h4
+            - _component: building-blocks/core-elements/text
+              text: Everything you need to launch a simple marketing site.
     - contentSections:
         - _component: building-blocks/wrappers/card
-          paddingHorizontal: xs
-          paddingVertical: none
+          border: true
+          rounded: true
+          paddingHorizontal: sm
+          paddingVertical: sm
           contentSections:
-            - _component: building-blocks/core-elements/image
-              source: /src/assets/images/component-docs/sunset.jpg
-              alt: 'Sunset'
+            - _component: building-blocks/core-elements/heading
+              text: Growth
+              level: h4
+            - _component: building-blocks/core-elements/text
+              text: Add a blog, custom sections, and team editing workflows.
     - contentSections:
         - _component: building-blocks/wrappers/card
-          paddingHorizontal: xs
-          paddingVertical: none
+          border: true
+          rounded: true
+          paddingHorizontal: sm
+          paddingVertical: sm
           contentSections:
-            - _component: building-blocks/core-elements/image
-              source: /src/assets/images/component-docs/sheep.jpg
-              alt: 'Sheep'
+            - _component: building-blocks/core-elements/heading
+              text: Scale
+              level: h4
+            - _component: building-blocks/core-elements/text
+              text: Multi-site support, advanced permissions, and priority support.
     - contentSections:
         - _component: building-blocks/wrappers/card
-          paddingHorizontal: xs
-          paddingVertical: none
+          border: true
+          rounded: true
+          paddingHorizontal: sm
+          paddingVertical: sm
           contentSections:
-            - _component: building-blocks/core-elements/image
-              source: /src/assets/images/component-docs/castle.jpg
-              alt: 'Castle'
-    - contentSections:
-        - _component: building-blocks/wrappers/card
-          paddingHorizontal: xs
-          paddingVertical: none
-          contentSections:
-            - _component: building-blocks/core-elements/image
-              source: /src/assets/images/component-docs/dunedin-cliff.jpg
-              alt: 'Dunedin Cliff'
+            - _component: building-blocks/core-elements/heading
+              text: Enterprise
+              level: h4
+            - _component: building-blocks/core-elements/text
+              text: Bespoke onboarding, SLAs, and custom integrations for your org.
 ---

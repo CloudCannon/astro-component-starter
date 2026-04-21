@@ -56,3 +56,24 @@ slideWidthPercent:
 minSlideWidth:
   comment: Minimum width of slides in pixels. Prevents slides from getting too small.
   type: number
+gap:
+  comment: The gap between slides. Only visible when slides are narrower than the viewport.
+  type: select
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl

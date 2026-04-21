@@ -18,6 +18,7 @@ const {
   slidesToScroll = "auto",
   slideWidthPercent = 100,
   minSlideWidth = 0,
+  gap = "none",
   style = "",
   label,
   "data-children-prop": childrenDataProp,
@@ -56,10 +57,13 @@ const arrayDataAttributes = effectiveChildrenProp
 
 const carouselClasses = "carousel";
 
+const slideGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
+
 // Build the style attribute, merging custom styles with CSS variables
 const carouselStyles = `
   --slide-width: ${slideWidthPercent}%;
   --min-slide-width: ${minSlideWidth}px;
+  --slide-gap: ${slideGap};
   ${style}
 `.trim();
 
@@ -287,6 +291,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         position: relative;
         --slide-width: 100%;
         --min-slide-width: 0px;
+        --slide-gap: 0px;
 
         > .viewport {
           overflow: hidden;
@@ -297,10 +302,12 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         > .viewport > .track {
           display: flex;
           flex-wrap: nowrap;
+          margin-inline-start: calc(var(--slide-gap) * -1);
 
           > .slide {
             flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
             flex-shrink: 0;
+            padding-inline-start: var(--slide-gap);
             width: 100%;
           }
         }

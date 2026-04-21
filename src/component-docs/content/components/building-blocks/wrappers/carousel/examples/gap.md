@@ -1,10 +1,9 @@
 ---
-title: Auto Scroll
+title: Gap between slides
 spacing:
 blocks:
   _component: 'building-blocks/wrappers/carousel'
   style: 'max-width: 800px;margin-inline: auto;'
-  autoScroll: true
   slideWidthPercent: 33
   minSlideWidth: 200
   gap: md
@@ -45,18 +44,6 @@ blocks:
               level: h4
             - _component: building-blocks/core-elements/text
               text: Mix and match building blocks to assemble any page layout.
-    - contentSections:
-        - _component: building-blocks/wrappers/card
-          border: true
-          rounded: true
-          paddingHorizontal: sm
-          paddingVertical: sm
-          contentSections:
-            - _component: building-blocks/core-elements/heading
-              text: Accessible
-              level: h4
-            - _component: building-blocks/core-elements/text
-              text: Semantic markup and keyboard support baked into every component.
     - contentSections:
         - _component: building-blocks/wrappers/card
           border: true

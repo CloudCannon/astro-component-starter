@@ -15,6 +15,7 @@ value:
   slidesToScroll: auto
   slideWidthPercent: 100
   minSlideWidth: 0
+  gap: none
 preview:
   text:
     - Carousel
