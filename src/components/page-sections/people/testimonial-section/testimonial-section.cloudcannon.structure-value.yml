@@ -1,5 +1,5 @@
 label: Testimonial Section
-icon: format_quote
+icon: false
 description: Section displaying a customer testimonial with author information.
 value:
   _component: page-sections/people/testimonial-section
@@ -13,9 +13,10 @@ value:
 preview:
   text:
     - Testimonial Section
+  gallery:
+    image: /images/thumbnails/testimonial-section.png
   subtext:
     - key: authorName
-  icon: format_quote
 picker_preview:
   text: Testimonial Section
   subtext: Section with customer testimonial and author details.

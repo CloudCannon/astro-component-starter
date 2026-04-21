@@ -1,5 +1,5 @@
 label: CTA Split
-icon: hero
+icon: false
 description: Side-by-side CTA with copy on one side and stacked buttons on the other.
 value:
   _component: page-sections/ctas/cta-split
@@ -23,9 +23,10 @@ value:
 preview:
   text:
     - CTA Split
+  gallery:
+    image: /images/thumbnails/cta-split.png
   subtext:
     - key: heading
-  icon: hero
 picker_preview:
   text: CTA Split
   subtext: Split layout CTA with button stack.

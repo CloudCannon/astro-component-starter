@@ -1,5 +1,5 @@
 label: Feature Grid
-icon: apps
+icon: false
 description: Responsive grid layout for highlighting multiple product features.
 value:
   _component: page-sections/features/feature-grid
@@ -14,9 +14,10 @@ preview:
     - Feature Grid
   subtext:
     - key: heading
-  icon: apps
 picker_preview:
   text: Feature Grid
+  gallery:
+    image: /images/thumbnails/feature-grid.png
   subtext: Grid of feature highlights with icons and descriptions.
 _inputs_from_glob:
   - /src/components/page-sections/features/feature-grid/feature-grid.cloudcannon.inputs.yml

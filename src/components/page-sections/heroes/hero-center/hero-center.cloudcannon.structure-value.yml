@@ -1,5 +1,5 @@
 label: Hero Center
-icon: hero
+icon: false
 description: Centered hero with heading, supporting text, and buttons.
 value:
   _component: page-sections/heroes/hero-center
@@ -20,9 +20,10 @@ value:
 preview:
   text:
     - Hero Center
+  gallery:
+    image: /images/thumbnails/hero-center.png
   subtext:
     - key: heading
-  icon: hero
 picker_preview:
   text: Hero Center
   subtext: Centered hero with heading, subtext, and buttons.

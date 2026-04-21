@@ -1,7 +1,9 @@
 ---
 _schema: default
 title: Astro Component Starter
-description: Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.
+description: >-
+  Build fast, customizable Astro sites with a modern component starter that is
+  easy to edit and maintain.
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
@@ -94,9 +96,6 @@ pageSections:
     eyebrow: Principles
     heading: Built for real-world web projects
     subtext: No trends. No noise. Just reliability.
-    gap: xl
-    minItemWidth: 280
-    maxItemWidth: 360
     features:
       - title: Web fundamentals
         description: >-
@@ -130,6 +129,9 @@ pageSections:
         iconColor: pink
     colorScheme: inherit
     backgroundColor: surface
+    gap: xl
+    minItemWidth: 280
+    maxItemWidth: 360
     align: center
   - _component: page-sections/ctas/cta-center
     heading: Ready to start building?
@@ -157,4 +159,15 @@ pageSections:
     colorScheme: dark
     backgroundColor: surface
     rounded: false
+  - _component: page-sections/people/testimonial-section
+    text: >-
+      This framework has completely changed the way we build. The sites come
+      together fast, they run even faster, and the whole process feels
+      effortless. I couldn't be happier with the results.
+    authorName: Richard Johnson
+    authorDescription: CEO, Tech Innovations
+    authorImage: /src/assets/images/component-docs/profile.jpg
+    paddingVertical: sm
+    colorScheme: inherit
+    backgroundColor: surface
 ---
