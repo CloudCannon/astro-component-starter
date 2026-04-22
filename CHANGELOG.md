@@ -93,6 +93,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Blog index and tag archive pagination pages now use unique document titles (append “– Page N” for page 2 and up) instead of repeating the first-page title.
 - Content selector mobile views
 - Excluded the **Pagination** component from being added to components.
+- Carousel now works correctly in the CloudCannon visual editor.
 
 ## [1.0.1] - 2026-03-19
 

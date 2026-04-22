@@ -11,7 +11,7 @@
  *      (e.g. Carousel's Embla setup) never initialise in the editor, so
  *      we initialise them here instead.
  *
- * Flip DEBUG to `true` to trace editor mutations in the console.
+ * Logs editor mutations to the console in dev; silent in production.
  */
 
 import {
@@ -20,7 +20,7 @@ import {
   setupCarousel,
 } from "./src/components/building-blocks/wrappers/carousel/setup";
 
-const DEBUG = true;
+const DEBUG = import.meta.env.DEV;
 
 function log(...args) {
   if (DEBUG) console.log("[editor-live-sync]", ...args);

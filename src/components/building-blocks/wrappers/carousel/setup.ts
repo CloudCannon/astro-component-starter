@@ -29,7 +29,12 @@ export function setupCarousel(carousel: CarouselElement): void {
   const fractionEl = controlsWrapper?.querySelector<HTMLElement>(".carousel-fraction");
 
   if (!inner || !viewport || !track || !slides || !slides.length) {
-    console.warn("Carousel: Missing required elements");
+    // Silently skip: in the CloudCannon editor the inner DOM can be
+    // briefly incomplete while content loads; the live-sync observer
+    // will re-run setup once slides are inserted.
+    if (import.meta.env.DEV) {
+      console.debug("Carousel: skipping setup, required elements missing", carousel);
+    }
     return;
   }
 
@@ -44,15 +49,19 @@ export function setupCarousel(carousel: CarouselElement): void {
       : "start";
 
   const plugins = [];
+
   if (inner.hasAttribute("data-autoplay")) {
     const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
+
     plugins.push(Autoplay({ delay: autoplayInterval, stopOnInteraction: false }));
   }
 
   let watchDrag = true;
+
   if (inner.hasAttribute("data-autoscroll")) {
     const scrollValue = parseFloat(inner.getAttribute("data-autoscroll") || "1");
     const speed = isNaN(scrollValue) ? 1 : scrollValue;
+
     plugins.push(AutoScroll({ speed }));
     watchDrag = false;
   }
@@ -94,8 +103,10 @@ export function setupCarousel(carousel: CarouselElement): void {
   if (indicatorsContainer) {
     const renderDots = () => {
       indicatorsContainer.innerHTML = "";
+
       embla.scrollSnapList().forEach((_, index) => {
         const dot = document.createElement("div");
+
         dot.className = "indicator";
         dot.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
         dot.addEventListener("click", () => embla.scrollTo(index));
@@ -106,6 +117,7 @@ export function setupCarousel(carousel: CarouselElement): void {
     const updateSelectedDot = () => {
       indicatorsContainer.querySelectorAll(".indicator").forEach((dot, index) => {
         const isSelected = index === embla.selectedScrollSnap();
+
         dot.setAttribute("data-selected", isSelected.toString());
       });
     };
@@ -121,6 +133,7 @@ export function setupCarousel(carousel: CarouselElement): void {
       const current = embla.selectedScrollSnap() + 1;
       const safeTotal = Math.max(snaps, 1);
       const safeCurrent = Math.min(current, safeTotal);
+
       fractionEl.textContent = `${safeCurrent}/${safeTotal}`;
       fractionEl.setAttribute("aria-label", `Slide ${safeCurrent} of ${safeTotal}`);
     };
