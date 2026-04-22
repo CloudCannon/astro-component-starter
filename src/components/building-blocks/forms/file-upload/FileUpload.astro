@@ -14,7 +14,10 @@ const {
 const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
 ---
 
-<div class:list={["file-upload", className]}>
+<div
+  class:list={["file-upload", className]}
+  {...htmlAttributes}
+>
   {
     label && (
       <label
@@ -42,7 +45,6 @@ const fieldId = htmlAttributes.id || `file-upload-${crypto.randomUUID()}`;
     accept={accept}
     multiple={multiple}
     class="field"
-    {...htmlAttributes}
   />
 </div>
 

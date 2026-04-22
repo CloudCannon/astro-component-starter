@@ -21,7 +21,10 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
 const hasLeadingIcon = iconName?.trim().length > 0;
 ---
 
-<div class:list={["select", className]}>
+<div
+  class:list={["select", className]}
+  {...htmlAttributes}
+>
   {
     label && (
       <label
@@ -40,9 +43,7 @@ const hasLeadingIcon = iconName?.trim().length > 0;
       </label>
     )
   }
-  <div
-    class:list={["field-shell", { "has-leading-icon": hasLeadingIcon }]}
-  >
+  <div class:list={["field-shell", { "has-leading-icon": hasLeadingIcon }]}>
     {
       hasLeadingIcon && (
         <Icon
@@ -61,7 +62,6 @@ const hasLeadingIcon = iconName?.trim().length > 0;
       required={required}
       aria-required={required}
       class="field"
-      {...htmlAttributes}
     >
       {
         placeholder && (

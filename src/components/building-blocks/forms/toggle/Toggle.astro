@@ -14,7 +14,10 @@ const {
 const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
 ---
 
-<div class:list={["toggle", className]}>
+<div
+  class:list={["toggle", className]}
+  {...htmlAttributes}
+>
   <label
     class="toggle-container"
     for={fieldId}
@@ -29,7 +32,6 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
         aria-required={required}
         value={value}
         class="toggle-input"
-        {...htmlAttributes}
       />
       <span class="toggle-track"></span>
     </span>
