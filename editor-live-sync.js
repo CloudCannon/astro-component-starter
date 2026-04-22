@@ -1,12 +1,24 @@
 /**
  * Syncs DOM changes in the CloudCannon editor to component runtime state.
  *
- * This works around CloudCannon's inability to re-render props on a
- * component's root element, and re-initializes components like the
- * carousel whose JS state is not reactive to prop changes.
+ * This works around two editor-only quirks:
  *
- * Flip DEBUG to `true` to see what mutations the editor is producing.
+ *   1. CloudCannon cannot re-render props on a component's root element
+ *      (handled via direct style sync, e.g. bento-box spans).
+ *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
+ *      to render Astro components, which strips inline `<script>` tags.
+ *      That means components whose behaviour lives in a client `<script>`
+ *      (e.g. Carousel's Embla setup) never initialise in the editor, so
+ *      we initialise them here instead.
+ *
+ * Flip DEBUG to `true` to trace editor mutations in the console.
  */
+
+import {
+  destroyCarousel,
+  setupAllCarousels,
+  setupCarousel,
+} from "./src/components/building-blocks/wrappers/carousel/setup";
 
 const DEBUG = true;
 
@@ -48,7 +60,7 @@ const CAROUSEL_INNER_ATTRS = [
 const carouselsToReset = new Set();
 let carouselFlushScheduled = false;
 
-function resetCarousel(carousel, reason) {
+function queueCarouselReset(carousel, reason) {
   if (!carousel) return;
 
   log("queue carousel reset:", reason, carousel);
@@ -73,39 +85,33 @@ function scheduleCarouselFlush() {
         continue;
       }
 
-      const embla = el.__embla;
-
-      if (embla) {
-        log("destroying existing embla", el);
-        try {
-          embla.destroy();
-        } catch (err) {
-          log("embla.destroy() threw", err);
-        }
-        delete el.__embla;
-      }
-
-      el.removeAttribute("data-embla-initialized");
+      log("destroying + re-initialising carousel", el);
+      destroyCarousel(el);
+      setupCarousel(el);
     }
-
-    log("dispatching carousel:setup");
-    document.dispatchEvent(new CustomEvent("carousel:setup"));
   });
 }
 
-function nodeHasNewCarousel(node) {
-  if (node.nodeType !== Node.ELEMENT_NODE) return false;
+function initNewCarousels(root) {
+  const carousels = [];
 
-  if (node.classList?.contains("carousel") && !node.hasAttribute("data-embla-initialized")) {
-    return true;
+  if (root.nodeType === Node.ELEMENT_NODE) {
+    if (root.classList?.contains("carousel") && !root.hasAttribute("data-embla-initialized")) {
+      carousels.push(root);
+    }
+
+    root
+      .querySelectorAll(".carousel:not([data-embla-initialized])")
+      .forEach((el) => carousels.push(el));
   }
 
-  return !!node.querySelector?.(".carousel:not([data-embla-initialized])");
+  for (const el of carousels) {
+    log("initialising new carousel", el);
+    setupCarousel(el);
+  }
 }
 
 const observer = new MutationObserver((mutations) => {
-  let shouldSetupNewCarousels = false;
-
   for (const mutation of mutations) {
     const { type, target, attributeName } = mutation;
 
@@ -120,14 +126,14 @@ const observer = new MutationObserver((mutations) => {
         target instanceof Element &&
         target.classList.contains("carousel-inner")
       ) {
-        resetCarousel(target.closest(".carousel"), `attr:${attributeName}`);
+        queueCarouselReset(target.closest(".carousel"), `attr:${attributeName}`);
         continue;
       }
     }
 
     if (type === "childList") {
       if (target instanceof Element && target.classList.contains("track")) {
-        resetCarousel(target.closest(".carousel"), "slides changed");
+        queueCarouselReset(target.closest(".carousel"), "slides changed");
       }
 
       for (const node of mutation.addedNodes) {
@@ -141,16 +147,9 @@ const observer = new MutationObserver((mutations) => {
           syncBentoBoxSpans(child);
         }
 
-        if (nodeHasNewCarousel(node)) {
-          shouldSetupNewCarousels = true;
-        }
+        initNewCarousels(node);
       }
     }
-  }
-
-  if (shouldSetupNewCarousels) {
-    log("new carousel detected in DOM, dispatching carousel:setup");
-    document.dispatchEvent(new CustomEvent("carousel:setup"));
   }
 });
 
@@ -161,9 +160,10 @@ observer.observe(document.body, {
   subtree: true,
 });
 
+// Initialise any carousels already in the editor DOM.
+setupAllCarousels();
+
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,
   carouselAttrs: CAROUSEL_INNER_ATTRS,
 });
-
-export {};
