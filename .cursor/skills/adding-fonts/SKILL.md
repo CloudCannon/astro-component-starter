@@ -9,10 +9,10 @@ Fonts are configured in a single file: `site-fonts.mjs` at the project root. Thi
 
 The project uses two CSS variable slots that the entire design system references:
 
-| Variable          | Purpose  |
-| ----------------- | -------- |
+| Variable          | Purpose                |
+| ----------------- | ---------------------- |
 | `--font-body`     | Body text, UI elements |
-| `--font-headings` | Headings (h1–h6) |
+| `--font-headings` | Headings (h1–h6)       |
 
 Components never hardcode font families — they use these variables, so changing fonts here changes everything.
 
@@ -33,22 +33,22 @@ Browse available fonts at [fontsource.org](https://fontsource.org/).
 2. **Update `site-fonts.mjs`:**
 
 ```js
-import { fontProviders } from "astro/config";
+import { fontProviders } from 'astro/config';
 
 export const siteFonts = [
   {
-    name: "Open Sans",             // must match the fontsource catalog name
-    cssVariable: "--font-body",    // keep this — the CSS references it
+    name: 'Open Sans', // must match the fontsource catalog name
+    cssVariable: '--font-body', // keep this — the CSS references it
     provider: fontProviders.fontsource(),
-    weights: [400, 600, 700],      // must include weights used in _fonts.css
-    styles: ["normal"],
+    weights: [400, 600, 700], // must include weights used in _fonts.css
+    styles: ['normal'],
   },
   {
-    name: "Montserrat",
-    cssVariable: "--font-headings",
+    name: 'Montserrat',
+    cssVariable: '--font-headings',
     provider: fontProviders.fontsource(),
     weights: [400, 600, 700],
-    styles: ["normal"],
+    styles: ['normal'],
   },
 ];
 ```
@@ -90,18 +90,18 @@ For fonts not available on Fontsource (e.g. a proprietary brand font), use `font
 2. **Configure with `fontProviders.local()`:**
 
 ```js
-import { fontProviders } from "astro/config";
+import { fontProviders } from 'astro/config';
 
 export const siteFonts = [
   {
-    name: "BrandSans",
-    cssVariable: "--font-body",
+    name: 'BrandSans',
+    cssVariable: '--font-body',
     provider: fontProviders.local(),
     options: {
       variants: [
-        { weight: 400, style: "normal", src: ["./src/assets/fonts/BrandSans-Regular.woff2"] },
-        { weight: 600, style: "normal", src: ["./src/assets/fonts/BrandSans-SemiBold.woff2"] },
-        { weight: 700, style: "normal", src: ["./src/assets/fonts/BrandSans-Bold.woff2"] },
+        { weight: 400, style: 'normal', src: ['./src/assets/fonts/BrandSans-Regular.woff2'] },
+        { weight: 600, style: 'normal', src: ['./src/assets/fonts/BrandSans-SemiBold.woff2'] },
+        { weight: 700, style: 'normal', src: ['./src/assets/fonts/BrandSans-Bold.woff2'] },
       ],
     },
   },
@@ -127,11 +127,11 @@ For variable fonts, specify a weight range instead of individual weights:
 
 The design system (`src/styles/variables/_fonts.css`) defines three weight tokens. Any font you add must include at least these weights (or be a variable font covering the range):
 
-| Token                      | Weight |
-| -------------------------- | ------ |
-| `--font-weight-normal`     | 400    |
-| `--font-weight-semibold`   | 600    |
-| `--font-weight-bold`       | 700    |
+| Token                    | Weight |
+| ------------------------ | ------ |
+| `--font-weight-normal`   | 400    |
+| `--font-weight-semibold` | 600    |
+| `--font-weight-bold`     | 700    |
 
 ## How font loading works
 
@@ -145,9 +145,9 @@ Astro downloads/caches font files during build and outputs them to `_astro/fonts
 
 ## Troubleshooting
 
-| Problem | Fix |
-| --- | --- |
-| Font not loading | Verify `name` matches the fontsource catalog exactly (case-sensitive) |
-| Weights look wrong | Ensure `weights` array includes 400, 600, 700 |
-| CSS variable not applied | Check `cssVariable` matches `--font-body` or `--font-headings` |
-| Stale cached fonts | Delete `.astro/fonts/` (dev) or `node_modules/.astro/fonts/` (build) |
+| Problem                  | Fix                                                                   |
+| ------------------------ | --------------------------------------------------------------------- |
+| Font not loading         | Verify `name` matches the fontsource catalog exactly (case-sensitive) |
+| Weights look wrong       | Ensure `weights` array includes 400, 600, 700                         |
+| CSS variable not applied | Check `cssVariable` matches `--font-body` or `--font-headings`        |
+| Stale cached fonts       | Delete `.astro/fonts/` (dev) or `node_modules/.astro/fonts/` (build)  |

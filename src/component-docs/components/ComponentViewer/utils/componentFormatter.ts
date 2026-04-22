@@ -154,7 +154,12 @@ export function formatComponentWithSlots(
 
       if (slot.name === "default") {
         defaultPieces.push(
-          formatBlockArray(block[slot.fallbackFor], indentLevel + 1, componentMetadata, nestedBlockProperties)
+          formatBlockArray(
+            block[slot.fallbackFor],
+            indentLevel + 1,
+            componentMetadata,
+            nestedBlockProperties
+          )
         );
       } else {
         namedPieces.push(

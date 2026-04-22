@@ -118,38 +118,30 @@ const articleTags = article?.tags?.filter(Boolean) ?? [];
 {
   pageType === "article" ? (
     <>
-      {
-        article?.publishedTime ? (
-          <meta
-            property="article:published_time"
-            content={article.publishedTime}
-          />
-        ) : null
-      }
-      {
-        article?.modifiedTime ? (
-          <meta
-            property="article:modified_time"
-            content={article.modifiedTime}
-          />
-        ) : null
-      }
-      {
-        articleAuthors.map((author) => (
-          <meta
-            property="article:author"
-            content={author}
-          />
-        ))
-      }
-      {
-        articleTags.map((tag) => (
-          <meta
-            property="article:tag"
-            content={tag}
-          />
-        ))
-      }
+      {article?.publishedTime ? (
+        <meta
+          property="article:published_time"
+          content={article.publishedTime}
+        />
+      ) : null}
+      {article?.modifiedTime ? (
+        <meta
+          property="article:modified_time"
+          content={article.modifiedTime}
+        />
+      ) : null}
+      {articleAuthors.map((author) => (
+        <meta
+          property="article:author"
+          content={author}
+        />
+      ))}
+      {articleTags.map((tag) => (
+        <meta
+          property="article:tag"
+          content={tag}
+        />
+      ))}
     </>
   ) : null
 }

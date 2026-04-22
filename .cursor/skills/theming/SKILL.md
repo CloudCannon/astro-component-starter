@@ -86,11 +86,11 @@ There are also `--spacing-em-*` variants (same scale in `em` units) for font-rel
 
 **Font families** (set via `site-fonts.mjs`, see font configuration below):
 
-| Token             | Default                    |
-| ----------------- | -------------------------- |
-| `--font-body`     | Inter (fontsource, local)  |
-| `--font-headings` | Raleway (fontsource, local)|
-| `--font-mono`     | System monospace stack     |
+| Token             | Default                     |
+| ----------------- | --------------------------- |
+| `--font-body`     | Inter (fontsource, local)   |
+| `--font-headings` | Raleway (fontsource, local) |
+| `--font-mono`     | System monospace stack      |
 
 ### Colors (`src/styles/variables/_colors.css`)
 

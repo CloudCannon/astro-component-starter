@@ -26,17 +26,26 @@ const textDataAttributes = effectiveDataProp
 const isPopoverLink = link?.startsWith("^");
 const Tag = (element ?? (isPopoverLink || !link ? "button" : "a")) as any;
 
-const tagProps: Record<string, any> =
-  isPopoverLink
-    ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
-    : Tag === "a" && link ? { href: link } : Tag === "button" ? { type: "button" } : {};
+const tagProps: Record<string, any> = isPopoverLink
+  ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+  : Tag === "a" && link
+    ? { href: link }
+    : Tag === "button"
+      ? { type: "button" }
+      : {};
 
 if (hideText) {
   tagProps["aria-label"] = htmlAttributes["aria-label"] || text;
   delete htmlAttributes["aria-label"];
 }
 
-const tagKeys = new Set<string>(["id", "tabindex", "tabIndex", "popovertarget", "popovertargetaction"]);
+const tagKeys = new Set<string>([
+  "id",
+  "tabindex",
+  "tabIndex",
+  "popovertarget",
+  "popovertargetaction",
+]);
 
 if (Tag === "a" && link) {
   for (const k of ["target", "rel", "download", "hreflang", "referrerpolicy", "ping"]) {

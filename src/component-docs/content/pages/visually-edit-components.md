@@ -63,7 +63,11 @@ When an editor clicks this image, CloudCannon opens a picker. The selected file 
 Some components contain arrays of child components, like a row of buttons or a set of accordion items. Pass `data-children-prop` to make them editable inline:
 
 ```astro
-<ButtonGroup buttonSections={buttonSections} alignmentHorizontal="center" data-children-prop="buttonSections" />
+<ButtonGroup
+  buttonSections={buttonSections}
+  alignmentHorizontal="center"
+  data-children-prop="buttonSections"
+/>
 ```
 
 `ButtonGroup` handles the rest internally — it adds `data-editable="array"` to its container so CloudCannon knows this element holds an array of children that can be added, removed, and reordered in the preview. Setting `data-children-prop` implies editability, just like `data-prop` does for text components.

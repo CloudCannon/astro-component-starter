@@ -74,40 +74,46 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
   {...htmlAttributes}
 >
   <Tag
-    {...(isPopoverLink
+    {...isPopoverLink
       ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
-      : link && { href: link })}
+      : link && { href: link }}
     class:list={["card-inner", rounded && "rounded", border && "border"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
   >
-    {bgType === "image" && (
-      <Image
-        class:list={["background-image"]}
-        source={imageSource}
-        alt={imageAlt}
-        priority={priority}
-        positionVertical={positionVertical}
-        positionHorizontal={positionHorizontal}
-        background={true}
-      />
-    )}
-    {bgType === "video" && (
-      <Video
-        type="local-source"
-        source={videoSource}
-        background={true}
-        style={{ '--background-position': `${positionHorizontal} ${positionVertical}` }}
-      />
-    )}
-    {overlay !== 0 && (
-      <div
-        class="background-overlay"
-        aria-hidden="true"
-        style={{
-          backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`
-        }}
-      />
-    )}
+    {
+      bgType === "image" && (
+        <Image
+          class:list={["background-image"]}
+          source={imageSource}
+          alt={imageAlt}
+          priority={priority}
+          positionVertical={positionVertical}
+          positionHorizontal={positionHorizontal}
+          background={true}
+        />
+      )
+    }
+    {
+      bgType === "video" && (
+        <Video
+          type="local-source"
+          source={videoSource}
+          background={true}
+          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+        />
+      )
+    }
+    {
+      overlay !== 0 && (
+        <div
+          class="background-overlay"
+          aria-hidden="true"
+          style={{
+            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
+          }}
+        />
+      )
+    }
     {
       backgroundColor && (
         <div

@@ -477,7 +477,7 @@ Single testimonial with author info.
 | `authorName`                            | text     | Author name                                      |
 | `authorDescription`                     | text     | Author title/role                                |
 | `authorImage`                           | image    | Author photo                                     |
-| `alignmentHorizontal`                                | select   | `center`, `start`, `end`                         |
+| `alignmentHorizontal`                   | select   | `center`, `start`, `end`                         |
 | `maxContentWidth`                       | select   | `sm`–`2xl`                                       |
 | `paddingHorizontal` / `paddingVertical` | select   | Spacing sizes                                    |
 | `colorScheme`                           | select   | `inherit`, `light`, `dark`                       |
@@ -520,14 +520,14 @@ Flexible container for composing any building blocks. Use when no specific page 
     overlay: 0
 ```
 
-| Prop                                    | Type   | Options / Notes                                                                                                                                 |
-| --------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`                                 | text   | Section label (also becomes anchor ID)                                                                                                          |
-| `contentSections`                       | array  | Any building blocks                                                                                                                             |
-| `maxContentWidth`                       | select | `xs`–`3xl`                                                                                                                                      |
-| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                                                                                                                   |
-| `colorScheme`                           | select | `inherit`, `light`, `dark`                                                                                                                      |
-| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                                                |
+| Prop                                    | Type   | Options / Notes                                                                                                                                                                       |
+| --------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`                                 | text   | Section label (also becomes anchor ID)                                                                                                                                                |
+| `contentSections`                       | array  | Any building blocks                                                                                                                                                                   |
+| `maxContentWidth`                       | select | `xs`–`3xl`                                                                                                                                                                            |
+| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                                                                                                                                                         |
+| `colorScheme`                           | select | `inherit`, `light`, `dark`                                                                                                                                                            |
+| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                                                                                      |
 | `background`                            | object | `type`: `image` \| `video`; shared `positionVertical` / `positionHorizontal`; `overlay` (-1 to 1, darken/lighten); image: `imageSource`, `imageAlt`, `priority`; video: `videoSource` |
 
 ---

@@ -72,19 +72,21 @@ const arrayDataAttributes =
           type="local-source"
           source={videoSource}
           background={true}
-          style={{ '--background-position': `${positionHorizontal} ${positionVertical}` }}
+          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
         />
       )
     }
-    {overlay !== 0 && (
-      <div
-        class="background-overlay"
-        aria-hidden="true"
-        style={{
-          backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`
-        }}
-      />
-    )}
+    {
+      overlay !== 0 && (
+        <div
+          class="background-overlay"
+          aria-hidden="true"
+          style={{
+            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
+          }}
+        />
+      )
+    }
     {
       backgroundColor && (
         <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />

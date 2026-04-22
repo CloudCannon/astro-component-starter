@@ -186,10 +186,7 @@ const observer = new MutationObserver((mutations) => {
           queueCarouselReset(target.closest(".carousel"), "slides changed");
         }
 
-        if (
-          target.classList.contains("main-track") ||
-          target.classList.contains("thumbs-strip")
-        ) {
+        if (target.classList.contains("main-track") || target.classList.contains("thumbs-strip")) {
           queueImageCarouselReset(target.closest(".image-carousel"), "images changed");
         }
 
@@ -218,11 +215,7 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, {
   attributes: true,
-  attributeFilter: [
-    ...BENTO_BOX_ATTRS,
-    ...CAROUSEL_INNER_ATTRS,
-    ...IMAGE_CAROUSEL_ROOT_ATTRS,
-  ],
+  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS, ...IMAGE_CAROUSEL_ROOT_ATTRS],
   childList: true,
   subtree: true,
 });

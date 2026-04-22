@@ -6,10 +6,7 @@ import navData from "../data/nav.json";
 import { generateNavData } from "../utils/navGenerator.js";
 
 const generatedNavData = await generateNavData(navData);
-const mobileNavData = [
-  { name: "← Back to site", path: "/", children: [] },
-  ...generatedNavData,
-];
+const mobileNavData = [{ name: "← Back to site", path: "/", children: [] }, ...generatedNavData];
 ---
 
 <div class="library-mobile-nav">
@@ -22,7 +19,10 @@ const mobileNavData = [
   <div class="library-mobile-nav-actions">
     <ThemeToggle />
     <Mobile navData={mobileNavData}>
-      <span slot="logo" class="component-docs-mobile-logo">
+      <span
+        slot="logo"
+        class="component-docs-mobile-logo"
+      >
         <Image
           source="/src/assets/images/component-docs/acs-logo.svg"
           alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"

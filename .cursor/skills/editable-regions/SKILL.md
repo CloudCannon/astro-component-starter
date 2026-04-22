@@ -161,7 +161,11 @@ Arrays allow editors to add, remove, and reorder items in the Visual Editor.
 Pass `data-children-prop` on a wrapper building block:
 
 ```astro
-<ButtonGroup buttonSections={buttonSections} alignmentHorizontal="center" data-children-prop="buttonSections" />
+<ButtonGroup
+  buttonSections={buttonSections}
+  alignmentHorizontal="center"
+  data-children-prop="buttonSections"
+/>
 
 <Grid gap="lg" minItemWidth="360" class="feature-grid" data-children-prop="features">
   {

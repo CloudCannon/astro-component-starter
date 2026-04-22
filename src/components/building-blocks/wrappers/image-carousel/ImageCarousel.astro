@@ -37,7 +37,6 @@ const arrayDataAttributes = effectiveChildrenProp
 const hasImages = images?.length > 0;
 
 if (!_component && !hasImages) return;
-
 ---
 
 <section
@@ -65,7 +64,10 @@ if (!_component && !hasImages) return;
 
   <div class="carousel-content">
     <div class="main-viewport">
-      <div class="main-track" {...arrayDataAttributes}>
+      <div
+        class="main-track"
+        {...arrayDataAttributes}
+      >
         {
           images.map((img: ImageItem, index: number) => (
             <div
@@ -194,11 +196,21 @@ if (!_component && !hasImages) return;
           scrollbar-width: none;
           width: fit-content;
 
-          &.thumbs-ratio-square { --thumb-ratio: var(--ratio-square); }
-          &.thumbs-ratio-landscape { --thumb-ratio: var(--ratio-landscape); }
-          &.thumbs-ratio-portrait { --thumb-ratio: var(--ratio-portrait); }
-          &.thumbs-ratio-widescreen { --thumb-ratio: var(--ratio-widescreen); }
-          &.thumbs-ratio-horizontal-strip { --thumb-ratio: var(--ratio-horizontal-strip); }
+          &.thumbs-ratio-square {
+            --thumb-ratio: var(--ratio-square);
+          }
+          &.thumbs-ratio-landscape {
+            --thumb-ratio: var(--ratio-landscape);
+          }
+          &.thumbs-ratio-portrait {
+            --thumb-ratio: var(--ratio-portrait);
+          }
+          &.thumbs-ratio-widescreen {
+            --thumb-ratio: var(--ratio-widescreen);
+          }
+          &.thumbs-ratio-horizontal-strip {
+            --thumb-ratio: var(--ratio-horizontal-strip);
+          }
 
           &::-webkit-scrollbar {
             display: none;
@@ -216,7 +228,8 @@ if (!_component && !hasImages) return;
             height: 64px;
             overflow: hidden;
             padding: 0;
-            transition: border-color var(--animation-fast) ease,
+            transition:
+              border-color var(--animation-fast) ease,
               opacity var(--animation-fast) ease;
 
             &[data-selected="true"] {

@@ -17,5 +17,5 @@ blocks:
       text: 'Background Video'
       level: h3
     - _component: building-blocks/core-elements/text
-      text: "This card has a looping background video behind its content."
+      text: 'This card has a looping background video behind its content.'
 ---

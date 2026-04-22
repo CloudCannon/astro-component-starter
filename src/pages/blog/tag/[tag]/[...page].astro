@@ -16,9 +16,11 @@ export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
   const blogPosts = await getBlogPostsSortedByDate();
 
   const tagSlugs = new Set<string>();
+
   for (const post of blogPosts) {
     for (const raw of post.data.tags ?? []) {
       const key = slugifyLabel(raw.trim());
+
       if (key) tagSlugs.add(key);
     }
   }
@@ -39,7 +41,8 @@ const { blogPage, heroSections } = await loadBlogPageContext();
 
 const baseTitle = blogPage?.data?.title ?? "Blog";
 const displayTag =
-  page.data[0]?.data.tags.find((t: string) => slugifyLabel(t.trim()) === tagSlug)?.trim() ?? tagSlug;
+  page.data[0]?.data.tags.find((t: string) => slugifyLabel(t.trim()) === tagSlug)?.trim() ??
+  tagSlug;
 const tagListingTitle = `${baseTitle}: ${displayTag}`;
 const pageTitle =
   page.currentPage > 1 ? `${tagListingTitle} – Page ${page.currentPage}` : tagListingTitle;

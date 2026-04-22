@@ -200,13 +200,14 @@ Check `src/icons/social/` for the full list of available SVGs.
 
 ### Fields
 
-| Field           | Type   | Purpose                                                   |
-| --------------- | ------ | --------------------------------------------------------- |
-| `name`          | string | Site name (used in structured data)                       |
-| `url`           | string | Production URL (used in structured data, canonical links) |
-| `description`   | string | Fallback meta description                                 |
-| `logoSource`    | string | Fallback OG image                                         |
-| `titleFormat`   | string | Title template — `{title}` is replaced with page title    |
+| Field         | Type   | Purpose                                                   |
+| ------------- | ------ | --------------------------------------------------------- |
+| `name`        | string | Site name (used in structured data)                       |
+| `url`         | string | Production URL (used in structured data, canonical links) |
+| `description` | string | Fallback meta description                                 |
+| `logoSource`  | string | Fallback OG image                                         |
+| `titleFormat` | string | Title template — `{title}` is replaced with page title    |
+
 ### How it's consumed
 
 `BaseLayout.astro` imports `seo.json` and uses it for:

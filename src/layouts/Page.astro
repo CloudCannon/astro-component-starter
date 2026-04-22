@@ -83,7 +83,7 @@ const sections = frontmatter?.pageSections ?? [];
   {mainNav.themeToggle && <ThemeToggleScript slot="head" />}
   <MainNavigation {...mainNav} />
 
-  <main {...(disablePagefind ? { "data-pagefind-ignore": "all" } : {})}>
+  <main {...disablePagefind ? { "data-pagefind-ignore": "all" } : {}}>
     {
       sections.length > 0 && (
         <div
@@ -95,7 +95,7 @@ const sections = frontmatter?.pageSections ?? [];
         </div>
       )
     }
-    <div {...(disablePagefind ? {} : { "data-pagefind-body": true })}>
+    <div {...disablePagefind ? {} : { "data-pagefind-body": true }}>
       <slot />
     </div>
   </main>

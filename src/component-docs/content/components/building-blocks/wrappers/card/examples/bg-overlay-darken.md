@@ -18,5 +18,5 @@ blocks:
       text: 'Darkened Overlay'
       level: h3
     - _component: building-blocks/core-elements/text
-      text: "A dark overlay makes light text easier to read over a background image."
+      text: 'A dark overlay makes light text easier to read over a background image.'
 ---

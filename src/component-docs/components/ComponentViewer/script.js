@@ -256,9 +256,11 @@ function initializeCopyCode() {
 
 function handleHashNavigation() {
   const hash = window.location.hash.slice(1);
+
   if (!hash) return;
 
   const directTarget = document.getElementById(hash);
+
   if (directTarget) {
     directTarget.scrollIntoView({ behavior: "instant" });
     return;
@@ -266,14 +268,17 @@ function handleHashNavigation() {
 
   // Check if the hash matches an example slug inside a viewer dropdown
   const allOptions = document.querySelectorAll(".example-select option[data-slug]");
+
   for (const option of allOptions) {
     if (option.dataset.slug === hash) {
       const select = option.closest("select");
+
       if (select) {
         select.value = option.value;
         select.dispatchEvent(new Event("change"));
 
         const viewer = select.closest(".component-viewer");
+
         if (viewer) {
           viewer.scrollIntoView({ behavior: "instant" });
         }

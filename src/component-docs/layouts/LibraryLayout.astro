@@ -66,7 +66,14 @@ const contentSections = props.frontmatter?.contentSections || [];
       name="robots"
       content="noindex"
     />
-    {pageDescription ? <meta name="description" content={pageDescription} /> : null}
+    {
+      pageDescription ? (
+        <meta
+          name="description"
+          content={pageDescription}
+        />
+      ) : null
+    }
     <slot name="head" />
     <ClientRouter />
   </head>
@@ -75,25 +82,25 @@ const contentSections = props.frontmatter?.contentSections || [];
     data-pagefind-ignore
   >
     <div transition:animate={fade({ duration: "0.3s" })}>
-    <MobileNavLayout />
-    <CustomSection
-      maxContentWidth="2xl"
-      paddingHorizontal="md"
-      paddingVertical="none"
-      class="library-container"
-    >
-      <SidebarNavLayout />
-      <main class="main">
-        <div
-          data-editable="array"
-          data-children-prop="contentSections"
-        >
-          <RenderBlock contentSections={contentSections} />
-        </div>
-        <slot />
-      </main>
-    </CustomSection>
-    <VideoElements />
+      <MobileNavLayout />
+      <CustomSection
+        maxContentWidth="2xl"
+        paddingHorizontal="md"
+        paddingVertical="none"
+        class="library-container"
+      >
+        <SidebarNavLayout />
+        <main class="main">
+          <div
+            data-editable="array"
+            data-children-prop="contentSections"
+          >
+            <RenderBlock contentSections={contentSections} />
+          </div>
+          <slot />
+        </main>
+      </CustomSection>
+      <VideoElements />
     </div>
   </body>
 </html>

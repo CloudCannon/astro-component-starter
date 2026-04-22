@@ -18,14 +18,13 @@ const {
 const trimmedThumbnail =
   typeof thumbnail === "string" && thumbnail.trim() !== "" ? thumbnail.trim() : "";
 
-const posterUrl = trimmedThumbnail
-  ? await resolveVideoPosterSource(trimmedThumbnail)
-  : undefined;
+const posterUrl = trimmedThumbnail ? await resolveVideoPosterSource(trimmedThumbnail) : undefined;
 
 let localVideoSources: VideoSource[] = [];
 
 if (type === "local-source" && source) {
   const { discoverVideoSources } = await import("@component-utils/discoverVideoSources");
+
   localVideoSources = await discoverVideoSources(source);
 }
 ---
@@ -60,7 +59,11 @@ if (type === "local-source" && source) {
       </a>
     </lite-youtube>
   ) : background ? (
-    <div class:list={["video", "background", className]} aria-hidden="true" {...htmlAttributes}>
+    <div
+      class:list={["video", "background", className]}
+      aria-hidden="true"
+      {...htmlAttributes}
+    >
       <video
         preload="metadata"
         autoplay

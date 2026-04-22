@@ -11,10 +11,16 @@ const { class: className, ...htmlAttributes } = Astro.props;
   {...htmlAttributes}
 >
   <span class="theme-toggle-icon theme-toggle-sun">
-    <AstroIcon name="sun" is:inline />
+    <AstroIcon
+      name="sun"
+      is:inline
+    />
   </span>
   <span class="theme-toggle-icon theme-toggle-moon">
-    <AstroIcon name="moon" is:inline />
+    <AstroIcon
+      name="moon"
+      is:inline
+    />
   </span>
 </button>
 
@@ -23,8 +29,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
 
   function initThemeToggle() {
     const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-toggle");
-    const defaultTheme =
-      document.documentElement.getAttribute("data-default-theme") || "light";
+    const defaultTheme = document.documentElement.getAttribute("data-default-theme") || "light";
 
     function getTheme(): string {
       return document.documentElement.getAttribute("data-theme") || "light";
@@ -41,7 +46,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
       buttons.forEach((btn) => {
         btn.setAttribute(
           "aria-label",
-          theme === "dark" ? "Switch to light mode" : "Switch to dark mode",
+          theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
         );
       });
     }
@@ -49,7 +54,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
     buttons.forEach((btn) => {
       btn.setAttribute(
         "aria-label",
-        getTheme() === "dark" ? "Switch to light mode" : "Switch to dark mode",
+        getTheme() === "dark" ? "Switch to light mode" : "Switch to dark mode"
       );
 
       btn.addEventListener("click", () => {
@@ -57,25 +62,19 @@ const { class: className, ...htmlAttributes } = Astro.props;
       });
     });
 
-    matchMedia("(prefers-color-scheme: dark)").addEventListener(
-      "change",
-      (e) => {
-        if (!localStorage.getItem("theme")) {
-          setTheme(e.matches ? "dark" : "light");
-        }
-      },
-    );
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        setTheme(e.matches ? "dark" : "light");
+      }
+    });
   }
 
   onPageLoad(initThemeToggle);
 
   document.addEventListener("astro:before-swap", (e: any) => {
     const stored = localStorage.getItem("theme");
-    const theme =
-      stored ||
-      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    const newDefault =
-      e.newDocument.documentElement.getAttribute("data-theme") || "light";
+    const theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const newDefault = e.newDocument.documentElement.getAttribute("data-theme") || "light";
     e.newDocument.documentElement.setAttribute("data-default-theme", newDefault);
     e.newDocument.documentElement.setAttribute("data-theme", theme);
     if (theme !== newDefault) {

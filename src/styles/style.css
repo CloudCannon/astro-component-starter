@@ -1,5 +1,5 @@
 /* Note: Layer order is declared in layouts (BaseLayout.astro, LibraryLayout.astro) 
-   using <style is:inline> to ensure it's processed before component styles */
+   using \3c style is:inline> to ensure it's processed before component styles */
 @import "_variables.css";
 @import "_theme.css";
 @import "_reset.css";
