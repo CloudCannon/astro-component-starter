@@ -54,6 +54,10 @@ function fallback(source: string): VideoSource[] {
  * (e.g. CloudCannon visual editor) where node:fs is unavailable.
  */
 export async function discoverVideoSources(source: string): Promise<VideoSource[]> {
+  if (typeof process === "undefined" || typeof process.cwd !== "function") {
+    return fallback(source);
+  }
+
   let existsSync: typeof import("node:fs").existsSync;
 
   try {
@@ -62,12 +66,12 @@ export async function discoverVideoSources(source: string): Promise<VideoSource[
     return fallback(source);
   }
 
-  const ext = getExtension(source).toLowerCase();
-  const dir = getDirectory(source);
-  const base = getBasename(stripExtension(source));
-  const publicDir = `${process.cwd()}/public/${dir}`;
-
   try {
+    const ext = getExtension(source).toLowerCase();
+    const dir = getDirectory(source);
+    const base = getBasename(stripExtension(source));
+    const publicDir = `${process.cwd()}/public/${dir}`;
+
     const candidates = Object.keys(VIDEO_MIME_TYPES)
       .filter((candidateExt) => {
         if (candidateExt === ext) return true;
