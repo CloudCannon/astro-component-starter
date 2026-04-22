@@ -33,6 +33,8 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
     return;
   }
 
+  syncThumbnailSources(mainSlides, thumbButtons);
+
   const loop = carousel.getAttribute("data-loop") !== "false";
 
   const mainEmbla = EmblaCarousel(mainViewport, {
@@ -85,6 +87,42 @@ export function setupAllImageCarousels(root: ParentNode = document): void {
   root
     .querySelectorAll<ImageCarouselElement>(".image-carousel")
     .forEach((el) => setupImageCarousel(el));
+}
+
+/**
+ * Mirror each main-slide `<img>` src onto its matching thumbnail.
+ *
+ * Thumbnails deliberately aren't marked `data-editable="image"`, so
+ * the CloudCannon editor doesn't rewrite their src to its session
+ * file URL, and `astro:assets` build-time resolution doesn't run
+ * in the editor either — leaving thumbnails with the raw `/src/...`
+ * path which 404s. The main slide's img has already been rewritten
+ * by CC (or by Astro at build time on the live site), so we copy
+ * that src across.
+ *
+ * Guarded by a `/src/` prefix check so this is a no-op on the live
+ * site, where the thumbnail src is already a valid Astro-built URL.
+ */
+function syncThumbnailSources(
+  mainSlides: NodeListOf<HTMLElement>,
+  thumbButtons: NodeListOf<HTMLButtonElement>
+): void {
+  thumbButtons.forEach((btn, index) => {
+    const thumbImg = btn.querySelector<HTMLImageElement>("img");
+    const mainImg = mainSlides[index]?.querySelector<HTMLImageElement>("img");
+
+    if (!thumbImg || !mainImg) return;
+
+    const thumbSrc = thumbImg.getAttribute("src") ?? "";
+
+    if (!thumbSrc.startsWith("/src/")) return;
+
+    const resolvedSrc = mainImg.getAttribute("src");
+
+    if (resolvedSrc && resolvedSrc !== thumbSrc) {
+      thumbImg.src = resolvedSrc;
+    }
+  });
 }
 
 export function destroyImageCarousel(carousel: ImageCarouselElement): void {
