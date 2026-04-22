@@ -215,6 +215,16 @@ if (!_component && !hasSlides && !hasSlotContent) return;
       );
 
       carousel.setAttribute("data-embla-initialized", "true");
+      (carousel as any).__embla = embla;
+
+      const handleReinit = () => {
+        embla.destroy();
+        delete (carousel as any).__embla;
+        carousel.removeAttribute("data-embla-initialized");
+        carousel.removeEventListener("carousel:reinit", handleReinit);
+        setupCarousels();
+      };
+      carousel.addEventListener("carousel:reinit", handleReinit);
 
       const prevButton = inner.querySelector(".prev > .button-inner") as HTMLButtonElement;
       const nextButton = inner.querySelector(".next > .button-inner") as HTMLButtonElement;

@@ -16,16 +16,83 @@ function syncBentoBoxSpans(target) {
   parent.style.gridRow = rowSpan > 1 ? `span ${rowSpan}` : "";
 }
 
+const BENTO_BOX_ATTRS = ["data-col-span", "data-row-span"];
+
+/**
+ * Carousel config is read from attributes on `.carousel-inner` at
+ * Embla init time, so any change to those attributes, the inline
+ * style (CSS vars like `--slide-width`), or the slide list requires
+ * a full destroy + re-init of the Embla instance.
+ */
+const CAROUSEL_INNER_ATTRS = [
+  "data-show-indicators",
+  "data-show-arrows",
+  "data-loop",
+  "data-align",
+  "data-slides-to-scroll",
+  "data-autoplay",
+  "data-autoscroll",
+  "style",
+];
+
+const pendingCarouselReinits = new Set();
+let carouselReinitScheduled = false;
+
+function scheduleCarouselReinit(carousel) {
+  if (!carousel || !carousel.hasAttribute("data-embla-initialized")) return;
+
+  pendingCarouselReinits.add(carousel);
+
+  if (carouselReinitScheduled) return;
+  carouselReinitScheduled = true;
+
+  requestAnimationFrame(() => {
+    carouselReinitScheduled = false;
+
+    const carousels = Array.from(pendingCarouselReinits);
+
+    pendingCarouselReinits.clear();
+
+    for (const el of carousels) {
+      if (!el.isConnected) continue;
+      el.dispatchEvent(new CustomEvent("carousel:reinit"));
+    }
+  });
+}
+
+function findCarouselFromInner(inner) {
+  return inner.closest(".carousel");
+}
+
+function findCarouselFromTrack(track) {
+  return track.closest(".carousel");
+}
+
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
-    if (
-      mutation.type === "attributes" &&
-      (mutation.attributeName === "data-col-span" || mutation.attributeName === "data-row-span")
-    ) {
-      syncBentoBoxSpans(mutation.target);
+    const { type, target, attributeName } = mutation;
+
+    if (type === "attributes") {
+      if (BENTO_BOX_ATTRS.includes(attributeName)) {
+        syncBentoBoxSpans(target);
+        continue;
+      }
+
+      if (
+        CAROUSEL_INNER_ATTRS.includes(attributeName) &&
+        target instanceof Element &&
+        target.classList.contains("carousel-inner")
+      ) {
+        scheduleCarouselReinit(findCarouselFromInner(target));
+        continue;
+      }
     }
 
-    if (mutation.type === "childList") {
+    if (type === "childList") {
+      if (target instanceof Element && target.classList.contains("track")) {
+        scheduleCarouselReinit(findCarouselFromTrack(target));
+      }
+
       for (const node of mutation.addedNodes) {
         if (node.nodeType !== Node.ELEMENT_NODE) continue;
 
@@ -43,7 +110,7 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, {
   attributes: true,
-  attributeFilter: ["data-col-span", "data-row-span"],
+  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS],
   childList: true,
   subtree: true,
 });
