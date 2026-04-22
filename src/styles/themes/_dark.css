@@ -26,6 +26,7 @@
   --color-bg-inverse: var(--gray-1);
 
   --color-border: var(--gray-8);
+  --color-border-inputs: var(--gray-6);
   --color-border-strong: var(--gray-4);
   --color-border-subtle: var(--gray-8);
 

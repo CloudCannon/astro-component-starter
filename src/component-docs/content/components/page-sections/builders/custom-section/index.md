@@ -47,6 +47,7 @@ examples:
   - title: Color Scheme
     slugs:
       - scheme-contrast
+      - scheme-light
       - scheme-default
     size: md
   - title: Rounded Corners

@@ -28,6 +28,8 @@ collections_config:
       keywords:
         type: array
         comment: Optional meta keywords for this page.
+      keywords[*]:
+        type: text
   blog:
     path: src/content/blog
     glob:
@@ -77,9 +79,13 @@ collections_config:
       tags:
         type: array
         comment: Tags relevant to this post's content.
+      tags[*]:
+        type: text
       keywords:
         type: array
         comment: Optional meta keywords for this post.
+      keywords[*]:
+        type: text
     _editables:
       content:
         image: false
