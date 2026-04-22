@@ -134,71 +134,9 @@ if (!_component && !hasImages) return;
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
-  import EmblaCarousel from "embla-carousel";
+  import { setupAllImageCarousels } from "./setup";
 
-  function setupImageCarousels() {
-    const carousels = document.querySelectorAll(".image-carousel");
-
-    carousels.forEach((carousel) => {
-      if (carousel.hasAttribute("data-embla-initialized")) return;
-
-      const mainViewport = carousel.querySelector(".main-viewport") as HTMLElement;
-      const mainTrack = mainViewport?.querySelector(".main-track");
-      const mainSlides = mainTrack?.querySelectorAll(".main-slide");
-      const thumbButtons = carousel.querySelectorAll(".thumb");
-
-      if (!mainViewport || !mainTrack || !mainSlides?.length || !thumbButtons.length) {
-        return;
-      }
-
-      const loop = carousel.getAttribute("data-loop") !== "false";
-
-      const mainEmbla = EmblaCarousel(mainViewport, {
-        loop,
-        align: "start",
-        duration: 20,
-        startIndex: 0,
-        skipSnaps: false,
-      });
-
-      carousel.setAttribute("data-embla-initialized", "true");
-
-      let isInitialUpdate = true;
-      const updateSelectedThumb = () => {
-        const selected = mainEmbla.selectedScrollSnap();
-        thumbButtons.forEach((btn, i) => {
-          const isSelected = i === selected;
-          btn.setAttribute("data-selected", isSelected.toString());
-          if (isSelected && !isInitialUpdate) {
-            btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-          }
-        });
-        isInitialUpdate = false;
-      };
-
-      thumbButtons.forEach((btn, index) => {
-        btn.addEventListener("click", () => {
-          mainEmbla.scrollTo(index);
-        });
-      });
-
-      mainEmbla.on("select", updateSelectedThumb);
-
-      const prevButton = carousel.querySelector(".arrow-prev .button-inner") as HTMLButtonElement;
-      const nextButton = carousel.querySelector(".arrow-next .button-inner") as HTMLButtonElement;
-
-      if (prevButton) {
-        prevButton.addEventListener("click", () => mainEmbla.scrollPrev());
-      }
-      if (nextButton) {
-        nextButton.addEventListener("click", () => mainEmbla.scrollNext());
-      }
-
-      updateSelectedThumb();
-    });
-  }
-
-  onPageLoad(setupImageCarousels);
+  onPageLoad(() => setupAllImageCarousels());
 </script>
 
 <style is:global>

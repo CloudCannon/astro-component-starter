@@ -8,8 +8,8 @@
  *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
- *      (e.g. Carousel's Embla setup) never initialise in the editor, so
- *      we initialise them here instead.
+ *      (e.g. Carousel / ImageCarousel Embla setup) never initialise in
+ *      the editor, so we initialise them here instead.
  *
  * Logs editor mutations to the console in dev; silent in production.
  */
@@ -19,6 +19,11 @@ import {
   setupAllCarousels,
   setupCarousel,
 } from "./src/components/building-blocks/wrappers/carousel/setup";
+import {
+  destroyImageCarousel,
+  setupAllImageCarousels,
+  setupImageCarousel,
+} from "./src/components/building-blocks/wrappers/image-carousel/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -57,57 +62,92 @@ const CAROUSEL_INNER_ATTRS = [
   "style",
 ];
 
-const carouselsToReset = new Set();
-let carouselFlushScheduled = false;
+/**
+ * ImageCarousel only reads `data-loop` from its root for Embla config.
+ * Image list and arrow visibility are rendered conditionally, so those
+ * are handled via childList mutations below.
+ */
+const IMAGE_CAROUSEL_ROOT_ATTRS = ["data-loop"];
 
-function queueCarouselReset(carousel, reason) {
-  if (!carousel) return;
+function makeResetScheduler({ destroy, init, label }) {
+  const pending = new Set();
+  let scheduled = false;
 
-  log("queue carousel reset:", reason, carousel);
-  carouselsToReset.add(carousel);
-  scheduleCarouselFlush();
-}
+  function queue(el, reason) {
+    if (!el) return;
 
-function scheduleCarouselFlush() {
-  if (carouselFlushScheduled) return;
-  carouselFlushScheduled = true;
+    log(`queue ${label} reset:`, reason, el);
+    pending.add(el);
 
-  requestAnimationFrame(() => {
-    carouselFlushScheduled = false;
+    if (scheduled) return;
+    scheduled = true;
 
-    const carousels = [...carouselsToReset];
+    requestAnimationFrame(() => {
+      scheduled = false;
 
-    carouselsToReset.clear();
+      const items = [...pending];
 
-    for (const el of carousels) {
-      if (!el.isConnected) {
-        log("skipping detached carousel", el);
-        continue;
+      pending.clear();
+
+      for (const target of items) {
+        if (!target.isConnected) {
+          log(`skipping detached ${label}`, target);
+          continue;
+        }
+
+        log(`destroying + re-initialising ${label}`, target);
+        destroy(target);
+        init(target);
       }
-
-      log("destroying + re-initialising carousel", el);
-      destroyCarousel(el);
-      setupCarousel(el);
-    }
-  });
-}
-
-function initNewCarousels(root) {
-  const carousels = [];
-
-  if (root.nodeType === Node.ELEMENT_NODE) {
-    if (root.classList?.contains("carousel") && !root.hasAttribute("data-embla-initialized")) {
-      carousels.push(root);
-    }
-
-    root
-      .querySelectorAll(".carousel:not([data-embla-initialized])")
-      .forEach((el) => carousels.push(el));
+    });
   }
 
-  for (const el of carousels) {
+  return queue;
+}
+
+const queueCarouselReset = makeResetScheduler({
+  destroy: destroyCarousel,
+  init: setupCarousel,
+  label: "carousel",
+});
+
+const queueImageCarouselReset = makeResetScheduler({
+  destroy: destroyImageCarousel,
+  init: setupImageCarousel,
+  label: "image-carousel",
+});
+
+function initNewComponents(root) {
+  if (root.nodeType !== Node.ELEMENT_NODE) return;
+
+  const newCarousels = [];
+
+  if (root.classList?.contains("carousel") && !root.hasAttribute("data-embla-initialized")) {
+    newCarousels.push(root);
+  }
+
+  root
+    .querySelectorAll(".carousel:not([data-embla-initialized])")
+    .forEach((el) => newCarousels.push(el));
+
+  for (const el of newCarousels) {
     log("initialising new carousel", el);
     setupCarousel(el);
+  }
+
+  const newImageCarousels = [];
+
+  if (root.classList?.contains("image-carousel") && !root.hasAttribute("data-embla-initialized")) {
+    newImageCarousels.push(root);
+  }
+
+  root
+    .querySelectorAll(".image-carousel:not([data-embla-initialized])")
+    .forEach((el) => newImageCarousels.push(el));
+
+  for (const el of newImageCarousels) {
+    log("initialising new image-carousel", el);
+    setupImageCarousel(el);
   }
 }
 
@@ -121,19 +161,42 @@ const observer = new MutationObserver((mutations) => {
         continue;
       }
 
+      if (!(target instanceof Element)) continue;
+
       if (
         CAROUSEL_INNER_ATTRS.includes(attributeName) &&
-        target instanceof Element &&
         target.classList.contains("carousel-inner")
       ) {
         queueCarouselReset(target.closest(".carousel"), `attr:${attributeName}`);
         continue;
       }
+
+      if (
+        IMAGE_CAROUSEL_ROOT_ATTRS.includes(attributeName) &&
+        target.classList.contains("image-carousel")
+      ) {
+        queueImageCarouselReset(target, `attr:${attributeName}`);
+        continue;
+      }
     }
 
     if (type === "childList") {
-      if (target instanceof Element && target.classList.contains("track")) {
-        queueCarouselReset(target.closest(".carousel"), "slides changed");
+      if (target instanceof Element) {
+        if (target.classList.contains("track")) {
+          queueCarouselReset(target.closest(".carousel"), "slides changed");
+        }
+
+        if (
+          target.classList.contains("main-track") ||
+          target.classList.contains("thumbs-strip")
+        ) {
+          queueImageCarouselReset(target.closest(".image-carousel"), "images changed");
+        }
+
+        if (target.classList.contains("image-carousel")) {
+          // showArrows toggles .arrow-prev / .arrow-next in/out
+          queueImageCarouselReset(target, "arrows toggled");
+        }
       }
 
       for (const node of mutation.addedNodes) {
@@ -147,7 +210,7 @@ const observer = new MutationObserver((mutations) => {
           syncBentoBoxSpans(child);
         }
 
-        initNewCarousels(node);
+        initNewComponents(node);
       }
     }
   }
@@ -155,15 +218,21 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, {
   attributes: true,
-  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS],
+  attributeFilter: [
+    ...BENTO_BOX_ATTRS,
+    ...CAROUSEL_INNER_ATTRS,
+    ...IMAGE_CAROUSEL_ROOT_ATTRS,
+  ],
   childList: true,
   subtree: true,
 });
 
-// Initialise any carousels already in the editor DOM.
+// Initialise any components already in the editor DOM.
 setupAllCarousels();
+setupAllImageCarousels();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,
   carouselAttrs: CAROUSEL_INNER_ATTRS,
+  imageCarouselAttrs: IMAGE_CAROUSEL_ROOT_ATTRS,
 });
