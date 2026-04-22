@@ -24,7 +24,9 @@
     "lint:css": "stylelint \"**/*.css\"",
     "lint:css:fix": "stylelint \"**/*.css\" --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "deps:sync": "rm -rf node_modules && npm install --os=linux --cpu=x64 --libc=glibc --ignore-scripts --no-audit && npm ci",
+    "deps:check": "npm ci --dry-run"
   },
   "dependencies": {
     "@astrojs/compiler-rs": "^0.1.8",

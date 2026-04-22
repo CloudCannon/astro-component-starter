@@ -63,6 +63,22 @@ src/
 
 - Node.js >= 24.0.0
 
+## Updating Dependencies
+
+When adding, removing, or updating packages (on macOS especially), use:
+
+```bash
+npm run deps:sync
+```
+
+This regenerates `package-lock.json` with resolutions for all target platforms (Linux, Windows, macOS) so CI doesn't break. Plain `npm install` on macOS silently strips Linux-only peer dependencies out of the lockfile, which causes `npm ci` to fail on GitHub Actions.
+
+You can verify the lockfile is CI-ready at any time with:
+
+```bash
+npm run deps:check
+```
+
 ## Learn More
 
 Head to the [component docs](http://localhost:4321/component-docs/) in your dev server for a guided tour, examples for every component, and a visual component builder.
