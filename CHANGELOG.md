@@ -10,8 +10,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Heading `iconName` and footer social link `icon` selects now use the visual icon picker (with name and SVG preview) instead of a plain dropdown or text input.
-
 ### Added
 
 ## [1.0.2] - 2026-04-13
@@ -73,6 +71,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Base layout now renders SEO meta tags directly without relying on the `astro-seo` package.
 - Blog posts now render `og:type="article"` plus article-specific Open Graph metadata.
 - Component library routes (`/component-docs/*`) are excluded from the generated sitemap and use `<meta name="robots" content="noindex">` so they are not indexed as public site content.
+- Heading `iconName` and footer social link `icon` selects now use the visual icon picker (with name and SVG preview) instead of a plain dropdown or text input.
 
 ### Fixed
 
@@ -93,6 +92,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Structured data no longer emits an empty `description` field when the site SEO description has not been set.
 - Blog index and tag archive pagination pages now use unique document titles (append “– Page N” for page 2 and up) instead of repeating the first-page title.
 - Content selector mobile views
+- Excluded the **Pagination** component from being added to components.
 
 ## [1.0.1] - 2026-03-19
 
