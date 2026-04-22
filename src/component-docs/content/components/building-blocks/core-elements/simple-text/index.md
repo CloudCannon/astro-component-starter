@@ -7,7 +7,8 @@ slots:
 examples:
   - slugs:
       - primary
+  - slugs:
       - align
+  - slugs:
       - sizes
-    title: Basics
 ---
