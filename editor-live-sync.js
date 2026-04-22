@@ -1,8 +1,18 @@
 /**
- * Syncs data attributes on child elements to parent styles in the
- * CloudCannon editor. This works around CloudCannon's inability to
- * re-render props on a component's root element.
+ * Syncs DOM changes in the CloudCannon editor to component runtime state.
+ *
+ * This works around CloudCannon's inability to re-render props on a
+ * component's root element, and re-initializes components like the
+ * carousel whose JS state is not reactive to prop changes.
+ *
+ * Flip DEBUG to `true` to see what mutations the editor is producing.
  */
+
+const DEBUG = true;
+
+function log(...args) {
+  if (DEBUG) console.log("[editor-live-sync]", ...args);
+}
 
 function syncBentoBoxSpans(target) {
   const parent = target.closest(".bento-box-item");
@@ -35,40 +45,67 @@ const CAROUSEL_INNER_ATTRS = [
   "style",
 ];
 
-const pendingCarouselReinits = new Set();
-let carouselReinitScheduled = false;
+const carouselsToReset = new Set();
+let carouselFlushScheduled = false;
 
-function scheduleCarouselReinit(carousel) {
-  if (!carousel || !carousel.hasAttribute("data-embla-initialized")) return;
+function resetCarousel(carousel, reason) {
+  if (!carousel) return;
 
-  pendingCarouselReinits.add(carousel);
+  log("queue carousel reset:", reason, carousel);
+  carouselsToReset.add(carousel);
+  scheduleCarouselFlush();
+}
 
-  if (carouselReinitScheduled) return;
-  carouselReinitScheduled = true;
+function scheduleCarouselFlush() {
+  if (carouselFlushScheduled) return;
+  carouselFlushScheduled = true;
 
   requestAnimationFrame(() => {
-    carouselReinitScheduled = false;
+    carouselFlushScheduled = false;
 
-    const carousels = Array.from(pendingCarouselReinits);
+    const carousels = [...carouselsToReset];
 
-    pendingCarouselReinits.clear();
+    carouselsToReset.clear();
 
     for (const el of carousels) {
-      if (!el.isConnected) continue;
-      el.dispatchEvent(new CustomEvent("carousel:reinit"));
+      if (!el.isConnected) {
+        log("skipping detached carousel", el);
+        continue;
+      }
+
+      const embla = el.__embla;
+
+      if (embla) {
+        log("destroying existing embla", el);
+        try {
+          embla.destroy();
+        } catch (err) {
+          log("embla.destroy() threw", err);
+        }
+        delete el.__embla;
+      }
+
+      el.removeAttribute("data-embla-initialized");
     }
+
+    log("dispatching carousel:setup");
+    document.dispatchEvent(new CustomEvent("carousel:setup"));
   });
 }
 
-function findCarouselFromInner(inner) {
-  return inner.closest(".carousel");
-}
+function nodeHasNewCarousel(node) {
+  if (node.nodeType !== Node.ELEMENT_NODE) return false;
 
-function findCarouselFromTrack(track) {
-  return track.closest(".carousel");
+  if (node.classList?.contains("carousel") && !node.hasAttribute("data-embla-initialized")) {
+    return true;
+  }
+
+  return !!node.querySelector?.(".carousel:not([data-embla-initialized])");
 }
 
 const observer = new MutationObserver((mutations) => {
+  let shouldSetupNewCarousels = false;
+
   for (const mutation of mutations) {
     const { type, target, attributeName } = mutation;
 
@@ -83,14 +120,14 @@ const observer = new MutationObserver((mutations) => {
         target instanceof Element &&
         target.classList.contains("carousel-inner")
       ) {
-        scheduleCarouselReinit(findCarouselFromInner(target));
+        resetCarousel(target.closest(".carousel"), `attr:${attributeName}`);
         continue;
       }
     }
 
     if (type === "childList") {
       if (target instanceof Element && target.classList.contains("track")) {
-        scheduleCarouselReinit(findCarouselFromTrack(target));
+        resetCarousel(target.closest(".carousel"), "slides changed");
       }
 
       for (const node of mutation.addedNodes) {
@@ -103,8 +140,17 @@ const observer = new MutationObserver((mutations) => {
         for (const child of node.querySelectorAll("[data-col-span], [data-row-span]")) {
           syncBentoBoxSpans(child);
         }
+
+        if (nodeHasNewCarousel(node)) {
+          shouldSetupNewCarousels = true;
+        }
       }
     }
+  }
+
+  if (shouldSetupNewCarousels) {
+    log("new carousel detected in DOM, dispatching carousel:setup");
+    document.dispatchEvent(new CustomEvent("carousel:setup"));
   }
 });
 
@@ -113,6 +159,11 @@ observer.observe(document.body, {
   attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS],
   childList: true,
   subtree: true,
+});
+
+log("observer active", {
+  bentoAttrs: BENTO_BOX_ATTRS,
+  carouselAttrs: CAROUSEL_INNER_ATTRS,
 });
 
 export {};

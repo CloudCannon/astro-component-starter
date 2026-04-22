@@ -217,15 +217,6 @@ if (!_component && !hasSlides && !hasSlotContent) return;
       carousel.setAttribute("data-embla-initialized", "true");
       (carousel as any).__embla = embla;
 
-      const handleReinit = () => {
-        embla.destroy();
-        delete (carousel as any).__embla;
-        carousel.removeAttribute("data-embla-initialized");
-        carousel.removeEventListener("carousel:reinit", handleReinit);
-        setupCarousels();
-      };
-      carousel.addEventListener("carousel:reinit", handleReinit);
-
       const prevButton = inner.querySelector(".prev > .button-inner") as HTMLButtonElement;
       const nextButton = inner.querySelector(".next > .button-inner") as HTMLButtonElement;
 
@@ -289,6 +280,11 @@ if (!_component && !hasSlides && !hasSlotContent) return;
   }
 
   onPageLoad(setupCarousels);
+
+  // Allow the CloudCannon editor-live-sync script to re-trigger
+  // initialization after it destroys a stale Embla instance
+  // (e.g. when a prop or slide list is edited in the visual editor).
+  document.addEventListener("carousel:setup", () => setupCarousels());
 </script>
 
 <style is:global>
