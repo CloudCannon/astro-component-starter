@@ -51,6 +51,11 @@ iconName:
   type: select
   options:
     values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
 iconColor:
   type: select
   comment: The color of the icon.

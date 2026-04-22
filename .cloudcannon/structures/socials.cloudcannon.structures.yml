@@ -24,6 +24,11 @@ socials:
           comment: Icon to display for the social media link. Sourced from [Heroicons](https://heroicons.com/).
           options:
             values: _select_data.icons
+            preview:
+              text:
+                - key: name
+              image:
+                - template: src/icons/{id}.svg
         link:
           type: text
           comment: URL for the social media link.

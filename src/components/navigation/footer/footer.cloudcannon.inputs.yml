@@ -56,8 +56,15 @@ _structures:
           link: ""
         _inputs:
           icon:
-            type: text
-            comment: "Icon name for the social media platform."
+            type: select
+            comment: "Icon for the social media platform. Sourced from [Heroicons](https://heroicons.com/)."
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
           link:
             type: text
             comment: "URL link to the social media profile."
