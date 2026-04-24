@@ -53,6 +53,8 @@ const preparedImage = prepareImageData({
   positionHorizontal,
 });
 
+const effectiveSizes = priority ? sizes : `auto, ${sizes}`;
+
 const hasAlternate =
   alternateSource && typeof alternateSource === "string" && alternateSource.trim() !== "";
 const preparedAlternate = hasAlternate
@@ -105,7 +107,7 @@ if (hasAlternate) {
             src={prepared.imageSrc}
             alt={normalizedAlt}
             widths={prepared.filteredWidths}
-            sizes={sizes}
+            sizes={effectiveSizes}
             formats={["webp"]}
             width={prepared.finalWidth}
             height={prepared.finalHeight}

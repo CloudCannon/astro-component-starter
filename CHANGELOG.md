@@ -72,6 +72,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Blog posts now render `og:type="article"` plus article-specific Open Graph metadata.
 - Component library routes (`/component-docs/*`) are excluded from the generated sitemap and use `<meta name="robots" content="noindex">` so they are not indexed as public site content.
 - Heading `iconName` and footer social link `icon` selects now use the visual icon picker (with name and SVG preview) instead of a plain dropdown or text input.
+- Image component now prepends `sizes="auto"` for lazy-loaded images.
 
 ### Fixed
 
