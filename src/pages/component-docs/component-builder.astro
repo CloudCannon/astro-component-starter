@@ -1,6 +1,7 @@
 ---
 import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
 import Page from "@layouts/Page.astro";
+import ComponentBuilderInit from "@component-docs/components/ComponentBuilder/ComponentBuilderInit.astro";
 import "@component-docs/components/ComponentBuilder/styles.css";
 
 const isDisabled = process.env.DISABLE_COMPONENT_LIBRARY === "true";
@@ -79,24 +80,7 @@ if (!isDisabled) {
         pageSectionCategories={componentDiscovery.pageSectionCategories}
         ssrEnabled={ssrEnabled}
       />
-      <script
-        is:inline
-        data-astro-rerun
-      >
-        (() => {
-          const initBuilder = () => {
-            if (window.__initComponentBuilder) {
-              window.__initComponentBuilder();
-              return;
-            }
-
-            document.dispatchEvent(new Event("component-builder:ready"));
-          };
-
-          initBuilder();
-          requestAnimationFrame(initBuilder);
-        })();
-      </script>
+      <ComponentBuilderInit />
     </LibraryLayout>
   )
 }
