@@ -27,22 +27,52 @@ const { class: className, ...htmlAttributes } = Astro.props;
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
 
+  const themedSelector = '[data-theme="light"], [data-theme="dark"]';
+
+  function flipTheme(theme: string): string {
+    return theme === "dark" ? "light" : "dark";
+  }
+
+  function applyTheme(doc: Document, theme: string) {
+    const root = doc.documentElement;
+    const rootDefaultTheme =
+      root.getAttribute("data-default-theme") || root.getAttribute("data-theme") || "light";
+    const isToggled = theme !== rootDefaultTheme;
+    const themedElements = new Set<HTMLElement>([
+      root,
+      ...doc.querySelectorAll<HTMLElement>(themedSelector),
+    ]);
+
+    themedElements.forEach((element) => {
+      const defaultTheme =
+        element.getAttribute("data-default-theme") || element.getAttribute("data-theme");
+
+      if (defaultTheme === "light" || defaultTheme === "dark") {
+        element.setAttribute("data-default-theme", defaultTheme);
+        element.setAttribute("data-theme", isToggled ? flipTheme(defaultTheme) : defaultTheme);
+      }
+    });
+
+    root.toggleAttribute("data-theme-toggled", isToggled);
+  }
+
+  function getPreferredTheme(): string {
+    return (
+      localStorage.getItem("theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    );
+  }
+
   function initThemeToggle() {
     const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-toggle");
-    const defaultTheme = document.documentElement.getAttribute("data-default-theme") || "light";
 
     function getTheme(): string {
       return document.documentElement.getAttribute("data-theme") || "light";
     }
 
     function setTheme(theme: string) {
-      document.documentElement.setAttribute("data-theme", theme);
+      applyTheme(document, theme);
       localStorage.setItem("theme", theme);
-      if (theme !== defaultTheme) {
-        document.documentElement.setAttribute("data-theme-toggled", "");
-      } else {
-        document.documentElement.removeAttribute("data-theme-toggled");
-      }
       buttons.forEach((btn) => {
         btn.setAttribute(
           "aria-label",
@@ -50,6 +80,8 @@ const { class: className, ...htmlAttributes } = Astro.props;
         );
       });
     }
+
+    applyTheme(document, getTheme());
 
     buttons.forEach((btn) => {
       btn.setAttribute(
@@ -71,15 +103,9 @@ const { class: className, ...htmlAttributes } = Astro.props;
 
   onPageLoad(initThemeToggle);
 
-  document.addEventListener("astro:before-swap", (e: any) => {
-    const stored = localStorage.getItem("theme");
-    const theme = stored || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    const newDefault = e.newDocument.documentElement.getAttribute("data-theme") || "light";
-    e.newDocument.documentElement.setAttribute("data-default-theme", newDefault);
-    e.newDocument.documentElement.setAttribute("data-theme", theme);
-    if (theme !== newDefault) {
-      e.newDocument.documentElement.setAttribute("data-theme-toggled", "");
-    }
+  document.addEventListener("astro:before-swap", (e: Event) => {
+    const newDocument = (e as Event & { newDocument: Document }).newDocument;
+    applyTheme(newDocument, getPreferredTheme());
   });
 </script>
 
