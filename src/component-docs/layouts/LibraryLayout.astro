@@ -1,10 +1,9 @@
 ---
-import { ClientRouter } from "astro:transitions";
-import { fade } from "astro:transitions";
 import "@component-docs/styles/component-docs.css";
-import "@styles/style.css";
-import SiteFonts from "@layouts/SiteFonts.astro";
 import VideoElements from "@components/utils/VideoElements.astro";
+import SiteFonts from "@layouts/SiteFonts.astro";
+import "@styles/style.css";
+import { ClientRouter, fade } from "astro:transitions";
 import { z } from "zod/v4";
 
 const libraryLayoutSchema = z.object({
@@ -81,7 +80,7 @@ const contentSections = props.frontmatter?.contentSections || [];
     class="component-docs"
     data-pagefind-ignore
   >
-    <div transition:animate={fade({ duration: "0.3s" })}>
+    <div transition:animate={fade({ duration: "0.2s" })}>
       <MobileNavLayout />
       <CustomSection
         maxContentWidth="2xl"

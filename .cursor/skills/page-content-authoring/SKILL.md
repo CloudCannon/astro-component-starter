@@ -241,7 +241,6 @@ Carousel of feature cards with images.
         Description text.
       imageSource: /src/assets/images/slide1.jpg
       imageAlt: Slide one
-      minSplitWidth: 0
   colorScheme: inherit
   backgroundColor: surface
 ```
@@ -255,7 +254,7 @@ Carousel of feature cards with images.
 | `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
 | `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
-Slide item fields: `eyebrow` (text), `title` (text), `description` (markdown), `imageSource` (image), `imageAlt` (text), `minSplitWidth` (number).
+Slide item fields: `eyebrow` (text), `title` (text), `description` (markdown), `imageSource` (image), `imageAlt` (text).
 
 ---
 

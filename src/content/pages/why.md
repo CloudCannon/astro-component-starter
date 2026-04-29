@@ -105,7 +105,6 @@ pageSections:
           overwhelming the page.
         imageSource: /src/assets/images/component-docs/quiet-street.jpg
         imageAlt: High Performance
-        minSplitWidth: 0
       - eyebrow: Content transition example
         title: Seamless navigation between slides
         description: >-
@@ -116,7 +115,6 @@ pageSections:
           sequential content delivery.
         imageSource: /src/assets/images/component-docs/sheep.jpg
         imageAlt: Easy Maintenance
-        minSplitWidth: 0
       - eyebrow: Third position showcase
         title: Maintaining consistent formatting
         description: >-
@@ -126,7 +124,6 @@ pageSections:
           to expect as they progress through the available content.
         imageSource: /src/assets/images/component-docs/castle.jpg
         imageAlt: Move Faster
-        minSplitWidth: 300
       - eyebrow: Final slide
         title: Completing the carousel loop
         description: >-
@@ -137,7 +134,6 @@ pageSections:
           a compact, navigable format.
         imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
         imageAlt: Long-Term Stability
-        minSplitWidth: 0
     colorScheme: dark
     backgroundColor: surface
     eyebrow: Why Carousel

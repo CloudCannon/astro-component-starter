@@ -1,5 +1,4 @@
 ---
-import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
@@ -14,7 +13,7 @@ export interface Props {
 export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
   const blogPosts = await getBlogPostsSortedByDate();
 
-  return paginate(blogPosts, { pageSize: 9 });
+  return paginate(blogPosts, { pageSize: 12 });
 }
 
 const { page } = Astro.props as Props;
@@ -48,18 +47,6 @@ const pageDescription =
     colorScheme="inherit"
     backgroundColor="base"
   >
-    {
-      page.currentPage > 1 ? (
-        <SimpleText
-          size="md"
-          style="margin-top: var(--spacing-lg); color: var(--color-text-muted); max-width: 42rem;"
-        >
-          You are viewing older posts from the blog archive. The newest articles always appear on
-          page one; use the pagination controls at the bottom to move between pages or return to the
-          first page for the latest updates.
-        </SimpleText>
-      ) : null
-    }
     <BlogPostListingGrid
       page={page}
       emptyMessage="No blog posts yet. Check back soon!"

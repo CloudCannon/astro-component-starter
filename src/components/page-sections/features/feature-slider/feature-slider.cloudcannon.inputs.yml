@@ -22,7 +22,6 @@ slides:
           description: Short description for this slide.
           imageSource: /src/assets/images/component-docs/sunset.jpg
           imageAlt: Slide image alt text
-          minSplitWidth: 0
         preview:
           text:
             - key: title
@@ -53,6 +52,3 @@ slides:
           imageAlt:
             type: text
             comment: Alt text describing the slide image.
-          minSplitWidth:
-            type: number
-            comment: Container width (in px) before the split stacks vertically.

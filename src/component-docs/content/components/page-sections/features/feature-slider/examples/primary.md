@@ -16,19 +16,16 @@ blocks:
       description: 'Trigger downstream tools when tasks close so work keeps moving without manual pings.'
       imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
       imageAlt: 'Team reviewing an automated workflow'
-      minSplitWidth: 0
     - _component: 'page-sections/features/feature-slider/feature-slider-item'
       eyebrow: 'Visibility'
       title: 'Insight dashboards'
       description: 'Pull status from every project into a single adaptive view for leadership.'
       imageSource: /src/assets/images/component-docs/quiet-street.jpg
       imageAlt: 'Dashboards summarizing project progress'
-      minSplitWidth: 0
     - _component: 'page-sections/features/feature-slider/feature-slider-item'
       eyebrow: 'Control'
       title: 'Granular permissions'
       description: 'Use roles to decide exactly who can edit briefs, roadmaps, and approvals.'
       imageSource: /src/assets/images/component-docs/castle.jpg
       imageAlt: 'Secure permissions protecting team workflows'
-      minSplitWidth: 0
 ---

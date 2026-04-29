@@ -30,7 +30,7 @@ export async function getStaticPaths({ paginate }: { paginate: Paginate }) {
       (p.data.tags ?? []).some((t: string) => slugifyLabel(t.trim()) === tag)
     );
 
-    return paginate(filtered, { pageSize: 9, params: { tag } });
+    return paginate(filtered, { pageSize: 12, params: { tag } });
   });
 }
 

@@ -109,6 +109,10 @@ export function generateCloudCannonInputs(
           }
         }
 
+        const objectFieldValue = Object.fromEntries(
+          Object.keys(objectFields).map((fieldKey) => [fieldKey, null])
+        );
+
         if (Object.keys(objectFields).length > 0 && !inputs[renamedKey]) {
           inputs[renamedKey] = {
             type: "array",
@@ -118,7 +122,8 @@ export function generateCloudCannonInputs(
                 values: [
                   {
                     label: "Item",
-                    value: objectFields,
+                    value: objectFieldValue,
+                    _inputs: objectFields,
                   },
                 ],
               },
@@ -142,5 +147,8 @@ export function generateCloudCannonInputs(
     lineWidth: -1,
     noRefs: true,
     sortKeys: false,
+    styles: {
+      "!!null": "empty",
+    },
   });
 }
