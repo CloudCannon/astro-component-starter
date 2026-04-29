@@ -88,9 +88,19 @@ collections_config:
         type: text
     _editables:
       content:
-        image: false
-        paths:
-          uploads: src/assets/images
+        format: p h2 h3 h4 h5 h6
+        bold: true
+        italic: true
+        link: true
+        bulletedlist: true
+        numberedlist: true
+        blockquote: true
+        code: true
+        horizontalrule: true
+        snippet: true
+        undo: true
+        redo: true
+        removeformat: true
   data:
     path: src/data
     glob:
