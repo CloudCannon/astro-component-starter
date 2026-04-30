@@ -118,6 +118,14 @@ collections_config:
           resize_style: contain
           width: 1920
           height: 1280
+      logoAlternateSource:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+          resize_style: contain
+          width: 1920
+          height: 1280
       image:
         type: image
         options:
@@ -138,6 +146,8 @@ _inputs:
   pageSections:
     comment: The main sections of the page.
   logoSource:
+    type: image
+  logoAlternateSource:
     type: image
 _select_data:
   # Selectable UI icons match [Heroicons](https://heroicons.com/); SVGs live in src/icons/.
