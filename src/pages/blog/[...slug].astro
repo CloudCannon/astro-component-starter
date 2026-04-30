@@ -83,7 +83,7 @@ const article = {
   >
     <SimpleText
       size="sm"
-      style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);"
+      class="post-meta"
       data-prop="author"
     >
       <time
@@ -108,7 +108,7 @@ const article = {
       data-pagefind-meta="title"
       level="h1"
       size="2xl"
-      style="margin-bottom: var(--spacing-xs);"
+      class="post-title"
     >
       {post.data.title}
     </Heading>
@@ -120,7 +120,7 @@ const article = {
           data-pagefind-meta="description"
           data-pagefind-weight="3"
           size="lg"
-          style="color: var(--color-text-muted); margin-bottom: 0; margin-top: var(--spacing-xs);"
+          class="post-description"
         >
           {post.data.description}
         </SimpleText>
@@ -131,7 +131,9 @@ const article = {
       post.data.tags.length > 0 && (
         <p
           class="post-tags"
-          style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-top: var(--spacing-sm); margin-bottom: 0;"
+          data-editable="array"
+          data-prop="tags"
+          data-direction="row"
         >
           {post.data.tags.map((tag, i) => (
             <>
@@ -140,6 +142,8 @@ const article = {
                 class="post-tag-link"
                 href={`/blog/tag/${slugifyLabel(tag.trim())}/`}
                 data-pagefind-filter="Tag"
+                data-editable="array-item"
+                data-id={tag.trim()}
               >
                 {tag.trim()}
               </a>
@@ -180,6 +184,28 @@ const article = {
 <style is:global>
   .post-container.custom-section > .outer-content > .content {
     padding-bottom: 0 !important;
+  }
+
+  .post-meta {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .post-title {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .post-description {
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+    margin-top: var(--spacing-xs);
+  }
+
+  .post-tags {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-bottom: 0;
+    margin-top: var(--spacing-sm);
   }
 
   .post {
