@@ -114,6 +114,9 @@ collections_config:
         name: SEO Settings
         path: .cloudcannon/schemas/seo.json
         remove_extra_inputs: false
+        preview:
+          text:
+            - SEO
         _inputs:
           name:
             comment: Site name used in structured data and as the fallback brand name in SEO metadata.
