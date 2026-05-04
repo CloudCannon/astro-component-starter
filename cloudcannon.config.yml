@@ -109,6 +109,22 @@ collections_config:
     icon: database
     _enabled_editors:
       - data
+    schemas:
+      seo:
+        name: SEO Settings
+        path: .cloudcannon/schemas/seo.json
+        remove_extra_inputs: false
+        _inputs:
+          name:
+            comment: Site name used in structured data and as the fallback brand name in SEO metadata.
+          url:
+            comment: Production site URL used for canonical links and structured data.
+          description:
+            comment: Default meta description used when a page or blog post does not provide its own description.
+          logoSource:
+            comment: Default image used for social sharing metadata when a page or blog post does not provide its own image.
+          titleFormat:
+            comment: Browser title template. Include {title} where the page title should appear.
     _inputs:
       logoSource:
         type: image
