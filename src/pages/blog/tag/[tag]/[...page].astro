@@ -1,9 +1,8 @@
 ---
-import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
-import { slugifyLabel } from "@components/utils/slugify";
 import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../../../utils/blog";
 
 type Paginate = (_data: any[], _opts: { pageSize: number; params: Record<string, string> }) => any;
@@ -68,14 +67,6 @@ const pageDescription =
     colorScheme="inherit"
     backgroundColor="base"
   >
-    <SimpleText
-      size="md"
-      style="margin-top: var(--spacing-lg); color: var(--color-text-muted); max-width: 42rem;"
-    >
-      Below are every published post that includes this tag. Posts are sorted by date with the
-      newest first. When there are many matches, the list splits across pages—use pagination to see
-      older articles or jump back to the blog home for the full feed.
-    </SimpleText>
     <BlogPostListingGrid
       page={page}
       emptyMessage="No posts with this tag."
