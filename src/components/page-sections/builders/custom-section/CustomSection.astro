@@ -11,6 +11,7 @@ const {
   paddingHorizontal,
   paddingVertical = "4xl",
   colorScheme = "inherit",
+  lockColorScheme = false,
   backgroundColor,
   background,
   rounded = false,
@@ -52,6 +53,7 @@ const arrayDataAttributes =
   <div
     class:list={["outer-content", rounded && "rounded"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+    data-theme-lock={lockColorScheme || undefined}
   >
     {
       bgType === "image" && (

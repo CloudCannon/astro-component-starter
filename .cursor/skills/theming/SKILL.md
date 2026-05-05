@@ -305,11 +305,14 @@ The theme files map raw palette values to semantic tokens. Components use semant
 <div
   class:list={['outer-content', rounded && 'rounded']}
   data-theme={colorScheme && colorScheme !== 'inherit' ? colorScheme : undefined}
+  data-theme-lock={lockColorScheme || undefined}
 >
 </div>
 ```
 
 When `colorScheme` is `"dark"`, all descendant elements resolve semantic tokens from `[data-theme="dark"]`. When `"inherit"`, no `data-theme` is set and the section uses whatever theme the parent provides (the document root is `data-theme="light"` by default, set in `BaseLayout.astro`).
+
+When `lockColorScheme` is `true`, the section keeps its authored `colorScheme` even when the visitor toggles the site theme. Keep the CloudCannon `lockColorScheme` input hidden by default; expose or set it only for projects that need fixed light/dark sections.
 
 The `backgroundColor` prop works in tandem — it renders a background div with a class like `bg-surface` that maps to `background-color: var(--color-bg-surface)`, which resolves differently depending on the active theme.
 

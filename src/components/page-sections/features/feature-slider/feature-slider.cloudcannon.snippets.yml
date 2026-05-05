@@ -120,6 +120,10 @@ featureSlider:
             name: Light
           - id: dark
             name: Dark
+    lockColorScheme:
+      type: switch
+      comment: Keep the selected color scheme from flipping when the visitor toggles the site theme.
+      hidden: true
     backgroundColor:
       type: select
       comment: Solid background color token behind the section content.

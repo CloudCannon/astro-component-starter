@@ -15,7 +15,9 @@
       new Set(
         [root].concat(
           Array.prototype.slice.call(
-            document.querySelectorAll('[data-theme="light"], [data-theme="dark"]')
+            document.querySelectorAll(
+              '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])'
+            )
           )
         )
       )

@@ -27,7 +27,8 @@ const { class: className, ...htmlAttributes } = Astro.props;
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
 
-  const themedSelector = '[data-theme="light"], [data-theme="dark"]';
+  const themedSelector =
+    '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])';
 
   function flipTheme(theme: string): string {
     return theme === "dark" ? "light" : "dark";
