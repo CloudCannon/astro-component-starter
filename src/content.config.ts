@@ -2,6 +2,7 @@ import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
 
 const contentBlockSchema = z.object({ _component: z.string() }).passthrough();
+const docsViewerSizeSchema = z.enum(["sm", "md", "lg", "xl"]);
 
 const pageSchema = z.object({
   title: z.string(),
@@ -14,6 +15,7 @@ const pageSchema = z.object({
 
 const docsPageSchema = z.object({
   title: z.string(),
+  description: z.string().optional(),
   contentSections: z.array(contentBlockSchema),
 });
 
@@ -22,6 +24,7 @@ const docsComponentSchema = z.object({
   name: z.string().optional(),
   order: z.number().optional(),
   overview: z.string().optional(),
+  defaultSize: docsViewerSizeSchema.optional(),
   spacing: z.string().optional().nullable(),
   component: z.string().optional(),
   component_path: z.string().optional(),
@@ -50,6 +53,7 @@ const docsComponentSchema = z.object({
         z.object({
           title: z.string().optional(),
           slugs: z.array(z.string()),
+          size: docsViewerSizeSchema.optional(),
         })
       ),
       z.null(),
@@ -66,7 +70,7 @@ const docsComponentSchema = z.object({
               example.slugs[0].replace(/-/g, " ").slice(1)
             : "Example"),
         slugs: example.slugs,
-        size: example.size ?? "md",
+        size: example.size,
       }));
     }),
 });
@@ -93,6 +97,7 @@ const blogPostSchema = z.object({
   author: z.string().default("Anonymous"),
   image: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  keywords: z.array(z.string()).optional(),
 });
 
 const blogCollection = defineCollection({

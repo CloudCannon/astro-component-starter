@@ -1,0 +1,15 @@
+<script is:inline data-astro-rerun>
+  (() => {
+    const initBuilder = () => {
+      if (window.__initComponentBuilder) {
+        window.__initComponentBuilder();
+        return;
+      }
+
+      document.dispatchEvent(new Event("component-builder:ready"));
+    };
+
+    initBuilder();
+    requestAnimationFrame(initBuilder);
+  })();
+</script>

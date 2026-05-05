@@ -31,6 +31,6 @@ blocks:
             This is content for side B.
   distributionMode: 'half'
   fixedWidth: null
-  verticalAlignment: 'stretch'
+  alignmentVertical: 'stretch'
   reverse: false
 ---

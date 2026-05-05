@@ -2,6 +2,7 @@
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
+import Video from "@core-elements/video/Video.astro";
 
 const {
   label,
@@ -13,7 +14,7 @@ const {
   paddingVertical,
   colorScheme = "inherit",
   backgroundColor,
-  backgroundImage,
+  background,
   link,
   showBeforeAfter = true,
   rounded = false,
@@ -28,11 +29,15 @@ const {
 } = Astro.props;
 
 const {
-  source = "",
-  alt = "",
+  type: bgType = "image",
   positionVertical = "top",
   positionHorizontal = "center",
-} = backgroundImage || {};
+  priority = false,
+  imageSource = "",
+  imageAlt = "",
+  videoSource = "",
+  overlay = 0,
+} = background || {};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -56,7 +61,8 @@ const arrayDataAttributesAfter = effectiveAfterProp
   ? { "data-editable": "array", "data-prop": effectiveAfterProp }
   : {};
 
-const Tag = link ? "a" : "div";
+const isPopoverLink = link?.startsWith("^");
+const Tag = link ? (isPopoverLink ? "button" : "a") : "div";
 const hasBeforeSlot = Astro.slots.has("before");
 const hasAfterSlot = Astro.slots.has("after");
 const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeContentSections;
@@ -68,18 +74,46 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
   {...htmlAttributes}
 >
   <Tag
-    {...link && { href: link }}
+    {...isPopoverLink
+      ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+      : link && { href: link }}
     class:list={["card-inner", rounded && "rounded", border && "border"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
   >
-    <Image
-      class:list={["background-image"]}
-      source={source}
-      alt={alt}
-      positionVertical={positionVertical}
-      positionHorizontal={positionHorizontal}
-      background={true}
-    />
+    {
+      bgType === "image" && (
+        <Image
+          class:list={["background-image"]}
+          source={imageSource}
+          alt={imageAlt}
+          priority={priority}
+          positionVertical={positionVertical}
+          positionHorizontal={positionHorizontal}
+          background={true}
+        />
+      )
+    }
+    {
+      bgType === "video" && (
+        <Video
+          type="local-source"
+          source={videoSource}
+          background={true}
+          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+        />
+      )
+    }
+    {
+      overlay !== 0 && (
+        <div
+          class="background-overlay"
+          aria-hidden="true"
+          style={{
+            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
+          }}
+        />
+      )
+    }
     {
       backgroundColor && (
         <div
@@ -150,14 +184,25 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
   </Tag>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .card {
       display: block;
       margin-top: var(--spacing-lg);
 
-      > a.card-inner:hover {
+      > a.card-inner:hover,
+      > button.card-inner:hover {
         transform: scale(1.05);
+      }
+
+      > button.card-inner {
+        appearance: none;
+        background: none;
+        cursor: pointer;
+        font: inherit;
+        padding: 0;
+        text-align: inherit;
+        width: 100%;
       }
 
       > .card-inner {
@@ -191,11 +236,11 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             position: relative;
             z-index: var(--layer-1);
 
-            > :global(*:first-child) {
+            > *:first-child {
               margin-top: 0 !important;
             }
 
-            > :global(*:last-child) {
+            > *:last-child {
               margin-bottom: 0 !important;
             }
 
@@ -245,6 +290,10 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
             &.pad-y-2xl {
               padding-block: var(--spacing-2xl);
+            }
+
+            &.max-width-none {
+              max-width: none;
             }
 
             &.max-width-xs {
@@ -308,13 +357,19 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           position: relative;
           z-index: var(--layer-2);
 
-          > :global(*:first-child) {
+          > *:first-child {
             margin-top: 0 !important;
           }
 
-          > :global(*:last-child) {
+          > *:last-child {
             margin-bottom: 0 !important;
           }
+        }
+
+        > .background-overlay {
+          inset: 0;
+          position: absolute;
+          z-index: var(--layer-1);
         }
 
         > .background {
@@ -322,7 +377,11 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           position: absolute;
         }
 
-        > :global(.background-image) {
+        > .background-image {
+          z-index: var(--layer-1);
+        }
+
+        > .background-video {
           z-index: var(--layer-1);
         }
 

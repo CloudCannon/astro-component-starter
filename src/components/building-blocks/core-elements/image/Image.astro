@@ -1,28 +1,10 @@
 ---
 import { Picture } from "astro:assets";
-
-const ASPECT_RATIO_MAP: Record<string, number> = {
-  square: 1,
-  landscape: 4 / 3,
-  portrait: 3 / 4,
-  widescreen: 16 / 9,
-  "horizontal-strip": 16 / 5,
-};
-
-const POSITION_MAP: Record<string, string> = {
-  "top-left": "northwest",
-  "top-center": "north",
-  "top-right": "northeast",
-  "center-left": "west",
-  "center-center": "center",
-  "center-right": "east",
-  "bottom-left": "southwest",
-  "bottom-center": "south",
-  "bottom-right": "southeast",
-};
+import { prepareImageData } from "../../../utils/image";
 
 const {
   source,
+  alternateSource = null,
   alt,
   sizes = "(max-width: 1280px) 100vw, 1280px",
   widths = [640, 1280, 2560],
@@ -38,6 +20,7 @@ const {
   class: className,
   "data-prop-src": customDataPropSrc,
   "data-prop-alt": customDataPropAlt,
+  imageElementAttributes = {},
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -60,86 +43,46 @@ const dataAttributes = isEditable
   : {};
 
 const positionClass = `position-${positionVertical}-${positionHorizontal}`;
-const isLocalSource = typeof source === "string" && source.startsWith("/src/");
-const isSvg = typeof source === "string" && source.toLowerCase().endsWith(".svg");
+const preparedImage = prepareImageData({
+  source,
+  width,
+  height,
+  widths,
+  aspectRatio,
+  positionVertical,
+  positionHorizontal,
+});
 
-let imageSrc = source;
-let imageWidth = width;
-let imageHeight = height;
-let shouldRenderOptimizedPicture = false;
+const effectiveSizes = priority ? sizes : `auto, ${sizes}`;
 
-if (isLocalSource) {
-  const imageFiles = import.meta.glob("/src/assets/images/**/*", {
-    import: "default",
-    eager: true,
-  }) as Record<string, any>;
+const hasAlternate =
+  alternateSource && typeof alternateSource === "string" && alternateSource.trim() !== "";
+const preparedAlternate = hasAlternate
+  ? prepareImageData({
+      source: alternateSource,
+      width,
+      height,
+      widths,
+      aspectRatio,
+      positionVertical,
+      positionHorizontal,
+    })
+  : null;
 
-  const imageKey = Object.keys(imageFiles).find((key) => key.endsWith(source));
+const imageEntries = [
+  {
+    prepared: preparedImage,
+    attrs: { ...dataAttributes, ...imageElementAttributes },
+    wrapperClass: hasAlternate ? "image-primary" : null,
+  },
+];
 
-  if (imageKey && imageFiles[imageKey]) {
-    if (isSvg) {
-      imageSrc = imageFiles[imageKey].src;
-      imageWidth = imageWidth || imageFiles[imageKey].width;
-      imageHeight = imageHeight || imageFiles[imageKey].height;
-    } else {
-      imageSrc = imageFiles[imageKey];
-      imageWidth = imageWidth || imageSrc.width;
-      imageHeight = imageHeight || imageSrc.height;
-      shouldRenderOptimizedPicture = true;
-    }
-  } else {
-    console.warn(`Local image not found for path: ${source}`);
-  }
-}
-
-let finalWidth = imageWidth;
-let finalHeight = imageHeight;
-let useFit = undefined;
-let usePosition = undefined;
-let filteredWidths = widths;
-
-if (
-  aspectRatio &&
-  aspectRatio !== "none" &&
-  shouldRenderOptimizedPicture &&
-  imageSrc &&
-  imageWidth
-) {
-  const targetAspect = ASPECT_RATIO_MAP[aspectRatio];
-
-  if (targetAspect) {
-    let maxWidth: number;
-    let maxHeight: number;
-
-    if (targetAspect === 1 && imageHeight) {
-      const dimension = Math.min(imageWidth, imageHeight);
-
-      maxWidth = dimension;
-      maxHeight = dimension;
-    } else if (imageHeight) {
-      const heightFromWidth = imageWidth / targetAspect;
-
-      if (heightFromWidth <= imageHeight) {
-        maxWidth = imageWidth;
-        maxHeight = Math.round(imageWidth / targetAspect);
-      } else {
-        maxWidth = Math.round(imageHeight * targetAspect);
-        maxHeight = imageHeight;
-      }
-    } else {
-      maxWidth = imageWidth;
-      maxHeight = Math.round(imageWidth / targetAspect);
-    }
-
-    finalWidth = maxWidth;
-    finalHeight = maxHeight;
-    filteredWidths = widths.filter((w: number) => w <= maxWidth);
-    useFit = "cover";
-
-    const positionKey = `${positionVertical}-${positionHorizontal}`;
-
-    usePosition = POSITION_MAP[positionKey] || "center";
-  }
+if (hasAlternate) {
+  imageEntries.push({
+    prepared: preparedAlternate!,
+    attrs: { ...imageElementAttributes },
+    wrapperClass: "image-alternate",
+  });
 }
 ---
 
@@ -158,41 +101,45 @@ if (
     ]}
   >
     {
-      shouldRenderOptimizedPicture ? (
-        <Picture
-          src={imageSrc}
-          alt={normalizedAlt}
-          widths={filteredWidths}
-          sizes={sizes}
-          formats={["webp"]}
-          width={finalWidth}
-          height={finalHeight}
-          fit={useFit}
-          position={usePosition}
-          loading={priority ? "eager" : "lazy"}
-          decoding={priority ? "sync" : "async"}
-          fetchpriority={priority ? "high" : undefined}
-          {...dataAttributes}
-        />
-      ) : (
-        <picture>
-          <img
-            src={imageSrc}
+      imageEntries.map(({ prepared, attrs, wrapperClass }) => {
+        const img = prepared.shouldRenderOptimizedPicture ? (
+          <Picture
+            src={prepared.imageSrc}
             alt={normalizedAlt}
+            widths={prepared.filteredWidths}
+            sizes={effectiveSizes}
+            formats={["webp"]}
+            width={prepared.finalWidth}
+            height={prepared.finalHeight}
+            fit={prepared.useFit}
+            position={prepared.usePosition}
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? "sync" : "async"}
             fetchpriority={priority ? "high" : undefined}
-            width={imageWidth}
-            height={imageHeight}
-            {...dataAttributes}
+            {...attrs}
           />
-        </picture>
-      )
+        ) : (
+          <picture>
+            <img
+              src={prepared.imageSrc}
+              alt={normalizedAlt}
+              loading={priority ? "eager" : "lazy"}
+              decoding={priority ? "sync" : "async"}
+              fetchpriority={priority ? "high" : undefined}
+              width={prepared.imageWidth}
+              height={prepared.imageHeight}
+              {...attrs}
+            />
+          </picture>
+        );
+
+        return wrapperClass ? <div class:list={wrapperClass}>{img}</div> : img;
+      })
     }
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .image {
       display: block;
@@ -207,6 +154,7 @@ if (
 
       > .image-inner {
         overflow: hidden;
+        width: 100%;
 
         &.ratio-square {
           aspect-ratio: var(--ratio-square);
@@ -229,11 +177,11 @@ if (
         }
 
         &.ratio {
-          :global(picture) {
+          picture {
             height: 100%;
           }
 
-          :global(img) {
+          img {
             height: 100%;
             object-fit: cover;
             object-position: center center;
@@ -244,62 +192,62 @@ if (
           height: 100%;
           width: 100%;
 
-          > :global(picture) {
+          > picture {
             height: 100%;
           }
 
-          > :global(picture) > :global(img) {
+          > picture > img {
             height: 100%;
             object-fit: cover;
             width: 100%;
           }
         }
 
-        :global(picture) {
+        picture {
           display: block;
           margin-block: auto;
           width: 100%;
         }
 
-        :global(img) {
+        img {
           display: block;
           height: auto;
           width: 100%;
         }
 
-        &.position-center-center :global(img) {
+        &.position-center-center img {
           object-position: center center;
         }
 
-        &.position-top-center :global(img) {
+        &.position-top-center img {
           object-position: center top;
         }
 
-        &.position-bottom-center :global(img) {
+        &.position-bottom-center img {
           object-position: center bottom;
         }
 
-        &.position-center-left :global(img) {
+        &.position-center-left img {
           object-position: left center;
         }
 
-        &.position-center-right :global(img) {
+        &.position-center-right img {
           object-position: right center;
         }
 
-        &.position-top-left :global(img) {
+        &.position-top-left img {
           object-position: left top;
         }
 
-        &.position-top-right :global(img) {
+        &.position-top-right img {
           object-position: right top;
         }
 
-        &.position-bottom-left :global(img) {
+        &.position-bottom-left img {
           object-position: left bottom;
         }
 
-        &.position-bottom-right :global(img) {
+        &.position-bottom-right img {
           object-position: right bottom;
         }
 
@@ -307,6 +255,18 @@ if (
           border-radius: var(--radius-lg);
         }
       }
+
+      .image-alternate {
+        display: none;
+      }
+    }
+
+    html[data-theme-toggled] .image .image-primary {
+      display: none;
+    }
+
+    html[data-theme-toggled] .image .image-alternate {
+      display: block;
     }
   }
 </style>

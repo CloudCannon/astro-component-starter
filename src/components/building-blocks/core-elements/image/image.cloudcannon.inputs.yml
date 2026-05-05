@@ -8,6 +8,16 @@ source:
     resize_style: contain
     width: 1920
     height: 1280
+alternateSource:
+  type: image
+  comment: Optional alternate image shown when the site theme is toggled. The main source is shown by default.
+  options:
+    paths:
+      uploads: src/assets/images
+      static: ""
+    resize_style: contain
+    width: 1920
+    height: 1280
 alt:
   type: textarea
   comment: Alternative text for accessibility.

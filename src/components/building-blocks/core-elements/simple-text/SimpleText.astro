@@ -4,7 +4,7 @@ import MarkdownIt from "markdown-it";
 const {
   text,
   size = "md",
-  alignX = "start",
+  alignmentHorizontal = "start",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -32,7 +32,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   class:list={["simple-text", className]}
   {...htmlAttributes}
 >
-  <p class:list={["simple-text-content", size && `size-${size}`, `align-${alignX}`]}>
+  <p class:list={["simple-text-content", size && `size-${size}`, `align-${alignmentHorizontal}`]}>
     <span
       class="simple-text-inner"
       {...textDataAttributes}
@@ -44,7 +44,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   </p>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .simple-text {
       margin-top: var(--spacing-lg);

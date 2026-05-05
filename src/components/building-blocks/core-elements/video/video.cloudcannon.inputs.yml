@@ -11,30 +11,32 @@ type:
 title:
   type: text
   comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
-id:
+videoId:
   type: text
-  comment: Used for externally hosted videos - Enter the YouTube or Vimeo id.
+  comment: Used for externally hosted videos - Enter the YouTube or Vimeo video ID.
 source:
   type: file
   label: Video Source
-  comment: Used for locally hosted videos - Must be mp4 as this is supported by all modern browsers.
+  comment: Used for locally hosted videos - Select a video file; matching sibling formats with the same filename are added as additional sources automatically.
   options:
     accepts_mime_types:
       - video/mp4
+      - video/webm
+      - video/ogg
     paths:
       uploads: public/videos
       static: public
 thumbnail:
   type: image
-  comment: Used for locally hosted videos - The image displayed before the video plays or while it is loading.
+  comment: Poster image before the video plays. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
   options:
     accepts_mime_types:
       - image/jpeg
       - image/png
       - image/webp
     paths:
-      uploads: public/images
-      static: public
+      uploads: src/assets/images
+      static: ""
     resize_style: contain
     width: 1920
-    height: 1280
+    height: 1080

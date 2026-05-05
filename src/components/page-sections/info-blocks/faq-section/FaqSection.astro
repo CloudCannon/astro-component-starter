@@ -7,9 +7,13 @@ const {
   heading = "Frequently Asked Questions",
   items = [],
   label = "About FAQ",
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
   paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
+  background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -20,17 +24,19 @@ const {
 <CustomSection
   {...htmlAttributes}
   class:list={["faq-section", className]}
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
 >
   <Heading
     level="h2"
     size="lg"
-    alignX="center"
+    alignmentHorizontal="center"
     text={heading}
     data-prop="heading"
   />

@@ -1,6 +1,7 @@
 ---
 import Footer from "@components/navigation/footer/Footer.astro";
 import MainNavigation from "@components/navigation/main-nav/MainNav.astro";
+import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
 import MainComponent from "@components/utils/MainComponent.astro";
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
@@ -15,13 +16,30 @@ type Props = {
     keywords?: string[];
     image?: string;
     canonical?: string;
+    type?: "website" | "article";
+    article?: {
+      publishedTime?: string;
+      modifiedTime?: string;
+      author?: string | string[];
+      tags?: string[];
+    };
     pageSections?: ContentBlock[];
+    noindex?: boolean;
   };
   title?: string;
   description?: string;
   keywords?: string[];
   image?: string;
   canonical?: string;
+  type?: "website" | "article";
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    author?: string | string[];
+    tags?: string[];
+  };
+  noindex?: boolean;
+  disablePagefind?: boolean;
   mainNav?: Record<string, unknown>;
   footer?: Record<string, unknown>;
 };
@@ -33,6 +51,10 @@ const {
   keywords: keywordsProp,
   image: imageProp,
   canonical: canonicalProp,
+  type: typeProp,
+  article: articleProp,
+  noindex: noindexProp,
+  disablePagefind = false,
   mainNav = mainNavData,
   footer = footerData,
 } = Astro.props as Props;
@@ -42,6 +64,9 @@ const description = frontmatter?.description ?? descriptionProp;
 const keywords = frontmatter?.keywords ?? keywordsProp;
 const image = frontmatter?.image ?? imageProp;
 const canonical = frontmatter?.canonical ?? canonicalProp;
+const type = frontmatter?.type ?? typeProp;
+const article = frontmatter?.article ?? articleProp;
+const noindex = frontmatter?.noindex ?? noindexProp ?? false;
 const sections = frontmatter?.pageSections ?? [];
 ---
 
@@ -51,10 +76,14 @@ const sections = frontmatter?.pageSections ?? [];
   keywords={keywords}
   image={image}
   canonical={canonical}
+  type={type}
+  article={article}
+  noindex={noindex}
 >
+  {mainNav.themeToggle && <ThemeToggleScript slot="head" />}
   <MainNavigation {...mainNav} />
 
-  <main>
+  <main {...disablePagefind ? { "data-pagefind-ignore": "all" } : {}}>
     {
       sections.length > 0 && (
         <div
@@ -66,7 +95,9 @@ const sections = frontmatter?.pageSections ?? [];
         </div>
       )
     }
-    <slot />
+    <div {...disablePagefind ? {} : { "data-pagefind-body": true }}>
+      <slot />
+    </div>
   </main>
   <Footer {...footer} />
 </Layout>

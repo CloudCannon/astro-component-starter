@@ -17,7 +17,7 @@ blocks:
         This is content for side B.
   distributionMode: half
   fixedWidth: null
-  verticalAlignment: top
+  alignmentVertical: top
   reverse: false
   label: ''
   minSplitWidth: 700

@@ -14,4 +14,6 @@ examples:
       - variants
   - slugs:
       - icons
+  - slugs:
+      - icon-colors
 ---

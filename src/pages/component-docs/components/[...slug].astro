@@ -1,8 +1,8 @@
 ---
 import ComponentLayout from "@component-docs/layouts/ComponentLayout.astro";
 import { getCollection, render } from "astro:content";
-import { existsSync, readFileSync } from "node:fs";
 import { load as yamlLoad } from "js-yaml";
+import { existsSync, readFileSync } from "node:fs";
 
 export async function getStaticPaths() {
   // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set

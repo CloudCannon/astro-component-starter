@@ -4,7 +4,7 @@ spacing: 'all'
 blocks:
   - _component: 'building-blocks/core-elements/video'
     type: youtube
-    id: dsTXcSeAZq8
+    videoId: ZoXyK96nyCg
     title: Astro in 100 Seconds
     source: ''
     thumbnail: ''

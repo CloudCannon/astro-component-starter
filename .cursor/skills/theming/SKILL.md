@@ -86,11 +86,11 @@ There are also `--spacing-em-*` variants (same scale in `em` units) for font-rel
 
 **Font families** (set via `site-fonts.mjs`, see font configuration below):
 
-| Token             | Default                |
-| ----------------- | ---------------------- |
-| `--font-body`     | Inter (Google Fonts)   |
-| `--font-headings` | Raleway (Google Fonts) |
-| `--font-mono`     | System monospace stack |
+| Token             | Default                     |
+| ----------------- | --------------------------- |
+| `--font-body`     | Inter (fontsource, local)   |
+| `--font-headings` | Raleway (fontsource, local) |
+| `--font-mono`     | System monospace stack      |
 
 ### Colors (`src/styles/variables/_colors.css`)
 
@@ -231,7 +231,17 @@ The theme files map raw palette values to semantic tokens. Components use semant
   --color-overlay: rgba(0, 0, 0, 0.5);
 
   --color-focus-ring: rgba(0, 87, 255, 0.4);
-  --color-error: #f00;
+
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-bg-subtle: #fef2f2;
+  --color-danger-border-subtle: #fca5a5;
+  --color-info: #2563eb;
+  --color-info-bg-subtle: #eff6ff;
+  --color-info-border-subtle: #bfdbfe;
+  --color-success: #16a34a;
+  --color-success-bg-subtle: #dcfce7;
+  --color-error: var(--color-danger);
 }
 ```
 
@@ -273,6 +283,17 @@ The theme files map raw palette values to semantic tokens. Components use semant
   --color-overlay: rgba(0, 0, 0, 0.7);
 
   --color-focus-ring: rgba(0, 122, 255, 0.4);
+
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-danger-bg-subtle: rgba(239, 68, 68, 0.12);
+  --color-danger-border-subtle: rgba(239, 68, 68, 0.4);
+  --color-info: #60a5fa;
+  --color-info-bg-subtle: rgba(59, 130, 246, 0.12);
+  --color-info-border-subtle: rgba(59, 130, 246, 0.4);
+  --color-success: #4ade80;
+  --color-success-bg-subtle: rgba(16, 185, 129, 0.15);
+  --color-error: var(--color-danger);
 }
 ```
 
@@ -284,11 +305,14 @@ The theme files map raw palette values to semantic tokens. Components use semant
 <div
   class:list={['outer-content', rounded && 'rounded']}
   data-theme={colorScheme && colorScheme !== 'inherit' ? colorScheme : undefined}
+  data-theme-lock={lockColorScheme || undefined}
 >
 </div>
 ```
 
 When `colorScheme` is `"dark"`, all descendant elements resolve semantic tokens from `[data-theme="dark"]`. When `"inherit"`, no `data-theme` is set and the section uses whatever theme the parent provides (the document root is `data-theme="light"` by default, set in `BaseLayout.astro`).
+
+When `lockColorScheme` is `true`, the section keeps its authored `colorScheme` even when the visitor toggles the site theme. Keep the CloudCannon `lockColorScheme` input hidden by default; expose or set it only for projects that need fixed light/dark sections.
 
 The `backgroundColor` prop works in tandem — it renders a background div with a class like `bg-surface` that maps to `background-color: var(--color-bg-surface)`, which resolves differently depending on the active theme.
 
@@ -370,69 +394,17 @@ If a component needs a token that doesn't exist yet (e.g., `--color-bg-card-hove
 
 ## Font configuration
 
-Fonts are managed in a single file: `site-fonts.mjs` at the project root. This file is consumed by both Astro's font system (`astro.config.mjs`) and the layout (`SiteFonts.astro`).
+Fonts are managed in `site-fonts.mjs` at the project root. This file is consumed by both Astro's font system (`astro.config.mjs`) and the layout (`SiteFonts.astro`). Fonts use `@fontsource` packages for local copies — no external font services at runtime.
 
-### Current configuration
+For detailed instructions on adding or changing fonts, see the **adding-fonts** skill (`SKILL.md` in `.cursor/skills/adding-fonts/`).
 
-```js
-// site-fonts.mjs
-import { fontProviders } from 'astro/config';
+### Quick summary
 
-export const siteFonts = [
-  {
-    name: 'Inter',
-    cssVariable: '--font-body',
-    provider: fontProviders.google(),
-    weights: [400, 600, 700],
-    styles: ['normal'],
-  },
-  {
-    name: 'Raleway',
-    cssVariable: '--font-headings',
-    provider: fontProviders.google(),
-    weights: [400, 600, 700],
-    styles: ['normal'],
-  },
-];
-```
-
-### Changing fonts
-
-To change fonts, edit `site-fonts.mjs`:
-
-1. Replace `name` with the new font name (must match the provider's catalog).
-2. Keep `cssVariable` the same (`--font-body` and `--font-headings`) — these are referenced throughout the CSS.
-3. Update `weights` to match the weights you need (must include weights used in `_fonts.css`: 400, 600, 700).
-4. Change `provider` if not using Google Fonts (Astro supports other providers).
-
-Example switching to a custom font pair:
-
-```js
-export const siteFonts = [
-  {
-    name: 'Open Sans',
-    cssVariable: '--font-body',
-    provider: fontProviders.google(),
-    weights: [400, 600, 700],
-    styles: ['normal'],
-  },
-  {
-    name: 'Montserrat',
-    cssVariable: '--font-headings',
-    provider: fontProviders.google(),
-    weights: [400, 600, 700],
-    styles: ['normal'],
-  },
-];
-```
-
-### How fonts load
-
-`SiteFonts.astro` (in `src/layouts/`) maps each font entry to Astro's `<Font>` component, which handles preloading and CSS variable injection:
-
-```astro
-{siteFonts.map((entry) => <Font cssVariable={entry.cssVariable} />)}
-```
+- Edit `site-fonts.mjs` to change font families, weights, or provider.
+- Install `@fontsource/<font-name>` for new fonts. Use `fontProviders.fontsource()` as the provider.
+- Keep `cssVariable` values aligned with `--font-body` and `--font-headings`.
+- Weights must include 400, 600, 700 (or a variable font covering that range).
+- For proprietary fonts not on Fontsource, use `fontProviders.local()` with `.woff2` files in `src/assets/fonts/`.
 
 ---
 
@@ -474,7 +446,7 @@ Edit `src/styles/themes/_dark.css` — use appropriate dark-mode variants:
 
 ### 3. Set brand fonts
 
-Edit `site-fonts.mjs` with the brand's font families. Make sure the weights array includes at least 400, 600, and 700 (or whichever weights `_fonts.css` references).
+Install `@fontsource/<font-name>` packages and edit `site-fonts.mjs` with the brand's font families using `fontProviders.fontsource()`. For proprietary fonts, use `fontProviders.local()` with `.woff2` files. See the **adding-fonts** skill for full details.
 
 ### 4. Adjust spacing and radius (optional)
 

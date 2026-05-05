@@ -62,8 +62,8 @@ Make any text field editable by passing `data-prop` on a text building block.
 ### Pattern
 
 ```astro
-<Heading level="h2" size="lg" alignX="center" data-prop="heading" text={heading} />
-<Text alignX="center" data-prop="subtext" text={subtext} />
+<Heading level="h2" size="lg" alignmentHorizontal="center" data-prop="heading" text={heading} />
+<Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
 <SimpleText data-prop="eyebrow" text={eyebrow} />
 ```
 
@@ -161,7 +161,11 @@ Arrays allow editors to add, remove, and reorder items in the Visual Editor.
 Pass `data-children-prop` on a wrapper building block:
 
 ```astro
-<ButtonGroup buttonSections={buttonSections} alignX="center" data-children-prop="buttonSections" />
+<ButtonGroup
+  buttonSections={buttonSections}
+  alignmentHorizontal="center"
+  data-children-prop="buttonSections"
+/>
 
 <Grid gap="lg" minItemWidth="360" class="feature-grid" data-children-prop="features">
   {

@@ -19,10 +19,17 @@ collections_config:
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.md"
     new_preview_url: /
+    paths:
+      uploads: src/assets/images
     _inputs:
       title:
         type: text
         comment: Controls the metadata title for the page.
+      keywords:
+        type: array
+        comment: Optional meta keywords for this page.
+      keywords[*]:
+        type: text
   blog:
     path: src/content/blog
     glob:
@@ -45,6 +52,8 @@ collections_config:
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
     new_preview_url: /blog/
+    paths:
+      uploads: src/assets/images
     _inputs:
       title:
         type: text
@@ -70,15 +79,65 @@ collections_config:
       tags:
         type: array
         comment: Tags relevant to this post's content.
+      tags[*]:
+        type: text
+      keywords:
+        type: array
+        comment: Optional meta keywords for this post.
+      keywords[*]:
+        type: text
+    _editables:
+      content:
+        format: p h2 h3 h4 h5 h6
+        bold: true
+        italic: true
+        link: true
+        bulletedlist: true
+        numberedlist: true
+        blockquote: true
+        code: true
+        horizontalrule: true
+        snippet: true
+        undo: true
+        redo: true
+        removeformat: true
   data:
     path: src/data
     glob:
       - "**/*.json"
+    disable_url: true
     icon: database
     _enabled_editors:
       - data
+    schemas:
+      seo:
+        name: SEO Settings
+        path: .cloudcannon/schemas/seo.json
+        remove_extra_inputs: false
+        preview:
+          text:
+            - SEO
+        _inputs:
+          name:
+            comment: Site name used in structured data and as the fallback brand name in SEO metadata.
+          url:
+            comment: Production site URL used for canonical links and structured data.
+          description:
+            comment: Default meta description used when a page or blog post does not provide its own description.
+          logoSource:
+            comment: Default image used for social sharing metadata when a page or blog post does not provide its own image.
+          titleFormat:
+            comment: Browser title template. Include {title} where the page title should appear.
     _inputs:
       logoSource:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+          resize_style: contain
+          width: 1920
+          height: 1280
+      logoAlternateSource:
         type: image
         options:
           paths:
@@ -107,7 +166,10 @@ _inputs:
     comment: The main sections of the page.
   logoSource:
     type: image
+  logoAlternateSource:
+    type: image
 _select_data:
+  # Selectable UI icons match [Heroicons](https://heroicons.com/); SVGs live in src/icons/.
   icons:
     - id: academic-cap
       name: Academic Cap

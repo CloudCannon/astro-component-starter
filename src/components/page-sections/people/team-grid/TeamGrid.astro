@@ -12,9 +12,14 @@ const {
   heading = "",
   subtext = "",
   teamMembers = [],
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
+  layout = "start",
   useDefaultEditableBinding = false,
   _component,
   class: className,
@@ -24,16 +29,18 @@ const {
 
 <CustomSection
   class:list={["team-grid", className]}
-  maxContentWidth="2xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <SimpleText
-    alignX="center"
+    alignmentHorizontal="center"
     class="eyebrow"
     data-prop="eyebrow"
     text={eyebrow}
@@ -42,7 +49,7 @@ const {
     class="team-grid-heading"
     level="h2"
     size="lg"
-    alignX="center"
+    alignmentHorizontal="center"
     data-prop="heading"
   >
     {heading}
@@ -50,7 +57,7 @@ const {
   <SimpleText
     class="team-grid-subtext"
     size="md"
-    alignX="center"
+    alignmentHorizontal="center"
     data-prop="subtext"
     text={subtext}
   />
@@ -60,7 +67,7 @@ const {
     minItemWidth={260}
     maxItemWidth={400}
     data-children-prop="teamMembers"
-    layout="start"
+    layout={layout}
   >
     {
       teamMembers.map((member: MemberProps) => (
@@ -75,17 +82,17 @@ const {
   </Grid>
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.team-grid-heading) {
+    .team-grid-heading {
       margin-bottom: var(--spacing-sm);
     }
 
-    :global(.team-grid-subtext) {
+    .team-grid-subtext {
       margin-top: 0;
     }
 
-    :global(.team-grid-grid) {
+    .team-grid-grid {
       margin-top: var(--spacing-xl);
     }
   }

@@ -44,7 +44,6 @@
 
     .device-size-segments,
     .direction-segments,
-    .theme-segments,
     .view-segments {
       .options {
         display: flex;
@@ -157,6 +156,22 @@
       }
     }
   }
+}
+
+.component-viewer > .previews.viewer-size-sm {
+  min-height: 8rem;
+}
+
+.component-viewer > .previews.viewer-size-md {
+  min-height: 10rem;
+}
+
+.component-viewer > .previews.viewer-size-lg {
+  min-height: 14rem;
+}
+
+.component-viewer > .previews.viewer-size-xl {
+  min-height: 18rem;
 }
 
 .hide {

@@ -40,8 +40,8 @@ This means at the page section level, you're mostly passing props to building bl
 The most common pattern. Pass `data-prop` to a building block to make its text editable inline:
 
 ```astro
-<Heading level="h2" size="lg" alignX="center" data-prop="heading" text={heading} />
-<Text alignX="center" data-prop="subtext" text={subtext} />
+<Heading level="h2" size="lg" alignmentHorizontal="center" data-prop="heading" text={heading} />
+<Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
 ```
 
 The `data-prop` value must match a prop name on your component. When an editor clicks the heading in the preview, CloudCannon updates the `heading` prop in the page's frontmatter.
@@ -63,7 +63,11 @@ When an editor clicks this image, CloudCannon opens a picker. The selected file 
 Some components contain arrays of child components, like a row of buttons or a set of accordion items. Pass `data-children-prop` to make them editable inline:
 
 ```astro
-<ButtonGroup buttonSections={buttonSections} alignX="center" data-children-prop="buttonSections" />
+<ButtonGroup
+  buttonSections={buttonSections}
+  alignmentHorizontal="center"
+  data-children-prop="buttonSections"
+/>
 ```
 
 `ButtonGroup` handles the rest internally — it adds `data-editable="array"` to its container so CloudCannon knows this element holds an array of children that can be added, removed, and reordered in the preview. Setting `data-children-prop` implies editability, just like `data-prop` does for text components.
@@ -74,11 +78,11 @@ Here's [CTA Center](/component-docs/components/page-sections/ctas/cta-center/) a
 
 ```astro
 <CustomSection maxContentWidth="lg" paddingVertical={paddingVertical} {...htmlAttributes}>
-  <Heading level="h2" size="xl" alignX="center" data-prop="heading" text={heading} />
-  <Text alignX="center" data-prop="subtext" text={subtext} />
+  <Heading level="h2" size="xl" alignmentHorizontal="center" data-prop="heading" text={heading} />
+  <Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
     buttonSections={buttonSections}
-    alignX="center"
+    alignmentHorizontal="center"
     data-children-prop="buttonSections"
   />
 </CustomSection>

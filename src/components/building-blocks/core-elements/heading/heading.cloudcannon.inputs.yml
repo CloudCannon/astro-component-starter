@@ -35,7 +35,7 @@ size:
         name: 3xl
       - id: 4xl
         name: 4xl
-alignX:
+alignmentHorizontal:
   comment: The horizontal alignment of the text.
   type: select
   options:
@@ -47,10 +47,39 @@ alignX:
       - id: end
         name: End
 iconName:
-  comment: The name of the icon to display.
+  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
   type: select
   options:
     values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+iconColor:
+  type: select
+  comment: The color of the icon.
+  hidden: "!iconName"
+  options:
+    values:
+      - id: default
+        name: Default
+      - id: blue
+        name: Blue
+      - id: green
+        name: Green
+      - id: yellow
+        name: Yellow
+      - id: orange
+        name: Orange
+      - id: red
+        name: Red
+      - id: purple
+        name: Purple
+      - id: pink
+        name: Pink
+      - id: cyan
+        name: Cyan
 iconPosition:
   comment: The position of the icon relative to the text.
   type: select

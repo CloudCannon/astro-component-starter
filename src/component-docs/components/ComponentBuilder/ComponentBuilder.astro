@@ -9,7 +9,7 @@
 
 import type { ComponentInfo, ComponentMetadata, NestingRules } from "./types";
 import Button from "../../../components/building-blocks/core-elements/button/Button.astro";
-import Slider from "../../../components/building-blocks/forms/slider/Slider.astro";
+import Toggle from "../../../components/building-blocks/forms/toggle/Toggle.astro";
 
 interface Props {
   components: ComponentInfo[];
@@ -47,11 +47,11 @@ const builderData = {
   data-builder-data={JSON.stringify(builderData)}
   data-ssr-enabled={String(ssrEnabled)}
 >
-  <!-- Template for reusable Slider component -->
-  <template id="slider-template">
-    <Slider
-      id="slider-template-id"
-      name="slider-template"
+  <!-- Template for reusable Toggle component -->
+  <template id="toggle-template">
+    <Toggle
+      id="toggle-template-id"
+      name="toggle-template"
     />
   </template>
 
@@ -174,7 +174,7 @@ const builderData = {
         >Structure Value</button
       >
     </div>
-    <div class="builder-code-content">
+    <div class="builder-code-frame">
       <button
         type="button"
         class="code-copy-btn"
@@ -195,7 +195,9 @@ const builderData = {
           ></path>
         </svg>
       </button>
-      <!-- Populated by JS with shiki-highlighted code -->
+      <div class="builder-code-content">
+        <!-- Populated by JS with shiki-highlighted code -->
+      </div>
     </div>
   </div>
 
@@ -314,7 +316,7 @@ const builderData = {
             >Structure Value</button
           >
         </div>
-        <div class="export-preview-code">
+        <div class="export-preview-code-frame">
           <button
             type="button"
             class="code-copy-btn"
@@ -335,8 +337,10 @@ const builderData = {
               ></path>
             </svg>
           </button>
-          <pre
-            id="export-preview-code-content"><span class="line-numbers" id="export-line-numbers" /><code /></pre>
+          <div class="export-preview-code">
+            <pre
+              id="export-preview-code-content"><span class="line-numbers" id="export-line-numbers" /><code /></pre>
+          </div>
         </div>
       </div>
       <div class="export-config-footer">

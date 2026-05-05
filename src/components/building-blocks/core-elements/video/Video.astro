@@ -1,15 +1,32 @@
 ---
+import { resolveVideoPosterSource } from "@component-utils/image";
+import type { VideoSource } from "@component-utils/discoverVideoSources";
+
 const {
   type,
-  id,
+  videoId,
   title,
   source,
   thumbnail,
+  background = false,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const trimmedThumbnail =
+  typeof thumbnail === "string" && thumbnail.trim() !== "" ? thumbnail.trim() : "";
+
+const posterUrl = trimmedThumbnail ? await resolveVideoPosterSource(trimmedThumbnail) : undefined;
+
+let localVideoSources: VideoSource[] = [];
+
+if (type === "local-source" && source) {
+  const { discoverVideoSources } = await import("@component-utils/discoverVideoSources");
+
+  localVideoSources = await discoverVideoSources(source);
+}
 ---
 
 {
@@ -17,12 +34,12 @@ const {
     <lite-vimeo
       class:list={["video", className]}
       videotitle={`${title}`}
-      videoid={`${id}`}
+      videoid={`${videoId}`}
       {...htmlAttributes}
     >
       <a
         class="lite-vimeo-fallback"
-        href={`https://vimeo.com/${id}`}
+        href={`https://vimeo.com/${videoId}`}
       >
         Watch on Vimeo: "{title}"
       </a>
@@ -31,38 +48,83 @@ const {
     <lite-youtube
       class:list={["video", className]}
       videotitle={`${title}`}
-      videoid={`${id}`}
+      videoid={`${videoId}`}
       {...htmlAttributes}
     >
       <a
         class="lite-youtube-fallback"
-        href={`https://www.youtube.com/watch?v=${id}`}
+        href={`https://www.youtube.com/watch?v=${videoId}`}
       >
         Watch on YouTube: "{title}"
       </a>
     </lite-youtube>
+  ) : background ? (
+    <div
+      class:list={["video", "background", className]}
+      aria-hidden="true"
+      {...htmlAttributes}
+    >
+      <video
+        preload="metadata"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster={posterUrl}
+      >
+        {localVideoSources.map(({ src, type: sourceType }) => (
+          <source
+            src={src}
+            type={sourceType}
+          />
+        ))}
+      </video>
+    </div>
   ) : (
     <video
       preload="none"
       controls
-      poster={thumbnail}
+      poster={posterUrl}
       class:list={["video", className]}
       {...htmlAttributes}
     >
-      <source
-        src={`${source}`}
-        type="video/mp4"
-      />
+      {localVideoSources.map(({ src, type: sourceType }) => (
+        <source
+          src={src}
+          type={sourceType}
+        />
+      ))}
       Your browser does not support the HTML5 video element.
     </video>
   )
 }
 
-<style>
+<style is:global>
   @layer components {
     .video {
       display: block;
       margin-top: var(--spacing-lg);
+
+      &.background {
+        inset: 0;
+        margin-top: 0;
+        overflow: hidden;
+        pointer-events: none;
+        position: absolute;
+
+        > video {
+          height: 100%;
+          object-fit: cover;
+          object-position: var(--background-position, center center);
+          width: 100%;
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .video.background {
+        display: none;
+      }
     }
   }
 </style>

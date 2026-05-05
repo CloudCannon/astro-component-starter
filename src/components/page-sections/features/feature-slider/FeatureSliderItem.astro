@@ -13,7 +13,6 @@ const {
   description = "",
   imageSource = "",
   imageAlt = "",
-  minSplitWidth = 0,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -29,8 +28,8 @@ const {
   >
     <Split
       distributionMode="two-thirds-third"
-      minSplitWidth={minSplitWidth}
-      verticalAlignment="center"
+      minSplitWidth={600}
+      alignmentVertical="center"
     >
       <Fragment slot="first">
         <SimpleText

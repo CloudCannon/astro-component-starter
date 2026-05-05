@@ -4,7 +4,7 @@ spacing: 'all'
 blocks:
   - _component: 'building-blocks/core-elements/video'
     type: youtube
-    id: 4mB5KwenCzI
+    videoId: 4mB5KwenCzI
     title: Live visual editing in Astro with CloudCannon
     source: ''
     thumbnail: ''

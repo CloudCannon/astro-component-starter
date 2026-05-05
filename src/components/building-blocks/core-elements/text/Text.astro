@@ -5,7 +5,8 @@ const md = markdownit({ html: true });
 
 const {
   text = "",
-  alignX = "start",
+  size,
+  alignmentHorizontal = "start",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -31,7 +32,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   {...htmlAttributes}
 >
   <div
-    class:list={["text-inner", `align-${alignX}`]}
+    class:list={["text-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}
     {...textDataAttributes}
   >
     <slot>
@@ -40,12 +41,57 @@ if (!_component && !hasText && !hasSlotContent) return;
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .text {
       margin-top: var(--spacing-lg);
 
       > .text-inner {
+        &.size-xs {
+          --text-size: var(--font-size-xs);
+        }
+        &.size-sm {
+          --text-size: var(--font-size-sm);
+        }
+        &.size-md {
+          --text-size: var(--font-size-md);
+        }
+        &.size-lg {
+          --text-size: var(--font-size-lg);
+        }
+        &.size-xl {
+          --text-size: var(--font-size-xl);
+        }
+        &.size-2xl {
+          --text-size: var(--font-size-2xl);
+        }
+        &.size-3xl {
+          --text-size: var(--font-size-3xl);
+        }
+        &.size-4xl {
+          --text-size: var(--font-size-4xl);
+        }
+
+        > p {
+          font-size: var(--text-size, inherit);
+        }
+
+        > ul {
+          font-size: var(--text-size, inherit);
+        }
+
+        > ol {
+          font-size: var(--text-size, inherit);
+        }
+
+        > *:first-child {
+          margin-top: 0 !important;
+        }
+
+        > *:last-child {
+          margin-bottom: 0 !important;
+        }
+
         &.align-start {
           text-align: start;
         }

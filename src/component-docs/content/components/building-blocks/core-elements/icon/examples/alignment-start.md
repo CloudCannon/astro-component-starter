@@ -5,7 +5,7 @@ blocks:
   - _component: 'building-blocks/core-elements/icon'
     name: arrow-right
     size: lg
-    alignX: start
+    alignmentHorizontal: start
     color: blue
     background: true
 ---

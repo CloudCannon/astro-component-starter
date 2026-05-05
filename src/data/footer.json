@@ -1,6 +1,7 @@
 {
-  "logoSource": "/images/logo.svg",
-  "logoAlt": "Logo",
+  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
+  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoAlt": "Astro Component Starter",
   "links": [
     {
       "name": "Home",
@@ -9,6 +10,10 @@
     {
       "name": "Why",
       "path": "/why/"
+    },
+    {
+      "name": "Components",
+      "path": "/component-docs/"
     },
     {
       "name": "Blog",
@@ -22,7 +27,7 @@
     },
     {
       "icon": "social/x",
-      "link": "https://twitter.com"
+      "link": "https://x.com"
     },
     {
       "icon": "social/linkedin",

@@ -28,8 +28,8 @@ const { heading = '', subtext = '', _component, ...htmlAttributes } = Astro.prop
   paddingVertical="4xl"
   {...htmlAttributes}
 >
-  <Heading level="h1" size="2xl" alignX="center" data-prop="heading" text={heading} />
-  <Text alignX="center" data-prop="subtext" text={subtext} />
+  <Heading level="h1" size="2xl" alignmentHorizontal="center" data-prop="heading" text={heading} />
+  <Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
 </CustomSection>
 ```
 
@@ -124,11 +124,11 @@ CTA Center is a good example:
 
 ```astro
 <CustomSection maxContentWidth="lg" paddingVertical={paddingVertical} {...htmlAttributes}>
-  <Heading level="h2" size="xl" alignX="center" data-prop="heading" text={heading} />
-  <Text alignX="center" data-prop="subtext" text={subtext} />
+  <Heading level="h2" size="xl" alignmentHorizontal="center" data-prop="heading" text={heading} />
+  <Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
     buttonSections={buttonSections}
-    alignX="center"
+    alignmentHorizontal="center"
     data-children-prop="buttonSections"
   />
 </CustomSection>

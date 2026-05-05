@@ -2,16 +2,18 @@
 import Button from "@core-elements/button/Button.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
+import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
 
 const {
   logoSource,
+  logoAlternateSource,
   logoAlt,
   navData = [],
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
-} = Astro.props as Props;
+} = Astro.props;
 
 const toggleId = `mobile-toggle-${crypto.randomUUID()}`;
 const navInstanceId = crypto.randomUUID();
@@ -34,6 +36,7 @@ function createNavItemData(item, level, parentGroupId) {
   return {
     ...item,
     hasChildren,
+    hasSplitLink: itemHasSplitNavLink(item),
     level,
     dropdownId: `dropdown-toggle-${crypto.randomUUID()}`,
     contentId: `dropdown-content-${crypto.randomUUID()}`,
@@ -77,29 +80,30 @@ function createNavItemData(item, level, parentGroupId) {
       <slot name="logo">
         <Image
           source={logoSource}
-          alt={logoAlt || "Logo"}
-          width={120}
-          height={48}
+          alternateSource={logoAlternateSource}
+          alt={logoAlt || "Astro Component Starter"}
           class="mobile-logo-image"
           useDefaultEditableBinding={false}
         />
       </slot>
     </div>
-    <label
-      for={toggleId}
-      class="mobile-close mobile-button"
-      aria-label="Close navigation menu"
-      tabindex="0"
-    >
-      <Button
-        variant="tertiary"
-        size="lg"
-        element="span"
-        iconName="x-mark"
-        hideText="true"
-        class="mobile-nav-close mobile-nav-button"
-      />
-    </label>
+    <div class="mobile-header-actions">
+      <label
+        for={toggleId}
+        class="mobile-close mobile-button"
+        aria-label="Close navigation menu"
+        tabindex="0"
+      >
+        <Button
+          variant="tertiary"
+          size="lg"
+          element="span"
+          iconName="x-mark"
+          hideText="true"
+          class="mobile-nav-close mobile-nav-button"
+        />
+      </label>
+    </div>
   </div>
 
   <div class="mobile-content">
@@ -133,23 +137,49 @@ function createNavItemData(item, level, parentGroupId) {
                 autocomplete="off"
                 checked={itemData.hasCurrent}
               />
-              <label
-                for={itemData.dropdownId}
-                class="nav-item-trigger"
-                role="button"
-                aria-controls={itemData.contentId}
-                tabindex="0"
-                aria-current={itemData.isCurrent ? "page" : undefined}
-              >
-                {itemData.name}
-                <span class="nav-item-icon">
-                  <Icon
-                    name="chevron-right"
-                    size="none"
-                    aria-hidden="true"
-                  />
-                </span>
-              </label>
+              {itemData.hasSplitLink ? (
+                <div class="nav-item-split">
+                  <a
+                    href={itemData.path}
+                    class="nav-item-link"
+                    aria-current={itemData.isCurrent ? "page" : undefined}
+                  >
+                    {itemData.name}
+                  </a>
+                  <label
+                    for={itemData.dropdownId}
+                    class="nav-item-trigger nav-item-toggle-btn"
+                    aria-controls={itemData.contentId}
+                    tabindex="0"
+                    aria-label={`Toggle ${itemData.name} submenu`}
+                  >
+                    <span class="nav-item-icon">
+                      <Icon
+                        name="chevron-right"
+                        size="none"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </label>
+                </div>
+              ) : (
+                <label
+                  for={itemData.dropdownId}
+                  class="nav-item-trigger"
+                  aria-controls={itemData.contentId}
+                  tabindex="0"
+                  aria-current={itemData.isCurrent ? "page" : undefined}
+                >
+                  {itemData.name}
+                  <span class="nav-item-icon">
+                    <Icon
+                      name="chevron-right"
+                      size="none"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </label>
+              )}
               <div
                 id={itemData.contentId}
                 class="nav-item-content"
@@ -186,23 +216,49 @@ function createNavItemData(item, level, parentGroupId) {
                           autocomplete="off"
                           checked={childData.hasCurrent}
                         />
-                        <label
-                          for={childData.dropdownId}
-                          class="nav-item-trigger"
-                          role="button"
-                          aria-controls={childData.contentId}
-                          tabindex="0"
-                          aria-current={childData.isCurrent ? "page" : undefined}
-                        >
-                          {childData.name}
-                          <span class="nav-item-icon">
-                            <Icon
-                              name="chevron-right"
-                              size="none"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </label>
+                        {childData.hasSplitLink ? (
+                          <div class="nav-item-split">
+                            <a
+                              href={childData.path}
+                              class="nav-item-link"
+                              aria-current={childData.isCurrent ? "page" : undefined}
+                            >
+                              {childData.name}
+                            </a>
+                            <label
+                              for={childData.dropdownId}
+                              class="nav-item-trigger nav-item-toggle-btn"
+                              aria-controls={childData.contentId}
+                              tabindex="0"
+                              aria-label={`Toggle ${childData.name} submenu`}
+                            >
+                              <span class="nav-item-icon">
+                                <Icon
+                                  name="chevron-right"
+                                  size="none"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </label>
+                          </div>
+                        ) : (
+                          <label
+                            for={childData.dropdownId}
+                            class="nav-item-trigger"
+                            aria-controls={childData.contentId}
+                            tabindex="0"
+                            aria-current={childData.isCurrent ? "page" : undefined}
+                          >
+                            {childData.name}
+                            <span class="nav-item-icon">
+                              <Icon
+                                name="chevron-right"
+                                size="none"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </label>
+                        )}
                         <div
                           id={childData.contentId}
                           class="nav-item-content"
@@ -379,7 +435,7 @@ function createNavItemData(item, level, parentGroupId) {
   onPageLoad(initMobileNavigation);
 </script>
 
-<style>
+<style is:global>
   @layer components {
     .nav-toggle {
       display: none;
@@ -406,70 +462,149 @@ function createNavItemData(item, level, parentGroupId) {
       transition: transform var(--animation-normal) ease-in-out;
       z-index: var(--layer-5);
 
-      :global(.mobile-logo-image) {
-        margin-top: 0 !important;
-      }
-
       .mobile-header {
         align-items: center;
         border-bottom: 1px solid var(--color-border-subtle);
         display: flex;
         flex-shrink: 0;
+        height: 5rem;
         justify-content: space-between;
-        padding: var(--spacing-md);
+        padding: 0 var(--spacing-lg);
 
         .mobile-logo {
-          :global(svg) {
-            height: 100%;
-            max-height: 3em;
-            width: 100%;
-          }
+          align-items: center;
+          display: flex;
+          flex: 0 1 min(11rem, 100%);
+          min-width: 0;
+          width: min(11rem, 100%);
+        }
 
-          :global(img),
-          :global(.mobile-logo-image) {
-            height: auto;
-            max-height: 3em;
-            max-width: min(20em, 100%);
-            width: auto;
-          }
+        .mobile-header-actions {
+          align-items: center;
+          display: flex;
+          gap: var(--spacing-xs);
         }
       }
 
       .mobile-content {
         flex: 1;
         overflow-y: auto;
+      }
 
-        .mobile-list {
-          font-size: var(--font-size-lg);
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
+      .mobile-list {
+        font-size: var(--font-size-lg);
+      }
 
-        .nav-list {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        }
+      .mobile-list,
+      .nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
       }
 
       .nav-item {
         border-bottom: 1px solid var(--color-border-subtle);
         position: relative;
+      }
 
-        > a,
-        > .nav-item-trigger {
+      /*
+       * Row shell shared by direct links and full-row label triggers.
+       * Split rows (link + chevron toggle) use `.nav-item-split` below.
+       */
+      .nav-item > a,
+      .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+        align-items: center;
+        border-radius: var(--radius-xs);
+        color: var(--color-text-strong);
+        cursor: pointer;
+        display: flex;
+        font-weight: var(--font-weight-semibold);
+        min-height: 2.5rem;
+        padding: var(--spacing-md);
+        text-decoration: none;
+        transition: background-color var(--animation-normal) ease-in-out;
+        user-select: none;
+        white-space: nowrap;
+        width: 100%;
+
+        &[aria-current="page"] {
+          text-decoration: underline dotted;
+          text-decoration-color: var(--color-text-muted);
+          text-underline-offset: 3px;
+        }
+
+        &:hover,
+        &:focus-visible {
+          background: var(--color-state-hover);
+          color: var(--color-text-strong);
+
+          .nav-item-icon {
+            color: var(--color-text-strong);
+          }
+        }
+      }
+
+      .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+        gap: var(--spacing-xs);
+        justify-content: space-between;
+        padding-inline-end: 0;
+
+        .nav-item-icon {
+          align-items: center;
+          box-sizing: border-box;
+          color: var(--color-text-muted);
+          display: inline-flex;
+          flex-shrink: 0;
+          justify-content: center;
+          line-height: 0;
+          margin-inline: 2px var(--spacing-md);
+          min-height: 1.75rem;
+          min-width: 2.5rem;
+          padding: var(--spacing-xs);
+          transition:
+            color var(--animation-normal) ease-in-out,
+            transform var(--animation-normal) ease-in-out;
+        }
+      }
+
+      /* Split row: link column + chevron toggle column */
+      .nav-item-split {
+        align-items: stretch;
+        border-radius: var(--radius-xs);
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--spacing-xs);
+        min-width: 0;
+        transition: background-color var(--animation-normal) ease-in-out;
+        width: 100%;
+
+        &:hover {
+          background: var(--color-state-hover);
+
+          .nav-item-link {
+            color: var(--color-text-strong);
+          }
+
+          .nav-item-toggle-btn {
+            background: color-mix(in srgb, var(--color-state-hover), var(--color-text) 3%);
+          }
+        }
+
+        .nav-item-link {
+          align-items: center;
           border-radius: var(--radius-xs);
           color: var(--color-text-strong);
           cursor: pointer;
-          display: block;
+          display: flex;
+          flex: 1 1 auto;
           font-weight: var(--font-weight-semibold);
-          padding: var(--spacing-md);
+          min-height: 2.5rem;
+          min-width: 0;
+          padding: var(--spacing-md) var(--spacing-xs) var(--spacing-md) var(--spacing-md);
           text-decoration: none;
-          transition: background var(--animation-normal) ease-in-out;
+          transition: color var(--animation-normal) ease-in-out;
           user-select: none;
           white-space: nowrap;
-          width: 100%;
 
           &[aria-current="page"] {
             text-decoration: underline dotted;
@@ -479,67 +614,140 @@ function createNavItemData(item, level, parentGroupId) {
 
           &:hover,
           &:focus-visible {
-            background: var(--color-state-hover);
             color: var(--color-text-strong);
           }
         }
 
-        > .nav-item-trigger {
+        .nav-item-toggle-btn {
           align-items: center;
+          align-self: center;
+          aspect-ratio: 1;
+          background: transparent;
+          border: none;
+          border-left: 1px solid transparent;
+          border-radius: var(--radius-xs);
+          box-sizing: border-box;
+          color: var(--color-text-muted);
           cursor: pointer;
-          display: flex;
-          gap: var(--spacing-xs);
-          justify-content: space-between;
+          display: inline-flex;
+          flex: 0 0 auto;
+          height: 2.5rem;
+          justify-content: center;
+          margin-inline: 2px var(--spacing-md);
+          padding: 0;
+          width: 2.5rem;
+          transition:
+            background-color var(--animation-normal) ease-in-out,
+            border-color var(--animation-normal) ease-in-out,
+            color var(--animation-normal) ease-in-out;
+
+          &:hover {
+            background: color-mix(in srgb, var(--color-state-hover), var(--color-text) 8%);
+            border-left-color: var(--color-border);
+            color: var(--color-text-strong);
+          }
+
+          &:focus-visible {
+            outline: 2px solid var(--color-focus-ring);
+            outline-offset: 2px;
+          }
 
           .nav-item-icon {
-            color: var(--color-text-muted);
-            transition:
-              color var(--animation-normal) ease-in-out,
-              transform var(--animation-normal) ease-in-out;
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            line-height: 0;
           }
-
-          &:hover .nav-item-icon {
-            color: var(--color-text-strong);
-          }
-        }
-
-        .nav-item-toggle {
-          display: none;
-        }
-
-        .nav-item-content {
-          display: none;
-        }
-
-        .nav-item-toggle:checked ~ .nav-item-content {
-          animation: grow-out var(--animation-normal) ease-out;
-          display: block;
-        }
-
-        .nav-item-toggle:checked ~ .nav-item-trigger > .nav-item-icon {
-          transform: rotate(90deg);
         }
       }
 
-      .nav-item > .nav-item-content .nav-item {
-        > a,
-        > .nav-item-trigger {
-          padding: var(--spacing-md) var(--spacing-xl);
-          width: 100%;
-        }
+      /* Hidden checkbox drives expand/collapse via `:checked ~` selectors */
+      .nav-item-toggle,
+      .nav-item-content {
+        display: none;
+      }
 
-        &:last-child {
+      .nav-item-toggle:checked ~ .nav-item-content {
+        animation: grow-out var(--animation-normal) ease-out;
+        display: block;
+      }
+
+      .nav-item-icon {
+        color: var(--color-text-muted);
+        display: inline-block;
+        transition: transform var(--animation-normal) ease-in-out;
+      }
+
+      .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon,
+      .nav-item-toggle:checked ~ .nav-item-split .nav-item-icon {
+        transform: rotate(90deg);
+      }
+
+      /*
+       * Nested lists: deeper indentation. Level two inherits the primary
+       * weight / size; level three drops to body-sm + regular.
+       */
+      .nav-list {
+        & > .nav-item:last-child {
           border-bottom: none;
         }
 
-        > .nav-item-content .nav-item {
-          > a,
-          > .nav-item-trigger {
-            padding: var(--spacing-md) var(--spacing-2xl);
-            width: 100%;
-          }
+        & > .nav-item > a,
+        & > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+          padding-inline: var(--spacing-xl);
+        }
+
+        & > .nav-item > .nav-item-split {
+          padding-inline: var(--spacing-xl);
+        }
+
+        & > .nav-item > .nav-item-split .nav-item-link,
+        & .nav-list > .nav-item > .nav-item-split .nav-item-link {
+          padding: var(--spacing-md) var(--spacing-xs) var(--spacing-md) 0;
+        }
+
+        & .nav-list > .nav-item > a,
+        & .nav-list > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+          font-size: var(--font-size-body-sm);
+          font-weight: var(--font-weight-regular);
+          padding-inline-start: var(--spacing-2xl);
+        }
+
+        & .nav-list > .nav-item > .nav-item-split {
+          padding-inline-end: var(--spacing-xl);
+          padding-inline-start: var(--spacing-2xl);
+        }
+
+        & .nav-list > .nav-item > .nav-item-split .nav-item-link {
+          font-size: var(--font-size-body-sm);
+          font-weight: var(--font-weight-regular);
         }
       }
+    }
+
+    .mobile .mobile-header .mobile-logo .mobile-logo-image {
+      display: flex;
+      margin-top: 0 !important;
+      max-width: none;
+      width: 100%;
+    }
+
+    .mobile .mobile-header .mobile-logo .mobile-logo-image > .image-inner {
+      width: 100%;
+    }
+
+    .mobile .mobile-header .mobile-logo .mobile-logo-image picture {
+      display: block;
+      width: 100%;
+    }
+
+    .mobile .mobile-header .mobile-logo .mobile-logo-image img,
+    .mobile .mobile-header .mobile-logo .mobile-logo-image svg,
+    .mobile .mobile-header .mobile-logo svg {
+      display: block;
+      height: 2rem;
+      max-width: 100%;
+      width: auto;
     }
 
     .mobile-overlay {

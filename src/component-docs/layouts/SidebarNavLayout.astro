@@ -1,7 +1,8 @@
 ---
 import Side from "@components/navigation/side/Side.astro";
+import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
 import Button from "@core-elements/button/Button.astro";
-import Icon from "@core-elements/icon/Icon.astro";
+import Image from "@core-elements/image/Image.astro";
 import navData from "../data/nav.json";
 import { generateNavData } from "../utils/navGenerator.js";
 
@@ -10,9 +11,10 @@ const sideNavData = await generateNavData(navData);
 
 <div class="library-sidebar">
   <div class="sidebar-logo-container">
-    <Icon
-      name="library/logo"
-      size="none"
+    <Image
+      source="/src/assets/images/component-docs/acs-logo.svg"
+      alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"
+      alt="Astro Component Starter"
       class="sidebar-logo"
     />
     <Button
@@ -25,6 +27,9 @@ const sideNavData = await generateNavData(navData);
     />
   </div>
   <Side navData={sideNavData} />
+  <div class="sidebar-footer">
+    <ThemeToggle />
+  </div>
 </div>
 
 <style is:global>
@@ -34,14 +39,25 @@ const sideNavData = await generateNavData(navData);
     justify-content: space-between;
     margin-top: 5px;
 
-    .icon {
+    .sidebar-logo {
       flex: 1;
+      margin-top: 0;
       max-width: 138px;
 
-      svg {
-        height: 100%;
-        width: 100%;
+      img {
+        height: 2rem;
+        width: auto;
       }
     }
+
+    .button {
+      position: relative;
+      top: 7px;
+    }
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-block: var(--spacing-md);
   }
 </style>

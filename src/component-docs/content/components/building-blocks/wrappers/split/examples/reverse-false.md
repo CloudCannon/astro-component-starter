@@ -27,6 +27,6 @@ blocks:
             This is content for side B.
   distributionMode: 'third-two-thirds'
   fixedWidth: null
-  verticalAlignment: 'top'
+  alignmentVertical: 'top'
   reverse: false
 ---

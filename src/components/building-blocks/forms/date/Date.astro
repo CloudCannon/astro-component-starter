@@ -15,7 +15,10 @@ const {
 const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
 ---
 
-<div class:list={["date", className]}>
+<div
+  class:list={["date", className]}
+  {...htmlAttributes}
+>
   {
     label && (
       <label
@@ -44,11 +47,10 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
     min={min}
     max={max}
     class="field"
-    {...htmlAttributes}
   />
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .date {
       display: flex;

@@ -7,14 +7,17 @@ value:
     - text: List item 1
       iconName: check
       iconColor: default
+      link:
     - text: List item 2
       iconName: lock-closed
       iconColor: default
+      link:
     - text: List item 3
       iconName: briefcase
       iconColor: default
+      link:
   direction: vertical
-  alignX: start
+  alignmentHorizontal: start
   size: md
   listType: icon
 preview:
@@ -34,11 +37,15 @@ _structures:
           text: "List item"
           iconName: ""
           iconColor: default
+          link:
         preview:
           icon: text_fields
           image:
             - template: src/icons/{iconName}.svg
         _inputs:
+          link:
+            type: url
+            comment: Optional URL. When set, only the text is linked; the icon stays outside the anchor (e.g. table of contents or external services).
           text:
             type: markdown
             comment: The text to display in the list item.
@@ -57,7 +64,7 @@ _structures:
               removeformat: true
           iconName:
             type: select
-            comment: The name of the icon to display from the icon library.
+            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
             hidden: "listType !== 'icon'"
             options:
               values: _select_data.icons

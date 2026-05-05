@@ -1,5 +1,6 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
 
 const {
   navData = [],
@@ -27,6 +28,7 @@ function createNavItemData(item, level, parentGroupId) {
   return {
     ...item,
     hasChildren,
+    hasSplitLink: itemHasSplitNavLink(item),
     level,
     dropdownId: `dropdown-toggle-${crypto.randomUUID()}`,
     contentId: `dropdown-content-${crypto.randomUUID()}`,
@@ -71,23 +73,49 @@ function createNavItemData(item, level, parentGroupId) {
               aria-controls={itemData.contentId}
               autocomplete="off"
             />
-            <label
-              for={itemData.dropdownId}
-              class="nav-item-trigger"
-              role="button"
-              aria-controls={itemData.contentId}
-              tabindex="0"
-              aria-current={itemData.isCurrent ? "page" : undefined}
-            >
-              {itemData.name}
-              <span class="nav-item-icon">
-                <Icon
-                  name="chevron-right"
-                  size="none"
-                  aria-hidden="true"
-                />
-              </span>
-            </label>
+            {itemData.hasSplitLink ? (
+              <div class="nav-item-split">
+                <a
+                  href={itemData.path}
+                  class="nav-item-link"
+                  aria-current={itemData.isCurrent ? "page" : undefined}
+                >
+                  {itemData.name}
+                </a>
+                <label
+                  for={itemData.dropdownId}
+                  class="nav-item-trigger nav-item-toggle-btn"
+                  aria-controls={itemData.contentId}
+                  tabindex="0"
+                  aria-label={`Toggle ${itemData.name} submenu`}
+                >
+                  <span class="nav-item-icon">
+                    <Icon
+                      name="chevron-right"
+                      size="none"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </label>
+              </div>
+            ) : (
+              <label
+                for={itemData.dropdownId}
+                class="nav-item-trigger"
+                aria-controls={itemData.contentId}
+                tabindex="0"
+                aria-current={itemData.isCurrent ? "page" : undefined}
+              >
+                {itemData.name}
+                <span class="nav-item-icon">
+                  <Icon
+                    name="chevron-right"
+                    size="none"
+                    aria-hidden="true"
+                  />
+                </span>
+              </label>
+            )}
             <div
               id={itemData.contentId}
               class="nav-item-content"
@@ -123,23 +151,49 @@ function createNavItemData(item, level, parentGroupId) {
                         aria-controls={childData.contentId}
                         autocomplete="off"
                       />
-                      <label
-                        for={childData.dropdownId}
-                        class="nav-item-trigger"
-                        role="button"
-                        aria-controls={childData.contentId}
-                        tabindex="0"
-                        aria-current={childData.isCurrent ? "page" : undefined}
-                      >
-                        {childData.name}
-                        <span class="nav-item-icon">
-                          <Icon
-                            name="chevron-right"
-                            size="none"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </label>
+                      {childData.hasSplitLink ? (
+                        <div class="nav-item-split">
+                          <a
+                            href={childData.path}
+                            class="nav-item-link"
+                            aria-current={childData.isCurrent ? "page" : undefined}
+                          >
+                            {childData.name}
+                          </a>
+                          <label
+                            for={childData.dropdownId}
+                            class="nav-item-trigger nav-item-toggle-btn"
+                            aria-controls={childData.contentId}
+                            tabindex="0"
+                            aria-label={`Toggle ${childData.name} submenu`}
+                          >
+                            <span class="nav-item-icon">
+                              <Icon
+                                name="chevron-right"
+                                size="none"
+                                aria-hidden="true"
+                              />
+                            </span>
+                          </label>
+                        </div>
+                      ) : (
+                        <label
+                          for={childData.dropdownId}
+                          class="nav-item-trigger"
+                          aria-controls={childData.contentId}
+                          tabindex="0"
+                          aria-current={childData.isCurrent ? "page" : undefined}
+                        >
+                          {childData.name}
+                          <span class="nav-item-icon">
+                            <Icon
+                              name="chevron-right"
+                              size="none"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </label>
+                      )}
                       <div
                         id={childData.contentId}
                         class="nav-item-nested"
@@ -189,7 +243,12 @@ function createNavItemData(item, level, parentGroupId) {
     const contentId = toggle.getAttribute("aria-controls");
     const content = document.getElementById(contentId || "");
     const triggerId = toggle.getAttribute("id");
-    const trigger = document.querySelector(`label[for="${triggerId}"]`);
+    const barRoot = toggle.closest(".bar");
+    const toggleBtn = barRoot?.querySelector(`label.nav-item-toggle-btn[for="${triggerId}"]`);
+    const fullTrigger =
+      barRoot?.querySelector(
+        `label.nav-item-trigger:not(.nav-item-toggle-btn)[for="${triggerId}"]`
+      ) ?? null;
 
     toggle.setAttribute("aria-expanded", isExpanded.toString());
 
@@ -200,8 +259,11 @@ function createNavItemData(item, level, parentGroupId) {
       });
     }
 
-    if (trigger) {
-      trigger.setAttribute("aria-expanded", isExpanded.toString());
+    if (toggleBtn) {
+      toggleBtn.setAttribute("aria-expanded", isExpanded.toString());
+    }
+    if (fullTrigger) {
+      fullTrigger.setAttribute("aria-expanded", isExpanded.toString());
     }
   }
 
@@ -306,7 +368,12 @@ function createNavItemData(item, level, parentGroupId) {
         toggle.addEventListener("change", handleToggleChange);
       });
 
-      barNav.querySelectorAll(".nav-item-trigger").forEach((trigger) => {
+      barNav.querySelectorAll(".nav-item-toggle-btn").forEach((trigger) => {
+        trigger.addEventListener("click", handleTriggerClick);
+        trigger.addEventListener("keydown", handleKeydown);
+      });
+
+      barNav.querySelectorAll(".nav-item.has-children > .nav-item-trigger").forEach((trigger) => {
         trigger.addEventListener("click", handleTriggerClick);
         trigger.addEventListener("keydown", handleKeydown);
       });
@@ -314,9 +381,8 @@ function createNavItemData(item, level, parentGroupId) {
       // Prevent clicks inside dropdown content from bubbling to document handler
       barNav.querySelectorAll(".nav-item-content, .nav-item-nested").forEach((content) => {
         content.addEventListener("click", (e) => {
-          // Don't stop if clicking directly on a trigger (let it handle itself)
           const target = e.target as HTMLElement;
-          if (!target.closest(".nav-item-trigger")) {
+          if (!target.closest(".nav-item-trigger") && !target.closest(".nav-item-link")) {
             e.stopPropagation();
           }
         });
@@ -327,7 +393,7 @@ function createNavItemData(item, level, parentGroupId) {
   onPageLoad(initBarNavigation);
 </script>
 
-<style>
+<style is:global>
   @layer components {
     .bar {
       font-weight: var(--font-weight-semibold);
@@ -364,12 +430,73 @@ function createNavItemData(item, level, parentGroupId) {
 
         &:hover {
           background: var(--color-state-hover);
+        }
+      }
+
+      .nav-item-split {
+        align-items: center;
+        border-radius: var(--radius-xs);
+        display: flex;
+        flex-wrap: nowrap;
+        min-width: 0;
+        transition: background var(--animation-normal) ease-in-out;
+
+        .nav-item-link {
           color: var(--color-text-strong);
+          cursor: pointer;
+          display: block;
+          flex: 1 1 auto;
+          min-width: 0;
+          padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-md);
+          text-decoration: none;
+          transition: background var(--animation-normal) ease-in-out;
+          white-space: nowrap;
+        }
+
+        .nav-item-toggle-btn {
+          align-items: center;
+          aspect-ratio: 1;
+          border-left: 1px solid transparent;
+          border-radius: var(--radius-xs);
+          box-sizing: border-box;
+          cursor: pointer;
+          display: flex;
+          flex: 0 0 auto;
+          height: 1.75em;
+          justify-content: center;
+          margin-inline-end: 4px;
+          padding: 0;
+          width: 1.75em;
+          transition:
+            background var(--animation-normal) ease-in-out,
+            border-color var(--animation-normal) ease-in-out;
+        }
+
+        &:hover {
+          background: var(--color-state-hover);
+
+          .nav-item-toggle-btn {
+            background: color-mix(in srgb, var(--color-state-hover), var(--color-text) 3%);
+          }
+        }
+
+        .nav-item-toggle-btn:hover {
+          background: color-mix(in srgb, var(--color-state-hover), var(--color-text) 8%);
+          border-left-color: var(--color-border);
+        }
+
+        .nav-item-toggle-btn .nav-item-icon {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+          line-height: 0;
+          top: 0;
         }
       }
 
       .nav-item > a[aria-current="page"],
-      .nav-item > .nav-item-trigger[aria-current="page"] {
+      .nav-item > .nav-item-trigger[aria-current="page"],
+      .nav-item-split .nav-item-link[aria-current="page"] {
         text-decoration: underline dotted;
         text-decoration-color: var(--color-text-muted);
         text-underline-offset: 3px;
@@ -384,7 +511,6 @@ function createNavItemData(item, level, parentGroupId) {
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
-        transform-origin: 50% 60%;
         transition:
           color var(--animation-normal) ease-in-out,
           transform var(--animation-normal) ease-in-out;
@@ -397,7 +523,8 @@ function createNavItemData(item, level, parentGroupId) {
         color: var(--color-text-strong);
       }
 
-      .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon {
+      .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon,
+      .nav-item-toggle:checked ~ .nav-item-split .nav-item-icon {
         transform: rotate(90deg);
       }
 
@@ -439,13 +566,29 @@ function createNavItemData(item, level, parentGroupId) {
       }
 
       .nav-item-content .nav-item > a,
-      .nav-item-content .nav-item > .nav-item-trigger {
+      .nav-item-content .nav-item > .nav-item-trigger,
+      .nav-item-content .nav-item-split {
         border-radius: 0;
+      }
+
+      .nav-item-content .nav-item > .nav-item-trigger,
+      .nav-item-nested .nav-item > .nav-item-trigger {
+        display: flex;
+        justify-content: space-between;
+        padding-inline-end: calc(var(--spacing-sm) + 2px);
       }
 
       .nav-item-nested .nav-item > a {
         border-radius: 0;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-normal);
+        padding-inline-end: 4px;
         padding-left: var(--spacing-xl);
+      }
+
+      .nav-item-nested .nav-item > .nav-item-trigger,
+      .nav-item-nested .nav-item-split .nav-item-link {
+        font-weight: var(--font-weight-normal);
       }
     }
   }

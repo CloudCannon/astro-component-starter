@@ -12,7 +12,7 @@ import { debugLog } from "../constants";
 import { builderState } from "../state";
 import type { ComponentInfo, ComponentNode, SlotDefinition } from "../types";
 import { createDeleteButton } from "../utils/buttonHelpers";
-import { createSlider } from "../utils/sliderHelpers";
+import { createToggle } from "../utils/toggleHelpers";
 import { openComponentPicker } from "./componentPicker";
 import {
   canDropInSlot,
@@ -200,7 +200,7 @@ function createSlotElement(node: ComponentNode, slot: SlotDefinition): HTMLEleme
 
   const toggle = createModeToggle(currentMode === "prop", () => {
     builderState.toggleSlotMode(node._nodeId, slot.propName);
-    // Delay render to allow slider animation to complete (350ms)
+    // Delay render to allow toggle animation to complete (350ms)
     setTimeout(() => triggerRender(), 350);
   });
 
@@ -329,11 +329,11 @@ function createRepeatableSlotElement(
 
 /** Create mode toggle switch */
 function createModeToggle(checked: boolean, onChange: () => void): HTMLElement {
-  const slider = createSlider(checked, onChange);
+  const toggle = createToggle(checked, onChange);
 
-  slider.title =
+  toggle.title =
     "When on, this slot is left open for editors to fill when building pages in CloudCannon";
-  return slider;
+  return toggle;
 }
 
 /** Render slot in prop mode (open for page building) */

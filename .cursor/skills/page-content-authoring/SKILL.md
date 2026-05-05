@@ -241,7 +241,6 @@ Carousel of feature cards with images.
         Description text.
       imageSource: /src/assets/images/slide1.jpg
       imageAlt: Slide one
-      minSplitWidth: 0
   colorScheme: inherit
   backgroundColor: surface
 ```
@@ -255,7 +254,7 @@ Carousel of feature cards with images.
 | `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
 | `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
 
-Slide item fields: `eyebrow` (text), `title` (text), `description` (markdown), `imageSource` (image), `imageAlt` (text), `minSplitWidth` (number).
+Slide item fields: `eyebrow` (text), `title` (text), `description` (markdown), `imageSource` (image), `imageAlt` (text).
 
 ---
 
@@ -278,7 +277,6 @@ Centered call-to-action with headline, text, and buttons.
       size: md
   colorScheme: dark
   backgroundColor: surface
-  rounded: false
 ```
 
 | Prop              | Type     | Options / Notes                                  |
@@ -288,7 +286,6 @@ Centered call-to-action with headline, text, and buttons.
 | `buttonSections`  | array    | Button components                                |
 | `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
 | `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
-| `rounded`         | switch   | Round section corners                            |
 
 #### cta-split
 
@@ -310,7 +307,6 @@ Split layout CTA with image on one side.
   reverse: false
   colorScheme: inherit
   backgroundColor: base
-  rounded: false
 ```
 
 | Prop              | Type     | Options / Notes                                  |
@@ -323,7 +319,6 @@ Split layout CTA with image on one side.
 | `reverse`         | switch   | Flip sides                                       |
 | `colorScheme`     | select   | `inherit`, `light`, `dark`                       |
 | `backgroundColor` | select   | `none`, `base`, `surface`, `accent`, `highlight` |
-| `rounded`         | switch   | Round section corners                            |
 
 #### cta-form
 
@@ -467,7 +462,7 @@ Single testimonial with author info.
   authorName: John Smith
   authorDescription: CEO, Acme Corp
   authorImage: /src/assets/images/testimonial.jpg
-  alignX: center
+  alignmentHorizontal: center
   maxContentWidth: xl
   paddingHorizontal: xl
   paddingVertical: 2xl
@@ -481,7 +476,7 @@ Single testimonial with author info.
 | `authorName`                            | text     | Author name                                      |
 | `authorDescription`                     | text     | Author title/role                                |
 | `authorImage`                           | image    | Author photo                                     |
-| `alignX`                                | select   | `center`, `start`, `end`                         |
+| `alignmentHorizontal`                   | select   | `center`, `start`, `end`                         |
 | `maxContentWidth`                       | select   | `sm`–`2xl`                                       |
 | `paddingHorizontal` / `paddingVertical` | select   | Spacing sizes                                    |
 | `colorScheme`                           | select   | `inherit`, `light`, `dark`                       |
@@ -503,34 +498,36 @@ Flexible container for composing any building blocks. Use when no specific page 
       text: Custom content
       level: h2
       size: lg
-      alignX: center
+      alignmentHorizontal: center
     - _component: building-blocks/core-elements/text
       text: >-
         Any combination of building blocks.
-      alignX: center
+      alignmentHorizontal: center
   maxContentWidth: 2xl
   paddingHorizontal: md
   paddingVertical: md
   colorScheme: inherit
   backgroundColor: base
-  backgroundImage:
-    source: ''
-    alt: ''
+  background:
+    type: image
     positionVertical: top
     positionHorizontal: center
-  rounded: false
+    priority: false
+    imageSource: ''
+    imageAlt: ''
+    videoSource: null
+    overlay: 0
 ```
 
-| Prop                                    | Type   | Options / Notes                                           |
-| --------------------------------------- | ------ | --------------------------------------------------------- |
-| `label`                                 | text   | Section label (also becomes anchor ID)                    |
-| `contentSections`                       | array  | Any building blocks                                       |
-| `maxContentWidth`                       | select | `xs`–`3xl`                                                |
-| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                             |
-| `colorScheme`                           | select | `inherit`, `light`, `dark`                                |
-| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`          |
-| `backgroundImage`                       | object | `source`, `alt`, `positionVertical`, `positionHorizontal` |
-| `rounded`                               | switch | Round section corners                                     |
+| Prop                                    | Type   | Options / Notes                                                                                                                                                                       |
+| --------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`                                 | text   | Section label (also becomes anchor ID)                                                                                                                                                |
+| `contentSections`                       | array  | Any building blocks                                                                                                                                                                   |
+| `maxContentWidth`                       | select | `xs`–`3xl`                                                                                                                                                                            |
+| `paddingHorizontal` / `paddingVertical` | select | Spacing sizes                                                                                                                                                                         |
+| `colorScheme`                           | select | `inherit`, `light`, `dark`                                                                                                                                                            |
+| `backgroundColor`                       | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                                                                                      |
+| `background`                            | object | `type`: `image` \| `video`; shared `positionVertical` / `positionHorizontal`; `overlay` (-1 to 1, darken/lighten); image: `imageSource`, `imageAlt`, `priority`; video: `videoSource` |
 
 ---
 

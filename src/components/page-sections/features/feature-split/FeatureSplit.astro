@@ -17,26 +17,32 @@ const {
   imageAspectRatio = "portrait",
   imageRounded = true,
   reverse = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const minSplitWidth = 720;
+const minSplitWidth = 800;
 const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 ---
 
 <CustomSection
   class:list={["feature-split", className]}
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   data-feature-split-id={featureSplitId}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
@@ -47,7 +53,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     fixedWidth="400"
     minSplitWidth={minSplitWidth}
     reverse={reverse}
-    verticalAlignment="center"
+    alignmentVertical="center"
     gap="2xl"
     reverseOrderOnMobile={true}
   >
@@ -73,7 +79,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
         class="feature-buttons"
         buttonSections={buttonSections}
         direction="row"
-        alignX="start"
+        alignmentHorizontal="start"
         data-children-prop="buttonSections"
       />
     </Fragment>
@@ -110,9 +116,9 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   )
 }
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.feature-split-layout) {
+    .feature-split-layout {
       container-type: inline-size;
     }
   }

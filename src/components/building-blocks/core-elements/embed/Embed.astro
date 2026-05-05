@@ -7,28 +7,26 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const slot = await Astro.slots.render("default");
-const content = slot || html;
 ---
 
 <div
   class:list={["embed-wrapper", className]}
   {...htmlAttributes}
 >
-  <div
-    class:list={["embed-content", `ratio-${aspectRatio}`]}
-    set:html={content}
-  />
+  <div class:list={["embed-content", `ratio-${aspectRatio}`]}>
+    <slot>
+      <Fragment set:html={html} />
+    </slot>
+  </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .embed-wrapper {
       margin-top: var(--spacing-lg);
 
       > .embed-content {
-        > :global(iframe) {
+        > iframe {
           border: none;
           display: block;
           height: 100%;

@@ -22,7 +22,7 @@ const {
   <Card
     class:list={["team-item", className]}
     paddingHorizontal="lg"
-    paddingVertical="sm"
+    paddingVertical="lg"
     rounded
     border
     backgroundColor="base"
@@ -42,7 +42,7 @@ const {
       class="team-name"
       level="h3"
       size="md"
-      alignX="start"
+      alignmentHorizontal="start"
       style="margin-bottom: var(--spacing-xs); margin-top: 0;"
       data-prop="name"
     >
@@ -51,7 +51,7 @@ const {
     <SimpleText
       class="team-role"
       size="sm"
-      alignX="start"
+      alignmentHorizontal="start"
       style="color: var(--color-text-subtle); font-weight: var(--font-weight-bold); margin-bottom: var(--spacing-sm); margin-top: 0;"
       data-prop="role"
       text={role}
@@ -59,7 +59,7 @@ const {
     <SimpleText
       class="team-bio"
       size="sm"
-      alignX="start"
+      alignmentHorizontal="start"
       style="color: var(--color-text-muted); margin-top: 0;"
       data-prop="bio"
       text={bio}

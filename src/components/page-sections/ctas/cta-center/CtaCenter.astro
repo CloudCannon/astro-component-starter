@@ -8,11 +8,14 @@ const {
   heading = "",
   subtext = "",
   buttonSections = [],
+  sectionLabel,
+  maxContentWidth = "lg",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
   class: className,
-  rounded = false,
   useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -21,31 +24,32 @@ const {
 
 <CustomSection
   class:list={["cta-center", className]}
-  maxContentWidth="lg"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  rounded={rounded}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <Heading
     level="h2"
     size="xl"
-    alignX="center"
+    alignmentHorizontal="center"
     data-prop="heading"
     text={heading}
   />
   <Text
-    alignX="center"
+    alignmentHorizontal="center"
     data-prop="subtext"
     text={subtext}
   />
   <ButtonGroup
     class="buttonSections"
     buttonSections={buttonSections}
-    alignX="center"
+    alignmentHorizontal="center"
     data-children-prop="buttonSections"
   />
 </CustomSection>

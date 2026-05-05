@@ -17,4 +17,6 @@ examples:
       - align
   - slugs:
       - icons
+  - slugs:
+      - icon-colors
 ---

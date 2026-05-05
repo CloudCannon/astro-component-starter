@@ -1,0 +1,86 @@
+label:
+  type: text
+  comment: Accessible label for the video modal dialog.
+type:
+  type: select
+  comment: Video source type.
+  options:
+    values:
+      - id: youtube
+        name: YouTube
+      - id: vimeo
+        name: Vimeo
+      - id: local-source
+        name: Local Source
+title:
+  type: text
+  comment: Video title for accessibility and display.
+videoId:
+  type: text
+  comment: Used for externally hosted videos — enter the YouTube or Vimeo video ID.
+  hidden: type=local-source
+source:
+  type: file
+  label: Video Source
+  comment: Used for locally hosted videos — select a video file.
+  hidden: type!=local-source
+  options:
+    accepts_mime_types:
+      - video/mp4
+      - video/webm
+      - video/ogg
+    paths:
+      uploads: public/videos
+      static: public
+triggerText:
+  type: text
+  comment: Text displayed on the button that opens the video modal.
+triggerVariant:
+  type: select
+  comment: Visual style of the trigger button.
+  options:
+    values:
+      - id: primary
+        name: Primary
+      - id: secondary
+        name: Secondary
+      - id: tertiary
+        name: Tertiary
+      - id: ghost
+        name: Ghost
+      - id: text
+        name: Text
+triggerSize:
+  type: select
+  comment: Size of the trigger button.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+triggerIconName:
+  type: select
+  comment: Optional icon for the trigger button. Sourced from [Heroicons](https://heroicons.com/).
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+size:
+  type: select
+  comment: Maximum width of the video modal.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large

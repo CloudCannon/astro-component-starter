@@ -43,5 +43,5 @@ export const DEFAULT_EXPOSED_PROPS: Record<string, string[]> = {
   "simple-text": ["text"],
   testimonial: ["text", "authorName", "authorDescription"],
   text: ["text"],
-  video: ["type", "id", "title", "source", "thumbnail"],
+  video: ["type", "videoId", "title", "source", "thumbnail"],
 } as const;

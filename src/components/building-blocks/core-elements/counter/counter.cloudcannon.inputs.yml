@@ -5,7 +5,7 @@ prefix:
   comment: Text immediately before the number.
 suffix:
   comment: Text immediately after the number.
-alignX:
+alignmentHorizontal:
   comment: The horizontal alignment of the counter.
   type: select
   options:

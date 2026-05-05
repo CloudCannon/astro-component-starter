@@ -6,7 +6,7 @@ const {
   size = "lg",
   color = "default",
   background = false,
-  alignX = "",
+  alignmentHorizontal = "",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -30,7 +30,7 @@ if (!_component && !isValidName) {
       `size-${size}`,
       `color-${color}`,
       background && "background",
-      alignX && `align-${alignX}`,
+      alignmentHorizontal && `align-${alignmentHorizontal}`,
       name?.includes("social/") && "fill",
     ]}
   >
@@ -41,7 +41,7 @@ if (!_component && !isValidName) {
   </span>
 </span>
 
-<style>
+<style is:global>
   @layer components {
     .icon {
       display: block;
@@ -70,6 +70,7 @@ if (!_component && !isValidName) {
         &.background {
           background-color: var(--color-bg-surface);
           padding: var(--spacing-em-xs);
+          width: fit-content;
         }
 
         &.color-blue {
@@ -177,7 +178,7 @@ if (!_component && !isValidName) {
           width: fit-content;
         }
 
-        :global(svg) {
+        svg {
           max-height: 100%;
         }
       }

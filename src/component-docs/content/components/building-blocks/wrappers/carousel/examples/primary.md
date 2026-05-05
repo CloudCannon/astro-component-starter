@@ -8,26 +8,26 @@ blocks:
         - _component: building-blocks/core-elements/heading
           text: Slide 1
           level: h2
-          alignX: center
+          alignmentHorizontal: center
         - _component: building-blocks/core-elements/text
-          alignX: center
+          alignmentHorizontal: center
           text: This is the first slide of the carousel.
     - contentSections:
         - _component: building-blocks/core-elements/heading
           text: Slide 2
           level: h2
-          alignX: center
+          alignmentHorizontal: center
         - _component: building-blocks/core-elements/text
           text: This is the second slide of the carousel.
-          alignX: center
+          alignmentHorizontal: center
     - contentSections:
         - _component: building-blocks/core-elements/heading
           text: Slide 3
           level: h2
-          alignX: center
+          alignmentHorizontal: center
         - _component: building-blocks/core-elements/text
           text: This is the third slide of the carousel.
-          alignX: center
+          alignmentHorizontal: center
   label: ''
   autoPlay: false
   autoScroll: false

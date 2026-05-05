@@ -126,7 +126,7 @@ The nav is sticky-positioned at the top of the page with `z-index: var(--layer-2
     },
     {
       "icon": "social/x",
-      "link": "https://twitter.com/your-handle"
+      "link": "https://x.com/your-handle"
     },
     {
       "icon": "social/linkedin",
@@ -194,21 +194,19 @@ Check `src/icons/social/` for the full list of available SVGs.
   "url": "https://yourdomain.com",
   "description": "Default meta description for pages without one.",
   "logoSource": "/images/logo.svg",
-  "titleFormat": "{title} | Your Site Name",
-  "twitterHandle": "@yourhandle"
+  "titleFormat": "{title} | Your Site Name"
 }
 ```
 
 ### Fields
 
-| Field           | Type   | Purpose                                                   |
-| --------------- | ------ | --------------------------------------------------------- |
-| `name`          | string | Site name (used in structured data)                       |
-| `url`           | string | Production URL (used in structured data, canonical links) |
-| `description`   | string | Fallback meta description                                 |
-| `logoSource`    | string | Fallback OG image                                         |
-| `titleFormat`   | string | Title template — `{title}` is replaced with page title    |
-| `twitterHandle` | string | Twitter/X handle for social cards                         |
+| Field         | Type   | Purpose                                                   |
+| ------------- | ------ | --------------------------------------------------------- |
+| `name`        | string | Site name (used in structured data)                       |
+| `url`         | string | Production URL (used in structured data, canonical links) |
+| `description` | string | Fallback meta description                                 |
+| `logoSource`  | string | Fallback OG image                                         |
+| `titleFormat` | string | Title template — `{title}` is replaced with page title    |
 
 ### How it's consumed
 
@@ -287,7 +285,6 @@ Edit `src/data/seo.json`:
 - Set `url` to the production URL
 - Set `description` to the default meta description
 - Set `titleFormat` to include the site name
-- Set `twitterHandle`
 
 Also update `site` in `astro.config.mjs` to match the production URL.
 

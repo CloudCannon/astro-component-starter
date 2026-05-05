@@ -5,13 +5,18 @@ blocks:
   _component: 'page-sections/builders/custom-section'
   paddingVertical: 2xl
   paddingHorizontal: md
-  backgroundImage:
-    source: /src/assets/images/component-docs/dunedin-cliff.jpg
-    alt: 'Dunedin cliffside'
+  colorScheme: dark
+  background:
+    type: image
     positionVertical: bottom
     positionHorizontal: right
+    priority: false
+    imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+    imageAlt: 'Dunedin cliffside'
+    overlay: -0.3
   contentSections:
-    - _component: building-blocks/core-elements/text
-      alignX: end
+    - _component: building-blocks/core-elements/heading
+      alignmentHorizontal: end
       text: Build bold. Launch fast.
+      level: h3
 ---

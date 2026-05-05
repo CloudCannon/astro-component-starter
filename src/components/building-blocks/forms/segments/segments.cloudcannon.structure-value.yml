@@ -51,7 +51,7 @@ _structures:
             comment: Whether the field is checked by default.
           icon:
             type: select
-            comment: The name of the icon to display from the icon library next to the segment option.
+            comment: Icon next to the segment option. Sourced from [Heroicons](https://heroicons.com/).
             options:
               values: _select_data.icons
               preview:

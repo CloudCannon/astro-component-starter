@@ -15,7 +15,7 @@ text:
     numberedlist: true
     indent: true
     outdent: true
-alignX:
+alignmentHorizontal:
   type: select
   options:
     values:
@@ -26,3 +26,24 @@ alignX:
       - id: end
         name: End
   comment: The horizontal alignment of the text component.
+size:
+  type: select
+  comment: The font size of paragraphs and lists. Does not affect headings.
+  options:
+    values:
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+      - id: 4xl
+        name: 4xl

@@ -18,5 +18,5 @@ blocks:
         text: 2 years
       - title: SKU
         text: TB-X1-2024
-    alignX: start
+    alignmentHorizontal: start
 ---

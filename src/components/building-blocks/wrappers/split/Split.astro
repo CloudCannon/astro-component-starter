@@ -6,7 +6,7 @@ const {
   firstColumnContentSections = [],
   secondColumnContentSections = [],
   distributionMode = "half",
-  verticalAlignment = "top",
+  alignmentVertical = "top",
   reverse = false,
   reverseOrderOnMobile = true,
   fixedWidth,
@@ -78,7 +78,7 @@ const splitId = `split-${crypto.randomUUID()}`;
   <div
     class:list={[
       "split-inner",
-      `align-${verticalAlignment}`,
+      `align-${alignmentVertical}`,
       finalDistributionMode,
       `gap-${gap}`,
       { reversed: reverse },
@@ -168,7 +168,7 @@ const splitId = `split-${crypto.randomUUID()}`;
   )
 }
 
-<style>
+<style is:global>
   @layer components {
     .split {
       margin-top: var(--spacing-lg);
@@ -181,6 +181,10 @@ const splitId = `split-${crypto.randomUUID()}`;
         display: grid;
         gap: var(--spacing-lg);
         grid-template-columns: var(--split-columns-desktop);
+
+        &.gap-none {
+          gap: 0;
+        }
 
         &.gap-xs {
           gap: var(--spacing-xs);
@@ -225,7 +229,7 @@ const splitId = `split-${crypto.randomUUID()}`;
         &.align-stretch {
           align-items: stretch;
 
-          > .pane > :global(*:only-child) {
+          > .pane > *:only-child {
             height: 100%;
           }
         }
@@ -235,7 +239,7 @@ const splitId = `split-${crypto.randomUUID()}`;
           min-width: 0;
           overflow-wrap: break-word;
 
-          > :global(*:first-child) {
+          > *:first-child {
             margin-top: 0 !important;
           }
         }
@@ -269,6 +273,10 @@ const splitId = `split-${crypto.randomUUID()}`;
         }
 
         @media (width < 640px) {
+          &.gap-none {
+            gap: 0;
+          }
+
           &.gap-xs {
             gap: var(--spacing-xs);
           }

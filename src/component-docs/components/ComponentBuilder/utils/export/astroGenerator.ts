@@ -399,9 +399,7 @@ function formatComponentBlock(
   if (isMapPatternSlot) {
     const mapSlotName = originalNode?.[`_renamed_${fallbackProp}`] || fallbackProp;
 
-    if (mapSlotName !== fallbackProp) {
-      propsList.push(`data-children-prop="${mapSlotName}"`);
-    }
+    propsList.push(`data-children-prop="${mapSlotName}"`);
   }
 
   if (!isRootComponent) {
@@ -538,9 +536,7 @@ function formatComponentBlock(
             const renamedKey = templateOriginal?.[`_renamed_${sp}`] || sp;
 
             childPropsList.push(`${sp}={${singularName}.${renamedKey}}`);
-            if (renamedKey !== sp) {
-              childPropsList.push(`data-children-prop="${renamedKey}"`);
-            }
+            childPropsList.push(`data-children-prop="${renamedKey}"`);
           }
         }
 

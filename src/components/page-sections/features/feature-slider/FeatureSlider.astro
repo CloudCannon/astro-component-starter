@@ -6,9 +6,13 @@ import Carousel from "@wrappers/carousel/Carousel.astro";
 type SlideProps = Record<string, unknown>;
 
 const {
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
   class: className,
   slides = [],
   useDefaultEditableBinding = false,
@@ -19,11 +23,13 @@ const {
 
 <CustomSection
   class:list={["feature-slider", className]}
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >

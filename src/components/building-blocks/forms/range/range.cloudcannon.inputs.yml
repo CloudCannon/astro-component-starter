@@ -1,0 +1,24 @@
+label:
+  type: text
+  comment: The label text for the range field.
+name:
+  type: text
+  comment: The name attribute for the range field.
+min:
+  type: number
+  comment: The minimum value of the range.
+max:
+  type: number
+  comment: The maximum value of the range.
+step:
+  type: number
+  comment: The step increment between values.
+value:
+  type: number
+  comment: The default value for the range field.
+required:
+  type: switch
+  comment: Whether the field is required.
+showValue:
+  type: switch
+  comment: Whether to display the current value next to the label.

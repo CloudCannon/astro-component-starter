@@ -3,7 +3,6 @@ import typescriptParser from "@typescript-eslint/parser";
 import astroEslintParser from "astro-eslint-parser";
 import eslintPluginAstro from "eslint-plugin-astro";
 import jsoncPlugin from "eslint-plugin-jsonc";
-import jsxA11y from "eslint-plugin-jsx-a11y";
 import ymlPlugin from "eslint-plugin-yml";
 import * as jsoncParser from "jsonc-eslint-parser";
 import * as yamlParser from "yaml-eslint-parser";
@@ -64,17 +63,6 @@ export default [
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       // Removed rules that require type information for now
-    },
-  },
-
-  // JSX/TSX files
-  {
-    files: ["**/*.jsx", "**/*.tsx"],
-    plugins: {
-      "jsx-a11y": jsxA11y,
-    },
-    rules: {
-      ...jsxA11y.configs.recommended.rules,
     },
   },
 

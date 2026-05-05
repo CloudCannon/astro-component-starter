@@ -1,4 +1,5 @@
 ---
+import { slugifyLabel } from "@components/utils/slugify";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
@@ -35,7 +36,7 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog");
 
   return posts.map((post: CollectionEntry<"blog">) => {
-    const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
+    const slug = post.id.replace(/\.mdx?$/, "");
 
     return {
       params: { slug },
@@ -55,12 +56,21 @@ const date = post.data.date.toLocaleDateString("en-US", {
   month: "long",
   day: "numeric",
 });
+const dateIso = post.data.date.toISOString().slice(0, 10);
+const article = {
+  publishedTime: post.data.date.toISOString(),
+  author: post.data.author,
+  tags: post.data.tags,
+};
 ---
 
 <Page
   title={post.data.title}
   description={post.data.description}
+  keywords={post.data.keywords}
   image={post.data.image}
+  type="article"
+  article={article}
 >
   <CustomSection
     maxContentWidth="xl"
@@ -69,20 +79,36 @@ const date = post.data.date.toLocaleDateString("en-US", {
     colorScheme="inherit"
     backgroundColor="base"
     class="post-container"
+    data-pagefind-filter="Type:Article"
   >
     <SimpleText
       size="sm"
-      style="color: var(--color-text-muted); margin-bottom: var(--spacing-sm);"
+      class="post-meta"
       data-prop="author"
     >
-      {date} • {post.data.author}
+      <time
+        datetime={dateIso}
+        data-pagefind-meta={`published:${dateIso}`}
+        data-pagefind-sort={`date:${dateIso}`}
+      >
+        {date}
+      </time>
+
+      •
+      <span
+        data-pagefind-filter="Author"
+        data-pagefind-meta="author"
+      >
+        {post.data.author}
+      </span>
     </SimpleText>
 
     <Heading
       data-prop="title"
+      data-pagefind-meta="title"
       level="h1"
       size="2xl"
-      style="margin-bottom: var(--spacing-xs);"
+      class="post-title"
     >
       {post.data.title}
     </Heading>
@@ -91,11 +117,39 @@ const date = post.data.date.toLocaleDateString("en-US", {
       post.data.description && (
         <SimpleText
           data-prop="description"
+          data-pagefind-meta="description"
+          data-pagefind-weight="3"
           size="lg"
-          style="color: var(--color-text-muted); margin-bottom: 0; margin-top: var(--spacing-xs);"
+          class="post-description"
         >
           {post.data.description}
         </SimpleText>
+      )
+    }
+
+    {
+      post.data.tags.length > 0 && (
+        <p
+          class="post-tags"
+          data-editable="array"
+          data-prop="tags"
+          data-direction="row"
+        >
+          {post.data.tags.map((tag, i) => (
+            <>
+              {i > 0 && " • "}
+              <a
+                class="post-tag-link"
+                href={`/blog/tag/${slugifyLabel(tag.trim())}/`}
+                data-pagefind-filter="Tag"
+                data-editable="array-item"
+                data-id={tag.trim()}
+              >
+                {tag.trim()}
+              </a>
+            </>
+          ))}
+        </p>
       )
     }
 
@@ -110,6 +164,9 @@ const date = post.data.date.toLocaleDateString("en-US", {
           class="post-image"
           aspectRatio="horizontal-strip"
           positionVertical="center"
+          imageElementAttributes={{
+            "data-pagefind-meta": "image[src], image_alt[alt]",
+          }}
         />
       )
     }
@@ -127,6 +184,28 @@ const date = post.data.date.toLocaleDateString("en-US", {
 <style is:global>
   .post-container.custom-section > .outer-content > .content {
     padding-bottom: 0 !important;
+  }
+
+  .post-meta {
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .post-title {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .post-description {
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+    margin-top: var(--spacing-xs);
+  }
+
+  .post-tags {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    margin-bottom: 0;
+    margin-top: var(--spacing-sm);
   }
 
   .post {
@@ -170,5 +249,17 @@ const date = post.data.date.toLocaleDateString("en-US", {
 
   .post-image {
     margin-top: var(--spacing-xl);
+  }
+
+  .post-tags .post-tag-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.15em;
+  }
+
+  .post-tags .post-tag-link:hover {
+    color: var(--color-text-strong);
+    text-decoration-thickness: 2px;
   }
 </style>

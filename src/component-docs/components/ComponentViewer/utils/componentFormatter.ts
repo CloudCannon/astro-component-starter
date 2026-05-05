@@ -4,6 +4,32 @@ import type { ComponentMetadata } from "../../../shared/metadata";
 import { getComponentDisplayName } from "./componentUtils";
 const { html } = pkg;
 
+function hasSlotBlocks(value: unknown): boolean {
+  if (value == null) return false;
+  if (Array.isArray(value)) return value.length > 0;
+  return typeof value === "object";
+}
+
+function formatBlockArray(
+  blocks: unknown,
+  childIndentLevel: number,
+  componentMetadata?: Map<string, ComponentMetadata>,
+  nestedBlockProperties?: Set<string>
+): string {
+  const arr = Array.isArray(blocks) ? blocks : [blocks];
+
+  return arr
+    .map((nestedBlock) =>
+      formatComponentWithSlots(
+        nestedBlock,
+        childIndentLevel,
+        componentMetadata,
+        nestedBlockProperties
+      )
+    )
+    .join("\n");
+}
+
 export function formatComponentWithSlots(
   block: any,
   indentLevel: number = 0,
@@ -62,6 +88,11 @@ export function formatComponentWithSlots(
     delete props.secondColumnContentSections;
     delete props.buttonSections;
     delete props.slides;
+    if (metadata?.slots) {
+      for (const slot of metadata.slots) {
+        delete props[slot.fallbackFor];
+      }
+    }
   } else if (componentPath.includes("split")) {
     delete props.firstColumnContentSections;
     delete props.secondColumnContentSections;
@@ -82,7 +113,7 @@ export function formatComponentWithSlots(
     delete props.options;
   }
 
-  let propsString = Object.entries(props)
+  const propsString = Object.entries(props)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, value]) => {
       if (typeof value === "string") {
@@ -108,47 +139,44 @@ export function formatComponentWithSlots(
 
   const items = block.items;
 
-  const nestedBlocks =
-    block.contentSections || block.navBlocks || block.formBlocks || block.buttonSections;
+  const hasAnySlotContent =
+    supportsSlots &&
+    metadata?.slots &&
+    !componentPath.includes("content-selector") &&
+    metadata.slots.some((slot) => hasSlotBlocks(block[slot.fallbackFor]));
 
-  if (nestedBlocks && supportsSlots) {
-    propsString = Object.entries(props)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([key, value]) => {
-        if (typeof value === "string") {
-          return `${key}="${value}"`;
-        } else if (typeof value === "boolean") {
-          return value ? key : "";
-        } else if (typeof value === "number") {
-          return `${key}={${value}}`;
-        } else if (Array.isArray(value)) {
-          const formattedArray = JSON.stringify(value, null, 2)
-            .split("\n")
-            .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
-            .join("\n");
+  if (hasAnySlotContent && metadata?.slots) {
+    const namedPieces: string[] = [];
+    const defaultPieces: string[] = [];
 
-          return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
-        } else if (typeof value === "object" && value !== null) {
-          return `${key}={${JSON.stringify(value)}}`;
-        }
-        return `${key}="${String(value)}"`;
-      })
-      .filter(Boolean)
-      .join(" ");
-    const blocksArray = Array.isArray(nestedBlocks) ? nestedBlocks : [nestedBlocks];
-    const nestedContent = blocksArray
-      .map((nestedBlock) =>
-        formatComponentWithSlots(
-          nestedBlock,
-          indentLevel + 1,
-          componentMetadata,
-          nestedBlockProperties
-        )
-      )
-      .join("\n");
+    for (const slot of metadata.slots) {
+      if (!hasSlotBlocks(block[slot.fallbackFor])) continue;
+
+      if (slot.name === "default") {
+        defaultPieces.push(
+          formatBlockArray(
+            block[slot.fallbackFor],
+            indentLevel + 1,
+            componentMetadata,
+            nestedBlockProperties
+          )
+        );
+      } else {
+        namedPieces.push(
+          `${indent}  <Fragment slot="${slot.name}">\n${formatBlockArray(
+            block[slot.fallbackFor],
+            indentLevel + 2,
+            componentMetadata,
+            nestedBlockProperties
+          )}\n${indent}  </Fragment>`
+        );
+      }
+    }
+
+    const inner = [...namedPieces, ...defaultPieces].join("\n");
 
     return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
-${nestedContent}
+${inner}
 ${indent}</${componentName}>`;
   } else if (block.formBlocks) {
     // Handle formBlocks as slot content - render as Form with child components
@@ -171,57 +199,6 @@ ${indent}</${componentName}>`;
 ${indent}  <${FormComponentName} action="${formAction}">
 ${formChildren}
 ${indent}  </${FormComponentName}>
-${indent}</${componentName}>`;
-  } else if (
-    componentPath.includes("split") &&
-    (block.firstColumnContentSections || block.secondColumnContentSections)
-  ) {
-    const firstContent = block.firstColumnContentSections
-      ? (Array.isArray(block.firstColumnContentSections)
-          ? block.firstColumnContentSections
-          : [block.firstColumnContentSections]
-        )
-          .map((nestedBlock) =>
-            formatComponentWithSlots(
-              nestedBlock,
-              indentLevel + 2,
-              componentMetadata,
-              nestedBlockProperties
-            )
-          )
-          .join("\n")
-      : "";
-
-    const secondContent = block.secondColumnContentSections
-      ? (Array.isArray(block.secondColumnContentSections)
-          ? block.secondColumnContentSections
-          : [block.secondColumnContentSections]
-        )
-          .map((nestedBlock) =>
-            formatComponentWithSlots(
-              nestedBlock,
-              indentLevel + 2,
-              componentMetadata,
-              nestedBlockProperties
-            )
-          )
-          .join("\n")
-      : "";
-
-    return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
-${
-  firstContent
-    ? `${indent}  <Fragment slot="first">
-${firstContent}
-${indent}  </Fragment>`
-    : ""
-}${firstContent && secondContent ? "\n" : ""}${
-      secondContent
-        ? `${indent}  <Fragment slot="second">
-${secondContent}
-${indent}  </Fragment>`
-        : ""
-    }
 ${indent}</${componentName}>`;
   } else if (items && componentPath.includes("list")) {
     // Handle list items as slot content
@@ -308,11 +285,15 @@ ${indent}</${componentName}>`;
       .join(" ");
 
     const itemsContent = itemsArray
-      .map((item) => {
+      .map((item, index) => {
         const itemProps = { ...item };
 
         delete itemProps._component;
         delete itemProps.contentSections;
+
+        if (index === 0) {
+          itemProps.checked = true;
+        }
 
         const itemPropsString = Object.entries(itemProps)
           .sort(([a], [b]) => a.localeCompare(b))

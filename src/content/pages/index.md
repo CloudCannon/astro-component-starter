@@ -1,7 +1,9 @@
 ---
 _schema: default
-title: Astro Component Starter
-description: Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.
+title: Home
+description: >-
+  Astro Component Starter: fast, visually editable components for Astro and CloudCannon—docs,
+  blog, and patterns for shipping real sites.
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
@@ -130,7 +132,7 @@ pageSections:
         iconColor: pink
     colorScheme: inherit
     backgroundColor: surface
-    align: center
+    alignmentHorizontal: center
   - _component: page-sections/ctas/cta-center
     heading: Ready to start building?
     subtext: >-

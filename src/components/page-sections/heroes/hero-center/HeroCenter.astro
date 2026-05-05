@@ -10,9 +10,13 @@ const {
   heading = "",
   subtext = "",
   buttonSections = [],
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -22,16 +26,18 @@ const {
 
 <CustomSection
   class:list={["hero-center", className]}
-  maxContentWidth="2xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <SimpleText
-    alignX="center"
+    alignmentHorizontal="center"
     class="eyebrow"
     data-prop="eyebrow"
     text={eyebrow}
@@ -39,13 +45,13 @@ const {
   <Heading
     level="h1"
     size="2xl"
-    alignX="center"
+    alignmentHorizontal="center"
     data-prop="heading"
   >
     {heading}
   </Heading>
   <Text
-    alignX="center"
+    alignmentHorizontal="center"
     class="subtext"
     data-prop="subtext"
     text={subtext}
@@ -53,14 +59,14 @@ const {
   <ButtonGroup
     class="buttonSections"
     buttonSections={buttonSections}
-    alignX="center"
+    alignmentHorizontal="center"
     data-children-prop="buttonSections"
   />
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.subtext) :global(p) {
+    .subtext p {
       font-size: var(--font-size-lg);
     }
   }

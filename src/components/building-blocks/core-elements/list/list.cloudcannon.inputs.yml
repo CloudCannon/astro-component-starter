@@ -23,7 +23,7 @@ direction:
       - id: vertical
         name: Vertical
   comment: The direction in which list items are arranged.
-alignX:
+alignmentHorizontal:
   type: select
   comment: The horizontal alignment of the list items.
   options:

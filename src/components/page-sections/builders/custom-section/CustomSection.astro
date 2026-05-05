@@ -2,6 +2,7 @@
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
+import Video from "@core-elements/video/Video.astro";
 
 const {
   label,
@@ -10,8 +11,9 @@ const {
   paddingHorizontal,
   paddingVertical = "4xl",
   colorScheme = "inherit",
+  lockColorScheme = false,
   backgroundColor,
-  backgroundImage,
+  background,
   rounded = false,
   useDefaultEditableBinding = false,
   class: className,
@@ -21,12 +23,15 @@ const {
 } = Astro.props;
 
 const {
-  source = "",
-  alt = "",
+  type: bgType = "image",
   positionVertical = "top",
   positionHorizontal = "center",
   priority = false,
-} = backgroundImage || {};
+  imageSource = "",
+  imageAlt = "",
+  videoSource = "",
+  overlay = 0,
+} = background || {};
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -48,16 +53,42 @@ const arrayDataAttributes =
   <div
     class:list={["outer-content", rounded && "rounded"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+    data-theme-lock={lockColorScheme || undefined}
   >
-    <Image
-      class:list={["background-image"]}
-      source={source}
-      alt={alt}
-      priority={priority}
-      positionVertical={positionVertical}
-      positionHorizontal={positionHorizontal}
-      background={true}
-    />
+    {
+      bgType === "image" && (
+        <Image
+          class:list={["background-image"]}
+          source={imageSource}
+          alt={imageAlt}
+          priority={priority}
+          positionVertical={positionVertical}
+          positionHorizontal={positionHorizontal}
+          background={true}
+        />
+      )
+    }
+    {
+      bgType === "video" && (
+        <Video
+          type="local-source"
+          source={videoSource}
+          background={true}
+          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+        />
+      )
+    }
+    {
+      overlay !== 0 && (
+        <div
+          class="background-overlay"
+          aria-hidden="true"
+          style={{
+            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
+          }}
+        />
+      )
+    }
     {
       backgroundColor && (
         <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
@@ -87,7 +118,7 @@ const arrayDataAttributes =
   </div>
 </section>
 
-<style>
+<style is:global>
   @layer components {
     .custom-section {
       > .outer-content {
@@ -106,11 +137,11 @@ const arrayDataAttributes =
           position: relative;
           z-index: var(--layer-1);
 
-          > :global(*:first-child) {
+          > *:first-child {
             margin-top: 0 !important;
           }
 
-          > :global(*:last-child) {
+          > *:last-child {
             margin-bottom: 0 !important;
           }
 
@@ -236,6 +267,10 @@ const arrayDataAttributes =
             }
           }
 
+          &.max-width-none {
+            max-width: none;
+          }
+
           &.max-width-xs {
             max-width: var(--content-width-xs);
           }
@@ -265,12 +300,22 @@ const arrayDataAttributes =
           }
         }
 
+        > .background-overlay {
+          inset: 0;
+          position: absolute;
+          z-index: var(--layer-1);
+        }
+
         > .background {
           inset: 0;
           position: absolute;
         }
 
-        > :global(.background-image) {
+        > .background-image {
+          z-index: var(--layer-1);
+        }
+
+        > .background-video {
           z-index: var(--layer-1);
         }
 

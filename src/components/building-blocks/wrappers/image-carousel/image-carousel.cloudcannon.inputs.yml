@@ -1,0 +1,39 @@
+label:
+  type: text
+  comment: Optional label for the carousel to help identify it in the editor.
+images:
+  type: array
+  comment: Array of images to display in the carousel.
+  options:
+    structures: _structures.imageCarouselImages
+showArrows:
+  type: switch
+  comment: Show previous and next arrow buttons.
+loop:
+  type: switch
+  comment: Loop the carousel back to the beginning when reaching the end.
+aspectRatio:
+  type: select
+  comment: Aspect ratio for the main image display.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: square
+        name: Square (1:1)
+      - id: landscape
+        name: Landscape (4:3)
+      - id: portrait
+        name: Portrait (3:4)
+      - id: widescreen
+        name: Widescreen (16:9)
+      - id: horizontal-strip
+        name: Horizontal Strip (16:5)
+sizes:
+  type: text
+  comment: 'Sizes attribute for main images (e.g. "(max-width: 1280px) 100vw, 1280px").'
+  hidden: true
+widths:
+  type: array
+  comment: Widths to generate for responsive main images (e.g. 640, 1280, 2560).
+  hidden: true

@@ -22,7 +22,6 @@ slides:
           description: Short description for this slide.
           imageSource: /src/assets/images/component-docs/sunset.jpg
           imageAlt: Slide image alt text
-          minSplitWidth: 0
         preview:
           text:
             - key: title
@@ -53,32 +52,3 @@ slides:
           imageAlt:
             type: text
             comment: Alt text describing the slide image.
-          minSplitWidth:
-            type: number
-            comment: Container width (in px) before the split stacks vertically.
-colorScheme:
-  type: select
-  comment: Color scheme theme applied to the section wrapper.
-  options:
-    values:
-      - id: inherit
-        name: Inherit
-      - id: light
-        name: Light
-      - id: dark
-        name: Dark
-backgroundColor:
-  type: select
-  comment: Background color for the section.
-  options:
-    values:
-      - id: none
-        name: None
-      - id: base
-        name: Base
-      - id: surface
-        name: Surface
-      - id: accent
-        name: Accent
-      - id: highlight
-        name: Highlight

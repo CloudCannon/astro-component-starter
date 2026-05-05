@@ -60,6 +60,15 @@ examples:
       - bg-image-position-center-center
       - bg-image-position-bottom-right
     size: md
+  - title: 'Background video'
+    slugs:
+      - bg-video
+    size: md
+  - title: 'Background overlay'
+    slugs:
+      - bg-overlay-darken
+      - bg-overlay-lighten
+    size: md
   - title: 'Before & After Content'
     slugs:
       - before-content

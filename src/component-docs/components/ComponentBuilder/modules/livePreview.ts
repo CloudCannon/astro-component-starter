@@ -12,7 +12,11 @@
 import { builderState } from "../state";
 import type { ComponentNode } from "../types";
 import { generateExportPreview } from "../utils/exportGenerator";
-import { createHighlighter } from "shiki/bundle/web";
+import astroLang from "@shikijs/langs/astro";
+import yamlLang from "@shikijs/langs/yaml";
+import githubDarkTheme from "@shikijs/themes/github-dark";
+import { createHighlighterCore } from "shiki/core";
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
 
 type ViewMode = "build" | "preview" | "code";
 
@@ -35,10 +39,10 @@ let highlighterPromise: Promise<CodeHighlighter> | null = null;
 
 function getHighlighter(): Promise<CodeHighlighter> {
   if (!highlighterPromise) {
-    // Use a static import so Vite bundles this reliably in dev.
-    highlighterPromise = createHighlighter({
-      themes: ["github-dark"],
-      langs: ["astro", "yaml"],
+    highlighterPromise = createHighlighterCore({
+      themes: [githubDarkTheme],
+      langs: [...astroLang, ...yamlLang],
+      engine: createJavaScriptRegexEngine({ forgiving: true }),
     }).catch((error) => {
       // Allow retry if initialization fails once.
       highlighterPromise = null;
@@ -60,6 +64,14 @@ function createCodeMarkup(renderedHtml: string, code: string): string {
   const lineNumbers = Array.from({ length: lineCount }, (_, i) => `<span>${i + 1}</span>`).join("");
 
   return `<div class="builder-code-render"><div class="builder-code-lines" aria-hidden="true">${lineNumbers}</div><div class="builder-code-html">${renderedHtml}</div></div>`;
+}
+
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function createPlainCodeMarkup(code: string): string {
+  return createCodeMarkup(`<pre><code>${escapeHtml(code)}</code></pre>`, code);
 }
 
 function cleanTree(nodes: ComponentNode[]): Record<string, unknown>[] {
@@ -208,44 +220,18 @@ export function initLivePreview(
 
           const highlighted = hl.codeToHtml(code, { lang, theme: "github-dark" });
           const html = createCodeMarkup(highlighted, code);
-          const copyBtn = codeContentEl.querySelector(".code-copy-btn");
 
-          if (copyBtn) {
-            const existing = codeContentEl.querySelector(".builder-code-render, pre");
-
-            if (existing) existing.remove();
-            copyBtn.insertAdjacentHTML("afterend", html);
-          } else {
-            codeContentEl.innerHTML = html;
-          }
+          codeContentEl.innerHTML = html;
         })
         .catch((error) => {
-          const message = error instanceof Error ? error.message : String(error);
-          const copyBtn = codeContentEl.querySelector(".code-copy-btn");
-          const errorMarkup = `<div class="builder-code-error">Shiki failed to load: ${escapeHtml(message)}</div>`;
-
-          if (copyBtn) {
-            const existing = codeContentEl.querySelector(
-              ".builder-code-render, pre, .builder-code-error"
-            );
-
-            if (existing) existing.remove();
-            copyBtn.insertAdjacentHTML("afterend", errorMarkup);
-          } else {
-            codeContentEl.innerHTML = errorMarkup;
-          }
-
-          console.error("[ComponentBuilder] Shiki highlight failed.", error);
+          codeContentEl.innerHTML = createPlainCodeMarkup(code);
+          console.warn("[ComponentBuilder] Shiki highlight failed. Rendering plain code.", error);
         });
     } catch (error) {
       const message = error instanceof Error ? error.message : "Unknown error";
 
       codeContentEl.innerHTML = `<pre><code>// Error generating code preview\n// ${escapeHtml(message)}</code></pre>`;
     }
-  }
-
-  function escapeHtml(str: string): string {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
   if (codeTabs) {

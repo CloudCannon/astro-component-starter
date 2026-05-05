@@ -5,6 +5,7 @@ import Button from "@core-elements/button/Button.astro";
 
 const {
   label,
+  heading,
   triggerText,
   triggerVariant = "primary",
   triggerSize = "md",
@@ -18,7 +19,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || `Modal-${crypto.randomUUID()}`;
+const generatedLabel = label || heading || `Modal-${crypto.randomUUID()}`;
 const popoverId = `modal-${slugifyLabel(generatedLabel)}`;
 
 const effectiveChildrenProp =
@@ -26,7 +27,11 @@ const effectiveChildrenProp =
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const headingDataAttributes = useDefaultEditableBinding
+  ? { "data-editable": "text", "data-prop": "heading" }
+  : {};
 
+const hasHeading = heading?.trim().length > 0;
 const hasContentSections = contentSections?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const hasTrigger = triggerText?.trim().length > 0 || triggerIconName?.trim().length > 0;
@@ -45,9 +50,8 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         variant={triggerVariant}
         size={triggerSize}
         iconName={triggerIconName}
-        element="button"
+        link={`^${popoverId}`}
         class="modal-trigger"
-        popovertarget={popoverId}
       />
     )
   }
@@ -57,16 +61,27 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     popover="auto"
     class:list={["modal-popover", `size-${size}`]}
     role="dialog"
-    aria-label={label}
+    aria-label={hasHeading ? undefined : label}
+    aria-labelledby={hasHeading ? `${popoverId}-header` : undefined}
   >
-    <div class="modal-header">
+    <div class:list={["modal-header", hasHeading ? "has-header" : "no-header"]}>
+      {
+        hasHeading && (
+          <h2
+            id={`${popoverId}-header`}
+            class="modal-title"
+            {...headingDataAttributes}
+          >
+            {heading}
+          </h2>
+        )
+      }
       <Button
         iconName="x-mark"
         hideText
         text="Close"
         variant="ghost"
         size="lg"
-        element="button"
         class="modal-close"
         popovertarget={popoverId}
         popovertargetaction="hide"
@@ -93,6 +108,15 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
 
+  function updateModalScrollLock() {
+    const openPopovers = Array.from(
+      document.querySelectorAll<HTMLElement>(".modal-popover")
+    ).filter((popover) => popover.matches(":popover-open"));
+    const hasOpenModal = openPopovers.length > 0;
+
+    document.body.toggleAttribute("data-modal-scroll-lock", hasOpenModal);
+  }
+
   function setupModals() {
     document.querySelectorAll<HTMLElement>(".modal").forEach((modal) => {
       if (modal.hasAttribute("data-modal-initialized")) return;
@@ -100,23 +124,26 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
 
       const trigger = modal.querySelector<HTMLButtonElement>(".modal-trigger .button-inner");
       const popover = modal.querySelector<HTMLElement>(".modal-popover");
-      if (!trigger || !popover) return;
+      if (!popover) return;
 
       popover.addEventListener("toggle", (e) => {
         const { newState } = e as ToggleEvent;
-        trigger.setAttribute("aria-expanded", String(newState === "open"));
+        trigger?.setAttribute("aria-expanded", String(newState === "open"));
+        updateModalScrollLock();
 
-        if (newState === "closed") {
+        if (newState === "closed" && trigger) {
           trigger.focus();
         }
       });
     });
+
+    updateModalScrollLock();
   }
 
   onPageLoad(setupModals);
 </script>
 
-<style>
+<style is:global>
   @layer components {
     .modal {
       display: inline-flex;
@@ -132,7 +159,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       inset: 0;
       margin: auto;
       max-height: 85vh;
-      overflow-y: auto;
+      overflow: hidden;
       padding: 0;
       width: 90vw;
 
@@ -145,6 +172,8 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         display var(--animation-normal) ease-out allow-discrete;
 
       &:popover-open {
+        display: flex;
+        flex-direction: column;
         opacity: 1;
         transform: translateY(0);
 
@@ -189,22 +218,50 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     }
 
     .modal-header {
+      align-items: center;
       display: flex;
-      justify-content: flex-end;
-      padding: var(--spacing-sm) var(--spacing-sm) 0;
-      position: sticky;
-      top: 0;
-      z-index: var(--layer-1);
+      gap: var(--spacing-md);
+      z-index: var(--layer-2);
+    }
+
+    .modal-header.has-header {
+      background-color: var(--color-bg-surface);
+      flex-shrink: 0;
+      justify-content: space-between;
+      padding: var(--spacing-sm);
+    }
+
+    .modal-header.no-header {
+      flex-shrink: 0;
+      height: 0;
+      padding: 0;
+      position: relative;
+      z-index: var(--layer-2);
+    }
+
+    .modal-header.no-header .modal-close {
+      position: absolute;
+      right: var(--spacing-sm);
+      top: var(--spacing-sm);
+      z-index: var(--layer-2);
+    }
+
+    .modal-title {
+      flex: 1;
+      font-size: var(--font-size-heading-sm);
+      margin: 0;
+      padding: 0 var(--spacing-md);
     }
 
     .modal-body {
-      padding: 0 var(--spacing-lg) var(--spacing-lg);
+      flex: 1;
+      overflow-y: auto;
 
-      > :global(*:first-child) {
+      > *:first-child {
         margin-top: 0 !important;
       }
 
-      > :global(*:last-child) {
+      > *:last-child {
         margin-bottom: 0 !important;
       }
     }

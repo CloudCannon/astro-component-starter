@@ -1,0 +1,159 @@
+---
+import Modal from "@wrappers/modal/Modal.astro";
+import type { VideoSource } from "@component-utils/discoverVideoSources";
+
+const {
+  label,
+  type = "youtube",
+  videoId,
+  title,
+  source,
+  triggerText,
+  triggerVariant = "primary",
+  triggerSize = "md",
+  triggerIconName = "play-circle",
+  size = "lg",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+let localVideoSources: VideoSource[] = [];
+
+if (type === "local-source" && source) {
+  const { discoverVideoSources } = await import("@component-utils/discoverVideoSources");
+
+  localVideoSources = await discoverVideoSources(source);
+}
+
+const hasVideo =
+  (type === "local-source" && source) || ((type === "youtube" || type === "vimeo") && videoId);
+
+if (!_component && !hasVideo) return;
+---
+
+<Modal
+  label={label}
+  header={title}
+  triggerText={triggerText}
+  triggerVariant={triggerVariant}
+  triggerSize={triggerSize}
+  triggerIconName={triggerIconName}
+  size={size}
+  class:list={["video-modal", className]}
+  _component={_component}
+  data-video-type={type}
+  data-video-id={videoId}
+  data-video-title={title}
+  {...htmlAttributes}
+>
+  <div class="video-modal-body">
+    {
+      type === "local-source" ? (
+        <video
+          preload="none"
+          controls
+          class="video-modal-player"
+        >
+          {localVideoSources.map(({ src, type: sourceType }) => (
+            <source
+              src={src}
+              type={sourceType}
+            />
+          ))}
+          Your browser does not support the HTML5 video element.
+        </video>
+      ) : (
+        <div class="video-modal-embed" />
+      )
+    }
+  </div>
+</Modal>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  function setupVideoModals() {
+    document.querySelectorAll<HTMLElement>(".video-modal").forEach((modal) => {
+      if (modal.hasAttribute("data-video-modal-initialized")) return;
+      modal.setAttribute("data-video-modal-initialized", "");
+
+      const popover = modal.querySelector<HTMLElement>(".modal-popover");
+      if (!popover) return;
+
+      const videoType = modal.dataset.videoType;
+      const videoId = modal.dataset.videoId;
+      const videoTitle = modal.dataset.videoTitle;
+      const embedContainer = popover.querySelector<HTMLElement>(".video-modal-embed");
+      const localVideo = popover.querySelector<HTMLVideoElement>(".video-modal-player");
+
+      popover.addEventListener("toggle", (e) => {
+        const { newState } = e as ToggleEvent;
+
+        if (newState === "open") {
+          if (localVideo) {
+            localVideo.play();
+          } else if (embedContainer && videoId) {
+            let iframeSrc = "";
+            if (videoType === "youtube") {
+              iframeSrc = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+            } else if (videoType === "vimeo") {
+              iframeSrc = `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+            }
+
+            if (iframeSrc) {
+              const iframe = document.createElement("iframe");
+              iframe.src = iframeSrc;
+              iframe.title = videoTitle || "";
+              iframe.allow = "autoplay; fullscreen; picture-in-picture";
+              iframe.allowFullscreen = true;
+              embedContainer.replaceChildren(iframe);
+            }
+          }
+        } else {
+          if (localVideo) {
+            localVideo.pause();
+            localVideo.currentTime = 0;
+          } else if (embedContainer) {
+            embedContainer.replaceChildren();
+          }
+        }
+      });
+    });
+  }
+
+  onPageLoad(setupVideoModals);
+</script>
+
+<style is:global>
+  @layer components {
+    .video-modal .modal-popover {
+      overflow: hidden;
+      width: min(90vw, (85vh - 3rem) * 16 / 9);
+    }
+
+    .video-modal-body {
+      aspect-ratio: 16 / 9;
+      line-height: 0;
+
+      > .video-modal-player,
+      > .video-modal-embed {
+        height: 100%;
+        width: 100%;
+      }
+
+      > .video-modal-player {
+        display: block;
+        object-fit: contain;
+        background-color: black;
+      }
+
+      > .video-modal-embed > iframe {
+        border: 0;
+        height: 100%;
+        width: 100%;
+      }
+    }
+  }
+</style>

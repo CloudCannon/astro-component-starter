@@ -9,4 +9,6 @@ examples:
       - sizes
   - slugs:
       - icons
+  - slugs:
+      - icon-colors
 ---

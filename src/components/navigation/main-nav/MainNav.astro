@@ -2,20 +2,25 @@
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Bar from "@components/navigation/bar/Bar.astro";
 import Mobile from "@components/navigation/mobile/Mobile.astro";
+import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
 import Image from "@core-elements/image/Image.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 
 type NavButton = {
   text?: string;
+  /** Button schema uses `link`; legacy entries may use `href`. */
+  link?: string;
   href?: string;
   [key: string]: unknown;
 };
 
 const {
   logoSource,
+  logoAlternateSource,
   logoAlt = "logo",
   navData = [],
   buttonSections = [] as NavButton[],
+  themeToggle = false,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -26,7 +31,7 @@ const mobileNavData = [
   ...navData,
   ...buttonSections.map((button: NavButton) => ({
     name: button.text || "Button",
-    path: button.href || "#",
+    path: button.link || button.href || "#",
     children: [],
   })),
 ];
@@ -40,9 +45,13 @@ const mobileNavData = [
   {...htmlAttributes}
   useDefaultEditableBinding={false}
 >
-  <a href="/">
+  <a
+    href="/"
+    class="main-nav-logo-link"
+  >
     <Image
       source={logoSource}
+      alternateSource={logoAlternateSource}
       class="main-nav-logo"
       alt={logoAlt}
       useDefaultEditableBinding={false}
@@ -54,6 +63,7 @@ const mobileNavData = [
       class="desktop-main-nav"
     />
 
+    {themeToggle && <ThemeToggle />}
     <ButtonGroup
       direction="row"
       align="center"
@@ -64,6 +74,7 @@ const mobileNavData = [
   </div>
   <Mobile
     logoSource={logoSource}
+    logoAlternateSource={logoAlternateSource}
     logoAlt={logoAlt}
     navData={mobileNavData}
     class="mobile-main-nav"
@@ -75,7 +86,7 @@ const mobileNavData = [
   @layer page-sections {
     .main-nav {
       background-color: var(--color-bg);
-      padding-block: var(--spacing-md);
+      padding-block: 0;
       position: sticky;
       top: 0;
       z-index: var(--layer-2);
@@ -85,10 +96,6 @@ const mobileNavData = [
         @container (max-width: 768px) {
           display: none;
         }
-      }
-
-      .main-nav-logo {
-        margin-top: 0 !important;
       }
 
       .nav-hamburger.mobile-button {
@@ -103,10 +110,37 @@ const mobileNavData = [
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-md);
+        height: 5rem;
 
-        > a > .image img {
-          height: 1.8em;
-          max-width: min(20em, 100%);
+        > .main-nav-logo-link {
+          align-items: center;
+          display: flex;
+          flex: 0 1 min(11rem, 100%);
+          min-width: 0;
+          width: min(11rem, 100%);
+        }
+
+        > .main-nav-logo-link > .main-nav-logo {
+          display: flex;
+          margin-top: 0 !important;
+          max-width: none;
+          width: 100%;
+        }
+
+        > .main-nav-logo-link > .main-nav-logo > .image-inner {
+          width: 100%;
+        }
+
+        > .main-nav-logo-link > .main-nav-logo picture {
+          display: block;
+          width: 100%;
+        }
+
+        > .main-nav-logo-link > .main-nav-logo img,
+        > .main-nav-logo-link > .main-nav-logo svg {
+          display: block;
+          height: 2rem;
+          max-width: 100%;
           width: auto;
         }
 
@@ -119,6 +153,7 @@ const mobileNavData = [
         align-items: center;
         display: flex;
         flex-shrink: 0;
+        gap: var(--spacing-md);
         justify-content: flex-end;
         margin-left: auto;
 

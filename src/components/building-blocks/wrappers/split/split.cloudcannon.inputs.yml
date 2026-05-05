@@ -36,7 +36,7 @@ fixedWidth:
 minSplitWidth:
   comment: Minimum width in pixels before switching to mobile layout.
   type: number
-verticalAlignment:
+alignmentVertical:
   comment: Vertical alignment of the columns.
   type: select
   options:
@@ -61,6 +61,8 @@ gap:
   type: select
   options:
     values:
+      - id: none
+        name: None
       - id: xs
         name: Extra Small
       - id: sm

@@ -40,10 +40,34 @@ _structures:
             type: text
             comment: Optional supporting text shown beneath the item heading.
           iconName:
-            comment: The name of the icon to display.
+            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
             type: select
             options:
               values: _select_data.icons
+          iconColor:
+            type: select
+            comment: The color of the icon.
+            hidden: "!iconName"
+            options:
+              values:
+                - id: default
+                  name: Default
+                - id: blue
+                  name: Blue
+                - id: green
+                  name: Green
+                - id: yellow
+                  name: Yellow
+                - id: orange
+                  name: Orange
+                - id: red
+                  name: Red
+                - id: purple
+                  name: Purple
+                - id: pink
+                  name: Pink
+                - id: cyan
+                  name: Cyan
           contentSections:
             type: array
             options:

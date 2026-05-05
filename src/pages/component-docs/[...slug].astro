@@ -41,18 +41,30 @@ const { Content } = isDisabled ? { Content: null } : await render(page);
 
 {
   isDisabled ? (
-    <Page frontmatter={{ title: "Component Docs" }}>
+    <Page
+      frontmatter={{
+        title: "Component Docs",
+        description:
+          "The component library and interactive docs are available in local development or when you build with the component library enabled (npm run build:with-library).",
+        noindex: true,
+      }}
+    >
       <section class="component-docs-disabled">
         <h1>Component Docs Available in Local Development</h1>
         <p>
-          The component docs are disabled in this production build to keep the generated site lean.
+          The component docs are disabled in this production build to keep the generated site lean
+          and to avoid shipping the interactive Component Builder and full example gallery when you
+          only need marketing pages and the blog.
         </p>
         <p>
           Run <code>npm run dev</code> and open <code>/component-docs/</code> locally to browse the
-          full docs, examples, and Component Builder.
+          full docs, live examples, props tables, and the visual Component Builder used to prototype
+          page sections before exporting Astro code.
         </p>
         <p>
           To include component docs in a static build, run <code>npm run build:with-library</code>.
+          That build enables every route under <code>/component-docs/</code>, including the builder
+          and per-component documentation pages.
         </p>
       </section>
     </Page>
@@ -63,7 +75,7 @@ const { Content } = isDisabled ? { Content: null } : await render(page);
   )
 }
 
-<style>
+<style is:global>
   .component-docs-disabled {
     margin: 0 auto;
     max-width: 50rem;

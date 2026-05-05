@@ -19,7 +19,7 @@ video:
         type: string
         optional: true
         remove_empty: true
-      - editor_key: id
+      - editor_key: videoId
         type: string
         optional: true
         remove_empty: true

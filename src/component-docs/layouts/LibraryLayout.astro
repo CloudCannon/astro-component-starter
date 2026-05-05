@@ -1,13 +1,16 @@
 ---
 import "@component-docs/styles/component-docs.css";
-import "@styles/style.css";
+import VideoElements from "@components/utils/VideoElements.astro";
 import SiteFonts from "@layouts/SiteFonts.astro";
+import "@styles/style.css";
+import { ClientRouter, fade } from "astro:transitions";
 import { z } from "zod/v4";
 
 const libraryLayoutSchema = z.object({
   frontmatter: z
     .object({
       title: z.string().optional(),
+      description: z.string().optional(),
       contentSections: z.array(z.any()).optional(),
     })
     .optional(),
@@ -16,9 +19,11 @@ const libraryLayoutSchema = z.object({
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import MobileNavLayout from "@component-docs/layouts/MobileNavLayout.astro";
 import SidebarNavLayout from "@component-docs/layouts/SidebarNavLayout.astro";
+import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
 import RenderBlock from "@components/utils/renderBlock.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
+const pageDescription = props.frontmatter?.description;
 const contentSections = props.frontmatter?.contentSections || [];
 ---
 
@@ -42,6 +47,7 @@ const contentSections = props.frontmatter?.contentSections || [];
       name="generator"
       content={Astro.generator}
     />
+    <ThemeToggleScript />
     <style is:inline>
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
@@ -55,30 +61,45 @@ const contentSections = props.frontmatter?.contentSections || [];
       ) : null
     }
     <title>{pageTitle}</title>
+    <meta
+      name="robots"
+      content="noindex"
+    />
+    {
+      pageDescription ? (
+        <meta
+          name="description"
+          content={pageDescription}
+        />
+      ) : null
+    }
     <slot name="head" />
+    <ClientRouter />
   </head>
-  <body class="component-docs">
-    <MobileNavLayout />
-    <CustomSection
-      maxContentWidth="2xl"
-      paddingHorizontal="md"
-      paddingVertical="none"
-      class="library-container"
-    >
-      <SidebarNavLayout />
-      <main class="main">
-        <div
-          data-editable="array"
-          data-children-prop="contentSections"
-        >
-          <RenderBlock contentSections={contentSections} />
-        </div>
-        <slot />
-      </main>
-    </CustomSection>
-    <script>
-      import "@choctawnationofoklahoma/lite-vimeo";
-      import "@justinribeiro/lite-youtube";
-    </script>
+  <body
+    class="component-docs"
+    data-pagefind-ignore
+  >
+    <div transition:animate={fade({ duration: "0.2s" })}>
+      <MobileNavLayout />
+      <CustomSection
+        maxContentWidth="2xl"
+        paddingHorizontal="md"
+        paddingVertical="none"
+        class="library-container"
+      >
+        <SidebarNavLayout />
+        <main class="main">
+          <div
+            data-editable="array"
+            data-children-prop="contentSections"
+          >
+            <RenderBlock contentSections={contentSections} />
+          </div>
+          <slot />
+        </main>
+      </CustomSection>
+      <VideoElements />
+    </div>
   </body>
 </html>

@@ -18,5 +18,5 @@ blocks:
         text: Closed
       - title: Sunday
         text: Closed
-    alignX: start
+    alignmentHorizontal: start
 ---

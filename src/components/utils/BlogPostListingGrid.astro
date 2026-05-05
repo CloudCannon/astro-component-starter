@@ -1,0 +1,137 @@
+---
+import Heading from "@core-elements/heading/Heading.astro";
+import Image from "@core-elements/image/Image.astro";
+import Pagination from "@core-elements/pagination/Pagination.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Card from "@wrappers/card/Card.astro";
+import Grid from "@wrappers/grid/Grid.astro";
+import GridItem from "@wrappers/grid/GridItem.astro";
+
+/** Paginated page object from `paginate()` (includes `data`, `url`, etc.). */
+interface Props {
+  page: any;
+  emptyMessage: string;
+  /** Top margin for the grid when no tag breadcrumb is shown. */
+  gridMarginTop?: string;
+  /** Renders “All posts / …” above the grid; grid uses a tighter top margin. */
+  tagBreadcrumb?: {
+    allPostsHref: string;
+    allPostsLabel?: string;
+    currentLabel: string;
+  };
+}
+
+const { page, emptyMessage, gridMarginTop = "var(--spacing-2xl)", tagBreadcrumb } = Astro.props;
+
+const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
+---
+
+{
+  page.data.length > 0 ? (
+    <>
+      {tagBreadcrumb && (
+        <nav
+          class="blog-list-breadcrumb"
+          aria-label="Blog tag"
+          style="margin-top: var(--spacing-2xl);"
+        >
+          <a href={tagBreadcrumb.allPostsHref}>{tagBreadcrumb.allPostsLabel ?? "All posts"}</a>
+          <span aria-hidden="true"> / </span>
+          <span class="blog-list-breadcrumb-current">{tagBreadcrumb.currentLabel}</span>
+        </nav>
+      )}
+      <Grid
+        gap="lg"
+        layout="start"
+        minItemWidth="320"
+        maxItemWidth="400"
+        style={`margin-top: ${gridTop}`}
+      >
+        {page.data.map((post: any) => {
+          const pubDate = post.data.date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
+
+          return (
+            <GridItem>
+              <Card
+                link={`/blog/${slug}`}
+                rounded={true}
+                border={true}
+                paddingVertical="lg"
+                paddingHorizontal="lg"
+              >
+                {post.data.image && (
+                  <Image
+                    slot="before"
+                    source={post.data.image}
+                    alt={post.data.title}
+                    aspectRatio="landscape"
+                  />
+                )}
+                <SimpleText
+                  size="sm"
+                  style="color: var(--color-text-muted); margin-bottom: var(--spacing-xs);"
+                >
+                  {pubDate} • {post.data.author || "Anonymous"}
+                </SimpleText>
+                <Heading
+                  level="h2"
+                  size="md"
+                  style="margin-bottom: var(--spacing-md); margin-top: var(--spacing-sm);"
+                >
+                  {post.data.title}
+                </Heading>
+                <SimpleText
+                  size="sm"
+                  style="color: var(--color-text-muted); margin-top: 0;"
+                >
+                  {post.data.description}
+                </SimpleText>
+              </Card>
+            </GridItem>
+          );
+        })}
+      </Grid>
+      <Pagination
+        page={page}
+        showArrows={true}
+        style="margin-top: var(--spacing-2xl);"
+      />
+    </>
+  ) : (
+    <SimpleText
+      alignmentHorizontal="center"
+      style="margin-top: var(--spacing-2xl);"
+    >
+      {emptyMessage}
+    </SimpleText>
+  )
+}
+
+<style is:global>
+  .blog-list-breadcrumb {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .blog-list-breadcrumb a {
+    color: var(--color-text-strong);
+    text-decoration: underline;
+    text-underline-offset: 0.12em;
+  }
+
+  .blog-list-breadcrumb a:hover {
+    color: var(--color-text-strong);
+    text-decoration-thickness: 2px;
+  }
+
+  .blog-list-breadcrumb-current {
+    color: var(--color-text-strong);
+    font-weight: var(--font-weight-medium);
+  }
+</style>

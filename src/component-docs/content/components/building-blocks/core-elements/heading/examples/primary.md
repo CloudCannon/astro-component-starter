@@ -6,7 +6,7 @@ blocks:
   text: This looks important
   level: h2
   size: default
-  alignX: start
+  alignmentHorizontal: start
   iconName: null
   iconPosition: before
 ---

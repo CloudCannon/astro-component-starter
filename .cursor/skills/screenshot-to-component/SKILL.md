@@ -152,10 +152,15 @@ const {
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
-  <Heading level="h2" size="lg" alignX="center" data-prop="heading">
+  <Heading level="h2" size="lg" alignmentHorizontal="center" data-prop="heading">
     {heading}
   </Heading>
-  <Text class="service-cards-subtext" alignX="center" data-prop="subtext" text={subtext} />
+  <Text
+    class="service-cards-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
   <Grid
     gap="lg"
     minItemWidth="300"
@@ -175,9 +180,9 @@ const {
   </Grid>
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.service-cards-grid) {
+    .service-cards-grid {
       margin-top: var(--spacing-2xl);
     }
   }
@@ -234,18 +239,18 @@ Every text prop, image prop, and array prop needs CloudCannon editable bindings 
 | Thin border                    | `1px solid var(--color-border)`                       |
 | Subtle shadow                  | `box-shadow: 0 1px 3px rgba(0,0,0,0.1)`               |
 
-### Scoped styles
+### Global styles
 
-Use `@layer page-sections` for all styles. Target child building blocks with `:global(.class-name)` when you need to override their spacing or layout:
+Use `<style is:global>` and `@layer page-sections` for all styles. Do NOT use `:global()` — all styles are global so it is not needed:
 
 ```css
-<style>
+<style is:global>
   @layer page-sections {
     .my-section-heading {
       margin-bottom: var(--spacing-lg);
     }
 
-    :global(.my-section-grid) {
+    .my-section-grid {
       margin-top: var(--spacing-2xl);
     }
   }
@@ -496,15 +501,15 @@ Import via `@core-elements/{slug}/{Name}.astro`.
 
 | Component        | Renders                              | Key props                                                                                                                  |
 | ---------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `Heading`        | Semantic heading (h1-h6)             | `text`, `level` (h1-h6), `size` (xs-5xl), `alignX` (start/center/end)                                                      |
-| `Text`           | Body paragraph, supports markdown    | `text`, `alignX`                                                                                                           |
-| `SimpleText`     | Plain inline text (eyebrows, labels) | `text`, `alignX`                                                                                                           |
+| `Heading`        | Semantic heading (h1-h6)             | `text`, `level` (h1-h6), `size` (xs-5xl), `alignmentHorizontal` (start/center/end)                                         |
+| `Text`           | Body paragraph, supports markdown    | `text`, `alignmentHorizontal`                                                                                              |
+| `SimpleText`     | Plain inline text (eyebrows, labels) | `text`, `alignmentHorizontal`                                                                                              |
 | `Image`          | Responsive optimized image           | `source`, `alt`, `aspectRatio` (square/landscape/portrait/wide/none), `rounded`                                            |
 | `Icon`           | SVG icon from icon set               | `name`, `size` (xs-4xl), `color` (default/blue/green/yellow/orange/red/purple/pink/cyan), `background`                     |
 | `Button`         | Link or button                       | `text`, `link`, `variant` (primary/secondary/tertiary/ghost), `size` (sm/md/lg), `iconName`, `iconPosition` (before/after) |
 | `List`           | Ordered/unordered list               | `items[]`, `ordered`, `iconName`                                                                                           |
 | `DefinitionList` | Term + definition pairs              | `items[]` (term, definition)                                                                                               |
-| `Testimonial`    | Blockquote with author               | `text`, `authorName`, `authorDescription`, `authorImage`, `alignX`                                                         |
+| `Testimonial`    | Blockquote with author               | `text`, `authorName`, `authorDescription`, `authorImage`, `alignmentHorizontal`                                            |
 | `Embed`          | iframe embed                         | `src`, `title`, `aspectRatio`                                                                                              |
 | `Video`          | YouTube/Vimeo lite embed             | `videoId`, `provider` (youtube/vimeo)                                                                                      |
 | `Counter`        | Animated number counter              | `value`, `suffix`, `label`                                                                                                 |
@@ -518,12 +523,12 @@ Import via `@wrappers/{slug}/{Name}.astro`.
 | Component                                  | Renders             | Key props                                                                                                                                         |
 | ------------------------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Grid` / `GridItem`                        | Responsive CSS grid | `minItemWidth`, `maxItemWidth`, `gap` (sm-3xl), `items[]`                                                                                         |
-| `Split`                                    | Two-column layout   | `reverse`, `distributionMode` (equal/fixed-flexible/flexible-fixed), `verticalAlignment` (start/center/end), `fixedWidth`, `minSplitWidth`, `gap` |
+| `Split`                                    | Two-column layout   | `reverse`, `distributionMode` (equal/fixed-flexible/flexible-fixed), `alignmentVertical` (start/center/end), `fixedWidth`, `minSplitWidth`, `gap` |
 | `Card`                                     | Content container   | `contentSections[]`, `border`, `rounded`, `link`, `paddingHorizontal`, `paddingVertical`, `backgroundColor`, `colorScheme`                        |
 | `BentoBox` / `BentoBoxItem`                | Spanning grid       | `columns`, `minRowHeight`, `gap`, `items[]`                                                                                                       |
 | `Accordion` / `AccordionItem`              | Expandable panels   | `items[]`, `openFirst`, `singleOpen`                                                                                                              |
 | `Carousel` / `CarouselSlide`               | Sliding content     | `slides[]`, `autoPlay`, `autoScroll`, `loop`, `showArrows`, `showIndicators`, `slideWidthPercent`, `minSlideWidth`                                |
-| `ButtonGroup`                              | Button row/column   | `buttonSections[]`, `direction` (row/column), `alignX` (start/center/end)                                                                         |
+| `ButtonGroup`                              | Button row/column   | `buttonSections[]`, `direction` (row/column), `alignmentHorizontal` (start/center/end)                                                            |
 | `Modal`                                    | Popover dialog      | `triggerText`, `triggerVariant`, `size`, `contentSections[]`                                                                                      |
 | `ContentSelector` / `ContentSelectorPanel` | Tabbed content      | `items[]`, `navigationPosition`                                                                                                                   |
 
@@ -531,13 +536,12 @@ Import via `@wrappers/{slug}/{Name}.astro`.
 
 Import via `@builders/custom-section/CustomSection.astro`. Every page section wraps its content in this.
 
-| Prop                | Values                                 | Default |
-| ------------------- | -------------------------------------- | ------- |
-| `maxContentWidth`   | xs, sm, md, lg, xl, 2xl, 3xl           | —       |
-| `paddingHorizontal` | xs through 6xl                         | —       |
-| `paddingVertical`   | xs through 6xl                         | 4xl     |
-| `colorScheme`       | inherit, light, dark                   | inherit |
-| `backgroundColor`   | none, base, surface, accent, highlight | —       |
-| `backgroundImage`   | object with `source`, `alt`            | —       |
-| `rounded`           | boolean                                | false   |
-| `label`             | string (also used as anchor ID)        | —       |
+| Prop                | Values                                                                      | Default |
+| ------------------- | --------------------------------------------------------------------------- | ------- |
+| `maxContentWidth`   | xs, sm, md, lg, xl, 2xl, 3xl                                                | —       |
+| `paddingHorizontal` | xs through 6xl                                                              | —       |
+| `paddingVertical`   | xs through 6xl                                                              | 4xl     |
+| `colorScheme`       | inherit, light, dark                                                        | inherit |
+| `backgroundColor`   | none, base, surface, accent, highlight                                      | —       |
+| `background`        | object: `type` (`none`/`image`/`video`), positioning, image or video fields | —       |
+| `label`             | string (also used as anchor ID)                                             | —       |

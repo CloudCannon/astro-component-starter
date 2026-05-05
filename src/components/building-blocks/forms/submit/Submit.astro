@@ -6,6 +6,7 @@ const {
   variant = "primary",
   size = "md",
   iconName,
+  iconColor = "default",
   iconPosition = "before",
   hideText = false,
   disabled = false,
@@ -14,49 +15,27 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const hasSlot = Astro.slots.has("default");
 ---
 
-{
-  hasSlot ? (
-    <Button
-      element="button"
-      type="submit"
-      text={text}
-      variant={variant}
-      size={size}
-      iconName={iconName}
-      iconPosition={iconPosition}
-      hideText={hideText}
-      disabled={disabled}
-      data-prop="text"
-      class:list={["submit", className]}
-      {...htmlAttributes}
-    >
-      <slot />
-    </Button>
-  ) : (
-    <Button
-      element="button"
-      type="submit"
-      text={text}
-      variant={variant}
-      size={size}
-      iconName={iconName}
-      iconPosition={iconPosition}
-      hideText={hideText}
-      disabled={disabled}
-      data-prop="text"
-      class:list={["submit", className]}
-      {...htmlAttributes}
-    />
-  )
-}
+<Button
+  element="button"
+  type="submit"
+  text={text}
+  variant={variant}
+  size={size}
+  iconName={iconName}
+  iconColor={iconColor}
+  iconPosition={iconPosition}
+  hideText={hideText}
+  disabled={disabled}
+  data-prop="text"
+  class:list={["submit", className]}
+  {...htmlAttributes}
+/>
 
-<style>
+<style is:global>
   @layer components {
-    :global(.submit) {
+    form .submit {
       margin-top: var(--spacing-md);
     }
   }

@@ -26,7 +26,7 @@ if (!htmlAttributes.id && label) {
 const gridStyles = [
   `--min-item-width: ${minItemWidth}px`,
   `--max-item-width: ${maxItemWidth}px`,
-  `--grid-spacing: var(--spacing-${gap})`,
+  `--grid-spacing: ${gap === "none" ? "0px" : `var(--spacing-${gap})`}`,
   userStyle,
 ]
   .filter(Boolean)
@@ -68,7 +68,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .grid {
       margin-top: var(--spacing-lg);
@@ -92,7 +92,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           justify-content: center;
           width: 100%;
 
-          > :global(.grid-item) {
+          > .grid-item {
             flex: 1 1 var(--min-item-width, 200px);
             max-width: var(--max-item-width, 320px);
             min-width: min(var(--min-item-width, 200px), 100%);

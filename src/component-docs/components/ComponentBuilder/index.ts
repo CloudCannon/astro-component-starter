@@ -9,7 +9,6 @@
  * @module index
  */
 
-import "./styles.css";
 import { onPageLoad } from "../../../components/utils/onPageLoad";
 import { debugLog } from "./constants";
 import { showExportConfigModal } from "./modules/exportModal";
@@ -20,11 +19,24 @@ import { builderState } from "./state";
 import type { BuilderData } from "./types";
 import { generateExport } from "./utils/exportGenerator";
 
+const BUILDER_READY_EVENT = "component-builder:ready";
+const BUILDER_INIT_GLOBAL = "__initComponentBuilder";
+let cleanupCallbacks: Array<() => void> = [];
+
+type BuilderWindow = Window & {
+  [BUILDER_INIT_GLOBAL]?: () => void;
+};
+
 /** Initialize the component builder */
 function initializeBuilder(): void {
   const builderElement = document.querySelector(".component-builder");
 
   if (!builderElement) return;
+  if (builderElement.getAttribute("data-builder-initialized") === "true") return;
+
+  cleanupCallbacks.forEach((cleanup) => cleanup());
+  cleanupCallbacks = [];
+  builderElement.setAttribute("data-builder-initialized", "true");
 
   // Load builder data from data attribute
   const dataAttr = builderElement.getAttribute("data-builder-data");
@@ -57,8 +69,12 @@ function initializeBuilder(): void {
   const sidebarTitle = document.getElementById("sidebar-title");
   const exportBtn = document.getElementById("export-btn") as HTMLElement;
   const exportBar = document.querySelector(".export-bar") as HTMLElement;
-  const exportBtnInner = exportBtn?.querySelector(".button-inner") as HTMLButtonElement | null;
-  const exportBtnLabel = exportBtn?.querySelector(".label-text") as HTMLElement | null;
+  const exportBtnInner = (
+    exportBtn?.classList.contains("button-inner")
+      ? exportBtn
+      : exportBtn?.querySelector(".button-inner")
+  ) as HTMLButtonElement | null;
+  const exportBtnLabel = exportBtnInner?.querySelector(".label-text") as HTMLElement | null;
 
   if (!sandbox || !sidebarContent || !sidebarTitle || !exportBtn || !exportBar || !exportBtnInner) {
     console.error("[ComponentBuilder] Missing required DOM elements");
@@ -75,26 +91,32 @@ function initializeBuilder(): void {
   setRenderCallback(render);
 
   // Selection change handler
-  builderState.on("selectionChange", () => {
-    updateSidebar();
-  });
+  cleanupCallbacks.push(
+    builderState.on("selectionChange", () => {
+      updateSidebar();
+    })
+  );
 
   // Tree change handler
-  builderState.on("treeChange", () => {
-    if (builderState.propEditInProgress) {
-      renderSandbox(sandbox);
-      updateExportButton();
-    } else {
-      render();
-    }
-    builderState.saveToLocalStorage();
-  });
+  cleanupCallbacks.push(
+    builderState.on("treeChange", () => {
+      if (builderState.propEditInProgress) {
+        renderSandbox(sandbox);
+        updateExportButton();
+      } else {
+        render();
+      }
+      builderState.saveToLocalStorage();
+    })
+  );
 
   // Validation change handler
-  builderState.on("validationChange", () => {
-    updateExportButton();
-    updateValidationPanel();
-  });
+  cleanupCallbacks.push(
+    builderState.on("validationChange", () => {
+      updateExportButton();
+      updateValidationPanel();
+    })
+  );
 
   // Export button handler
   exportBtn.addEventListener("click", (e) => {
@@ -317,4 +339,6 @@ function initializeBuilder(): void {
   updateValidationPanel();
 }
 
+(window as BuilderWindow)[BUILDER_INIT_GLOBAL] = initializeBuilder;
+document.addEventListener(BUILDER_READY_EVENT, initializeBuilder);
 onPageLoad(initializeBuilder);

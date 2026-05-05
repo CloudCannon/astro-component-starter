@@ -1,6 +1,9 @@
 label:
   type: text
   comment: Accessible label for the modal dialog.
+heading:
+  type: text
+  comment: Optional heading displayed at the top of the modal.
 triggerText:
   type: text
   comment: Text displayed on the button that opens the modal.
@@ -32,7 +35,7 @@ triggerSize:
         name: Large
 triggerIconName:
   type: select
-  comment: Optional icon for the trigger button.
+  comment: Optional icon for the trigger button. Sourced from [Heroicons](https://heroicons.com/).
   options:
     values: _select_data.icons
     preview:

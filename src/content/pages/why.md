@@ -38,6 +38,7 @@ pageSections:
               We give you [straightforward building blocks](/component-docs/)
               without hiding anything behind layers of abstraction. You see
               everything that's happening, and stay in control.
+            size: md
       - title: What's included in the Component Starter?
         contentSections:
           - _component: building-blocks/core-elements/text
@@ -45,6 +46,7 @@ pageSections:
               Lean HTML, CSS, and small touches of vanilla JavaScript. No dead
               weight, no surprise dependencies, just the pieces you actually
               need to build great pages.
+            size: md
       - title: How is the Component Starter so fast?
         contentSections:
           - _component: building-blocks/core-elements/text
@@ -52,6 +54,7 @@ pageSections:
               Performance comes from keeping things lightweight. The framework
               handles image optimization and responsive patterns so your site
               stays quick without extra work.
+            size: md
       - title: Can I customize the Component Starter?
         contentSections:
           - _component: building-blocks/core-elements/text
@@ -60,6 +63,7 @@ pageSections:
               and edited. You shape it to fit your project instead of working
               around someone else's opinions. Start by [browsing the
               components](/component-docs/) to see how they're set up!
+            size: md
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 4xl
@@ -74,24 +78,20 @@ pageSections:
         text: Mix and match your components
         level: h2
         size: default
-        alignX: center
+        alignmentHorizontal: center
         iconName:
         iconPosition: before
       - _component: building-blocks/core-elements/text
         text: >-
           With custom sections, you can create components for almost any use
           case.
-        alignX: center
+        alignmentHorizontal: center
+        size: md
     maxContentWidth: 2xl
     paddingHorizontal: md
     paddingVertical: md
     colorScheme: dark
     backgroundColor: surface
-    backgroundImage:
-      source: ''
-      alt: ''
-      positionVertical: top
-      positionHorizontal: center
     rounded: false
   - _component: page-sections/features/feature-slider
     slides:
@@ -105,7 +105,6 @@ pageSections:
           overwhelming the page.
         imageSource: /src/assets/images/component-docs/quiet-street.jpg
         imageAlt: High Performance
-        minSplitWidth: 0
       - eyebrow: Content transition example
         title: Seamless navigation between slides
         description: >-
@@ -116,7 +115,6 @@ pageSections:
           sequential content delivery.
         imageSource: /src/assets/images/component-docs/sheep.jpg
         imageAlt: Easy Maintenance
-        minSplitWidth: 0
       - eyebrow: Third position showcase
         title: Maintaining consistent formatting
         description: >-
@@ -126,7 +124,6 @@ pageSections:
           to expect as they progress through the available content.
         imageSource: /src/assets/images/component-docs/castle.jpg
         imageAlt: Move Faster
-        minSplitWidth: 300
       - eyebrow: Final slide
         title: Completing the carousel loop
         description: >-
@@ -137,7 +134,6 @@ pageSections:
           a compact, navigable format.
         imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
         imageAlt: Long-Term Stability
-        minSplitWidth: 0
     colorScheme: dark
     backgroundColor: surface
     eyebrow: Why Carousel
@@ -151,7 +147,7 @@ pageSections:
     authorName: John Convincingname
     authorDescription: Founder
     authorImage: /src/assets/images/component-docs/profile.jpg
-    alignX: center
+    alignmentHorizontal: center
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 2xl

@@ -12,13 +12,13 @@ blocks:
         - _component: building-blocks/core-elements/heading
           text: 'Frequently asked questions'
           level: h2
-          alignX: start
+          alignmentHorizontal: start
         - _component: building-blocks/core-elements/text
           text: |
             **Do you offer support?** Yes — email us anytime.
 
             **Can I cancel?** Yes, you can cancel anytime.
-          alignX: start
+          alignmentHorizontal: start
           size: md
     - title: Shipping
       subtext: How we deliver
@@ -28,7 +28,7 @@ blocks:
           text: |
             We ship worldwide. Orders leave within 2 business days.
             Delivery times vary by region.
-          alignX: start
+          alignmentHorizontal: start
           size: md
         - _component: building-blocks/core-elements/list
           items:
@@ -37,7 +37,7 @@ blocks:
             - text: 'US & EU: 5–10 days'
               iconName: globe-alt
           direction: vertical
-          alignX: start
+          alignmentHorizontal: start
           size: md
     - title: Returns
       subtext: Easy and fair
@@ -45,7 +45,7 @@ blocks:
       contentSections:
         - _component: building-blocks/core-elements/text
           text: '30‑day returns. Unused items only. Full refund once received.'
-          alignX: start
+          alignmentHorizontal: start
           size: md
         - _component: building-blocks/core-elements/text
           text: Start a return

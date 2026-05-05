@@ -26,6 +26,7 @@
   --color-bg-inverse: var(--gray-1);
 
   --color-border: var(--gray-8);
+  --color-border-inputs: var(--gray-6);
   --color-border-strong: var(--gray-4);
   --color-border-subtle: var(--gray-8);
 
@@ -34,4 +35,15 @@
   --color-overlay: rgba(0, 0, 0, 0.7);
 
   --color-focus-ring: rgba(0, 122, 255, 0.4);
+
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-danger-bg-subtle: rgba(239, 68, 68, 0.12);
+  --color-danger-border-subtle: rgba(239, 68, 68, 0.4);
+  --color-info: #60a5fa;
+  --color-info-bg-subtle: rgba(59, 130, 246, 0.12);
+  --color-info-border-subtle: rgba(59, 130, 246, 0.4);
+  --color-success: #4ade80;
+  --color-success-bg-subtle: rgba(16, 185, 129, 0.15);
+  --color-error: var(--color-danger);
 }

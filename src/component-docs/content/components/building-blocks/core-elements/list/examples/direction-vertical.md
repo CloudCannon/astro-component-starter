@@ -11,6 +11,6 @@ blocks:
       - text: Third vertical list item
         iconName: bolt
     direction: vertical
-    alignX: start
+    alignmentHorizontal: start
     size: md
 ---

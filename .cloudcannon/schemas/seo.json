@@ -1,0 +1,7 @@
+{
+  "name": "Astro Component Starter",
+  "url": "https://example.com",
+  "description": "Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.",
+  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
+  "titleFormat": "{title} | Astro Component Starter"
+}

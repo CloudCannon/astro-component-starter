@@ -9,11 +9,13 @@ value:
   autoScroll: false
   loop: true
   showIndicators: true
+  indicatorStyle: dots
   showArrows: true
-  align: center
+  alignmentHorizontal: center
   slidesToScroll: auto
   slideWidthPercent: 100
   minSlideWidth: 0
+  gap: none
 preview:
   text:
     - Carousel

@@ -1,8 +1,8 @@
 {
+  "_schema": "seo",
   "name": "Astro Component Starter",
   "url": "https://example.com",
-  "description": "",
-  "logoSource": "/images/logo.svg",
-  "titleFormat": "{title} | Astro Component Starter",
-  "twitterHandle": "@yourusername"
+  "description": "Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.",
+  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
+  "titleFormat": "{title} | Astro Component Starter"
 }

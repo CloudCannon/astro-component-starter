@@ -9,5 +9,5 @@ blocks:
     - _component: building-blocks/core-elements/heading
       text: This card has 2xl max content width.
       level: h3
-      alignX: center
+      alignmentHorizontal: center
 ---

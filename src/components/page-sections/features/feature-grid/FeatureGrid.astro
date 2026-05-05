@@ -13,9 +13,14 @@ const {
   heading = "",
   subtext = "",
   features = [],
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
+  alignmentHorizontal = "center",
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -25,16 +30,18 @@ const {
 
 <CustomSection
   class:list={["feature-grid", className]}
-  maxContentWidth="2xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <SimpleText
-    alignX="center"
+    alignmentHorizontal={alignmentHorizontal}
     class="eyebrow"
     data-prop="eyebrow"
     text={eyebrow}
@@ -42,21 +49,21 @@ const {
   <Heading
     level="h2"
     size="lg"
-    alignX="center"
+    alignmentHorizontal={alignmentHorizontal}
     data-prop="heading"
   >
     {heading}
   </Heading>
   <Text
     class="feature-grid-subtext"
-    alignX="center"
+    alignmentHorizontal={alignmentHorizontal}
     data-prop="subtext"
     text={subtext}
   />
   <Grid
     gap="lg"
     minItemWidth="360"
-    maxItemWidth="360"
+    maxItemWidth="400"
     class="feature-grid-grid"
     data-children-prop="features"
   >
@@ -72,9 +79,9 @@ const {
   </Grid>
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
-    :global(.feature-grid-grid) {
+    .feature-grid-grid {
       margin-top: var(--spacing-2xl);
     }
   }

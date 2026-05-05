@@ -1,0 +1,236 @@
+---
+const {
+  label,
+  name,
+  min = 0,
+  max = 100,
+  step = 1,
+  value,
+  required = false,
+  showValue = true,
+  id: customId,
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const fieldId = customId || `range-${crypto.randomUUID()}`;
+const defaultValue = value ?? min;
+const initialPct = ((defaultValue - min) / (max - min)) * 100;
+---
+
+<div
+  class:list={["range", className]}
+  {...htmlAttributes}
+>
+  {
+    label && (
+      <div class="range-header">
+        <label
+          for={fieldId}
+          class="label"
+        >
+          {label}
+          {required && (
+            <span
+              class="range-required"
+              aria-label="required"
+            >
+              *
+            </span>
+          )}
+        </label>
+        {showValue && (
+          <output
+            class="range-value"
+            for={fieldId}
+          >
+            {defaultValue}
+          </output>
+        )}
+      </div>
+    )
+  }
+  <input
+    type="range"
+    name={name}
+    id={fieldId}
+    min={min}
+    max={max}
+    step={step}
+    value={defaultValue}
+    required={required}
+    aria-required={required}
+    class="range-input"
+    style={`--range-pct: ${initialPct}%`}
+  />
+  <div
+    class="range-bounds"
+    aria-hidden="true"
+  >
+    <span>{min}</span>
+    <span>{max}</span>
+  </div>
+</div>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  onPageLoad(() => {
+    const ranges = document.querySelectorAll<HTMLDivElement>(".range");
+    if (!ranges.length) return;
+
+    ranges.forEach((wrapper) => {
+      const input = wrapper.querySelector<HTMLInputElement>(".range-input");
+      const output = wrapper.querySelector<HTMLOutputElement>(".range-value");
+      if (!input) return;
+
+      input.addEventListener("input", () => {
+        const min = Number(input.min) || 0;
+        const max = Number(input.max) || 100;
+        const val = Number(input.value);
+        const pct = ((val - min) / (max - min)) * 100;
+        input.style.setProperty("--range-pct", `${pct}%`);
+        if (output) output.value = input.value;
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  @layer components {
+    .range {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+      margin: 0;
+      margin-bottom: var(--spacing-md);
+      width: 100%;
+
+      .range-header {
+        align-items: baseline;
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: space-between;
+
+        .label {
+          flex: 1;
+        }
+      }
+
+      .range-required {
+        color: var(--color-error);
+        margin-inline-start: var(--spacing-em-xs);
+      }
+
+      .range-value {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        font-variant-numeric: tabular-nums;
+        min-width: 2.5ch;
+        text-align: end;
+      }
+
+      .range-input {
+        --thumb-size: 18px;
+        --track-height: 4px;
+
+        appearance: none;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        cursor: pointer;
+        height: var(--thumb-size);
+        margin: 0;
+        padding: 0;
+        width: 100%;
+
+        &:focus-visible {
+          outline: none;
+        }
+
+        &:focus-visible::-webkit-slider-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 0 0 5px var(--color-focus-ring);
+        }
+
+        &:focus-visible::-moz-range-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 0 0 5px var(--color-focus-ring);
+        }
+
+        /* Track — WebKit */
+        &::-webkit-slider-runnable-track {
+          background: linear-gradient(
+            to right,
+            var(--color-brand) var(--range-pct),
+            var(--color-border) var(--range-pct)
+          );
+          border-radius: var(--radius-full);
+          height: var(--track-height);
+        }
+
+        /* Track — Firefox */
+        &::-moz-range-track {
+          background: var(--color-border);
+          border-radius: var(--radius-full);
+          height: var(--track-height);
+        }
+
+        &::-moz-range-progress {
+          background: var(--color-brand);
+          border-radius: var(--radius-full);
+          height: var(--track-height);
+        }
+
+        /* Thumb — WebKit */
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          background-color: var(--color-brand);
+          border-radius: var(--radius-full);
+          height: var(--thumb-size);
+          margin-top: calc((var(--track-height) - var(--thumb-size)) / 2);
+          transition: background-color var(--animation-fast) ease-in-out;
+          width: var(--thumb-size);
+        }
+
+        /* Thumb — Firefox */
+        &::-moz-range-thumb {
+          appearance: none;
+          background-color: var(--color-brand);
+          border: none;
+          border-radius: var(--radius-full);
+          height: var(--thumb-size);
+          transition: background-color var(--animation-fast) ease-in-out;
+          width: var(--thumb-size);
+        }
+
+        &:hover::-webkit-slider-thumb,
+        &:focus-visible::-webkit-slider-thumb {
+          background-color: var(--color-brand-muted);
+        }
+
+        &:hover::-moz-range-thumb,
+        &:focus-visible::-moz-range-thumb {
+          background-color: var(--color-brand-muted);
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
+        }
+      }
+
+      .range-bounds {
+        color: var(--color-text-muted);
+        display: flex;
+        font-size: var(--font-size-xs);
+        justify-content: space-between;
+      }
+    }
+  }
+</style>

@@ -1,4 +1,5 @@
 ---
+import Icon from "@core-elements/icon/Icon.astro";
 import SelectOption from "./SelectOption.astro";
 
 const {
@@ -8,6 +9,8 @@ const {
   placeholder,
   required = false,
   value,
+  iconName,
+  iconColor = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -15,9 +18,13 @@ const {
 } = Astro.props;
 
 const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
+const hasLeadingIcon = iconName?.trim().length > 0;
 ---
 
-<div class:list={["select", className]}>
+<div
+  class:list={["select", className]}
+  {...htmlAttributes}
+>
   {
     label && (
       <label
@@ -36,41 +43,61 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
       </label>
     )
   }
-  <select
-    name={name}
-    id={fieldId}
-    required={required}
-    aria-required={required}
-    class="field"
-    {...htmlAttributes}
-  >
+  <div class:list={["field-shell", { "has-leading-icon": hasLeadingIcon }]}>
     {
-      placeholder && (
-        <option
-          value=""
-          disabled
-        >
-          {placeholder}
-        </option>
+      hasLeadingIcon && (
+        <Icon
+          name={iconName}
+          color={iconColor}
+          size="none"
+          class="select-icon select-leading-icon"
+          aria-hidden="true"
+          role="presentation"
+        />
       )
     }
-    {
-      options.length > 0 ? (
-        options.map((option) => (
-          <SelectOption
-            value={option.value}
-            label={option.label}
-            selected={option.value === value}
-          />
-        ))
-      ) : (
-        <slot />
-      )
-    }
-  </select>
+    <select
+      name={name}
+      id={fieldId}
+      required={required}
+      aria-required={required}
+      class="field"
+    >
+      {
+        placeholder && (
+          <option
+            value=""
+            disabled
+          >
+            {placeholder}
+          </option>
+        )
+      }
+      {
+        options.length > 0 ? (
+          options.map((option) => (
+            <SelectOption
+              value={option.value}
+              label={option.label}
+              selected={option.value === value}
+            />
+          ))
+        ) : (
+          <slot />
+        )
+      }
+    </select>
+    <Icon
+      name="chevron-down"
+      size="none"
+      class="select-icon select-chevron"
+      aria-hidden="true"
+      role="presentation"
+    />
+  </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .select {
       display: flex;
@@ -83,6 +110,62 @@ const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
       .select-required {
         color: var(--color-error);
         margin-inline-end: var(--spacing-em-xs);
+      }
+    }
+
+    .select .field-shell {
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border-inputs);
+      border-radius: var(--radius-xs);
+      display: block;
+      position: relative;
+      transition:
+        border-color var(--animation-normal) ease-in-out,
+        box-shadow var(--animation-normal) ease-in-out;
+
+      &:focus-within {
+        border-color: var(--color-brand);
+        box-shadow: 0 0 0 3px var(--color-focus-ring);
+      }
+
+      .select-icon {
+        color: var(--color-text-muted);
+        font-size: 1.25em;
+        pointer-events: none;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .select-leading-icon {
+        inset-inline-start: var(--spacing-em-sm);
+      }
+
+      .select-chevron {
+        inset-inline-end: var(--spacing-em-sm);
+      }
+
+      > .field {
+        appearance: none;
+        background-color: transparent;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        cursor: pointer;
+        display: block;
+        padding-block: var(--spacing-em-sm);
+        padding-inline-end: calc(1.25em + var(--spacing-em-sm) * 2);
+        padding-inline-start: var(--spacing-em-sm);
+        width: 100%;
+
+        &:focus {
+          box-shadow: none;
+          outline: none;
+        }
+      }
+
+      &.has-leading-icon > .field {
+        padding-inline-start: calc(1.25em + var(--spacing-em-sm) * 2);
       }
     }
   }

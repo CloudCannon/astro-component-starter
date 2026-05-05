@@ -8,12 +8,14 @@
       }
 
       > .main {
+        min-width: 0;
         padding-block-end: var(--spacing-2xl);
       }
     }
 
     & .library-sidebar {
       display: none;
+      flex-direction: column;
       flex-shrink: 0;
       height: 100vh;
       overflow-y: auto;
@@ -41,21 +43,44 @@
       background: var(--color-bg);
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
       display: flex;
+      height: 5rem;
       justify-content: space-between;
-      padding: var(--spacing-md);
+      padding-inline: var(--spacing-lg);
       position: sticky;
       top: 0;
       z-index: var(--layer-2);
 
       > .sidebar-logo {
-        height: 30px;
-        width: auto;
-
-        & svg {
-          height: 100%;
-          width: 100%;
-        }
+        height: auto;
+        margin-top: 0;
+        max-width: 130px;
+        width: 100%;
       }
+
+      > .library-mobile-nav-actions {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-md);
+      }
+    }
+
+    & .heading-anchor {
+      color: var(--color-text-subtle);
+      font-weight: var(--font-weight-normal);
+      margin-inline-start: 0.25em;
+      opacity: 0;
+      text-decoration: none;
+      transition: opacity var(--animation-normal) ease;
+
+      &:hover {
+        color: var(--color-text-link);
+      }
+    }
+
+    & h2:hover .heading-anchor,
+    & h3:hover .heading-anchor,
+    & .heading-anchor:focus-visible {
+      opacity: 1;
     }
 
     & .component-viewer {
@@ -96,7 +121,7 @@
       }
 
       & .library-sidebar {
-        display: block;
+        display: flex;
       }
 
       & .library-mobile-nav {

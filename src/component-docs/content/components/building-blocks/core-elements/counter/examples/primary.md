@@ -6,5 +6,5 @@ blocks:
   number: 100
   prefix: $
   suffix: +
-  alignX: center
+  alignmentHorizontal: center
 ---

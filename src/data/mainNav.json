@@ -1,6 +1,8 @@
 {
-  "logoSource": "/images/logo.svg",
-  "logoAlt": "Logo",
+  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
+  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoAlt": "Astro Component Starter",
+  "themeToggle": true,
   "navData": [
     {
       "name": "Home",
@@ -10,6 +12,11 @@
     {
       "name": "Why",
       "path": "/why/",
+      "children": []
+    },
+    {
+      "name": "Components",
+      "path": "/component-docs/",
       "children": []
     },
     {

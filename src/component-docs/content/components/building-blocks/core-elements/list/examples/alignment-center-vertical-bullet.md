@@ -8,7 +8,7 @@ blocks:
       - text: Second list item
       - text: Third list item
     direction: vertical
-    alignX: center
+    alignmentHorizontal: center
     size: md
     listType: bullet
 ---

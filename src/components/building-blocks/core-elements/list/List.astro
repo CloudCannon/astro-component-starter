@@ -6,7 +6,7 @@ type ItemProps = Record<string, unknown>;
 const {
   items = [],
   direction = "vertical",
-  alignX = "start",
+  alignmentHorizontal = "start",
   size = "md",
   listType = "icon",
   class: className,
@@ -39,7 +39,7 @@ const arrayDataAttributes = effectiveChildrenProp
     class:list={[
       `size-${size}`,
       `direction-${direction}`,
-      `alignment-${alignX}`,
+      `alignment-${alignmentHorizontal}`,
       `type-${listType}`,
     ]}
     {...arrayDataAttributes}
@@ -60,7 +60,7 @@ const arrayDataAttributes = effectiveChildrenProp
   </ListTag>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .list {
       margin-top: var(--spacing-lg);

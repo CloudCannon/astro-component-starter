@@ -7,5 +7,5 @@ blocks:
     authorName: Jules Mercer
     authorDescription: Travel photographer
     authorImage: /src/assets/images/component-docs/profile.jpg
-    alignX: start
+    alignmentHorizontal: start
 ---

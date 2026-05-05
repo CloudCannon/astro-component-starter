@@ -20,6 +20,13 @@ examples:
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right
+  - title: Background video
+    slugs:
+      - bg-video
+  - title: Background overlay
+    slugs:
+      - bg-overlay-darken
+      - bg-overlay-lighten
   - title: Max Width
     slugs:
       - max-content-width-xs
@@ -40,6 +47,7 @@ examples:
   - title: Color Scheme
     slugs:
       - scheme-contrast
+      - scheme-light
       - scheme-default
     size: md
   - title: Rounded Corners

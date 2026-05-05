@@ -1,0 +1,129 @@
+---
+const {
+  label,
+  name,
+  checked = false,
+  required = false,
+  value = "on",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
+---
+
+<div
+  class:list={["toggle", className]}
+  {...htmlAttributes}
+>
+  <label
+    class="toggle-container"
+    for={fieldId}
+  >
+    <span class="toggle-switch">
+      <input
+        type="checkbox"
+        name={name}
+        id={fieldId}
+        checked={checked}
+        required={required}
+        aria-required={required}
+        value={value}
+        class="toggle-input"
+      />
+      <span class="toggle-track"></span>
+    </span>
+    {
+      label && (
+        <span class="toggle-label">
+          {label}
+          {required && (
+            <span
+              class="toggle-required"
+              aria-label="required"
+            >
+              *
+            </span>
+          )}
+        </span>
+      )
+    }
+  </label>
+</div>
+
+<style is:global>
+  @layer components {
+    .toggle {
+      display: flex;
+      margin: 0;
+      margin-bottom: var(--spacing-md);
+      width: 100%;
+
+      .toggle-container {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        gap: var(--spacing-sm);
+        width: 100%;
+      }
+
+      .toggle-label {
+        flex: 1;
+      }
+
+      .toggle-required {
+        color: red;
+      }
+
+      .toggle-switch {
+        display: inline-block;
+        flex-shrink: 0;
+        height: 26px;
+        position: relative;
+        width: 48px;
+      }
+
+      .toggle-input {
+        height: 0;
+        opacity: 0;
+        width: 0;
+      }
+
+      .toggle-track {
+        background-color: var(--color-border);
+        border-radius: var(--radius-full);
+        inset: 0;
+        position: absolute;
+        transition: var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .toggle-track::before {
+        background-color: var(--color-bg);
+        border-radius: var(--radius-full);
+        bottom: 3px;
+        box-shadow: 0 2px 4px var(--color-state-active);
+        content: "";
+        height: 20px;
+        left: 3px;
+        position: absolute;
+        transition: var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+        width: 20px;
+      }
+
+      .toggle-input:checked + .toggle-track {
+        background: var(--color-bg-inverse);
+      }
+
+      .toggle-input:checked + .toggle-track::before {
+        transform: translateX(22px);
+      }
+
+      .toggle-input:disabled + .toggle-track {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+  }
+</style>

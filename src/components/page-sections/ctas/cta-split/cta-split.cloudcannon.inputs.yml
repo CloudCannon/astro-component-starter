@@ -37,32 +37,3 @@ buttonSections:
 reverse:
   type: switch
   comment: Reverse the order so buttons appear before the copy.
-colorScheme:
-  type: select
-  comment: Color scheme theme for the CTA.
-  options:
-    values:
-      - id: inherit
-        name: Inherit
-      - id: light
-        name: Light
-      - id: dark
-        name: Dark
-backgroundColor:
-  type: select
-  comment: Background color for the CTA.
-  options:
-    values:
-      - id: none
-        name: None
-      - id: base
-        name: Base
-      - id: surface
-        name: Surface
-      - id: accent
-        name: Accent
-      - id: highlight
-        name: Highlight
-rounded:
-  type: switch
-  comment: Add rounded corners to the CTA section.

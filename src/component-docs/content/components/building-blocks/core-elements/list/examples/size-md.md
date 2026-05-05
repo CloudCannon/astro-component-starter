@@ -11,6 +11,6 @@ blocks:
       - text: Third item
         iconName: arrow-down-right
     direction: horizontal
-    alignX: start
+    alignmentHorizontal: start
     size: md
 ---

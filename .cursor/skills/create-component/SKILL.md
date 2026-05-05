@@ -121,7 +121,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   </div>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .my-component {
       margin-top: var(--spacing-lg);
@@ -170,17 +170,17 @@ const {
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
-  <Heading level="h2" size="lg" alignX="center" data-prop="heading" text={heading} />
-  <Text alignX="center" data-prop="subtext" text={subtext} />
+  <Heading level="h2" size="lg" alignmentHorizontal="center" data-prop="heading" text={heading} />
+  <Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
     class="buttonSections"
     buttonSections={buttonSections}
-    alignX="center"
+    alignmentHorizontal="center"
     data-children-prop="buttonSections"
   />
 </CustomSection>
 
-<style>
+<style is:global>
   @layer page-sections {
   }
 </style>
@@ -273,7 +273,7 @@ Always query for elements inside the callback, guard with an early return if non
 - **Root element rules**: Spread `{...htmlAttributes}` on the root element so `renderBlock.astro` can pass through `data-editable="array-item"` and `data-id`. Never put a `data-editable` attribute on the root element — it would conflict with the one injected by `renderBlock`. Never use `display: contents` on the root element as it breaks editable array-item regions.
 - **Early return guard**: `if (!_component && !hasContent) return;` — prevents empty rendering when used programmatically. When `_component` is set (placed via CloudCannon), always render so the editor can interact.
 - **Editable bindings**: Follow the [editable-regions skill](../editable-regions/SKILL.md) for all editable region patterns. In short: pass `data-prop` on text building blocks, `data-children-prop` on array wrappers, `data-prop-src`/`data-prop-alt` on images, and `data-editable="array-item"` + `data-id` on mapped child items.
-- **Scoped styles**: Use `@layer components` for building blocks, `@layer page-sections` for page sections. Use CSS custom properties for all values. Use `class:list` for conditional classes. Use `:global()` when targeting children from other components.
+- **Global styles**: All component styles use `<style is:global>`. Use `@layer components` for building blocks, `@layer page-sections` for page sections. Use CSS custom properties for all values. Use `class:list` for conditional classes. Do NOT use `:global()` — it is not needed since all styles are global.
 
 ## CloudCannon structures registration
 
@@ -508,4 +508,4 @@ blocks:
 
 ## CustomSection props reference
 
-Page sections wrap content in `CustomSection` from `@builders/custom-section/CustomSection.astro`. Key props: `maxContentWidth` (`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`xs`..`6xl`, default `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `backgroundImage` (object), `rounded` (boolean), `label` (string, also used as anchor ID), `useDefaultEditableBinding` (boolean).
+Page sections wrap content in `CustomSection` from `@builders/custom-section/CustomSection.astro`. Key props: `maxContentWidth` (`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`xs`..`6xl`, default `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `background` (object: `type` `none`/`image`/`video`, shared positioning, plus image or video fields), `label` (string, also used as anchor ID), `useDefaultEditableBinding` (boolean). Note: `rounded` is only available on `CustomSection` directly, not forwarded by page section wrappers.

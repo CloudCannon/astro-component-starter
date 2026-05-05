@@ -14,10 +14,13 @@ const {
   imageSource = "",
   imageAlt = "",
   reverse = false,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
-  rounded = false,
+  background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -27,12 +30,13 @@ const {
 
 <CustomSection
   class:list={["cta-form", className]}
-  maxContentWidth="2xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
-  rounded={rounded}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
@@ -40,7 +44,7 @@ const {
     class="split"
     distributionMode="fixed-flexible"
     fixedWidth="400"
-    verticalAlignment="center"
+    alignmentVertical="center"
     reverse={reverse}
     minSplitWidth={640}
   >

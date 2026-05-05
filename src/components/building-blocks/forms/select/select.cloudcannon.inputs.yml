@@ -23,3 +23,37 @@ placeholder:
 value:
   type: text
   comment: The default selected value.
+iconName:
+  type: select
+  comment: The name of an optional leading icon. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+iconColor:
+  type: select
+  comment: The color of the icon.
+  hidden: "!iconName"
+  options:
+    values:
+      - id: default
+        name: Default
+      - id: blue
+        name: Blue
+      - id: green
+        name: Green
+      - id: yellow
+        name: Yellow
+      - id: orange
+        name: Orange
+      - id: red
+        name: Red
+      - id: purple
+        name: Purple
+      - id: pink
+        name: Pink
+      - id: cyan
+        name: Cyan

@@ -1,0 +1,6 @@
+page:
+  type: object
+  comment: The Astro page object from paginate() function.
+showArrows:
+  type: switch
+  comment: Show previous/next chevron buttons either side of the page numbers.

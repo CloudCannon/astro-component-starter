@@ -6,8 +6,9 @@ const {
   text,
   level = "h2",
   size,
-  alignX = "start",
+  alignmentHorizontal = "start",
   iconName,
+  iconColor = "default",
   iconPosition = "before",
   class: className,
   useDefaultEditableBinding = false,
@@ -37,11 +38,12 @@ if (!_component && !hasText && !hasSlotContent) return;
   class:list={["heading", className]}
   {...htmlAttributes}
 >
-  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignX}`]}>
+  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}>
     {
       iconPosition == "before" && (
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="heading-icon"
           aria-hidden="true"
@@ -61,6 +63,7 @@ if (!_component && !hasText && !hasSlotContent) return;
       iconPosition === "after" && (
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="heading-icon heading-icon-after"
           aria-hidden="true"
@@ -71,7 +74,7 @@ if (!_component && !hasText && !hasSlotContent) return;
   </span>
 </Tag>
 
-<style>
+<style is:global>
   @layer components {
     .heading {
       margin-top: var(--spacing-lg);
@@ -79,7 +82,7 @@ if (!_component && !hasText && !hasSlotContent) return;
       > .heading-inner {
         display: block;
 
-        :global(.heading-icon) {
+        .heading-icon {
           bottom: 0.1em;
           display: inline-block;
           font-size: 0.9em;

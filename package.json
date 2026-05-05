@@ -1,7 +1,7 @@
 {
   "name": "astro-component-starter",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
   "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
   "author": "Your Name",
@@ -24,22 +24,23 @@
     "lint:css": "stylelint \"**/*.css\"",
     "lint:css:fix": "stylelint \"**/*.css\" --fix",
     "format": "prettier --check .",
-    "format:fix": "prettier --write ."
+    "format:fix": "prettier --write .",
+    "deps:sync": "rm -rf node_modules && npm install --os=linux --cpu=x64 --libc=glibc --ignore-scripts --no-audit && npm ci",
+    "deps:check": "npm ci --dry-run"
   },
   "dependencies": {
-    "@astrojs/compiler-rs": "^0.1.6",
-    "@astrojs/mdx": "^5.0.2",
-    "@astrojs/node": "^10.0.3",
-    "@astrojs/sitemap": "^3.7.1",
+    "@astrojs/compiler-rs": "^0.1.10",
+    "@astrojs/mdx": "^5.0.4",
+    "@astrojs/node": "^10.0.6",
+    "@astrojs/sitemap": "^3.7.2",
     "@choctawnationofoklahoma/lite-vimeo": "^1.3.1",
-    "@cloudcannon/editable-regions": "^0.0.12",
+    "@cloudcannon/editable-regions": "^0.0.14",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/raleway": "^5.2.8",
     "@justinribeiro/lite-youtube": "^1.9.0",
     "@types/js-yaml": "^4.0.9",
-    "astro": "^6.0.7",
+    "astro": "^6.1.10",
     "astro-icon": "^1.1.5",
-    "astro-seo": "^1.1.0",
     "embla-carousel": "^8.6.0",
     "embla-carousel-auto-scroll": "^8.6.0",
     "embla-carousel-autoplay": "^8.6.0",
@@ -47,38 +48,36 @@
     "js-beautify": "^1.15.4",
     "js-yaml": "^4.1.1",
     "jszip": "^3.10.1",
-    "lightningcss": "^1.32.0",
     "markdown-it": "^14.1.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
     "sharp": "^0.34.5",
     "shiki": "^4.0.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "^8.57.1",
-    "eslint": "^9.39.4",
-    "eslint-plugin-astro": "^1.6.0",
+    "@typescript-eslint/eslint-plugin": "^8.59.1",
+    "@typescript-eslint/parser": "^8.59.1",
+    "eslint": "^10.2.1",
+    "eslint-plugin-astro": "^1.7.0",
     "eslint-plugin-jsonc": "^3.1.2",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-yml": "^3.3.1",
     "jsonc-eslint-parser": "^3.1.0",
-    "prettier": "^3.8.1",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "stylelint": "^17.5.0",
+    "stylelint": "^17.9.1",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-order": "^8.1.1",
     "yaml-eslint-parser": "^2.0.0"
   },
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=22.0.0"
   },
   "optionalDependencies": {
     "@img/sharp-linux-x64": "^0.34.5",
     "@img/sharp-linuxmusl-x64": "^0.34.5",
-    "@rollup/rollup-linux-x64-gnu": "^4.59.0",
-    "@rollup/rollup-win32-x64-msvc": "^4.59.0"
+    "@rollup/rollup-linux-x64-gnu": "^4.60.2",
+    "@rollup/rollup-win32-x64-msvc": "^4.60.2"
   }
 }

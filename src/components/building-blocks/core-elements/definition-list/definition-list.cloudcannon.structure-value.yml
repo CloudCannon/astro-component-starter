@@ -4,7 +4,7 @@ description: Lists term/definition pairs for structured content.
 value:
   _component: building-blocks/core-elements/definition-list
   items: []
-  alignX: start
+  alignmentHorizontal: start
 preview:
   text:
     - Definition List

@@ -5,11 +5,14 @@ blocks:
   _component: 'building-blocks/wrappers/card'
   paddingVertical: 2xl
   paddingHorizontal: sm
-  backgroundImage:
-    source: /src/assets/images/component-docs/dunedin-cliff.jpg
-    alt: 'Dunedin cliffside'
+  colorScheme: dark
+  background:
+    type: image
     positionVertical: top
     positionHorizontal: left
+    imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+    imageAlt: 'Dunedin cliffside'
+    overlay: -0.3
   contentSections:
     - _component: building-blocks/core-elements/heading
       text: 'Top Left Position'

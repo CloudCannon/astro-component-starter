@@ -1,0 +1,160 @@
+---
+import { Icon as AstroIcon } from "astro-icon/components";
+
+const { class: className, ...htmlAttributes } = Astro.props;
+---
+
+<button
+  type="button"
+  class:list={["theme-toggle", className]}
+  aria-label="Toggle dark mode"
+  {...htmlAttributes}
+>
+  <span class="theme-toggle-icon theme-toggle-sun">
+    <AstroIcon
+      name="sun"
+      is:inline
+    />
+  </span>
+  <span class="theme-toggle-icon theme-toggle-moon">
+    <AstroIcon
+      name="moon"
+      is:inline
+    />
+  </span>
+</button>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  const themedSelector =
+    '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])';
+
+  function flipTheme(theme: string): string {
+    return theme === "dark" ? "light" : "dark";
+  }
+
+  function applyTheme(doc: Document, theme: string) {
+    const root = doc.documentElement;
+    const rootDefaultTheme =
+      root.getAttribute("data-default-theme") || root.getAttribute("data-theme") || "light";
+    const isToggled = theme !== rootDefaultTheme;
+    const themedElements = new Set<HTMLElement>([
+      root,
+      ...doc.querySelectorAll<HTMLElement>(themedSelector),
+    ]);
+
+    themedElements.forEach((element) => {
+      const defaultTheme =
+        element.getAttribute("data-default-theme") || element.getAttribute("data-theme");
+
+      if (defaultTheme === "light" || defaultTheme === "dark") {
+        element.setAttribute("data-default-theme", defaultTheme);
+        element.setAttribute("data-theme", isToggled ? flipTheme(defaultTheme) : defaultTheme);
+      }
+    });
+
+    root.toggleAttribute("data-theme-toggled", isToggled);
+  }
+
+  function getPreferredTheme(): string {
+    return (
+      localStorage.getItem("theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
+    );
+  }
+
+  function initThemeToggle() {
+    const buttons = document.querySelectorAll<HTMLButtonElement>(".theme-toggle");
+
+    function getTheme(): string {
+      return document.documentElement.getAttribute("data-theme") || "light";
+    }
+
+    function setTheme(theme: string) {
+      applyTheme(document, theme);
+      localStorage.setItem("theme", theme);
+      buttons.forEach((btn) => {
+        btn.setAttribute(
+          "aria-label",
+          theme === "dark" ? "Switch to light mode" : "Switch to dark mode"
+        );
+      });
+    }
+
+    applyTheme(document, getTheme());
+
+    buttons.forEach((btn) => {
+      btn.setAttribute(
+        "aria-label",
+        getTheme() === "dark" ? "Switch to light mode" : "Switch to dark mode"
+      );
+
+      btn.addEventListener("click", () => {
+        setTheme(getTheme() === "dark" ? "light" : "dark");
+      });
+    });
+
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+      if (!localStorage.getItem("theme")) {
+        setTheme(e.matches ? "dark" : "light");
+      }
+    });
+  }
+
+  onPageLoad(initThemeToggle);
+
+  document.addEventListener("astro:before-swap", (e: Event) => {
+    const newDocument = (e as Event & { newDocument: Document }).newDocument;
+    applyTheme(newDocument, getPreferredTheme());
+  });
+</script>
+
+<style is:global>
+  @layer components {
+    .theme-toggle {
+      align-items: center;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-xs);
+      color: var(--color-text-strong);
+      cursor: pointer;
+      display: inline-flex;
+      flex-shrink: 0;
+      font-size: var(--font-size-xl);
+      justify-content: center;
+      line-height: 0;
+      padding: var(--spacing-em-xs);
+      transition-duration: var(--animation-normal);
+      transition-property: background-color, color;
+      transition-timing-function: ease-in-out;
+
+      &:hover {
+        background-color: var(--color-state-hover);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 2px 2px var(--color-focus-ring) inset;
+        outline: none;
+      }
+
+      svg {
+        height: 1em;
+        width: 1em;
+      }
+    }
+
+    .theme-toggle-icon {
+      display: none;
+      line-height: 0;
+    }
+
+    [data-theme="light"] .theme-toggle-moon {
+      display: block;
+    }
+
+    [data-theme="dark"] .theme-toggle-sun {
+      display: block;
+    }
+  }
+</style>

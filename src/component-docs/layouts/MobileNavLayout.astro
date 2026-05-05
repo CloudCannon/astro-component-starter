@@ -1,26 +1,34 @@
 ---
-import Icon from "@core-elements/icon/Icon.astro";
+import Image from "@core-elements/image/Image.astro";
 import Mobile from "@components/navigation/mobile/Mobile.astro";
+import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
 import navData from "../data/nav.json";
 import { generateNavData } from "../utils/navGenerator.js";
 
-const mobileNavData = await generateNavData(navData);
+const generatedNavData = await generateNavData(navData);
+const mobileNavData = [{ name: "← Back to site", path: "/", children: [] }, ...generatedNavData];
 ---
 
 <div class="library-mobile-nav">
-  <Icon
-    name="library/logo"
-    size="none"
+  <Image
+    source="/src/assets/images/component-docs/acs-logo.svg"
+    alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"
+    alt="Astro Component Starter"
     class="sidebar-logo"
   />
-  <Mobile navData={mobileNavData}>
-    <span slot="logo">
-      <Icon
-        name="library/logo"
-        size="none"
-        class="component-docs-sidebar-logo"
-        style="height: 35px; width: auto;"
-      />
-    </span>
-  </Mobile>
+  <div class="library-mobile-nav-actions">
+    <ThemeToggle />
+    <Mobile navData={mobileNavData}>
+      <span
+        slot="logo"
+        class="component-docs-mobile-logo"
+      >
+        <Image
+          source="/src/assets/images/component-docs/acs-logo.svg"
+          alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"
+          alt="Astro Component Starter"
+        />
+      </span>
+    </Mobile>
+  </div>
 </div>

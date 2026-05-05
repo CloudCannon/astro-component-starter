@@ -25,7 +25,7 @@ export default defineConfig({
     port: 4321,
   },
   image: {
-    domains: ["picsum.photos"],
+    domains: [],
   },
   integrations: [
     {
@@ -72,23 +72,60 @@ export default defineConfig({
     }),
     sitemap({
       filter: (page) => {
-        // Always exclude component library from sitemap if disabled
-        if (process.env.DISABLE_COMPONENT_LIBRARY === "true") {
-          return !page.includes("/component-docs");
+        if (page.endsWith("/404") || page.endsWith("/404.html")) {
+          return false;
         }
-        // If not disabled, still exclude from sitemap (existing behavior)
-        return !page.includes("/component-docs");
+        if (page.includes("/component-docs")) {
+          return false;
+        }
+        return true;
       },
     }),
     mdx(),
   ],
   vite: {
     build: {
+      minify: "esbuild",
+    },
+    plugins: [
+      {
+        name: "suppress-node-externalized-warning",
+        config() {
+          return {
+            build: {
+              rollupOptions: {
+                onwarn(warning, defaultHandler) {
+                  if (
+                    warning.message?.includes("externalized for browser compatibility") &&
+                    warning.message?.includes("discoverVideoSources")
+                  )
+                    return;
+                  defaultHandler(warning);
+                },
+              },
+            },
+          };
+        },
+        configResolved(config) {
+          const originalWarn = config.logger.warn;
+
+          config.logger.warn = (msg, options) => {
+            if (
+              typeof msg === "string" &&
+              msg.includes("externalized for browser compatibility") &&
+              msg.includes("discoverVideoSources")
+            )
+              return;
+            originalWarn(msg, options);
+          };
+        },
+      },
+    ],
+    build: {
       chunkSizeWarningLimit: 1024,
     },
     css: {
       devSourcemap: true,
-      transformer: "lightningcss",
     },
     resolve: {
       alias: {

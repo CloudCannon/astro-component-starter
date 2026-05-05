@@ -1,5 +1,6 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
 
 const {
   navData = [],
@@ -40,6 +41,7 @@ function hasCurrentChild(item) {
         const parentGroupId = `parent-${crypto.randomUUID()}`;
         const isCurrent = isCurrentPage(item);
         const hasCurrent = hasCurrentChild(item);
+        const splitLink = itemHasSplitNavLink(item);
 
         if (hasChildren) {
           return (
@@ -54,23 +56,49 @@ function hasCurrentChild(item) {
                 autocomplete="off"
                 checked={hasCurrent}
               />
-              <label
-                for={dropdownId}
-                class="nav-item-trigger"
-                role="button"
-                aria-controls={contentId}
-                tabindex="0"
-                aria-current={isCurrent ? "page" : undefined}
-              >
-                <span class="nav-item-label">{item.name}</span>
-                <span class="nav-item-icon">
-                  <Icon
-                    name="chevron-right"
-                    size="none"
-                    aria-hidden="true"
-                  />
-                </span>
-              </label>
+              {splitLink ? (
+                <div class="nav-item-split">
+                  <a
+                    href={item.path}
+                    class="nav-item-link"
+                    aria-current={isCurrent ? "page" : undefined}
+                  >
+                    <span class="nav-item-label">{item.name}</span>
+                  </a>
+                  <label
+                    for={dropdownId}
+                    class="nav-item-trigger nav-item-toggle-btn"
+                    aria-controls={contentId}
+                    tabindex="0"
+                    aria-label={`Toggle ${item.name} submenu`}
+                  >
+                    <span class="nav-item-icon">
+                      <Icon
+                        name="chevron-right"
+                        size="none"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </label>
+                </div>
+              ) : (
+                <label
+                  for={dropdownId}
+                  class="nav-item-trigger"
+                  aria-controls={contentId}
+                  tabindex="0"
+                  aria-current={isCurrent ? "page" : undefined}
+                >
+                  <span class="nav-item-label">{item.name}</span>
+                  <span class="nav-item-icon">
+                    <Icon
+                      name="chevron-right"
+                      size="none"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </label>
+              )}
               <div
                 id={contentId}
                 class:list={["nav-item-content", hasCurrent && "nav-item-content-initial"]}
@@ -85,6 +113,7 @@ function hasCurrentChild(item) {
                     const childContentId = `dropdown-content-${crypto.randomUUID()}`;
                     const childIsCurrent = isCurrentPage(child);
                     const childHasCurrent = hasCurrentChild(child);
+                    const childSplitLink = itemHasSplitNavLink(child);
 
                     if (childHasChildren) {
                       return (
@@ -99,23 +128,49 @@ function hasCurrentChild(item) {
                             autocomplete="off"
                             checked={childHasCurrent}
                           />
-                          <label
-                            for={childDropdownId}
-                            class="nav-item-trigger"
-                            role="button"
-                            aria-controls={childContentId}
-                            tabindex="0"
-                            aria-current={childIsCurrent ? "page" : undefined}
-                          >
-                            <span class="nav-item-label">{child.name}</span>
-                            <span class="nav-item-icon">
-                              <Icon
-                                name="chevron-right"
-                                size="none"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </label>
+                          {childSplitLink ? (
+                            <div class="nav-item-split">
+                              <a
+                                href={child.path}
+                                class="nav-item-link"
+                                aria-current={childIsCurrent ? "page" : undefined}
+                              >
+                                <span class="nav-item-label">{child.name}</span>
+                              </a>
+                              <label
+                                for={childDropdownId}
+                                class="nav-item-trigger nav-item-toggle-btn"
+                                aria-controls={childContentId}
+                                tabindex="0"
+                                aria-label={`Toggle ${child.name} submenu`}
+                              >
+                                <span class="nav-item-icon">
+                                  <Icon
+                                    name="chevron-right"
+                                    size="none"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              </label>
+                            </div>
+                          ) : (
+                            <label
+                              for={childDropdownId}
+                              class="nav-item-trigger"
+                              aria-controls={childContentId}
+                              tabindex="0"
+                              aria-current={childIsCurrent ? "page" : undefined}
+                            >
+                              <span class="nav-item-label">{child.name}</span>
+                              <span class="nav-item-icon">
+                                <Icon
+                                  name="chevron-right"
+                                  size="none"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            </label>
+                          )}
                           <div
                             id={childContentId}
                             class:list={[
@@ -196,57 +251,65 @@ function hasCurrentChild(item) {
         toggle.addEventListener("change", (e) => {
           const target = e.target;
           const content = document.getElementById(target.getAttribute("aria-controls") || "");
-          const trigger = sideNav.querySelector(`label[for="${target.id}"]`);
+          const toggleBtn = sideNav.querySelector(`label.nav-item-toggle-btn[for="${target.id}"]`);
+          const rowLabel = sideNav.querySelector(
+            `label.nav-item-trigger:not(.nav-item-toggle-btn)[for="${target.id}"]`
+          );
 
-          if (content && trigger) {
+          if (content) {
             const isOpen = target.checked;
 
-            // Update ARIA attributes
             target.setAttribute("aria-expanded", isOpen.toString());
             content.setAttribute("aria-hidden", (!isOpen).toString());
 
-            // Update trigger ARIA attributes
-            trigger.setAttribute("aria-expanded", isOpen.toString());
+            if (toggleBtn) {
+              toggleBtn.setAttribute("aria-expanded", isOpen.toString());
+            }
+            if (rowLabel) {
+              rowLabel.setAttribute("aria-expanded", isOpen.toString());
+            }
           }
         });
       });
 
-      // Handle label interactions for toggling dropdowns
-      sideNav.querySelectorAll(".nav-item-trigger").forEach((trigger) => {
-        // Click handler
+      function bindTriggerHandlers(trigger) {
         trigger.addEventListener("click", (e) => {
           const label = e.currentTarget;
           const toggleId = label.getAttribute("for");
-          const toggle = document.getElementById(toggleId || "");
+          const toggleEl = document.getElementById(toggleId || "");
 
-          if (toggle && toggle.checked) {
-            // If the item is already open, close it
+          if (toggleEl && toggleEl.checked) {
             e.preventDefault();
-            toggle.checked = false;
-            toggle.dispatchEvent(new Event("change"));
+            toggleEl.checked = false;
+            toggleEl.dispatchEvent(new Event("change"));
           }
         });
 
-        // Keyboard handler
         trigger.addEventListener("keydown", (e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             e.stopPropagation();
             const label = e.currentTarget;
             const toggleId = label.getAttribute("for");
-            const toggle = document.getElementById(toggleId || "");
+            const toggleEl = document.getElementById(toggleId || "");
 
-            if (toggle) {
-              if (toggle.checked) {
-                toggle.checked = false;
+            if (toggleEl) {
+              if (toggleEl.checked) {
+                toggleEl.checked = false;
               } else {
-                toggle.checked = true;
+                toggleEl.checked = true;
               }
-              toggle.dispatchEvent(new Event("change"));
+              toggleEl.dispatchEvent(new Event("change"));
             }
           }
         });
-      });
+      }
+
+      sideNav.querySelectorAll(".nav-item-toggle-btn").forEach(bindTriggerHandlers);
+
+      sideNav
+        .querySelectorAll(".nav-item.has-children > .nav-item-trigger:not(.nav-item-toggle-btn)")
+        .forEach(bindTriggerHandlers);
     });
   }
   onPageLoad(setupSideNavigation);
@@ -259,13 +322,13 @@ function hasCurrentChild(item) {
   }, 1000);
 </script>
 
-<style>
+<style is:global>
   @layer components {
-    /* Sidebar Navigation Styles */
     .side {
       margin-top: var(--spacing-lg);
 
-      .side-list {
+      .side-list,
+      .nav-list {
         list-style: none;
         margin: 0;
         padding: 0;
@@ -274,40 +337,157 @@ function hasCurrentChild(item) {
       .nav-item {
         list-style: none;
         position: relative;
+      }
 
-        a,
-        .nav-item-trigger {
-          border-radius: var(--radius-xs);
-          color: inherit;
-          display: flex;
-          font-weight: var(--font-weight-semibold);
-          padding: var(--spacing-sm) var(--spacing-md);
-          text-decoration: none;
-          transition: background-color var(--animation-normal) ease;
+      /*
+       * Row shell shared by direct links and full-row label triggers.
+       * Split rows (link + chevron toggle) use `.nav-item-split` below.
+       * `min-height` + `padding-block` establish a consistent row height
+       * across plain links, triggers, and split rows.
+       */
+      .nav-item > a,
+      .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+        align-items: center;
+        border-radius: var(--radius-xs);
+        color: inherit;
+        display: flex;
+        min-height: 1.75rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+        text-decoration: none;
+        transition: background-color var(--animation-normal) ease;
 
-          &:hover,
-          &:focus-visible {
-            background-color: var(--color-state-hover);
+        &:hover,
+        &:focus-visible {
+          background-color: var(--color-state-hover);
+          color: var(--color-text-strong);
+
+          .nav-item-icon {
             color: var(--color-text-strong);
-
-            .nav-item-icon {
-              color: var(--color-text-strong);
-            }
           }
         }
       }
 
+      .nav-item > a {
+        font-weight: var(--font-weight-semibold);
+      }
+
+      .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+        cursor: pointer;
+        justify-content: space-between;
+        padding-inline-end: 0;
+        user-select: none;
+        width: 100%;
+
+        .nav-item-icon {
+          align-items: center;
+          box-sizing: border-box;
+          display: inline-flex;
+          flex-shrink: 0;
+          justify-content: center;
+          line-height: 0;
+          margin-inline: 2px var(--spacing-xs);
+          min-height: 1.75rem;
+          min-width: 2.25rem;
+          padding: var(--spacing-xs);
+        }
+      }
+
+      /* Primary full-row trigger reads as a top-level heading */
+      .side-list > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+        font-weight: var(--font-weight-semibold);
+      }
+
+      /* Split row: link column + chevron toggle column */
+      .nav-item-split {
+        align-items: stretch;
+        border-radius: var(--radius-xs);
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--spacing-xs);
+        min-width: 0;
+        transition: background-color var(--animation-normal) ease;
+        width: 100%;
+
+        &:hover {
+          background-color: var(--color-state-hover);
+          color: var(--color-text-strong);
+
+          .nav-item-icon {
+            color: var(--color-text-strong);
+          }
+
+          .nav-item-toggle-btn {
+            background-color: color-mix(in srgb, var(--color-state-hover), var(--color-text) 3%);
+          }
+        }
+
+        .nav-item-link {
+          align-items: center;
+          border-radius: var(--radius-xs);
+          color: inherit;
+          display: flex;
+          flex: 1 1 auto;
+          font-weight: var(--font-weight-semibold);
+          min-height: 1.75rem;
+          min-width: 0;
+          padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-md);
+          text-decoration: none;
+          transition: color var(--animation-normal) ease;
+
+          &:hover,
+          &:focus-visible {
+            color: var(--color-text-strong);
+          }
+        }
+
+        .nav-item-toggle-btn {
+          align-items: center;
+          align-self: stretch;
+          background: transparent;
+          border: none;
+          border-left: 1px solid transparent;
+          border-radius: var(--radius-xs);
+          cursor: pointer;
+          display: inline-flex;
+          flex: 0 0 auto;
+          justify-content: center;
+          margin-inline: 2px var(--spacing-xs);
+          min-width: 2.25rem;
+          padding: 0 var(--spacing-xs);
+          transition:
+            background-color var(--animation-normal) ease,
+            border-color var(--animation-normal) ease;
+
+          &:hover {
+            background-color: color-mix(in srgb, var(--color-state-hover), var(--color-text) 8%);
+            border-left-color: var(--color-border);
+          }
+
+          &:focus-visible {
+            outline: 2px solid var(--color-focus-ring);
+            outline-offset: 2px;
+          }
+
+          .nav-item-icon {
+            align-items: center;
+            display: flex;
+            justify-content: center;
+            line-height: 0;
+          }
+        }
+      }
+
+      /* Current page indicator */
       .nav-item a[aria-current="page"] .nav-item-label,
-      .nav-item .nav-item-trigger[aria-current="page"] .nav-item-label {
+      .nav-item .nav-item-trigger[aria-current="page"] .nav-item-label,
+      .nav-item-split .nav-item-link[aria-current="page"] .nav-item-label {
         text-decoration: underline dotted;
         text-decoration-color: var(--color-text-muted);
         text-underline-offset: 3px;
       }
 
-      .nav-item-toggle {
-        display: none;
-      }
-
+      /* Hidden checkbox drives expand/collapse via `:checked ~` selectors */
+      .nav-item-toggle,
       .nav-item-content {
         display: none;
       }
@@ -322,39 +502,47 @@ function hasCurrentChild(item) {
         display: block;
       }
 
-      .nav-item-trigger {
-        align-items: center;
-        cursor: pointer;
-        flex-direction: row;
-        justify-content: space-between;
-        user-select: none;
-        width: 100%;
-      }
-
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
-        transform-origin: 50% 60%;
         transition: transform var(--animation-normal) ease;
       }
 
-      .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon {
+      .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon,
+      .nav-item-toggle:checked ~ .nav-item-split .nav-item-icon {
         transform: rotate(90deg);
       }
 
       .nav-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-
-        .nav-item a,
-        .nav-item .nav-item-trigger {
+        & > .nav-item > a,
+        & > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
           font-weight: var(--font-weight-normal);
-          padding-inline: var(--spacing-xl);
+          padding-inline-start: var(--spacing-xl);
         }
 
-        .nav-list .nav-item a,
-        .nav-list .nav-item .nav-item-trigger {
+        & > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+          padding-inline-end: var(--spacing-sm);
+        }
+
+        & > .nav-item > .nav-item-split {
+          box-sizing: border-box;
+          padding-inline-start: var(--spacing-xl);
+          padding-inline-end: var(--spacing-sm);
+        }
+
+        & > .nav-item > .nav-item-split .nav-item-link,
+        & .nav-list > .nav-item > .nav-item-split .nav-item-link {
+          font-weight: var(--font-weight-normal);
+          padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) 0;
+        }
+
+        & .nav-list > .nav-item > a,
+        & .nav-list > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
+          padding-inline-start: var(--spacing-2xl);
+        }
+
+        & .nav-list > .nav-item > .nav-item-split {
+          padding-inline-end: var(--spacing-xl);
           padding-inline-start: var(--spacing-2xl);
         }
       }

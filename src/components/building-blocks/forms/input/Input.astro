@@ -9,6 +9,7 @@ const {
   required = false,
   value,
   iconName,
+  iconColor = "default",
   iconPosition = "before",
   id: customId,
   class: className,
@@ -48,6 +49,7 @@ const hasIcon = iconName?.trim().length > 0;
       <span class:list={["field-shell", iconPosition === "after" && "icon-after"]}>
         <Icon
           name={iconName}
+          color={iconColor}
           size="none"
           class="input-icon"
           aria-hidden="true"
@@ -79,7 +81,7 @@ const hasIcon = iconName?.trim().length > 0;
   }
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .input {
       display: flex;
@@ -115,7 +117,7 @@ const hasIcon = iconName?.trim().length > 0;
           flex-direction: row-reverse;
         }
 
-        :global(.input-icon) {
+        .input-icon {
           color: var(--color-text-muted);
           flex-shrink: 0;
           font-size: 1.25em;

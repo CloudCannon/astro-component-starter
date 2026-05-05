@@ -1,0 +1,37 @@
+<script is:inline>
+  (function () {
+    function flipTheme(theme) {
+      return theme === "dark" ? "light" : "dark";
+    }
+
+    var root = document.documentElement;
+    var defaultTheme = root.getAttribute("data-theme") || "light";
+    var theme =
+      localStorage.getItem("theme") ||
+      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var isToggled = theme !== defaultTheme;
+
+    Array.from(
+      new Set(
+        [root].concat(
+          Array.prototype.slice.call(
+            document.querySelectorAll(
+              '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])'
+            )
+          )
+        )
+      )
+    ).forEach(function (element) {
+      var elementTheme = element.getAttribute("data-theme");
+
+      if (elementTheme === "light" || elementTheme === "dark") {
+        element.setAttribute("data-default-theme", elementTheme);
+        element.setAttribute("data-theme", isToggled ? flipTheme(elementTheme) : elementTheme);
+      }
+    });
+
+    if (isToggled) {
+      root.setAttribute("data-theme-toggled", "");
+    }
+  })();
+</script>

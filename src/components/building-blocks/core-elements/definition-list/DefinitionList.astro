@@ -5,7 +5,7 @@ type ItemProps = Record<string, unknown>;
 
 const {
   items,
-  alignX = "start",
+  alignmentHorizontal = "start",
   class: className,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
@@ -28,7 +28,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   {...htmlAttributes}
 >
   <dl
-    class:list={[`alignment-${alignX}`]}
+    class:list={[`alignment-${alignmentHorizontal}`]}
     {...arrayDataAttributes}
   >
     <slot>
@@ -46,7 +46,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   </dl>
 </div>
 
-<style>
+<style is:global>
   @layer components {
     .definition-list {
       margin-top: var(--spacing-lg);
@@ -62,7 +62,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           grid-template-columns: 1fr 1fr;
           justify-content: center;
 
-          > :global(.definition-list-item) > :global(.title) {
+          > .definition-list-item > .title {
             text-align: end;
           }
         }
@@ -72,16 +72,16 @@ if (!_component && !hasItems && !hasSlotContent) return;
           grid-template-columns: auto auto;
           justify-content: end;
 
-          > :global(.definition-list-item) > :global(.title) {
+          > .definition-list-item > .title {
             text-align: start;
           }
 
-          > :global(.definition-list-item) > :global(.content) {
+          > .definition-list-item > .content {
             text-align: end;
           }
         }
 
-        > :global(.definition-list-item) > :global(.content) {
+        > .definition-list-item > .content {
           margin: 0;
         }
       }

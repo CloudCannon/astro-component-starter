@@ -26,8 +26,8 @@ blocks:
 
             This column takes up the remaining space.
   distributionMode: 'fixed-flexible'
-  fixedWidth: null
+  fixedWidth: 250
   minSplitWidth: 500
-  verticalAlignment: 'top'
+  alignmentVertical: 'top'
   reverse: false
 ---

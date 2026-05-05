@@ -1,0 +1,26 @@
+label: Video Modal
+icon: play_circle
+description: Dialog overlay with an embedded video that autoplays on open and pauses on close.
+value:
+  _component: building-blocks/wrappers/video-modal
+  label: null
+  type: youtube
+  videoId: ""
+  title: ""
+  source: ""
+  triggerText: Watch video
+  triggerVariant: primary
+  triggerSize: md
+  triggerIconName: play-circle
+  size: lg
+preview:
+  text:
+    - Video Modal
+  subtext:
+    - key: title
+  icon: play_circle
+picker_preview:
+  text: Video Modal
+  subtext: Dialog overlay with an embedded video that autoplays on open and pauses on close.
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/video-modal/video-modal.cloudcannon.inputs.yml

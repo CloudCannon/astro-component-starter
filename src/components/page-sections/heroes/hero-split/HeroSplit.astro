@@ -16,9 +16,13 @@ const {
   imageAspectRatio = "none",
   buttonSections = [],
   reverse = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
   colorScheme = "inherit",
   backgroundColor,
-  paddingVertical = "4xl",
+  background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -27,11 +31,13 @@ const {
 ---
 
 <CustomSection
-  maxContentWidth="xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   class:list={["hero", className]}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
@@ -39,9 +45,9 @@ const {
   <Split
     distributionMode="flexible-fixed"
     fixedWidth="400"
-    verticalAlignment="center"
+    alignmentVertical="center"
     reverse={reverse}
-    minSplitWidth={710}
+    minSplitWidth={800}
     gap="2xl"
     class="hero-split"
   >
