@@ -44,3 +44,25 @@ jobs:
 
       - name: Check
         run: npm run check
+
+  build:
+    name: Build all components
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Render every component's structure defaults
+        run: npm run test:render
