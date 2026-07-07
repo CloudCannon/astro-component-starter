@@ -150,6 +150,8 @@ const dataAttributes = isEditable
 
 When `useDefaultEditableBinding` is `true` and no explicit props are passed, it defaults to `"source"` and `"alt"`.
 
+**Pairing trap:** passing only `data-prop-src` still makes the image editable, and the alt binding falls back to `"alt"`. If the parent's data uses a different key (e.g., `imageAlt`), CloudCannon will try to write alt text to a nonexistent `alt` field. Always pass `data-prop-src` and `data-prop-alt` together when the prop names differ from the defaults.
+
 ---
 
 ## Array editable regions

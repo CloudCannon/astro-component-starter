@@ -42,6 +42,9 @@ tags:
 | `author`      | string   | No       | `"Anonymous"` |
 | `image`       | string   | No       | —             |
 | `tags`        | string[] | No       | `[]`          |
+| `keywords`    | string[] | No       | —             |
+
+`tags` power the tag archive pages at `/blog/tag/{tag}/` (rendered by `src/pages/blog/tag/[tag]/[...page].astro`, paginated like the main index). `keywords`, when set, are output as a `<meta name="keywords">` tag.
 
 The `_schema: default` line tells CloudCannon to use the blog post schema (`.cloudcannon/schemas/blog-post.mdx`).
 
@@ -57,6 +60,7 @@ const blogPostSchema = z.object({
   author: z.string().default('Anonymous'),
   image: z.string().optional(),
   tags: z.array(z.string()).default([]),
+  keywords: z.array(z.string()).optional(),
 });
 ```
 
@@ -234,6 +238,8 @@ Snippets allow CloudCannon editors to insert components into MDX content through
 3. MDX snippet imports are enabled: `_snippets_imports: { mdx: true }`
 4. In the CloudCannon content editor, editors click the snippet button to insert components
 
+Note: the content editor's native image toolbar button is disabled for blog posts — editors add images via the Image snippet instead.
+
 ### Snippet file format
 
 Each snippet file defines how a component maps between the CloudCannon editor and MDX output:
@@ -392,7 +398,7 @@ When migrating blog posts from another platform:
    - `<img>` tags → `<Image source="..." alt="..." />`
    - `<blockquote>` with author → `<TestimonialSection ... />`
    - CTA sections → `<CtaCenter ... />`
-   - Video embeds → `<Video videoId="..." provider="youtube" />`
+   - Video embeds → `<Video type="youtube" videoId="..." title="..." />` (`type` is `youtube`, `vimeo`, or `local-source`; local videos use `source` instead of `videoId`)
 4. **Download images** to `src/assets/images/blog/` and update paths
 5. **Set the date** to the original publication date (ISO format or `YYYY-MM-DD`)
 6. **Map categories/tags** to the `tags` array

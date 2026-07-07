@@ -150,9 +150,13 @@ const {
   heading = '',
   subtext = '',
   buttonSections = [],
+  sectionLabel,
+  maxContentWidth = '2xl',
+  paddingHorizontal = 'lg',
+  paddingVertical = '4xl',
   colorScheme = 'inherit',
   backgroundColor,
-  paddingVertical = '4xl',
+  background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -162,11 +166,13 @@ const {
 
 <CustomSection
   class:list={['my-section', className]}
-  maxContentWidth="2xl"
-  paddingHorizontal="lg"
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
   backgroundColor={backgroundColor}
+  background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
@@ -281,22 +287,28 @@ Components must be registered in the appropriate structure files in `.cloudcanno
 
 ### Structure files
 
-| File                | Context                              | Typical contents                               |
-| ------------------- | ------------------------------------ | ---------------------------------------------- |
-| `containerSections` | Custom sections (main content areas) | All wrappers + core elements                   |
-| `splitSections`     | Inside split layouts                 | All wrappers + core elements                   |
-| `gridItemSections`  | Inside grid items                    | Card, accordion, modal + core elements         |
-| `cardSections`      | Inside cards                         | Button group, accordion, modal + core elements |
-| `accordionSections` | Inside accordion items               | Button group, modal + core elements            |
-| `pageSections`      | Top-level page sections              | Glob: all page-section structure-values        |
-| `modalSections`     | Inside modals                        | Button group, accordion + core elements        |
-| `buttonSections`    | Button groups                        | Button only                                    |
+| File                      | Context                                | Typical contents                               |
+| ------------------------- | -------------------------------------- | ---------------------------------------------- |
+| `containerSections`       | Custom sections (main content areas)   | All wrappers + core elements                   |
+| `splitSections`           | Inside split layouts                   | All wrappers + core elements                   |
+| `gridItemSections`        | Inside grid items                      | Card, accordion, modal + core elements         |
+| `cardSections`            | Inside cards                           | Button group, accordion, modal + core elements |
+| `accordionSections`       | Inside accordion items                 | Button group, modal + core elements            |
+| `carouselSections`        | Inside carousel slides                 | Card + core elements                           |
+| `contentSelectorSections` | Inside content selector panels         | Wrappers + core elements                       |
+| `bentoBoxSections`        | Inside bento box items                 | Card + core elements                           |
+| `modalSections`           | Inside modals                          | Button group, accordion + core elements        |
+| `pageSections`            | Top-level page sections                | Glob: all page-section structure-values        |
+| `buttonSections`          | Button groups                          | Button only                                    |
+| `formBlocks`              | Form field areas (cta-form, Form)      | Form components (input, select, submit, …)     |
+
+(`navData`, `links`, and `socials` also live in `.cloudcannon/structures/` but define site-data shapes, not component pickers — see the site-data-navigation skill.)
 
 ### How to register
 
 Add the component's `structure-value.yml` path to the `values_from_glob` array in each relevant structure file. Look at existing entries for the pattern.
 
-- **Wrappers**: Add to `containerSections`, `splitSections`, `gridItemSections`, `cardSections`, and `accordionSections`
+- **Wrappers**: Add to `containerSections`, `splitSections`, `gridItemSections`, `cardSections`, `accordionSections`, and any other `*Sections` context where the component makes sense (e.g., `contentSelectorSections`, `bentoBoxSections`, `modalSections`)
 - **Core elements**: Already included via glob (`/src/components/building-blocks/core-elements/**/*.cloudcannon.structure-value.yml`) in most structures
 - **Page sections**: Already included via glob in `pageSections`
 
@@ -508,4 +520,4 @@ blocks:
 
 ## CustomSection props reference
 
-Page sections wrap content in `CustomSection` from `@builders/custom-section/CustomSection.astro`. Key props: `maxContentWidth` (`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`xs`..`6xl`, default `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `background` (object: `type` `none`/`image`/`video`, shared positioning, plus image or video fields), `label` (string, also used as anchor ID), `useDefaultEditableBinding` (boolean). Note: `rounded` is only available on `CustomSection` directly, not forwarded by page section wrappers.
+Page sections wrap content in `CustomSection` from `@builders/custom-section/CustomSection.astro`. Key props: `maxContentWidth` (`none`/`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`none`/`xs`..`6xl`, default `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `lockColorScheme` (boolean — keeps the authored scheme when the visitor toggles the site theme), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `background` (object: `type` `image`/`video`, shared positioning, `overlay` -1 to 1, plus image or video fields), `label` (string, also used as anchor ID), `useDefaultEditableBinding` (boolean). Page section wrappers expose `label` to content authors as `sectionLabel` and forward it. Note: `rounded` is only available on `CustomSection` directly, not forwarded by page section wrappers.

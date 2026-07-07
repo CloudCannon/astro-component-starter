@@ -16,9 +16,13 @@ The project uses two CSS variable slots that the entire design system references
 
 Components never hardcode font families — they use these variables, so changing fonts here changes everything.
 
+## Current defaults
+
+Out of the box, `site-fonts.mjs` registers **Inter** (`--font-body`) and **Raleway** (`--font-headings`) using `fontProviders.google()` with a variable weight range (`weights: ["100 900"]`) and `subsets: ["latin"]`. Note: `@fontsource/inter` and `@fontsource/raleway` are installed in `package.json` but the config currently uses the Google provider — check `site-fonts.mjs` for the actual state before making changes. Astro downloads and self-hosts the font files at build time regardless of provider, so there are no runtime requests to Google either way.
+
 ## Preferred approach: @fontsource packages
 
-**Always prefer fontsource over Google Fonts or other remote providers.** Fontsource packages bundle the font files locally in `node_modules`, so builds don't depend on external services and fonts are self-hosted automatically.
+**When adding or changing fonts, prefer fontsource over Google Fonts or other remote providers.** Fontsource packages bundle the font files locally in `node_modules`, so builds don't depend on external services at build time (with `fontProviders.google()`, Astro fetches font files from Google during the build, then self-hosts them).
 
 ### Changing an existing font
 

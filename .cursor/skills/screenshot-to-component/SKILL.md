@@ -501,17 +501,17 @@ Import via `@core-elements/{slug}/{Name}.astro`.
 
 | Component        | Renders                              | Key props                                                                                                                  |
 | ---------------- | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| `Heading`        | Semantic heading (h1-h6)             | `text`, `level` (h1-h6), `size` (xs-5xl), `alignmentHorizontal` (start/center/end)                                         |
-| `Text`           | Body paragraph, supports markdown    | `text`, `alignmentHorizontal`                                                                                              |
+| `Heading`        | Semantic heading (h1-h6)             | `text`, `level` (h1-h6), `size` (default, xs-4xl), `alignmentHorizontal` (start/center/end)                                |
+| `Text`           | Body paragraph, supports markdown    | `text`, `size` (xs-4xl), `alignmentHorizontal`                                                                             |
 | `SimpleText`     | Plain inline text (eyebrows, labels) | `text`, `alignmentHorizontal`                                                                                              |
-| `Image`          | Responsive optimized image           | `source`, `alt`, `aspectRatio` (square/landscape/portrait/wide/none), `rounded`                                            |
-| `Icon`           | SVG icon from icon set               | `name`, `size` (xs-4xl), `color` (default/blue/green/yellow/orange/red/purple/pink/cyan), `background`                     |
+| `Image`          | Responsive optimized image           | `source`, `alternateSource` (theme-toggle swap), `alt`, `aspectRatio` (none/square/landscape/portrait/widescreen/horizontal-strip), `rounded` |
+| `Icon`           | SVG icon from icon set               | `name`, `size` (none, sm-3xl), `color` (default/blue/green/yellow/orange/red/purple/pink/cyan), `background`               |
 | `Button`         | Link or button                       | `text`, `link`, `variant` (primary/secondary/tertiary/ghost), `size` (sm/md/lg), `iconName`, `iconPosition` (before/after) |
 | `List`           | Ordered/unordered list               | `items[]`, `ordered`, `iconName`                                                                                           |
 | `DefinitionList` | Term + definition pairs              | `items[]` (term, definition)                                                                                               |
 | `Testimonial`    | Blockquote with author               | `text`, `authorName`, `authorDescription`, `authorImage`, `alignmentHorizontal`                                            |
 | `Embed`          | iframe embed                         | `src`, `title`, `aspectRatio`                                                                                              |
-| `Video`          | YouTube/Vimeo lite embed             | `videoId`, `provider` (youtube/vimeo)                                                                                      |
+| `Video`          | YouTube/Vimeo/local video embed      | `type` (youtube/vimeo/local-source), `videoId` (youtube/vimeo) or `source` (local), `title`, `thumbnail`, `background` (decorative looping mode) |
 | `Counter`        | Animated number counter              | `value`, `suffix`, `label`                                                                                                 |
 | `Divider`        | Horizontal rule                      | —                                                                                                                          |
 | `Spacer`         | Vertical whitespace                  | `size` (xs-6xl)                                                                                                            |
@@ -527,9 +527,11 @@ Import via `@wrappers/{slug}/{Name}.astro`.
 | `Card`                                     | Content container   | `contentSections[]`, `border`, `rounded`, `link`, `paddingHorizontal`, `paddingVertical`, `backgroundColor`, `colorScheme`                        |
 | `BentoBox` / `BentoBoxItem`                | Spanning grid       | `columns`, `minRowHeight`, `gap`, `items[]`                                                                                                       |
 | `Accordion` / `AccordionItem`              | Expandable panels   | `items[]`, `openFirst`, `singleOpen`                                                                                                              |
-| `Carousel` / `CarouselSlide`               | Sliding content     | `slides[]`, `autoPlay`, `autoScroll`, `loop`, `showArrows`, `showIndicators`, `slideWidthPercent`, `minSlideWidth`                                |
+| `Carousel` / `CarouselSlide`               | Sliding content     | `slides[]`, `autoPlay`, `autoScroll`, `loop`, `showArrows`, `showIndicators`, `indicatorStyle` (dots/fraction), `gap`, `slidesToScroll`, `slideWidthPercent`, `minSlideWidth` |
+| `ImageCarousel`                            | Image slider with thumbnail navigation | `images[]`, `aspectRatio`, `showArrows`, `loop`                                                                                |
 | `ButtonGroup`                              | Button row/column   | `buttonSections[]`, `direction` (row/column), `alignmentHorizontal` (start/center/end)                                                            |
-| `Modal`                                    | Popover dialog      | `triggerText`, `triggerVariant`, `size`, `contentSections[]`                                                                                      |
+| `Modal`                                    | Popover dialog      | `triggerText`, `triggerVariant`, `heading` (sticky header title), `size`, `contentSections[]`                                                     |
+| `VideoModal`                               | Button that opens a video in a modal | `type` (youtube/vimeo/local-source), `videoId` or `source`, `triggerText`, `triggerVariant`, `triggerIconName`, `size`           |
 | `ContentSelector` / `ContentSelectorPanel` | Tabbed content      | `items[]`, `navigationPosition`                                                                                                                   |
 
 ### CustomSection (page section wrapper)

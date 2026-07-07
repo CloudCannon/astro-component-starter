@@ -23,8 +23,10 @@ Site-wide data (navigation, footer, SEO) lives in JSON files under `src/data/`. 
 
 ```json
 {
-  "logoSource": "/images/logo.svg",
+  "logoSource": "/src/assets/images/logo.svg",
+  "logoAlternateSource": "/src/assets/images/logo-dark.svg",
   "logoAlt": "Logo",
+  "themeToggle": true,
   "navData": [
     {
       "name": "Home",
@@ -65,12 +67,14 @@ Site-wide data (navigation, footer, SEO) lives in JSON files under `src/data/`. 
 
 ### Fields
 
-| Field            | Type   | Purpose                                              |
-| ---------------- | ------ | ---------------------------------------------------- |
-| `logoSource`     | string | Path to logo image (static `/images/` or asset path) |
-| `logoAlt`        | string | Alt text for logo                                    |
-| `navData`        | array  | Navigation items (up to 3 levels deep)               |
-| `buttonSections` | array  | Action buttons in the nav bar (e.g., search, CTA)    |
+| Field                 | Type    | Purpose                                                                     |
+| --------------------- | ------- | --------------------------------------------------------------------------- |
+| `logoSource`          | string  | Path to logo image (use `/src/assets/images/...` — rendered via `Image`)    |
+| `logoAlternateSource` | string  | Optional logo swapped in when the site theme is toggled (e.g., dark mode)   |
+| `logoAlt`             | string  | Alt text for logo                                                           |
+| `themeToggle`         | boolean | Show the light/dark theme toggle in the nav bar                             |
+| `navData`             | array   | Navigation items (up to 3 levels deep)                                      |
+| `buttonSections`      | array   | Action buttons in the nav bar (e.g., search, CTA)                           |
 
 ### Navigation item shape
 
@@ -103,7 +107,8 @@ The nav is sticky-positioned at the top of the page with `z-index: var(--layer-2
 
 ```json
 {
-  "logoSource": "/images/logo.svg",
+  "logoSource": "/src/assets/images/logo.svg",
+  "logoAlternateSource": "/src/assets/images/logo-dark.svg",
   "logoAlt": "Logo",
   "links": [
     {
@@ -139,13 +144,14 @@ The nav is sticky-positioned at the top of the page with `z-index: var(--layer-2
 
 ### Fields
 
-| Field        | Type   | Purpose                 |
-| ------------ | ------ | ----------------------- |
-| `logoSource` | string | Path to footer logo     |
-| `logoAlt`    | string | Alt text for logo       |
-| `links`      | array  | Footer navigation links |
-| `socials`    | array  | Social media icon links |
-| `footerText` | string | Copyright / legal text  |
+| Field                 | Type   | Purpose                                            |
+| --------------------- | ------ | -------------------------------------------------- |
+| `logoSource`          | string | Path to footer logo (`/src/assets/images/...`)     |
+| `logoAlternateSource` | string | Optional logo swapped in when the theme is toggled |
+| `logoAlt`             | string | Alt text for logo                                  |
+| `links`               | array  | Footer navigation links                            |
+| `socials`             | array  | Social media icon links                            |
+| `footerText`          | string | Copyright / legal text                             |
 
 ### Link item shape
 
@@ -190,10 +196,11 @@ Check `src/icons/social/` for the full list of available SVGs.
 
 ```json
 {
+  "_schema": "seo",
   "name": "Your Site Name",
   "url": "https://yourdomain.com",
   "description": "Default meta description for pages without one.",
-  "logoSource": "/images/logo.svg",
+  "logoSource": "/src/assets/images/logo.svg",
   "titleFormat": "{title} | Your Site Name"
 }
 ```
@@ -292,7 +299,8 @@ Also update `site` in `astro.config.mjs` to match the production URL.
 
 Edit `src/data/mainNav.json`:
 
-- Replace `logoSource` with the site's logo path (place the SVG in `public/images/`)
+- Replace `logoSource` with the site's logo path (place the SVG in `src/assets/images/` — the default starter logo lives at `/src/assets/images/component-docs/acs-logo.svg`)
+- Set `logoAlternateSource` if the site has a dark-mode logo variant (or remove the key)
 - Set `logoAlt`
 - Replace `navData` with the site's navigation structure
 - Update `buttonSections` (or set to `[]` to remove nav buttons)
@@ -308,4 +316,4 @@ Edit `src/data/footer.json`:
 
 ### Step 4: Add logo files
 
-Place logo files in `public/images/` for static serving, or in `src/assets/images/` if you want Astro image optimization. The nav and footer reference these via `logoSource`.
+Place logo files in `src/assets/images/` — the nav and footer render `logoSource` through the `Image` building block, which resolves and optimizes assets from that directory. (There is no `public/images/` directory in this starter; only use `public/` for files that must be served verbatim, like `favicon.svg`.)

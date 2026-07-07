@@ -72,9 +72,25 @@ The `blog` slug is excluded from the catch-all route (it has its own route).
 
 ---
 
+## Shared section shell props
+
+**Every page section** wraps `CustomSection` and accepts this common set of shell props in addition to its own content props. The per-component tables below list only the content props — assume these are always available:
+
+| Prop                | Type   | Options / Notes                                                                                                     |
+| ------------------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
+| `sectionLabel`      | text   | Editor label; when set and no HTML `id` is given, a slugified anchor `id` is derived from it                        |
+| `maxContentWidth`   | select | `none`, `xs`–`3xl`                                                                                                    |
+| `paddingHorizontal` | select | `none`, `xs`–`3xl`                                                                                                    |
+| `paddingVertical`   | select | `none`, `xs`–`6xl` (default `4xl`)                                                                                    |
+| `colorScheme`       | select | `inherit`, `light`, `dark`                                                                                            |
+| `backgroundColor`   | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                      |
+| `background`        | object | `type` (`image`/`video`), `positionVertical`, `positionHorizontal`, `overlay` (-1 to 1), image: `imageSource`/`imageAlt`/`priority`, video: `videoSource` |
+
+(`custom-section` uses `label` instead of `sectionLabel` — the other page sections forward `sectionLabel` to CustomSection's `label` prop.)
+
 ## Component catalog
 
-Every page section and its key props. Use `_component` exactly as shown.
+Every page section and its key props. Use `_component` exactly as shown. Shell props (above) are omitted from these tables.
 
 ### Heroes
 
@@ -552,6 +568,8 @@ Buttons appear in `buttonSections` arrays across many page sections.
 | `size`         | `sm`, `md`, `lg`                            |
 | `iconPosition` | `before`, `after`                           |
 | `hideText`     | `true` / `false` (icon-only button)         |
+
+The rendered element is inferred: `<a>` when `link` is set, `<button>` otherwise. A `link` starting with `^` (e.g., `^modal-my-video`) opens the popover/modal with that ID via the native Popover API instead of navigating.
 
 ---
 

@@ -56,7 +56,7 @@ Follow the [theming skill](../theming/SKILL.md) to configure the design system.
 2. **Edit** `src/styles/variables/_colors.css` — add brand palette values
 3. **Edit** `src/styles/themes/_light.css` AND `_dark.css` — map brand colors to semantic tokens (always both files)
 4. **Edit** `site-fonts.mjs` — set the brand's font families and weights
-5. **Replace** `public/images/logo.svg` with the site's logo
+5. **Replace the logo** — add the site's logo to `src/assets/images/` and update `logoSource` (and `logoAlternateSource` for dark mode, if applicable) in `src/data/mainNav.json`, `src/data/footer.json`, and `src/data/seo.json`
 
 ---
 
@@ -225,10 +225,10 @@ Images referenced in page frontmatter use the full source path:
 imageSource: /src/assets/images/hero.jpg
 ```
 
-For static images that shouldn't be processed (like logos), place in `public/images/`:
+Logos also live in `src/assets/images/` — the nav and footer render them through the `Image` building block:
 
 ```yaml
-logoSource: /images/logo.svg
+logoSource: /src/assets/images/logo.svg
 ```
 
 ### Placeholder approach

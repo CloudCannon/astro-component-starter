@@ -86,11 +86,11 @@ There are also `--spacing-em-*` variants (same scale in `em` units) for font-rel
 
 **Font families** (set via `site-fonts.mjs`, see font configuration below):
 
-| Token             | Default                     |
-| ----------------- | --------------------------- |
-| `--font-body`     | Inter (fontsource, local)   |
-| `--font-headings` | Raleway (fontsource, local) |
-| `--font-mono`     | System monospace stack      |
+| Token             | Default                                              |
+| ----------------- | ---------------------------------------------------- |
+| `--font-body`     | Inter (Google provider, variable weights 100–900)    |
+| `--font-headings` | Raleway (Google provider, variable weights 100–900)  |
+| `--font-mono`     | System monospace stack                               |
 
 ### Colors (`src/styles/variables/_colors.css`)
 
@@ -394,14 +394,14 @@ If a component needs a token that doesn't exist yet (e.g., `--color-bg-card-hove
 
 ## Font configuration
 
-Fonts are managed in `site-fonts.mjs` at the project root. This file is consumed by both Astro's font system (`astro.config.mjs`) and the layout (`SiteFonts.astro`). Fonts use `@fontsource` packages for local copies — no external font services at runtime.
+Fonts are managed in `site-fonts.mjs` at the project root. This file is consumed by both Astro's font system (`astro.config.mjs`) and the layout (`SiteFonts.astro`). The current defaults use `fontProviders.google()`; Astro downloads the files at build time and self-hosts them, so there are no external font requests at runtime.
 
 For detailed instructions on adding or changing fonts, see the **adding-fonts** skill (`SKILL.md` in `.cursor/skills/adding-fonts/`).
 
 ### Quick summary
 
 - Edit `site-fonts.mjs` to change font families, weights, or provider.
-- Install `@fontsource/<font-name>` for new fonts. Use `fontProviders.fontsource()` as the provider.
+- When adding new fonts, install `@fontsource/<font-name>` and use `fontProviders.fontsource()` as the provider.
 - Keep `cssVariable` values aligned with `--font-body` and `--font-headings`.
 - Weights must include 400, 600, 700 (or a variable font covering that range).
 - For proprietary fonts not on Fontsource, use `fontProviders.local()` with `.woff2` files in `src/assets/fonts/`.
