@@ -76,14 +76,14 @@ The `blog` slug is excluded from the catch-all route (it has its own route).
 
 **Every page section** wraps `CustomSection` and accepts this common set of shell props in addition to its own content props. The per-component tables below list only the content props — assume these are always available:
 
-| Prop                | Type   | Options / Notes                                                                                                     |
-| ------------------- | ------ | -------------------------------------------------------------------------------------------------------------------- |
-| `sectionLabel`      | text   | Editor label; when set and no HTML `id` is given, a slugified anchor `id` is derived from it                        |
-| `maxContentWidth`   | select | `none`, `xs`–`3xl`                                                                                                    |
-| `paddingHorizontal` | select | `none`, `xs`–`3xl`                                                                                                    |
-| `paddingVertical`   | select | `none`, `xs`–`6xl` (default `4xl`)                                                                                    |
-| `colorScheme`       | select | `inherit`, `light`, `dark`                                                                                            |
-| `backgroundColor`   | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                      |
+| Prop                | Type   | Options / Notes                                                                                                                                           |
+| ------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sectionLabel`      | text   | Editor label; when set and no HTML `id` is given, a slugified anchor `id` is derived from it                                                              |
+| `maxContentWidth`   | select | `none`, `xs`–`3xl`                                                                                                                                        |
+| `paddingHorizontal` | select | `none`, `xs`–`3xl`                                                                                                                                        |
+| `paddingVertical`   | select | `none`, `xs`–`6xl` (default `4xl`)                                                                                                                        |
+| `colorScheme`       | select | `inherit`, `light`, `dark`                                                                                                                                |
+| `backgroundColor`   | select | `none`, `base`, `surface`, `accent`, `highlight`                                                                                                          |
 | `background`        | object | `type` (`image`/`video`), `positionVertical`, `positionHorizontal`, `overlay` (-1 to 1), image: `imageSource`/`imageAlt`/`priority`, video: `videoSource` |
 
 (`custom-section` uses `label` instead of `sectionLabel` — the other page sections forward `sectionLabel` to CustomSection's `label` prop.)

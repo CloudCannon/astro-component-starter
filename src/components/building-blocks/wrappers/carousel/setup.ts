@@ -50,7 +50,11 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   const plugins = [];
 
-  if (inner.hasAttribute("data-autoplay")) {
+  // Embla moves slides with JS, so the global reduced-motion CSS rule
+  // can't stop it; manual navigation still works without the plugins.
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (inner.hasAttribute("data-autoplay") && !prefersReducedMotion) {
     const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
 
     plugins.push(Autoplay({ delay: autoplayInterval, stopOnInteraction: false }));
@@ -58,7 +62,7 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   let watchDrag = true;
 
-  if (inner.hasAttribute("data-autoscroll")) {
+  if (inner.hasAttribute("data-autoscroll") && !prefersReducedMotion) {
     const scrollValue = parseFloat(inner.getAttribute("data-autoscroll") || "1");
     const speed = isNaN(scrollValue) ? 1 : scrollValue;
 

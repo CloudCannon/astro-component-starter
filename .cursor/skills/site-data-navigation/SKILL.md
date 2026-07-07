@@ -67,14 +67,14 @@ Site-wide data (navigation, footer, SEO) lives in JSON files under `src/data/`. 
 
 ### Fields
 
-| Field                 | Type    | Purpose                                                                     |
-| --------------------- | ------- | --------------------------------------------------------------------------- |
-| `logoSource`          | string  | Path to logo image (use `/src/assets/images/...` — rendered via `Image`)    |
-| `logoAlternateSource` | string  | Optional logo swapped in when the site theme is toggled (e.g., dark mode)   |
-| `logoAlt`             | string  | Alt text for logo                                                           |
-| `themeToggle`         | boolean | Show the light/dark theme toggle in the nav bar                             |
-| `navData`             | array   | Navigation items (up to 3 levels deep)                                      |
-| `buttonSections`      | array   | Action buttons in the nav bar (e.g., search, CTA)                           |
+| Field                 | Type    | Purpose                                                                   |
+| --------------------- | ------- | ------------------------------------------------------------------------- |
+| `logoSource`          | string  | Path to logo image (use `/src/assets/images/...` — rendered via `Image`)  |
+| `logoAlternateSource` | string  | Optional logo swapped in when the site theme is toggled (e.g., dark mode) |
+| `logoAlt`             | string  | Alt text for logo                                                         |
+| `themeToggle`         | boolean | Show the light/dark theme toggle in the nav bar                           |
+| `navData`             | array   | Navigation items (up to 3 levels deep)                                    |
+| `buttonSections`      | array   | Action buttons in the nav bar (e.g., search, CTA)                         |
 
 ### Navigation item shape
 

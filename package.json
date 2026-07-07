@@ -4,7 +4,7 @@
   "version": "1.0.2",
   "description": "A modern design system built with Astro, featuring design tokens, components, and comprehensive documentation",
   "keywords": ["design-system", "astro", "components", "css", "design-tokens"],
-  "author": "Your Name",
+  "author": "CloudCannon",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
@@ -13,8 +13,12 @@
     "build:with-library": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "npm run lint && npm run format",
+    "check": "npm run lint && npm run format && npm run typecheck && npm run manifest:check",
     "check:fix": "npm run lint:fix && npm run format:fix",
+    "typecheck": "astro check",
+    "manifest:check": "node scripts/manifest/generate.mjs --check",
+    "manifest:write": "node scripts/manifest/generate.mjs --write",
+    "test:render": "node scripts/tests/render-all-sections.mjs",
     "lint": "npm run lint:js && npm run lint:css && npm run lint:yml",
     "lint:js": "eslint .",
     "lint:yml": "eslint \"**/*.{yml,yaml}\"",
@@ -56,6 +60,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.6",
     "@types/markdown-it": "^14.1.2",
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
@@ -69,6 +74,7 @@
     "stylelint": "^17.9.1",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-order": "^8.1.1",
+    "typescript": "^5.9.3",
     "yaml-eslint-parser": "^2.0.0"
   },
   "engines": {

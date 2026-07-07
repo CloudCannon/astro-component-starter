@@ -35,7 +35,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  /* `*` does not match pseudo-elements, so animated ones (modal
+     backdrops, `<details>` content) are listed explicitly. */
+  *,
+  *::before,
+  *::after,
+  ::backdrop,
+  ::details-content {
     animation: none !important;
     scroll-behavior: auto !important;
     transition: none !important;

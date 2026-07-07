@@ -8,9 +8,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Toggle's required marker now uses the `--color-danger` token instead of a hardcoded red, so it follows the theme in dark mode.
+- Reduced-motion support now also covers animated pseudo-elements (modal backdrops, accordion `<details>` content) and stops carousel autoplay/auto-scroll, which are JS-driven and were unaffected by the CSS rule.
+- Removed a stray `:first-of-type` wrapper around the accordion summary's Firefox marker fix.
+
 ### Changed
 
+- Fonts are now self-hosted via `fontProviders.fontsource()` (the installed `@fontsource` packages) instead of being fetched from Google at build time.
+- Modal's drop shadow uses the new `--shadow-lg` token; a small shadow scale (`--shadow-sm/md/lg`) is available in `src/styles/variables/_shadows.css`.
+- Button icon spacing can be themed via the `--button-icon-gap` custom property (default unchanged).
+
 ### Added
+
+- `npm run typecheck` (`astro check`), now part of `npm run check` and CI.
+- Component manifest system (experimental): author a single `*.manifest.mjs` per component and generate its CloudCannon YAML with `npm run manifest:write`; `npm run manifest:check` guards against drift in CI. Button is the first migrated component. See `docs/component-manifest-design.md`.
+- `npm run test:render` — builds a kitchen-sink page containing every component structure's default value, so CI fails if any page-builder component stops rendering. CI now runs a production build.
+- `CLAUDE.md` and `docs/ARCHITECTURE.md` — onboarding for AI agents and an overview of the content → component pipeline, CloudCannon config aggregation, and theming tiers.
 
 ## [1.0.2] - 2026-04-13
 

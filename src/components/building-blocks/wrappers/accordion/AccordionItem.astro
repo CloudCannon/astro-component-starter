@@ -64,15 +64,14 @@ const arrayDataAttributes = effectiveChildrenProp
         font-size: var(--font-size-xl);
         font-weight: var(--font-weight-bold);
         justify-content: space-between;
+
+        /* Hides the disclosure marker in Firefox (summary is display: list-item) */
+        list-style-type: none;
         padding: var(--spacing-md);
         transition: background-color var(--animation-normal) ease-out;
         -webkit-user-select: none;
         -ms-user-select: none;
         user-select: none;
-
-        &:first-of-type {
-          list-style-type: none;
-        }
 
         &:hover {
           background-color: var(--color-bg-surface);

@@ -287,20 +287,20 @@ Components must be registered in the appropriate structure files in `.cloudcanno
 
 ### Structure files
 
-| File                      | Context                                | Typical contents                               |
-| ------------------------- | -------------------------------------- | ---------------------------------------------- |
-| `containerSections`       | Custom sections (main content areas)   | All wrappers + core elements                   |
-| `splitSections`           | Inside split layouts                   | All wrappers + core elements                   |
-| `gridItemSections`        | Inside grid items                      | Card, accordion, modal + core elements         |
-| `cardSections`            | Inside cards                           | Button group, accordion, modal + core elements |
-| `accordionSections`       | Inside accordion items                 | Button group, modal + core elements            |
-| `carouselSections`        | Inside carousel slides                 | Card + core elements                           |
-| `contentSelectorSections` | Inside content selector panels         | Wrappers + core elements                       |
-| `bentoBoxSections`        | Inside bento box items                 | Card + core elements                           |
-| `modalSections`           | Inside modals                          | Button group, accordion + core elements        |
-| `pageSections`            | Top-level page sections                | Glob: all page-section structure-values        |
-| `buttonSections`          | Button groups                          | Button only                                    |
-| `formBlocks`              | Form field areas (cta-form, Form)      | Form components (input, select, submit, …)     |
+| File                      | Context                              | Typical contents                               |
+| ------------------------- | ------------------------------------ | ---------------------------------------------- |
+| `containerSections`       | Custom sections (main content areas) | All wrappers + core elements                   |
+| `splitSections`           | Inside split layouts                 | All wrappers + core elements                   |
+| `gridItemSections`        | Inside grid items                    | Card, accordion, modal + core elements         |
+| `cardSections`            | Inside cards                         | Button group, accordion, modal + core elements |
+| `accordionSections`       | Inside accordion items               | Button group, modal + core elements            |
+| `carouselSections`        | Inside carousel slides               | Card + core elements                           |
+| `contentSelectorSections` | Inside content selector panels       | Wrappers + core elements                       |
+| `bentoBoxSections`        | Inside bento box items               | Card + core elements                           |
+| `modalSections`           | Inside modals                        | Button group, accordion + core elements        |
+| `pageSections`            | Top-level page sections              | Glob: all page-section structure-values        |
+| `buttonSections`          | Button groups                        | Button only                                    |
+| `formBlocks`              | Form field areas (cta-form, Form)    | Form components (input, select, submit, …)     |
 
 (`navData`, `links`, and `socials` also live in `.cloudcannon/structures/` but define site-data shapes, not component pickers — see the site-data-navigation skill.)
 
