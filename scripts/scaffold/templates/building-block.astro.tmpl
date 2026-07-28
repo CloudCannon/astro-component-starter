@@ -1,0 +1,27 @@
+---
+const {
+  text = "__LABEL__",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<div
+  class:list={["__SLUG__", className]}
+  {...htmlAttributes}
+>
+  <span class="__SLUG__-text">{text}</span>
+</div>
+
+<style is:global>
+  @layer components {
+    /* Consume design tokens only — never hardcode colors/spacing/shadows/breakpoints.
+       Primitive tokens: src/styles/variables/*  Semantic tokens: src/styles/themes/* */
+    .__SLUG__ {
+      /* TODO: replace with real styles for __PASCAL__. */
+      color: var(--color-text);
+    }
+  }
+</style>

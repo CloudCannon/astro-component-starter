@@ -1,0 +1,84 @@
+---
+import RenderBlock from "@component-utils/renderBlock.astro";
+import VideoElements from "@components/utils/VideoElements.astro";
+import "@styles/style.css";
+import { glob } from "glob";
+import * as yaml from "js-yaml";
+import { readFileSync } from "node:fs";
+import type { ContentBlock } from "../../types";
+import {
+  loadGlobalStructures,
+  resolveDocInputs,
+  seedEmptyArrays,
+  type StructureDefs,
+  type StructureValueDoc,
+} from "./_seed-structure-defaults";
+
+// One bare page per page-builder component, rendered from its structure-value
+// defaults. These routes exist only for `npm run previews:screenshot`, which
+// builds with COMPONENT_PREVIEWS=true — normal builds emit nothing.
+export async function getStaticPaths() {
+  if (process.env.COMPONENT_PREVIEWS !== "true") {
+    return [];
+  }
+
+  const structureFiles = await glob("src/components/**/*.cloudcannon.structure-value.yml");
+  const globalStructures = loadGlobalStructures();
+
+  return structureFiles.sort().flatMap((file) => {
+    const structure = yaml.load(readFileSync(file, "utf8")) as StructureValueDoc | null;
+    const block = structure?.value as ContentBlock | undefined;
+
+    if (!structure || !block?._component) {
+      return [];
+    }
+
+    // Merge this component's own input/structure definitions on top of the
+    // global registry, so top-level arrays resolve via the component's inputs
+    // and any nested container arrays resolve via the global structures.
+    const { inputs, structures } = resolveDocInputs(file, structure);
+    const mergedStructures: StructureDefs = { ...globalStructures, ...structures };
+
+    seedEmptyArrays(block, inputs, mergedStructures);
+
+    return [{ params: { slug: block._component }, props: { block } }];
+  });
+}
+
+interface Props {
+  block: ContentBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<!doctype html>
+<html
+  lang="en"
+  data-theme="light"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta
+      name="robots"
+      content="noindex"
+    />
+    <title>{`Preview render: ${block._component}`}</title>
+    <style is:inline>
+      @layer reset, base, components, page-sections, utils, overrides;
+    </style>
+  </head>
+  <body>
+    <main data-preview-root>
+      <RenderBlock
+        contentSections={[block]}
+        useDefaultEditableBinding={false}
+      />
+    </main>
+    <VideoElements />
+  </body>
+</html>

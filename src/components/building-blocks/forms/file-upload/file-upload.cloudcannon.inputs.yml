@@ -16,3 +16,6 @@ accept:
 multiple:
   type: switch
   comment: Whether multiple files can be selected.
+hint:
+  type: text
+  comment: Optional help text shown between the label and the field, announced to assistive technology.

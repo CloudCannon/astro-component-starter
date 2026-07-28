@@ -2,10 +2,11 @@
 import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
 import Page from "@layouts/Page.astro";
 import { getCollection, render } from "astro:content";
+import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
 
 export async function getStaticPaths() {
   // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set
-  if (process.env.DISABLE_COMPONENT_LIBRARY === "true") {
+  if (isComponentLibraryDisabled()) {
     return [
       {
         params: { slug: undefined },
@@ -69,9 +70,7 @@ const { Content } = isDisabled ? { Content: null } : await render(page);
       </section>
     </Page>
   ) : (
-    <LibraryLayout frontmatter={page.data}>
-      <Content />
-    </LibraryLayout>
+    <LibraryLayout frontmatter={page.data}>{Content && <Content />}</LibraryLayout>
   )
 }
 

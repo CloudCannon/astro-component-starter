@@ -96,9 +96,6 @@ pageSections:
     eyebrow: Principles
     heading: Built for real-world web projects
     subtext: No trends. No noise. Just reliability.
-    gap: xl
-    minItemWidth: 280
-    maxItemWidth: 360
     features:
       - title: Web fundamentals
         description: >-

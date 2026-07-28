@@ -1,4 +1,8 @@
 ---
+import FormLabel from "@component-utils/FormLabel.astro";
+import { generateFieldId } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
 const {
   label,
   name,
@@ -8,6 +12,8 @@ const {
   value,
   required = false,
   showValue = true,
+  hint,
+  error,
   id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -15,7 +21,10 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = customId || `range-${crypto.randomUUID()}`;
+const fieldId = generateFieldId("range", customId);
+const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
+const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 const defaultValue = value ?? min;
 const initialPct = ((defaultValue - min) / (max - min)) * 100;
 ---
@@ -27,20 +36,12 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
   {
     label && (
       <div class="range-header">
-        <label
+        <FormLabel
           for={fieldId}
-          class="label"
-        >
-          {label}
-          {required && (
-            <span
-              class="range-required"
-              aria-label="required"
-            >
-              *
-            </span>
-          )}
-        </label>
+          label={label}
+          required={required}
+          requiredClass="range-required"
+        />
         {showValue && (
           <output
             class="range-value"
@@ -50,6 +51,16 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           </output>
         )}
       </div>
+    )
+  }
+  {
+    hintId && (
+      <p
+        class="range-hint"
+        id={hintId}
+      >
+        {hint}
+      </p>
     )
   }
   <input
@@ -62,6 +73,8 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
     value={defaultValue}
     required={required}
     aria-required={required}
+    aria-invalid={errorId ? "true" : undefined}
+    aria-describedby={describedBy}
     class="range-input"
     style={`--range-pct: ${initialPct}%`}
   />
@@ -72,6 +85,16 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
     <span>{min}</span>
     <span>{max}</span>
   </div>
+  {
+    errorId && (
+      <p
+        class="range-error"
+        id={errorId}
+      >
+        {error}
+      </p>
+    )
+  }
 </div>
 
 <script>
@@ -124,6 +147,18 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
         margin-inline-start: var(--spacing-em-xs);
       }
 
+      .range-hint {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .range-error {
+        color: var(--color-error);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
       .range-value {
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
@@ -153,13 +188,13 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
         &:focus-visible::-webkit-slider-thumb {
           box-shadow:
             0 0 0 3px var(--color-bg),
-            0 0 0 5px var(--color-focus-ring);
+            0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
         }
 
         &:focus-visible::-moz-range-thumb {
           box-shadow:
             0 0 0 3px var(--color-bg),
-            0 0 0 5px var(--color-focus-ring);
+            0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
         }
 
         /* Track — WebKit */
@@ -194,7 +229,7 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           border-radius: var(--radius-full);
           height: var(--thumb-size);
           margin-top: calc((var(--track-height) - var(--thumb-size)) / 2);
-          transition: background-color var(--animation-fast) ease-in-out;
+          transition: background-color var(--animation-fast) var(--ease-in-out);
           width: var(--thumb-size);
         }
 
@@ -205,7 +240,7 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           border: none;
           border-radius: var(--radius-full);
           height: var(--thumb-size);
-          transition: background-color var(--animation-fast) ease-in-out;
+          transition: background-color var(--animation-fast) var(--ease-in-out);
           width: var(--thumb-size);
         }
 

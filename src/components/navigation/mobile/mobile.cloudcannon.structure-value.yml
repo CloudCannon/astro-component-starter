@@ -9,9 +9,11 @@ value:
 preview:
   text:
     - Mobile Navigation
+  image: /component-previews/navigation/mobile.svg
 picker_preview:
   text: Mobile Navigation
   subtext: "Mobile navigation with full-screen overlay."
+  image: /component-previews/navigation/mobile.svg
   icon: device-phone-mobile
 _inputs_from_glob:
   - /src/components/navigation/mobile/mobile.cloudcannon.inputs.yml

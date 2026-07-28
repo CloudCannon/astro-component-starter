@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
+  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
+  <g transform="translate(292 248) scale(1.0000)">
+    <rect x="186" y="0" width="100" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
+    <rect x="298" y="0" width="100" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
+    <rect x="410" y="0" width="100" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
+    <rect x="0" y="48" width="696" height="256" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
+    <rect x="28" y="76" width="260" height="200" rx="8" fill="#e8e6e0"/>
+    <circle cx="210" cy="140" r="12" fill="#cbc7bf"/>
+    <polygon points="75,232 137,176 184,232" fill="#cbc7bf"/>
+    <polygon points="145,232 200,188 252,232" fill="#cbc7bf"/>
+    <rect x="316" y="129" width="240" height="20" rx="10" fill="#c2beb5"/>
+    <rect x="316" y="163" width="340" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="316" y="187" width="340" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="316" y="211" width="204" height="12" rx="6" fill="#dcd9d2"/>
+  </g>
+</svg>

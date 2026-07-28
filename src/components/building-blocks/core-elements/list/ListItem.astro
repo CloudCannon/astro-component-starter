@@ -1,6 +1,6 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
-import MarkdownIt from "markdown-it";
+import { renderMarkdownInline } from "@component-utils/markdown";
 
 const {
   text = "",
@@ -14,8 +14,6 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
-
-const md = new MarkdownIt({ html: true });
 
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
@@ -47,13 +45,13 @@ const hasIcon = showIcon && iconName;
         class="item-inner"
       >
         <p {...textDataAttributes}>
-          {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
+          {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
         </p>
       </a>
     ) : (
       <span class="item-inner">
         <p {...textDataAttributes}>
-          {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
+          {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
         </p>
       </span>
     )
@@ -99,7 +97,7 @@ const hasIcon = showIcon && iconName;
 
       > a.item-inner:any-link:focus-visible {
         border-radius: var(--radius-sm);
-        outline: 2px solid currentColor;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
         outline-offset: 2px;
       }
     }

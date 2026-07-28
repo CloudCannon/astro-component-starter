@@ -8,6 +8,7 @@ type SlideProps = Record<string, unknown>;
 const {
   slides = [],
   autoPlay = false,
+  pauseOnHover = false,
   autoScroll = false,
   showIndicators = true,
   /** `"dots"` (default) or `"fraction"` (e.g. `1/3`). */
@@ -44,6 +45,10 @@ dataAttributes["data-slides-to-scroll"] = String(slidesToScroll);
 
 if (autoPlay) {
   dataAttributes["data-autoplay"] = "3";
+
+  if (pauseOnHover) {
+    dataAttributes["data-pause-on-hover"] = "true";
+  }
 }
 
 if (autoScroll) {
@@ -250,7 +255,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           flex-shrink: 0;
           font-size: var(--font-size-sm);
           font-variant-numeric: tabular-nums;
-          line-height: 1.2;
+          line-height: var(--line-height-tight);
           min-width: 3ch;
           text-align: center;
         }

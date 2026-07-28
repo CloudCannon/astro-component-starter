@@ -165,7 +165,7 @@ export function prepareImageData({
   const isLocalSource = typeof source === "string" && source.startsWith("/src/");
   const isSvg = typeof source === "string" && source.toLowerCase().endsWith(".svg");
 
-  let imageSrc = source;
+  let imageSrc: string | ImageMetadata | undefined = source;
   let imageWidth = width;
   let imageHeight = height;
   let shouldRenderOptimizedPicture = false;
@@ -244,7 +244,7 @@ export function prepareImageData({
       ? getResponsiveWidths(widths, finalWidth)
       : getResponsiveWidths(widths);
 
-  if (shouldRenderOptimizedPicture && typeof imageSrc !== "string") {
+  if (shouldRenderOptimizedPicture && typeof imageSrc === "object") {
     return {
       imageSrc,
       imageWidth,

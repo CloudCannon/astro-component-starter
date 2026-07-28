@@ -8,14 +8,17 @@ value:
   required: false
   accept: null
   multiple: false
+  hint: null
 preview:
   text:
     - File Upload
   subtext:
     - key: name
+  image: /component-previews/building-blocks/forms/file-upload.svg
   icon: upload
 picker_preview:
   text: File Upload
   subtext: Form field for uploading files.
+  image: /component-previews/building-blocks/forms/file-upload.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/file-upload/file-upload.cloudcannon.inputs.yml

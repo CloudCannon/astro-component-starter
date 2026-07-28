@@ -1,6 +1,7 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
-import MarkdownIt from "markdown-it";
+import { renderMarkdownInline } from "@component-utils/markdown";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   text,
@@ -22,13 +23,12 @@ const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-const md = MarkdownIt({ html: true });
-let MarkdownText = text ? md.renderInline(text) : "";
+let MarkdownText = renderMarkdownInline(text);
 
 MarkdownText = MarkdownText.replace(/\n/g, "<br />");
 const Tag = level;
 
-const hasText = text?.trim().length > 0;
+const hasText = isNonEmptyString(text);
 const hasSlotContent = Astro.slots.has("default");
 
 if (!_component && !hasText && !hasSlotContent) return;

@@ -7,13 +7,16 @@ value:
   logoAlt: "Logo"
   navData: []
   buttonSections: []
+  logoAlternateSource: ""
 preview:
   text:
     - Main Nav
+  image: /component-previews/navigation/main-nav.svg
   icon: navigation
 picker_preview:
   text: Main Nav
   subtext: "Header navigation combining logo, links, and actions."
+  image: /component-previews/navigation/main-nav.svg
   icon: navigation
 _inputs_from_glob:
   - /src/components/navigation/main-nav/main-nav.cloudcannon.inputs.yml

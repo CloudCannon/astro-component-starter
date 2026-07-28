@@ -28,29 +28,6 @@ alignmentHorizontal:
         name: Start
       - id: center
         name: Center
-gap:
-  type: select
-  comment: Spacing between feature cards.
-  options:
-    values:
-      - id: sm
-        name: Small
-      - id: md
-        name: Medium
-      - id: lg
-        name: Large
-      - id: xl
-        name: Extra Large
-      - id: 2xl
-        name: 2xl
-      - id: 3xl
-        name: 3xl
-minItemWidth:
-  type: number
-  comment: Minimum width for each feature card in pixels.
-maxItemWidth:
-  type: number
-  comment: Maximum width for each feature card in pixels.
 features:
   type: array
   label: Features

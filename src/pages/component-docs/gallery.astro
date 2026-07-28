@@ -1,0 +1,218 @@
+---
+import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
+import Page from "@layouts/Page.astro";
+import { getCollection } from "astro:content";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
+
+const isDisabled = isComponentLibraryDisabled();
+
+const DISPLAY_NAME_OVERRIDES: Record<string, string> = {
+  ctas: "CTAs",
+  cta: "CTA",
+};
+
+const formatDisplayName = (value = "") => {
+  const lower = value.toLowerCase();
+
+  if (DISPLAY_NAME_OVERRIDES[lower]) {
+    return DISPLAY_NAME_OVERRIDES[lower];
+  }
+  return value
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
+type GalleryCard = {
+  label: string;
+  path: string;
+  previewSrc: string | null;
+};
+
+const categories: { name: string; cards: GalleryCard[] }[] = [];
+
+if (!isDisabled) {
+  const allComponents = await getCollection("docs-components");
+  const byCategory: Record<string, GalleryCard[]> = {};
+
+  allComponents.forEach((component) => {
+    const slug = component.id.replace(/^components\//, "").replace(/\/index$/, "");
+    const parts = slug.split("/").filter(Boolean);
+
+    // Mirror navGenerator.js: skip example entries and untitled components.
+    if (slug.includes("/examples/") || (!component.data.title && !component.data.name)) {
+      return;
+    }
+    if (parts.length < 1) {
+      return;
+    }
+
+    const componentName = parts[parts.length - 1];
+    const topCategory = parts[0];
+    const label = component.data.title || componentName.replace(/-/g, " ");
+
+    // Same existence fallback as ComponentLayout: only link to a preview that
+    // actually exists on disk, otherwise the card shows a neutral placeholder.
+    const hasPreview = existsSync(
+      join(process.cwd(), "public", "component-previews", `${slug}.svg`)
+    );
+
+    if (!byCategory[topCategory]) {
+      byCategory[topCategory] = [];
+    }
+    byCategory[topCategory].push({
+      label,
+      path: `/component-docs/components/${slug}/`,
+      previewSrc: hasPreview ? `/component-previews/${slug}.svg` : null,
+    });
+  });
+
+  Object.keys(byCategory)
+    .sort()
+    .forEach((key) => {
+      const cards = byCategory[key].sort((a, b) => a.label.localeCompare(b.label));
+
+      categories.push({ name: formatDisplayName(key), cards });
+    });
+}
+---
+
+{
+  isDisabled ? (
+    <Page
+      frontmatter={{
+        title: "Component Gallery",
+        description:
+          "The component gallery is available in local development or when you build with the component library enabled (npm run build:with-library).",
+        noindex: true,
+      }}
+    >
+      <section class="component-docs-disabled">
+        <h1>Component Gallery Available in Local Development</h1>
+        <p>
+          The component gallery is disabled in this production build to keep the generated site
+          lean.
+        </p>
+        <p>
+          Run <code>npm run dev</code> and open <code>/component-docs/gallery/</code> locally, or
+          run <code>npm run build:with-library</code> to include it in static output.
+        </p>
+      </section>
+    </Page>
+  ) : (
+    <LibraryLayout
+      frontmatter={{
+        title: "Component Gallery",
+        contentSections: [],
+        description:
+          "Browse every component in the library at a glance—each card links to its full documentation page.",
+      }}
+    >
+      <h1>Component Gallery</h1>
+      <p>Every component in the library. Select a card to open its documentation.</p>
+
+      {categories.map((category) => (
+        <section class="gallery-category">
+          <h2 id={category.name.toLowerCase().replace(/\s+/g, "-")}>{category.name}</h2>
+          <ul class="gallery-grid">
+            {category.cards.map((card) => (
+              <li class="gallery-card">
+                <a
+                  href={card.path}
+                  class="gallery-card-link"
+                >
+                  <span class="gallery-card-thumb">
+                    {card.previewSrc ? (
+                      <img
+                        src={card.previewSrc}
+                        alt={`${card.label} preview`}
+                        loading="lazy"
+                        decoding="async"
+                        width="320"
+                        height="200"
+                      />
+                    ) : (
+                      <span class="gallery-card-placeholder">No preview</span>
+                    )}
+                  </span>
+                  <span class="gallery-card-label">{card.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </LibraryLayout>
+  )
+}
+
+<style>
+  .component-docs-disabled {
+    margin: 0 auto;
+    max-width: 50rem;
+    padding: var(--spacing-4xl) var(--spacing-lg);
+  }
+
+  .gallery-category {
+    margin-block-start: var(--spacing-2xl);
+  }
+
+  .gallery-grid {
+    display: grid;
+    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .gallery-card {
+    margin: 0;
+  }
+
+  .gallery-card-link {
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+  }
+
+  .gallery-card-thumb {
+    align-items: center;
+    aspect-ratio: 16 / 10;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    transition:
+      border-color var(--animation-normal) ease,
+      box-shadow var(--animation-normal) ease;
+  }
+
+  .gallery-card-thumb > img {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .gallery-card-placeholder {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .gallery-card-link:hover .gallery-card-thumb,
+  .gallery-card-link:focus-visible .gallery-card-thumb {
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .gallery-card-label {
+    font-weight: var(--font-weight-semibold);
+  }
+</style>

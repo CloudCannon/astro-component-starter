@@ -185,7 +185,7 @@ ${indent}</${componentName}>`;
     const FormComponentName = getComponentDisplayName("building-blocks/forms/form");
 
     const formChildren = formBlocksArray
-      .map((formBlock) =>
+      .map((formBlock: unknown) =>
         formatComponentWithSlots(
           formBlock,
           indentLevel + 2,
@@ -312,7 +312,7 @@ ${indent}</${componentName}>`;
 
         const itemContent = item.contentSections
           ? (Array.isArray(item.contentSections) ? item.contentSections : [item.contentSections])
-              .map((nestedBlock) =>
+              .map((nestedBlock: unknown) =>
                 formatComponentWithSlots(
                   nestedBlock,
                   indentLevel + 2,

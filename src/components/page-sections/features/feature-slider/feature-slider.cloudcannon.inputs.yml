@@ -1,12 +1,3 @@
-eyebrow:
-  type: text
-  comment: Optional eyebrow text displayed above the heading.
-heading:
-  type: text
-  comment: Main heading for the slider section.
-subtext:
-  type: textarea
-  comment: Supporting copy beneath the heading.
 slides:
   type: array
   label: Slides

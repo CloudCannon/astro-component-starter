@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
+  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
+  <g transform="translate(212 127) scale(1.0000)">
+    <rect x="2" y="0" width="360" height="380" rx="8" fill="#e8e6e0"/>
+    <circle cx="254" cy="122" r="22" fill="#cbc7bf"/>
+    <polygon points="67,296 153,190 218,296" fill="#cbc7bf"/>
+    <polygon points="164,296 240,213 312,296" fill="#cbc7bf"/>
+    <rect x="378" y="0" width="260" height="182" rx="8" fill="#e8e6e0"/>
+    <circle cx="560" cy="58" r="11" fill="#cbc7bf"/>
+    <polygon points="425,142 487,91 534,142" fill="#cbc7bf"/>
+    <polygon points="495,142 550,102 602,142" fill="#cbc7bf"/>
+    <rect x="378" y="198" width="260" height="182" rx="8" fill="#e8e6e0"/>
+    <circle cx="560" cy="256" r="11" fill="#cbc7bf"/>
+    <polygon points="425,340 487,289 534,340" fill="#cbc7bf"/>
+    <polygon points="495,340 550,300 602,340" fill="#cbc7bf"/>
+    <rect x="654" y="0" width="200" height="380" rx="8" fill="#e8e6e0"/>
+    <circle cx="794" cy="122" r="12" fill="#cbc7bf"/>
+    <polygon points="690,296 738,190 774,296" fill="#cbc7bf"/>
+    <polygon points="744,296 786,213 826,296" fill="#cbc7bf"/>
+    <rect x="0" y="396" width="400" height="150" rx="8" fill="#e8e6e0"/>
+    <circle cx="280" cy="444" r="9" fill="#cbc7bf"/>
+    <polygon points="72,513 168,471 240,513" fill="#cbc7bf"/>
+    <polygon points="180,513 264,480 344,513" fill="#cbc7bf"/>
+    <rect x="416" y="396" width="440" height="150" rx="8" fill="#e8e6e0"/>
+    <circle cx="724" cy="444" r="9" fill="#cbc7bf"/>
+    <polygon points="495,513 601,471 680,513" fill="#cbc7bf"/>
+    <polygon points="614,513 706,480 794,513" fill="#cbc7bf"/>
+  </g>
+</svg>

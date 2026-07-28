@@ -1,11 +1,13 @@
 ---
 import { Picture } from "astro:assets";
 import { prepareImageData } from "../../../utils/image";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   source,
   alternateSource = null,
   alt,
+  decorative = false,
   sizes = "(max-width: 1280px) 100vw, 1280px",
   widths = [640, 1280, 2560],
   rounded = false,
@@ -25,13 +27,15 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const hasValidSrc = source && typeof source === "string" && source.trim() !== "";
+const hasValidSrc = isNonEmptyString(source);
 
 if (!_component && !hasValidSrc) {
   return;
 }
 
-const normalizedAlt = alt || "";
+// Decorative images are explicitly hidden from assistive technology with an
+// empty alt (the standard mechanism — no aria-hidden needed on <img alt="">).
+const normalizedAlt = decorative ? "" : alt || "";
 const isEditable =
   useDefaultEditableBinding || customDataPropSrc != null || customDataPropAlt != null;
 const dataAttributes = isEditable
@@ -41,6 +45,11 @@ const dataAttributes = isEditable
       "data-prop-alt": customDataPropAlt || "alt",
     }
   : {};
+
+// "none" is the aspect-ratio select's explicit "no fixed ratio" value — treat
+// it like unset (src/components/utils/image.ts already does) so it doesn't
+// emit inert `ratio ratio-none` classes.
+const effectiveAspectRatio = aspectRatio && aspectRatio !== "none" ? aspectRatio : null;
 
 const positionClass = `position-${positionVertical}-${positionHorizontal}`;
 const preparedImage = prepareImageData({
@@ -55,8 +64,7 @@ const preparedImage = prepareImageData({
 
 const effectiveSizes = priority ? sizes : `auto, ${sizes}`;
 
-const hasAlternate =
-  alternateSource && typeof alternateSource === "string" && alternateSource.trim() !== "";
+const hasAlternate = isNonEmptyString(alternateSource);
 const preparedAlternate = hasAlternate
   ? prepareImageData({
       source: alternateSource,
@@ -93,8 +101,8 @@ if (hasAlternate) {
   <div
     class:list={[
       "image-inner",
-      aspectRatio && "ratio",
-      aspectRatio && `ratio-${aspectRatio}`,
+      effectiveAspectRatio && "ratio",
+      effectiveAspectRatio && `ratio-${effectiveAspectRatio}`,
       positionClass,
       rounded && "rounded",
       background && "background",

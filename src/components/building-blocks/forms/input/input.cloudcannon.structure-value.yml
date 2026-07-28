@@ -12,14 +12,17 @@ value:
   iconName: null
   iconColor: default
   iconPosition: before
+  hint: null
 preview:
   text:
     - template: Input - {type}
   subtext:
     - key: name
+  image: /component-previews/building-blocks/forms/input.svg
   icon: rectangle
 picker_preview:
   text: Input
   subtext: Single text input form field.
+  image: /component-previews/building-blocks/forms/input.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/input/input.cloudcannon.inputs.yml

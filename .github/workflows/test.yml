@@ -45,6 +45,9 @@ jobs:
       - name: Check
         run: npm run check
 
+      - name: Unit tests
+        run: npm run test:unit
+
   build:
     name: Build all components
     runs-on: ubuntu-24.04
@@ -66,3 +69,38 @@ jobs:
 
       - name: Render every component's structure defaults
         run: npm run test:render
+
+  # Interactive smoke tests + axe-core accessibility scan against the full
+  # library build (the component-docs pages render a live example of every
+  # component). These scripts locate Chrome via Playwright's Chromium, so
+  # installing it is enough here.
+  browser-tests:
+    name: Smoke & a11y
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright-core install --with-deps chromium
+
+      - name: Build site with component library
+        run: npm run build:with-library
+
+      - name: Smoke-test interactive components
+        run: npm run test:smoke
+
+      - name: Accessibility scan
+        run: npm run test:a11y

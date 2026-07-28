@@ -6,6 +6,7 @@ value:
   label: ""
   slides: []
   autoPlay: false
+  pauseOnHover: false
   autoScroll: false
   loop: true
   showIndicators: true
@@ -21,10 +22,12 @@ preview:
     - Carousel
   subtext:
     - key: label
+  image: /component-previews/building-blocks/wrappers/carousel.svg
   icon: image
 picker_preview:
   text: Carousel
   subtext: Displays multiple items in a sliding gallery.
+  image: /component-previews/building-blocks/wrappers/carousel.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/carousel/carousel.cloudcannon.inputs.yml
 _structures:

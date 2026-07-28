@@ -24,6 +24,9 @@ required:
 value:
   type: text
   comment: The default value for the input field.
+hint:
+  type: text
+  comment: Optional help text shown between the label and the field, announced to assistive technology.
 iconName:
   type: select
   comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.

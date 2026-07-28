@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
+  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
+  <g transform="translate(248 128) scale(1.0000)">
+    <rect x="342" y="0" width="100" height="12" rx="6" fill="#d0ccc3"/>
+    <rect x="212" y="28" width="360" height="34" rx="17" fill="#c2beb5"/>
+    <rect x="222" y="78" width="340" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="0" y="138" width="240" height="280" rx="8" fill="#e8e6e0"/>
+    <circle cx="168" cy="228" r="14" fill="#cbc7bf"/>
+    <polygon points="43,356 101,278 144,356" fill="#cbc7bf"/>
+    <polygon points="108,356 158,295 206,356" fill="#cbc7bf"/>
+    <rect x="20" y="438" width="150" height="18" rx="9" fill="#c2beb5"/>
+    <rect x="20" y="466" width="90" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="20" y="488" width="200" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="20" y="512" width="140" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="272" y="138" width="240" height="280" rx="8" fill="#e8e6e0"/>
+    <circle cx="440" cy="228" r="14" fill="#cbc7bf"/>
+    <polygon points="315,356 373,278 416,356" fill="#cbc7bf"/>
+    <polygon points="380,356 430,295 478,356" fill="#cbc7bf"/>
+    <rect x="292" y="438" width="150" height="18" rx="9" fill="#c2beb5"/>
+    <rect x="292" y="466" width="90" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="292" y="488" width="200" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="292" y="512" width="140" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="544" y="138" width="240" height="280" rx="8" fill="#e8e6e0"/>
+    <circle cx="712" cy="228" r="14" fill="#cbc7bf"/>
+    <polygon points="587,356 645,278 688,356" fill="#cbc7bf"/>
+    <polygon points="652,356 702,295 750,356" fill="#cbc7bf"/>
+    <rect x="564" y="438" width="150" height="18" rx="9" fill="#c2beb5"/>
+    <rect x="564" y="466" width="90" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="564" y="488" width="200" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="564" y="512" width="140" height="12" rx="6" fill="#dcd9d2"/>
+  </g>
+</svg>

@@ -13,7 +13,14 @@ declare module "markdown-it" {
     renderInline(src: string, env?: Record<string, unknown>): string;
   }
 
-  export default function markdownit(options?: Options | string): MarkdownIt;
+  // markdown-it is callable both with and without `new` at runtime.
+  interface MarkdownItConstructor {
+    new (options?: Options | string): MarkdownIt;
+    (options?: Options | string): MarkdownIt;
+  }
+
+  const MarkdownIt: MarkdownItConstructor;
+  export default MarkdownIt;
 }
 
 declare module "js-beautify" {
@@ -36,31 +43,4 @@ declare module "js-beautify" {
   };
 
   export default pkg;
-}
-
-declare module "js-yaml" {
-  interface DumpOptions {
-    indent?: number;
-    noArrayIndent?: boolean;
-    skipInvalid?: boolean;
-    flowLevel?: number;
-    sortKeys?: boolean | ((a: string, b: string) => number);
-    lineWidth?: number;
-    noRefs?: boolean;
-    noCompatMode?: boolean;
-    condenseFlow?: boolean;
-    quotingType?: "'" | '"';
-    forceQuotes?: boolean;
-    [key: string]: unknown;
-  }
-
-  interface JsYaml {
-    load(str: string, opts?: Record<string, unknown>): unknown;
-    dump(obj: unknown, opts?: DumpOptions): string;
-  }
-
-  const yaml: JsYaml;
-  export default yaml;
-  export function load(str: string, opts?: Record<string, unknown>): unknown;
-  export function dump(obj: unknown, opts?: DumpOptions): string;
 }

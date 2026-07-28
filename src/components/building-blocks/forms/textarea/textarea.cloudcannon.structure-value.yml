@@ -8,14 +8,17 @@ value:
   required: false
   placeholder: null
   value: null
+  hint: null
 preview:
   text:
     - Textarea
   subtext:
     - key: name
+  image: /component-previews/building-blocks/forms/textarea.svg
   icon: text_ad
 picker_preview:
   text: Textarea
   subtext: Form field for entering multi-line text.
+  image: /component-previews/building-blocks/forms/textarea.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/textarea/textarea.cloudcannon.inputs.yml

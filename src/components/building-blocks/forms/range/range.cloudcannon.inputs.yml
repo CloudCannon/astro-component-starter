@@ -22,3 +22,6 @@ required:
 showValue:
   type: switch
   comment: Whether to display the current value next to the label.
+hint:
+  type: text
+  comment: Optional help text shown between the label and the slider, announced to assistive technology.

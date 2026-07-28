@@ -1,5 +1,6 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { overlayColor } from "@components/utils/overlayColor";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
@@ -16,7 +17,7 @@ const {
   backgroundColor,
   background,
   link,
-  showBeforeAfter = true,
+  showBeforeAfter = false,
   rounded = false,
   border = false,
   class: className,
@@ -109,7 +110,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           class="background-overlay"
           aria-hidden="true"
           style={{
-            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
+            backgroundColor: overlayColor(overlay),
           }}
         />
       )
@@ -145,6 +146,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
       <div
         class:list={[
           "card-content",
+          "uses-spacing-utils",
           paddingHorizontal && `pad-x-${paddingHorizontal}`,
           paddingVertical && `pad-y-${paddingVertical}`,
           maxContentWidth && `max-width-${maxContentWidth}`,
@@ -212,6 +214,15 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         overflow: hidden;
         position: relative;
         text-decoration: none;
+
+        /* Themed cards with a media background get a solid theme-colored
+           backing so text stays legible if the image/video fails to load or
+           is still buffering. The media is a child painted on top, so this is
+           invisible when it loads. */
+        &[data-theme]:has(> .background-image),
+        &[data-theme]:has(> .video.background) {
+          background-color: var(--color-bg);
+        }
         transition:
           transform 0.2s ease,
           box-shadow 0.2s ease;
@@ -244,54 +255,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
               margin-bottom: 0 !important;
             }
 
-            &.pad-x-xs {
-              padding-inline: var(--spacing-xs);
-            }
-
-            &.pad-x-sm {
-              padding-inline: var(--spacing-sm);
-            }
-
-            &.pad-x-md {
-              padding-inline: var(--spacing-md);
-            }
-
-            &.pad-x-lg {
-              padding-inline: var(--spacing-lg);
-            }
-
-            &.pad-x-xl {
-              padding-inline: var(--spacing-xl);
-            }
-
-            &.pad-x-2xl {
-              padding-inline: var(--spacing-2xl);
-            }
-
-            &.pad-y-xs {
-              padding-block: var(--spacing-xs);
-            }
-
-            &.pad-y-sm {
-              padding-block: var(--spacing-sm);
-            }
-
-            &.pad-y-md {
-              padding-block: var(--spacing-md);
-            }
-
-            &.pad-y-lg {
-              padding-block: var(--spacing-lg);
-            }
-
-            &.pad-y-xl {
-              padding-block: var(--spacing-xl);
-            }
-
-            &.pad-y-2xl {
-              padding-block: var(--spacing-2xl);
-            }
-
             &.max-width-none {
               max-width: none;
             }
@@ -322,32 +285,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
             &.max-width-3xl {
               max-width: var(--content-width-3xl);
-            }
-
-            @media (width < 640px) {
-              &.pad-y-xs {
-                padding-block: var(--spacing-xs);
-              }
-
-              &.pad-y-sm {
-                padding-block: var(--spacing-xs);
-              }
-
-              &.pad-y-md {
-                padding-block: var(--spacing-sm);
-              }
-
-              &.pad-y-lg {
-                padding-block: var(--spacing-md);
-              }
-
-              &.pad-y-xl {
-                padding-block: var(--spacing-md);
-              }
-
-              &.pad-y-2xl {
-                padding-block: var(--spacing-lg);
-              }
             }
           }
         }

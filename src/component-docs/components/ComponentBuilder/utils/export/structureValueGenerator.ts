@@ -1,4 +1,4 @@
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import { toPascalCase } from "../../../../shared/caseUtils";
 import type { ComponentInfo, ComponentMetadata, ComponentNode } from "../../types";

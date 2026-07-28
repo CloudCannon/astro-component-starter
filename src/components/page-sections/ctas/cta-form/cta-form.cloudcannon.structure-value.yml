@@ -47,10 +47,12 @@ preview:
     - CTA Form
   subtext:
     - key: heading
+  image: /component-previews/page-sections/ctas/cta-form.svg
   icon: hero
 picker_preview:
   text: CTA Form
   subtext: Split layout CTA with form and image.
+  image: /component-previews/page-sections/ctas/cta-form.svg
 _inputs_from_glob:
   - /src/components/page-sections/ctas/cta-form/cta-form.cloudcannon.inputs.yml
 _inputs:

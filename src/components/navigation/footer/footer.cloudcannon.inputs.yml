@@ -54,6 +54,7 @@ _structures:
         value:
           icon: ""
           link: ""
+          label: ""
         _inputs:
           icon:
             type: select
@@ -68,3 +69,6 @@ _structures:
           link:
             type: text
             comment: "URL link to the social media profile."
+          label:
+            type: text
+            comment: 'Optional accessible label for the link (e.g. "Visit us on X"). Defaults to "Visit our <icon> page".'

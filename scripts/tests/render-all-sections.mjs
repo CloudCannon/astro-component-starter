@@ -13,7 +13,7 @@ import { execSync } from "node:child_process";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { glob } from "glob";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const fixturePath = join(root, "src/content/pages/kitchen-sink-render-test.md");

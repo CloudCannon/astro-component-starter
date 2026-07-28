@@ -3,8 +3,9 @@ import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
 import Page from "@layouts/Page.astro";
 import ComponentBuilderInit from "@component-docs/components/ComponentBuilder/ComponentBuilderInit.astro";
 import "@component-docs/components/ComponentBuilder/styles.css";
+import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
 
-const isDisabled = process.env.DISABLE_COMPONENT_LIBRARY === "true";
+const isDisabled = isComponentLibraryDisabled();
 const ssrEnabled = import.meta.env.DEV;
 
 let componentDiscovery: any = null;

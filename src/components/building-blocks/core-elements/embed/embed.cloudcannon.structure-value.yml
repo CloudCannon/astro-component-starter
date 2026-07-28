@@ -8,9 +8,11 @@ value:
 preview:
   text:
     - Embed
+  image: /component-previews/building-blocks/core-elements/embed.svg
   icon: data_object
 picker_preview:
   text: Embed
   subtext: Responsive wrapper for third-party embeds.
+  image: /component-previews/building-blocks/core-elements/embed.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/embed/embed.cloudcannon.inputs.yml

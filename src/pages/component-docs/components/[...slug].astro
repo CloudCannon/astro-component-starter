@@ -1,12 +1,13 @@
 ---
 import ComponentLayout from "@component-docs/layouts/ComponentLayout.astro";
-import { getCollection, render } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import { load as yamlLoad } from "js-yaml";
 import { existsSync, readFileSync } from "node:fs";
+import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
 
 export async function getStaticPaths() {
   // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set
-  if (process.env.DISABLE_COMPONENT_LIBRARY === "true") {
+  if (isComponentLibraryDisabled()) {
     return [];
   }
 
@@ -131,7 +132,7 @@ const componentKey = slugParts.join("/");
 
 const searchPattern = `${componentKey}/examples/`.toLowerCase();
 
-let examples = [];
+let examples: CollectionEntry<"docs-components">[] = [];
 
 try {
   examples = await getCollection("docs-components", ({ id }) => {

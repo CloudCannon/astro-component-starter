@@ -428,7 +428,8 @@ class BuilderState {
     };
   }
 
-  private emit(event: string): void {
+  /** Public so modules that mutate node data directly (e.g. sandbox preview count) can notify listeners. */
+  emit(event: string): void {
     if (event === "treeChange" && !this._isUndoRedoOp) {
       this._redoStack = [];
       this._history.push(this._lastTreeSnapshot);

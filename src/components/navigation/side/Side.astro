@@ -13,13 +13,19 @@ const {
 // Generate a unique ID for this navigation instance to scope radio buttons
 const navInstanceId = crypto.randomUUID();
 
+interface NavItem {
+  name?: string;
+  path?: string;
+  children?: NavItem[];
+}
+
 // Helper function to check if item is current page
-function isCurrentPage(item) {
+function isCurrentPage(item: NavItem) {
   return item.path && Astro.url.pathname === item.path;
 }
 
 // Helper function to check if any child is current page (recursive)
-function hasCurrentChild(item) {
+function hasCurrentChild(item: NavItem): boolean {
   if (isCurrentPage(item)) return true;
   if (item.children && item.children.length > 0) {
     return item.children.some((child) => hasCurrentChild(child));
@@ -34,7 +40,7 @@ function hasCurrentChild(item) {
 >
   <ul class="side-list">
     {
-      navData.map((item) => {
+      navData.map((item: NavItem) => {
         const hasChildren = item.children && item.children.length > 0;
         const dropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
         const contentId = `dropdown-content-${crypto.randomUUID()}`;
@@ -51,7 +57,7 @@ function hasCurrentChild(item) {
                 name={`side-nav-top-${navInstanceId}`}
                 id={dropdownId}
                 class="nav-item-toggle"
-                aria-expanded={hasCurrent.toString()}
+                aria-expanded={hasCurrent ? "true" : "false"}
                 aria-controls={contentId}
                 autocomplete="off"
                 checked={hasCurrent}
@@ -104,10 +110,10 @@ function hasCurrentChild(item) {
                 class:list={["nav-item-content", hasCurrent && "nav-item-content-initial"]}
                 role="region"
                 aria-label={`${item.name} submenu`}
-                aria-hidden={(!hasCurrent).toString()}
+                aria-hidden={!hasCurrent ? "true" : "false"}
               >
                 <ul class="nav-list">
-                  {item.children.map((child) => {
+                  {item.children!.map((child) => {
                     const childHasChildren = child.children && child.children.length > 0;
                     const childDropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
                     const childContentId = `dropdown-content-${crypto.randomUUID()}`;
@@ -123,7 +129,7 @@ function hasCurrentChild(item) {
                             name={`side-nav-${parentGroupId}`}
                             id={childDropdownId}
                             class="nav-item-toggle"
-                            aria-expanded={childHasCurrent.toString()}
+                            aria-expanded={childHasCurrent ? "true" : "false"}
                             aria-controls={childContentId}
                             autocomplete="off"
                             checked={childHasCurrent}
@@ -179,7 +185,7 @@ function hasCurrentChild(item) {
                             ]}
                             role="region"
                             aria-label={`${child.name} submenu`}
-                            aria-hidden={(!childHasCurrent).toString()}
+                            aria-hidden={!childHasCurrent ? "true" : "false"}
                           >
                             <ul class="nav-list">
                               {child.children && child.children.length > 0
@@ -247,9 +253,11 @@ function hasCurrentChild(item) {
       navElement.dataset.sideInitialized = "true";
 
       // Handle radio button changes
-      sideNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+      sideNav.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {
         toggle.addEventListener("change", (e) => {
           const target = e.target;
+          if (!(target instanceof HTMLInputElement)) return;
+
           const content = document.getElementById(target.getAttribute("aria-controls") || "");
           const toggleBtn = sideNav.querySelector(`label.nav-item-toggle-btn[for="${target.id}"]`);
           const rowLabel = sideNav.querySelector(
@@ -272,13 +280,15 @@ function hasCurrentChild(item) {
         });
       });
 
-      function bindTriggerHandlers(trigger) {
+      function bindTriggerHandlers(trigger: Element) {
         trigger.addEventListener("click", (e) => {
           const label = e.currentTarget;
+          if (!(label instanceof Element)) return;
+
           const toggleId = label.getAttribute("for");
           const toggleEl = document.getElementById(toggleId || "");
 
-          if (toggleEl && toggleEl.checked) {
+          if (toggleEl instanceof HTMLInputElement && toggleEl.checked) {
             e.preventDefault();
             toggleEl.checked = false;
             toggleEl.dispatchEvent(new Event("change"));
@@ -286,14 +296,16 @@ function hasCurrentChild(item) {
         });
 
         trigger.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e instanceof KeyboardEvent && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault();
             e.stopPropagation();
             const label = e.currentTarget;
+            if (!(label instanceof Element)) return;
+
             const toggleId = label.getAttribute("for");
             const toggleEl = document.getElementById(toggleId || "");
 
-            if (toggleEl) {
+            if (toggleEl instanceof HTMLInputElement) {
               if (toggleEl.checked) {
                 toggleEl.checked = false;
               } else {
@@ -384,7 +396,7 @@ function hasCurrentChild(item) {
           display: inline-flex;
           flex-shrink: 0;
           justify-content: center;
-          line-height: 0;
+          line-height: var(--line-height-none);
           margin-inline: 2px var(--spacing-xs);
           min-height: 1.75rem;
           min-width: 2.25rem;
@@ -464,7 +476,7 @@ function hasCurrentChild(item) {
           }
 
           &:focus-visible {
-            outline: 2px solid var(--color-focus-ring);
+            outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
             outline-offset: 2px;
           }
 
@@ -472,7 +484,7 @@ function hasCurrentChild(item) {
             align-items: center;
             display: flex;
             justify-content: center;
-            line-height: 0;
+            line-height: var(--line-height-none);
           }
         }
       }
@@ -493,7 +505,7 @@ function hasCurrentChild(item) {
       }
 
       .nav-item-toggle:checked ~ .nav-item-content {
-        animation: grow-out var(--animation-normal) ease-out;
+        animation: grow-out var(--animation-normal) var(--ease-out);
         display: block;
       }
 

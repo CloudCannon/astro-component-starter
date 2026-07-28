@@ -78,6 +78,7 @@ const splitId = `split-${crypto.randomUUID()}`;
   <div
     class:list={[
       "split-inner",
+      "uses-spacing-utils",
       `align-${alignmentVertical}`,
       finalDistributionMode,
       `gap-${gap}`,
@@ -182,38 +183,6 @@ const splitId = `split-${crypto.randomUUID()}`;
         gap: var(--spacing-lg);
         grid-template-columns: var(--split-columns-desktop);
 
-        &.gap-none {
-          gap: 0;
-        }
-
-        &.gap-xs {
-          gap: var(--spacing-xs);
-        }
-
-        &.gap-sm {
-          gap: var(--spacing-sm);
-        }
-
-        &.gap-md {
-          gap: var(--spacing-md);
-        }
-
-        &.gap-lg {
-          gap: var(--spacing-lg);
-        }
-
-        &.gap-xl {
-          gap: var(--spacing-xl);
-        }
-
-        &.gap-2xl {
-          gap: var(--spacing-2xl);
-        }
-
-        &.gap-3xl {
-          gap: var(--spacing-3xl);
-        }
-
         &.align-top {
           align-items: start;
         }
@@ -270,40 +239,6 @@ const splitId = `split-${crypto.randomUUID()}`;
 
         &.flexible-fixed {
           --split-columns-desktop: 1fr var(--split-fixed-width);
-        }
-
-        @media (width < 640px) {
-          &.gap-none {
-            gap: 0;
-          }
-
-          &.gap-xs {
-            gap: var(--spacing-xs);
-          }
-
-          &.gap-sm {
-            gap: var(--spacing-xs);
-          }
-
-          &.gap-md {
-            gap: var(--spacing-sm);
-          }
-
-          &.gap-lg {
-            gap: var(--spacing-md);
-          }
-
-          &.gap-xl {
-            gap: var(--spacing-md);
-          }
-
-          &.gap-2xl {
-            gap: var(--spacing-lg);
-          }
-
-          &.gap-3xl {
-            gap: var(--spacing-xl);
-          }
         }
       }
     }

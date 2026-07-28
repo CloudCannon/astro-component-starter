@@ -18,9 +18,11 @@ preview:
     - Video Modal
   subtext:
     - key: title
+  image: /component-previews/building-blocks/wrappers/video-modal.svg
   icon: play_circle
 picker_preview:
   text: Video Modal
   subtext: Dialog overlay with an embedded video that autoplays on open and pauses on close.
+  image: /component-previews/building-blocks/wrappers/video-modal.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/video-modal/video-modal.cloudcannon.inputs.yml

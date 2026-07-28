@@ -48,6 +48,12 @@ paddingHorizontal:
         name: 2xl
       - id: 3xl
         name: 3xl
+      - id: 4xl
+        name: 4xl
+      - id: 5xl
+        name: 5xl
+      - id: 6xl
+        name: 6xl
 paddingVertical:
   type: select
   comment: Vertical padding applied to the custom section content.
@@ -69,6 +75,12 @@ paddingVertical:
         name: 2xl
       - id: 3xl
         name: 3xl
+      - id: 4xl
+        name: 4xl
+      - id: 5xl
+        name: 5xl
+      - id: 6xl
+        name: 6xl
 colorScheme:
   type: select
   comment: Color scheme theme for the custom section.

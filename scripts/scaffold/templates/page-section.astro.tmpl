@@ -1,0 +1,50 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+
+const {
+  heading = "",
+  sectionLabel,
+  maxContentWidth = "lg",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["__SLUG__", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <Heading
+    level="h2"
+    size="xl"
+    data-prop="heading"
+    text={heading}
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    /* Consume design tokens only — never hardcode colors/spacing/shadows/breakpoints.
+       Primitive tokens: src/styles/variables/*  Semantic tokens: src/styles/themes/* */
+    .__SLUG__ {
+      /* TODO: replace with real styles for __PASCAL__. */
+      color: var(--color-text);
+    }
+  }
+</style>

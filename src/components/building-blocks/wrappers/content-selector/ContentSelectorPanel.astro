@@ -46,9 +46,9 @@ const arrayDataAttributes = effectiveChildrenProp
     class="content-selector-tab"
     id={tabLabelId}
     for={tabId}
-    role="tab"
+    role="button"
     aria-controls={panelId}
-    aria-selected={checked ? "true" : "false"}
+    aria-expanded={checked ? "true" : "false"}
     tabindex="0"
   >
     <Heading
@@ -82,7 +82,7 @@ const arrayDataAttributes = effectiveChildrenProp
   <div
     class="content-selector-panel"
     id={panelId}
-    role="tabpanel"
+    role="region"
     aria-labelledby={tabLabelId}
     aria-hidden={checked ? "false" : "true"}
   >
@@ -121,7 +121,7 @@ const arrayDataAttributes = effectiveChildrenProp
       display: block;
       padding: var(--spacing-md);
       position: relative;
-      transition: background-color var(--animation-normal) ease-in-out;
+      transition: background-color var(--animation-normal) var(--ease-in-out);
 
       &::before {
         background: transparent;
@@ -160,7 +160,7 @@ const arrayDataAttributes = effectiveChildrenProp
     .content-selector-tab-chevron {
       display: none;
       flex: 0 0 auto;
-      transition: transform var(--animation-normal) ease-out;
+      transition: transform var(--animation-normal) var(--ease-out);
     }
 
     .content-selector-input:checked + .content-selector-tab::before {
@@ -172,7 +172,7 @@ const arrayDataAttributes = effectiveChildrenProp
     }
 
     .content-selector-panel {
-      animation: fade-in var(--animation-slow) ease-in-out forwards;
+      animation: fade-in var(--animation-slow) var(--ease-in-out) forwards;
       container-type: inline-size;
       display: none;
     }

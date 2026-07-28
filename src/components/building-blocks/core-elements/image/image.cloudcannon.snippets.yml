@@ -24,6 +24,9 @@ image:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: decorative
+        type: boolean
+        optional: true
       - editor_key: rounded
         type: boolean
         optional: true

@@ -16,3 +16,6 @@ placeholder:
 value:
   type: text
   comment: The default value for the textarea field.
+hint:
+  type: text
+  comment: Optional help text shown between the label and the field, announced to assistive technology.

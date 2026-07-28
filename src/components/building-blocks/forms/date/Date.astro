@@ -1,4 +1,8 @@
 ---
+import FormLabel from "@component-utils/FormLabel.astro";
+import { generateFieldId } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
 const {
   label,
   name,
@@ -6,35 +10,38 @@ const {
   value,
   min,
   max,
+  hint,
+  error,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
+const fieldId = generateFieldId("date", htmlAttributes.id);
+const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
+const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 ---
 
 <div
   class:list={["date", className]}
   {...htmlAttributes}
 >
+  <FormLabel
+    for={fieldId}
+    label={label}
+    required={required}
+    requiredClass="date-required"
+  />
   {
-    label && (
-      <label
-        for={fieldId}
-        class="label"
+    hintId && (
+      <p
+        class="date-hint"
+        id={hintId}
       >
-        {label}
-        {required && (
-          <span
-            class="date-required"
-            aria-label="required"
-          >
-            *
-          </span>
-        )}
-      </label>
+        {hint}
+      </p>
     )
   }
   <input
@@ -43,11 +50,23 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
     id={fieldId}
     required={required}
     aria-required={required}
+    aria-invalid={errorId ? "true" : undefined}
+    aria-describedby={describedBy}
     value={value}
     min={min}
     max={max}
     class="field"
   />
+  {
+    errorId && (
+      <p
+        class="date-error"
+        id={errorId}
+      >
+        {error}
+      </p>
+    )
+  }
 </div>
 
 <style is:global>
@@ -63,6 +82,22 @@ const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
       .date-required {
         color: var(--color-error);
         margin-inline-end: var(--spacing-em-xs);
+      }
+
+      .date-hint {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .date-error {
+        color: var(--color-error);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      > .field[aria-invalid="true"] {
+        border-color: var(--color-error);
       }
     }
   }

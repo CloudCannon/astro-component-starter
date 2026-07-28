@@ -11,14 +11,17 @@ value:
   value: 50
   required: false
   showValue: true
+  hint: null
 preview:
   text:
     - Range
   subtext:
     - key: label
+  image: /component-previews/building-blocks/forms/range.svg
   icon: linear_scale
 picker_preview:
   text: Range
   subtext: Slider input for selecting a numeric value within a range.
+  image: /component-previews/building-blocks/forms/range.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/range/range.cloudcannon.inputs.yml

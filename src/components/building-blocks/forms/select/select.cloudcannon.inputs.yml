@@ -23,6 +23,9 @@ placeholder:
 value:
   type: text
   comment: The default selected value.
+hint:
+  type: text
+  comment: Optional help text shown between the label and the field, announced to assistive technology.
 iconName:
   type: select
   comment: The name of an optional leading icon. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.

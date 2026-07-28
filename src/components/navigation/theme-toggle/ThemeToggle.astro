@@ -123,19 +123,19 @@ const { class: className, ...htmlAttributes } = Astro.props;
       flex-shrink: 0;
       font-size: var(--font-size-xl);
       justify-content: center;
-      line-height: 0;
+      line-height: var(--line-height-none);
       padding: var(--spacing-em-xs);
       transition-duration: var(--animation-normal);
       transition-property: background-color, color;
-      transition-timing-function: ease-in-out;
+      transition-timing-function: var(--ease-in-out);
 
       &:hover {
         background-color: var(--color-state-hover);
       }
 
       &:focus-visible {
-        box-shadow: 0 0 2px 2px var(--color-focus-ring) inset;
-        outline: none;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       svg {
@@ -146,7 +146,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
 
     .theme-toggle-icon {
       display: none;
-      line-height: 0;
+      line-height: var(--line-height-none);
     }
 
     [data-theme="light"] .theme-toggle-moon {

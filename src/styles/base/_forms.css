@@ -22,12 +22,12 @@
       color: var(--color-text-strong);
       font-size: var(--font-size-md);
       padding: var(--spacing-em-sm);
-      transition: border-color var(--animation-normal) ease-in-out;
+      transition: border-color var(--animation-normal) var(--ease-in-out);
 
-      &:focus {
+      &:focus-visible {
         border-color: var(--color-brand);
-        box-shadow: 0 0 0 3px var(--color-focus-ring);
-        outline: none;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       &::placeholder {
@@ -49,7 +49,7 @@
         font-size: var(--font-size-sm);
         margin-inline-end: var(--spacing-em-sm);
         padding: var(--spacing-em-xs) var(--spacing-em-sm);
-        transition: background-color var(--animation-normal) ease-in-out;
+        transition: background-color var(--animation-normal) var(--ease-in-out);
 
         &:hover {
           background-color: var(--color-bg-muted);
@@ -66,12 +66,12 @@
       min-height: 100px;
       padding: var(--spacing-em-sm);
       resize: vertical;
-      transition: border-color var(--animation-normal) ease-in-out;
+      transition: border-color var(--animation-normal) var(--ease-in-out);
 
-      &:focus {
+      &:focus-visible {
         border-color: var(--color-brand);
-        box-shadow: 0 0 0 3px var(--color-focus-ring);
-        outline: none;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       &::placeholder {
@@ -92,12 +92,12 @@
       color: var(--color-text-strong);
       cursor: pointer;
       padding: var(--spacing-em-sm);
-      transition: border-color var(--animation-normal) ease-in-out;
+      transition: border-color var(--animation-normal) var(--ease-in-out);
 
-      &:focus {
+      &:focus-visible {
         border-color: var(--color-brand);
-        box-shadow: 0 0 0 3px var(--color-focus-ring);
-        outline: none;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       &:disabled {

@@ -1,5 +1,6 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import { generateFieldId } from "@component-utils/formField";
 import type { SegmentOption } from "../../../../types";
 
 const {
@@ -16,7 +17,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const groupId = htmlAttributes.id || `segments-${crypto.randomUUID()}`;
+const groupId = generateFieldId("segments", htmlAttributes.id);
 const inputType = multiple ? "checkbox" : "radio";
 ---
 
@@ -49,7 +50,7 @@ const inputType = multiple ? "checkbox" : "radio";
     role="presentation"
   >
     {
-      options.map((option, index: number) => (
+      options.map((option: SegmentOption, index: number) => (
         <label class="segments-option">
           <input
             type={inputType}
@@ -170,8 +171,8 @@ const inputType = multiple ? "checkbox" : "radio";
           }
         }
 
-        .segments-field:focus + .segment {
-          outline: 2px solid var(--color-focus-ring);
+        .segments-field:focus-visible + .segment {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
           outline-offset: 2px;
         }
       }

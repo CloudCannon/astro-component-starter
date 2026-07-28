@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync, statSync } from "fs";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { join } from "path";
 
 import { kebabToTitleCase, toPascalCase } from "../../../../shared/caseUtils";

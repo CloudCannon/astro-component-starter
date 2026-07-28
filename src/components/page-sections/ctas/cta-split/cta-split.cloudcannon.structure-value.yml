@@ -38,10 +38,12 @@ preview:
     - CTA Split
   subtext:
     - key: heading
+  image: /component-previews/page-sections/ctas/cta-split.svg
   icon: hero
 picker_preview:
   text: CTA Split
   subtext: Split layout CTA with button stack.
+  image: /component-previews/page-sections/ctas/cta-split.svg
 _inputs_from_glob:
   - /src/components/page-sections/ctas/cta-split/cta-split.cloudcannon.inputs.yml
 _inputs:

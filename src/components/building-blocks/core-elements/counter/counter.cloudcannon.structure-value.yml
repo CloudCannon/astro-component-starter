@@ -13,9 +13,11 @@ preview:
     - Counter
   subtext:
     - template: "{prefix}{number}{suffix}"
+  image: /component-previews/building-blocks/core-elements/counter.svg
   icon: speed
 picker_preview:
   text: Counter
   subtext: Animated counter for highlighting key stats or figures.
+  image: /component-previews/building-blocks/core-elements/counter.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/counter/counter.cloudcannon.inputs.yml

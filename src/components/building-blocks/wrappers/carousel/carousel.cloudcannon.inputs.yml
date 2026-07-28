@@ -9,6 +9,9 @@ slides:
 autoPlay:
   comment: Enable auto-play functionality.
   type: switch
+pauseOnHover:
+  comment: Pause auto-play while the cursor is over the carousel. Only applies when auto-play is enabled.
+  type: switch
 autoScroll:
   comment: Enable auto-scroll functionality.
   type: switch

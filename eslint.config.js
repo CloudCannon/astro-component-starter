@@ -62,7 +62,6 @@ export default [
       ],
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
-      // Removed rules that require type information for now
     },
   },
 
@@ -173,6 +172,16 @@ export default [
       "yml/no-empty-document": "off",
       "yml/no-empty-mapping-value": "off",
       "yml/no-empty-sequence-entry": "off",
+    },
+  },
+
+  // Vitest unit tests + vitest config: not part of tsconfig.json's include
+  // (astro check only covers src/), so lint them without a TS project.
+  {
+    files: ["tests/**/*.ts", "vitest.config.ts"],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: { ecmaVersion: "latest", sourceType: "module", project: false },
     },
   },
 

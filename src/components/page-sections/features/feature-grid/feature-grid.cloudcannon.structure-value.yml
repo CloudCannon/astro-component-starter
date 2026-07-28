@@ -7,6 +7,7 @@ value:
   eyebrow: Eyebrow text
   heading: Heading text
   subtext: Subtext placeholder text that will be replaced with actual content.
+  alignmentHorizontal: center
   features: []
   maxContentWidth: 2xl
   paddingHorizontal: lg
@@ -27,10 +28,12 @@ preview:
     - Feature Grid
   subtext:
     - key: heading
+  image: /component-previews/page-sections/features/feature-grid.svg
   icon: apps
 picker_preview:
   text: Feature Grid
   subtext: Grid of feature highlights with icons and descriptions.
+  image: /component-previews/page-sections/features/feature-grid.svg
 _inputs_from_glob:
   - /src/components/page-sections/features/feature-grid/feature-grid.cloudcannon.inputs.yml
 _inputs:

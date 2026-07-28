@@ -1,46 +1,6 @@
 heading:
   type: text
   comment: Main heading for the FAQ section.
-headingLevel:
-  type: select
-  comment: HTML heading level (h1-h6).
-  options:
-    values:
-      - id: h1
-        name: H1
-      - id: h2
-        name: H2
-      - id: h3
-        name: H3
-      - id: h4
-        name: H4
-      - id: h5
-        name: H5
-      - id: h6
-        name: H6
-headingSize:
-  type: select
-  comment: Visual size of the heading.
-  options:
-    values:
-      - id: xs
-        name: Extra Small
-      - id: sm
-        name: Small
-      - id: md
-        name: Medium
-      - id: lg
-        name: Large
-      - id: xl
-        name: Extra Large
-      - id: 2xl
-        name: 2X Large
-singleOpen:
-  type: switch
-  comment: Whether only one accordion item can be open at a time.
-openFirst:
-  type: switch
-  comment: Whether the first accordion item should be open by default.
 items:
   type: array
   label: FAQ Items

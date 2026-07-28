@@ -35,10 +35,12 @@ preview:
     - CTA Center
   subtext:
     - key: heading
+  image: /component-previews/page-sections/ctas/cta-center.svg
   icon: hero
 picker_preview:
   text: CTA Center
   subtext: Centered CTA with stacked text and buttons.
+  image: /component-previews/page-sections/ctas/cta-center.svg
 _inputs_from_glob:
   - /src/components/page-sections/ctas/cta-center/cta-center.cloudcannon.inputs.yml
 _inputs:

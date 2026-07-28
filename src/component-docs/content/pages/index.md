@@ -36,4 +36,4 @@ Want to prototype a component without writing code first? The **[Component Build
 
 ## Browse components
 
-All components are documented in the sidebar. Each page includes a description, live examples, and a full list of properties. Use them as reference when building pages or creating your own components.
+Browse the **[Component Gallery](/component-docs/gallery/)** to see every component as a preview thumbnail, or use the sidebar to jump straight to one. Each component page includes a description, live examples, and a full list of properties. Use them as reference when building pages or creating your own components.

@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from "fs";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { join } from "path";
 
 import { findStructureValueFiles } from "../../../../shared/structureFiles";

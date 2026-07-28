@@ -2,4 +2,13 @@
   --animation-fast: 100ms;
   --animation-normal: 200ms;
   --animation-slow: 500ms;
+
+  /* Easing (timing functions). Named by intent; values match the literals
+     previously hardcoded in component transition/animation shorthands, so
+     migrating to these tokens is appearance-preserving. --ease-smooth is the
+     Material "standard" curve used by the Toggle knob (smoother than the
+     CSS ease-in-out keyword). */
+  --ease-out: ease-out;
+  --ease-in-out: ease-in-out;
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }

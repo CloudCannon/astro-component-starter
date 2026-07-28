@@ -107,40 +107,9 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllModals } from "./setup";
 
-  function updateModalScrollLock() {
-    const openPopovers = Array.from(
-      document.querySelectorAll<HTMLElement>(".modal-popover")
-    ).filter((popover) => popover.matches(":popover-open"));
-    const hasOpenModal = openPopovers.length > 0;
-
-    document.body.toggleAttribute("data-modal-scroll-lock", hasOpenModal);
-  }
-
-  function setupModals() {
-    document.querySelectorAll<HTMLElement>(".modal").forEach((modal) => {
-      if (modal.hasAttribute("data-modal-initialized")) return;
-      modal.setAttribute("data-modal-initialized", "");
-
-      const trigger = modal.querySelector<HTMLButtonElement>(".modal-trigger .button-inner");
-      const popover = modal.querySelector<HTMLElement>(".modal-popover");
-      if (!popover) return;
-
-      popover.addEventListener("toggle", (e) => {
-        const { newState } = e as ToggleEvent;
-        trigger?.setAttribute("aria-expanded", String(newState === "open"));
-        updateModalScrollLock();
-
-        if (newState === "closed" && trigger) {
-          trigger.focus();
-        }
-      });
-    });
-
-    updateModalScrollLock();
-  }
-
-  onPageLoad(setupModals);
+  onPageLoad(() => setupAllModals());
 </script>
 
 <style is:global>
@@ -166,10 +135,10 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       opacity: 0;
       transform: translateY(16px);
       transition:
-        opacity var(--animation-normal) ease-out,
-        transform var(--animation-normal) ease-out,
-        overlay var(--animation-normal) ease-out allow-discrete,
-        display var(--animation-normal) ease-out allow-discrete;
+        opacity var(--animation-normal) var(--ease-out),
+        transform var(--animation-normal) var(--ease-out),
+        overlay var(--animation-normal) var(--ease-out) allow-discrete,
+        display var(--animation-normal) var(--ease-out) allow-discrete;
 
       &:popover-open {
         display: flex;
@@ -187,9 +156,9 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         background-color: var(--color-overlay);
         opacity: 0;
         transition:
-          opacity var(--animation-normal) ease-out,
-          overlay var(--animation-normal) ease-out allow-discrete,
-          display var(--animation-normal) ease-out allow-discrete;
+          opacity var(--animation-normal) var(--ease-out),
+          overlay var(--animation-normal) var(--ease-out) allow-discrete,
+          display var(--animation-normal) var(--ease-out) allow-discrete;
       }
 
       &:popover-open::backdrop {

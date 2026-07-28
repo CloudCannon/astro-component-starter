@@ -35,8 +35,7 @@ export function getChildWrapperPropConfig(
 
   const structureName = structuresRef.replace("_structures.", "");
   const structureDef = componentInfo.structureValue._structures[structureName] as
-    | { values?: Array<{ _inputs?: Record<string, InputConfig> }> }
-    | undefined;
+    { values?: Array<{ _inputs?: Record<string, InputConfig> }> } | undefined;
   const inputsDef = structureDef?.values?.[0]?._inputs;
   const config = inputsDef?.[propName];
 

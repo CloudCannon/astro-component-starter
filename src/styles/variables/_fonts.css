@@ -27,6 +27,7 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
+  /* 640px = canonical mobile/stacking breakpoint — see variables/_breakpoints.css */
   @media (width < 640px) {
     --font-size-xs: 0.625rem;
     --font-size-sm: 0.75rem;

@@ -1,0 +1,6 @@
+:where(:root) {
+  /* Focus ring — width/style are brand-agnostic primitives; the ring color is
+     per-theme (`--color-focus-ring` in themes/_light.css + _dark.css). */
+  --focus-ring-width: 3px;
+  --focus-ring-style: solid;
+}

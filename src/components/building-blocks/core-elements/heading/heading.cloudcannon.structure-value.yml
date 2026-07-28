@@ -11,6 +11,7 @@ value:
   iconColor: default
   iconPosition: before
 preview:
+  image: /component-previews/building-blocks/core-elements/heading.svg
   icon: title
   text:
     - Heading
@@ -19,5 +20,6 @@ preview:
 picker_preview:
   text: Heading
   subtext: Headings for content hierarchy.
+  image: /component-previews/building-blocks/core-elements/heading.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/heading/heading.cloudcannon.inputs.yml

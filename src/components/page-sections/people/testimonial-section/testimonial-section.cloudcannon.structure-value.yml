@@ -27,10 +27,12 @@ preview:
     - Testimonial Section
   subtext:
     - key: authorName
+  image: /component-previews/page-sections/people/testimonial-section.svg
   icon: format_quote
 picker_preview:
   text: Testimonial Section
   subtext: Section with customer testimonial and author details.
+  image: /component-previews/page-sections/people/testimonial-section.svg
 _inputs_from_glob:
   - /src/components/page-sections/people/testimonial-section/testimonial-section.cloudcannon.inputs.yml
 _inputs:

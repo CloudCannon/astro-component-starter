@@ -22,10 +22,12 @@ value:
 preview:
   text:
     - Feature Slider
+  image: /component-previews/page-sections/features/feature-slider.svg
   icon: view_carousel
 picker_preview:
   text: Feature Slider
   subtext: Carousel of feature-focused cards.
+  image: /component-previews/page-sections/features/feature-slider.svg
 _inputs_from_glob:
   - /src/components/page-sections/features/feature-slider/feature-slider.cloudcannon.inputs.yml
 _inputs:

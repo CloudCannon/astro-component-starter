@@ -68,7 +68,7 @@ const arrayDataAttributes = effectiveChildrenProp
         /* Hides the disclosure marker in Firefox (summary is display: list-item) */
         list-style-type: none;
         padding: var(--spacing-md);
-        transition: background-color var(--animation-normal) ease-out;
+        transition: background-color var(--animation-normal) var(--ease-out);
         -webkit-user-select: none;
         -ms-user-select: none;
         user-select: none;
@@ -82,7 +82,7 @@ const arrayDataAttributes = effectiveChildrenProp
         }
 
         .accordion-item-icon {
-          transition: transform var(--animation-normal) ease-out;
+          transition: transform var(--animation-normal) var(--ease-out);
         }
       }
 
@@ -102,7 +102,7 @@ const arrayDataAttributes = effectiveChildrenProp
       }
 
       &::details-content {
-        animation: grow-out var(--animation-normal) ease-out;
+        animation: grow-out var(--animation-normal) var(--ease-out);
       }
     }
 
@@ -115,8 +115,8 @@ const arrayDataAttributes = effectiveChildrenProp
         height: 0;
         overflow: clip;
         transition:
-          height var(--animation-normal) ease-out,
-          content-visibility var(--animation-normal) ease-out allow-discrete;
+          height var(--animation-normal) var(--ease-out),
+          content-visibility var(--animation-normal) var(--ease-out) allow-discrete;
       }
 
       .accordion-item[open]::details-content {

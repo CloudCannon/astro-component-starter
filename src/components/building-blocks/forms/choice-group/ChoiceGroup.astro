@@ -1,4 +1,6 @@
 ---
+import type { SegmentOption } from "../../../../types";
+
 const {
   name,
   options = [],
@@ -43,7 +45,7 @@ const inputName = multiple ? `${name}[]` : name;
       class:list={["choice-group-options", `orientation-${orientation}`, multiple && "multiple"]}
     >
       {
-        options.map((option, index) => (
+        options.map((option: SegmentOption, index: number) => (
           <label class="choice-group-option">
             <input
               type={inputType}

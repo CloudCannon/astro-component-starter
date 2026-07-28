@@ -12,17 +12,23 @@ const {
 
 const navInstanceId = crypto.randomUUID();
 
-function isCurrentPage(item) {
+interface NavItem {
+  name?: string;
+  path?: string;
+  children?: NavItem[];
+}
+
+function isCurrentPage(item: NavItem) {
   return Boolean(item.path && Astro.url.pathname === item.path);
 }
 
-function hasCurrentChild(item) {
+function hasCurrentChild(item: NavItem): boolean {
   if (isCurrentPage(item)) return true;
   return Boolean(item.children?.some((child) => hasCurrentChild(child)));
 }
 
 // Helper function to create navigation item data
-function createNavItemData(item, level, parentGroupId) {
+function createNavItemData(item: NavItem, level: string, parentGroupId?: string) {
   const hasChildren = Boolean(item.children?.length);
 
   return {
@@ -46,7 +52,7 @@ function createNavItemData(item, level, parentGroupId) {
 >
   <ul class="bar-list">
     {
-      navData.map((item) => {
+      navData.map((item: NavItem) => {
         const itemData = createNavItemData(item, "top");
 
         if (!itemData.hasChildren) {
@@ -85,6 +91,7 @@ function createNavItemData(item, level, parentGroupId) {
                 <label
                   for={itemData.dropdownId}
                   class="nav-item-trigger nav-item-toggle-btn"
+                  role="button"
                   aria-controls={itemData.contentId}
                   tabindex="0"
                   aria-label={`Toggle ${itemData.name} submenu`}
@@ -102,6 +109,7 @@ function createNavItemData(item, level, parentGroupId) {
               <label
                 for={itemData.dropdownId}
                 class="nav-item-trigger"
+                role="button"
                 aria-controls={itemData.contentId}
                 tabindex="0"
                 aria-current={itemData.isCurrent ? "page" : undefined}
@@ -163,6 +171,7 @@ function createNavItemData(item, level, parentGroupId) {
                           <label
                             for={childData.dropdownId}
                             class="nav-item-trigger nav-item-toggle-btn"
+                            role="button"
                             aria-controls={childData.contentId}
                             tabindex="0"
                             aria-label={`Toggle ${childData.name} submenu`}
@@ -180,6 +189,7 @@ function createNavItemData(item, level, parentGroupId) {
                         <label
                           for={childData.dropdownId}
                           class="nav-item-trigger"
+                          role="button"
                           aria-controls={childData.contentId}
                           tabindex="0"
                           aria-current={childData.isCurrent ? "page" : undefined}
@@ -239,7 +249,7 @@ function createNavItemData(item, level, parentGroupId) {
 
   let barGlobalHandlersBound = false;
 
-  function updateAriaStates(toggle, isExpanded) {
+  function updateAriaStates(toggle: HTMLInputElement, isExpanded: boolean) {
     const contentId = toggle.getAttribute("aria-controls");
     const content = document.getElementById(contentId || "");
     const triggerId = toggle.getAttribute("id");
@@ -268,7 +278,7 @@ function createNavItemData(item, level, parentGroupId) {
   }
 
   // Handle toggle change events
-  function handleToggleChange(e) {
+  function handleToggleChange(e: Event) {
     const target = e.target as HTMLInputElement;
 
     // Only handle checkboxes closing other checkboxes
@@ -294,7 +304,7 @@ function createNavItemData(item, level, parentGroupId) {
   }
 
   // Handle trigger click events
-  function handleTriggerClick(e) {
+  function handleTriggerClick(e: Event) {
     const label = e.currentTarget as HTMLElement;
     const toggle = document.getElementById(label.getAttribute("for") || "") as HTMLInputElement;
 
@@ -306,14 +316,17 @@ function createNavItemData(item, level, parentGroupId) {
   }
 
   // Handle keyboard events
-  function handleKeydown(e) {
+  function handleKeydown(e: Event) {
+    if (!(e instanceof KeyboardEvent)) return;
     if (e.key !== "Enter" && e.key !== " ") return;
 
     e.preventDefault();
     const label = e.currentTarget;
+    if (!(label instanceof HTMLElement)) return;
+
     const toggle = document.getElementById(label.getAttribute("for") || "");
 
-    if (toggle) {
+    if (toggle instanceof HTMLInputElement) {
       toggle.checked = !toggle.checked;
       toggle.dispatchEvent(new Event("change"));
     }
@@ -344,7 +357,7 @@ function createNavItemData(item, level, parentGroupId) {
       // Handle escape key to close all dropdowns
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
-          document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
+          document.querySelectorAll<HTMLInputElement>(".bar .nav-item-toggle").forEach((toggle) => {
             if (toggle.checked) {
               toggle.checked = false;
               updateAriaStates(toggle, false);
@@ -362,7 +375,7 @@ function createNavItemData(item, level, parentGroupId) {
       if (navElement.dataset.barInitialized === "true") return;
       navElement.dataset.barInitialized = "true";
 
-      barNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
+      barNav.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {
         const isChecked = toggle.checked;
         updateAriaStates(toggle, isChecked);
         toggle.addEventListener("change", handleToggleChange);
@@ -425,7 +438,7 @@ function createNavItemData(item, level, parentGroupId) {
         font-weight: var(--font-weight-medium);
         padding: var(--spacing-sm) var(--spacing-md);
         text-decoration: none;
-        transition: background var(--animation-normal) ease-in-out;
+        transition: background var(--animation-normal) var(--ease-in-out);
         white-space: nowrap;
 
         &:hover {
@@ -439,7 +452,7 @@ function createNavItemData(item, level, parentGroupId) {
         display: flex;
         flex-wrap: nowrap;
         min-width: 0;
-        transition: background var(--animation-normal) ease-in-out;
+        transition: background var(--animation-normal) var(--ease-in-out);
 
         .nav-item-link {
           color: var(--color-text-strong);
@@ -449,7 +462,7 @@ function createNavItemData(item, level, parentGroupId) {
           min-width: 0;
           padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-md);
           text-decoration: none;
-          transition: background var(--animation-normal) ease-in-out;
+          transition: background var(--animation-normal) var(--ease-in-out);
           white-space: nowrap;
         }
 
@@ -468,8 +481,8 @@ function createNavItemData(item, level, parentGroupId) {
           padding: 0;
           width: 1.75em;
           transition:
-            background var(--animation-normal) ease-in-out,
-            border-color var(--animation-normal) ease-in-out;
+            background var(--animation-normal) var(--ease-in-out),
+            border-color var(--animation-normal) var(--ease-in-out);
         }
 
         &:hover {
@@ -489,7 +502,7 @@ function createNavItemData(item, level, parentGroupId) {
           align-items: center;
           display: flex;
           justify-content: center;
-          line-height: 0;
+          line-height: var(--line-height-none);
           top: 0;
         }
       }
@@ -512,8 +525,8 @@ function createNavItemData(item, level, parentGroupId) {
         color: var(--color-text-muted);
         display: inline-block;
         transition:
-          color var(--animation-normal) ease-in-out,
-          transform var(--animation-normal) ease-in-out;
+          color var(--animation-normal) var(--ease-in-out),
+          transform var(--animation-normal) var(--ease-in-out);
         width: 0.8rem;
         position: relative;
         top: 0.2rem;
@@ -538,12 +551,12 @@ function createNavItemData(item, level, parentGroupId) {
       }
 
       .nav-item-toggle:checked ~ .nav-item-content {
-        animation: grow-out-centered var(--animation-normal) ease-out forwards;
+        animation: grow-out-centered var(--animation-normal) var(--ease-out) forwards;
         display: block;
       }
 
       .nav-item-toggle:checked ~ .nav-item-nested {
-        animation: grow-out var(--animation-normal) ease-out forwards;
+        animation: grow-out var(--animation-normal) var(--ease-out) forwards;
         display: block;
       }
 

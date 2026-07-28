@@ -6,13 +6,7 @@ value:
   source: /src/assets/images/placeholder.png
   alternateSource:
   alt: ""
-  sizes: "(max-width: 1280px) 100vw, 1280px"
-  widths:
-    - 640
-    - 1280
-    - 2560
-  width:
-  height:
+  decorative: false
   rounded: false
   aspectRatio: none
   positionVertical: center
@@ -23,9 +17,11 @@ preview:
     - Image
   subtext:
     - key: alt
+  image: /component-previews/building-blocks/core-elements/image.svg
   icon: image
 picker_preview:
   text: Image
   subtext: Optimized image component for local and remote sources.
+  image: /component-previews/building-blocks/core-elements/image.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/image/image.cloudcannon.inputs.yml

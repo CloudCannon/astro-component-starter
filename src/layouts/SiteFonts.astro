@@ -1,6 +1,9 @@
 ---
 import { siteFonts } from "../../site-fonts.mjs";
 import { Font } from "astro:assets";
+import type { ComponentProps } from "astro/types";
+
+type FontCssVariable = ComponentProps<typeof Font>["cssVariable"];
 ---
 
-{siteFonts.map((entry) => <Font cssVariable={entry.cssVariable} />)}
+{siteFonts.map((entry) => <Font cssVariable={entry.cssVariable as FontCssVariable} />)}

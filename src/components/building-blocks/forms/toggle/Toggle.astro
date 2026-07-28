@@ -1,4 +1,6 @@
 ---
+import { generateFieldId } from "@component-utils/formField";
+
 const {
   label,
   name,
@@ -11,7 +13,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
+const fieldId = generateFieldId("toggle", htmlAttributes.id);
 ---
 
 <div
@@ -30,6 +32,7 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
         checked={checked}
         required={required}
         aria-required={required}
+        aria-label={label ? undefined : name}
         value={value}
         class="toggle-input"
       />
@@ -96,19 +99,21 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
         border-radius: var(--radius-full);
         inset: 0;
         position: absolute;
-        transition: var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--animation-normal) var(--ease-smooth);
       }
 
       .toggle-track::before {
         background-color: var(--color-bg);
         border-radius: var(--radius-full);
         bottom: 3px;
+        /* State-tinted knob halo (dark in light theme, light in dark theme via
+           --color-state-active) — intentionally not an elevation-scale shadow. */
         box-shadow: 0 2px 4px var(--color-state-active);
         content: "";
         height: 20px;
         left: 3px;
         position: absolute;
-        transition: var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--animation-normal) var(--ease-smooth);
         width: 20px;
       }
 

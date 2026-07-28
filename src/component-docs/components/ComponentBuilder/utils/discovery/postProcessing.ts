@@ -41,8 +41,7 @@ export function registerVirtualComponents(
 
           const virtualSlots: SlotDefinition[] = [];
           const valueInputs = valueItem._inputs as
-            | Record<string, Record<string, unknown>>
-            | undefined;
+            Record<string, Record<string, unknown>> | undefined;
 
           if (valueInputs) {
             for (const [propName, inputDef] of Object.entries(valueInputs)) {
@@ -144,8 +143,7 @@ export function registerVirtualComponents(
     const slotStructureName = repeatableSlot?.structureName;
     const structureDef = slotStructureName
       ? (component.structureValue?._structures?.[slotStructureName] as
-          | Record<string, unknown>
-          | undefined)
+          Record<string, unknown> | undefined)
       : undefined;
     const firstValue = Array.isArray(structureDef?.values)
       ? (structureDef.values[0] as Record<string, unknown> | undefined)

@@ -16,3 +16,6 @@ min:
 max:
   type: date
   comment: The maximum date allowed (ISO8601 format).
+hint:
+  type: text
+  comment: Optional help text shown between the label and the field, announced to assistive technology.

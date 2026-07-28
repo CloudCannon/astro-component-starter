@@ -8,22 +8,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Toggle's required marker now uses the `--color-danger` token instead of a hardcoded red, so it follows the theme in dark mode.
-- Reduced-motion support now also covers animated pseudo-elements (modal backdrops, accordion `<details>` content) and stops carousel autoplay/auto-scroll, which are JS-driven and were unaffected by the CSS rule.
+- Removed dead editor inputs the components never read, found by the new `lint:cms` check: Feature Grid's `gap`/`minItemWidth`/`maxItemWidth`, Icon's `inline`, Feature Slider's `eyebrow`/`heading`/`subtext`, FAQ Section's `headingLevel`/`headingSize`/`singleOpen`/`openFirst`, and Testimonial Section's `alignmentHorizontal`. Also dropped a stale form-blocks exclusion for the deleted `forms/slider`.
+- Feature Grid `alignment` and Team Grid `layout` controls now appear on freshly inserted sections.
+- Footer and Main Nav `logoAlternateSource` (the alternate-theme logo) now appears on a freshly inserted block; the input existed but was never seeded into the structure default.
+- Modal traps keyboard focus while open and restores focus to the trigger on close. Modal behavior also initializes inside the CloudCannon Visual Editor.
+- Accessibility fixes found by the new `test:a11y` scan: Bar and Main Nav dropdown triggers are real buttons (their `aria-controls` was invalid on a bare `<label>`), Content Selector is a disclosure-button group instead of a malformed tab widget, Toggle inputs without a visible label fall back to `name`, cards with a media background get a solid theme-colored backing so text stays legible if the media fails, and docs example previews are keyboard-scrollable labelled regions.
+- Rewrote the 12 form-field preview thumbnails, which were near-invisible and looked identical at picker size. Each control now has a distinguishing cue — a chevron on select, calendar tile on date, wrapped lines in textarea, filled track and knob on range/toggle, a selected option in choice-group, an active segment in segments.
+- Reduced-motion support now covers animated pseudo-elements (modal backdrops, accordion content) and stops carousel autoplay/auto-scroll, which are JS-driven.
+- Toggle's required marker uses the `--color-danger` token instead of a hardcoded red, so it follows the dark theme.
+- Custom section `paddingHorizontal`/`paddingVertical` now offer `4xl`/`5xl`/`6xl`, matching what the CSS supports.
+- Image's `aspectRatio: none` no longer emits inert `ratio ratio-none` classes; hidden `sizes`/`widths`/`width`/`height` copies were removed from its editor structure.
+- Footer social links accept an optional `label` overriding the auto-generated accessible label.
+- Content blocks missing a `_component` key log a warning instead of vanishing silently.
+- Production builds fail loudly if `DISABLE_COMPONENT_LIBRARY` is set to anything other than `true`/`false`/unset; the build log states whether the library is included.
+- Fixed three `hideText="true"` string-instead-of-boolean Button usages in Footer and mobile nav.
 - Removed a stray `:first-of-type` wrapper around the accordion summary's Firefox marker fix.
+- Removed the empty `src/components/page-sections/carousel/` stub directory and restored the missing `src/assets/images/placeholder.jpg`.
 
 ### Changed
 
-- Fonts are now self-hosted via `fontProviders.fontsource()` (the installed `@fontsource` packages) instead of being fetched from Google at build time.
-- Modal's drop shadow uses the new `--shadow-lg` token; a small shadow scale (`--shadow-sm/md/lg`) is available in `src/styles/variables/_shadows.css`.
-- Button icon spacing can be themed via the `--button-icon-gap` custom property (default unchanged).
+- Upgraded to **Astro 7** (from 6) with `@astrojs/node` 11, `@astrojs/mdx` 7, and `@astrojs/compiler-rs` 0.3; all other dependencies refreshed. The Node floor is now `>=22.12.0` and `.nvmrc` pins `24.18.0`, an exact [CloudCannon-supported version](https://cloudcannon.com/documentation/developer-articles/pin-your-dependency-version/) that CI and CloudCannon both read. TypeScript stays on 5.9 until `@astrojs/check` and `typescript-eslint` support 6/7.
+- `js-yaml` v5 dropped its default export — it is now imported via named/namespace imports, and `@types/js-yaml` was removed since js-yaml ships its own types.
+- Security advisories are pinned through `overrides` rather than `npm audit fix`, which would break the cross-platform lockfile. Regenerate dependencies with `npm run deps:sync`, never a bare `npm install`.
+- Agent skills now live canonically in `.agents/skills/` (10 skills, tool-neutral). `.cursor/skills/` and `.claude/skills/` are generated copies, kept in sync by `npm run skills:sync` and drift-checked by `npm run skills:check`. Authoring standard: `.agents/skills/STYLE.md`.
+- Focus rings are consistent across every interactive component — one `:focus-visible` outline from the new `--focus-ring-width`/`--focus-ring-style` tokens. Forms, buttons, and navigation each drew a different ring on `:focus` before, so mouse clicks no longer leave a ring behind.
+- **Light-theme link colors changed:** the placeholder pure-blues (`#00f`/`#00008b`) are now `--blue-700` (#1d4ed8) and `--blue-800` (#1e40af), both meeting WCAG AA. Dark-theme links are unchanged.
+- Breakpoints are standardized on two canonical values, `640px` (mobile/stacking) and `768px` (nav/tablet), documented in `src/styles/variables/_breakpoints.css`. Footer's `599/600px`, MainNav's `768/769px`, and ContentSelector's `40rem` were normalized — small, intended layout shifts around 600→640px. Bento Box keeps its content-driven `700px`/`450px` grid-density steps.
+- Line heights, status/link colors, and easing are tokenized: `--line-height-*`, `--ease-out`/`--ease-in-out`/`--ease-smooth`, and status/link entries in the `_colors.css` palette. Appearance is unchanged.
+- Dark-theme accent/highlight backgrounds reference `--blue-deep`/`--amber-deep` instead of inline `rgb()` literals. Computed colors are identical.
+- Fonts are self-hosted via `fontProviders.fontsource()` instead of fetched from Google at build time.
+- Modal's drop shadow uses the new `--shadow-lg` token (scale: `--shadow-sm/md/lg`).
+- Button icon spacing is themeable via `--button-icon-gap` (default unchanged).
+- Internal dedup (~400 lines, no visual or behavioral change): the `.pad-x-*`/`.pad-y-*`/`.gap-*` CSS that Custom Section, Card, and Split each hand-rolled is now one shared `@layer utils` stylesheet; markdown rendering, form label/ID boilerplate, string validation, and overlay color are shared utils under `src/components/utils/`; and the component-key derivation used by `renderBlock.astro`, `live-editing.js`, and `lint:cms` is a single `componentKey.mjs` instead of three hand-synced copies.
 
 ### Added
 
-- `npm run typecheck` (`astro check`), now part of `npm run check` and CI.
-- Component manifest system (experimental): author a single `*.manifest.mjs` per component and generate its CloudCannon YAML with `npm run manifest:write`; `npm run manifest:check` guards against drift in CI. Button is the first migrated component. See `docs/component-manifest-design.md`.
-- `npm run test:render` — builds a kitchen-sink page containing every component structure's default value, so CI fails if any page-builder component stops rendering. CI now runs a production build.
-- `CLAUDE.md` and `docs/ARCHITECTURE.md` — onboarding for AI agents and an overview of the content → component pipeline, CloudCannon config aggregation, and theming tiers.
+- `npm run lint:cms` (part of `npm run check`) — validates the CloudCannon layer against the components: prop drift (every `inputs.yml`/`structure-value.yml` key must be a prop the `.astro` destructures, catching renames), inputs with no seeded `value:` default (the field would never appear on a newly inserted block), missing or orphaned co-located YAML, `_component` resolution, and structures-glob registration.
+- Component preview thumbnails for the CloudCannon section picker and placed-block cards. Each component has a co-located `*.preview.mjs` recipe that `npm run previews:build` compiles to a 16:10 mockup SVG in `public/component-previews/` — deterministic and browser-free — then wires into its `preview`/`picker_preview` blocks.
+- `npm run previews:check` (part of `npm run check`) — fails on a missing recipe, a missing or stale SVG, an orphan SVG, or missing `image:` wiring.
+- `npm run previews:montage` — rasterizes every preview into one labelled PNG contact sheet (`.preview-montage.png`, gitignored) for reviewing legibility across the whole set, which `previews:check` can't judge. `npm run previews:screenshot` captures reference PNGs of the real components as an authoring aid.
+- Component docs gallery at `/component-docs/`, with a preview thumbnail on each component page.
+- `npm run new:component <tier/path/name>` — scaffolds a component's `.astro` plus both CloudCannon YAML files and prints the remaining manual steps.
+- `npm run test:unit` (Vitest) — covers the shared component utils: key derivation, markdown, overlay color, form-field IDs, string guards, image data.
+- `npm run test:smoke` — headless-Chrome tests for accordion, modal focus trap, carousel, mobile navigation, and theme-toggle persistence against the built site.
+- `npm run test:a11y` — axe-core scan over every component-docs page and the main site pages; fails on serious/critical violations.
+- `npm run test:render` — builds a kitchen-sink page of every structure default, so CI catches a page-builder component that stops rendering.
+- `npm run typecheck` (`astro check`), part of `npm run check` and CI. CI also gained a "Smoke & a11y" job and runs unit tests on every push.
+- Form fields (Input, Textarea, Select, Date, FileUpload, Range) support a `hint` prop for editor-authored help text, wired to the control via `aria-describedby`. They also accept an `error` prop, which marks the field `aria-invalid` and adds a danger-token border — a developer-set prop for server-rendered validation, deliberately not exposed as an editor field.
+- Carousel `pauseOnHover` option (off by default; applies only when auto-play is enabled).
+- Image `decorative` prop forcing an empty `alt` for screen-reader-skipped images.
+- `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, and `docs/ARCHITECTURE.md` — agent onboarding, the component-addition checklist and `deps:sync` rule, and an overview of the content → component pipeline, CloudCannon config aggregation, and theming tiers.
+- Documented the formBlocks structure design: the picker list is glob-owned by co-located `structure-value.yml` files, with `form` and `segments` intentionally excluded.
 
 ## [1.0.2] - 2026-04-13
 

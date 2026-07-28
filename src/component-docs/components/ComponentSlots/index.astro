@@ -1,7 +1,19 @@
 ---
+interface SlotChildComponent {
+  name?: string;
+  props?: string[];
+}
+
+interface SlotDoc {
+  title?: string;
+  description?: string;
+  fallback_for?: string;
+  child_component?: SlotChildComponent;
+}
+
 const { slotData } = Astro.props;
 
-const slots = slotData;
+const slots: SlotDoc[] = slotData;
 ---
 
 <div class="slots">

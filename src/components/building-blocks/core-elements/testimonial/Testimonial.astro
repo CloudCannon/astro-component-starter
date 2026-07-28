@@ -1,6 +1,6 @@
 ---
 import Image from "@core-elements/image/Image.astro";
-import MarkdownIt from "markdown-it";
+import { renderMarkdown } from "@component-utils/markdown";
 const {
   text,
   authorName,
@@ -16,8 +16,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const md = MarkdownIt({ html: true });
-const MarkdownText = text ? md.render(text) : "";
+const MarkdownText = renderMarkdown(text);
 
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp

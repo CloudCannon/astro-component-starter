@@ -20,10 +20,12 @@ preview:
     - Choice Group
   subtext:
     - key: title
+  image: /component-previews/building-blocks/forms/choice-group.svg
   icon: check_box
 picker_preview:
   text: Choice Group
   subtext: Form field for selecting one or more options.
+  image: /component-previews/building-blocks/forms/choice-group.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/choice-group/choice-group.cloudcannon.inputs.yml
 _structures:

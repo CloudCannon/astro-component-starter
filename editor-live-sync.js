@@ -8,8 +8,8 @@
  *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
- *      (e.g. Carousel / ImageCarousel Embla setup) never initialise in
- *      the editor, so we initialise them here instead.
+ *      (e.g. Carousel / ImageCarousel Embla setup, Modal focus trap)
+ *      never initialise in the editor, so we initialise them here instead.
  *
  * Logs editor mutations to the console in dev; silent in production.
  */
@@ -24,6 +24,7 @@ import {
   setupAllImageCarousels,
   setupImageCarousel,
 } from "./src/components/building-blocks/wrappers/image-carousel/setup";
+import { setupAllModals, setupModal } from "./src/components/building-blocks/wrappers/modal/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -58,6 +59,7 @@ const CAROUSEL_INNER_ATTRS = [
   "data-align",
   "data-slides-to-scroll",
   "data-autoplay",
+  "data-pause-on-hover",
   "data-autoscroll",
   "style",
 ];
@@ -149,6 +151,19 @@ function initNewComponents(root) {
     log("initialising new image-carousel", el);
     setupImageCarousel(el);
   }
+
+  const newModals = [];
+
+  if (root.classList?.contains("modal") && !root.hasAttribute("data-modal-initialized")) {
+    newModals.push(root);
+  }
+
+  root.querySelectorAll(".modal:not([data-modal-initialized])").forEach((el) => newModals.push(el));
+
+  for (const el of newModals) {
+    log("initialising new modal", el);
+    setupModal(el);
+  }
 }
 
 const observer = new MutationObserver((mutations) => {
@@ -223,6 +238,7 @@ observer.observe(document.body, {
 // Initialise any components already in the editor DOM.
 setupAllCarousels();
 setupAllImageCarousels();
+setupAllModals();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,

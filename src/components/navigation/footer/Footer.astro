@@ -6,7 +6,7 @@ import Divider from "@core-elements/divider/Divider.astro";
 import Image from "@core-elements/image/Image.astro";
 import Text from "@core-elements/text/Text.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
-import type { SocialLink } from "../../../../types";
+import type { SocialLink } from "../../../types";
 
 const {
   links = [],
@@ -66,13 +66,13 @@ const {
           useDefaultEditableBinding={false}
         >
           {
-            socials.map((social) => (
+            socials.map((social: SocialLink) => (
               <Button
                 variant="ghost"
                 size="lg"
                 iconName={social.icon}
                 link={social.link}
-                hideText="true"
+                hideText={true}
                 aria-label={social.label || `Visit our ${social.icon.replace(/^.*\//, "")} page`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -93,14 +93,14 @@ const {
 
       .button-group {
         &.align-end {
-          @container (max-width: 599px) {
+          @container (max-width: 639px) {
             justify-content: center;
           }
         }
       }
 
       .footer-content {
-        @container (min-width: 600px) {
+        @container (min-width: 640px) {
           align-items: center;
           display: flex;
           flex-wrap: wrap;
@@ -115,7 +115,7 @@ const {
       .footer-legal-text {
         color: var(--color-text-muted);
         text-align: center;
-        @container (min-width: 600px) {
+        @container (min-width: 640px) {
           text-align: start;
         }
       }
@@ -130,7 +130,7 @@ const {
           max-height: 2em;
           max-width: min(20em, 100%);
           width: auto;
-          @container (min-width: 600px) {
+          @container (min-width: 640px) {
             margin: 0;
           }
         }
@@ -138,7 +138,7 @@ const {
 
       .bar .bar-list {
         flex-flow: column wrap;
-        @container (min-width: 600px) {
+        @container (min-width: 640px) {
           flex-direction: row;
           justify-content: end;
         }

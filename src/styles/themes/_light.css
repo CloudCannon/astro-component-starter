@@ -13,8 +13,8 @@
   --color-text-on-muted: var(--gray-12);
   --color-text-on-brand: var(--gray-0);
   --color-text-inverse: var(--gray-0);
-  --color-link: blue;
-  --color-link-hover: darkblue;
+  --color-link: var(--blue-700);
+  --color-link-hover: var(--blue-800);
 
   --color-bg: var(--gray-0);
   --color-bg-surface: var(--gray-1);
@@ -36,14 +36,14 @@
 
   --color-focus-ring: rgba(0, 87, 255, 0.4);
 
-  --color-danger: #dc2626;
-  --color-danger-hover: #b91c1c;
-  --color-danger-bg-subtle: #fef2f2;
-  --color-danger-border-subtle: #fca5a5;
-  --color-info: #2563eb;
-  --color-info-bg-subtle: #eff6ff;
-  --color-info-border-subtle: #bfdbfe;
-  --color-success: #16a34a;
-  --color-success-bg-subtle: #dcfce7;
+  --color-danger: var(--red-600);
+  --color-danger-hover: var(--red-700);
+  --color-danger-bg-subtle: var(--red-50);
+  --color-danger-border-subtle: var(--red-300);
+  --color-info: var(--blue-600);
+  --color-info-bg-subtle: var(--blue-50);
+  --color-info-border-subtle: var(--blue-200);
+  --color-success: var(--green-600);
+  --color-success-bg-subtle: var(--green-100);
   --color-error: var(--color-danger);
 }

@@ -93,13 +93,13 @@ const mobileNavData = [
 
       .desktop-main-nav,
       .desktop-button-group.button-group {
-        @container (max-width: 768px) {
+        @container (width < 768px) {
           display: none;
         }
       }
 
       .nav-hamburger.mobile-button {
-        @container (min-width: 769px) {
+        @container (width >= 768px) {
           display: none;
         }
       }

@@ -15,10 +15,12 @@ preview:
     - Segments
   subtext:
     - key: title
+  image: /component-previews/building-blocks/forms/segments.svg
   icon: radio_button_partial
 picker_preview:
   text: Segments
   subtext: Segmented control form field with connected buttons.
+  image: /component-previews/building-blocks/forms/segments.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/segments/segments.cloudcannon.inputs.yml
 _structures:

@@ -55,7 +55,7 @@ reverse:
 reverseOrderOnMobile:
   comment: When true, reversed splits will have their order flipped on mobile (text-image pattern). When false, reversed splits keep their desktop order on mobile.
   type: switch
-  default: false
+  default: true
 gap:
   comment: Spacing between the two columns.
   type: select

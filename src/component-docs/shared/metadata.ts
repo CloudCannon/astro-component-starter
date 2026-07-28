@@ -1,6 +1,6 @@
 import { getCollection } from "astro:content";
 import { readFileSync } from "fs";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { findStructureValueFiles } from "./structureFiles";
 
 type ChildComponentInfo = {

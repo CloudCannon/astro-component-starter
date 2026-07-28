@@ -1,5 +1,6 @@
 ---
 import { Icon as AstroIcon } from "astro-icon/components";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   name,
@@ -13,11 +14,15 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const isValidName = name && typeof name === "string" && name.trim();
+const isValidName = isNonEmptyString(name);
 
 if (!_component && !isValidName) {
   return;
 }
+
+// Social icons ship solid single-color artwork, so they are recolored to the
+// current text color. Every other icon keeps the colors it was drawn with.
+const matchTextColor = Boolean(name?.includes("social/"));
 ---
 
 <span
@@ -30,8 +35,8 @@ if (!_component && !isValidName) {
       `size-${size}`,
       `color-${color}`,
       background && "background",
-      alignmentHorizontal && `align-${alignmentHorizontal}`,
-      name?.includes("social/") && "fill",
+      alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+      matchTextColor && "fill",
     ]}
   >
     <AstroIcon
@@ -45,14 +50,14 @@ if (!_component && !isValidName) {
   @layer components {
     .icon {
       display: block;
-      line-height: 0;
+      line-height: var(--line-height-none);
       vertical-align: middle;
 
       > .icon-inner {
         border-radius: var(--radius-xs);
         color: inherit;
         display: block;
-        line-height: 0;
+        line-height: var(--line-height-none);
         vertical-align: middle;
 
         &.flip-rtl {

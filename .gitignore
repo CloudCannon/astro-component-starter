@@ -31,3 +31,10 @@ yarn-error.log*
 # temporary files
 *.tmp
 *.temp
+
+# Component preview authoring references (regenerated on demand)
+.preview-screenshots/
+.preview-montage.png
+
+# Local working area: plans, strategy, scratch notes — never committed
+.local/

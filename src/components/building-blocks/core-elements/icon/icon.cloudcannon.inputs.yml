@@ -53,14 +53,13 @@ color:
 background:
   type: switch
   comment: Show a background behind the icon.
-inline:
-  type: switch
-  comment: Display the icon inline instead of block.
 alignmentHorizontal:
   type: select
   comment: Horizontal alignment of the icon.
   options:
     values:
+      - id: none
+        name: None (in flow)
       - id: start
         name: Start
       - id: center

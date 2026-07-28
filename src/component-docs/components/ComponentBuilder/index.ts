@@ -81,6 +81,9 @@ function initializeBuilder(): void {
     return;
   }
 
+  // Non-null alias so nested functions see the narrowed type from the guard above.
+  const exportButtonInner = exportBtnInner;
+
   // Set up render callback
   const render = (): void => {
     renderSandbox(sandbox);
@@ -191,7 +194,7 @@ function initializeBuilder(): void {
     // Disable if no components
     if (!hasComponents) {
       exportBtn.setAttribute("disabled", "");
-      exportBtnInner.disabled = true;
+      exportButtonInner.disabled = true;
       exportBtn.classList.remove("has-errors");
       if (exportBtnLabel) exportBtnLabel.textContent = "Export Component";
       return;
@@ -200,7 +203,7 @@ function initializeBuilder(): void {
     // Show error state if validation fails
     if (!validation.isValid) {
       exportBtn.removeAttribute("disabled");
-      exportBtnInner.disabled = false; // Keep enabled to show errors
+      exportButtonInner.disabled = false; // Keep enabled to show errors
       exportBtn.classList.add("has-errors");
 
       // Update button text to show error count
@@ -211,7 +214,7 @@ function initializeBuilder(): void {
       }
     } else {
       exportBtn.removeAttribute("disabled");
-      exportBtnInner.disabled = false;
+      exportButtonInner.disabled = false;
       exportBtn.classList.remove("has-errors");
       if (exportBtnLabel) exportBtnLabel.textContent = "Export Component";
     }

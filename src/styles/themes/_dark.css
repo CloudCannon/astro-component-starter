@@ -13,14 +13,14 @@
   --color-text-on-muted: var(--gray-0);
   --color-text-on-brand: var(--gray-12);
   --color-text-inverse: var(--gray-12);
-  --color-link: #60a5fa;
-  --color-link-hover: #93c5fd;
+  --color-link: var(--blue-400);
+  --color-link-hover: var(--blue-300);
 
   --color-bg: var(--gray-12);
   --color-bg-surface: var(--gray-11);
   --color-bg-muted: var(--gray-10);
-  --color-bg-accent: rgb(35, 54, 98);
-  --color-bg-highlight: rgb(94, 65, 28);
+  --color-bg-accent: var(--blue-deep);
+  --color-bg-highlight: var(--amber-deep);
   --color-bg-brand: var(--color-brand);
   --color-bg-brand-muted: var(--color-brand-muted);
   --color-bg-inverse: var(--gray-1);
@@ -36,14 +36,14 @@
 
   --color-focus-ring: rgba(0, 122, 255, 0.4);
 
-  --color-danger: #f87171;
-  --color-danger-hover: #ef4444;
-  --color-danger-bg-subtle: rgba(239, 68, 68, 0.12);
-  --color-danger-border-subtle: rgba(239, 68, 68, 0.4);
-  --color-info: #60a5fa;
-  --color-info-bg-subtle: rgba(59, 130, 246, 0.12);
-  --color-info-border-subtle: rgba(59, 130, 246, 0.4);
-  --color-success: #4ade80;
-  --color-success-bg-subtle: rgba(16, 185, 129, 0.15);
+  --color-danger: var(--red-400);
+  --color-danger-hover: var(--red-dark);
+  --color-danger-bg-subtle: color-mix(in srgb, var(--red-dark) 12%, transparent);
+  --color-danger-border-subtle: color-mix(in srgb, var(--red-dark) 40%, transparent);
+  --color-info: var(--blue-400);
+  --color-info-bg-subtle: color-mix(in srgb, var(--blue-dark) 12%, transparent);
+  --color-info-border-subtle: color-mix(in srgb, var(--blue-dark) 40%, transparent);
+  --color-success: var(--green-400);
+  --color-success-bg-subtle: color-mix(in srgb, var(--green-dark) 15%, transparent);
   --color-error: var(--color-danger);
 }

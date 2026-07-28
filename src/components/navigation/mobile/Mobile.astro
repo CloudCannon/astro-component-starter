@@ -18,19 +18,25 @@ const {
 const toggleId = `mobile-toggle-${crypto.randomUUID()}`;
 const navInstanceId = crypto.randomUUID();
 
+interface NavItem {
+  name?: string;
+  path?: string;
+  children?: NavItem[];
+}
+
 // Check if item is current page
-function isCurrentPage(item) {
+function isCurrentPage(item: NavItem) {
   return Boolean(item.path && Astro.url.pathname === item.path);
 }
 
 // Check if any child is current page (recursive)
-function hasCurrentChild(item) {
+function hasCurrentChild(item: NavItem): boolean {
   if (isCurrentPage(item)) return true;
   return Boolean(item.children?.some((child) => hasCurrentChild(child)));
 }
 
 // Create navigation item data
-function createNavItemData(item, level, parentGroupId) {
+function createNavItemData(item: NavItem, level: string, parentGroupId?: string) {
   const hasChildren = Boolean(item.children?.length);
 
   return {
@@ -65,7 +71,7 @@ function createNavItemData(item, level, parentGroupId) {
     size="lg"
     element="div"
     iconName="bars-3"
-    hideText="true"
+    hideText={true}
     class="mobile-nav-button"
   />
 </label>
@@ -99,7 +105,7 @@ function createNavItemData(item, level, parentGroupId) {
           size="lg"
           element="span"
           iconName="x-mark"
-          hideText="true"
+          hideText={true}
           class="mobile-nav-close mobile-nav-button"
         />
       </label>
@@ -109,7 +115,7 @@ function createNavItemData(item, level, parentGroupId) {
   <div class="mobile-content">
     <ul class="mobile-list">
       {
-        navData.map((item) => {
+        navData.map((item: NavItem) => {
           const itemData = createNavItemData(item, "top");
 
           if (!itemData.hasChildren) {
@@ -317,13 +323,12 @@ function createNavItemData(item, level, parentGroupId) {
 
   // Initialize mobile navigation instances
   function initMobileNavigation() {
-    const allMobileNavs = document.querySelectorAll(".mobile");
+    const allMobileNavs = document.querySelectorAll<HTMLElement>(".mobile");
     const overlaysContainer = getOrCreateOverlaysContainer();
 
     allMobileNavs.forEach((nav) => {
-      const navElement = nav as HTMLElement;
-      if (navElement.dataset.mobileInitialized === "true") return;
-      navElement.dataset.mobileInitialized = "true";
+      if (nav.dataset.mobileInitialized === "true") return;
+      nav.dataset.mobileInitialized = "true";
 
       // Add a class to indicate JS is available
       nav.classList.add("js-enabled");
@@ -333,16 +338,19 @@ function createNavItemData(item, level, parentGroupId) {
 
       // Find the toggle for this specific nav instance
       const toggleId = nav.getAttribute("data-toggle-id");
-      const toggle = document.getElementById(toggleId);
-      const hamburger = document.querySelector(`label[for="${toggleId}"].nav-hamburger`);
+      const toggleElement = toggleId ? document.getElementById(toggleId) : null;
+      const toggle = toggleElement instanceof HTMLInputElement ? toggleElement : null;
+      const hamburger = document.querySelector<HTMLElement>(
+        `label[for="${toggleId}"].nav-hamburger`
+      );
 
       // Handle navigation toggle state and accessibility
-      function handleNavToggle(isOpen) {
+      function handleNavToggle(isOpen: boolean) {
         if (isOpen) {
           nav.setAttribute("aria-hidden", "false");
           nav.style.transform = "translateX(0)";
           document.body.style.overflow = "hidden";
-          nav.querySelector(".mobile-close")?.focus();
+          nav.querySelector<HTMLElement>(".mobile-close")?.focus();
         } else {
           nav.setAttribute("aria-hidden", "true");
           nav.style.transform = "translateX(-100%)";
@@ -353,7 +361,7 @@ function createNavItemData(item, level, parentGroupId) {
 
       // Handle hamburger button interactions
       if (hamburger && toggle) {
-        const toggleHandler = (e) => {
+        const toggleHandler = (e: Event) => {
           e.preventDefault();
           e.stopPropagation();
           toggle.checked = !toggle.checked;
@@ -369,9 +377,9 @@ function createNavItemData(item, level, parentGroupId) {
       }
 
       // Handle close button interactions
-      const closeButton = nav.querySelector(".mobile-close");
+      const closeButton = nav.querySelector<HTMLElement>(".mobile-close");
       if (closeButton && toggle) {
-        const closeHandler = (e) => {
+        const closeHandler = (e: Event) => {
           e.preventDefault();
           e.stopPropagation();
           toggle.checked = false;
@@ -389,23 +397,29 @@ function createNavItemData(item, level, parentGroupId) {
       // Handle toggle state changes
       if (toggle) {
         toggle.addEventListener("change", (e) => {
-          handleNavToggle(e.target.checked);
+          if (e.target instanceof HTMLInputElement) {
+            handleNavToggle(e.target.checked);
+          }
         });
       }
 
       // Handle dropdown interactions using event delegation
-      const handleDropdownToggle = (e) => {
-        const trigger = e.target?.closest(".nav-item-trigger");
+      const handleDropdownToggle = (e: Event) => {
+        const target = e.target;
+        if (!(target instanceof Element)) return;
+
+        const trigger = target.closest(".nav-item-trigger");
         if (!trigger) return;
 
         const radioName = trigger.getAttribute("for");
-        let dropdownToggle = null;
+        let dropdownToggle: HTMLInputElement | null = null;
 
         if (radioName) {
-          dropdownToggle = document.getElementById(radioName);
+          const radioElement = document.getElementById(radioName);
+          dropdownToggle = radioElement instanceof HTMLInputElement ? radioElement : null;
         } else {
           const parent = trigger.closest(".nav-item");
-          dropdownToggle = parent?.querySelector(".nav-item-toggle");
+          dropdownToggle = parent?.querySelector<HTMLInputElement>(".nav-item-toggle") ?? null;
         }
 
         if (dropdownToggle) {
@@ -448,7 +462,12 @@ function createNavItemData(item, level, parentGroupId) {
     .mobile-button {
       border-radius: var(--radius-xs);
       display: inline-block;
+      /* Inset offset: these buttons sit flush to the panel edge / scroll box. */
       outline-offset: -2px;
+
+      &:focus-visible {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+      }
     }
 
     .mobile {
@@ -459,7 +478,7 @@ function createNavItemData(item, level, parentGroupId) {
       inset: 0;
       position: fixed;
       transform: translateX(-100%);
-      transition: transform var(--animation-normal) ease-in-out;
+      transition: transform var(--animation-normal) var(--ease-in-out);
       z-index: var(--layer-5);
 
       .mobile-header {
@@ -522,7 +541,7 @@ function createNavItemData(item, level, parentGroupId) {
         min-height: 2.5rem;
         padding: var(--spacing-md);
         text-decoration: none;
-        transition: background-color var(--animation-normal) ease-in-out;
+        transition: background-color var(--animation-normal) var(--ease-in-out);
         user-select: none;
         white-space: nowrap;
         width: 100%;
@@ -556,14 +575,14 @@ function createNavItemData(item, level, parentGroupId) {
           display: inline-flex;
           flex-shrink: 0;
           justify-content: center;
-          line-height: 0;
+          line-height: var(--line-height-none);
           margin-inline: 2px var(--spacing-md);
           min-height: 1.75rem;
           min-width: 2.5rem;
           padding: var(--spacing-xs);
           transition:
-            color var(--animation-normal) ease-in-out,
-            transform var(--animation-normal) ease-in-out;
+            color var(--animation-normal) var(--ease-in-out),
+            transform var(--animation-normal) var(--ease-in-out);
         }
       }
 
@@ -575,7 +594,7 @@ function createNavItemData(item, level, parentGroupId) {
         flex-wrap: nowrap;
         gap: var(--spacing-xs);
         min-width: 0;
-        transition: background-color var(--animation-normal) ease-in-out;
+        transition: background-color var(--animation-normal) var(--ease-in-out);
         width: 100%;
 
         &:hover {
@@ -602,7 +621,7 @@ function createNavItemData(item, level, parentGroupId) {
           min-width: 0;
           padding: var(--spacing-md) var(--spacing-xs) var(--spacing-md) var(--spacing-md);
           text-decoration: none;
-          transition: color var(--animation-normal) ease-in-out;
+          transition: color var(--animation-normal) var(--ease-in-out);
           user-select: none;
           white-space: nowrap;
 
@@ -637,9 +656,9 @@ function createNavItemData(item, level, parentGroupId) {
           padding: 0;
           width: 2.5rem;
           transition:
-            background-color var(--animation-normal) ease-in-out,
-            border-color var(--animation-normal) ease-in-out,
-            color var(--animation-normal) ease-in-out;
+            background-color var(--animation-normal) var(--ease-in-out),
+            border-color var(--animation-normal) var(--ease-in-out),
+            color var(--animation-normal) var(--ease-in-out);
 
           &:hover {
             background: color-mix(in srgb, var(--color-state-hover), var(--color-text) 8%);
@@ -648,7 +667,7 @@ function createNavItemData(item, level, parentGroupId) {
           }
 
           &:focus-visible {
-            outline: 2px solid var(--color-focus-ring);
+            outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
             outline-offset: 2px;
           }
 
@@ -656,7 +675,7 @@ function createNavItemData(item, level, parentGroupId) {
             align-items: center;
             display: flex;
             justify-content: center;
-            line-height: 0;
+            line-height: var(--line-height-none);
           }
         }
       }
@@ -668,14 +687,14 @@ function createNavItemData(item, level, parentGroupId) {
       }
 
       .nav-item-toggle:checked ~ .nav-item-content {
-        animation: grow-out var(--animation-normal) ease-out;
+        animation: grow-out var(--animation-normal) var(--ease-out);
         display: block;
       }
 
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
-        transition: transform var(--animation-normal) ease-in-out;
+        transition: transform var(--animation-normal) var(--ease-in-out);
       }
 
       .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon,
@@ -758,7 +777,7 @@ function createNavItemData(item, level, parentGroupId) {
       inset: 0;
       position: fixed;
       transform: translateX(-100%);
-      transition: transform var(--animation-normal) ease-in-out;
+      transition: transform var(--animation-normal) var(--ease-in-out);
       z-index: var(--layer-6);
 
       &.open {

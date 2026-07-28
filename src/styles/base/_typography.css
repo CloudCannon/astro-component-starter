@@ -25,17 +25,17 @@
 
     h1 {
       font-size: var(--font-size-heading-2xl);
-      line-height: 1.2;
+      line-height: var(--line-height-tight);
     }
 
     h2 {
       font-size: var(--font-size-heading-xl);
-      line-height: 1.25;
+      line-height: var(--line-height-heading-xl);
     }
 
     h3 {
       font-size: var(--font-size-heading-lg);
-      line-height: 1.3;
+      line-height: var(--line-height-heading-lg);
     }
 
     h4,
@@ -46,17 +46,17 @@
 
     h4 {
       font-size: var(--font-size-heading-md);
-      line-height: 1.35;
+      line-height: var(--line-height-heading-md);
     }
 
     h5 {
       font-size: var(--font-size-heading-sm);
-      line-height: 1.4;
+      line-height: var(--line-height-heading-sm);
     }
 
     h6 {
       font-size: var(--font-size-heading-xs);
-      line-height: 1.45;
+      line-height: var(--line-height-heading-xs);
     }
 
     p,
@@ -64,7 +64,7 @@
     ol {
       color: var(--color-text);
       font-size: var(--font-size-md);
-      line-height: 1.6;
+      line-height: var(--line-height-relaxed);
     }
 
     strong {

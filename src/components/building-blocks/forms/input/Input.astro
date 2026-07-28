@@ -1,5 +1,8 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import FormLabel from "@component-utils/FormLabel.astro";
+import { generateFieldId } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   label,
@@ -8,6 +11,8 @@ const {
   placeholder,
   required = false,
   value,
+  hint,
+  error,
   iconName,
   iconColor = "default",
   iconPosition = "before",
@@ -18,30 +23,31 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = customId || `input-${crypto.randomUUID()}`;
-const hasIcon = iconName?.trim().length > 0;
+const fieldId = generateFieldId("input", customId);
+const hasIcon = isNonEmptyString(iconName);
+const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
+const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 ---
 
 <div
   class:list={["input", className]}
   {...htmlAttributes}
 >
+  <FormLabel
+    for={fieldId}
+    label={label}
+    required={required}
+    requiredClass="input-required"
+  />
   {
-    label && (
-      <label
-        for={fieldId}
-        class="label"
+    hintId && (
+      <p
+        class="input-hint"
+        id={hintId}
       >
-        {label}
-        {required && (
-          <span
-            class="input-required"
-            aria-label="required"
-          >
-            *
-          </span>
-        )}
-      </label>
+        {hint}
+      </p>
     )
   }
   {
@@ -62,6 +68,8 @@ const hasIcon = iconName?.trim().length > 0;
           placeholder={placeholder}
           required={required}
           aria-required={required}
+          aria-invalid={errorId ? "true" : undefined}
+          aria-describedby={describedBy}
           value={value}
           class="field"
         />
@@ -74,9 +82,21 @@ const hasIcon = iconName?.trim().length > 0;
         placeholder={placeholder}
         required={required}
         aria-required={required}
+        aria-invalid={errorId ? "true" : undefined}
+        aria-describedby={describedBy}
         value={value}
         class="field"
       />
+    )
+  }
+  {
+    errorId && (
+      <p
+        class="input-error"
+        id={errorId}
+      >
+        {error}
+      </p>
     )
   }
 </div>
@@ -96,6 +116,23 @@ const hasIcon = iconName?.trim().length > 0;
         margin-inline-end: var(--spacing-em-xs);
       }
 
+      .input-hint {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .input-error {
+        color: var(--color-error);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      > .field[aria-invalid="true"],
+      .field-shell:has(> .field[aria-invalid="true"]) {
+        border-color: var(--color-error);
+      }
+
       .field-shell {
         align-items: center;
         background-color: var(--color-bg);
@@ -105,12 +142,13 @@ const hasIcon = iconName?.trim().length > 0;
         gap: var(--spacing-em-sm);
         padding-inline: var(--spacing-em-sm);
         transition:
-          border-color var(--animation-normal) ease-in-out,
-          box-shadow var(--animation-normal) ease-in-out;
+          border-color var(--animation-normal) var(--ease-in-out),
+          box-shadow var(--animation-normal) var(--ease-in-out);
 
-        &:focus-within {
+        &:has(:focus-visible) {
           border-color: var(--color-brand);
-          box-shadow: 0 0 0 3px var(--color-focus-ring);
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
 
         &.icon-after {
@@ -132,8 +170,8 @@ const hasIcon = iconName?.trim().length > 0;
           min-width: 0;
           padding-inline: 0;
 
-          &:focus {
-            box-shadow: none;
+          &:focus-visible {
+            outline: none;
           }
         }
       }

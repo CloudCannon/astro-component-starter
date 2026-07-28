@@ -1,5 +1,5 @@
 ---
-import { pascalToKebab } from "@components/utils/pascalToKebab";
+import { componentKeyFromPath } from "@components/utils/componentKey.mjs";
 import type { ContentBlock } from "../../types";
 
 export interface Props {
@@ -15,19 +15,7 @@ const componentImports = import.meta.glob("../**/*.{jsx,astro}", {
 });
 
 Object.entries(componentImports).forEach(([path, obj]) => {
-  const parts = path.replace("../", "").split(".")[0].split("/");
-  const filename = parts[parts.length - 1];
-
-  const kebabFilename = pascalToKebab(filename);
-
-  if (parts.length > 1 && kebabFilename === parts[parts.length - 2]) {
-    parts.pop();
-    parts[parts.length - 1] = kebabFilename;
-  } else {
-    parts[parts.length - 1] = kebabFilename;
-  }
-
-  const componentName = parts.join("/");
+  const componentName = componentKeyFromPath(path.replace("../", ""));
 
   components[componentName] = (obj as Record<string, AstroComponent>).default;
 });
@@ -45,6 +33,11 @@ const { contentSections, useDefaultEditableBinding = true } = Astro.props;
       console.warn(
         `Component not found: ${block._component}. Available components:`,
         Object.keys(components)
+      );
+    } else if (!block._component) {
+      console.warn(
+        "Skipping content block with no _component key:",
+        JSON.stringify(block).slice(0, 200)
       );
     }
 

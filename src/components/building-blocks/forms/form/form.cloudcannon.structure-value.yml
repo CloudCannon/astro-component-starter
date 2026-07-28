@@ -10,9 +10,11 @@ preview:
     - Form
   subtext:
     - key: label
+  image: /component-previews/building-blocks/forms/form.svg
   icon: checklist_rtl
 picker_preview:
   text: Form
   subtext: Groups form fields into one submission area.
+  image: /component-previews/building-blocks/forms/form.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/form/form.cloudcannon.inputs.yml

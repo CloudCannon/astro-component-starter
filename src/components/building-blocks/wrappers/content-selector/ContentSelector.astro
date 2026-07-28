@@ -39,7 +39,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <div
     class:list={["content-selector-items", `nav-${navigationPosition}`]}
     data-uid={uniqueId}
-    role="tablist"
+    role="group"
     {...arrayDataAttributes}
   >
     <slot>
@@ -73,7 +73,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
     if (!(tab instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
 
-    tab.setAttribute("aria-selected", isSelected.toString());
+    tab.setAttribute("aria-expanded", isSelected.toString());
     panel.setAttribute("aria-hidden", (!isSelected).toString());
   }
 
@@ -245,7 +245,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           }
         }
 
-        @container content-selector (width < 40rem) {
+        @container content-selector (width < 640px) {
           &.nav-start,
           &.nav-top {
             column-gap: 0;

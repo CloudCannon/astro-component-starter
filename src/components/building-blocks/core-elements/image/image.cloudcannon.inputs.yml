@@ -21,6 +21,10 @@ alternateSource:
 alt:
   type: textarea
   comment: Alternative text for accessibility.
+decorative:
+  type: switch
+  comment: Mark the image as decorative. Forces an empty alt attribute so assistive technology skips
+    it. Any alternative text is ignored while this is on.
 sizes:
   type: text
   comment: Responsive sizes attribute for the image.

@@ -26,10 +26,6 @@ pageSections:
     paddingVertical: 4xl
   - _component: page-sections/info-blocks/faq-section
     heading: Frequently asked questions
-    headingLevel: h2
-    headingSize: lg
-    singleOpen: true
-    openFirst: false
     items:
       - title: How does the Component Starter work?
         contentSections:

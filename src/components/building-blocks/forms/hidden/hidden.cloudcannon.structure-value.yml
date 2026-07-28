@@ -11,9 +11,11 @@ preview:
   subtext:
     - key: text
     - ""
+  image: /component-previews/building-blocks/forms/hidden.svg
   icon: eye-slash
 picker_preview:
   text: Hidden
   subtext: Hidden form field for storing data.
+  image: /component-previews/building-blocks/forms/hidden.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/hidden/hidden.cloudcannon.inputs.yml

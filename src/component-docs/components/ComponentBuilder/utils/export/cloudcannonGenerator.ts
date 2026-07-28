@@ -1,4 +1,4 @@
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 
 import type { ComponentInfo, ComponentMetadata, ComponentNode, InputConfig } from "../../types";
 import { shouldUseMapPattern, type BuilderNode } from "../shared";
@@ -142,13 +142,14 @@ export function generateCloudCannonInputs(
     collectExposedInputs(block, originalTree[idx] || null);
   });
 
-  return yaml.dump(inputs, {
-    indent: 2,
-    lineWidth: -1,
-    noRefs: true,
-    sortKeys: false,
-    styles: {
-      "!!null": "empty",
-    },
-  });
+  // js-yaml v5 dropped the v4 `styles: { "!!null": "empty" }` dump option;
+  // strip the emitted `null` scalars so null values render as empty (`key:`).
+  return yaml
+    .dump(inputs, {
+      indent: 2,
+      lineWidth: -1,
+      noRefs: true,
+      sortKeys: false,
+    })
+    .replace(/: null$/gm, ":");
 }

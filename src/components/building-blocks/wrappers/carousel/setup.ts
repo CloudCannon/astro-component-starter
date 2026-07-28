@@ -56,8 +56,17 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   if (inner.hasAttribute("data-autoplay") && !prefersReducedMotion) {
     const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
+    // With `stopOnInteraction: false`, `stopOnMouseEnter` pauses autoplay on
+    // mouseenter and resumes it on mouseleave (pause-on-hover behaviour).
+    const pauseOnHover = inner.getAttribute("data-pause-on-hover") === "true";
 
-    plugins.push(Autoplay({ delay: autoplayInterval, stopOnInteraction: false }));
+    plugins.push(
+      Autoplay({
+        delay: autoplayInterval,
+        stopOnInteraction: false,
+        stopOnMouseEnter: pauseOnHover,
+      })
+    );
   }
 
   let watchDrag = true;

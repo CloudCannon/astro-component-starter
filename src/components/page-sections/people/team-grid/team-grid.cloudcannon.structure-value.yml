@@ -8,6 +8,7 @@ value:
   heading: Meet the team
   subtext: Get to know the people behind our work.
   teamMembers: []
+  layout: start
   maxContentWidth: 2xl
   paddingHorizontal: lg
   paddingVertical: 4xl
@@ -27,10 +28,12 @@ preview:
     - Team Grid
   subtext:
     - key: subtext
+  image: /component-previews/page-sections/people/team-grid.svg
   icon: people
 picker_preview:
   text: Team Grid
   subtext: Grid of team member cards with photos and bios.
+  image: /component-previews/page-sections/people/team-grid.svg
 _inputs_from_glob:
   - /src/components/page-sections/people/team-grid/team-grid.cloudcannon.inputs.yml
 _inputs:

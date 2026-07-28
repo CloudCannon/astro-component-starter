@@ -1,5 +1,6 @@
 ---
 import Component from "@components/utils/renderBlock.astro";
+import { overlayColor } from "@components/utils/overlayColor";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
@@ -84,7 +85,7 @@ const arrayDataAttributes =
           class="background-overlay"
           aria-hidden="true"
           style={{
-            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
+            backgroundColor: overlayColor(overlay),
           }}
         />
       )
@@ -98,6 +99,7 @@ const arrayDataAttributes =
     <div
       class:list={[
         "content",
+        "uses-spacing-utils",
         paddingHorizontal && `pad-x-${paddingHorizontal}`,
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
@@ -143,128 +145,6 @@ const arrayDataAttributes =
 
           > *:last-child {
             margin-bottom: 0 !important;
-          }
-
-          &.pad-x-xs {
-            padding-inline: var(--spacing-xs);
-          }
-
-          &.pad-x-sm {
-            padding-inline: var(--spacing-sm);
-          }
-
-          &.pad-x-md {
-            padding-inline: var(--spacing-md);
-          }
-
-          &.pad-x-lg {
-            padding-inline: var(--spacing-lg);
-          }
-
-          &.pad-x-xl {
-            padding-inline: var(--spacing-xl);
-          }
-
-          &.pad-x-2xl {
-            padding-inline: var(--spacing-2xl);
-          }
-
-          &.pad-x-3xl {
-            padding-inline: var(--spacing-3xl);
-          }
-
-          &.pad-x-4xl {
-            padding-inline: var(--spacing-4xl);
-          }
-
-          &.pad-x-5xl {
-            padding-inline: var(--spacing-5xl);
-          }
-
-          &.pad-x-6xl {
-            padding-inline: var(--spacing-6xl);
-          }
-
-          &.pad-y-xs {
-            padding-block: var(--spacing-xs);
-          }
-
-          &.pad-y-sm {
-            padding-block: var(--spacing-sm);
-          }
-
-          &.pad-y-md {
-            padding-block: var(--spacing-md);
-          }
-
-          &.pad-y-lg {
-            padding-block: var(--spacing-lg);
-          }
-
-          &.pad-y-xl {
-            padding-block: var(--spacing-xl);
-          }
-
-          &.pad-y-2xl {
-            padding-block: var(--spacing-2xl);
-          }
-
-          &.pad-y-3xl {
-            padding-block: var(--spacing-3xl);
-          }
-
-          &.pad-y-4xl {
-            padding-block: var(--spacing-4xl);
-          }
-
-          &.pad-y-5xl {
-            padding-block: var(--spacing-5xl);
-          }
-
-          &.pad-y-6xl {
-            padding-block: var(--spacing-6xl);
-          }
-
-          @media (width < 640px) {
-            &.pad-y-xs {
-              padding-block: var(--spacing-xs);
-            }
-
-            &.pad-y-sm {
-              padding-block: var(--spacing-xs);
-            }
-
-            &.pad-y-md {
-              padding-block: var(--spacing-sm);
-            }
-
-            &.pad-y-lg {
-              padding-block: var(--spacing-md);
-            }
-
-            &.pad-y-xl {
-              padding-block: var(--spacing-md);
-            }
-
-            &.pad-y-2xl {
-              padding-block: var(--spacing-lg);
-            }
-
-            &.pad-y-3xl {
-              padding-block: var(--spacing-xl);
-            }
-
-            &.pad-y-4xl {
-              padding-block: var(--spacing-2xl);
-            }
-
-            &.pad-y-5xl {
-              padding-block: var(--spacing-3xl);
-            }
-
-            &.pad-y-6xl {
-              padding-block: var(--spacing-4xl);
-            }
           }
 
           &.max-width-none {

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
+  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
+  <g transform="translate(70 245) scale(1.0000)">
+    <rect x="0" y="0" width="296" height="310" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
+    <rect x="28" y="28" width="150" height="22" rx="11" fill="#c2beb5"/>
+    <rect x="28" y="70" width="240" height="2" rx="1" fill="#e7e5e0"/>
+    <rect x="28" y="92" width="200" height="15" rx="8" fill="#c2beb5"/>
+    <rect x="28" y="127" width="160" height="15" rx="8" fill="#c2beb5"/>
+    <rect x="28" y="162" width="210" height="15" rx="8" fill="#c2beb5"/>
+    <rect x="28" y="197" width="150" height="15" rx="8" fill="#c2beb5"/>
+    <rect x="28" y="232" width="180" height="15" rx="8" fill="#c2beb5"/>
+    <rect x="28" y="267" width="140" height="15" rx="8" fill="#c2beb5"/>
+    <rect x="360" y="0" width="420" height="30" rx="15" fill="#c2beb5"/>
+    <rect x="360" y="52" width="780" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="360" y="76" width="780" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="360" y="100" width="780" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="360" y="124" width="390" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="360" y="158" width="780" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="360" y="182" width="780" height="12" rx="6" fill="#dcd9d2"/>
+    <rect x="360" y="206" width="562" height="12" rx="6" fill="#dcd9d2"/>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+/* Breakpoints — documentation only (this file defines no tokens).
+ *
+ * CSS custom properties cannot be used inside @media / @container preludes, so
+ * breakpoints are written as literal pixel values. By maintainer decision the
+ * project stays on vanilla CSS (no PostCSS / custom-media plugin), so there is
+ * no `@custom-media` here — just two canonical values to keep in sync across
+ * every component and stylesheet:
+ *
+ *   640px — mobile / stacking switch (single column below, multi-column above)
+ *   768px — navigation / tablet switch (mobile nav below, desktop nav above)
+ *
+ * Prefer range syntax (`width < 640px` / `width >= 640px`) so a min/max pair
+ * shares one edge with no sub-pixel dead zone. Where a file already pairs
+ * `max-width`/`min-width`, offset by 1px (e.g. 639/640) to match its style.
+ * 40rem is NOT used — it only equals 640px at the default root size; px is the
+ * repo standard.
+ *
+ * A component may keep its own content-driven threshold when its layout
+ * genuinely needs one (e.g. BentoBox's grid-density steps at 700px / 450px);
+ * mark such cases with an inline comment saying they are intentionally
+ * non-canonical.
+ */

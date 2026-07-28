@@ -1,4 +1,5 @@
 ---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
@@ -79,9 +80,9 @@ for (const key of tagKeys) {
   }
 }
 
-const hasText = text?.trim().length > 0;
+const hasText = isNonEmptyString(text);
 const hasSlotContent = Astro.slots.has("default");
-const hasIcon = iconName?.trim().length > 0;
+const hasIcon = isNonEmptyString(iconName);
 
 if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
 ---
@@ -144,7 +145,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
         text-decoration: none;
         transition-duration: var(--animation-normal);
         transition-property: background-color, color, border-color;
-        transition-timing-function: ease-in-out;
+        transition-timing-function: var(--ease-in-out);
 
         &:hover {
           background-color: var(--color-bg-muted);
@@ -153,9 +154,9 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           cursor: pointer;
         }
 
-        &:focus {
-          box-shadow: 0 0 2px 2px var(--color-focus-ring) inset;
-          outline: none;
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
 
         &.icon-only {

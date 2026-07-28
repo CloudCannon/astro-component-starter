@@ -25,10 +25,12 @@ preview:
     - FAQ Section
   subtext:
     - key: heading
+  image: /component-previews/page-sections/info-blocks/faq-section.svg
   icon: help_outline
 picker_preview:
   text: FAQ Section
   subtext: Accordion of frequently asked questions.
+  image: /component-previews/page-sections/info-blocks/faq-section.svg
 _inputs_from_glob:
   - /src/components/page-sections/info-blocks/faq-section/faq-section.cloudcannon.inputs.yml
 _inputs:

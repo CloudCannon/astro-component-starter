@@ -8,13 +8,16 @@ value:
   links: []
   socials: []
   footerText: ""
+  logoAlternateSource: ""
 preview:
   text:
     - Footer
+  image: /component-previews/navigation/footer.svg
   icon: footer
 picker_preview:
   text: Footer
   subtext: "Footer block with logo, links, and legal information."
+  image: /component-previews/navigation/footer.svg
   icon: footer
 _inputs_from_glob:
   - /src/components/navigation/footer/footer.cloudcannon.inputs.yml
