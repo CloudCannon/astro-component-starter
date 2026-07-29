@@ -55,7 +55,7 @@ const matchTextColor = Boolean(name?.includes("social/"));
 
       > .icon-inner {
         border-radius: var(--radius-xs);
-        color: inherit;
+        color: var(--icon-accent, inherit);
         display: block;
         line-height: var(--line-height-none);
         vertical-align: middle;
@@ -73,73 +73,52 @@ const matchTextColor = Boolean(name?.includes("social/"));
         }
 
         &.background {
-          background-color: var(--color-bg-surface);
+          background-color: var(--icon-accent-bg, var(--color-bg-surface));
           padding: var(--spacing-em-xs);
           width: fit-content;
         }
 
+        /* Each accent sets only the two ramp steps it uses; the rules above
+           consume them. `color-default` sets neither and falls back. Yellow
+           uses 400 rather than 500 — 500 is too dark against a pale tint. */
         &.color-blue {
-          color: var(--blue-dark);
-
-          &.background {
-            background-color: var(--blue-light);
-          }
+          --icon-accent: var(--blue-500);
+          --icon-accent-bg: var(--blue-100);
         }
 
         &.color-green {
-          color: var(--green-dark);
-
-          &.background {
-            background-color: var(--green-light);
-          }
+          --icon-accent: var(--green-500);
+          --icon-accent-bg: var(--green-100);
         }
 
         &.color-yellow {
-          color: var(--yellow-dark);
-
-          &.background {
-            background-color: var(--yellow-light);
-          }
+          --icon-accent: var(--yellow-400);
+          --icon-accent-bg: var(--yellow-100);
         }
 
         &.color-orange {
-          color: var(--orange-dark);
-
-          &.background {
-            background-color: var(--orange-light);
-          }
+          --icon-accent: var(--orange-500);
+          --icon-accent-bg: var(--orange-100);
         }
 
         &.color-red {
-          color: var(--red-dark);
-
-          &.background {
-            background-color: var(--red-light);
-          }
+          --icon-accent: var(--red-500);
+          --icon-accent-bg: var(--red-100);
         }
 
         &.color-purple {
-          color: var(--purple-dark);
-
-          &.background {
-            background-color: var(--purple-light);
-          }
+          --icon-accent: var(--purple-500);
+          --icon-accent-bg: var(--purple-100);
         }
 
         &.color-pink {
-          color: var(--pink-dark);
-
-          &.background {
-            background-color: var(--pink-light);
-          }
+          --icon-accent: var(--pink-500);
+          --icon-accent-bg: var(--pink-100);
         }
 
         &.color-cyan {
-          color: var(--cyan-dark);
-
-          &.background {
-            background-color: var(--cyan-light);
-          }
+          --icon-accent: var(--cyan-500);
+          --icon-accent-bg: var(--cyan-100);
         }
 
         &.size-sm {

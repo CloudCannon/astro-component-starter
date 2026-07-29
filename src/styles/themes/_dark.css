@@ -19,8 +19,8 @@
   --color-bg: var(--gray-12);
   --color-bg-surface: var(--gray-11);
   --color-bg-muted: var(--gray-10);
-  --color-bg-accent: var(--blue-deep);
-  --color-bg-highlight: var(--amber-deep);
+  --color-bg-accent: var(--blue-900);
+  --color-bg-highlight: var(--yellow-900);
   --color-bg-brand: var(--color-brand);
   --color-bg-brand-muted: var(--color-brand-muted);
   --color-bg-inverse: var(--gray-1);
@@ -37,13 +37,13 @@
   --color-focus-ring: rgba(0, 122, 255, 0.4);
 
   --color-danger: var(--red-400);
-  --color-danger-hover: var(--red-dark);
-  --color-danger-bg-subtle: color-mix(in srgb, var(--red-dark) 12%, transparent);
-  --color-danger-border-subtle: color-mix(in srgb, var(--red-dark) 40%, transparent);
+  --color-danger-hover: var(--red-500);
+  --color-danger-bg-subtle: color-mix(in srgb, var(--red-500) 12%, transparent);
+  --color-danger-border-subtle: color-mix(in srgb, var(--red-500) 40%, transparent);
   --color-info: var(--blue-400);
-  --color-info-bg-subtle: color-mix(in srgb, var(--blue-dark) 12%, transparent);
-  --color-info-border-subtle: color-mix(in srgb, var(--blue-dark) 40%, transparent);
+  --color-info-bg-subtle: color-mix(in srgb, var(--blue-500) 12%, transparent);
+  --color-info-border-subtle: color-mix(in srgb, var(--blue-500) 40%, transparent);
   --color-success: var(--green-400);
-  --color-success-bg-subtle: color-mix(in srgb, var(--green-dark) 15%, transparent);
+  --color-success-bg-subtle: color-mix(in srgb, var(--green-500) 15%, transparent);
   --color-error: var(--color-danger);
 }

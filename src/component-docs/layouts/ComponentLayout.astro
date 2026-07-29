@@ -65,22 +65,26 @@ const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
 ---
 
 <LibraryLayout frontmatter={frontmatter}>
-  <h1>{frontmatter.title}</h1>
-  <p>{meta.description}</p>
+  <div class="component-hero">
+    <div class="component-hero-text">
+      <h1>{frontmatter.title}</h1>
+      <p>{meta.description}</p>
+    </div>
 
-  {
-    hasPreview && (
-      <img
-        class="component-preview-thumb"
-        src={previewSrc}
-        alt={`${meta.title || componentKey} preview`}
-        loading="lazy"
-        decoding="async"
-        width="640"
-        height="400"
-      />
-    )
-  }
+    {
+      hasPreview && (
+        <img
+          class="component-preview-thumb"
+          src={previewSrc}
+          alt={`${meta.title || componentKey} preview`}
+          loading="lazy"
+          decoding="async"
+          width="640"
+          height="400"
+        />
+      )
+    }
+  </div>
 
   {
     primaryExample && (
@@ -182,16 +186,46 @@ const processedExamples = frontmatterExamples.map((exampleConfig: any) => {
 </LibraryLayout>
 
 <style>
+  /* Title/description on the left, preview thumbnail on the right. The preview
+     is a picker-scale mockup, so it is sized as a thumbnail rather than stretched
+     to the content width. Below 640px the thumbnail wraps under the text. */
+  .component-hero {
+    align-items: start;
+    display: flex;
+    flex-wrap: wrap;
+    /* Row gap only applies once the thumbnail wraps under the text, so no media
+       query is needed to keep it clear of the description. */
+    gap: var(--spacing-lg) var(--spacing-xl);
+    justify-content: space-between;
+    /* The h1's own top margin is moved here so the thumbnail aligns with the
+       title rather than floating above it. */
+    margin-block: var(--spacing-2xl) var(--spacing-lg);
+  }
+
+  .component-hero-text {
+    flex: 1 1 18rem;
+    min-width: 0;
+
+    > :first-child {
+      margin-block-start: 0;
+    }
+
+    > :last-child {
+      margin-block-end: 0;
+    }
+  }
+
   .component-preview-thumb {
     aspect-ratio: 16 / 10;
     background-color: var(--color-bg-surface);
-    border: 1px solid var(--color-border);
+    /* Matches the ComponentViewer frame below it (ComponentViewer/styles.css). */
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     display: block;
+    flex: 0 0 auto;
     height: auto;
-    margin-block: var(--spacing-lg);
-    max-width: 32rem;
+    max-width: 100%;
     object-fit: cover;
-    width: 100%;
+    width: 15rem;
   }
 </style>

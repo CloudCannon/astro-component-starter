@@ -31,7 +31,7 @@ primitive scales & palette      semantic --color-* per theme
 :where(:root) (specificity 0)   [data-theme="light|dark"]
 ```
 
-- **Primitive** tokens are raw scales and palette swatches — a gray ramp, named accent light/dark pairs, spacing steps, radii. They carry no meaning ("gray-8", not "border"). Components never consume them directly.
+- **Primitive** tokens are raw scales and palette swatches — a neutral ramp, per-hue lightness ramps, spacing steps, radii. They carry no meaning ("gray-8", not "border"). Components never consume them directly.
 - **Semantic** `--color-*` tokens map primitives onto roles (`--color-text`, `--color-bg-surface`, `--color-border`) and are what components actually use. They are declared twice — once per theme — so a component adapts to light/dark for free.
 
 Aggregation and load order (`src/styles/style.css`): `_variables.css` `@import`s every `variables/*.css`; `_theme.css` `@import`s both theme files; `style.css` imports `_variables.css`, then `_theme.css`, then `_reset.css` / `_base.css` / `_utils.css`. Later import wins at equal specificity.
@@ -42,7 +42,7 @@ Read the file for the exact names and values — do not rely on memory or a copy
 
 | File (`src/styles/…`)           | Scope selector         | Holds                                                                                                                                     |
 | ------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `variables/_colors.css`         | `:where(:root)`        | Primitive `--gray-0…12` ramp, `--{color}-light/-dark` accent pairs, `--{red,blue,green}-*` functional shades (status/link colors)         |
+| `variables/_colors.css`         | `:where(:root)`        | Primitive `--gray-0…12` neutral ramp plus a complete `--{hue}-50…900` ramp per hue (blue, red, green, yellow, orange, purple, pink, cyan) |
 | `variables/_spacing.css`        | `:where(:root)`        | `--spacing-*` (rem) and `--spacing-em-*` (em) scales                                                                                      |
 | `variables/_radius.css`         | `:where(:root)`        | `--radius-*` corner scale                                                                                                                 |
 | `variables/_shadows.css`        | `:where(:root)`        | `--shadow-sm/-md/-lg` elevations                                                                                                          |
@@ -99,13 +99,16 @@ The tokens-only rule for component styles is owned by [create-component's Stylin
 
 | What you're adding                                   | Where                                                              |
 | ---------------------------------------------------- | ------------------------------------------------------------------ |
-| A primitive value (new gray shade, accent swatch)    | The matching `variables/*.css` file                                |
+| A primitive value (new gray shade, hue step)         | The matching `variables/*.css` file                                |
 | A new step on an existing scale (spacing, radius, …) | The matching `variables/*.css` file                                |
 | A semantic color that differs per theme              | **Both** `themes/_light.css` and `themes/_dark.css`                |
 | A whole new token category                           | New `variables/<name>.css` + add its `@import` to `_variables.css` |
 
 **MUST:** add every new semantic `--color-*` to **both** `_light.css` and `_dark.css`.
 **Why:** an undefined token in one theme leaves any `colorScheme`-switched or toggled section with no value — the property falls back to `inherit`/initial and the section visibly breaks. Nothing validates this; a missing pair only shows up when someone views that theme.
+
+**MUST:** keep `_colors.css` a complete table — every hue runs `50` (palest) through `900` (deepest), values straight from the Tailwind palette.
+**Why:** components and themes pick steps freely, so a missing step is a dead end mid-task. The completeness is also what lets the file carry no comments: `--<hue>-<step>` is the only convention, and the step is always lightness. Re-skinning means replacing values in place, never renumbering.
 
 To change the base look every project inherits (a brand migration in place): edit primitive palette values in `variables/_colors.css`, remap semantic tokens in both theme files, and adjust `--radius-*` / `--shadow-*` if the brand needs it.
 

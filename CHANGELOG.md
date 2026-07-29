@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Content blocks missing a `_component` key log a warning instead of vanishing silently.
 - Production builds fail loudly if `DISABLE_COMPONENT_LIBRARY` is set to anything other than `true`/`false`/unset; the build log states whether the library is included.
 - Fixed three `hideText="true"` string-instead-of-boolean Button usages in Footer and mobile nav.
+- Restored the gap between property name and type in the component-docs property list. Astro 7's compiler drops whitespace-only nodes between adjacent elements, so the source newline separating the two `<span>`s stopped rendering as a space — worth knowing if your own components rely on that whitespace.
 - Removed a stray `:first-of-type` wrapper around the accordion summary's Firefox marker fix.
 - Removed the empty `src/components/page-sections/carousel/` stub directory and restored the missing `src/assets/images/placeholder.jpg`.
 
@@ -34,8 +35,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Focus rings are consistent across every interactive component — one `:focus-visible` outline from the new `--focus-ring-width`/`--focus-ring-style` tokens. Forms, buttons, and navigation each drew a different ring on `:focus` before, so mouse clicks no longer leave a ring behind.
 - **Light-theme link colors changed:** the placeholder pure-blues (`#00f`/`#00008b`) are now `--blue-700` (#1d4ed8) and `--blue-800` (#1e40af), both meeting WCAG AA. Dark-theme links are unchanged.
 - Breakpoints are standardized on two canonical values, `640px` (mobile/stacking) and `768px` (nav/tablet), documented in `src/styles/variables/_breakpoints.css`. Footer's `599/600px`, MainNav's `768/769px`, and ContentSelector's `40rem` were normalized — small, intended layout shifts around 600→640px. Bento Box keeps its content-driven `700px`/`450px` grid-density steps.
+- `src/styles/variables/_colors.css` is now a complete palette: `--gray-0…12` plus a full `--{hue}-50…900` ramp for all eight hues, values straight from the Tailwind palette. Replaces the previous mix of `--{hue}-light`/`-dark` pairs, partial numeric ramps, and bespoke `-deep` one-offs. Semantic tokens and all status/link colors are unchanged; the visible shifts are the eight Icon background tints, the green and yellow Icon foregrounds (the old values were emerald-500 and amber-400), and the dark theme's accent/highlight section backgrounds.
 - Line heights, status/link colors, and easing are tokenized: `--line-height-*`, `--ease-out`/`--ease-in-out`/`--ease-smooth`, and status/link entries in the `_colors.css` palette. Appearance is unchanged.
-- Dark-theme accent/highlight backgrounds reference `--blue-deep`/`--amber-deep` instead of inline `rgb()` literals. Computed colors are identical.
+- Dark-theme accent/highlight backgrounds reference `--blue-900`/`--yellow-900` instead of inline `rgb()` literals. Computed colors are identical.
 - Fonts are self-hosted via `fontProviders.fontsource()` instead of fetched from Google at build time.
 - Modal's drop shadow uses the new `--shadow-lg` token (scale: `--shadow-sm/md/lg`).
 - Button icon spacing is themeable via `--button-icon-gap` (default unchanged).

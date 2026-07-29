@@ -34,7 +34,7 @@ Open `src/styles/themes/_light.css`. This is where you define the look of your s
 
 These are **semantic** color variables. They describe purpose, not specific colors. Every component in the starter references these variables, so changes here propagate everywhere automatically.
 
-**Try it now:** Change `--color-brand` to a blue (`var(--blue-dark)`) or drop in your own hex value. Save, and watch buttons, headings, and accents shift across your entire site.
+**Try it now:** Change `--color-brand` to a blue (`var(--blue-500)`) or drop in your own hex value. Save, and watch buttons, headings, and accents shift across your entire site.
 
 The key variables to update first:
 
@@ -102,14 +102,14 @@ This is why both theme files are important. Even if your site is primarily light
 
 ## The base color palette
 
-The theme files reference raw color values defined in `src/styles/variables/_colors.css`:
+The theme files reference raw color values defined in `src/styles/variables/_colors.css`. Every hue is a complete ramp named `--<hue>-<step>`, where the step is lightness — 50 is the palest tint, 900 the deepest shade:
 
 ```css
 :where(:root) {
   --gray-0: #fff;
   --gray-12: #000;
-  --blue-light: #e8f4fd;
-  --blue-dark: #3b82f6;
+  --blue-100: #dbeafe;
+  --blue-500: #3b82f6;
   /* ... */
 }
 ```

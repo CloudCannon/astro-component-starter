@@ -253,7 +253,7 @@ const properties: PropertyMeta[] = configData ? parseConfigProperties(configData
           return (
             <div class="property">
               <h3>
-                <span class="property-name">{prop.name}</span>
+                <span class="property-name">{prop.name}</span>{" "}
                 <span class="property-type">
                   {prop.type}
                   {prop.default && prop.type !== "object" && ` | default: ${prop.default}`}
@@ -316,9 +316,16 @@ const properties: PropertyMeta[] = configData ? parseConfigProperties(configData
       border-top: 1px solid var(--color-border-subtle);
       padding-block: var(--spacing-md);
 
+      /* Flex rather than relying on whitespace between the two spans: the
+         compiler strips whitespace-only nodes between adjacent elements, so a
+         source newline is not a space. */
       h3 {
+        align-items: baseline;
+        display: flex;
+        flex-wrap: wrap;
         font-family: var(--font-mono);
         font-size: var(--font-size-md);
+        gap: var(--spacing-em-sm);
 
         .property-name {
           font-weight: var(--font-weight-bold);
