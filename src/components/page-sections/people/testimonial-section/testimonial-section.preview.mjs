@@ -1,15 +1,21 @@
-import { frame, stack, avatar, heading, text, T } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, dot, media } from "../../../../../scripts/previews/kit.mjs";
 
-// Centered customer testimonial on the tinted `surface` background:
-// a multi-line quote, then avatar + author name + role.
-export default frame(
-  { bg: T.frameAlt },
-  stack({ gap: 40, align: "center" }, [
-    text({ lines: 3, w: 760, last: 0.5, gap: 18, align: "center" }),
-    stack({ gap: 14, align: "center" }, [
-      avatar({ d: 64 }),
-      heading({ w: 170, h: 16 }),
-      text({ lines: 1, w: 130, align: "center" }),
-    ]),
-  ])
-);
+const B = band(960);
+
+// A quote on a filled full-width surface, with the attribution centred beneath.
+// The surface panel is what makes this a section rather than the `testimonial`
+// building block, which sits on bare paper.
+export default preview({
+  width: B.w,
+  draw: [
+    media(B.left, 200, 960, 400),
+
+    bar(252, 260, 775, "label"),
+    bar(280, 294, 720, "label"),
+    bar(400, 328, 480, "label"),
+
+    dot(530, 430, 32),
+    bar(576, 412, 166, "label"),
+    bar(576, 440, 203, "body"),
+  ],
+});

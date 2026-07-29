@@ -1,10 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(330 308) scale(1.0000)">
-    <rect x="0" y="0" width="620" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="93" y="24" width="434" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="250" y="80" width="120" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="0" y="148" width="620" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="124" y="172" width="372" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-spacer">
+  <title id="t-spacer">Spacer component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 2)">
+    <rect x="260" y="278" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="302" width="470" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="354" width="760" height="96" rx="10" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="260" y="482" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="506" width="560" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

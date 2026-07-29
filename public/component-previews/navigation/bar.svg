@@ -1,14 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(70 265) scale(1.0000)">
-    <rect x="0" y="0" width="160" height="22" rx="11" fill="#c2beb5"/>
-    <rect x="700" y="4" width="70" height="14" rx="7" fill="#c2beb5"/>
-    <rect x="814" y="4" width="92" height="14" rx="7" fill="#c2beb5"/>
-    <rect x="950" y="4" width="80" height="14" rx="7" fill="#c2beb5"/>
-    <rect x="1074" y="4" width="66" height="14" rx="7" fill="#c2beb5"/>
-    <rect x="0" y="98" width="1140" height="2" rx="1" fill="#e7e5e0"/>
-    <rect x="310" y="176" width="520" height="34" rx="17" fill="#c2beb5"/>
-    <rect x="250" y="234" width="640" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="378" y="258" width="384" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-bar">
+  <title id="t-bar">Bar component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 292)">
+    <rect x="260" y="0" width="74" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="381" y="0" width="106" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="495,4 514,4 505,13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="561" y="0" width="102" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="671,4 690,4 681,13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="736" y="0" width="116" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="861,4 880,4 871,13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="927" y="0" width="93" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="381" y="46" width="318" height="156" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="412" y="76" width="191" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="412" y="116" width="159" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="609,117 609,131 624,124" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="412" y="156" width="212" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="715" y="100" width="275" height="116" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="747" y="130" width="169" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="747" y="170" width="138" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
   </g>
 </svg>

@@ -1,9 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(230 352) scale(1.0000)">
-    <rect x="0" y="0" width="820" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="28" width="820" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="56" width="820" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="84" width="451" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-simple-text">
+  <title id="t-simple-text">Simple text component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g>
+    <rect x="260" y="358" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="382" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="406" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="430" width="418" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

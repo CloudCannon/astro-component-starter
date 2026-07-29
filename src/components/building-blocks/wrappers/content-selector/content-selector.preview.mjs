@@ -1,26 +1,19 @@
-import {
-  frame,
-  stack,
-  row,
-  card,
-  chip,
-  image,
-  heading,
-  text,
-} from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, lines, pill, plate } from "../../../../../scripts/previews/kit.mjs";
 
-// Content selector: a row of tabs above the selected content panel.
-export default frame(
-  stack({ gap: 24, align: "center" }, [
-    row({ gap: 12, justify: "center" }, [chip({ w: 100 }), chip({ w: 100 }), chip({ w: 100 })]),
-    card({ pad: 28, gap: 20, w: 640 }, [
-      row({ gap: 28, align: "center", w: 640 }, [
-        image({ w: 260, h: 200 }),
-        stack({ gap: 14, w: 340 }, [
-          heading({ w: 240, h: 20 }),
-          text({ lines: 3, w: 340, last: 0.6 }),
-        ]),
-      ]),
-    ]),
-  ])
-);
+const B = band(760);
+
+// A vertical tab list on the left with the first tab selected, and its panel on
+// the right. Vertical (not a top tab strip) so it does not read as `segments`.
+export default preview({
+  width: B.w,
+  draw: [
+    pill(B.left, 0, 239, 56, { label: 152 }),
+    plate(B.left, 72, 239, 56),
+    bar(303, 94, 130, "body"),
+    plate(B.left, 144, 239, 56),
+    bar(303, 166, 163, "body"),
+
+    bar(564, 0, 326, "heading"),
+    lines(564, 46, [456, 456, 456, 282]),
+  ],
+});

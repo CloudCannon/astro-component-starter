@@ -1,32 +1,48 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(248 128) scale(1.0000)">
-    <rect x="342" y="0" width="100" height="12" rx="6" fill="#d0ccc3"/>
-    <rect x="212" y="28" width="360" height="34" rx="17" fill="#c2beb5"/>
-    <rect x="222" y="78" width="340" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="138" width="240" height="280" rx="8" fill="#e8e6e0"/>
-    <circle cx="168" cy="228" r="14" fill="#cbc7bf"/>
-    <polygon points="43,356 101,278 144,356" fill="#cbc7bf"/>
-    <polygon points="108,356 158,295 206,356" fill="#cbc7bf"/>
-    <rect x="20" y="438" width="150" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="20" y="466" width="90" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="20" y="488" width="200" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="20" y="512" width="140" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="272" y="138" width="240" height="280" rx="8" fill="#e8e6e0"/>
-    <circle cx="440" cy="228" r="14" fill="#cbc7bf"/>
-    <polygon points="315,356 373,278 416,356" fill="#cbc7bf"/>
-    <polygon points="380,356 430,295 478,356" fill="#cbc7bf"/>
-    <rect x="292" y="438" width="150" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="292" y="466" width="90" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="292" y="488" width="200" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="292" y="512" width="140" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="544" y="138" width="240" height="280" rx="8" fill="#e8e6e0"/>
-    <circle cx="712" cy="228" r="14" fill="#cbc7bf"/>
-    <polygon points="587,356 645,278 688,356" fill="#cbc7bf"/>
-    <polygon points="652,356 702,295 750,356" fill="#cbc7bf"/>
-    <rect x="564" y="438" width="150" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="564" y="466" width="90" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="564" y="488" width="200" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="564" y="512" width="140" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-team-grid">
+  <title id="t-team-grid">Team grid component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 116)">
+    <rect x="592" y="0" width="97" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="466" y="36" width="349" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="475" y="98" width="330" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="158" width="233" height="280" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="423" cy="248" r="14" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="302,376 358,298 400,376" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="365,376 413,315 460,376" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="279" y="458" width="145" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="279" y="508" width="87" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="279" y="532" width="194" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="279" y="556" width="136" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="524" y="158" width="233" height="280" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="687" cy="248" r="14" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="566,376 622,298 664,376" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="629,376 677,315 724,376" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="543" y="458" width="145" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="543" y="508" width="87" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="543" y="532" width="194" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="543" y="556" width="136" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="787" y="158" width="233" height="280" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="950" cy="248" r="14" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="829,376 885,298 927,376" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="892,376 940,315 987,376" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="807" y="458" width="145" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="807" y="508" width="87" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="807" y="532" width="194" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="807" y="556" width="136" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

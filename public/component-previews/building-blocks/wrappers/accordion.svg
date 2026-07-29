@@ -1,17 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(238 244) scale(1.0000)">
-    <rect x="0" y="0" width="804" height="144" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="22" y="25" width="240" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="756" y="22" width="26" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="22" y="62" width="660" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="22" y="86" width="660" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="22" y="110" width="330" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="160" width="804" height="68" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="22" y="185" width="240" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="756" y="182" width="26" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="0" y="244" width="804" height="68" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="22" y="269" width="240" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="756" y="266" width="26" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-accordion">
+  <title id="t-accordion">Accordion component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 282)">
+    <rect x="260" y="0" width="760" height="68" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="281" y="21" width="227" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="974" y="21" width="26" height="26" rx="13" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="260" y="84" width="760" height="68" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="281" y="105" width="227" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="974" y="105" width="26" height="26" rx="13" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="260" y="168" width="760" height="68" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="281" y="189" width="227" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="974" y="189" width="26" height="26" rx="13" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
   </g>
 </svg>

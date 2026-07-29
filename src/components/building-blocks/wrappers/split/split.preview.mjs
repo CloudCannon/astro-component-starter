@@ -1,23 +1,18 @@
-import {
-  frame,
-  row,
-  stack,
-  eyebrow,
-  heading,
-  text,
-  button,
-  image,
-} from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, lines } from "../../../../../scripts/previews/kit.mjs";
 
-// Split: two side-by-side columns — copy on one side, media on the other.
-export default frame(
-  row({ gap: 56, align: "center" }, [
-    stack({ gap: 20, align: "start", w: 420 }, [
-      eyebrow({ w: 110 }),
-      heading({ w: 380, h: 34 }),
-      text({ lines: 4, w: 420, last: 0.5 }),
-      button({ w: 150 }),
-    ]),
-    image({ w: 460, h: 380 }),
-  ])
-);
+const B = band(960);
+
+// Two equal text columns with a wide gutter. Deliberately no media on either
+// side — this wrapper splits whatever you put in it, so neither half is special.
+const COLS = [
+  { x: B.left, head: 267, last: 271 },
+  { x: 669, head: 236, last: 361 },
+];
+
+export default preview({
+  width: B.w,
+  draw: COLS.map(({ x, head, last }) => [
+    bar(x, 0, head, "heading"),
+    lines(x, 46, [451, 451, 451, last]),
+  ]),
+});

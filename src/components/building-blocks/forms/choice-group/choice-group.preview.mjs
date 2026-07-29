@@ -1,25 +1,17 @@
-import {
-  frame,
-  card,
-  row,
-  heading,
-  text,
-  avatar,
-  T,
-} from "../../../../../scripts/previews/kit.mjs";
+import { preview, bar, checkbox, repeat, glyph } from "../../../../../scripts/previews/kit.mjs";
 
-// Radio/checkbox group: a stack of option rows with the first one selected.
-const option = (selected = false) =>
-  row({ gap: 20, align: "center" }, [
-    avatar({ d: 26, fill: selected ? T.primary : T.controlBorder }),
-    text({ lines: 1, w: 190, fill: T.eyebrow }),
-  ]);
+// A radio/checkbox group with the second option selected. Exempt: a narrow stack
+// of option rows stretched to 560 would leave the labels floating in space.
+const OPTIONS = [190, 230, 170, 200];
 
-export default frame(
-  card({ pad: 40, gap: 30, align: "start", w: 940, border: T.controlBorder }, [
-    heading({ w: 220, h: 16 }),
-    option(true),
-    option(),
-    option(),
-  ])
-);
+export default preview({
+  width: 270,
+  exempt: true,
+  draw: [
+    bar(505, 0, 220, "label"),
+    repeat(4, (i) => [
+      checkbox(505, 44 + i * 56, 26, i === 1),
+      bar(545, 51 + i * 56, OPTIONS[i], "body", { fill: glyph }),
+    ]),
+  ],
+});

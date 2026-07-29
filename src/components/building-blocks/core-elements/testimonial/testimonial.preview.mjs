@@ -1,13 +1,15 @@
-import { frame, stack, avatar, heading, text } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, dot, lines } from "../../../../../scripts/previews/kit.mjs";
 
-// A centered customer quote with the author's avatar, name, and role beneath.
-export default frame(
-  stack({ gap: 32, align: "center" }, [
-    text({ lines: 2, w: 720, last: 0.6, gap: 18, align: "center" }),
-    stack({ gap: 12, align: "center" }, [
-      avatar({ d: 72 }),
-      heading({ w: 180, h: 16 }),
-      text({ lines: 1, w: 120, align: "center" }),
-    ]),
-  ])
-);
+const B = band(760);
+
+// The quote is `label`-weight subject across the full band — pulled up to the
+// subject role because the quote, not the attribution, is the component.
+export default preview({
+  width: B.w,
+  draw: [
+    lines(B.left, 296, [760, 760, 520], { size: "label", gap: 18 }),
+    dot(292, 448, 32),
+    bar(344, 428, 200, "label"),
+    bar(344, 456, 260, "body"),
+  ],
+});

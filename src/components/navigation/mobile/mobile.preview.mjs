@@ -1,20 +1,18 @@
-import { frame, stack, row, heading, icon, divider } from "../../../../scripts/previews/kit.mjs";
+import { preview, bar, box, caret, tile, panel, line } from "../../../../scripts/previews/kit.mjs";
 
-// Mobile nav: a narrow drawer — logo + hamburger tile on top, then a stack of
-// full-width menu link bars.
-export default frame(
-  stack({ gap: 22, align: "stretch", w: 420 }, [
-    row({ justify: "between", align: "center", w: 420 }, [
-      heading({ w: 140, h: 20 }),
-      icon({ d: 42 }),
-    ]),
-    divider({ w: 420 }),
-    heading({ h: 18 }),
-    divider({ w: 420 }),
-    heading({ h: 18 }),
-    divider({ w: 420 }),
-    heading({ h: 18 }),
-    divider({ w: 420 }),
-    heading({ h: 18 }),
-  ])
-);
+// An open drawer: a tinted portrait panel with a close tile and big tappable menu
+// rows, two of them expandable. Exempt from the bands — the whole point is that
+// this is narrow, and stretching it to 560 would destroy the phone proportion.
+const MENU = [150, 190, 160, 200, 130];
+
+export default preview({
+  width: 480,
+  exempt: true,
+  draw: [
+    box(400, 0, 480, 420, { fill: panel, stroke: line }),
+    tile(806, 32, 42),
+    MENU.map((w, i) => bar(432, 110 + i * 62, w, "heading")),
+    caret(814, 181, 18, { h: 9 }),
+    caret(814, 305, 18, { h: 9 }),
+  ],
+});

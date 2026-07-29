@@ -56,10 +56,12 @@ for (const { file, key } of recipes) {
     const tree = typeof recipe === "function" ? recipe() : recipe;
 
     if (!tree || typeof tree !== "object") {
-      throw new Error("recipe default export must be a node tree (or a function returning one)");
+      throw new Error(
+        "recipe default export must be a preview({...}) spec (or a function returning one)"
+      );
     }
 
-    const svg = compile(tree);
+    const svg = compile(tree, key);
     const outPath = join(outDir, `${key}.svg`);
     const existing = existsSync(outPath) ? readFileSync(outPath, "utf8") : null;
 

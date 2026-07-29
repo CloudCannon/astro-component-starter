@@ -1,10 +1,10 @@
-import { frame, stack, eyebrow, heading, text } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, tile, glyph } from "../../../../../scripts/previews/kit.mjs";
 
-// A lone section heading with a small eyebrow above and a supporting line below.
-export default frame(
-  stack({ gap: 22, align: "start" }, [
-    eyebrow({ w: 130 }),
-    heading({ w: 660, h: 52 }),
-    text({ lines: 1, w: 780 }),
-  ])
-);
+const B = band(560);
+
+// One display-weight line with a leading mark, so it reads as a titled heading
+// rather than a stray bar.
+export default preview({
+  width: B.w,
+  draw: [tile(B.left, 380, 40, { fill: glyph }), bar(419, 380, 501, "display")],
+});

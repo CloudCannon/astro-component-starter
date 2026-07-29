@@ -1,15 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#faf9f7"/>
-  <g transform="translate(378 282) scale(1.0000)">
-    <rect x="0" y="0" width="524" height="236" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="32" y="33" width="220" height="22" rx="11" fill="#c2beb5"/>
-    <rect x="466" y="32" width="26" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="32" y="78" width="460" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="32" y="102" width="460" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="32" y="126" width="230" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="238" y="160" width="120" height="44" rx="8" fill="#ffffff" stroke="#cfccc4"/>
-    <rect x="268" y="178" width="60" height="8" rx="4" fill="#dcd9d2"/>
-    <rect x="372" y="160" width="120" height="44" rx="8" fill="#151515"/>
-    <rect x="402" y="178" width="60" height="8" rx="4" fill="#5a5a5a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-modal">
+  <title id="t-modal">Modal component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 277)">
+    <rect x="555" y="0" width="171" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="607" y="18" width="68" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="360" y="76" width="560" height="170" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="394" y="109" width="235" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="859" y="108" width="26" height="26" rx="13" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="394" y="154" width="492" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="394" y="178" width="492" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="394" y="202" width="246" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

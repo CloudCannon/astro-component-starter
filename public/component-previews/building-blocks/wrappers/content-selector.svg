@@ -1,17 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(292 248) scale(1.0000)">
-    <rect x="186" y="0" width="100" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="298" y="0" width="100" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="410" y="0" width="100" height="24" rx="12" fill="#faf9f7" stroke="#e7e5e0"/>
-    <rect x="0" y="48" width="696" height="256" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="28" y="76" width="260" height="200" rx="8" fill="#e8e6e0"/>
-    <circle cx="210" cy="140" r="12" fill="#cbc7bf"/>
-    <polygon points="75,232 137,176 184,232" fill="#cbc7bf"/>
-    <polygon points="145,232 200,188 252,232" fill="#cbc7bf"/>
-    <rect x="316" y="129" width="240" height="20" rx="10" fill="#c2beb5"/>
-    <rect x="316" y="163" width="340" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="316" y="187" width="340" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="316" y="211" width="204" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-content-selector">
+  <title id="t-content-selector">Content selector component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 300)">
+    <rect x="260" y="0" width="239" height="56" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="304" y="22" width="152" height="12" rx="6" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="260" y="72" width="239" height="56" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="303" y="94" width="130" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="144" width="239" height="56" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="303" y="166" width="163" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="564" y="0" width="326" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="564" y="46" width="456" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="564" y="70" width="456" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="564" y="94" width="456" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="564" y="118" width="282" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

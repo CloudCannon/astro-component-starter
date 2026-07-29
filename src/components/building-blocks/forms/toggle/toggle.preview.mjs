@@ -1,11 +1,10 @@
-import { frame, row, card, heading, avatar, T } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, toggle } from "../../../../../scripts/previews/kit.mjs";
 
-// Switch track with a dark knob pushed to one end, beside its label.
-export default frame(
-  row({ gap: 40, align: "center" }, [
-    card({ pad: 10, w: 180, align: "end", border: T.controlBorder }, [
-      avatar({ d: 64, fill: T.primary }),
-    ]),
-    heading({ w: 420, h: 28 }),
-  ])
-);
+const B = band(560);
+
+// Switch in the on position beside its label. The knob pushed hard right is the
+// whole signal, so the track is drawn at full ink rather than as an outline.
+export default preview({
+  width: B.w,
+  draw: [toggle(B.left, 0, 97, 52, true), bar(494, 13, 426, "heading")],
+});

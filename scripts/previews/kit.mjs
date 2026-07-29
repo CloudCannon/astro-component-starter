@@ -1,617 +1,777 @@
 /**
  * Component-preview kit — the authoring API for `*.preview.mjs` recipe files.
  *
- * A recipe is a small, semantic layout tree (stacks, rows, and primitives like
- * headings/buttons/images). This kit turns that tree into a polished, uniform
- * light-mockup SVG thumbnail, written by `scripts/previews/build.mjs` to
- * `public/component-previews/<component>.svg`.
+ * A recipe declares a content `width` and a flat list of drawing primitives in
+ * absolute canvas coordinates. `compile()` measures the drawn bounding box,
+ * centres it on (640, 400) with a single `<g transform>`, and asserts the box
+ * matches the declared width. Output goes to
+ * `public/component-previews/<component>.svg` via `scripts/previews/build.mjs`.
  *
  * The build is deterministic and browser-free: the same recipe always produces
- * the same SVG, so CI can rebuild and `git diff --exit-code` to catch drift.
- * A real screenshot of the component (see `scripts/previews/screenshot.mjs`) is
- * only an authoring reference — never an input to the output.
+ * the same SVG, so CI can rebuild and diff to catch drift. A real screenshot of
+ * the component (`scripts/previews/screenshot.mjs`) is only an authoring
+ * reference — never an input to the output.
  *
- * Design goals:
- *   - Recipes think in layout, not pixels. The engine measures + positions.
- *   - One token set → one global restyle re-skins all previews.
- *   - Everything fits + centers into a single 16:10 canvas, so a picker grid
- *     stays even regardless of how tall a recipe is.
+ * ---------------------------------------------------------------------------
+ * The design system this encodes
+ * ---------------------------------------------------------------------------
+ *
+ * Previews only look like one family if every one of them obeys the same small
+ * set of rules. The kit makes those rules the path of least resistance:
+ *
+ *   1. NINE COLOUR ROLES, no raw hex. Every fill and stroke is one of the roles
+ *      below, emitted as `var(--pv-role, #lightfallback)`. That is what makes
+ *      the whole set re-skinnable and dark-mode capable from one place.
+ *   2. A FIVE-STEP TYPE SCALE (display/heading/label/body/micro). Text is drawn
+ *      as fully-rounded bars at one of five heights — never an arbitrary one.
+ *      `bar()` takes a scale step, not a pixel height, precisely so a new
+ *      component cannot quietly introduce a sixth size.
+ *   3. A THREE-STEP STROKE SCALE (control 2 / field 3 / active 4).
+ *   4. FOUR CONTENT WIDTH BANDS (560 / 760 / 960 / 1120), declared per recipe
+ *      and asserted at build time. A handful of components are deliberately
+ *      exempt — a lone small control stretched to 560 reads as distorted — and
+ *      must say so with `exempt: true`.
+ *   5. EVERYTHING CENTRES on (640, 400). Recipes never do the centring maths;
+ *      `compile()` measures and emits the offset. So a picker grid stays even
+ *      no matter how tall or short a given composition is.
+ *
+ * Geometry is integer throughout.
+ *
+ * ---------------------------------------------------------------------------
+ * Authoring a new preview
+ * ---------------------------------------------------------------------------
+ *
+ *   import { preview, band, bar, lines, pill, media, glyph } from "<path>/kit.mjs";
+ *
+ *   const B = band(760);
+ *
+ *   export default preview({
+ *     width: B.w,
+ *     draw: [
+ *       bar(B.left, 0, 520, "display"),
+ *       lines(B.left, 62, [760, 760, 520]),
+ *       pill(B.left, 140, 150, 44),
+ *     ],
+ *   });
+ *
+ * Absolute y values are arbitrary — only their relationships matter, since the
+ * whole composition is re-centred. Start at 0 and work down.
+ *
+ * Prefer the composites (`pill`, `field`, `media`, `photoGlyph`, `navButton`, …)
+ * over hand-rolling shapes: they carry the stroke weights, radii and label
+ * insets that keep a new preview on-system.
  */
 
 // ---------------------------------------------------------------------------
-// Tokens. Colors come from the starter's real default theme (light):
-// `--color-brand: var(--gray-12)` is the primary button, so previews use a
-// dark neutral pill — faithful to what the default components actually render.
-// Softened one step to gray-11 so pure black doesn't dominate a tiny thumbnail.
+// Canvas
 // ---------------------------------------------------------------------------
 
-export const T = {
-  // Canvas — uniform 16:10 landscape.
-  W: 1280,
-  H: 800,
-  // How much breathing room to leave around fitted content, in canvas px.
-  margin: 64,
-
-  radius: 8,
-  radiusPill: 999,
-
-  // Surfaces
-  page: "#f4f3f0", // letterbox bars / behind the section
-  frame: "#ffffff", // the section surface
-  frameAlt: "#faf9f7", // a subtly-tinted section (e.g. "surface"/"muted" bg)
-  border: "#e7e5e0",
-  borderStrong: "#d9d6cf",
-
-  // Text bars — heading is visibly stronger than body copy.
-  heading: "#c2beb5",
-  text: "#dcd9d2",
-  eyebrow: "#d0ccc3",
-
-  // Brand primary (from --color-brand / gray-12, softened to gray-11).
-  primary: "#151515",
-  primaryOn: "#ffffff", // a faint bar drawn inside a primary pill
-  // Secondary / ghost control.
-  control: "#ffffff",
-  controlBorder: "#cfccc4",
-
-  // Media / image placeholder.
-  media: "#e8e6e0",
-  mediaGlyph: "#cbc7bf",
-
-  // Accent seam — intentionally UNUSED by the default kit. The default brand is
-  // a dark neutral, so nothing here is colored. If you want a colored preset
-  // baked into previews, set primary/eyebrow to an accent and rebuild all SVGs.
-  accent: "#2563eb",
-};
-
-// Default intrinsic sizes for primitives (canvas px). Recipes override via props.
-const D = {
-  headingH: 28,
-  textH: 12,
-  textGap: 12,
-  eyebrowH: 12,
-  eyebrowW: 120,
-  buttonW: 128,
-  buttonH: 44,
-  chipW: 72,
-  chipH: 24,
-  avatar: 48,
-  iconD: 40,
-  imageW: 520,
-  imageH: 320,
-  cardPad: 28,
-};
+export const W = 1280;
+export const H = 800;
+export const CX = W / 2;
+export const CY = H / 2;
 
 // ---------------------------------------------------------------------------
-// Node constructors. Each returns a plain object the engine measures + lays out.
+// Colour roles. Nine variables cover every preview. Light values are inlined as
+// the `var()` fallback so a preview loaded as `<img>` — an isolated document
+// page CSS cannot reach into — still renders correctly. The dark values are
+// injected as an in-document `@media` block by `compile()`, which is the only
+// way an `<img>`-loaded SVG can follow the viewer's colour scheme.
 //
-// Leaf nodes carry an intrinsic { w, h }. Container nodes (stack/row/grid/card/
-// frame) compute their size from children + gap + pad. `align`/`justify` follow
-// flexbox naming. Any node may set `w`/`h`/`grow` to override.
+//   paper    the page behind everything
+//   panel    a subtly-tinted panel (mobile menu, side nav, chevron chips)
+//   surface  a filled media / card surface, one step stronger than panel
+//   line     a faint hairline border or rule
+//   glyph    a placeholder mark: inactive control, dropdown copy, media glyph
+//   body     body-copy text bars
+//   subject  the component's SUBJECT — headings, active marks, nav labels.
+//            This role carries the visual hierarchy; use it for whatever the
+//            preview is actually about.
+//   ink      the brand primary (a dark neutral by default): filled buttons
+//   on-ink   a faint label bar drawn inside an `ink` fill
 // ---------------------------------------------------------------------------
 
-/** @param {object} props @param {string} type */
-function node(type, props = {}, children = []) {
-  return { type, ...props, children };
+const LIGHT = {
+  paper: "#FFFFFF",
+  panel: "#F7F6F3",
+  surface: "#EBE9E3",
+  line: "#E4E1DA",
+  glyph: "#CFCBC2",
+  body: "#DAD7D0",
+  subject: "#A8A398",
+  ink: "#151515",
+  "on-ink": "#9A9A9A",
+};
+
+const DARK = {
+  paper: "#151515",
+  panel: "#1D1D1B",
+  surface: "#232320",
+  line: "#2E2D29",
+  glyph: "#45443E",
+  body: "#3A3934",
+  subject: "#6E6A62",
+  ink: "#F5F3EE",
+  "on-ink": "#6B6B6B",
+};
+
+const role = (name) => `var(--pv-${name}, ${LIGHT[name]})`;
+
+export const paper = role("paper");
+export const panel = role("panel");
+export const surface = role("surface");
+export const line = role("line");
+export const glyph = role("glyph");
+export const body = role("body");
+export const subject = role("subject");
+export const ink = role("ink");
+export const onInk = role("on-ink");
+
+// ---------------------------------------------------------------------------
+// Scales
+// ---------------------------------------------------------------------------
+
+/** Type scale. Text is a fully-rounded bar at one of these five heights. */
+export const TYPE = {
+  display: 40,
+  heading: 26,
+  label: 16,
+  body: 12,
+  micro: 8,
+};
+
+/** Default role per type step — body copy is quieter than a heading. */
+const TYPE_FILL = {
+  display: subject,
+  heading: subject,
+  label: subject,
+  body,
+  micro: onInk,
+};
+
+/** Stroke scale. `control` = button/segment outline, `field` = form input, `active` = selected. */
+export const STROKE = { control: 2, field: 3, active: 4 };
+
+/** Corner radii. `box` is the universal soft corner; `tile` is the big icon plate. */
+export const R = { box: 10, tile: 44 };
+
+/** The four content width bands. */
+export const BANDS = [560, 760, 960, 1120];
+
+/**
+ * A content band: its width plus the canvas edges it centres to. Recipes read
+ * `B.left` / `B.right` / `B.cx` instead of doing arithmetic.
+ *
+ * @param {number} w One of BANDS, or any width when the recipe is `exempt`.
+ */
+export function band(w) {
+  const left = Math.round((W - w) / 2);
+
+  return { w, left, right: left + w, cx: CX };
 }
 
-/** Root section surface. Fills the canvas; centers its single child subtree. */
-export function frame(childOrProps, maybeChild) {
-  const [props, child] = isNode(childOrProps)
-    ? [{}, childOrProps]
-    : [childOrProps ?? {}, maybeChild];
+// ---------------------------------------------------------------------------
+// Core primitives. Every one returns a plain element object (or an array of
+// them) in absolute canvas coordinates. Recipes nest arrays freely; `compile()`
+// flattens. Draw order is array order.
+// ---------------------------------------------------------------------------
 
-  return node("frame", { bg: props.bg ?? T.frame, pad: props.pad ?? T.margin }, toArray(child));
-}
+const num = (v) => Math.round(v);
 
-/** Vertical layout. props: { gap, align: start|center|end|stretch, pad } */
-export function stack(props = {}, children = []) {
-  const [p, kids] = normalizeContainer(props, children);
-
-  return node(
-    "stack",
-    { gap: p.gap ?? 20, align: p.align ?? "start", pad: p.pad ?? 0, w: p.w, h: p.h },
-    kids
-  );
-}
-
-/** Horizontal layout. props: { gap, justify: start|center|end|between, align } */
-export function row(props = {}, children = []) {
-  const [p, kids] = normalizeContainer(props, children);
-
-  return node(
-    "row",
-    {
-      gap: p.gap ?? 16,
-      justify: p.justify ?? "start",
-      align: p.align ?? "center",
-      pad: p.pad ?? 0,
-      w: p.w,
-      h: p.h,
-    },
-    kids
-  );
-}
-
-/** Uniform grid. props: { cols, gap, cell: () => node | node, rows } */
-export function grid(props = {}) {
-  const cols = props.cols ?? 3;
-  const rows = props.rows ?? 1;
-  const gap = props.gap ?? 20;
-  const cells = [];
-
-  for (let i = 0; i < cols * rows; i++) {
-    cells.push(typeof props.cell === "function" ? props.cell(i) : cloneNode(props.cell));
-  }
-  return node("grid", { cols, rows, gap, w: props.w }, cells);
-}
-
-/** Bordered surface with padding — a card. props: { pad, w, bg, align, gap } */
-export function card(props = {}, children = []) {
-  const [p, kids] = normalizeContainer(props, children);
-
-  return node(
-    "card",
-    {
-      pad: p.pad ?? D.cardPad,
-      gap: p.gap ?? 16,
-      align: p.align ?? "start",
-      bg: p.bg ?? T.frame,
-      // Form controls pass `border: T.controlBorder` — the default card border is
-      // deliberately faint for content cards, but too faint to read as an input
-      // box at picker-thumbnail size.
-      border: p.border ?? T.border,
-      w: p.w,
-      h: p.h,
-    },
-    kids
-  );
-}
-
-/** Strong text bar (a title). props: { w, h } */
-export function heading(props = {}) {
-  return node("bar", {
-    fill: T.heading,
-    w: props.w ?? 360,
-    h: props.h ?? D.headingH,
-    r: (props.h ?? D.headingH) / 2,
-  });
-}
-
-/** Short muted bar above a heading. props: { w } */
-export function eyebrow(props = {}) {
-  return node("bar", {
-    fill: T.eyebrow,
-    w: props.w ?? D.eyebrowW,
-    h: D.eyebrowH,
-    r: D.eyebrowH / 2,
-  });
-}
-
-/** One or more body-copy line bars. props: { lines, w, gap, last, align } (last = width of final line, 0-1). */
-export function text(props = {}) {
-  const lines = props.lines ?? 3;
-  const w = props.w ?? 480;
-  const gap = props.gap ?? D.textGap;
-  const last = props.last ?? 0.6;
-  const align = props.align ?? "start";
-  const kids = [];
-
-  for (let i = 0; i < lines; i++) {
-    const lineW = i === lines - 1 && lines > 1 ? Math.round(w * last) : w;
-
-    kids.push(node("bar", { fill: props.fill ?? T.text, w: lineW, h: D.textH, r: D.textH / 2 }));
-  }
-  return node("stack", { gap, align, pad: 0, w, children: kids }, kids);
-}
-
-/** Button pill. props: { w, variant: primary|ghost, h } */
-export function button(props = {}) {
-  const variant = props.variant ?? "primary";
-  const w = props.w ?? D.buttonW;
-  const h = props.h ?? D.buttonH;
-
-  return node("button", { variant, w, h, r: T.radius });
-}
-
-/** Media / image placeholder. props: { w, h, r, play } — `play: true` draws a play button (video) instead of the mountain glyph. */
-export function image(props = {}) {
-  return node("image", {
-    w: props.w ?? D.imageW,
-    h: props.h ?? D.imageH,
-    r: props.r ?? T.radius,
-    play: props.play ?? false,
-  });
-}
-
-/** Circular avatar. props: { d, fill } — form recipes pass a dark `fill` for control knobs. */
-export function avatar(props = {}) {
-  const d = props.d ?? D.avatar;
-
-  return node("circle", { fill: props.fill ?? T.media, d });
-}
-
-/** Small pill (tag/badge). props: { w } */
-export function chip(props = {}) {
-  return node("bar", {
-    fill: T.frameAlt,
-    stroke: T.border,
-    w: props.w ?? D.chipW,
-    h: D.chipH,
-    r: D.chipH / 2,
-  });
-}
-
-/** Square-ish icon tile. props: { d, fill } */
-export function icon(props = {}) {
-  const d = props.d ?? D.iconD;
-
-  return node("bar", { fill: props.fill ?? T.media, w: d, h: d, r: T.radius });
-}
-
-/** Fixed empty gap along the parent's main axis. props: { size } */
-export function spacer(props = {}) {
-  return node("spacer", { w: props.size ?? 24, h: props.size ?? 24 });
-}
-
-/** Horizontal rule. props: { w, h, fill } — a thicker `h` doubles as a slider track. */
-export function divider(props = {}) {
-  const h = props.h ?? 2;
-
-  return node("bar", { fill: props.fill ?? T.border, w: props.w ?? 480, h, r: h / 2 });
+/**
+ * Rounded rectangle — the workhorse.
+ * @param {object} [o] { fill, stroke, sw, r, dash, opacity }
+ */
+export function box(x, y, w, h, o = {}) {
+  return {
+    k: "rect",
+    x: num(x),
+    y: num(y),
+    w: num(w),
+    h: num(h),
+    r: o.r ?? R.box,
+    fill: o.fill ?? surface,
+    stroke: o.stroke ?? null,
+    sw: o.sw ?? (o.stroke ? STROKE.control : null),
+    dash: o.dash ?? null,
+    opacity: o.opacity ?? null,
+  };
 }
 
 /**
- * Small downward chevron — the cue that reads unmistakably as "this control
- * opens a menu". Distinguishes select/date from a plain text input, which are
- * otherwise the same silhouette. props: { w, fill }
+ * A text bar: fully rounded, height from the type scale.
+ * @param {"display"|"heading"|"label"|"body"|"micro"} size
+ * @param {object} [o] { fill, opacity }
  */
-export function caret(props = {}) {
-  const w = props.w ?? 18;
+export function bar(x, y, w, size = "body", o = {}) {
+  const h = TYPE[size];
 
-  return node("caret", { w, h: Math.round(w * 0.6), fill: props.fill ?? T.controlBorder });
+  if (!h) throw new Error(`bar(): unknown type step "${size}"`);
+
+  return box(x, y, w, h, {
+    r: h / 2,
+    fill: o.fill ?? TYPE_FILL[size],
+    opacity: o.opacity,
+  });
+}
+
+/** Filled circle. @param {object} [o] { fill, opacity } */
+export function dot(cx, cy, r, o = {}) {
+  return {
+    k: "circle",
+    cx: num(cx),
+    cy: num(cy),
+    r: num(r),
+    fill: o.fill ?? glyph,
+    stroke: o.stroke ?? null,
+    sw: o.sw ?? (o.stroke ? STROKE.control : null),
+    opacity: o.opacity ?? null,
+  };
+}
+
+/** Polygon. @param {Array<[number, number]>} pts @param {object} [o] { fill, opacity } */
+export function poly(pts, o = {}) {
+  return {
+    k: "poly",
+    pts: pts.map(([x, y]) => [num(x), num(y)]),
+    fill: o.fill ?? glyph,
+    opacity: o.opacity ?? null,
+  };
+}
+
+/** A hairline rule. */
+export function rule(x, y, w, o = {}) {
+  return box(x, y, w, o.h ?? 2, { r: 1, fill: o.fill ?? line });
 }
 
 // ---------------------------------------------------------------------------
-// Helpers
+// Layout helpers — for composing without hand-computing every coordinate.
 // ---------------------------------------------------------------------------
 
-function isNode(v) {
-  return v && typeof v === "object" && typeof v.type === "string";
-}
-function toArray(v) {
-  if (v == null) return [];
-  return Array.isArray(v) ? v.filter(Boolean) : [v];
-}
-function normalizeContainer(props, children) {
-  // Support stack({gap}, [..]) and stack([..]) and stack({children:[..]}).
-  if (Array.isArray(props)) return [{}, props.filter(Boolean)];
-  const kids = toArray(children.length ? children : props.children);
-
-  return [props, kids];
-}
-function cloneNode(n) {
-  return JSON.parse(JSON.stringify(n));
-}
-
-// ---------------------------------------------------------------------------
-// Measure — assign intrinsic { mw, mh } (measured width/height) to every node,
-// bottom-up.
-// ---------------------------------------------------------------------------
-
-function measure(n) {
-  switch (n.type) {
-    case "bar":
-    case "button":
-    case "caret":
-    case "image":
-    case "spacer": {
-      n.mw = n.w;
-      n.mh = n.h;
-      return n;
-    }
-    case "circle": {
-      n.mw = n.d;
-      n.mh = n.d;
-      return n;
-    }
-    case "frame": {
-      n.children.forEach(measure);
-      n.mw = T.W;
-      n.mh = T.H;
-      return n;
-    }
-    case "stack":
-    case "card": {
-      n.children.forEach(measure);
-      const pad = n.pad ?? 0;
-      const gap = n.gap ?? 0;
-      const contentW = Math.max(0, ...n.children.map((c) => c.mw));
-      const contentH =
-        n.children.reduce((sum, c) => sum + c.mh, 0) + gap * Math.max(0, n.children.length - 1);
-
-      n.mw = (n.w ?? contentW) + pad * 2;
-      n.mh = (n.h ?? contentH) + pad * 2;
-      n._contentW = contentW;
-      return n;
-    }
-    case "row": {
-      n.children.forEach(measure);
-      const pad = n.pad ?? 0;
-      const gap = n.gap ?? 0;
-      const contentW =
-        n.children.reduce((sum, c) => sum + c.mw, 0) + gap * Math.max(0, n.children.length - 1);
-      const contentH = Math.max(0, ...n.children.map((c) => c.mh));
-
-      n.mw = (n.w ?? contentW) + pad * 2;
-      n.mh = (n.h ?? contentH) + pad * 2;
-      return n;
-    }
-    case "grid": {
-      n.children.forEach(measure);
-      const cellW = Math.max(0, ...n.children.map((c) => c.mw));
-      const cellH = Math.max(0, ...n.children.map((c) => c.mh));
-
-      n._cellW = cellW;
-      n._cellH = cellH;
-      n.mw = n.w ?? cellW * n.cols + n.gap * (n.cols - 1);
-      n.mh = cellH * n.rows + n.gap * (n.rows - 1);
-      return n;
-    }
-    default:
-      n.mw = n.mw ?? 0;
-      n.mh = n.mh ?? 0;
-      return n;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Position — assign absolute { x, y, w, h } given a box to fill.
-// ---------------------------------------------------------------------------
-
-function alignOffset(mode, extra) {
-  if (mode === "center") return extra / 2;
-  if (mode === "end") return extra;
-  return 0; // start / stretch
-}
-
-function place(n, x, y, boxW, boxH) {
-  n.x = x;
-  n.y = y;
-  n.w = n.mw;
-  n.h = n.mh;
-
-  switch (n.type) {
-    case "frame": {
-      // Fit the (single) child subtree into the canvas minus margins, centered.
-      const child = n.children[0];
-
-      if (!child) return;
-      const availW = T.W - n.pad * 2;
-      const availH = T.H - n.pad * 2;
-      const scale = Math.min(1, availW / child.mw, availH / child.mh);
-
-      n._scale = scale;
-      const sw = child.mw * scale;
-      const sh = child.mh * scale;
-
-      n._childX = (T.W - sw) / 2;
-      n._childY = (T.H - sh) / 2;
-      // Position the child in its own unscaled coordinate space; the emitter
-      // wraps it in a <g transform> that scales + translates.
-      place(child, 0, 0, child.mw, child.mh);
-      return;
-    }
-    case "stack":
-    case "card": {
-      const pad = n.pad ?? 0;
-      const gap = n.gap ?? 0;
-      const innerX = x + pad;
-      let cy = y + pad;
-      const innerW = n.w - pad * 2;
-
-      for (const c of n.children) {
-        const extra = innerW - c.mw;
-        const cx = innerX + (n.align === "stretch" ? 0 : alignOffset(n.align, extra));
-        const cw = n.align === "stretch" ? innerW : c.mw;
-
-        if (n.align === "stretch") c.mw = cw;
-        place(c, cx, cy, cw, c.mh);
-        cy += c.mh + gap;
-      }
-      return;
-    }
-    case "row": {
-      const pad = n.pad ?? 0;
-      const gap = n.gap ?? 0;
-      const innerX = x + pad;
-      const innerY = y + pad;
-      const innerW = n.w - pad * 2;
-      const innerH = n.h - pad * 2;
-      const childrenW =
-        n.children.reduce((s, c) => s + c.mw, 0) + gap * Math.max(0, n.children.length - 1);
-      let cx =
-        innerX + alignOffset(n.justify === "between" ? "start" : n.justify, innerW - childrenW);
-      const between =
-        n.justify === "between" && n.children.length > 1
-          ? (innerW - n.children.reduce((s, c) => s + c.mw, 0)) / (n.children.length - 1)
-          : gap;
-
-      for (const c of n.children) {
-        const cy = innerY + alignOffset(n.align, innerH - c.mh);
-
-        place(c, cx, cy, c.mw, c.mh);
-        cx += c.mw + between;
-      }
-      return;
-    }
-    case "grid": {
-      const { cols, gap } = n;
-      const cellW = n._cellW;
-      const cellH = n._cellH;
-
-      n.children.forEach((c, i) => {
-        const col = i % cols;
-        const rowI = Math.floor(i / cols);
-        const cx = x + col * (cellW + gap) + alignOffset("center", cellW - c.mw);
-        const cy = y + rowI * (cellH + gap) + alignOffset("center", cellH - c.mh);
-
-        place(c, cx, cy, c.mw, c.mh);
-      });
-      return;
-    }
-    default:
-      return;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Emit — walk the positioned tree, produce SVG rects.
-// ---------------------------------------------------------------------------
-
-function rnd(v) {
-  return Math.round(v);
-}
-
-function rect(x, y, w, h, fill, r, stroke) {
-  const attrs = [
-    `x="${rnd(x)}"`,
-    `y="${rnd(y)}"`,
-    `width="${rnd(w)}"`,
-    `height="${rnd(h)}"`,
-    r >= 1 ? `rx="${rnd(Math.min(r, w / 2, h / 2))}"` : null,
-    `fill="${fill}"`,
-    stroke ? `stroke="${stroke}"` : null,
-  ].filter(Boolean);
-
-  return `<rect ${attrs.join(" ")}/>`;
-}
-
-function emit(n, out) {
-  switch (n.type) {
-    case "frame": {
-      // Section surface fills the whole canvas.
-      out.push(`  ${rect(0, 0, T.W, T.H, n.bg, 0, null)}`);
-      const child = n.children[0];
-
-      if (!child) return;
-      const s = n._scale ?? 1;
-      const inner = [];
-
-      emit(child, inner);
-      out.push(
-        `  <g transform="translate(${rnd(n._childX)} ${rnd(n._childY)}) scale(${s.toFixed(4)})">`
-      );
-      inner.forEach((line) => out.push(`  ${line}`));
-      out.push(`  </g>`);
-      return;
-    }
-    case "stack":
-    case "row": {
-      n.children.forEach((c) => emit(c, out));
-      return;
-    }
-    case "card": {
-      out.push(`  ${rect(n.x, n.y, n.w, n.h, n.bg, T.radius, n.border ?? T.border)}`);
-      n.children.forEach((c) => emit(c, out));
-      return;
-    }
-    case "grid": {
-      n.children.forEach((c) => emit(c, out));
-      return;
-    }
-    case "bar": {
-      out.push(`  ${rect(n.x, n.y, n.w, n.h, n.fill, n.r ?? 0, n.stroke ?? null)}`);
-      return;
-    }
-    case "caret": {
-      const points = [
-        `${rnd(n.x)},${rnd(n.y)}`,
-        `${rnd(n.x + n.w)},${rnd(n.y)}`,
-        `${rnd(n.x + n.w / 2)},${rnd(n.y + n.h)}`,
-      ].join(" ");
-
-      out.push(`  <polygon points="${points}" fill="${n.fill}"/>`);
-      return;
-    }
-    case "circle": {
-      out.push(
-        `  <circle cx="${rnd(n.x + n.d / 2)}" cy="${rnd(n.y + n.d / 2)}" r="${rnd(n.d / 2)}" fill="${n.fill}"/>`
-      );
-      return;
-    }
-    case "button": {
-      const fill = n.variant === "primary" ? T.primary : T.control;
-      const stroke = n.variant === "primary" ? null : T.controlBorder;
-
-      out.push(`  ${rect(n.x, n.y, n.w, n.h, fill, n.r ?? T.radius, stroke)}`);
-      // Faint label bar inside the pill.
-      const lw = Math.min(n.w * 0.5, 64);
-      const lh = 8;
-      const labelFill = n.variant === "primary" ? "#5a5a5a" : T.text;
-
-      out.push(
-        `  ${rect(n.x + (n.w - lw) / 2, n.y + (n.h - lh) / 2, lw, lh, labelFill, lh / 2, null)}`
-      );
-      return;
-    }
-    case "image": {
-      out.push(`  ${rect(n.x, n.y, n.w, n.h, T.media, n.r ?? T.radius, null)}`);
-      const gx = n.x;
-      const gy = n.y;
-      const gw = n.w;
-      const gh = n.h;
-
-      if (n.play) {
-        // Centered play button: darker disc + white triangle.
-        const cx = gx + gw / 2;
-        const cy = gy + gh / 2;
-        const pr = Math.max(16, Math.min(gw, gh) * 0.14);
-        const t = pr * 0.5;
-        const tri = `${rnd(cx - t * 0.55)},${rnd(cy - t)} ${rnd(cx - t * 0.55)},${rnd(cy + t)} ${rnd(cx + t * 0.9)},${rnd(cy)}`;
-
-        out.push(`  <circle cx="${rnd(cx)}" cy="${rnd(cy)}" r="${rnd(pr)}" fill="#a8a39a"/>`);
-        out.push(`  <polygon points="${tri}" fill="#ffffff"/>`);
-        return;
-      }
-      // Simple mountain + sun glyph, centered in the lower portion.
-      const sunR = Math.max(6, Math.min(gw, gh) * 0.06);
-      const sunCx = gx + gw * 0.7;
-      const sunCy = gy + gh * 0.32;
-      const baseY = gy + gh * 0.78;
-      const p1 = `${rnd(gx + gw * 0.18)},${rnd(baseY)} ${rnd(gx + gw * 0.42)},${rnd(gy + gh * 0.5)} ${rnd(gx + gw * 0.6)},${rnd(baseY)}`;
-      const p2 = `${rnd(gx + gw * 0.45)},${rnd(baseY)} ${rnd(gx + gw * 0.66)},${rnd(gy + gh * 0.56)} ${rnd(gx + gw * 0.86)},${rnd(baseY)}`;
-
-      out.push(
-        `  <circle cx="${rnd(sunCx)}" cy="${rnd(sunCy)}" r="${rnd(sunR)}" fill="${T.mediaGlyph}"/>`
-      );
-      out.push(`  <polygon points="${p1}" fill="${T.mediaGlyph}"/>`);
-      out.push(`  <polygon points="${p2}" fill="${T.mediaGlyph}"/>`);
-      return;
-    }
-    case "spacer":
-      return;
-    default:
-      return;
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Public: compile a recipe tree to an SVG string.
-// ---------------------------------------------------------------------------
-
-/** @param {object} tree A `frame(...)` root (or any node — wrapped in a frame). */
-export function compile(tree) {
-  const root = tree.type === "frame" ? tree : frame(tree);
-
-  measure(root);
-  place(root, 0, 0, T.W, T.H);
+/** Flatten arbitrarily-nested element arrays, dropping null/false/undefined. */
+export function flatten(els) {
   const out = [];
+  const walk = (v) => {
+    if (v == null || v === false) return;
+    if (Array.isArray(v)) return v.forEach(walk);
+    out.push(v);
+  };
 
-  emit(root, out);
+  walk(els);
+  return out;
+}
+
+/** Translate a group of elements by (dx, dy). */
+export function at(dx, dy, els) {
+  return flatten(els).map((e) => {
+    if (e.k === "rect") return { ...e, x: e.x + num(dx), y: e.y + num(dy) };
+    if (e.k === "circle") return { ...e, cx: e.cx + num(dx), cy: e.cy + num(dy) };
+    return { ...e, pts: e.pts.map(([x, y]) => [x + num(dx), y + num(dy)]) };
+  });
+}
+
+/** `repeat(3, i => …)` — build n groups, index-aware. */
+export function repeat(n, fn) {
+  return Array.from({ length: n }, (_, i) => fn(i));
+}
+
+/** The bounding box of a group of elements (stroke-agnostic, matching how bands are measured). */
+export function bounds(els) {
+  const list = flatten(els);
+
+  if (!list.length) return null;
+  let x0 = Infinity;
+  let y0 = Infinity;
+  let x1 = -Infinity;
+  let y1 = -Infinity;
+
+  for (const e of list) {
+    if (e.k === "rect") {
+      x0 = Math.min(x0, e.x);
+      y0 = Math.min(y0, e.y);
+      x1 = Math.max(x1, e.x + e.w);
+      y1 = Math.max(y1, e.y + e.h);
+    } else if (e.k === "circle") {
+      x0 = Math.min(x0, e.cx - e.r);
+      y0 = Math.min(y0, e.cy - e.r);
+      x1 = Math.max(x1, e.cx + e.r);
+      y1 = Math.max(y1, e.cy + e.r);
+    } else {
+      for (const [x, y] of e.pts) {
+        x0 = Math.min(x0, x);
+        y0 = Math.min(y0, y);
+        x1 = Math.max(x1, x);
+        y1 = Math.max(y1, y);
+      }
+    }
+  }
+  return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0 };
+}
+
+/**
+ * Stack groups vertically from (x, y), each offset by the previous group's
+ * height plus `gap`. Groups keep their own internal x positions.
+ */
+export function stackY(x, y, gap, groups) {
+  const out = [];
+  let cy = y;
+
+  for (const group of groups) {
+    const g = flatten(group);
+
+    if (!g.length) continue;
+    const b = bounds(g);
+
+    out.push(at(x - b.x0, cy - b.y0, g));
+    cy += b.h + gap;
+  }
+  return out;
+}
+
+/** Lay groups out horizontally from (x, y), top-aligned. */
+export function rowX(x, y, gap, groups) {
+  const out = [];
+  let cx = x;
+
+  for (const group of groups) {
+    const g = flatten(group);
+
+    if (!g.length) continue;
+    const b = bounds(g);
+
+    out.push(at(cx - b.x0, y - b.y0, g));
+    cx += b.w + gap;
+  }
+  return out;
+}
+
+/** Even columns: `columns(x, 4, 293, i => …)` places group i at x + i * pitch. */
+export function columns(x, count, pitch, fn) {
+  return repeat(count, (i) => at(x + i * pitch, 0, fn(i)));
+}
+
+/** Centre a group horizontally on `cx` (leaves y alone). */
+export function centerX(cx, els) {
+  const g = flatten(els);
+  const b = bounds(g);
+
+  return b ? at(cx - (b.x0 + b.x1) / 2, 0, g) : g;
+}
+
+/**
+ * A column of body-copy bars with explicit per-line widths — the ragged right
+ * edge is what makes a text block read as prose rather than a table.
+ *
+ * @param {number[]} widths One entry per line.
+ * @param {object} [o] { size = "body", gap = 12 (leading between bars), fill,
+ *   align = "left"|"center", within }
+ */
+export function lines(x, y, widths, o = {}) {
+  const size = o.size ?? "body";
+  const step = TYPE[size] + (o.gap ?? 12);
+  const within = o.within ?? Math.max(...widths);
+
+  return widths.map((w, i) => {
+    const dx = o.align === "center" ? Math.round((within - w) / 2) : 0;
+
+    return bar(x + dx, y + i * step, w, size, { fill: o.fill });
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Composites. These carry the system's weights, radii and insets so a recipe
+// does not have to remember them.
+// ---------------------------------------------------------------------------
+
+/**
+ * A button. `ink` is the filled brand primary; `ghost` is an outlined control.
+ * The inner label bar is centred automatically — `micro` in a short button,
+ * `body` in a tall one, since an 8px bar disappears inside a 76px pill.
+ *
+ * @param {object} [o] { variant: "ink"|"ghost", label, labelSize, r }
+ */
+export function pill(x, y, w, h, o = {}) {
+  const variant = o.variant ?? "ink";
+  const labelSize = o.labelSize ?? (h >= 56 ? "body" : "micro");
+  const labelW = o.label ?? Math.min(Math.round(w * 0.45), 112);
+  const lh = TYPE[labelSize];
+  const shell =
+    variant === "ink"
+      ? box(x, y, w, h, { r: o.r ?? R.box, fill: ink })
+      : box(x, y, w, h, { r: o.r ?? R.box, fill: paper, stroke: glyph, sw: STROKE.control });
+
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${T.W} ${T.H}">`,
-    ...out,
+    shell,
+    bar(x + Math.round((w - labelW) / 2), y + Math.round((h - lh) / 2), labelW, labelSize, {
+      fill: variant === "ink" ? onInk : body,
+    }),
+  ];
+}
+
+/** A form field: paper plate, `field`-weight glyph outline. */
+export function field(x, y, w, h, o = {}) {
+  return box(x, y, w, h, {
+    r: o.r ?? R.box,
+    fill: o.fill ?? paper,
+    stroke: o.stroke ?? glyph,
+    sw: o.sw ?? STROKE.field,
+    dash: o.dash,
+  });
+}
+
+/** A bordered content plate: paper with a `line` hairline. Accordion rows, modals, FAQ items. */
+export function plate(x, y, w, h, o = {}) {
+  return box(x, y, w, h, {
+    r: o.r ?? R.box,
+    fill: o.fill ?? paper,
+    stroke: o.stroke ?? line,
+    sw: o.sw ?? STROKE.control,
+  });
+}
+
+/** A filled media / card surface. No glyph — add `photoGlyph` or `playDisc` on top. */
+export function media(x, y, w, h, o = {}) {
+  return box(x, y, w, h, { r: o.r ?? R.box, fill: o.fill ?? surface, stroke: o.stroke, sw: o.sw });
+}
+
+/** The sun disc of a photo placeholder. */
+export function sun(cx, cy, r, o = {}) {
+  return dot(cx, cy, r, { fill: o.fill ?? glyph });
+}
+
+/** One mountain of a photo placeholder: base from x1..x2 at yBase, apex at (xApex, yApex). */
+export function peak(x1, x2, xApex, yBase, yApex, o = {}) {
+  return poly(
+    [
+      [x1, yBase],
+      [xApex, yApex],
+      [x2, yBase],
+    ],
+    { fill: o.fill ?? glyph }
+  );
+}
+
+/**
+ * The default photo placeholder glyph — sun plus two overlapping peaks, sized
+ * proportionally to the media box. Use this when authoring a NEW preview; the
+ * shipped set mostly carries hand-tuned `sun`/`peak` calls instead.
+ */
+export function photoGlyph(x, y, w, h, o = {}) {
+  const fill = o.fill ?? glyph;
+  const baseY = y + h * 0.78;
+
+  return [
+    sun(x + w * 0.7, y + h * 0.32, Math.max(6, Math.min(w, h) * 0.06), { fill }),
+    peak(x + w * 0.18, x + w * 0.6, x + w * 0.42, baseY, y + h * 0.5, { fill }),
+    peak(x + w * 0.45, x + w * 0.86, x + w * 0.66, baseY, y + h * 0.56, { fill }),
+  ];
+}
+
+/**
+ * A play button: filled disc with a paper triangle. `r` drives the triangle,
+ * so the two always stay in proportion.
+ */
+export function playDisc(cx, cy, r, o = {}) {
+  const left = cx - (o.back ?? Math.round(r * 0.2778));
+  const half = o.half ?? Math.round(r * 0.5278);
+  const tip = cx + (o.reach ?? Math.round(r * 0.6389));
+
+  return [
+    dot(cx, cy, r, { fill: o.fill ?? subject }),
+    poly(
+      [
+        [left, cy - half],
+        [left, cy + half],
+        [tip, cy],
+      ],
+      { fill: o.tri ?? paper }
+    ),
+  ];
+}
+
+/** A downward caret — the "this opens a menu" cue that separates select/date from a text input. */
+export function caret(x, y, w, o = {}) {
+  const h = o.h ?? Math.round(w * 0.56);
+
+  return poly(
+    [
+      [x, y],
+      [x + w, y],
+      [x + w / 2, y + h],
+    ],
+    { fill: o.fill ?? subject }
+  );
+}
+
+/** A sideways chevron. `dir` is "left" or "right". */
+export function chevron(x, y, w, h, dir = "right", o = {}) {
+  const pts =
+    dir === "right"
+      ? [
+          [x, y],
+          [x, y + h],
+          [x + w, y + h / 2],
+        ]
+      : [
+          [x + w, y],
+          [x + w, y + h],
+          [x, y + h / 2],
+        ];
+
+  return poly(pts, { fill: o.fill ?? glyph });
+}
+
+/** A round carousel nav button: filled disc with a paper chevron. */
+export function navButton(cx, cy, dir, o = {}) {
+  const r = o.r ?? 40;
+  const half = o.half ?? 18;
+  const reach = o.reach ?? 10;
+  const stem = o.stem ?? 9;
+  const pts =
+    dir === "right"
+      ? [
+          [cx - stem, cy - half],
+          [cx - stem, cy + half],
+          [cx + reach, cy],
+        ]
+      : [
+          [cx + stem, cy - half],
+          [cx + stem, cy + half],
+          [cx - reach, cy],
+        ];
+
+  return [dot(cx, cy, r, { fill: o.fill ?? subject }), poly(pts, { fill: o.tri ?? paper })];
+}
+
+/** A small square plate — icon tile, social button, avatar stand-in. */
+export function tile(x, y, d, o = {}) {
+  return box(x, y, d, d, { r: o.r ?? R.box, fill: o.fill ?? surface, stroke: o.stroke, sw: o.sw });
+}
+
+/**
+ * Four L-shaped crop marks inside a box — the cue that reads as "embedded
+ * frame" rather than "photo", which a plain surface rect cannot do.
+ */
+export function cropCorners(x, y, w, h, o = {}) {
+  const inset = o.inset ?? 71;
+  const insetY = o.insetY ?? 68;
+  const arm = o.arm ?? 115;
+  const t = o.thick ?? 12;
+  const legT = o.legThick ?? 13;
+  const legH = o.legH ?? 110;
+  const fill = o.fill ?? subject;
+  const l = x + inset;
+  const rgt = x + w - inset - arm;
+  const top = y + insetY;
+  const bot = y + h - insetY - t;
+  const armBar = (bx, by) => box(bx, by, arm, t, { r: t / 2, fill });
+  const legBar = (bx, by) => box(bx, by, legT, legH, { r: R.box, fill });
+
+  return [
+    armBar(l, top),
+    legBar(l, top),
+    armBar(rgt, top),
+    legBar(rgt + arm - legT, top),
+    armBar(l, bot),
+    legBar(l, bot - legH + t),
+    armBar(rgt, bot),
+    legBar(rgt + arm - legT, bot - legH + t),
+  ];
+}
+
+/**
+ * Carousel position dots. The active one is an elongated bar rather than a
+ * bigger circle — at thumbnail size a size difference between two small discs
+ * is invisible, a shape difference is not.
+ */
+export function dots(cx, cy, count, active = 0, o = {}) {
+  const r = o.r ?? 5;
+  const gap = o.gap ?? 20;
+  const activeW = o.activeW ?? 31;
+  const activeH = o.activeH ?? 8;
+  const inactive = o.fill ?? glyph;
+  const activeFill = o.activeFill ?? subject;
+  const widths = repeat(count, (i) => (i === active ? activeW : r * 2));
+  const total = widths.reduce((s, w) => s + w, 0) + gap * (count - 1);
+  const out = [];
+  let x = cx - total / 2;
+
+  for (let i = 0; i < count; i++) {
+    if (i === active) {
+      out.push(box(x, cy - activeH / 2, activeW, activeH, { r: activeH / 2, fill: activeFill }));
+    } else {
+      out.push(dot(x + r, cy, r, { fill: inactive }));
+    }
+    x += widths[i] + gap;
+  }
+  return out;
+}
+
+/** A checkbox / radio mark. `on` fills it with ink. */
+export function checkbox(x, y, d, on = false, o = {}) {
+  return box(x, y, d, d, { r: o.r ?? 6, fill: on ? ink : (o.fill ?? glyph) });
+}
+
+/** A switch: ink track with a paper knob, knob side set by `on`. */
+export function toggle(x, y, w, h, on = true, o = {}) {
+  const kr = o.knob ?? Math.round(h / 2 - 8);
+  const pad = o.pad ?? 8;
+  const kx = on ? x + w - kr - pad : x + kr + pad;
+
+  return [
+    box(x, y, w, h, { r: h / 2, fill: on ? ink : glyph }),
+    dot(kx, y + h / 2, kr, { fill: o.knobFill ?? paper }),
+  ];
+}
+
+// ---------------------------------------------------------------------------
+// preview() — the recipe wrapper.
+// ---------------------------------------------------------------------------
+
+/**
+ * Declare a preview.
+ *
+ * @param {object} spec
+ * @param {number} spec.width  Content bounding-box width. Must be one of BANDS
+ *   unless `exempt` is set. Asserted against the drawn geometry at build time,
+ *   so an edit that drifts off-band fails loudly instead of silently.
+ * @param {boolean} [spec.exempt] Opt out of the band check — for a single small
+ *   control that would read as distorted stretched to 560.
+ * @param {string} [spec.title] Override the derived `<title>` text.
+ * @param {Array} spec.draw Nested arrays of elements.
+ */
+export function preview(spec) {
+  if (typeof spec?.width !== "number") {
+    throw new Error("preview(): `width` is required (the content bounding-box width)");
+  }
+  if (!spec.exempt && !BANDS.includes(spec.width)) {
+    throw new Error(
+      `preview(): width ${spec.width} is not a band (${BANDS.join(" / ")}). ` +
+        `Pick a band, or set \`exempt: true\` with a comment saying why.`
+    );
+  }
+  return {
+    __preview: true,
+    width: spec.width,
+    exempt: !!spec.exempt,
+    title: spec.title,
+    draw: spec.draw,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Emit
+// ---------------------------------------------------------------------------
+
+function attrs(pairs) {
+  return pairs
+    .filter(([, v]) => v != null)
+    .map(([k, v]) => `${k}="${v}"`)
+    .join(" ");
+}
+
+function emit(e) {
+  if (e.k === "rect") {
+    const r = e.r >= 1 ? Math.round(Math.min(e.r, e.w / 2, e.h / 2)) : null;
+
+    return `<rect ${attrs([
+      ["x", e.x],
+      ["y", e.y],
+      ["width", e.w],
+      ["height", e.h],
+      ["rx", r],
+      ["fill", e.fill],
+      ["stroke", e.stroke],
+      ["stroke-width", e.sw],
+      ["stroke-dasharray", e.dash],
+      ["opacity", e.opacity],
+    ])}/>`;
+  }
+  if (e.k === "circle") {
+    return `<circle ${attrs([
+      ["cx", e.cx],
+      ["cy", e.cy],
+      ["r", e.r],
+      ["fill", e.fill],
+      ["stroke", e.stroke],
+      ["stroke-width", e.sw],
+      ["opacity", e.opacity],
+    ])}/>`;
+  }
+  return `<polygon ${attrs([
+    ["points", e.pts.map(([x, y]) => `${x},${y}`).join(" ")],
+    ["fill", e.fill],
+    ["opacity", e.opacity],
+  ])}/>`;
+}
+
+/** `hero-split` -> `Hero split`. */
+function titleCase(slug) {
+  const words = slug.split("-").join(" ");
+
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+/**
+ * The dark-mode block, injected INSIDE every SVG. An external stylesheet cannot
+ * reach into an `<img>`-loaded SVG, and CloudCannon loads previews by URL — so
+ * this is the only way the set follows the viewer's colour scheme.
+ *
+ * Scoped to `svg`, deliberately NOT `:root`: `:root` would match the host
+ * `<html>` when the same file is inlined, leaking the overrides onto the page.
+ */
+const DARK_BLOCK = [
+  "  <style>",
+  "    @media (prefers-color-scheme: dark) {",
+  "      svg {",
+  ...Object.entries(DARK).map(([k, v]) => `        --pv-${k}: ${v};`),
+  "      }",
+  "    }",
+  "  </style>",
+].join("\n");
+
+/**
+ * Compile a recipe to an SVG string.
+ *
+ * @param {object} spec A `preview({...})` result.
+ * @param {string} key  The component key, e.g. `page-sections/heroes/hero-split`.
+ */
+export function compile(spec, key = "preview") {
+  if (!spec?.__preview) {
+    throw new Error("compile(): recipe default export must be a preview({...}) result");
+  }
+  const els = flatten(spec.draw);
+
+  if (!els.length) throw new Error("compile(): recipe drew nothing");
+
+  const b = bounds(els);
+
+  if (b.w !== spec.width) {
+    throw new Error(
+      `compile(): declared width ${spec.width} but the drawn content measures ${b.w} ` +
+        `(x ${b.x0}..${b.x1}). Fix the geometry or the declared width.`
+    );
+  }
+
+  // Centre the drawn box on (640, 400) — recipes never do this arithmetic.
+  const dx = Math.round(CX - (b.x0 + b.x1) / 2);
+  const dy = Math.round(CY - (b.y0 + b.y1) / 2);
+
+  const slug = key.split("/").pop();
+  const id = `t-${slug}`;
+  const title = `${spec.title ?? titleCase(slug)} component preview`;
+  const open = dx === 0 && dy === 0 ? "  <g>" : `  <g transform="translate(${dx} ${dy})">`;
+
+  return [
+    // width/height alongside viewBox give the file an intrinsic size, so an
+    // <img> reserves the right box before it loads. CSS can still override.
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="${id}">`,
+    `  <title id="${id}">${title}</title>`,
+    DARK_BLOCK,
+    `  <rect x="0" y="0" width="${W}" height="${H}" fill="${paper}"/>`,
+    open,
+    ...els.map((e) => `    ${emit(e)}`),
+    `  </g>`,
     `</svg>`,
     ``,
   ].join("\n");

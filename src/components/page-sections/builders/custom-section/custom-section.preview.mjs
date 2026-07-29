@@ -1,9 +1,14 @@
-import { frame, card, heading, text, T } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, lines, media } from "../../../../../scripts/previews/kit.mjs";
 
-// Freeform builder: a large outlined content area (tinted card) with a centered heading + copy placeholder.
-export default frame(
-  card({ pad: 80, w: 900, align: "center", gap: 20, bg: T.frameAlt }, [
-    heading({ w: 260, h: 24 }),
-    text({ lines: 2, w: 420, last: 0.6, align: "center" }),
-  ])
-);
+const B = band(1120);
+
+// A full-bleed band with left-aligned copy and nothing else — the empty right
+// half is the point: this is the section you drop arbitrary blocks into.
+export default preview({
+  width: B.w,
+  draw: [
+    media(B.left, 0, 1120, 240, { r: 0 }),
+    bar(139, 70, 511, "heading"),
+    lines(139, 122, [747, 413]),
+  ],
+});

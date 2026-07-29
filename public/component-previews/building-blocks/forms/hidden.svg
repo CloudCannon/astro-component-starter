@@ -1,8 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(254 357) scale(1.0000)">
-    <rect x="0" y="0" width="772" height="86" rx="8" fill="#faf9f7" stroke="#cfccc4"/>
-    <rect x="139" y="36" width="150" height="14" rx="7" fill="#c2beb5"/>
-    <rect x="313" y="37" width="320" height="12" rx="6" fill="#d0ccc3"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-hidden">
+  <title id="t-hidden">Hidden component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g>
+    <rect x="260" y="330" width="760" height="140" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3" stroke-dasharray="8 12"/>
+    <rect x="310" y="386" width="180" height="16" rx="8" fill="var(--pv-subject, #A8A398)" opacity="0.45"/>
+    <rect x="530" y="388" width="240" height="12" rx="6" fill="var(--pv-body, #DAD7D0)" opacity="0.45"/>
   </g>
 </svg>

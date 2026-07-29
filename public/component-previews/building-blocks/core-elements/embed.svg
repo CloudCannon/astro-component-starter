@@ -1,9 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(180 140) scale(1.0000)">
-    <rect x="0" y="0" width="920" height="520" rx="8" fill="#e8e6e0"/>
-    <circle cx="644" cy="166" r="31" fill="#cbc7bf"/>
-    <polygon points="166,406 386,260 552,406" fill="#cbc7bf"/>
-    <polygon points="414,406 607,291 791,406" fill="#cbc7bf"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-embed">
+  <title id="t-embed">Embed component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g>
+    <rect x="160" y="140" width="960" height="520" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="231" y="208" width="115" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="231" y="208" width="13" height="110" rx="7" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="934" y="208" width="115" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="1036" y="208" width="13" height="110" rx="7" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="231" y="580" width="115" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="231" y="482" width="13" height="110" rx="7" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="934" y="580" width="115" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="1036" y="482" width="13" height="110" rx="7" fill="var(--pv-subject, #A8A398)"/>
   </g>
 </svg>

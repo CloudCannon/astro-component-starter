@@ -1,31 +1,37 @@
 import {
-  frame,
-  stack,
-  row,
-  card,
-  eyebrow,
-  heading,
-  text,
-  icon,
-  avatar,
+  preview,
+  band,
+  bar,
+  dot,
+  lines,
+  media,
+  peak,
+  sun,
+  glyph,
+  surface,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Feature slider: centered header, a wide row of feature cards, and carousel nav dots below.
-const slide = () =>
-  card({ pad: 28, gap: 16, w: 300 }, [
-    icon({ d: 46 }),
-    heading({ w: 150, h: 18 }),
-    text({ lines: 3, w: 250, last: 0.6 }),
-  ]);
+const B = band(1120);
 
-export default frame(
-  stack({ gap: 40, align: "center" }, [
-    stack({ gap: 16, align: "center" }, [
-      eyebrow({ w: 110 }),
-      heading({ w: 380, h: 32 }),
-      text({ lines: 1, w: 520, align: "center" }),
-    ]),
-    row({ gap: 28 }, [slide(), slide(), slide()]),
-    row({ gap: 12, justify: "center" }, [avatar({ d: 12 }), avatar({ d: 12 }), avatar({ d: 12 })]),
-  ])
-);
+// One slide — copy left, photo right — with the nav controls and dots on a row
+// below. The controls are drawn in `surface` rather than `subject` here: this is
+// a section, so the arrows should stay quieter than the content.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 94, 110, "body", { fill: glyph }),
+    bar(B.left, 126, 379, "display"),
+    lines(B.left, 186, [418, 418, 259]),
+
+    media(638, 0, 562, 340),
+    sun(1126, 76, 20),
+    peak(678, 817, 758, 270, 180),
+    peak(789, 947, 867, 270, 190),
+
+    dot(102, 386, 22, { fill: surface }),
+    dot(1178, 386, 22, { fill: surface }),
+    dot(616, 386, 6, { fill: glyph }),
+    dot(640, 386, 6, { fill: surface }),
+    dot(664, 386, 6, { fill: surface }),
+  ],
+});

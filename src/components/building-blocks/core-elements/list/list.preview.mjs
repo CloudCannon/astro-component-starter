@@ -1,6 +1,23 @@
-import { frame, stack, row, icon, text } from "../../../../../scripts/previews/kit.mjs";
+import {
+  preview,
+  band,
+  bar,
+  box,
+  repeat,
+  subject,
+  body,
+} from "../../../../../scripts/previews/kit.mjs";
 
-// A vertical list: each item is an icon marker followed by its text.
-const item = () => row({ gap: 18, align: "center" }, [icon({ d: 30 }), text({ lines: 1, w: 460 })]);
+const B = band(760);
 
-export default frame(stack({ gap: 24, align: "start" }, [item(), item(), item()]));
+// Square subject markers, generously spaced — a bulleted list at a glance. The
+// marker shape (square, not a dot) is what separates this from `text`'s bullets.
+const WIDTHS = [650, 711, 569];
+
+export default preview({
+  width: B.w,
+  draw: repeat(3, (i) => [
+    box(B.left, 300 + i * 52, 28, 28, { fill: subject }),
+    bar(309, 306 + i * 52, WIDTHS[i], "label", { fill: body }),
+  ]),
+});

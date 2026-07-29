@@ -1,28 +1,40 @@
 import {
-  frame,
-  row,
-  stack,
-  card,
-  heading,
-  text,
-  button,
-  image,
+  preview,
+  band,
+  bar,
+  field,
+  lines,
+  media,
+  peak,
+  pill,
+  sun,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Split CTA with a contact form: heading + copy + label/field pairs + submit on the left, image on the right.
-const field = (h = 44) =>
-  stack({ gap: 8 }, [text({ lines: 1, w: 70 }), card({ pad: 0, w: 360, h })]);
+const B = band(960);
 
-export default frame(
-  row({ gap: 64, align: "center" }, [
-    stack({ gap: 22, align: "start", w: 400 }, [
-      heading({ w: 300, h: 34 }),
-      text({ lines: 2, w: 380, last: 0.6 }),
-      field(),
-      field(),
-      field(96),
-      button({ w: 150 }),
+// Copy plus a three-field contact form on the left, a tall photo on the right.
+// The form is what separates this from `cta-split`.
+const FIELDS = [
+  { label: 88, y: 156, h: 44 },
+  { label: 78, y: 242, h: 44 },
+  { label: 107, y: 328, h: 96 },
+];
+
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 46, 293, "display"),
+    lines(B.left, 102, [371, 222]),
+
+    FIELDS.map(({ label, y, h }) => [
+      bar(B.left, y, label, "label"),
+      field(B.left, y + 24, 351, h),
     ]),
-    image({ w: 520, h: 560 }),
-  ])
-);
+    pill(B.left, 470, 146, 44, { label: 62 }),
+
+    media(613, 0, 507, 560),
+    sun(968, 179, 31),
+    peak(704, 917, 825, 437, 280),
+    peak(841, 1049, 947, 437, 314),
+  ],
+});

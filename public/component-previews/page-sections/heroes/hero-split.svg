@@ -1,16 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(129 200) scale(1.0000)">
-    <rect x="0" y="87" width="110" height="12" rx="6" fill="#d0ccc3"/>
-    <rect x="0" y="123" width="400" height="38" rx="19" fill="#c2beb5"/>
-    <rect x="0" y="185" width="420" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="209" width="420" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="233" width="231" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="269" width="150" height="44" rx="8" fill="#151515"/>
-    <rect x="43" y="287" width="64" height="8" rx="4" fill="#5a5a5a"/>
-    <rect x="502" y="0" width="520" height="400" rx="8" fill="#e8e6e0"/>
-    <circle cx="866" cy="128" r="24" fill="#cbc7bf"/>
-    <polygon points="596,312 720,200 814,312" fill="#cbc7bf"/>
-    <polygon points="736,312 845,224 949,312" fill="#cbc7bf"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-hero-split">
+  <title id="t-hero-split">Hero split component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 200)">
+    <rect x="160" y="87" width="103" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="123" width="376" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="160" y="185" width="395" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="209" width="395" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="233" width="217" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="269" width="141" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="201" y="287" width="60" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="320" y="269" width="160" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="370" y="287" width="60" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="632" y="0" width="488" height="400" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="974" cy="128" r="24" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="720,312 836,200 925,312" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="851,312 954,224 1051,312" fill="var(--pv-glyph, #CFCBC2)"/>
   </g>
 </svg>

@@ -1,11 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#faf9f7"/>
-  <g transform="translate(270 152) scale(1.0000)">
-    <rect x="0" y="0" width="740" height="496" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="20" y="20" width="700" height="394" rx="8" fill="#e8e6e0"/>
-    <circle cx="370" cy="217" r="55" fill="#a8a39a"/>
-    <polygon points="355,189 355,245 395,217" fill="#ffffff"/>
-    <rect x="285" y="432" width="170" height="44" rx="8" fill="#151515"/>
-    <rect x="338" y="450" width="64" height="8" rx="4" fill="#5a5a5a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-video-modal">
+  <title id="t-video-modal">Video modal component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 145)">
+    <rect x="537" y="0" width="205" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
+    <circle cx="568" cy="22" r="10" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="589" y="18" width="113" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="260" y="76" width="760" height="434" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="281" y="96" width="719" height="394" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="640" cy="293" r="55" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="625,265 625,321 666,293" fill="var(--pv-paper, #FFFFFF)"/>
   </g>
 </svg>

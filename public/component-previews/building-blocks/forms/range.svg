@@ -1,10 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(140 357) scale(1.0000)">
-    <rect x="0" y="0" width="170" height="16" rx="8" fill="#c2beb5"/>
-    <rect x="940" y="2" width="60" height="12" rx="6" fill="#d0ccc3"/>
-    <rect x="0" y="61" width="500" height="10" rx="5" fill="#151515"/>
-    <circle cx="520" cy="66" r="20" fill="#151515"/>
-    <rect x="540" y="61" width="460" height="10" rx="5" fill="#cfccc4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-range">
+  <title id="t-range">Range component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 344)">
+    <rect x="160" y="0" width="163" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="1062" y="2" width="58" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="640" y="61" width="480" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="61" width="480" height="12" rx="6" fill="var(--pv-ink, #151515)"/>
+    <circle cx="640" cy="67" r="20" fill="var(--pv-ink, #151515)"/>
+    <rect x="160" y="104" width="27" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="1084" y="104" width="36" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
   </g>
 </svg>

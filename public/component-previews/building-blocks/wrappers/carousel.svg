@@ -1,14 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(208 170) scale(1.0000)">
-    <circle cx="20" cy="210" r="20" fill="#e8e6e0"/>
-    <rect x="72" y="0" width="720" height="420" rx="8" fill="#e8e6e0"/>
-    <circle cx="576" cy="134" r="25" fill="#cbc7bf"/>
-    <polygon points="202,328 374,210 504,328" fill="#cbc7bf"/>
-    <polygon points="396,328 547,235 691,328" fill="#cbc7bf"/>
-    <circle cx="844" cy="210" r="20" fill="#e8e6e0"/>
-    <circle cx="408" cy="454" r="6" fill="#e8e6e0"/>
-    <circle cx="432" cy="454" r="6" fill="#e8e6e0"/>
-    <circle cx="456" cy="454" r="6" fill="#e8e6e0"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-carousel">
+  <title id="t-carousel">Carousel component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -10)">
+    <rect x="276" y="190" width="727" height="380" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="410" y="300" width="459" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="363" y="350" width="555" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="420" y="374" width="440" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="200" cy="380" r="40" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="209,362 209,398 190,380" fill="var(--pv-paper, #FFFFFF)"/>
+    <circle cx="1080" cy="380" r="40" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="1071,362 1071,398 1090,380" fill="var(--pv-paper, #FFFFFF)"/>
+    <rect x="598" y="621" width="31" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <circle cx="651" cy="625" r="5" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="671" cy="625" r="5" fill="var(--pv-glyph, #CFCBC2)"/>
   </g>
 </svg>

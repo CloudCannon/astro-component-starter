@@ -1,13 +1,13 @@
-import { frame, stack, row, eyebrow, button } from "../../../../../scripts/previews/kit.mjs";
+import { preview, box, bar, ink, onInk } from "../../../../../scripts/previews/kit.mjs";
 
-// A single call-to-action button (primary), paired with a ghost variant so the
-// pill shape reads clearly at thumbnail size.
-export default frame(
-  stack({ gap: 30, align: "center" }, [
-    eyebrow({ w: 130 }),
-    row({ gap: 24, justify: "center" }, [
-      button({ w: 260, h: 62 }),
-      button({ w: 260, h: 62, variant: "ghost" }),
-    ]),
-  ])
-);
+// A single filled button, big enough to show the optional leading icon slot.
+// Exempt from the width bands: one control stretched to 560 reads as distorted.
+export default preview({
+  width: 280,
+  exempt: true,
+  draw: [
+    box(500, 362, 280, 76, { fill: ink }),
+    box(566, 390, 20, 20, { r: 5, fill: onInk }),
+    bar(602, 394, 112, "body", { fill: onInk }),
+  ],
+});

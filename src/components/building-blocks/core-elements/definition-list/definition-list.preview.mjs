@@ -1,7 +1,16 @@
-import { frame, stack, row, heading, text } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, repeat } from "../../../../../scripts/previews/kit.mjs";
 
-// Term/definition pairs: a bold term on the left, its definition on the right.
-const pair = () =>
-  row({ gap: 48, align: "start" }, [heading({ w: 220, h: 18 }), text({ lines: 1, w: 440 })]);
+const B = band(560);
 
-export default frame(stack({ gap: 26, align: "start" }, [pair(), pair(), pair()]));
+// Term / description pairs in two columns. Terms are `label`-weight subject so
+// the two columns read as different kinds of text, not one ragged block.
+const TERMS = [200, 180, 230, 200, 160];
+const DEFS = [220, 220, 300, 300, 160];
+
+export default preview({
+  width: B.w,
+  draw: repeat(5, (i) => [
+    bar(B.left, 300 + i * 48, TERMS[i], "label"),
+    bar(620, 302 + i * 48, DEFS[i], "body"),
+  ]),
+});

@@ -1,26 +1,31 @@
 import {
-  frame,
-  card,
-  stack,
-  heading,
-  spacer,
-  button,
-  T,
+  preview,
+  band,
+  bar,
+  field,
+  pill,
+  caret,
+  glyph,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// The whole-form wrapper: several labelled fields plus a submit button.
-const field = (labelW) =>
-  stack({ gap: 12, align: "start", w: 780 }, [
-    heading({ w: labelW, h: 14 }),
-    card({ pad: 0, w: 780, h: 54, border: T.controlBorder }),
-  ]);
+const B = band(760);
 
-export default frame(
-  card({ pad: 48, gap: 28, align: "start", w: 860 }, [
-    field(150),
-    field(210),
-    field(120),
-    spacer({ size: 2 }),
-    button({ w: 170, h: 52 }),
-  ])
-);
+// The whole-form wrapper: three labelled fields of different heights (text,
+// select, textarea) plus a submit. The variety is the point — it distinguishes
+// this from any single field component.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 0, 146, "label"),
+    field(B.left, 26, 760, 54),
+
+    bar(B.left, 108, 205, "label"),
+    field(B.left, 134, 760, 54),
+    caret(958, 155, 27, { h: 14, fill: glyph }),
+
+    bar(B.left, 216, 117, "label"),
+    field(B.left, 242, 760, 110),
+
+    pill(B.left, 384, 166, 52, { label: 62 }),
+  ],
+});

@@ -1,21 +1,30 @@
 import {
-  frame,
-  row,
-  stack,
-  heading,
-  text,
-  button,
-  image,
+  preview,
+  band,
+  bar,
+  lines,
+  media,
+  peak,
+  pill,
+  sun,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Split CTA: heading + copy + button on the left, image on the right (no eyebrow — tighter than the hero).
-export default frame(
-  row({ gap: 72, align: "center" }, [
-    stack({ gap: 22, align: "start", w: 400 }, [
-      heading({ w: 340, h: 36 }),
-      text({ lines: 2, w: 380, last: 0.6 }),
-      button({ w: 150 }),
-    ]),
-    image({ w: 560, h: 400 }),
-  ])
-);
+const B = band(960);
+
+// Copy left, a stacked button pair in the middle, photo right. No eyebrow — that
+// is what keeps it tighter than `hero-split`, which is otherwise the same shape.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 120, 316, "display"),
+    lines(B.left, 178, [354, 212]),
+
+    pill(551, 140, 167, 44, { label: 60 }),
+    pill(551, 204, 167, 44, { variant: "ghost", label: 60 }),
+
+    media(774, 0, 346, 400),
+    sun(1053, 96, 20),
+    peak(811, 941, 886, 320, 220),
+    peak(915, 1053, 982, 320, 236),
+  ],
+});

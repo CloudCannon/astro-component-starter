@@ -1,23 +1,32 @@
 import {
-  frame,
-  row,
-  stack,
-  eyebrow,
-  heading,
-  text,
-  button,
-  image,
+  preview,
+  band,
+  bar,
+  lines,
+  media,
+  peak,
+  pill,
+  sun,
+  glyph,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Feature split: eyebrow + heading + copy + a row of buttons on the left, tall portrait image on the right.
-export default frame(
-  row({ gap: 72, align: "center" }, [
-    stack({ gap: 22, align: "start", w: 430 }, [
-      eyebrow({ w: 120 }),
-      heading({ w: 400, h: 38 }),
-      text({ lines: 2, w: 420, last: 0.55 }),
-      row({ gap: 12 }, [button({ w: 100 }), button({ w: 100, variant: "ghost" })]),
-    ]),
-    image({ w: 420, h: 540 }),
-  ])
-);
+const B = band(960);
+
+// Eyebrow, heading, copy and a side-by-side button pair on the left; a tall
+// portrait photo on the right. The eyebrow is what separates it from `cta-split`.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 169, 125, "body", { fill: glyph }),
+    bar(B.left, 205, 417, "display"),
+    lines(B.left, 267, [437, 241]),
+
+    pill(B.left, 327, 104, 44, { label: 52 }),
+    pill(277, 327, 104, 44, { variant: "ghost", label: 52 }),
+
+    media(683, 0, 437, 540),
+    sun(989, 173, 25),
+    peak(762, 945, 866, 421, 270),
+    peak(880, 1059, 971, 421, 302),
+  ],
+});

@@ -1,24 +1,27 @@
 import {
-  frame,
-  stack,
-  row,
-  card,
-  heading,
-  text,
-  chip,
+  preview,
+  band,
+  bar,
+  box,
+  plate,
+  repeat,
+  panel,
+  line,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Accordion: stacked full-width rows, each a header bar + chevron chip.
-// First row is expanded, revealing body copy.
-const panel = (expanded) =>
-  card({ pad: 22, gap: 16, w: 760 }, [
-    row({ justify: "between", align: "center", w: 760 }, [
-      heading({ w: 240, h: 18 }),
-      chip({ w: 26 }),
-    ]),
-    ...(expanded ? [text({ lines: 3, w: 660, last: 0.5 })] : []),
-  ]);
+const B = band(760);
 
-export default frame(
-  stack({ gap: 16, align: "center" }, [panel(true), panel(false), panel(false)])
-);
+// Three collapsed rows, each a header plus a round chevron chip. All collapsed
+// deliberately: an expanded row would make this read as the FAQ section instead.
+export default preview({
+  width: B.w,
+  draw: repeat(3, (i) => {
+    const y = i * 84;
+
+    return [
+      plate(B.left, y, 760, 68),
+      bar(281, y + 21, 227, "heading"),
+      box(974, y + 21, 26, 26, { r: 13, fill: panel, stroke: line }),
+    ];
+  }),
+});

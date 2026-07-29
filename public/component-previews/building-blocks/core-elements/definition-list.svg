@@ -1,11 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(286 347) scale(1.0000)">
-    <rect x="0" y="0" width="220" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="268" y="0" width="440" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="44" width="220" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="268" y="44" width="440" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="0" y="88" width="220" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="268" y="88" width="440" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-definition-list">
+  <title id="t-definition-list">Definition list component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -4)">
+    <rect x="360" y="300" width="200" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="620" y="302" width="220" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="360" y="348" width="180" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="620" y="350" width="220" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="360" y="396" width="230" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="620" y="398" width="300" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="360" y="444" width="200" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="620" y="446" width="300" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="360" y="492" width="160" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="620" y="494" width="160" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

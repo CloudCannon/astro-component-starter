@@ -1,13 +1,13 @@
-import { frame, stack, text, chip, spacer } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, box, lines, glyph } from "../../../../../scripts/previews/kit.mjs";
 
-// Adjustable vertical space between content: a labeled gap between two faint
-// blocks of copy.
-export default frame(
-  stack({ gap: 0, align: "center" }, [
-    text({ lines: 2, w: 620, last: 0.7, align: "center" }),
-    spacer({ size: 44 }),
-    chip({ w: 120 }),
-    spacer({ size: 44 }),
-    text({ lines: 2, w: 620, last: 0.6, align: "center" }),
-  ])
-);
+const B = band(760);
+
+// The gap itself is the subject: a solid block held between two text blocks.
+export default preview({
+  width: B.w,
+  draw: [
+    lines(B.left, 278, [760, 470]),
+    box(B.left, 354, 760, 96, { fill: glyph }),
+    lines(B.left, 482, [760, 560]),
+  ],
+});

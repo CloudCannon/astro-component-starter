@@ -1,15 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(430 251) scale(1.0000)">
-    <rect x="0" y="11" width="140" height="20" rx="10" fill="#c2beb5"/>
-    <rect x="378" y="0" width="42" height="42" rx="8" fill="#e8e6e0"/>
-    <rect x="0" y="64" width="420" height="2" rx="1" fill="#e7e5e0"/>
-    <rect x="0" y="88" width="420" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="0" y="128" width="420" height="2" rx="1" fill="#e7e5e0"/>
-    <rect x="0" y="152" width="420" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="0" y="192" width="420" height="2" rx="1" fill="#e7e5e0"/>
-    <rect x="0" y="216" width="420" height="18" rx="9" fill="#c2beb5"/>
-    <rect x="0" y="256" width="420" height="2" rx="1" fill="#e7e5e0"/>
-    <rect x="0" y="280" width="420" height="18" rx="9" fill="#c2beb5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-mobile">
+  <title id="t-mobile">Mobile component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 190)">
+    <rect x="400" y="0" width="480" height="420" rx="10" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="806" y="32" width="42" height="42" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="432" y="110" width="150" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="172" width="190" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="234" width="160" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="296" width="200" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="358" width="130" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="814,181 832,181 823,190" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="814,305 832,305 823,314" fill="var(--pv-subject, #A8A398)"/>
   </g>
 </svg>

@@ -1,12 +1,9 @@
-import { frame, stack, card, spacer, button, T } from "../../../../../scripts/previews/kit.mjs";
+import { preview, pill } from "../../../../../scripts/previews/kit.mjs";
 
-// The submit control itself: trailing fields for context, then a prominent
-// primary button — the emphasis is on the button, unlike the `form` wrapper.
-export default frame(
-  stack({ gap: 28, align: "center", w: 760 }, [
-    card({ pad: 0, w: 760, h: 62, border: T.controlBorder }),
-    card({ pad: 0, w: 760, h: 62, border: T.controlBorder }),
-    spacer({ size: 10 }),
-    button({ w: 300, h: 76 }),
-  ])
-);
+// Just the submit control, big. Exempt: this is one button, and stretching it to
+// a band would make it indistinguishable from a filled section.
+export default preview({
+  width: 220,
+  exempt: true,
+  draw: pill(530, 0, 220, 76, { label: 112 }),
+});

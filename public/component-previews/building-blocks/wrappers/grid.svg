@@ -1,29 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(204 269) scale(1.0000)">
-    <rect x="0" y="0" width="272" height="262" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="16" y="16" width="240" height="150" rx="8" fill="#e8e6e0"/>
-    <circle cx="184" cy="64" r="9" fill="#cbc7bf"/>
-    <polygon points="59,133 117,91 160,133" fill="#cbc7bf"/>
-    <polygon points="124,133 174,100 222,133" fill="#cbc7bf"/>
-    <rect x="16" y="180" width="150" height="16" rx="8" fill="#c2beb5"/>
-    <rect x="16" y="210" width="240" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="16" y="234" width="168" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="300" y="0" width="272" height="262" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="316" y="16" width="240" height="150" rx="8" fill="#e8e6e0"/>
-    <circle cx="484" cy="64" r="9" fill="#cbc7bf"/>
-    <polygon points="359,133 417,91 460,133" fill="#cbc7bf"/>
-    <polygon points="424,133 474,100 522,133" fill="#cbc7bf"/>
-    <rect x="316" y="180" width="150" height="16" rx="8" fill="#c2beb5"/>
-    <rect x="316" y="210" width="240" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="316" y="234" width="168" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="600" y="0" width="272" height="262" rx="8" fill="#ffffff" stroke="#e7e5e0"/>
-    <rect x="616" y="16" width="240" height="150" rx="8" fill="#e8e6e0"/>
-    <circle cx="784" cy="64" r="9" fill="#cbc7bf"/>
-    <polygon points="659,133 717,91 760,133" fill="#cbc7bf"/>
-    <polygon points="724,133 774,100 822,133" fill="#cbc7bf"/>
-    <rect x="616" y="180" width="150" height="16" rx="8" fill="#c2beb5"/>
-    <rect x="616" y="210" width="240" height="12" rx="6" fill="#dcd9d2"/>
-    <rect x="616" y="234" width="168" height="12" rx="6" fill="#dcd9d2"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-grid">
+  <title id="t-grid">Grid component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 347)">
+    <rect x="160" y="0" width="198" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="160" y="46" width="299" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="70" width="299" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="94" width="209" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="490" y="0" width="176" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="490" y="46" width="299" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="490" y="70" width="299" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="490" y="94" width="165" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="821" y="0" width="220" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="821" y="46" width="299" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="821" y="70" width="299" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="821" y="94" width="247" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

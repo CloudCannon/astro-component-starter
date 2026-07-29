@@ -1,13 +1,15 @@
-import { frame, card, row, heading, text, T } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, field } from "../../../../../scripts/previews/kit.mjs";
+
+const B = band(760);
 
 // A hidden field renders nothing on the page, so the preview stands in for what
-// it *is*: a tinted key/value pair carried with the form, with no visible label
-// or input box of its own.
-export default frame(
-  card({ pad: 36, w: 700, bg: T.frameAlt, border: T.controlBorder, align: "center" }, [
-    row({ gap: 24, align: "center" }, [
-      heading({ w: 150, h: 14 }),
-      text({ lines: 1, w: 320, fill: T.eyebrow }),
-    ]),
-  ])
-);
+// it *is*: a key/value pair carried with the form. The dashed outline and the
+// half-opacity contents are the "not rendered" cue.
+export default preview({
+  width: B.w,
+  draw: [
+    field(B.left, 330, 760, 140, { dash: "8 12" }),
+    bar(310, 386, 180, "label", { opacity: 0.45 }),
+    bar(530, 388, 240, "body", { opacity: 0.45 }),
+  ],
+});

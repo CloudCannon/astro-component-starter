@@ -1,26 +1,33 @@
 import {
-  frame,
-  stack,
-  row,
-  card,
-  heading,
-  text,
-  icon,
-  T,
+  preview,
+  band,
+  bar,
+  box,
+  repeat,
+  STROKE,
+  glyph,
+  ink,
+  paper,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Segmented control: adjacent segments with the active one filled.
-const seg = (active = false) =>
-  card({ pad: 22, w: 250, bg: active ? T.primary : T.frame, border: T.controlBorder }, [
-    row({ gap: 14, align: "center", w: 206 }, [
-      icon({ d: 26, fill: active ? T.primaryOn : T.controlBorder }),
-      text({ lines: 1, w: 110, fill: active ? T.primaryOn : T.eyebrow }),
-    ]),
-  ]);
+const B = band(960);
 
-export default frame(
-  stack({ gap: 26, align: "start" }, [
-    heading({ w: 260, h: 24 }),
-    row({ gap: 0 }, [seg(true), seg(), seg()]),
-  ])
-);
+// Three adjacent segments, the first one filled. Each carries an icon plus a
+// label so the active segment's contents invert to paper and stay legible.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 0, 283, "heading"),
+    repeat(3, (i) => {
+      const x = B.left + i * 320;
+      const on = i === 0;
+      const mark = on ? paper : glyph;
+
+      return [
+        box(x, 46, 320, 70, { fill: on ? ink : paper, stroke: glyph, sw: STROKE.control }),
+        box(x + 25, 68, 26, 26, { fill: mark }),
+        bar(x + 68, 75, 120, "body", { fill: mark }),
+      ];
+    }),
+  ],
+});

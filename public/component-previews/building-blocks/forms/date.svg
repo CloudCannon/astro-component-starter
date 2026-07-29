@@ -1,9 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800">
-  <rect x="0" y="0" width="1280" height="800" fill="#ffffff"/>
-  <g transform="translate(170 348) scale(1.0000)">
-    <rect x="0" y="0" width="150" height="16" rx="8" fill="#c2beb5"/>
-    <rect x="0" y="34" width="980" height="70" rx="8" fill="#ffffff" stroke="#cfccc4"/>
-    <rect x="20" y="63" width="150" height="12" rx="6" fill="#d0ccc3"/>
-    <rect x="890" y="54" width="30" height="30" rx="8" fill="#cfccc4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-date">
+  <title id="t-date">Date component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 50)">
+    <rect x="260" y="296" width="150" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="260" y="332" width="760" height="72" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
+    <rect x="290" y="362" width="40" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="342" y="362" width="40" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="394" y="362" width="72" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="955" y="351" width="34" height="34" rx="10" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="954" y="362" width="36" height="3" fill="var(--pv-paper, #FFFFFF)"/>
   </g>
 </svg>

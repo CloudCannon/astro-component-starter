@@ -1,10 +1,13 @@
-import { frame, row, button } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, pill } from "../../../../../scripts/previews/kit.mjs";
 
-// Button group: buttons side by side, mixing primary + ghost.
-export default frame(
-  row({ gap: 20, justify: "center" }, [
-    button({ w: 160 }),
-    button({ w: 160, variant: "ghost" }),
-    button({ w: 160, variant: "ghost" }),
-  ])
-);
+const B = band(560);
+
+// One filled and one outlined button with a wide gap — the pairing, and the
+// contrast between the two variants, is what this wrapper is for.
+export default preview({
+  width: B.w,
+  draw: [
+    pill(B.left, 0, 255, 44, { label: 82 }),
+    pill(640, 0, 280, 44, { variant: "ghost", label: 82 }),
+  ],
+});

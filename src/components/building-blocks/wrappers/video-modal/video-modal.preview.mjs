@@ -1,10 +1,29 @@
-import { frame, card, image, button, T } from "../../../../../scripts/previews/kit.mjs";
+import {
+  preview,
+  band,
+  bar,
+  box,
+  dot,
+  media,
+  plate,
+  playDisc,
+  ink,
+  onInk,
+} from "../../../../../scripts/previews/kit.mjs";
 
-// Video modal: a dialog holding a video frame with a play/watch control.
-export default frame(
-  { bg: T.frameAlt },
-  card({ pad: 20, gap: 18, w: 700, align: "center" }, [
-    image({ w: 700, h: 394, play: true }),
-    button({ w: 170 }),
-  ])
-);
+const B = band(760);
+
+// A trigger with a leading play dot, above the dialog holding the player. Same
+// trigger-plus-dialog logic as `modal`, with the video surface as the payload.
+export default preview({
+  width: B.w,
+  draw: [
+    box(537, 0, 205, 44, { fill: ink }),
+    dot(568, 22, 10, { fill: onInk }),
+    bar(589, 18, 113, "micro", { fill: onInk }),
+
+    plate(B.left, 76, 760, 434),
+    media(281, 96, 719, 394),
+    playDisc(640, 293, 55, { back: 15, half: 28, reach: 26 }),
+  ],
+});

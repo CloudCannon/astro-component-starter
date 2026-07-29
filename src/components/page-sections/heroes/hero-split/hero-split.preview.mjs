@@ -1,23 +1,32 @@
 import {
-  frame,
-  row,
-  stack,
-  eyebrow,
-  heading,
-  text,
-  button,
-  image,
+  preview,
+  band,
+  bar,
+  lines,
+  media,
+  peak,
+  pill,
+  sun,
+  glyph,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Split hero: eyebrow + heading + copy + CTA on the left, image on the right.
-export default frame(
-  row({ gap: 72, align: "center" }, [
-    stack({ gap: 24, align: "start", w: 430 }, [
-      eyebrow({ w: 110 }),
-      heading({ w: 400, h: 38 }),
-      text({ lines: 3, w: 420, last: 0.55 }),
-      button({ w: 150 }),
-    ]),
-    image({ w: 520, h: 400 }),
-  ])
-);
+const B = band(960);
+
+// The archetype: eyebrow, display heading, three copy lines and a button pair on
+// the left, a landscape photo on the right.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(B.left, 87, 103, "body", { fill: glyph }),
+    bar(B.left, 123, 376, "display"),
+    lines(B.left, 185, [395, 395, 217]),
+
+    pill(B.left, 269, 141, 44, { label: 60 }),
+    pill(320, 269, 160, 44, { variant: "ghost", label: 60 }),
+
+    media(632, 0, 488, 400),
+    sun(974, 128, 24),
+    peak(720, 925, 836, 312, 200),
+    peak(851, 1051, 954, 312, 224),
+  ],
+});

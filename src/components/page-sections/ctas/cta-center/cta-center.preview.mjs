@@ -1,11 +1,15 @@
-import { frame, stack, heading, text, button, T } from "../../../../../scripts/previews/kit.mjs";
+import { preview, band, bar, pill } from "../../../../../scripts/previews/kit.mjs";
 
-// Tight centered call-to-action on the tinted surface: heading, supporting copy, one primary button.
-export default frame(
-  { bg: T.frameAlt },
-  stack({ align: "center", gap: 24 }, [
-    heading({ w: 540, h: 36 }),
-    text({ lines: 2, w: 640, last: 0.65, align: "center" }),
-    button({ w: 150 }),
-  ])
-);
+const B = band(560);
+
+// Centred heading, two centred copy lines, one button. The narrowest band in the
+// set — the tight measure is what makes it read as a focused CTA, not a hero.
+export default preview({
+  width: B.w,
+  draw: [
+    bar(410, 330, 460, "heading"),
+    bar(B.left, 378, 560, "body"),
+    bar(440, 402, 400, "body"),
+    pill(565, 446, 150, 44, { label: 64 }),
+  ],
+});

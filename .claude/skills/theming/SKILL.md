@@ -126,4 +126,4 @@ These are **not** tokenized yet. When a task needs one, flag the gap rather than
 
 - Run `npm run check`. Expect exit 0 — no lint, format, or type errors.
 - Run `npm run dev`, then toggle the site theme and load a section with `colorScheme: dark`. Confirm the change reads correctly in **both** light and dark, and that a `lockColorScheme` section stays put when you toggle.
-- Component previews need no rebuild. They are hand-authored `*.preview.mjs` recipes with their own fixed neutral style (`scripts/previews/kit.mjs`), independent of theme tokens — changing `--radius-*` or colors does not affect them.
+- Component previews need no rebuild. They are hand-authored `*.preview.mjs` recipes with their own palette, independent of the site's theme tokens — changing `--radius-*` or colors does not affect them. The preview palette is nine `--pv-*` roles declared in `scripts/previews/kit.mjs` (light values inlined as `var()` fallbacks, dark values injected into each SVG as a `@media (prefers-color-scheme: dark)` block). To re-skin every preview at once, edit `LIGHT`/`DARK` there and run `npm run previews:build`.
