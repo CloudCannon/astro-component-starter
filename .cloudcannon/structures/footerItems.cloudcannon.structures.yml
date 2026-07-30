@@ -1,0 +1,54 @@
+# Footer link and social-icon structures, used by the `footer` component's
+# `links` and `socials` array inputs.
+#
+# Moved out of `footer.cloudcannon.inputs.yml`, where an `_structures:` block is
+# not a valid key (an `_inputs_from_glob` file is read as input-name -> config).
+# Unlike the nav item structures, these names are unique to `footer`, so this is
+# a verbatim move with no change in behaviour.
+#
+# Note these are distinct from the field-name-matched `links` / `socials`
+# structures used by the data files in `src/data/` — same idea, different
+# consumers.
+linkItems:
+  values:
+    - label: Navigation Link
+      icon: link
+      value:
+        name: ""
+        path: ""
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the navigation link."
+        path:
+          type: url
+          comment: "URL path for the navigation link."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+socialItems:
+  values:
+    - label: Social Link
+      icon: share
+      value:
+        icon: ""
+        link: ""
+        label: ""
+      _inputs:
+        icon:
+          type: select
+          comment: "Icon for the social media platform. Sourced from [Heroicons](https://heroicons.com/)."
+          options:
+            values: _select_data.icons
+            preview:
+              text:
+                - key: name
+              image:
+                - template: src/icons/{id}.svg
+        link:
+          type: text
+          comment: "URL link to the social media profile."
+        label:
+          type: text
+          comment: 'Optional accessible label for the link (e.g. "Visit us on X"). Defaults to "Visit our <icon> page".'

@@ -36,56 +36,58 @@ navData:
           comment: Child navigation items for dropdown menus.
           options:
             structures:
-              - label: Navigation Item
-                icon: link
-                value:
-                  name: ""
-                  path: ""
-                  children: []
-                preview:
-                  text:
-                    - key: name
-                    - Navigation Item
-                  subtext:
-                    - key: path
-                    - Add path
-                _inputs:
-                  name:
-                    type: text
-                    comment: Display text for the child navigation item.
-                  path:
-                    type: url
-                    comment: URL path for the child navigation item.
-                    options:
-                      hide_link_to_file: true
-                      hide_link_to_email_address: true
-                      hide_link_to_telephone: true
-                  children:
-                    type: array
-                    label: Grandchild Navigation Items
-                    comment: Grandchild navigation items for nested dropdowns.
-                    options:
-                      structures:
-                        - label: Navigation Item
-                          icon: link
-                          value:
-                            name: ""
-                            path: ""
-                          preview:
-                            text:
-                              - key: name
-                              - Navigation Item
-                            subtext:
-                              - key: path
-                              - Add path
-                          _inputs:
-                            name:
-                              type: text
-                              comment: Display text for the grandchild navigation item.
-                            path:
-                              type: url
-                              comment: URL path for the grandchild navigation item.
-                              options:
-                                hide_link_to_file: true
-                                hide_link_to_email_address: true
-                                hide_link_to_telephone: true
+              values:
+                - label: Navigation Item
+                  icon: link
+                  value:
+                    name: ""
+                    path: ""
+                    children: []
+                  preview:
+                    text:
+                      - key: name
+                      - Navigation Item
+                    subtext:
+                      - key: path
+                      - Add path
+                  _inputs:
+                    name:
+                      type: text
+                      comment: Display text for the child navigation item.
+                    path:
+                      type: url
+                      comment: URL path for the child navigation item.
+                      options:
+                        hide_link_to_file: true
+                        hide_link_to_email_address: true
+                        hide_link_to_telephone: true
+                    children:
+                      type: array
+                      label: Grandchild Navigation Items
+                      comment: Grandchild navigation items for nested dropdowns.
+                      options:
+                        structures:
+                          values:
+                            - label: Navigation Item
+                              icon: link
+                              value:
+                                name: ""
+                                path: ""
+                              preview:
+                                text:
+                                  - key: name
+                                  - Navigation Item
+                                subtext:
+                                  - key: path
+                                  - Add path
+                              _inputs:
+                                name:
+                                  type: text
+                                  comment: Display text for the grandchild navigation item.
+                                path:
+                                  type: url
+                                  comment: URL path for the grandchild navigation item.
+                                  options:
+                                    hide_link_to_file: true
+                                    hide_link_to_email_address: true
+                                    hide_link_to_telephone: true

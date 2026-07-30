@@ -1,5 +1,5 @@
 label: Hidden
-icon: eye-slash
+icon: visibility_off
 description: Hidden form field for storing data.
 value:
   _component: building-blocks/forms/hidden
@@ -12,7 +12,7 @@ preview:
     - key: text
     - ""
   image: /component-previews/building-blocks/forms/hidden.svg
-  icon: eye-slash
+  icon: visibility_off
 picker_preview:
   text: Hidden
   subtext: Hidden form field for storing data.

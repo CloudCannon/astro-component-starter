@@ -6,6 +6,7 @@ embed:
       - Embed
     subtext:
       - key: html
+    image: /component-previews/building-blocks/core-elements/embed.svg
     icon: data_object
   definitions:
     component_name: Embed

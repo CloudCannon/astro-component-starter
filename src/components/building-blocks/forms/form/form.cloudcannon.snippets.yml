@@ -6,6 +6,7 @@ form:
       - Form
     subtext:
       - key: label
+    image: /component-previews/building-blocks/forms/form.svg
     icon: checklist_rtl
   definitions:
     component_name: Form

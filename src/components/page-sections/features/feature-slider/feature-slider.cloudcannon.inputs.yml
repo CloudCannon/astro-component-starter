@@ -4,42 +4,43 @@ slides:
   comment: Structured feature slides rendered inside the carousel.
   options:
     structures:
-      - label: Feature slide
-        icon: view_carousel
-        value:
-          _component: page-sections/features/feature-slider/feature-slider-item
-          eyebrow: ""
-          title: Slide title
-          description: Short description for this slide.
-          imageSource: /src/assets/images/component-docs/sunset.jpg
-          imageAlt: Slide image alt text
-        preview:
-          text:
-            - key: title
-            - Feature slide
-          subtext:
-            - key: description
-            - Add description for this slide
-        _inputs:
-          eyebrow:
-            type: text
-            comment: Optional eyebrow text displayed above the title.
-          title:
-            type: text
-            comment: Heading text shown on the slide.
-          description:
-            type: markdown
-            comment: Supporting body copy shown on the slide.
-          imageSource:
-            type: image
-            comment: Image shown on the side of the slide.
-            options:
-              paths:
-                uploads: src/assets/images
-                static: ""
-              resize_style: contain
-              width: 1920
-              height: 1280
-          imageAlt:
-            type: text
-            comment: Alt text describing the slide image.
+      values:
+        - label: Feature slide
+          icon: view_carousel
+          value:
+            _component: page-sections/features/feature-slider/feature-slider-item
+            eyebrow: ""
+            title: Slide title
+            description: Short description for this slide.
+            imageSource: /src/assets/images/component-docs/sunset.jpg
+            imageAlt: Slide image alt text
+          preview:
+            text:
+              - key: title
+              - Feature slide
+            subtext:
+              - key: description
+              - Add description for this slide
+          _inputs:
+            eyebrow:
+              type: text
+              comment: Optional eyebrow text displayed above the title.
+            title:
+              type: text
+              comment: Heading text shown on the slide.
+            description:
+              type: markdown
+              comment: Supporting body copy shown on the slide.
+            imageSource:
+              type: image
+              comment: Image shown on the side of the slide.
+              options:
+                paths:
+                  uploads: src/assets/images
+                  static: ""
+                resize_style: contain
+                width: 1920
+                height: 1280
+            imageAlt:
+              type: text
+              comment: Alt text describing the slide image.

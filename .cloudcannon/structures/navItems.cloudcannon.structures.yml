@@ -1,0 +1,80 @@
+# Three-level navigation item structures, shared by every nav component
+# (`bar`, `main-nav`, `mobile`, `side`).
+#
+# These previously lived in an `_structures:` block inside each component's
+# `*.cloudcannon.inputs.yml`. That is not a valid key in an `_inputs_from_glob`
+# file (the schema reads that file as input-name -> config), and because all four
+# components declared the *same* three names, only one definition could ever win
+# — decided by glob load order. Three variants had drifted apart: `bar`/`mobile`
+# typed `path` as plain text, `main-nav`/`side` as a URL picker.
+#
+# This file is that single definition, made explicit. `path` is a `url` input
+# with the file/email/telephone link options suppressed, since nav items point at
+# site pages. Levels 1 and 2 nest via `children`; level 3 is the final level and
+# has none.
+navItemLevel1:
+  values:
+    - label: Navigation Item (Level 1)
+      icon: link
+      value:
+        name: ""
+        path: ""
+        children: []
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the navigation item."
+        path:
+          type: url
+          comment: "URL path for the navigation item."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        children:
+          type: array
+          comment: "Child navigation items for dropdown menus."
+          options:
+            structures: _structures.navItemLevel2
+navItemLevel2:
+  values:
+    - label: Navigation Item (Level 2)
+      icon: link
+      value:
+        name: ""
+        path: ""
+        children: []
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the child navigation item."
+        path:
+          type: url
+          comment: "URL path for the child navigation item."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        children:
+          type: array
+          comment: "Grandchild navigation items for nested dropdowns."
+          options:
+            structures: _structures.navItemLevel3
+navItemLevel3:
+  values:
+    - label: Navigation Item (Level 3)
+      icon: link
+      value:
+        name: ""
+        path: ""
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the grandchild navigation item."
+        path:
+          type: url
+          comment: "URL path for the grandchild navigation item."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true

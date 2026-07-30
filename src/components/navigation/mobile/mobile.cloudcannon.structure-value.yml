@@ -1,5 +1,5 @@
 label: Mobile Navigation
-icon: device-phone-mobile
+icon: smartphone
 description: "Mobile navigation with full-screen overlay."
 value:
   _component: navigation/mobile
@@ -14,6 +14,6 @@ picker_preview:
   text: Mobile Navigation
   subtext: "Mobile navigation with full-screen overlay."
   image: /component-previews/navigation/mobile.svg
-  icon: device-phone-mobile
+  icon: smartphone
 _inputs_from_glob:
   - /src/components/navigation/mobile/mobile.cloudcannon.inputs.yml

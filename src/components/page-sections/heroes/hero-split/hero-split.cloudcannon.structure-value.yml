@@ -1,5 +1,5 @@
 label: Hero Split
-icon: hero
+icon: web_asset
 description: Prominent section block for landing pages.
 value:
   _component: page-sections/heroes/hero-split
@@ -41,7 +41,7 @@ preview:
   subtext:
     - key: heading
   image: /component-previews/page-sections/heroes/hero-split.svg
-  icon: hero
+  icon: web_asset
 picker_preview:
   text: Hero Split
   subtext: Prominent section block for landing pages.

@@ -1,5 +1,5 @@
 label: Hero Center
-icon: hero
+icon: web_asset
 description: Centered hero with heading, supporting text, and buttons.
 value:
   _component: page-sections/heroes/hero-center
@@ -37,12 +37,12 @@ preview:
   subtext:
     - key: heading
   image: /component-previews/page-sections/heroes/hero-center.svg
-  icon: hero
+  icon: web_asset
 picker_preview:
   text: Hero Center
   subtext: Centered hero with heading, subtext, and buttons.
   image: /component-previews/page-sections/heroes/hero-center.svg
-  icon: hero
+  icon: web_asset
 _inputs_from_glob:
   - /src/components/page-sections/heroes/hero-center/hero-center.cloudcannon.inputs.yml
 _inputs:

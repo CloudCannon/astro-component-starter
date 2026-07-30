@@ -4,6 +4,7 @@ featureSlider:
   preview:
     text:
       - Feature Slider
+    image: /component-previews/page-sections/features/feature-slider.svg
     icon: view_carousel
   definitions:
     component_name: FeatureSlider

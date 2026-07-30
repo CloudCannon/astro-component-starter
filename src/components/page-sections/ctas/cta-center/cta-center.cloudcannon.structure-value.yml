@@ -1,5 +1,5 @@
 label: CTA Center
-icon: hero
+icon: call_to_action
 description: Centered call-to-action with headline, supporting text, and buttons.
 value:
   _component: page-sections/ctas/cta-center
@@ -36,7 +36,7 @@ preview:
   subtext:
     - key: heading
   image: /component-previews/page-sections/ctas/cta-center.svg
-  icon: hero
+  icon: call_to_action
 picker_preview:
   text: CTA Center
   subtext: Centered CTA with stacked text and buttons.

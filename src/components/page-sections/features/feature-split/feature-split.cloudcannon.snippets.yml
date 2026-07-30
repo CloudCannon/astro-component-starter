@@ -6,6 +6,7 @@ featureSplit:
       - Feature Split
     subtext:
       - key: heading
+    image: /component-previews/page-sections/features/feature-split.svg
     icon: view_week
   definitions:
     component_name: FeatureSplit

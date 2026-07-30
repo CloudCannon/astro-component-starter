@@ -6,7 +6,8 @@ ctaSplit:
       - CTA Split
     subtext:
       - key: heading
-    icon: hero
+    image: /component-previews/page-sections/ctas/cta-split.svg
+    icon: call_to_action
   definitions:
     component_name: CtaSplit
     named_args:

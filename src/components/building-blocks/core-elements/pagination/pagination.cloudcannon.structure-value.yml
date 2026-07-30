@@ -1,7 +1,6 @@
 label: Pagination
 icon: list
 description: "Navigation component for multi-page content."
-structures: []
 value:
   _component: building-blocks/core-elements/pagination
   page: null

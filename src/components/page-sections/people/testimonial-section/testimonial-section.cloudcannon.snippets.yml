@@ -6,6 +6,7 @@ testimonialSection:
       - Testimonial Section
     subtext:
       - key: authorName
+    image: /component-previews/page-sections/people/testimonial-section.svg
     icon: format_quote
   definitions:
     component_name: TestimonialSection

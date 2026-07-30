@@ -1,5 +1,5 @@
 label: FAQ Section
-icon: help_outline
+icon: help
 description: Section displaying frequently asked questions in an accordion format.
 value:
   _component: page-sections/info-blocks/faq-section
@@ -26,7 +26,7 @@ preview:
   subtext:
     - key: heading
   image: /component-previews/page-sections/info-blocks/faq-section.svg
-  icon: help_outline
+  icon: help
 picker_preview:
   text: FAQ Section
   subtext: Accordion of frequently asked questions.
@@ -222,7 +222,7 @@ _structures:
   faqItems:
     values:
       - label: FAQ Item
-        icon: help_outline
+        icon: help
         value:
           title: Question text
           contentSections:

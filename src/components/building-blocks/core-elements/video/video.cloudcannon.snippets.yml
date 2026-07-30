@@ -7,6 +7,7 @@ video:
       - Video
     subtext:
       - key: title
+    image: /component-previews/building-blocks/core-elements/video.svg
     icon: videocam
   definitions:
     component_name: Video

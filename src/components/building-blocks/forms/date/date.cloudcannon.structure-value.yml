@@ -1,5 +1,5 @@
 label: Date
-icon: calendar
+icon: calendar_month
 description: Form field for selecting a date.
 value:
   _component: building-blocks/forms/date
@@ -16,7 +16,7 @@ preview:
   subtext:
     - key: label
   image: /component-previews/building-blocks/forms/date.svg
-  icon: calendar
+  icon: calendar_month
 picker_preview:
   text: Date
   subtext: Form field for selecting a date.

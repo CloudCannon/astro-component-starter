@@ -15,7 +15,7 @@ import { dirname, join, relative, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import { glob } from "glob";
 import { compile } from "./kit.mjs";
-import { wirePreviewImage } from "./wire-yaml.mjs";
+import { wirePreviewImage, wireSnippetPreviewImage } from "./wire-yaml.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const componentsDir = join(root, "src", "components");
@@ -83,6 +83,16 @@ for (const { file, key } of recipes) {
 
       if (existsSync(structFile)) {
         const wired = wirePreviewImage(key, structFile);
+
+        if (wired === "written") wiredCount++;
+      }
+
+      // Components that are also MDX snippets get the same thumbnail in the
+      // snippet picker. Only some components have a snippets file.
+      const snippetFile = join(root, file).replace(/\.preview\.mjs$/, ".cloudcannon.snippets.yml");
+
+      if (existsSync(snippetFile)) {
+        const wired = wireSnippetPreviewImage(key, snippetFile);
 
         if (wired === "written") wiredCount++;
       }

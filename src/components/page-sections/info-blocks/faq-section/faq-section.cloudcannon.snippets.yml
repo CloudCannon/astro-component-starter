@@ -6,7 +6,8 @@ faqSection:
       - FAQ Section
     subtext:
       - key: heading
-    icon: help_outline
+    image: /component-previews/page-sections/info-blocks/faq-section.svg
+    icon: help
   definitions:
     component_name: FaqSection
     named_args:

@@ -6,7 +6,8 @@ teamGrid:
       - Team Grid
     subtext:
       - key: subtext
-    icon: people
+    image: /component-previews/page-sections/people/team-grid.svg
+    icon: groups
   definitions:
     component_name: TeamGrid
     named_args:

@@ -22,6 +22,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, sep } from "node:path";
 import { glob, globSync } from "glob";
 import * as yaml from "js-yaml";
+import { snippetWantsPreviewImage } from "./wire-yaml.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
@@ -96,6 +97,21 @@ for (const component of components) {
 
   if (!readFileSync(absFile, "utf8").includes(imageLine)) {
     unwired.push({ component, file });
+  }
+
+  // Components that are also MDX snippets carry the same thumbnail in their
+  // snippets YAML, so the snippet picker matches the structure picker.
+  const snippetFile = file.replace(
+    /\.cloudcannon\.structure-value\.yml$/,
+    ".cloudcannon.snippets.yml"
+  );
+
+  if (existsSync(join(root, snippetFile))) {
+    const source = readFileSync(join(root, snippetFile), "utf8");
+
+    if (snippetWantsPreviewImage(source) && !source.includes(imageLine)) {
+      unwired.push({ component, file: snippetFile });
+    }
   }
 }
 

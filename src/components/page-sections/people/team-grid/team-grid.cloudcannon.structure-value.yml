@@ -1,5 +1,5 @@
 label: Team Grid
-icon: people
+icon: groups
 description: Responsive grid layout for showcasing team members.
 value:
   _component: page-sections/people/team-grid
@@ -29,7 +29,7 @@ preview:
   subtext:
     - key: subtext
   image: /component-previews/page-sections/people/team-grid.svg
-  icon: people
+  icon: groups
 picker_preview:
   text: Team Grid
   subtext: Grid of team member cards with photos and bios.

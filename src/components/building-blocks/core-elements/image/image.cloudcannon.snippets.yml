@@ -1,8 +1,8 @@
 image:
   template: mdx_component
   inline: false
+  view: gallery
   preview:
-    view: gallery
     text:
       - Image
     subtext:

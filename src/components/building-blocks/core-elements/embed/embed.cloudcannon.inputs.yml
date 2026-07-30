@@ -1,7 +1,8 @@
 html:
   type: code
   comment: The raw HTML content to render.
-  syntax: html
+  options:
+    syntax: html
 aspectRatio:
   type: select
   comment: The aspect ratio of the embed.

@@ -5,7 +5,8 @@ Upstream paths:
   - skills/cloudcannon-configuration/astro/configuration-gotchas.md (validation-related sections)
 Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
-CLI config-generation and `cloudcannon validate` flows from upstream are dropped — see below.
+CLI config-generation flows from upstream are dropped. Validation is kept but rebuilt on the
+official JSON Schemas via `npm run lint:schema` instead of the CLI — see below.
 See .agents/skills/STYLE.md § "This starter overrides generic CloudCannon docs".
 -->
 
@@ -13,25 +14,30 @@ See .agents/skills/STYLE.md § "This starter overrides generic CloudCannon docs"
 
 Generic reference for hallucinated / invalid CloudCannon configuration keys and the validation guidance around them. LLM training data invents keys that don't exist; the JSON schemas at [cloudcannon/configuration-types](https://github.com/cloudcannon/configuration-types) are the only authoritative source.
 
-> **In this starter:** validate config with **`npm run check`** (runs `astro check` + lint of the YAML). Upstream relies on the CloudCannon CLI (`npx @cloudcannon/cli validate` / `configure generate`) — this repo does **not** use the CLI for config generation or validation. Wherever upstream says "run the CLI to validate," read "run `npm run check`, and eyeball against the schema keys below." You may still `curl` the JSON schema for a definitive key check, but do not add a CLI step to any workflow.
+> **In this starter:** validate config with **`npm run check`**, which includes **`npm run lint:schema`** — every co-located `*.cloudcannon.*.yml` and `.cloudcannon/structures/*.yml` is validated against the official JSON Schemas from `@cloudcannon/configuration-types` (a pinned devDependency), using that package's own `loadValidator` for error presentation. Each glob maps to the schema for the `*_from_glob` key that loads it. So the keys listed below are now **machine-checked**, not just documentation.
+>
+> Config **generation** remains off-limits: `npx @cloudcannon/cli configure generate` would flatten this repo's co-located, glob-collected config into a monolith with inline `_structures` — see [STYLE.md § This starter overrides generic CloudCannon docs](../STYLE.md). Do not add a CLI step to any workflow, and do not commit a schema file; the pinned package replaces the `curl` recipe below. Validation via the schema carries none of the generation risk — it only reads.
+>
+> **Two lints, different axes, neither subsumes the other:** `lint:cms` checks YAML against the _components_ (prop drift, orphaned files, `_component` resolution); `lint:schema` checks YAML against _CloudCannon_ (invalid keys, out-of-enum values, wrong input types). A file can name every prop correctly and still be rejected by the editor.
 
 ## Common invalid keys
 
 Observed LLM hallucinations — not exhaustive. Each row gives the real key.
 
-| Wrong                                                               | Correct                                                                                                                                         |
-| ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `disable_url_preview: true`                                         | `disable_url: true` (toggles whether the collection has an output URL)                                                                          |
-| `output: false` (legacy Jekyll/Hugo/Eleventy key)                   | Omit `url:` and add `disable_url: true` — or use `data_config` instead of a collection                                                          |
-| `type: hidden` (deprecated value)                                   | `hidden: true` (sibling of `type`, works on any input; also `hidden: "<query>"` for conditional hiding)                                         |
-| `options.max` on text/textarea                                      | `options.max_length` (paired with `min_length`)                                                                                                 |
-| `_editables.text: { bulletedlist, blockquote, format, table, ... }` | `_editables.text` is inline-only (`TextEditable`). For block-level formatting use `_editables.content` or `_editables.block` (`BlockEditable`)  |
-| `heading2: true`, `heading3: true`                                  | `format: "p h1 h2 h3 h4 h5 h6"` (space-separated string)                                                                                        |
-| `options.collections: [team]` (invented)                            | `values: collections.team` with `value_key` / `preview`                                                                                         |
-| `options.structures: my_blocks` (bare name, invalid)                | `options.structures: _structures.my_blocks` (full path)                                                                                         |
-| `timezone: "+10:00"` (UTC offset, invalid)                          | `timezone` is a top-level key and a strict IANA-name enum (e.g. `Australia/Melbourne`, `America/New_York`), not a UTC offset. Default `Etc/UTC` |
-| `paths.collections`, `paths.data` (legacy keys)                     | No such keys. Use `collections_config.<name>.path` and `data_config.<name>.path`                                                                |
-| Arbitrary Material Symbols name (e.g. `place`)                      | Icon must be in the fixed enum (e.g. `location_on`). Invalid names silently fall back — check the schema for names                              |
+| Wrong                                                                                            | Correct                                                                                                                                                                                                                                                                              |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `disable_url_preview: true`                                                                      | `disable_url: true` (toggles whether the collection has an output URL)                                                                                                                                                                                                               |
+| `output: false` (legacy Jekyll/Hugo/Eleventy key)                                                | Omit `url:` and add `disable_url: true` — or use `data_config` instead of a collection                                                                                                                                                                                               |
+| `type: hidden` (deprecated value)                                                                | `hidden: true` (sibling of `type`, works on any input; also `hidden: "<query>"` for conditional hiding)                                                                                                                                                                              |
+| `options.max` on text/textarea                                                                   | `options.max_length` (paired with `min_length`)                                                                                                                                                                                                                                      |
+| `_editables.text: { bulletedlist, blockquote, format, table, ... }`                              | `_editables.text` is inline-only (`TextEditable`). For block-level formatting use `_editables.content` or `_editables.block` (`BlockEditable`)                                                                                                                                       |
+| `heading2: true`, `heading3: true`                                                               | `format: "p h1 h2 h3 h4 h5 h6"` (space-separated string)                                                                                                                                                                                                                             |
+| `options.collections: [team]` (invented)                                                         | `values: collections.team` with `value_key` / `preview`                                                                                                                                                                                                                              |
+| `options.structures: my_blocks` (bare name, invalid)                                             | `options.structures: _structures.my_blocks` (full path)                                                                                                                                                                                                                              |
+| `preview.view: gallery` on a snippet (**deprecated**, not invalid — the schema still accepts it) | Set `view:` at the **top level** of the snippet (sibling of `preview`/`template`), enum `card` \| `inline` \| `gallery`. Defaults to `card`, or `inline` when the snippet sets `inline: true`. Note `view` is a snippet-only key — the structure `preview` block rejects it outright |
+| `timezone: "+10:00"` (UTC offset, invalid)                                                       | `timezone` is a top-level key and a strict IANA-name enum (e.g. `Australia/Melbourne`, `America/New_York`), not a UTC offset. Default `Etc/UTC`                                                                                                                                      |
+| `paths.collections`, `paths.data` (legacy keys)                                                  | No such keys. Use `collections_config.<name>.path` and `data_config.<name>.path`                                                                                                                                                                                                     |
+| Arbitrary Material Symbols name (e.g. `place`)                                                   | Icon must be in the fixed enum (e.g. `location_on`). Invalid names silently fall back — check the schema for names                                                                                                                                                                   |
 
 ## Symptom-driven gotchas
 
@@ -179,11 +185,13 @@ _inputs:
 
 ## Verify your work
 
-- Run `npm run check` after any config change — `astro check` plus YAML lint catch schema-level and syntax errors.
-- For a definitive key check, download the schema and query it:
+- Run `npm run check` after any config change — `astro check`, YAML lint, `lint:cms`, and `lint:schema` (official JSON Schema validation of every config fragment).
+- `npm run lint:schema` on its own for a fast config-only pass; `node scripts/cms/lint-schema.mjs --only <substring>` to scope it to one component while iterating.
+- For a definitive key check, query the pinned schema in `node_modules` — no download, and it matches the version the lint uses:
   ```bash
-  curl -sL "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-config.latest.schema.json" -o /tmp/cc-schema.json
-  jq '.definitions["collections_config.*"].properties | keys' /tmp/cc-schema.json
+  jq '.definitions["collections_config.*"].properties | keys' \
+    node_modules/@cloudcannon/configuration-types/dist/cloudcannon-config.latest.schema.json
   ```
-  Do not commit the schema file, and do not add a CLI step to any workflow.
+  The per-fragment schemas sit beside it, named for the `*_from_glob` key that loads them: `cloudcannon-structure-value`, `cloudcannon-inputs`, `cloudcannon-snippets`, `cloudcannon-structures`. Do not add a CLI step to any workflow.
+- **A clean `lint:schema` is not proof the editor is happy.** Some keys are valid-but-**deprecated** (e.g. `preview.view` on a snippet) and some are accepted-but-ignored, so they pass. Load the component in CloudCannon for anything behavioural.
 - Open `npm run dev` and confirm inputs render as the intended type (select, image, switch) — a field falling through to plain text means a missing or misnamed `_inputs` entry.
