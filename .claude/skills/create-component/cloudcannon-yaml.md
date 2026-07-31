@@ -111,7 +111,7 @@ The block is deliberately **inline and per-component**, not extracted to a share
 
 **MUST NOT** hand-type the block — `npm run new:component` copies it in for you, slicing `cta-center.cloudcannon.inputs.yml` from the marker down. If you are writing a page section by hand, copy from that marker and edit only the component-specific fields above it.
 
-> **Migration in progress:** `cta-center` is the reference shape. The other 10 page sections still carry the legacy inline `_inputs:` block in their `structure-value.yml`. Treat them as examples of what _not_ to copy; new work follows `cta-center`.
+All 11 page sections now follow this shape, and `lint:cms` + `lint:schema` both pass over it — so any page section is a valid model. `cta-center` remains the canonical donor because the scaffolder slices from it.
 
 ## Child content arrays
 
@@ -190,8 +190,10 @@ myComponent:
         optional: true # array fields omit remove_empty
   _inputs_from_glob:
     - /src/components/page-sections/.../my-component.cloudcannon.inputs.yml
-  _inputs: # same section-wrapper block as the structure-value.yml
-    # ...
 ```
 
 Booleans use `type: boolean`. The `named_args` mirror the editor keys the section reads.
+
+**MUST NOT** add an inline `_inputs:` block here — `_inputs_from_glob` already pulls the whole `inputs.yml`, section-wrapper block included. An inline copy shadows it and drifts silently (see the convention section above).
+
+Add `image: /component-previews/<tier>/<path>/<slug>.svg` under `preview:` so the MDX snippet picker shows the same thumbnail as the structure picker. `npm run previews:build` wires this for you; a snippet whose `preview:` has its own `gallery:` block is deliberately skipped.

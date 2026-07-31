@@ -117,9 +117,7 @@ export function seedEmptyArrays(
   }
 }
 
-// ---------------------------------------------------------------------------
 // Structure registry loading (build-time, Node only)
-// ---------------------------------------------------------------------------
 
 export interface StructureValueDoc {
   value?: Record<string, unknown> & { _component?: string };

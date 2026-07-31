@@ -6,9 +6,7 @@
 
 import type { ComponentMetadata, ComponentNode } from "../types";
 
-// ---------------------------------------------------------------------------
 // Types
-// ---------------------------------------------------------------------------
 
 /** Extended component node that includes internal builder metadata flags. */
 export interface BuilderNode extends ComponentNode {
@@ -17,9 +15,7 @@ export interface BuilderNode extends ComponentNode {
   [key: `_${string}_mode`]: "components" | "prop";
 }
 
-// ---------------------------------------------------------------------------
 // Helpers
-// ---------------------------------------------------------------------------
 
 /**
  * True when the slot array has at least one item and every item has the same _component.

@@ -334,13 +334,13 @@ const properties: PropertyMeta[] = configData ? parseConfigProperties(configData
         .property-type {
           font-family: var(--font-headings);
           font-size: var(--font-size-sm);
-          font-weight: 400;
+          font-weight: var(--font-weight-normal);
         }
       }
 
       .enum-values {
         strong {
-          color: var(--text-subtle-textColor);
+          color: var(--color-text-muted);
           display: block;
           font-size: var(--font-size-sm);
           letter-spacing: 0.05em;
@@ -358,7 +358,7 @@ const properties: PropertyMeta[] = configData ? parseConfigProperties(configData
 
         li {
           code {
-            background: var(--background-subtle-backgroundColor);
+            background: var(--color-bg-muted);
             font-size: var(--font-size-sm);
             padding: 0;
           }

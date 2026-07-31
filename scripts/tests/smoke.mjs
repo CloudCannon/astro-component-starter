@@ -6,16 +6,6 @@
  * inline, so their client scripts run), and the main site pages carry the
  * navigation chrome (mobile nav, theme toggle).
  *
- * Covered behaviours:
- *   - accordion:   a closed item opens on click and closes again
- *   - modal:       opens via its trigger, moves focus inside, traps Tab /
- *                  Shift+Tab, and restores focus to the trigger on close
- *   - carousel:    the next arrow advances the track and the selected dot
- *   - mobile nav:  the hamburger opens the drawer at a mobile viewport and
- *                  the close button dismisses it
- *   - theme toggle: flips data-theme on <html>, persists via localStorage,
- *                  and survives a reload
- *
  *   node scripts/tests/smoke.mjs [--only <substring>]
  */
 import { existsSync } from "node:fs";
@@ -296,9 +286,7 @@ const tests = [
   },
 ];
 
-// ---------------------------------------------------------------------------
 // Run.
-// ---------------------------------------------------------------------------
 
 const marker = join(
   distDir,

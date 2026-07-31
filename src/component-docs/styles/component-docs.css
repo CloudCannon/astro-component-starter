@@ -65,7 +65,7 @@
     }
 
     & .heading-anchor {
-      color: var(--color-text-subtle);
+      color: var(--color-text-muted);
       font-weight: var(--font-weight-normal);
       margin-inline-start: 0.25em;
       opacity: 0;
@@ -73,7 +73,7 @@
       transition: opacity var(--animation-normal) ease;
 
       &:hover {
-        color: var(--color-text-link);
+        color: var(--color-link);
       }
     }
 
@@ -100,13 +100,13 @@
             color: var(--color-text-strong);
             content: "Copied!";
             font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-medium);
+            font-weight: var(--font-weight-normal);
             left: 50%;
             padding: var(--spacing-xs) var(--spacing-sm);
             position: absolute;
             transform: translateX(-50%);
             white-space: nowrap;
-            z-index: var(--layer-10);
+            z-index: var(--layer-5);
           }
         }
       }

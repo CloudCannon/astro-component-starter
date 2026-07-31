@@ -27,9 +27,7 @@ import { snippetWantsPreviewImage } from "./wire-yaml.mjs";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
 
-// ---------------------------------------------------------------------------
 // 1. Discover components — exactly the set generate.mjs previews.
-// ---------------------------------------------------------------------------
 
 const structureFiles = await glob("src/components/**/*.cloudcannon.structure-value.yml", {
   cwd: root,
@@ -51,9 +49,7 @@ if (!components.length) {
   process.exit(1);
 }
 
-// ---------------------------------------------------------------------------
 // 2a. Recipe presence: every component has a sibling `*.preview.mjs`.
-// ---------------------------------------------------------------------------
 
 const recipeless = [];
 
@@ -65,18 +61,14 @@ for (const component of components) {
   }
 }
 
-// ---------------------------------------------------------------------------
 // 2b. Coverage: every component has a built SVG.
-// ---------------------------------------------------------------------------
 
 const expectedSvgs = new Set(components.map((component) => `${component}.svg`));
 const missing = components.filter(
   (component) => !existsSync(join(previewsDir, `${component}.svg`))
 );
 
-// ---------------------------------------------------------------------------
 // 3. Orphans: every SVG maps back to a component.
-// ---------------------------------------------------------------------------
 
 const svgFiles = globSync("**/*.svg", {
   cwd: previewsDir,
@@ -84,9 +76,7 @@ const svgFiles = globSync("**/*.svg", {
 
 const orphans = svgFiles.filter((svg) => !expectedSvgs.has(svg)).sort();
 
-// ---------------------------------------------------------------------------
 // 4. Wiring: every component references its SVG in its structure YAML.
-// ---------------------------------------------------------------------------
 
 const unwired = [];
 
@@ -115,9 +105,7 @@ for (const component of components) {
   }
 }
 
-// ---------------------------------------------------------------------------
 // 5. Report.
-// ---------------------------------------------------------------------------
 
 if (!recipeless.length && !missing.length && !orphans.length && !unwired.length) {
   console.log(`ok     ${components.length} components, ${svgFiles.length} previews in sync`);

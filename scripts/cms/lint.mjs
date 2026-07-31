@@ -7,12 +7,9 @@
  * nothing else validates — Astro props and their co-located `*.cloudcannon.*.yml`
  * are maintained by hand in parallel.
  *
- * Output is one `ok`/`FAIL`/`WARN` line per thing checked. FAILs exit 1;
- * WARNs are printed but never fail the
- * build (reserved for checks that can't be made reliable without false
- * positives — each is commented with why).
- *
- * Dependencies: only js-yaml (v5: `yaml.load`) + glob, already in package.json.
+ * Output is one `ok`/`FAIL`/`WARN` line per thing checked. FAILs exit 1; WARNs
+ * never fail the build — they're for checks that can't be made false-positive
+ * free, and each is commented with why.
  */
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
@@ -30,13 +27,6 @@ const fail = (file, reason) => fails.push({ file, reason });
 const warn = (file, reason) => warns.push({ file, reason });
 const ok = (label) => oks.push(label);
 
-// ---------------------------------------------------------------------------
-// Component key derivation (`componentKeyFromPath` / `pascalToKebab`) is now
-// imported from the shared src/components/utils/componentKey.mjs — the single
-// source of truth also used by renderBlock.astro and live-editing.js, so the
-// linter's `_component` keys can no longer drift from the render/editor registries.
-// ---------------------------------------------------------------------------
-
 /** Is this .astro a component's own main file (kebab filename === dir name)? */
 function isMainComponentFile(astroAbsPath) {
   const dir = dirname(astroAbsPath);
@@ -45,13 +35,11 @@ function isMainComponentFile(astroAbsPath) {
   return pascalToKebab(base) === dir.split("/").pop();
 }
 
-// ---------------------------------------------------------------------------
 // Destructure parser: pull the prop names out of `const { ... } = Astro.props`.
 // Handles renames (`class: className`), quoted keys (`'data-prop': x`), aliased
 // with defaults (`useDefaultEditableBinding: _x = false`), plain-with-default
 // (`size = "md"`), multi-line, nested-brace defaults (`imageElementAttributes = {}`),
 // and the rest element (`...htmlAttributes`).
-// ---------------------------------------------------------------------------
 
 /**
  * @returns {{ props: Set<string>, hasRest: boolean } | null}
@@ -163,9 +151,7 @@ function firstTopLevelDelimiter(part) {
   return -1;
 }
 
-// ---------------------------------------------------------------------------
 // Shared helpers
-// ---------------------------------------------------------------------------
 
 function loadYaml(absPath) {
   return yaml.load(readFileSync(absPath, "utf8"));
@@ -208,9 +194,7 @@ const NON_PROP_KEY = (key) => key.startsWith("_");
 // names. Any stray key NOT listed here FAILs, so renames are caught.
 const KNOWN_DEAD_INPUTS = {};
 
-// ---------------------------------------------------------------------------
 // Build the world: every component .astro, its key, its parsed destructure.
-// ---------------------------------------------------------------------------
 
 const componentsDir = join(root, "src", "components");
 const astroPaths = (await glob("**/*.astro", { cwd: componentsDir })).sort();
@@ -232,12 +216,10 @@ for (const relToComponents of astroPaths) {
   }
 }
 
-// ---------------------------------------------------------------------------
 // Check 1 — Prop drift (FAIL): every top-level key in a co-located inputs.yml,
 // and every `value:` key in a structure-value.yml, must be a prop the component
 // actually destructures. This is the "renamed prop silently breaks the editor"
 // killer check. FAIL-level: parsing is exact and false positives were tuned out.
-// ---------------------------------------------------------------------------
 
 for (const [dir, { astroAbs, parsed }] of mainByDir) {
   if (!parsed) continue; // component reads no props — nothing to drift against.
@@ -285,7 +267,6 @@ for (const [dir, { astroAbs, parsed }] of mainByDir) {
   }
 }
 
-// ---------------------------------------------------------------------------
 // Check 2 — Missing structure-value (FAIL): every *main* component .astro under
 // building-blocks/ and page-sections/ must have a sibling structure-value.yml.
 // Rule for "main": kebab(filename) === parent dir name. Child components
@@ -293,7 +274,6 @@ for (const [dir, { astroAbs, parsed }] of mainByDir) {
 // parent's structures and legitimately have none — the rule expresses this with
 // no hardcoded exception list. Navigation/ and utils/ are out of scope (they are
 // wired as data panels / internal helpers, not page-builder blocks).
-// ---------------------------------------------------------------------------
 
 for (const relToComponents of astroPaths) {
   const scoped =
@@ -311,11 +291,9 @@ for (const relToComponents of astroPaths) {
   else fail(rel(astroAbs), "main component has no sibling *.cloudcannon.structure-value.yml");
 }
 
-// ---------------------------------------------------------------------------
 // Check 3 — Orphaned YAML (FAIL): every *.cloudcannon.*.yml under src/components
 // must sit beside a matching .astro (a sibling whose kebab filename equals the
 // YAML's kebab prefix). Catches YAML left behind after a rename/delete.
-// ---------------------------------------------------------------------------
 
 const yamlPaths = (await glob("**/*.cloudcannon.*.yml", { cwd: componentsDir })).sort();
 
@@ -331,13 +309,11 @@ for (const relYaml of yamlPaths) {
   else fail(rel(yamlAbs), `no sibling .astro whose kebab name is "${prefix}"`);
 }
 
-// ---------------------------------------------------------------------------
 // Check 4 — `_component` resolution (FAIL): every `_component` value found in
 // structure YAML (co-located + .cloudcannon/structures) and in content
 // frontmatter must resolve to a real component key. All sources are parsed as
 // YAML, so this is reliable → FAIL-level. Content *bodies* (MDX JSX) are checked
 // separately at WARN-level below (regex, not a parser).
-// ---------------------------------------------------------------------------
 
 const refSources = [];
 
@@ -382,14 +358,12 @@ for (const abs of contentFiles) {
     warn(rel(abs), `unresolved _component in body (MDX/JSX): ${broken.join(", ")}`);
 }
 
-// ---------------------------------------------------------------------------
 // Check 5 — Structures registration: literal (non-glob) paths listed in a
 // `*_from_glob` block must exist on disk. Positive entries missing → FAIL (a
 // structure points at a file that isn't there). Negation (`!`) entries missing,
 // and wildcard globs matching zero files → WARN: a dangling `!exclude` is a
 // harmless no-op in CloudCannon but signals stale config, and an empty positive
 // glob is usually — but not always — intentional.
-// ---------------------------------------------------------------------------
 
 const structureFiles = (await glob(".cloudcannon/structures/*.yml", { cwd: root })).map((p) =>
   join(root, p)
@@ -434,7 +408,6 @@ for (const abs of structureFiles) {
   if (!problems) ok(`structures  ${rel(abs)}`);
 }
 
-// ---------------------------------------------------------------------------
 // Check 6 — Unseeded input (FAIL): every *visible* key in a co-located
 // inputs.yml must also appear in the sibling structure-value.yml's `value:`.
 // CloudCannon builds a newly inserted block from `value:` alone, so an input
@@ -447,7 +420,6 @@ for (const abs of structureFiles) {
 //     every block would just duplicate that default into content.
 //   - `hidden: "<expression>"` inputs are conditionally shown; their parent key
 //     is what needs seeding, and dotted keys resolve through it.
-// ---------------------------------------------------------------------------
 
 const hasPath = (obj, path) => {
   let cursor = obj;
@@ -481,9 +453,7 @@ for (const [dir] of mainByDir) {
   }
 }
 
-// ---------------------------------------------------------------------------
 // Report.
-// ---------------------------------------------------------------------------
 
 for (const label of oks) console.log(`ok     ${label}`);
 for (const { file, reason } of warns) console.warn(`WARN   ${file}\n   ${reason}`);

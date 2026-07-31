@@ -11,9 +11,7 @@ import { debugLog } from "../constants";
 import type { ComponentMetadata, ComponentNode } from "../types";
 import { type BuilderNode, shouldUseMapPattern } from "./shared";
 
-// ---------------------------------------------------------------------------
 // Types
-// ---------------------------------------------------------------------------
 
 /** Location of a prop in the component tree (used in validation errors). */
 export interface PropLocation {
@@ -36,9 +34,7 @@ export interface ValidationResult {
   duplicateProps: DuplicatePropError[];
 }
 
-// ---------------------------------------------------------------------------
 // Public API
-// ---------------------------------------------------------------------------
 
 /**
  * Validate the component tree for duplicate exposed prop names.

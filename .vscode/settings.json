@@ -6,13 +6,6 @@
     "source.organizeImports": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
-  "files.associations": {
-    "*.pcss": "postcss",
-    "*.postcss": "postcss"
-  },
-  "emmet.includeLanguages": {
-    "postcss": "css"
-  },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -43,7 +36,7 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[postcss]": {
+  "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "eslint.validate": [
@@ -55,9 +48,34 @@
     "json",
     "jsonc"
   ],
-  "stylelint.validate": ["css", "postcss", "pcss", "astro"],
-  "css.validate": false,
+  "stylelint.validate": ["css", "astro"],
   "less.validate": false,
   "scss.validate": false,
-  "cSpell.words": ["pcss", "skele"]
+
+  // Design-token autocomplete inside `<style is:global>`. CI backstop: lint:css-vars.
+  "cssVariables.lookupFiles": [
+    "src/styles/**/*.css",
+    "src/component-docs/styles/**/*.css"
+  ],
+
+  // Same schemas `npm run lint:schema` uses, resolved from node_modules so the
+  // pinned package stays the source of truth and nothing is committed.
+  "yaml.schemas": {
+    "./node_modules/@cloudcannon/configuration-types/dist/cloudcannon-config.latest.schema.json": [
+      "cloudcannon.config.yml"
+    ],
+    "./node_modules/@cloudcannon/configuration-types/dist/cloudcannon-inputs.schema.json": [
+      "src/components/**/*.cloudcannon.inputs.yml"
+    ],
+    "./node_modules/@cloudcannon/configuration-types/dist/cloudcannon-structure-value.schema.json": [
+      "src/components/**/*.cloudcannon.structure-value.yml"
+    ],
+    "./node_modules/@cloudcannon/configuration-types/dist/cloudcannon-snippets.schema.json": [
+      "src/components/**/*.cloudcannon.snippets.yml"
+    ],
+    "./node_modules/@cloudcannon/configuration-types/dist/cloudcannon-structures.schema.json": [
+      ".cloudcannon/structures/*.cloudcannon.structures.yml"
+    ]
+  },
+  "cSpell.words": ["skele"]
 }

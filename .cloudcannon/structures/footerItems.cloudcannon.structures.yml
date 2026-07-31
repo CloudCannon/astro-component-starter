@@ -1,14 +1,11 @@
 # Footer link and social-icon structures, used by the `footer` component's
 # `links` and `socials` array inputs.
 #
-# Moved out of `footer.cloudcannon.inputs.yml`, where an `_structures:` block is
-# not a valid key (an `_inputs_from_glob` file is read as input-name -> config).
-# Unlike the nav item structures, these names are unique to `footer`, so this is
-# a verbatim move with no change in behaviour.
+# Must live here, not in the component's inputs.yml — `_structures` is not a
+# valid key in an `_inputs_from_glob` file.
 #
-# Note these are distinct from the field-name-matched `links` / `socials`
-# structures used by the data files in `src/data/` — same idea, different
-# consumers.
+# Distinct from the field-name-matched `links` / `socials` structures used by the
+# data files in `src/data/` — same idea, different consumers.
 linkItems:
   values:
     - label: Navigation Link

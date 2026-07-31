@@ -41,7 +41,7 @@
     h4,
     h5,
     h6 {
-      font-weight: normal;
+      font-weight: var(--font-weight-normal);
     }
 
     h4 {
@@ -94,6 +94,14 @@
       overflow-wrap: break-word;
     }
 
+    /* Without this, code falls through to the browser's UA-default monospace. */
+    code,
+    kbd,
+    samp,
+    pre {
+      font-family: var(--font-mono);
+    }
+
     code {
       overflow-wrap: anywhere;
     }
@@ -102,7 +110,7 @@
   .eyebrow {
     color: var(--color-text-muted);
     font-size: var(--font-size-sm);
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     letter-spacing: 0.08em;
     margin-bottom: var(--spacing-sm);
     text-transform: uppercase;

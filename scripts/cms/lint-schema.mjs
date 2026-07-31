@@ -1,26 +1,15 @@
 /**
- * Schema lint — validates every CloudCannon YAML fragment against the official
- * JSON Schemas from `@cloudcannon/configuration-types`.
+ * Validates the CloudCannon YAML against the official JSON Schemas from
+ * `@cloudcannon/configuration-types` — invalid keys, out-of-enum values, wrong
+ * input types.
  *
  *   node scripts/cms/lint-schema.mjs [--only <substring>]
  *
- * This is the complement to `lint:cms`. That script checks the YAML against the
- * *components* (prop drift, orphaned files, `_component` resolution); this one
- * checks the YAML against *CloudCannon* — invalid keys, bad enum values, wrong
- * input types. Neither subsumes the other: a file can name every prop correctly
- * and still be rejected by the editor, and vice versa.
+ * Complements `lint:cms`, which checks the same files against the *components*
+ * (prop drift, `_component` resolution). Neither subsumes the other.
  *
- * Why schemas and not the CloudCannon CLI: this repo deliberately does not use
- * `cloudcannon configure generate` (it would flatten the co-located, glob-
- * collected config into a monolith — see .agents/skills/STYLE.md). Validation
- * carries none of that risk, and the schema package is the same authority the
- * CLI validates against, pinned in the lockfile instead of fetched at runtime.
- *
- * Error presentation is delegated to the package's own `loadValidator`, which
- * suppresses non-matching union-branch noise and appends `closest:` spelling
- * suggestions. Hand-rolling Ajv here produced misleading output: one bad key on
- * an input makes every `type` branch fail, so the raw errors blame `type` and
- * quote whichever enum the last branch happened to define.
+ * Error formatting is delegated to the package's `loadValidator`: it suppresses
+ * non-matching union-branch noise, which raw Ajv output drowns in.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -40,6 +29,13 @@ const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 // loads it in cloudcannon.config.yml — the same names the schema package uses,
 // so this mapping stays auditable against the loader.
 const TARGETS = [
+  // The root config itself. Easy to forget because it isn't glob-collected, but
+  // it holds the `_select_data` vocabularies and collection `_inputs` that every
+  // component leans on — and a stray key here fails the same silent way.
+  {
+    schema: "global",
+    pattern: "cloudcannon.config.yml",
+  },
   {
     schema: "values_from_glob",
     pattern: "src/components/**/*.cloudcannon.structure-value.yml",

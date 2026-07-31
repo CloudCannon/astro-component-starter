@@ -2,17 +2,13 @@
 # `_structures.formBlocks` by the `formBlocks` array inputs of
 # `building-blocks/forms/form` and `page-sections/ctas/cta-form`.
 #
-# The glob owns the list: any form component with a co-located
-# `*.cloudcannon.structure-value.yml` is offered in this picker automatically —
-# no manual registration. Form fields can never leak into the page-sections
-# picker because `pageSections.cloudcannon.structures.yml` globs
-# `/src/components/page-sections/**` only.
+# The glob owns the list — any form component with a co-located
+# `*.cloudcannon.structure-value.yml` is offered automatically.
 #
 # Intentional exclusions (see docs/ARCHITECTURE.md, "Structured editing"):
-#   - form:     a Form must not be nestable inside its own blocks array.
-#   - segments: deliberately hidden from the picker (v1.0.1 form cleanup);
-#     the component and its YAML remain usable directly in content. Delete
-#     the exclusion line to offer it to editors again.
+#   - form:     must not be nestable inside its own blocks array.
+#   - segments: hidden from the picker but still usable directly in content;
+#               delete the exclusion line to offer it to editors again.
 formBlocks:
   id_key: _component
   style: modal

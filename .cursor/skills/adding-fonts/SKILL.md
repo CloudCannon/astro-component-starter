@@ -104,7 +104,7 @@ Use this only for a font not published on Fontsource (e.g. a licensed brand type
 
 ## Required weights
 
-`src/styles/variables/_fonts.css` defines three weight tokens consumed across components: `--font-weight-normal`, `--font-weight-semibold`, and `--font-weight-bold`. Any font you register — via either provider — must cover the weights those tokens map to (read the file for the current values), or be a variable font spanning the range. Token values are owned by [theming](../theming/SKILL.md) — do not rely on this skill for them.
+`src/styles/variables/_fonts.css` defines three weight tokens consumed across components: `--font-weight-normal`, `--font-weight-semibold`, and `--font-weight-bold`. There is deliberately no `medium` (500) step — the scale is 400/600/700. Any font you register — via either provider — must cover the weights those tokens map to (read the file for the current values), or be a variable font spanning the range. Token values are owned by [theming](../theming/SKILL.md) — do not rely on this skill for them.
 
 ## What NOT to do
 

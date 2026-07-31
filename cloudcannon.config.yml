@@ -1,3 +1,8 @@
+# Default for inputs without their own `options.paths`. Top level only — a
+# `paths:` block inside a collection is silently ignored.
+paths:
+  uploads: src/assets/images
+
 collections_config:
   pages:
     path: src/content/pages
@@ -19,8 +24,6 @@ collections_config:
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.md"
     new_preview_url: /
-    paths:
-      uploads: src/assets/images
     _inputs:
       title:
         type: text
@@ -52,8 +55,6 @@ collections_config:
     create:
       path: "[relative_base_path]/{filename|slugify|lowercase}.mdx"
     new_preview_url: /blog/
-    paths:
-      uploads: src/assets/images
     _inputs:
       title:
         type: text

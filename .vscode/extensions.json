@@ -3,8 +3,8 @@
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "astro-build.astro-vscode",
-    "csstools.postcss",
     "stylelint.vscode-stylelint",
-    "redhat.vscode-yaml"
+    "redhat.vscode-yaml",
+    "vunguyentuan.vscode-css-variables"
   ]
 }

@@ -1,77 +1,36 @@
 /**
  * Component-preview kit — the authoring API for `*.preview.mjs` recipe files.
  *
- * A recipe declares a content `width` and a flat list of drawing primitives in
- * absolute canvas coordinates. `compile()` measures the drawn bounding box,
- * centres it on (640, 400) with a single `<g transform>`, and asserts the box
- * matches the declared width. Output goes to
- * `public/component-previews/<component>.svg` via `scripts/previews/build.mjs`.
+ * A recipe declares a content `width` and drawing primitives in absolute canvas
+ * coordinates; `compile()` centres the bounding box on (640, 400) and asserts it
+ * matches the declared width. Deterministic and browser-free, so CI rebuilds and
+ * diffs to catch drift. Screenshots (`screenshot.mjs`) are an authoring reference
+ * only, never an input.
  *
- * The build is deterministic and browser-free: the same recipe always produces
- * the same SVG, so CI can rebuild and diff to catch drift. A real screenshot of
- * the component (`scripts/previews/screenshot.mjs`) is only an authoring
- * reference — never an input to the output.
+ * The five rules that keep 55 previews looking like one family:
  *
- * ---------------------------------------------------------------------------
- * The design system this encodes
- * ---------------------------------------------------------------------------
- *
- * Previews only look like one family if every one of them obeys the same small
- * set of rules. The kit makes those rules the path of least resistance:
- *
- *   1. NINE COLOUR ROLES, no raw hex. Every fill and stroke is one of the roles
- *      below, emitted as `var(--pv-role, #lightfallback)`. That is what makes
- *      the whole set re-skinnable and dark-mode capable from one place.
- *   2. A FIVE-STEP TYPE SCALE (display/heading/label/body/micro). Text is drawn
- *      as fully-rounded bars at one of five heights — never an arbitrary one.
- *      `bar()` takes a scale step, not a pixel height, precisely so a new
- *      component cannot quietly introduce a sixth size.
+ *   1. NINE COLOUR ROLES, no raw hex — see the glossary below. Re-skin and
+ *      dark-mode the whole set from one place.
+ *   2. A FIVE-STEP TYPE SCALE (display/heading/label/body/micro). `bar()` takes
+ *      a scale step, not a pixel height, so no recipe can add a sixth size.
  *   3. A THREE-STEP STROKE SCALE (control 2 / field 3 / active 4).
- *   4. FOUR CONTENT WIDTH BANDS (560 / 760 / 960 / 1120), declared per recipe
- *      and asserted at build time. A handful of components are deliberately
- *      exempt — a lone small control stretched to 560 reads as distorted — and
- *      must say so with `exempt: true`.
- *   5. EVERYTHING CENTRES on (640, 400). Recipes never do the centring maths;
- *      `compile()` measures and emits the offset. So a picker grid stays even
- *      no matter how tall or short a given composition is.
+ *   4. FOUR CONTENT WIDTH BANDS (560 / 760 / 960 / 1120), asserted at build
+ *      time. Components that would read as distorted set `exempt: true`.
+ *   5. EVERYTHING CENTRES on (640, 400) — `compile()` emits the offset, so a
+ *      picker grid stays even regardless of composition height.
  *
- * Geometry is integer throughout.
- *
- * ---------------------------------------------------------------------------
- * Authoring a new preview
- * ---------------------------------------------------------------------------
- *
- *   import { preview, band, bar, lines, pill, media, glyph } from "<path>/kit.mjs";
- *
- *   const B = band(760);
- *
- *   export default preview({
- *     width: B.w,
- *     draw: [
- *       bar(B.left, 0, 520, "display"),
- *       lines(B.left, 62, [760, 760, 520]),
- *       pill(B.left, 140, 150, 44),
- *     ],
- *   });
- *
- * Absolute y values are arbitrary — only their relationships matter, since the
- * whole composition is re-centred. Start at 0 and work down.
- *
- * Prefer the composites (`pill`, `field`, `media`, `photoGlyph`, `navButton`, …)
- * over hand-rolling shapes: they carry the stroke weights, radii and label
- * insets that keep a new preview on-system.
+ * Geometry is integer throughout. Prefer the composites (`pill`, `field`,
+ * `media`, `navButton`, …) over raw shapes: they carry the on-system weights,
+ * radii and insets. Absolute y values are arbitrary; start at 0 and work down.
  */
 
-// ---------------------------------------------------------------------------
 // Canvas
-// ---------------------------------------------------------------------------
 
 export const W = 1280;
 export const H = 800;
 export const CX = W / 2;
 export const CY = H / 2;
 
-// ---------------------------------------------------------------------------
 // Colour roles. Nine variables cover every preview. Light values are inlined as
 // the `var()` fallback so a preview loaded as `<img>` — an isolated document
 // page CSS cannot reach into — still renders correctly. The dark values are
@@ -89,7 +48,6 @@ export const CY = H / 2;
 //            preview is actually about.
 //   ink      the brand primary (a dark neutral by default): filled buttons
 //   on-ink   a faint label bar drawn inside an `ink` fill
-// ---------------------------------------------------------------------------
 
 const LIGHT = {
   paper: "#FFFFFF",
@@ -127,9 +85,7 @@ export const subject = role("subject");
 export const ink = role("ink");
 export const onInk = role("on-ink");
 
-// ---------------------------------------------------------------------------
 // Scales
-// ---------------------------------------------------------------------------
 
 /** Type scale. Text is a fully-rounded bar at one of these five heights. */
 export const TYPE = {
@@ -170,11 +126,9 @@ export function band(w) {
   return { w, left, right: left + w, cx: CX };
 }
 
-// ---------------------------------------------------------------------------
 // Core primitives. Every one returns a plain element object (or an array of
 // them) in absolute canvas coordinates. Recipes nest arrays freely; `compile()`
 // flattens. Draw order is array order.
-// ---------------------------------------------------------------------------
 
 const num = (v) => Math.round(v);
 
@@ -244,9 +198,7 @@ export function rule(x, y, w, o = {}) {
   return box(x, y, w, o.h ?? 2, { r: 1, fill: o.fill ?? line });
 }
 
-// ---------------------------------------------------------------------------
 // Layout helpers — for composing without hand-computing every coordinate.
-// ---------------------------------------------------------------------------
 
 /** Flatten arbitrarily-nested element arrays, dropping null/false/undefined. */
 export function flatten(els) {
@@ -378,10 +330,8 @@ export function lines(x, y, widths, o = {}) {
   });
 }
 
-// ---------------------------------------------------------------------------
 // Composites. These carry the system's weights, radii and insets so a recipe
 // does not have to remember them.
-// ---------------------------------------------------------------------------
 
 /**
  * A button. `ink` is the filled brand primary; `ghost` is an outlined control.
@@ -624,9 +574,7 @@ export function toggle(x, y, w, h, on = true, o = {}) {
   ];
 }
 
-// ---------------------------------------------------------------------------
 // preview() — the recipe wrapper.
-// ---------------------------------------------------------------------------
 
 /**
  * Declare a preview.
@@ -659,9 +607,7 @@ export function preview(spec) {
   };
 }
 
-// ---------------------------------------------------------------------------
 // Emit
-// ---------------------------------------------------------------------------
 
 function attrs(pairs) {
   return pairs

@@ -1,17 +1,11 @@
 # Three-level navigation item structures, shared by every nav component
-# (`bar`, `main-nav`, `mobile`, `side`).
+# (`bar`, `main-nav`, `mobile`, `side`). Must live here, not in a component's
+# inputs.yml — `_structures` is not a valid key in an `_inputs_from_glob` file,
+# and these names are global, so per-component copies silently collide.
 #
-# These previously lived in an `_structures:` block inside each component's
-# `*.cloudcannon.inputs.yml`. That is not a valid key in an `_inputs_from_glob`
-# file (the schema reads that file as input-name -> config), and because all four
-# components declared the *same* three names, only one definition could ever win
-# — decided by glob load order. Three variants had drifted apart: `bar`/`mobile`
-# typed `path` as plain text, `main-nav`/`side` as a URL picker.
-#
-# This file is that single definition, made explicit. `path` is a `url` input
-# with the file/email/telephone link options suppressed, since nav items point at
-# site pages. Levels 1 and 2 nest via `children`; level 3 is the final level and
-# has none.
+# `path` is a `url` input with the file/email/telephone options suppressed, since
+# nav items point at site pages. Levels 1 and 2 nest via `children`; level 3 has
+# none.
 navItemLevel1:
   values:
     - label: Navigation Item (Level 1)

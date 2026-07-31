@@ -3,22 +3,14 @@
  * YAML, so none of the create-component steps can be forgotten.
  *
  *   node scripts/scaffold/new-component.mjs <tier/path/kebab-name>
- *
- *   node scripts/scaffold/new-component.mjs building-blocks/core-elements/badge
  *   node scripts/scaffold/new-component.mjs page-sections/features/feature-tabs
  *
- * Generates into src/components/<path>/:
- *   - <PascalCase>.astro                        (destructure + minimal markup + layered styles)
- *   - <kebab>.cloudcannon.inputs.yml            (one example input)
- *   - <kebab>.cloudcannon.structure-value.yml   (label/icon/value/previews/_inputs_from_glob;
- *                                                page sections also get the shared section-wrapper
- *                                                `_inputs` block, copied from a real page section
- *                                                so it can never drift from the live shape)
+ * Generates <PascalCase>.astro plus both CloudCannon YAML files into
+ * src/components/<path>/. Page sections also get the section-wrapper `_inputs`
+ * block, sliced from a real page section so it can't drift from the live shape.
  *
- * The .agents/skills/create-component skill is the full playbook; this script
- * automates its file-creation steps and prints the remaining ones.
- *
- * Dependencies: none beyond node — templates live in ./templates.
+ * Templates live in ./templates. The .agents/skills/create-component skill is
+ * the full playbook; this automates its file-creation steps and prints the rest.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -42,9 +34,7 @@ const die = (message) => {
   process.exit(1);
 };
 
-// ---------------------------------------------------------------------------
 // Parse + validate the requested path.
-// ---------------------------------------------------------------------------
 
 const rawArg = process.argv[2];
 
@@ -108,9 +98,7 @@ const targetAbs = join(componentsDir, requested);
 
 if (existsSync(targetAbs)) die(`src/components/${requested}/ already exists.`);
 
-// ---------------------------------------------------------------------------
 // Derive names via the shared componentKey module (never reimplement).
-// ---------------------------------------------------------------------------
 
 const pascal = slug
   .split("-")
@@ -135,9 +123,7 @@ const label = slug
   .map((word) => word[0].toUpperCase() + word.slice(1))
   .join(" ");
 
-// ---------------------------------------------------------------------------
 // Render templates.
-// ---------------------------------------------------------------------------
 
 const templateSet = tier === "page-sections" ? "page-section" : "building-block";
 
@@ -187,9 +173,7 @@ for (const [name, content] of Object.entries(files)) {
   console.log(`created  src/components/${requested}/${name}`);
 }
 
-// ---------------------------------------------------------------------------
 // Remaining manual steps (the ones a script can't do for you).
-// ---------------------------------------------------------------------------
 
 const isWrapper = requested.startsWith("building-blocks/wrappers/");
 

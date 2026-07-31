@@ -157,9 +157,9 @@
     border-right: 1px solid #151515;
     color: #6e6e6e;
     cursor: pointer;
-    font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+    font-family: var(--font-mono);
     font-size: 12px;
-    font-weight: 400;
+    font-weight: var(--font-weight-normal);
     padding: 8px 16px;
     transition: color 0.1s ease;
 
@@ -197,7 +197,7 @@
       background: #161b22;
       border-right: 1px solid #30363d;
       color: #6e7681;
-      font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+      font-family: var(--font-mono);
       font-size: 13px;
       line-height: 1.6;
       padding: 12px 10px 12px 14px;
@@ -222,14 +222,7 @@
     }
 
     code {
-      font-family: var(
-        --font-mono,
-        "SF Mono",
-        "Fira Code",
-        "Fira Mono",
-        "Roboto Mono",
-        monospace
-      ) !important;
+      font-family: var(--font-mono) !important;
     }
 
     .builder-code-error {
@@ -237,7 +230,7 @@
       border: 1px solid #f85149;
       border-radius: 6px;
       color: #ffa198;
-      font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+      font-family: var(--font-mono);
       font-size: 12px;
       margin: 12px;
       overflow-wrap: anywhere;
@@ -393,7 +386,7 @@
   .repeatable-slot-badge {
     background: var(--color-bg-accent);
     border-radius: var(--radius-xs);
-    color: var(--color-text-accent);
+    color: var(--color-text-strong);
     font-size: 10px;
     font-weight: var(--font-weight-bold);
     letter-spacing: 0.04em;
@@ -414,7 +407,7 @@
   }
 
   .repeatable-slot-count-input {
-    background: var(--color-bg-input);
+    background: var(--color-bg-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
     color: var(--color-text);
@@ -503,7 +496,7 @@
     height: 15px;
     justify-content: center;
     position: relative;
-    z-index: var(--z-index-2);
+    z-index: var(--layer-2);
 
     &::after {
       background: var(--color-info);
@@ -515,7 +508,7 @@
       top: 50%;
       transform: translateY(-50%);
       transition: height var(--animation-fast) ease;
-      z-index: var(--z-index-3);
+      z-index: var(--layer-3);
     }
 
     &.active::after {
@@ -533,7 +526,7 @@
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
-    color: var(--color-text-body);
+    color: var(--color-text);
     cursor: pointer;
     display: flex;
     font-size: var(--font-size-sm);
@@ -568,7 +561,7 @@
     color: var(--color-text);
     display: flex;
     font-size: 1.25rem;
-    font-weight: 300;
+    font-weight: var(--font-weight-normal);
     height: 1.5rem;
     justify-content: center;
     line-height: 1;
@@ -1157,9 +1150,9 @@
   border-right: 1px solid #151515;
   color: #6e6e6e;
   cursor: pointer;
-  font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+  font-family: var(--font-mono);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: var(--font-weight-normal);
   padding: 8px 16px;
   transition: color 0.1s ease;
 
@@ -1208,7 +1201,7 @@
 
   code {
     display: block;
-    font-family: var(--font-mono, "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace);
+    font-family: var(--font-mono);
     padding: 0 16px;
   }
 }

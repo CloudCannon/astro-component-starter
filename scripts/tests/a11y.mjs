@@ -31,9 +31,7 @@ const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 
 const FAIL_IMPACTS = new Set(["serious", "critical"]);
 
-// ---------------------------------------------------------------------------
 // Locate axe-core and the built pages.
-// ---------------------------------------------------------------------------
 
 let axePath;
 
@@ -76,9 +74,7 @@ if (!pages.length) {
   process.exit(1);
 }
 
-// ---------------------------------------------------------------------------
 // Scan.
-// ---------------------------------------------------------------------------
 
 const { server, baseUrl } = await serveDist(distDir);
 const browser = await launchBrowser();

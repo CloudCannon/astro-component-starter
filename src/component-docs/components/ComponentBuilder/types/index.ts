@@ -7,9 +7,7 @@
  * @module types
  */
 
-// ---------------------------------------------------------------------------
 // Component discovery & structure types
-// ---------------------------------------------------------------------------
 
 /**
  * A slot definition describes a property on a component that can contain
@@ -110,9 +108,7 @@ export interface StructureDefinition {
   }>;
 }
 
-// ---------------------------------------------------------------------------
 // Component tree types (runtime)
-// ---------------------------------------------------------------------------
 
 /**
  * A node in the component tree — represents a single component instance
@@ -149,9 +145,7 @@ export interface NodeLocation {
   slotName: string | null;
 }
 
-// ---------------------------------------------------------------------------
 // Metadata & configuration types
-// ---------------------------------------------------------------------------
 
 /** Additional component metadata not stored in YAML. */
 export interface ComponentMetadata {
