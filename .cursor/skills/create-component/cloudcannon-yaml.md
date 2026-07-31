@@ -26,7 +26,7 @@ Model on `card.cloudcannon.structure-value.yml`.
 
 ```yaml
 label: My Component
-icon: crop_square # Material Icons name
+icon: crop_square # Material Symbols, snake_case — NOT a Heroicons name (see structures.md § Two icon systems)
 description: Short description of what the component does.
 value:
   _component: building-blocks/wrappers/my-wrapper # kebab dir path — must match the component location
@@ -95,9 +95,23 @@ Field types in use: `text`, `textarea`, `markdown`, `select`, `switch`, `array`,
 
 ## Page sections: the section-wrapper `_inputs` block
 
-**Convention:** a page section's `structure-value.yml` carries an inline `_inputs:` block for the `CustomSection` wrapper props (`sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `lockColorScheme`, `backgroundColor`, `background.*`) — ~180 lines — **in addition to** `_inputs_from_glob` pointing at the component-specific `inputs.yml`. Wrappers and core elements keep everything in `inputs.yml` instead (no inline block).
+**Convention:** a page section's `inputs.yml` carries the `CustomSection` wrapper props (`sectionLabel`, `maxContentWidth`, `paddingHorizontal`, `paddingVertical`, `colorScheme`, `lockColorScheme`, `backgroundColor`, `background.*`) — ~185 lines — below its own content props, separated by this exact marker line:
 
-**MUST NOT** hand-type the section-wrapper block. Copy it verbatim from an existing page section (`cta-center.cloudcannon.structure-value.yml`) and edit only the component-specific fields.
+```yaml
+# --- section wrapper inputs (CustomSection) ---
+```
+
+The block is deliberately **inline and per-component**, not extracted to a shared file: a project that wants fewer size or padding steps edits the lists right where it reads them. Wrappers and core elements have no wrapper block at all.
+
+**It belongs in `inputs.yml`, never in an inline `_inputs:` block in `structure-value.yml`.** Three reasons:
+
+- `structure-value.yml` and `snippets.yml` both already `_inputs_from_glob` the same `inputs.yml`, so one copy serves both. An inline block serves only the file it sits in — edit the sizes in `structure-value.yml` and the MDX snippet silently keeps the old list.
+- `lint:cms` reads `inputs.yml` top-level keys and the structure-value `value:` — **never** an inline `_inputs:`. Anything in that block is invisible to prop-drift checking. (`lockColorScheme` sat unwired in all 11 sections that way.)
+- `lint:schema` validates it against the official `_inputs_from_glob` schema.
+
+**MUST NOT** hand-type the block — `npm run new:component` copies it in for you, slicing `cta-center.cloudcannon.inputs.yml` from the marker down. If you are writing a page section by hand, copy from that marker and edit only the component-specific fields above it.
+
+> **Migration in progress:** `cta-center` is the reference shape. The other 10 page sections still carry the legacy inline `_inputs:` block in their `structure-value.yml`. Treat them as examples of what _not_ to copy; new work follows `cta-center`.
 
 ## Child content arrays
 

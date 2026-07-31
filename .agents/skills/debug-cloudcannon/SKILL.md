@@ -34,15 +34,16 @@ Diagnose from a real signal, not a guess. Each surface shows different failures.
 
 ## Symptom index
 
-| Symptom                                                           | Go to                                                     |
-| ----------------------------------------------------------------- | --------------------------------------------------------- |
-| Section renders blank / `Component not found` warning             | [Component not found](#component-not-found)               |
-| New component absent from the editor "Add" menu                   | [Missing from the Add menu](#missing-from-the-add-menu)   |
-| Interactive component works live, dead in the editor              | [Dead interactive component](#dead-interactive-component) |
-| Click does nothing / sidebar edit doesn't update the preview      | [Editable binding dead](#editable-binding-dead)           |
-| CloudCannon build error, invalid/ignored config key               | [Config build errors](#config-build-errors)               |
-| `npm run check` fails: `DRIFT .cursor/skills` or `.claude/skills` | [Skills drift](#skills-drift)                             |
-| Snippet missing from the MDX/content editor picker                | [Snippet missing](#snippet-missing)                       |
+| Symptom                                                               | Go to                                                     |
+| --------------------------------------------------------------------- | --------------------------------------------------------- |
+| Section renders blank / `Component not found` warning                 | [Component not found](#component-not-found)               |
+| New component absent from the editor "Add" menu                       | [Missing from the Add menu](#missing-from-the-add-menu)   |
+| Interactive component works live, dead in the editor                  | [Dead interactive component](#dead-interactive-component) |
+| Click does nothing / sidebar edit doesn't update the preview          | [Editable binding dead](#editable-binding-dead)           |
+| CloudCannon build error, invalid/ignored config key                   | [Config build errors](#config-build-errors)               |
+| Wrong icon in the Add menu, or `npm run check` fails on `lint:schema` | [Config build errors](#config-build-errors)               |
+| `npm run check` fails: `DRIFT .cursor/skills` or `.claude/skills`     | [Skills drift](#skills-drift)                             |
+| Snippet missing from the MDX/content editor picker                    | [Snippet missing](#snippet-missing)                       |
 
 ## Component not found
 
@@ -111,7 +112,20 @@ The attribute reference (`data-prop`, `data-children-prop`, `data-prop-src`/`-al
 
 **Symptom:** CloudCannon build logs report an invalid, unknown, or ignored config key; a field renders with the wrong input type.
 
-This is generic CloudCannon behaviour. The invalid-key list, the quote-numeric-values rule, select-vs-text field config, and `_editables` mapping are all in [references/config-invalid-keys.md](../references/config-invalid-keys.md). Structure-value rules (field completeness, previews, null handling) are in [references/structures.md](../references/structures.md).
+**Run `npm run lint:schema` first.** It validates every config fragment against the official CloudCannon JSON Schemas and names the exact path and key — faster than reading build logs. `--only <substring>` scopes it to one component.
+
+Failures it reports, and what they mean:
+
+| Reported                                           | Meaning                                                                                                                                                                                                                                                                                    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `unexpected property <key>`                        | Not a real key at that level. Common: a key nested one level too deep or too shallow (`syntax` belongs under `options:`; `view` at the snippet top level, not in `preview:`).                                                                                                              |
+| `$.icon — unexpected value <name>`                 | Wrong icon vocabulary. `icon:` is **Material Symbols** (snake_case); a kebab-case value is a Heroicons name and always wrong here. Invalid names fall back silently, so the Add menu shows the wrong icon. See [references/structures.md § Two icon systems](../references/structures.md). |
+| `options.structures — unexpected type array`       | An inline structure's array must sit under `values:`, or be a `_structures.<name>` reference. As an array it is ignored entirely and the editor offers no structures.                                                                                                                      |
+| `$._structures — must have required property type` | An `_structures:` block in a `*.cloudcannon.inputs.yml`, which is read as input-name → config. Move it to `.cloudcannon/structures/`.                                                                                                                                                      |
+
+**A clean `lint:schema` is not proof the editor is happy.** Deprecated-but-valid keys pass (e.g. `preview.view` on a snippet), and so do keys CloudCannon accepts then ignores. For anything behavioural, load the component in the editor.
+
+The invalid-key list, the quote-numeric-values rule, select-vs-text field config, and `_editables` mapping are all in [references/config-invalid-keys.md](../references/config-invalid-keys.md). Structure-value rules (field completeness, previews, null handling, icon vocabularies, where `_structures` may live) are in [references/structures.md](../references/structures.md).
 
 ## Skills drift
 

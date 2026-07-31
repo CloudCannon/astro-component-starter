@@ -21,6 +21,14 @@ buttonSections:
   comment: Buttons for calls-to-action.
   options:
     structures: _structures.buttonSections
+
+# --- section wrapper inputs (CustomSection) ---
+# Everything below configures the CustomSection wrapper rather than this
+# section's own content. Kept inline and per-component on purpose: a project
+# that wants fewer size or padding steps edits the lists right here.
+# `scripts/scaffold/new-component.mjs` copies this file from this marker down
+# into every new page section, so this block is the canonical copy — keep the
+# marker line exactly as-is.
 sectionLabel:
   type: text
   comment: Optional label to identify the section in the editor. When set and no HTML id is provided, an id is derived from this value.

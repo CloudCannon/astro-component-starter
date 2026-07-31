@@ -112,7 +112,56 @@ buttonSections:
 - **`values_from_glob`** — collects one structure value per co-located `*.cloudcannon.structure-value.yml`.
 - **`style: modal`** — opens a proper form when adding/editing, instead of inline free-text fields.
 
-The array input references the structure by full path (`options.structures: _structures.buttonSections`), never the bare name.
+### Two icon systems — do not mix them
+
+This repo uses **two unrelated icon vocabularies**, and confusing them is silent:
+
+| Key                                                                   | Vocabulary                                                              | Where                                    |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------- |
+| `icon:` on a structure value, `preview`, or `picker_preview`          | **Material Symbols**, a fixed 3,584-name enum in the CloudCannon schema | Editor chrome — Add menu, cards, pickers |
+| an `iconName` / `icon` **input value** (`values: _select_data.icons`) | **Heroicons**, SVGs in `src/icons/`                                     | Rendered on the page by the component    |
+
+An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Heroicons names are kebab-case (`eye-slash`, `device-phone-mobile`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` now catches these.
+
+To find a valid name, query the enum rather than guessing — the schema is the only authority, and levenshtein "closest" suggestions are unhelpful at this enum size (`hero` → `eco`):
+
+```bash
+# Swap /nav/ for whatever you're looking for. Picks the one large enum (the icon
+# list) so unrelated enums like mime types don't pollute the results.
+node -e "const s=require('./node_modules/@cloudcannon/configuration-types/dist/cloudcannon-structure-value.schema.json');
+const icons=Object.values(s.definitions).flatMap(d=>(d.anyOf||[d])).map(b=>b.enum).find(e=>e&&e.length>1000);
+console.log(icons.filter(n=>/nav/.test(n)).join(', '))"
+```
+
+### Where a named `_structures` block may live
+
+A named `_structures:` block belongs in `.cloudcannon/structures/*.cloudcannon.structures.yml` (collected by the root `_structures_from_glob`), or inside a `structure-value.yml` / `snippets.yml` for structures private to that one component.
+
+**Never in a `*.cloudcannon.inputs.yml`.** That file is loaded via `_inputs_from_glob` and read as a map of input-name → input-config, so an `_structures:` key there parses as an input literally named `_structures` — `lint:schema` rejects it. Worse, every such file lands in one shared namespace, so two components declaring the same structure name silently collide and load order picks the winner.
+
+### `options.structures` takes a string or an object — never an array
+
+```yaml
+# ❌ Wrong — an array. Reads as neither a reference nor a structure; the editor
+#    gets no structures at all and falls back to inferred fields.
+options:
+  structures:
+    - label: Feature slide
+      value: { ... }
+
+# ✓ Right — a reference by full path (preferred; reusable, one definition)
+options:
+  structures: _structures.featureSlides
+
+# ✓ Right — an inline structure object, array wrapped under `values:`
+options:
+  structures:
+    values:
+      - label: Feature slide
+        value: { ... }
+```
+
+A reference uses the full path (`options.structures: _structures.buttonSections`), never the bare name.
 
 ```yaml
 # ❌ Wrong — bare name, relies on naming-convention fallback

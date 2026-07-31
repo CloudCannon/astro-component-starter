@@ -28,12 +28,14 @@ const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const componentsDir = join(root, "src", "components");
 const templatesDir = join(root, "scripts", "scaffold", "templates");
 
-// The donor whose section-wrapper `_inputs` block is copied into new page
-// sections (create-component skill, step 5: "don't hand-type ~180 lines").
+// The donor whose section-wrapper inputs are copied into new page sections
+// (create-component skill, step 5: "don't hand-type ~180 lines"), and the marker
+// line that begins that block in the donor file.
 const SECTION_INPUTS_DONOR = join(
   componentsDir,
-  "page-sections/ctas/cta-center/cta-center.cloudcannon.structure-value.yml"
+  "page-sections/ctas/cta-center/cta-center.cloudcannon.inputs.yml"
 );
+const SECTION_INPUTS_MARKER = "# --- section wrapper inputs (CustomSection) ---";
 
 const die = (message) => {
   console.error(`error: ${message}`);
@@ -146,29 +148,37 @@ const render = (templateName) =>
     .replaceAll("__KEY__", componentKey)
     .replaceAll("__LABEL__", label);
 
-/** Extract the top-level `_inputs:` block (verbatim text) from the donor. */
+/**
+ * Extract the section-wrapper inputs (verbatim text) from the donor's *inputs*
+ * file — everything from the marker comment to the end of the file.
+ *
+ * The wrapper props live in `inputs.yml`, not in `structure-value.yml`: that is
+ * where `_inputs_from_glob` already points, so both the structure value and the
+ * MDX snippet pick them up from one place, and `lint:cms` can see them (it reads
+ * inputs.yml and the structure-value `value:`, never an inline `_inputs:`).
+ * The marker is an explicit boundary so reordering inputs can't shift the slice.
+ */
 function sectionInputsBlock() {
   const lines = readFileSync(SECTION_INPUTS_DONOR, "utf8").split("\n");
-  const start = lines.findIndex((line) => line === "_inputs:");
+  const start = lines.findIndex((line) => line === SECTION_INPUTS_MARKER);
 
-  if (start === -1) die(`no top-level "_inputs:" block found in ${SECTION_INPUTS_DONOR}.`);
-  let end = lines.length;
-
-  for (let i = start + 1; i < lines.length; i++) {
-    if (/^\S/.test(lines[i])) {
-      end = i;
-      break;
-    }
+  if (start === -1) {
+    die(
+      `no "${SECTION_INPUTS_MARKER}" marker found in ${SECTION_INPUTS_DONOR}.\n` +
+        `       The scaffolder copies the section-wrapper inputs from that marker down. ` +
+        `Restore the marker line, or point SECTION_INPUTS_DONOR at another page section.`
+    );
   }
-  return `${lines.slice(start, end).join("\n").trimEnd()}\n`;
+  return `\n${lines.slice(start).join("\n").trimEnd()}\n`;
 }
 
 const files = {
   [`${pascal}.astro`]: render(`${templateSet}.astro.tmpl`),
-  [`${slug}.cloudcannon.inputs.yml`]: render(`${templateSet}.inputs.yml.tmpl`),
-  [`${slug}.cloudcannon.structure-value.yml`]: render(
-    `${templateSet}.structure-value.yml.tmpl`
-  ).replace("__SECTION_INPUTS__\n", tier === "page-sections" ? sectionInputsBlock() : ""),
+  [`${slug}.cloudcannon.inputs.yml`]: render(`${templateSet}.inputs.yml.tmpl`).replace(
+    "__SECTION_INPUTS__\n",
+    tier === "page-sections" ? sectionInputsBlock() : ""
+  ),
+  [`${slug}.cloudcannon.structure-value.yml`]: render(`${templateSet}.structure-value.yml.tmpl`),
 };
 
 mkdirSync(targetAbs);

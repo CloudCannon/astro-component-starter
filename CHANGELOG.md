@@ -6,8 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `npm run lint:schema` validates every CloudCannon YAML fragment against the official JSON Schemas from `@cloudcannon/configuration-types` (pinned devDependency), mapping each glob to the schema for the `*_from_glob` key that loads it. Part of `npm run check`, and complements `lint:cms` — that one checks the YAML against the components, this one against CloudCannon.
+- Components that are also MDX snippets now show their preview thumbnail in the snippet picker; `previews:build` wires it and `previews:check` guards it. Snippets whose preview uses a `gallery:` block keep showing the author's own image instead.
+
 ### Fixed
 
+- Corrected 31 invalid `icon:` values across 15 component YAML files. These were Heroicons names (`hero`, `eye-slash`, `device-phone-mobile`, `people`, …) in a field that takes **Material Symbols**, so CloudCannon silently fell back and the Add menu showed the wrong icon.
+- Nav item structures (`navItemLevel1/2/3`) now live once in `.cloudcannon/structures/navItems.cloudcannon.structures.yml` instead of an `_structures:` block inside each of the four nav components' `inputs.yml` — not a valid key there. All four declared the _same_ three names with three drifted definitions, so only one could ever take effect, chosen by glob load order. Footer's `linkItems`/`socialItems` moved likewise to `footerItems.cloudcannon.structures.yml`.
+- `feature-slider`'s `slides` and the nav child/grandchild items gave `options.structures` as an array, which CloudCannon does not read as structures — the editor offered none. Now wrapped under `values:`.
+- `embed`'s `syntax: html` moved under `options:`, `split` dropped an invalid `default:` key, and `pagination` dropped a stray top-level `structures: []`.
+- `Split`'s `reverseOrderOnMobile` now defaults to `false`, matching the value seeded into the editor. `FeatureSplit` passes `true` explicitly, so its behaviour is unchanged.
+- `lockColorScheme` is now forwarded explicitly by `CtaCenter` rather than arriving via the rest-spread, and the CTA Center section-wrapper inputs moved from an inline `_inputs:` block in its `structure-value.yml` into its `inputs.yml`, where both the structure value and the MDX snippet already read from — and where `lint:cms` can see them.
+- `npm run new:component` was emitting the section-wrapper inputs into the wrong file; it now appends them to the new component's `inputs.yml`, sliced from a marker comment rather than a positional lookup.
 - Removed dead editor inputs the components never read, found by the new `lint:cms` check: Feature Grid's `gap`/`minItemWidth`/`maxItemWidth`, Icon's `inline`, Feature Slider's `eyebrow`/`heading`/`subtext`, FAQ Section's `headingLevel`/`headingSize`/`singleOpen`/`openFirst`, and Testimonial Section's `alignmentHorizontal`. Also dropped a stale form-blocks exclusion for the deleted `forms/slider`.
 - Feature Grid `alignment` and Team Grid `layout` controls now appear on freshly inserted sections.
 - Footer and Main Nav `logoAlternateSource` (the alternate-theme logo) now appears on a freshly inserted block; the input existed but was never seeded into the structure default.
