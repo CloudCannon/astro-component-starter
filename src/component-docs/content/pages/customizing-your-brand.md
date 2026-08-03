@@ -13,21 +13,21 @@ Open `src/styles/themes/_light.css`. This is where you define the look of your s
 
 ```css
 [data-theme='light'] {
-  --color-brand: var(--gray-12);
-  --color-brand-muted: var(--gray-9);
-  --color-brand-subtle: var(--gray-7);
-  --color-brand-on: var(--gray-0);
+  --color-brand: var(--black);
+  --color-brand-muted: var(--gray-800);
+  --color-brand-subtle: var(--gray-600);
+  --color-brand-on: var(--white);
 
-  --color-text: var(--gray-10);
-  --color-text-strong: var(--gray-12);
-  --color-text-muted: var(--gray-8);
+  --color-text: var(--gray-900);
+  --color-text-strong: var(--black);
+  --color-text-muted: var(--gray-700);
 
-  --color-bg: var(--gray-0);
-  --color-bg-surface: var(--gray-1);
+  --color-bg: var(--white);
+  --color-bg-surface: var(--gray-50);
   --color-bg-accent: #d5fdff;
   --color-bg-highlight: #fff9d6;
 
-  --color-border: var(--gray-4);
+  --color-border: var(--gray-300);
   /* ... */
 }
 ```
@@ -102,12 +102,14 @@ This is why both theme files are important. Even if your site is primarily light
 
 ## The base color palette
 
-The theme files reference raw color values defined in `src/styles/variables/_colors.css`. Every hue is a complete ramp named `--<hue>-<step>`, where the step is lightness — 50 is the palest tint, 900 the deepest shade:
+The theme files reference raw color values defined in `src/styles/variables/_colors.css`. Every hue is a complete ramp named `--<hue>-<step>`, where the step is lightness — `50` is the palest tint and `900` the deepest shade (gray extends to `950`). Pure white and black are their own tokens:
 
 ```css
 :where(:root) {
-  --gray-0: #fff;
-  --gray-12: #000;
+  --white: #fff;
+  --black: #000;
+  --gray-50: #eaeaea;
+  --gray-950: #151515;
   --blue-100: #dbeafe;
   --blue-500: #3b82f6;
   /* ... */

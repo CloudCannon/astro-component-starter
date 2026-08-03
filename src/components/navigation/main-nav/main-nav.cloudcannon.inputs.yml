@@ -23,3 +23,5 @@ navData:
 buttonSections:
   type: array
   comment: "Array of button components to display in the navigation bar. See the Button component documentation for more information."
+  options:
+    structures: _structures.buttonSections

@@ -86,8 +86,13 @@ if (!_component && !hasText && !hasSlotContent) return;
           bottom: 0.1em;
           display: inline-block;
           font-size: 0.9em;
+          margin-inline-end: var(--spacing-em-xs);
           position: relative;
           vertical-align: middle;
+
+          &.heading-icon-after {
+            margin-inline: var(--spacing-em-xs) 0;
+          }
         }
 
         &.size-xs {

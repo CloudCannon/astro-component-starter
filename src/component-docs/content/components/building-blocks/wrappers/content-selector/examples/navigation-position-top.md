@@ -49,7 +49,5 @@ blocks:
           size: md
         - _component: building-blocks/core-elements/text
           text: Start a return
-          link: #
-          variant: secondary
           size: md
 ---

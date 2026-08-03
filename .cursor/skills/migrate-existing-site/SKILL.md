@@ -83,7 +83,7 @@ For each inventoried section, match it to an existing page section before consid
 ### Reuse-over-rebuild bias
 
 **MUST:** prefer an existing component adjusted by props over a new component, and prefer `custom-section` composing existing building blocks over a bespoke new page section.
-**Why:** every new component is a maintenance surface (YAML, previews, docs entry) the starter carries forever; most "unique" source sections are a familiar layout with different copy, image position, or color.
+**Why:** every new component is a maintenance surface (YAML, previews) the starter carries forever; most "unique" source sections are a familiar layout with different copy, image position, or color.
 
 | If the source section...                                                                                       | Then...                                                                                                                                          |
 | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |

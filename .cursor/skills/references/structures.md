@@ -121,6 +121,8 @@ This repo uses **two unrelated icon vocabularies**, and confusing them is silent
 | `icon:` on a structure value, `preview`, or `picker_preview`          | **Material Symbols**, a fixed 3,584-name enum in the CloudCannon schema | Editor chrome — Add menu, cards, pickers |
 | an `iconName` / `icon` **input value** (`values: _select_data.icons`) | **Heroicons**, SVGs in `src/icons/`                                     | Rendered on the page by the component    |
 
+`_select_data.icons` is **generated** — add or remove an SVG under `src/icons/` and run `npm run icons:sync` rather than editing the list by hand; `npm run icons:check` fails the build on drift.
+
 An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Heroicons names are kebab-case (`eye-slash`, `device-phone-mobile`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` now catches these.
 
 To find a valid name, query the enum rather than guessing — the schema is the only authority, and levenshtein "closest" suggestions are unhelpful at this enum size (`hero` → `eco`):

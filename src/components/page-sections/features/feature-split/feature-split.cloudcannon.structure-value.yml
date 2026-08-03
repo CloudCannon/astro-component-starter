@@ -1,6 +1,6 @@
 label: Feature Split
 icon: view_week
-description: Split layout that pairs narrative content with a focused feature list.
+description: One feature explained beside an image.
 value:
   _component: page-sections/features/feature-split
   sectionLabel: ""

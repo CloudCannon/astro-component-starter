@@ -4,9 +4,7 @@ overview: 'Displays content panels in CSS-only tabs. Supports slot-based composi
 slots:
   - title: default
     description: The tab items inside the selector.
-    fallback_for: items
     child_component:
-      name: ContentSelectorPanel
       props:
         - title
         - contentSections/slot

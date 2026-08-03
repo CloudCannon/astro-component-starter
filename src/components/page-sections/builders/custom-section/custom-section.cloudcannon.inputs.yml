@@ -153,6 +153,11 @@ background.positionHorizontal:
         name: Center
       - id: right
         name: Right
+background.fixed:
+  type: switch
+  label: Fixed background (parallax)
+  comment: Pin the background image in place so the section scrolls over it.
+  hidden: "background.type !== 'image'"
 background.priority:
   type: switch
   label: Prioritize image load

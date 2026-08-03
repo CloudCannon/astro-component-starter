@@ -1,29 +1,12 @@
 ---
 import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
 import Page from "@layouts/Page.astro";
-import { getCollection } from "astro:content";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
+import { getComponentIndex, formatDisplayName } from "@component-docs/shared/componentIndex";
 
 const isDisabled = isComponentLibraryDisabled();
-
-const DISPLAY_NAME_OVERRIDES: Record<string, string> = {
-  ctas: "CTAs",
-  cta: "CTA",
-};
-
-const formatDisplayName = (value = "") => {
-  const lower = value.toLowerCase();
-
-  if (DISPLAY_NAME_OVERRIDES[lower]) {
-    return DISPLAY_NAME_OVERRIDES[lower];
-  }
-  return value
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
 
 type GalleryCard = {
   label: string;
@@ -34,38 +17,26 @@ type GalleryCard = {
 const categories: { name: string; cards: GalleryCard[] }[] = [];
 
 if (!isDisabled) {
-  const allComponents = await getCollection("docs-components");
+  const componentIndex = await getComponentIndex();
   const byCategory: Record<string, GalleryCard[]> = {};
 
-  allComponents.forEach((component) => {
-    const slug = component.id.replace(/^components\//, "").replace(/\/index$/, "");
-    const parts = slug.split("/").filter(Boolean);
-
-    // Mirror navGenerator.js: skip example entries and untitled components.
-    if (slug.includes("/examples/") || (!component.data.title && !component.data.name)) {
-      return;
-    }
-    if (parts.length < 1) {
-      return;
-    }
-
-    const componentName = parts[parts.length - 1];
+  componentIndex.forEach((entry) => {
+    const { key, parts, title } = entry;
     const topCategory = parts[0];
-    const label = component.data.title || componentName.replace(/-/g, " ");
 
     // Same existence fallback as ComponentLayout: only link to a preview that
     // actually exists on disk, otherwise the card shows a neutral placeholder.
     const hasPreview = existsSync(
-      join(process.cwd(), "public", "component-previews", `${slug}.svg`)
+      join(process.cwd(), "public", "component-previews", `${key}.svg`)
     );
 
     if (!byCategory[topCategory]) {
       byCategory[topCategory] = [];
     }
     byCategory[topCategory].push({
-      label,
-      path: `/component-docs/components/${slug}/`,
-      previewSrc: hasPreview ? `/component-previews/${slug}.svg` : null,
+      label: title,
+      path: `/component-docs/components/${key}/`,
+      previewSrc: hasPreview ? `/component-previews/${key}.svg` : null,
     });
   });
 

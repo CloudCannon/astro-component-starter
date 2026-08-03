@@ -81,13 +81,28 @@ const props = Astro.props;
       noindex={props.noindex}
     />
 
-    <StructuredData site={seoData} />
+    <StructuredData
+      site={seoData}
+      title={props.title}
+      description={props.description}
+      image={props.image}
+      canonical={props.canonical}
+      type={props.type}
+      article={props.article}
+    />
 
     <link
       rel="sitemap"
       type="application/xml"
       title="Sitemap"
       href="/sitemap-index.xml"
+    />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${seoData.name} — Blog`}
+      href="/rss.xml"
     />
 
     <slot name="head" />

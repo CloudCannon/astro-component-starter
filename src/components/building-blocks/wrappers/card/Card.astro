@@ -1,6 +1,6 @@
 ---
-import Component from "@components/utils/renderBlock.astro";
 import { overlayColor } from "@components/utils/overlayColor";
+import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
@@ -38,7 +38,10 @@ const {
   imageAlt = "",
   videoSource = "",
   overlay = 0,
+  fixed = false,
 } = background || {};
+
+const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -78,7 +81,12 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
     {...isPopoverLink
       ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
       : link && { href: link }}
-    class:list={["card-inner", rounded && "rounded", border && "border"]}
+    class:list={[
+      "card-inner",
+      rounded && "rounded",
+      border && "border",
+      usesFixedBackground && "background-fixed",
+    ]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
   >
     {
@@ -91,6 +99,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           positionVertical={positionVertical}
           positionHorizontal={positionHorizontal}
           background={true}
+          sizes="100vw"
         />
       )
     }
@@ -197,6 +206,14 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         transform: scale(1.05);
       }
 
+      /* A transformed ancestor becomes the containing block for its
+         fixed-position children, which would cancel the parallax background
+         mid-hover — so linked cards with one skip the hover scale. */
+      > a.card-inner.background-fixed:hover,
+      > button.card-inner.background-fixed:hover {
+        transform: none;
+      }
+
       > button.card-inner {
         appearance: none;
         background: none;
@@ -233,6 +250,22 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
         &.border {
           border: 1px solid var(--color-border);
+        }
+
+        /* Parallax: the background image is pinned to the viewport and the card
+           clips it with clip-path, because neither overflow nor border-radius
+           clips a fixed-position child. clip-path itself does not create a
+           containing block, so the image stays viewport-anchored. */
+        &.background-fixed {
+          clip-path: inset(0);
+
+          > .background-image {
+            position: fixed;
+          }
+
+          &.rounded {
+            clip-path: inset(0 round var(--radius-md));
+          }
         }
 
         > .card-outer-content {
@@ -337,6 +370,14 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         > .bg-highlight {
           background-color: var(--color-bg-highlight);
         }
+      }
+    }
+
+    /* Parallax scrolling is a common vestibular trigger — fall back to a
+       regular background image. */
+    @media (prefers-reduced-motion: reduce) {
+      .card > .card-inner.background-fixed > .background-image {
+        position: absolute;
       }
     }
   }

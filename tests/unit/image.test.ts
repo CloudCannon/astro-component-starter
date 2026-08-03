@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { prepareImageData, resolveImageSource } from "../../src/components/utils/image";
+import {
+  getResponsiveWidths,
+  prepareImageData,
+  resolveImageSource,
+} from "../../src/components/utils/image";
 
 // image.ts eagerly globs /src/assets/images/**/* and imports `astro:assets`
 // (stubbed via vitest.config.ts). These tests only exercise the pure,
@@ -16,6 +20,48 @@ describe("resolveImageSource", () => {
     expect(resolveImageSource("/src/assets/images/definitely-not-a-real-file-xyz.jpg")).toBe(
       "/src/assets/images/definitely-not-a-real-file-xyz.jpg"
     );
+  });
+});
+
+// `prepareImageData` only passes a max width for optimized local assets, which
+// need Astro's image pipeline — so the capping branch is exercised directly.
+describe("getResponsiveWidths", () => {
+  const PRESETS = [640, 1280, 2560];
+
+  it("returns every candidate when no max width is given", () => {
+    expect(getResponsiveWidths(PRESETS)).toEqual([640, 1280, 2560]);
+  });
+
+  it("includes the native width when it falls between two steps", () => {
+    // The reported case: a 1181px source was filtered down to a lone 640w
+    // candidate, so browsers had nothing else to pick.
+    expect(getResponsiveWidths(PRESETS, 1181)).toEqual([640, 1181]);
+    expect(getResponsiveWidths(PRESETS, 1707)).toEqual([640, 1280, 1707]);
+  });
+
+  it("includes a cropped width, which rarely lands on a step", () => {
+    // A portrait crop of a 1707x1280 source: round(1280 * 0.75).
+    expect(getResponsiveWidths(PRESETS, 960)).toEqual([640, 960]);
+  });
+
+  it("keeps the ceiling when the native width exceeds every step", () => {
+    // A 6000px camera upload must not produce a 6000px variant.
+    expect(getResponsiveWidths(PRESETS, 6000)).toEqual([640, 1280, 2560]);
+    expect(getResponsiveWidths(PRESETS, 2560)).toEqual([640, 1280, 2560]);
+  });
+
+  it("skips a native width within the tolerance of the largest step", () => {
+    expect(getResponsiveWidths(PRESETS, 1350)).toEqual([640, 1280]);
+    expect(getResponsiveWidths(PRESETS, 1280)).toEqual([640, 1280]);
+  });
+
+  it("falls back to the native width when it is below every step", () => {
+    expect(getResponsiveWidths(PRESETS, 400)).toEqual([400]);
+    expect(getResponsiveWidths([], 400)).toEqual([400]);
+  });
+
+  it("normalizes before capping", () => {
+    expect(getResponsiveWidths([2560, "640", 640, -5, 1280.4], 1181)).toEqual([640, 1181]);
   });
 });
 

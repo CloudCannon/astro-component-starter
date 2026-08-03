@@ -619,7 +619,7 @@
      Property Fields
      ============================================ */
   .prop-field {
-    background: var(--color-bg-muted);
+    background: var(--color-bg-surface);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
     margin-bottom: var(--spacing-md);

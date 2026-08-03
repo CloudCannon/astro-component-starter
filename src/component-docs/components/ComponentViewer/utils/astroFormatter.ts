@@ -156,6 +156,7 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
       .map((block) => {
         return formatComponentWithSlots(block, 0, metadataMap, nestedBlockProperties);
       })
+      .filter(Boolean)
       .join("\n\n");
 
     if (imports) {

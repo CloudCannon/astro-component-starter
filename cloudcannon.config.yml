@@ -129,6 +129,8 @@ collections_config:
             comment: Default image used for social sharing metadata when a page or blog post does not provide its own image.
           titleFormat:
             comment: Browser title template. Include {title} where the page title should appear.
+          twitterSite:
+            comment: Optional X (Twitter) handle for the site, including the @, used in social share cards.
     _inputs:
       logoSource:
         type: image

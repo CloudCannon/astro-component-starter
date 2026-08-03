@@ -4,8 +4,6 @@ overview: 'A button component for calls-to-action and navigation. Supports multi
 slots:
   - title: default
     description: The button content.
-    fallback_for: text
-    child_component:
 order: 4
 examples:
   - slugs:

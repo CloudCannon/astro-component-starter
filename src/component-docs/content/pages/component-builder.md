@@ -112,7 +112,7 @@ Click **Confirm** to download a ZIP file containing all three files:
 - **`component-name.cloudcannon.inputs.yml`**: Input definitions for every exposed prop
 - **`component-name.cloudcannon.structure-value.yml`**: Defaults and picker metadata
 
-Unzip the files into the appropriate directory under `src/components/` and your new component is ready to use, both in code and in CloudCannon's visual editor.
+Unzip the files into the appropriate directory under `src/components/` and your new component is ready to use, both in code and in CloudCannon's visual editor. It also gets its own page in these docs automatically — the sidebar, gallery, props table, and live example are all generated from the files you just exported.
 
 ## Tips for effective use
 

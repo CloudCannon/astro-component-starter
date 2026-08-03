@@ -5,9 +5,7 @@ overview: 'A carousel for displaying multiple slides of content. Supports autopl
 slots:
   - title: default
     description: The contents for the the Carousel.
-    fallback_for: slides
     child_component:
-      name: CarouselSlide
       props:
         - 'contentSections/slot'
 examples:
@@ -23,5 +21,9 @@ examples:
   - title: Fraction indicator
     slugs:
       - fraction
+    size: lg
+  - title: Gap between slides
+    slugs:
+      - gap
     size: lg
 ---

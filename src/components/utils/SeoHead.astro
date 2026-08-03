@@ -7,6 +7,7 @@ interface SiteSeoData {
   logoSource: string;
   description: string;
   titleFormat: string;
+  twitterSite?: string | null;
 }
 
 interface ArticleSeoData {
@@ -52,17 +53,22 @@ const articleAuthors = Array.isArray(article?.author)
     ? [article.author]
     : [];
 const articleTags = article?.tags?.filter(Boolean) ?? [];
+// The preview directives are opt-in: without them Google caps image previews
+// and snippet length, which costs rich results and Discover eligibility.
+const robotsContent = noindex
+  ? "noindex"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+// X reads og:title / og:description / og:image as fallbacks, so only the card
+// type and the site handle need their own tags.
+const twitterCard = pageImageUrl ? "summary_large_image" : "summary";
+const twitterSite = site.twitterSite?.trim();
 ---
 
 <title>{formattedTitle}</title>
-{
-  noindex ? (
-    <meta
-      name="robots"
-      content="noindex"
-    />
-  ) : null
-}
+<meta
+  name="robots"
+  content={robotsContent}
+/>
 <link
   rel="canonical"
   href={canonicalUrl}
@@ -113,6 +119,18 @@ const articleTags = article?.tags?.filter(Boolean) ?? [];
         content={pageImageUrl}
       />
     </>
+  ) : null
+}
+<meta
+  name="twitter:card"
+  content={twitterCard}
+/>
+{
+  twitterSite ? (
+    <meta
+      name="twitter:site"
+      content={twitterSite}
+    />
   ) : null
 }
 {

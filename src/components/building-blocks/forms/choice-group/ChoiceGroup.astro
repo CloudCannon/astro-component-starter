@@ -94,6 +94,17 @@ const inputName = multiple ? `${name}[]` : name;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
       }
+
+      .choice-group-option {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        gap: var(--spacing-sm);
+      }
+
+      .choice-group-field {
+        margin: 0;
+      }
     }
   }
 </style>

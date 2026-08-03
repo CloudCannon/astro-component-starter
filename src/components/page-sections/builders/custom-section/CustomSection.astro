@@ -1,6 +1,6 @@
 ---
-import Component from "@components/utils/renderBlock.astro";
 import { overlayColor } from "@components/utils/overlayColor";
+import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
@@ -32,7 +32,10 @@ const {
   imageAlt = "",
   videoSource = "",
   overlay = 0,
+  fixed = false,
 } = background || {};
+
+const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -52,7 +55,7 @@ const arrayDataAttributes =
   {...htmlAttributes}
 >
   <div
-    class:list={["outer-content", rounded && "rounded"]}
+    class:list={["outer-content", rounded && "rounded", usesFixedBackground && "background-fixed"]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
     data-theme-lock={lockColorScheme || undefined}
   >
@@ -66,6 +69,8 @@ const arrayDataAttributes =
           positionVertical={positionVertical}
           positionHorizontal={positionHorizontal}
           background={true}
+          sizes="100vw"
+          widths={[640, 1280, 1920, 2560]}
         />
       )
     }
@@ -130,6 +135,18 @@ const arrayDataAttributes =
         &.rounded {
           border-radius: var(--radius-xl);
           overflow: hidden;
+        }
+
+        &.background-fixed {
+          clip-path: inset(0);
+
+          > .background-image {
+            position: fixed;
+          }
+
+          &.rounded {
+            clip-path: inset(0 round var(--radius-xl));
+          }
         }
 
         > .content {
@@ -214,6 +231,14 @@ const arrayDataAttributes =
         > .bg-highlight {
           background-color: var(--color-bg-highlight);
         }
+      }
+    }
+
+    /* Parallax scrolling is a common vestibular trigger — fall back to a
+       regular background image. */
+    @media (prefers-reduced-motion: reduce) {
+      .custom-section > .outer-content.background-fixed > .background-image {
+        position: absolute;
       }
     }
   }

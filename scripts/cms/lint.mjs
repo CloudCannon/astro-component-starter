@@ -14,8 +14,15 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { glob } from "glob";
-import * as yaml from "js-yaml";
 import { componentKeyFromPath, pascalToKebab } from "../../src/components/utils/componentKey.mjs";
+import {
+  parseDestructure,
+  loadYaml,
+  collectComponentRefs,
+  frontmatter,
+  isMainComponentFile,
+  NON_PROP_KEY,
+} from "../lib/componentModel.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const rel = (p) => relative(root, p);
@@ -26,165 +33,6 @@ const oks = [];
 const fail = (file, reason) => fails.push({ file, reason });
 const warn = (file, reason) => warns.push({ file, reason });
 const ok = (label) => oks.push(label);
-
-/** Is this .astro a component's own main file (kebab filename === dir name)? */
-function isMainComponentFile(astroAbsPath) {
-  const dir = dirname(astroAbsPath);
-  const base = astroAbsPath.slice(dir.length + 1).replace(/\.astro$/, "");
-
-  return pascalToKebab(base) === dir.split("/").pop();
-}
-
-// Destructure parser: pull the prop names out of `const { ... } = Astro.props`.
-// Handles renames (`class: className`), quoted keys (`'data-prop': x`), aliased
-// with defaults (`useDefaultEditableBinding: _x = false`), plain-with-default
-// (`size = "md"`), multi-line, nested-brace defaults (`imageElementAttributes = {}`),
-// and the rest element (`...htmlAttributes`).
-
-/**
- * @returns {{ props: Set<string>, hasRest: boolean } | null}
- *   props = the concrete property names the component reads; null if no
- *   `Astro.props` destructure was found (component takes no props).
- */
-function parseDestructure(source) {
-  const marker = "= Astro.props";
-  const markerIdx = source.indexOf(marker);
-
-  if (markerIdx === -1) return null;
-
-  // Walk back from the `}` before the marker to its matching `{`.
-  const closeIdx = source.lastIndexOf("}", markerIdx);
-
-  if (closeIdx === -1) return null;
-
-  let depth = 0;
-  let openIdx = -1;
-
-  for (let i = closeIdx; i >= 0; i--) {
-    const ch = source[i];
-
-    if (ch === "}") depth += 1;
-    else if (ch === "{") {
-      depth -= 1;
-      if (depth === 0) {
-        openIdx = i;
-        break;
-      }
-    }
-  }
-  if (openIdx === -1) return null;
-
-  // Strip JS comments — destructures carry doc comments (`/** ... */`) whose
-  // punctuation (backticks, `=`, `:`) would otherwise corrupt key extraction.
-  const inner = source
-    .slice(openIdx + 1, closeIdx)
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\/\/[^\n]*/g, "");
-  const parts = splitTopLevel(inner);
-
-  const props = new Set();
-  let hasRest = false;
-
-  for (const raw of parts) {
-    const part = raw.trim();
-
-    if (!part) continue;
-    if (part.startsWith("...")) {
-      hasRest = true;
-      continue;
-    }
-    // Key is the text before the first top-level `:` (rename) or `=` (default).
-    let key = part;
-    const cut = firstTopLevelDelimiter(part);
-
-    if (cut !== -1) key = part.slice(0, cut);
-    key = key.trim().replace(/^['"]|['"]$/g, "");
-    if (key) props.add(key);
-  }
-
-  return { props, hasRest };
-}
-
-/** Split a destructure body on top-level commas (ignoring nested brackets/strings). */
-function splitTopLevel(text) {
-  const out = [];
-  let depth = 0;
-  let quote = null;
-  let start = 0;
-
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-
-    if (quote) {
-      if (ch === quote && text[i - 1] !== "\\") quote = null;
-      continue;
-    }
-    if (ch === '"' || ch === "'" || ch === "`") quote = ch;
-    else if (ch === "{" || ch === "[" || ch === "(") depth += 1;
-    else if (ch === "}" || ch === "]" || ch === ")") depth -= 1;
-    else if (ch === "," && depth === 0) {
-      out.push(text.slice(start, i));
-      start = i + 1;
-    }
-  }
-  out.push(text.slice(start));
-  return out;
-}
-
-/** Index of the first top-level `:` or `=` in a single destructure entry, or -1. */
-function firstTopLevelDelimiter(part) {
-  let depth = 0;
-  let quote = null;
-
-  for (let i = 0; i < part.length; i++) {
-    const ch = part[i];
-
-    if (quote) {
-      if (ch === quote && part[i - 1] !== "\\") quote = null;
-      continue;
-    }
-    if (ch === '"' || ch === "'" || ch === "`") quote = ch;
-    else if (ch === "{" || ch === "[" || ch === "(") depth += 1;
-    else if (ch === "}" || ch === "]" || ch === ")") depth -= 1;
-    else if (depth === 0 && (ch === ":" || ch === "=")) return i;
-  }
-  return -1;
-}
-
-// Shared helpers
-
-function loadYaml(absPath) {
-  return yaml.load(readFileSync(absPath, "utf8"));
-}
-
-/** Collect every value stored under a `_component` key, recursively. */
-function collectComponentRefs(node, out = []) {
-  if (Array.isArray(node)) {
-    for (const item of node) collectComponentRefs(item, out);
-  } else if (node && typeof node === "object") {
-    for (const [key, value] of Object.entries(node)) {
-      if (key === "_component" && typeof value === "string" && value) out.push(value);
-      else collectComponentRefs(value, out);
-    }
-  }
-  return out;
-}
-
-/** Extract the YAML frontmatter block from a .md/.mdx file, or null. */
-function frontmatter(source) {
-  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source);
-
-  if (!match) return null;
-  try {
-    return yaml.load(match[1]);
-  } catch {
-    return null;
-  }
-}
-
-// Meta keys that appear at the top level of a `value:` block or an inputs file
-// but are not component props. `_component` is special-cased where relevant.
-const NON_PROP_KEY = (key) => key.startsWith("_");
 
 // Known "dead input" drift: editor fields the component does NOT read (it
 // hardcodes the value, or the prop was never implemented). Adding an entry here
@@ -450,6 +298,77 @@ for (const [dir] of mainByDir) {
     );
   } else {
     ok(`seeded     ${rel(inputsAbs)}`);
+  }
+}
+
+// Check 7 — Unconfigured array input (FAIL): every visible `type: array` input
+// must declare what its items are, via either a sibling `<name>[*]` sub-input
+// (arrays of scalars) or `options.structures` (arrays of blocks). CloudCannon
+// needs one of the two to know what to insert when an editor clicks "+"; without
+// it the field renders as "<Name> not configured" and the array is uneditable.
+// The failure is invisible from the Astro side — the prop still has a default and
+// the site builds — so nothing else catches it.
+//
+// `hidden: true` inputs are exempt for the same reason as Check 6: they never
+// render a field, so they can never show the error (Image's `widths`). A
+// `hidden: "<expression>"` input IS conditionally shown, so it is still checked.
+
+/** Every `_inputs:` map in a document, recursively. */
+function collectInputMaps(node, out = []) {
+  if (Array.isArray(node)) {
+    for (const item of node) collectInputMaps(item, out);
+  } else if (node && typeof node === "object") {
+    for (const [key, value] of Object.entries(node)) {
+      if (key === "_inputs" && value && typeof value === "object" && !Array.isArray(value))
+        out.push(value);
+      collectInputMaps(value, out);
+    }
+  }
+  return out;
+}
+
+const arraySources = [];
+
+// Co-located component YAML: an `.inputs.yml` root is itself an input map;
+// `.snippets.yml` carries nested `_inputs` blocks.
+for (const relYaml of yamlPaths) {
+  const abs = join(componentsDir, relYaml);
+  const doc = loadYaml(abs) || {};
+  const maps = collectInputMaps(doc);
+
+  if (relYaml.endsWith(".inputs.yml") && doc && typeof doc === "object") maps.unshift(doc);
+  arraySources.push([abs, maps]);
+}
+
+// Collection-level and shared-structure inputs.
+for (const abs of [join(root, "cloudcannon.config.yml"), ...structureFiles]) {
+  arraySources.push([abs, collectInputMaps(loadYaml(abs) || {})]);
+}
+
+for (const [abs, maps] of arraySources) {
+  const unconfigured = [];
+  let arrayInputs = 0;
+
+  for (const map of maps) {
+    const siblings = new Set(Object.keys(map));
+
+    for (const [name, cfg] of Object.entries(map)) {
+      if (!cfg || typeof cfg !== "object" || cfg.type !== "array") continue;
+      arrayInputs += 1;
+      if (cfg.hidden === true) continue;
+      if (siblings.has(`${name}[*]`)) continue;
+      if (cfg.options?.structures) continue;
+      unconfigured.push(name);
+    }
+  }
+
+  if (unconfigured.length) {
+    fail(
+      rel(abs),
+      `array input(s) with no item configuration — CloudCannon renders these as "not configured" and the editor cannot add items. Add a \`<name>[*]\` sub-input or \`options.structures\`: ${[...new Set(unconfigured)].join(", ")}`
+    );
+  } else if (arrayInputs) {
+    ok(`array items ${rel(abs)}`);
   }
 }
 

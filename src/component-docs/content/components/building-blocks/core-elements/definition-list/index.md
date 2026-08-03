@@ -4,9 +4,7 @@ overview: 'A semantic `<dl>` component for displaying term/definition pairs. Ide
 slots:
   - title: default
     description: The content inside the DefinitionList.
-    fallback_for: items
     child_component:
-      name: DefinitionListItem
       props:
         - title
         - text

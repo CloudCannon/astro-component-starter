@@ -1,6 +1,6 @@
 label: Hero Split
 icon: web_asset
-description: Prominent section block for landing pages.
+description: Hero with text on one side and an image on the other.
 value:
   _component: page-sections/heroes/hero-split
   sectionLabel: ""

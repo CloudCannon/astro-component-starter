@@ -109,11 +109,18 @@
 
   .eyebrow {
     color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--font-weight-normal);
     letter-spacing: 0.08em;
     margin-bottom: var(--spacing-sm);
     text-transform: uppercase;
+  }
+
+  .eyebrow :where(.simple-text-content, .simple-text-inner, p, span) {
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
   }
 
   .eyebrow + .heading,

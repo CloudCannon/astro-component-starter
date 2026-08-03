@@ -5,9 +5,7 @@ overview: 'A responsive grid layout for displaying multiple items in rows and co
 slots:
   - title: default
     description: The contents for the the Grid.
-    fallback_for: items
     child_component:
-      name: GridItem
       props:
         - 'contentSections/slot'
 examples:

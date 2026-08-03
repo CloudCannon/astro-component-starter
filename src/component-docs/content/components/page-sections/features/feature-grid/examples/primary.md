@@ -7,9 +7,6 @@ blocks:
   heading: 'Operational clarity in every workflow'
   subtext: 'Spotlight the core capabilities that make your product different, with consistent icon cards that wrap automatically on any screen.'
   alignmentHorizontal: center
-  gap: xl
-  minItemWidth: 280
-  maxItemWidth: 360
   features:
     - title: 'Automated handoffs'
       description: 'Trigger downstream tools when tasks close so work keeps moving without manual pings.'

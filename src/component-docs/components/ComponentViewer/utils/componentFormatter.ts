@@ -27,6 +27,7 @@ function formatBlockArray(
         nestedBlockProperties
       )
     )
+    .filter(Boolean)
     .join("\n");
 }
 
@@ -36,6 +37,20 @@ export function formatComponentWithSlots(
   componentMetadata?: Map<string, ComponentMetadata>,
   nestedBlockProperties?: Set<string>
 ): string {
+  // A malformed/unexpected child (no `_component`, e.g. a plain data object
+  // that ended up somewhere a nested block tree was expected) can't be
+  // formatted — degrade gracefully by skipping just this one child instead
+  // of throwing, which previously took down the *entire* code sample (the
+  // caller in astroFormatter.ts wraps generation in a single try/catch).
+  if (!block || typeof block !== "object" || !block._component) {
+    console.warn(
+      "[componentFormatter] Skipping a block with no _component while generating an Astro code sample:",
+      block
+    );
+
+    return "";
+  }
+
   const componentPath = block._component;
   const componentName = getComponentDisplayName(componentPath);
   const props = { ...block };
@@ -57,6 +72,18 @@ export function formatComponentWithSlots(
   }
   const supportsSlots = metadata?.supportsSlots ?? false;
 
+  // Only slots with no `childComponent` hold arbitrary nested `_component`
+  // block trees (e.g. Card's before/default/after, Modal/CustomSection's
+  // contentSections). A slot WITH a childComponent (List's `items`,
+  // Accordion's `items`, Select's `options`, ...) holds plain prop-data
+  // objects that get spread onto a repeatable wrapper component further
+  // down — those objects have no `_component` of their own, so recursing
+  // into them here would crash. Keep them out of this "raw JSX children"
+  // path entirely; the dedicated branches below (`items && .../list`,
+  // `items && .../content-selector`, or the generic childComponent branch)
+  // already know how to render them correctly.
+  const rawContentSlots = metadata?.slots?.filter((slot) => !slot.childComponent) ?? [];
+
   const isTextComponent =
     componentPath.includes("heading") ||
     componentPath.includes("text") ||
@@ -76,7 +103,16 @@ export function formatComponentWithSlots(
   if (supportsSlots) {
     if (nestedBlockProperties) {
       for (const prop of nestedBlockProperties) {
-        if (props[prop] !== undefined) {
+        // `nestedBlockProperties` is a single global set of prop *names*
+        // shared across every component (built from every component's own
+        // fallbackFor in metadata.ts's getNestedBlockProperties). A name
+        // being in the set doesn't guarantee THIS component's value for it
+        // is block-shaped — e.g. Embed's own fallbackFor ("html", a string)
+        // lands in the same shared set, so without this check it would get
+        // stripped here from every component that happens to have an
+        // `html`-named prop, scalar or not. Same guard as below: only strip
+        // when there's actually block content to strip it in favor of.
+        if (hasSlotBlocks(props[prop])) {
           delete props[prop];
         }
       }
@@ -90,7 +126,14 @@ export function formatComponentWithSlots(
     delete props.slides;
     if (metadata?.slots) {
       for (const slot of metadata.slots) {
-        delete props[slot.fallbackFor];
+        // Only strip the fallback prop when it will actually be rendered as
+        // slot children somewhere below — a scalar/string fallback (e.g.
+        // Embed's `html`) has no slot-children path to land in, so deleting
+        // it here would drop it from the generated snippet entirely instead
+        // of leaving it as a regular attribute.
+        if (hasSlotBlocks(block[slot.fallbackFor])) {
+          delete props[slot.fallbackFor];
+        }
       }
     }
   } else if (componentPath.includes("split")) {
@@ -141,15 +184,14 @@ export function formatComponentWithSlots(
 
   const hasAnySlotContent =
     supportsSlots &&
-    metadata?.slots &&
     !componentPath.includes("content-selector") &&
-    metadata.slots.some((slot) => hasSlotBlocks(block[slot.fallbackFor]));
+    rawContentSlots.some((slot) => hasSlotBlocks(block[slot.fallbackFor]));
 
-  if (hasAnySlotContent && metadata?.slots) {
+  if (hasAnySlotContent) {
     const namedPieces: string[] = [];
     const defaultPieces: string[] = [];
 
-    for (const slot of metadata.slots) {
+    for (const slot of rawContentSlots) {
       if (!hasSlotBlocks(block[slot.fallbackFor])) continue;
 
       if (slot.name === "default") {
@@ -193,6 +235,7 @@ ${indent}</${componentName}>`;
           nestedBlockProperties
         )
       )
+      .filter(Boolean)
       .join("\n");
 
     return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
@@ -320,6 +363,7 @@ ${indent}</${componentName}>`;
                   nestedBlockProperties
                 )
               )
+              .filter(Boolean)
               .join("\n")
           : "";
 
@@ -388,7 +432,7 @@ ${indent}</${componentName}>`;
             }
           }
         }
-        const slotContent = slotContentParts.join("\n");
+        const slotContent = slotContentParts.filter(Boolean).join("\n");
 
         if (slotContent) {
           return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""}>

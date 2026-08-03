@@ -5,8 +5,6 @@ overview: 'A component for showcasing customer quotes and reviews. Includes opti
 slots:
   - title: default
     description: The quote.
-    fallback_for: text
-    child_component:
 examples:
   - slugs:
       - alignment-start

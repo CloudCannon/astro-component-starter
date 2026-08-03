@@ -9,6 +9,8 @@ Let's build a page section from scratch. We'll create the simplest possible comp
 
 Three files. That's all it takes.
 
+> **Shortcut:** `npm run new:component page-sections/info-blocks/section-intro` scaffolds all three files with the correct names, keys, and wiring, then prints the remaining steps. This guide builds them by hand so you understand what each file does — but for your second component onward, use the scaffolder.
+
 ## File 1: The Astro component
 
 Create `src/components/page-sections/info-blocks/section-intro/SectionIntro.astro`:
@@ -88,7 +90,7 @@ src/components/page-sections/info-blocks/section-intro/
 └── section-intro.cloudcannon.structure-value.yml
 ```
 
-Open `/src/content/pages/index.md and add the component under the pageSections array:
+Open `src/content/pages/index.md` and add the component under the `pageSections` array:
 
 ```yaml
 pageSections:
@@ -98,6 +100,17 @@ pageSections:
 ```
 
 Or add it in CloudCannon by clicking "Add Page Section" and picking "Section Intro" from the list.
+
+## You already have documentation
+
+As soon as those three files exist, this docs site generates a page for your component — check the sidebar under Info Blocks and you'll find Section Intro with its title, description, a full props table (types, defaults, and the `comment` text from your inputs file), and a live example rendered from your `value:` defaults. The gallery and sidebar pick it up too. Nothing to write, nothing to keep in sync: improve a `comment` or a default in the YAML and the docs update with it.
+
+Two optional extras when you want more:
+
+- **A preview thumbnail** for the gallery and CloudCannon picker: add a `section-intro.preview.mjs` recipe next to the component and run `npm run previews:build` (see any existing component for an example recipe).
+- **Richer docs**: add `src/component-docs/content/components/page-sections/info-blocks/section-intro/index.md` with an `overview:` and hand-picked examples in an `examples/` folder. This is enrichment, not a requirement — the page exists either way.
+
+`npm run check` validates all of it — prop names in the YAML against the component, example files against real props — so drift shows up in CI, not in production.
 
 ## Build it with Component Builder
 

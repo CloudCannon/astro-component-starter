@@ -4,9 +4,7 @@ overview: 'Displays a list with icons, bullets, or numbers as markers. Supports 
 slots:
   - title: default
     description: The content inside the List.
-    fallback_for: items
     child_component:
-      name: ListItem
       props:
         - iconName
         - iconColor

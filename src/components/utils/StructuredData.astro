@@ -1,6 +1,13 @@
 ---
 import { resolveImageSource } from "@component-utils/resolveImageSource";
 
+interface ArticleStructuredData {
+  publishedTime?: string | null;
+  modifiedTime?: string | null;
+  author?: string | string[] | null;
+  tags?: string[] | null;
+}
+
 export interface Props {
   site: {
     name: string;
@@ -8,18 +15,101 @@ export interface Props {
     logoSource: string;
     description: string;
   };
+  title?: string;
+  description?: string | null;
+  image?: string | null;
+  canonical?: string | null;
+  type?: "website" | "article";
+  article?: ArticleStructuredData | null;
 }
 
-const { site } = Astro.props;
-const logoUrl = new URL(resolveImageSource(site.logoSource), site.url).toString();
+const {
+  site,
+  title,
+  description,
+  image,
+  canonical,
+  type: pageType = "website",
+  article,
+} = Astro.props;
 
-const structuredData: Record<string, any> = {
+const siteBase = new URL(Astro.site ?? site.url);
+const siteHref = siteBase.href;
+const pageUrl = canonical || Astro.url.href;
+const pageDescription = description || site.description;
+
+// Entities are linked by `@id` rather than repeated inline, so a crawler reading
+// any one page can tell that its WebPage, the site, and the publisher are the
+// same entities it saw elsewhere.
+const organizationId = `${siteHref}#organization`;
+const websiteId = `${siteHref}#website`;
+const logoId = `${siteHref}#logo`;
+const articleId = `${pageUrl}#article`;
+
+const logoUrl = new URL(resolveImageSource(site.logoSource), siteBase).href;
+const pageImageUrl = image ? new URL(resolveImageSource(image), siteBase).href : null;
+
+const graph: Record<string, any>[] = [
+  {
+    "@type": "Organization",
+    "@id": organizationId,
+    name: site.name,
+    url: siteHref,
+    description: site.description,
+    logo: {
+      "@type": "ImageObject",
+      "@id": logoId,
+      url: logoUrl,
+      contentUrl: logoUrl,
+    },
+    image: { "@id": logoId },
+  },
+  {
+    "@type": "WebSite",
+    "@id": websiteId,
+    name: site.name,
+    url: siteHref,
+    description: site.description,
+    publisher: { "@id": organizationId },
+  },
+  {
+    "@type": "WebPage",
+    "@id": pageUrl,
+    url: pageUrl,
+    name: title || site.name,
+    description: pageDescription,
+    isPartOf: { "@id": websiteId },
+    ...(pageImageUrl ? { primaryImageOfPage: { "@type": "ImageObject", url: pageImageUrl } } : {}),
+  },
+];
+
+if (pageType === "article") {
+  const authors = (Array.isArray(article?.author) ? article.author : [article?.author]).filter(
+    (author): author is string => Boolean(author)
+  );
+  const tags = article?.tags?.filter(Boolean) ?? [];
+
+  graph.push({
+    "@type": "BlogPosting",
+    "@id": articleId,
+    headline: title,
+    description: pageDescription,
+    isPartOf: { "@id": websiteId },
+    mainEntityOfPage: { "@id": pageUrl },
+    publisher: { "@id": organizationId },
+    ...(article?.publishedTime ? { datePublished: article.publishedTime } : {}),
+    // Google treats a missing dateModified as "never updated"; publish date is
+    // the honest stand-in when a post has no separate modified timestamp.
+    dateModified: article?.modifiedTime || article?.publishedTime || undefined,
+    ...(authors.length > 0 ? { author: authors.map((name) => ({ "@type": "Person", name })) } : {}),
+    ...(tags.length > 0 ? { keywords: tags } : {}),
+    ...(pageImageUrl ? { image: { "@type": "ImageObject", url: pageImageUrl } } : {}),
+  });
+}
+
+const structuredData = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: site.name,
-  url: site.url,
-  logo: logoUrl,
-  description: site.description,
+  "@graph": graph,
 };
 ---
 

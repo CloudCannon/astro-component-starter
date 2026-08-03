@@ -5,9 +5,7 @@ overview: 'Organizes content into expandable panels that users can open or close
 slots:
   - title: default
     description: The contents for the the Accordion.
-    fallback_for: items
     child_component:
-      name: AccordionItem
       props:
         - 'contentSections/slot'
         - 'title'

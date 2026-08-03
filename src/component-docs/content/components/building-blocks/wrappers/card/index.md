@@ -7,16 +7,10 @@ overview: 'A card for grouping related content within a section. Provides backgr
 slots:
   - title: default
     description: The contents for the body of the Card.
-    fallback_for: contentSections
-    child_component:
   - title: before
     description: The contents to display before the Card content.
-    fallback_for: beforeContentSections
-    child_component:
   - title: after
     description: The contents to display after the Card content.
-    fallback_for: afterContentSections
-    child_component:
 examples:
   - slugs:
       - link
@@ -59,6 +53,10 @@ examples:
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right
+    size: md
+  - title: 'Fixed background image'
+    slugs:
+      - bg-image-fixed
     size: md
   - title: 'Background video'
     slugs:

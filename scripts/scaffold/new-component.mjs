@@ -201,9 +201,11 @@ Next steps:
      Compiles the preview SVG this component's YAML already points at
      (/component-previews/${componentKey}.svg). Until it exists,
      "npm run previews:check" (part of npm run check) fails on the missing recipe/SVG.
-  3. Add a docs entry: src/component-docs/content/components/${componentKey}/index.md
-     (+ an examples/ dir). The docs collection globs that directory
-     (src/content.config.ts) — the page appears as soon as the file exists.${
+  3. Docs page auto-derives from the two YAML files above — nothing to
+     create. Optional enrichment: src/component-docs/content/components/
+     ${componentKey}/index.md (overview prose, curated \`examples:\` groups,
+     slot descriptions) plus hand-written examples/*.md (each needs
+     \`title:\` + \`blocks:\`). npm run docs:check validates the docs layer.${
        tier === "page-sections"
          ? `
   4. MDX-insertable? Add ${slug}.cloudcannon.snippets.yml (see the

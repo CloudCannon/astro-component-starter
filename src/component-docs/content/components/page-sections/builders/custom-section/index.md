@@ -5,8 +5,6 @@ overview: 'Defines the primary sections of a page and manages their appearance. 
 slots:
   - title: default
     description: The contents of the Custom Section.
-    fallback_for: contentSections
-    child_component:
 examples:
   - title: Background color
     slugs:
@@ -20,6 +18,9 @@ examples:
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right
+  - title: Fixed background image
+    slugs:
+      - bg-image-fixed
   - title: Background video
     slugs:
       - bg-video

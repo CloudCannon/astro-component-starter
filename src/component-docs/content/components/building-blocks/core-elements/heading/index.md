@@ -5,8 +5,6 @@ overview: 'A heading component for establishing content hierarchy. Supports sema
 slots:
   - title: default
     description: The content inside the Heading.
-    fallback_for: text
-    child_component:
 examples:
   - slugs:
       - types

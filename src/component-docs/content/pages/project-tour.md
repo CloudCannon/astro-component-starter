@@ -88,6 +88,8 @@ value:
 
 A component isn't "done" until it has all three files. The Astro file makes it render. The CloudCannon files make it editable.
 
+The three files also power these docs: every component's documentation page (title, description, props table, live example) is generated from them at build time. Add a component and it appears in the sidebar, gallery, and docs automatically — there's no separate documentation to write or keep in sync.
+
 ## How components are organized
 
 Components live in `src/components/` and are grouped by purpose:
@@ -140,7 +142,7 @@ Here's a quick map of where things live:
 
 | Directory               | What's there                                                    |
 | ----------------------- | --------------------------------------------------------------- |
-| `src/components/`       | All 40+ components (building blocks, page sections, navigation) |
+| `src/components/`       | All 50+ components (building blocks, page sections, navigation) |
 | `src/content/pages/`    | Your site's pages as Markdown with `pageSections` arrays        |
 | `src/content/blog/`     | Blog posts in MDX                                               |
 | `src/styles/variables/` | Design tokens: colors, fonts, spacing, widths                   |

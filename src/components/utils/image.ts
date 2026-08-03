@@ -69,7 +69,14 @@ const getLocalImageAsset = (source: string) => {
   return imageKey ? imageFiles[imageKey] : null;
 };
 
-const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
+/**
+ * How much larger than the biggest surviving step the native width has to be
+ * before it earns its own variant. Within this margin the extra transform
+ * buys a few percent of linear detail and isn't worth the bytes or build time.
+ */
+const NATIVE_WIDTH_TOLERANCE = 1.1;
+
+export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
   const normalizedWidths = Array.isArray(candidates)
     ? [
         ...new Set(
@@ -85,12 +92,28 @@ const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
     return normalizedWidths;
   }
 
-  const maxCandidateWidth = Math.max(1, Math.round(maxWidth));
-  const filteredWidths = normalizedWidths.filter(
-    (candidateWidth) => candidateWidth <= maxCandidateWidth
-  );
+  const nativeWidth = Math.max(1, Math.round(maxWidth));
+  const filteredWidths = normalizedWidths.filter((candidateWidth) => candidateWidth <= nativeWidth);
 
-  return filteredWidths.length > 0 ? filteredWidths : [maxCandidateWidth];
+  if (filteredWidths.length === 0) {
+    return [nativeWidth];
+  }
+
+  // The preset steps almost never land on an asset's own width, so filtering
+  // alone caps the srcset at the largest step *below* native and the detail in
+  // between becomes unreachable — a 1181px source served at 640w. Offering the
+  // native width too costs one variant and can't make smaller viewports
+  // download more, since the browser takes the smallest adequate candidate.
+  //
+  // Two cases stay out. Above every step, the cap is deliberate: it stops a
+  // 6000px camera upload from becoming a 6000px variant. Within the tolerance
+  // of the largest step, the gain doesn't justify the transform.
+  const largestCandidate = normalizedWidths[normalizedWidths.length - 1];
+  const largestStep = filteredWidths[filteredWidths.length - 1];
+  const fillsGapBetweenSteps =
+    nativeWidth < largestCandidate && nativeWidth > largestStep * NATIVE_WIDTH_TOLERANCE;
+
+  return fillsGapBetweenSteps ? [...filteredWidths, nativeWidth] : filteredWidths;
 };
 
 export function resolveImageSource(source: string) {
