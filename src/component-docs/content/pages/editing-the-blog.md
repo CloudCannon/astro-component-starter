@@ -194,7 +194,9 @@ MDX uses JSX syntax for component props:
 
 ### In CloudCannon
 
-When editing a blog post in CloudCannon's content editor, you can insert components using the **snippet picker** (the "+" button in the toolbar). This gives you a visual form for each component's props without needing to write JSX. The snippet system converts back and forth between the visual form and the MDX code automatically.
+When editing a blog post in CloudCannon's content editor, you can insert components using the **snippet button** in the toolbar (the small document icon), which opens the snippet picker. Choosing a component opens a modal with inputs for configuring that instance, so you don't need to write JSX. The snippet system converts back and forth between those inputs and the MDX code automatically.
+
+See [Creating Snippets](/component-docs/creating-snippets/) for how this is wired up and how to make your own components available in the picker.
 
 ## Post card display
 
@@ -213,4 +215,4 @@ Tags create filtered views of your posts. If a post has `tags: ["Design", "Devel
 
 ## Next up
 
-Now that you know how the blog works, let's make the starter look like your brand. Head to [Customizing Your Brand](/component-docs/customizing-your-brand/) to update colors, fonts, and spacing across your entire site.
+Now that you know how the blog works, head to [Creating Snippets](/component-docs/creating-snippets/) to see how components become insertable inside post content, and how to add a snippet to a component of your own.
