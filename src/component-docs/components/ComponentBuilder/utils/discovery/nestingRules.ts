@@ -5,10 +5,8 @@ import { join } from "path";
 import { findStructureValueFiles } from "../../../../shared/structureFiles";
 import type { NestingRules, StructureValue } from "../../types";
 
-type Logger = (...args: unknown[]) => void;
-
 /** Parse global and inline CloudCannon structures into nesting rules. */
-export function parseNestingRules(log: Logger = () => {}): NestingRules {
+export function parseNestingRules(): NestingRules {
   const structuresDir = join(process.cwd(), ".cloudcannon/structures");
   const rules: NestingRules = {};
 
@@ -52,7 +50,6 @@ export function parseNestingRules(log: Logger = () => {}): NestingRules {
       for (const valueItem of structureDef.values) {
         if (valueItem?.value?._component) {
           allowedPaths.push(valueItem.value._component);
-          log(`Inline structure "${structureName}" allows: ${valueItem.value._component}`);
         }
       }
     }

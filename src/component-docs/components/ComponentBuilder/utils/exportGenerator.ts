@@ -3,14 +3,11 @@
  *
  * Orchestrates Astro + CloudCannon export generation and bundles output files
  * into a downloadable ZIP archive.
- *
- * @module exportGenerator
  */
 
 import JSZip from "jszip";
 
 import { toPascalCase } from "../../../shared/caseUtils";
-import { debugLog } from "../constants";
 import type { ComponentInfo, ComponentMetadata, ComponentNode } from "../types";
 import type { BuilderNode } from "./shared";
 import { generateAstroFile } from "./export/astroGenerator";
@@ -64,8 +61,6 @@ export async function generateExport(
   nestedBlockProperties: string[],
   componentPath: string | null = null
 ): Promise<void> {
-  debugLog("Starting export for:", componentName);
-
   const cleanTree = cleanComponentTree(componentTree);
 
   const astroCode = generateAstroFile(
@@ -110,6 +105,4 @@ export async function generateExport(
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-
-  debugLog("Export completed successfully");
 }

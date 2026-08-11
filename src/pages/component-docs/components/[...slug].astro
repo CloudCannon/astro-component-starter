@@ -6,7 +6,6 @@ import { getMergedSlotDocs } from "@component-docs/shared/metadata";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 export async function getStaticPaths() {
-  // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set
   if (isComponentLibraryDisabled()) {
     return [];
   }

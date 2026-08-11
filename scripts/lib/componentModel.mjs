@@ -1,7 +1,7 @@
 /**
  * Reusable component-model primitives shared by scripts that need to reason
  * about the Astro component library and its co-located CloudCannon YAML —
- * currently `scripts/cms/lint.mjs`, and (planned) `scripts/docs/check.mjs` /
+ * currently `scripts/cms/lint.mjs`, `scripts/docs/check.mjs`, and
  * `scripts/docs/catalog.mjs`.
  *
  * Component-key derivation itself is NOT reimplemented here — it is imported

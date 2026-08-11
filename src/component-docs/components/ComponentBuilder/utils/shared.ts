@@ -1,12 +1,4 @@
-/**
- * Shared Utilities
- * Common types and helper functions used across multiple ComponentBuilder modules.
- * Centralised here to avoid duplication between exportGenerator and validation.
- */
-
 import type { ComponentMetadata, ComponentNode } from "../types";
-
-// Types
 
 /** Extended component node that includes internal builder metadata flags. */
 export interface BuilderNode extends ComponentNode {
@@ -14,8 +6,6 @@ export interface BuilderNode extends ComponentNode {
   [key: `_renamed_${string}`]: string;
   [key: `_${string}_mode`]: "components" | "prop";
 }
-
-// Helpers
 
 /**
  * True when the slot array has at least one item and every item has the same _component.
@@ -36,8 +26,6 @@ export function slotHasSameComponentInEveryItem(
 }
 
 /**
- * Check whether a node has at least one exposed (non-hardcoded) prop.
- *
  * A prop is "exposed" when its `_hardcoded_<name>` flag is `false`, meaning
  * it will be surfaced as a configurable prop in the exported component.
  */

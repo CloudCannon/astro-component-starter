@@ -261,8 +261,6 @@ for (const f of indexFiles) {
   else ok(`slots       ${rel(abs)}`);
 }
 
-// Report.
-
 for (const label of oks) console.log(`ok     ${label}`);
 for (const { file, reason } of warns) console.warn(`WARN   ${file}\n   ${reason}`);
 for (const { file, reason } of fails) console.error(`FAIL   ${file}\n   ${reason}`);

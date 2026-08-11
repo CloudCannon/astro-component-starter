@@ -3,8 +3,6 @@
  *
  * Renders a modal overlay that lets the user browse available components
  * (grouped by category) and select one to insert into a slot.
- *
- * @module componentPicker
  */
 
 import { CATEGORY_ORDER, ROOT_COMPONENT_PATH } from "../constants";

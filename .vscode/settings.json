@@ -53,10 +53,7 @@
   "scss.validate": false,
 
   // Design-token autocomplete inside `<style is:global>`. CI backstop: lint:css-vars.
-  "cssVariables.lookupFiles": [
-    "src/styles/**/*.css",
-    "src/component-docs/styles/**/*.css"
-  ],
+  "cssVariables.lookupFiles": ["src/styles/**/*.css", "src/component-docs/styles/**/*.css"],
 
   // Same schemas `npm run lint:schema` uses, resolved from node_modules so the
   // pinned package stays the source of truth and nothing is committed.

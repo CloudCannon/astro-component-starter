@@ -1,7 +1,5 @@
 import type { ComponentInfo, NestingRules } from "../../types";
 
-type Logger = (...args: unknown[]) => void;
-
 /** Check if a component is allowed in a structure based on nesting rules. */
 export function isComponentAllowedInStructure(
   componentPath: string,
@@ -46,30 +44,9 @@ export function isComponentAllowedInStructure(
 export function getAllowedComponentsForStructure(
   structureName: string,
   allComponents: ComponentInfo[],
-  nestingRules: NestingRules,
-  log: Logger = () => {}
+  nestingRules: NestingRules
 ): string[] {
-  log(`Getting allowed components for structure "${structureName}"`);
-  log(`Rules for this structure:`, nestingRules[structureName]);
-
-  const filtered = allComponents
-    .filter((c) => {
-      const allowed = isComponentAllowedInStructure(
-        c.path,
-        structureName,
-        nestingRules,
-        c.isVirtual
-      );
-
-      if (allowed) {
-        log(`✓ ${c.path} is allowed`);
-      }
-
-      return allowed;
-    })
+  return allComponents
+    .filter((c) => isComponentAllowedInStructure(c.path, structureName, nestingRules, c.isVirtual))
     .map((c) => c.path);
-
-  log(`Total allowed: ${filtered.length}`);
-
-  return filtered;
 }

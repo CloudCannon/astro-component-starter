@@ -3,8 +3,6 @@
  *
  * Re-exports the public API from each sub-module so consumers can import
  * from `'./modules'` without knowing the internal file structure.
- *
- * @module modules
  */
 
 export * from "./componentPicker";

@@ -5,8 +5,6 @@
  * - Build: the default drag-and-drop sandbox + sidebar
  * - Preview: SSR-gated iframe rendering (hidden when SSR unavailable)
  * - Code: live-generated Astro, Inputs YAML, and Structure Value output
- *
- * @module livePreview
  */
 
 import { builderState } from "../state";

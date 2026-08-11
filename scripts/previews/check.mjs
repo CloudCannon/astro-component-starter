@@ -27,7 +27,7 @@ import { snippetWantsPreviewImage } from "./wire-yaml.mjs";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
 
-// 1. Discover components — exactly the set generate.mjs previews.
+// 1. Discover components — exactly the set build.mjs previews.
 
 const structureFiles = await glob("src/components/**/*.cloudcannon.structure-value.yml", {
   cwd: root,

@@ -57,22 +57,18 @@ function formatDefaultValue(value: any, inputConfig: any): string {
     return "";
   }
 
-  // Handle object types
   if (inputConfig?.type === "object" || (typeof value === "object" && !Array.isArray(value))) {
     return "object";
   }
 
-  // Handle arrays
   if (Array.isArray(value)) {
     return "array";
   }
 
-  // Handle booleans
   if (typeof value === "boolean") {
     return value.toString();
   }
 
-  // Handle other types
   return String(value);
 }
 
@@ -93,7 +89,6 @@ function getEnumValues(inputConfig: any): string[] | undefined {
       ) {
         return inputConfig.options.values.map((item: any) => item.value);
       }
-      // Handle simple string values
       return inputConfig.options.values;
     }
   }
@@ -124,7 +119,7 @@ function getNestedProperties(
     return nestedProperties;
   }
 
-  // Handle dot notation properties (e.g., backgroundImage.source)
+  // Dot notation properties (e.g., backgroundImage.source)
   if (inputConfig?.type === "object" && parentKey && configData?._inputs) {
     const nestedProperties: PropertyMeta[] = [];
     const prefix = `${parentKey}.`;
@@ -161,17 +156,16 @@ function getNestedProperties(
 }
 
 function getArrayItemProperties(inputConfig: any, configData: any): PropertyMeta[] | undefined {
-  // Check if this is an array with a structure reference
   if (inputConfig?.type === "array" && inputConfig.options?.structures) {
     const structures = inputConfig.options.structures;
 
-    // Handle _structures.item format - when structures is a string reference
+    // `_structures.<name>` string reference format
     if (typeof structures === "string" && structures.startsWith("_structures.")) {
       const structureName = structures.replace("_structures.", "");
       const structure = configData._structures?.[structureName];
 
       if (structure?.values && structure.values.length > 0) {
-        // Get the first value as the template
+        // Only item 0 is inspected as the template
         const itemTemplate = structure.values[0];
         const itemValue = itemTemplate.value;
         const itemInputs = itemTemplate._inputs;
@@ -197,10 +191,7 @@ function getArrayItemProperties(inputConfig: any, configData: any): PropertyMeta
           return arrayItemProperties;
         }
       }
-    }
-    // Handle array of structure definitions
-    else if (Array.isArray(structures) && structures.length > 0) {
-      // Get the first structure definition as the template
+    } else if (Array.isArray(structures) && structures.length > 0) {
       const itemTemplate = structures[0];
       const itemValue = itemTemplate.value;
       const itemInputs = itemTemplate._inputs;

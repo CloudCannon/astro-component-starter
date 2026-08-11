@@ -59,14 +59,13 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
       ? blocksWithoutStyle
       : [blocksWithoutStyle];
 
-    // Get unique components and generate imports
     const uniqueComponents = new Set<string>();
     const addComponentToSet = (block: any) => {
       if (block._component) {
         uniqueComponents.add(block._component);
       }
 
-      // Recursively check for nested components in properties that can contain blocks
+      // Recurse into properties that can contain blocks
       for (const prop of nestedBlockProperties) {
         if (block[prop]) {
           const nestedBlocks = Array.isArray(block[prop]) ? block[prop] : [block[prop]];
@@ -102,7 +101,6 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
         if (metadata?.childComponent && metadata?.fallbackFor) {
           const fallbackProp = metadata.fallbackFor;
 
-          // Check if the fallback property exists and might need child components
           if (block[fallbackProp]) {
             const childComponentPath = getChildComponentPath(
               block._component,
@@ -113,14 +111,12 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
               uniqueComponents.add(childComponentPath);
             }
 
-            // If the property contains items with nested content, discover those components too
             const items = Array.isArray(block[fallbackProp])
               ? block[fallbackProp]
               : [block[fallbackProp]];
 
             items.forEach((item: any) => {
               if (item && typeof item === "object") {
-                // Check all block properties in items
                 for (const prop of nestedBlockProperties) {
                   if (item[prop]) {
                     const nestedBlocks = Array.isArray(item[prop]) ? item[prop] : [item[prop]];
@@ -137,7 +133,6 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
 
     blocksArray.forEach(addComponentToSet);
 
-    // Generate import statements
     const imports = Array.from(uniqueComponents)
       .sort((a, b) => a.localeCompare(b))
       .map((componentPath) => {

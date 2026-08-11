@@ -1,15 +1,4 @@
-/**
- * ComponentBuilder State Management
- *
- * Provides a singleton {@link BuilderState} that holds the component tree,
- * selection state, drag state, and server-provided configuration. All
- * mutations are performed through methods that emit typed events so the
- * rest of the UI can react.
- *
- * @module state
- */
-
-import { debugLog, DEFAULT_EXPOSED_PROPS, ROOT_COMPONENT_PATH } from "./constants";
+import { DEFAULT_EXPOSED_PROPS, ROOT_COMPONENT_PATH } from "./constants";
 import {
   addComponentToSlotOperation,
   deleteComponentOperation,
@@ -33,7 +22,6 @@ import type {
 import { slotHasSameComponentInEveryItem } from "./utils/shared";
 import { validateComponentTree, type ValidationResult } from "./utils/validation";
 
-/** Builder state singleton */
 class BuilderState {
   private static STORAGE_KEY = "componentBuilder_state";
   private static MAX_HISTORY = 50;
@@ -43,39 +31,29 @@ class BuilderState {
   private _componentIdCounter = 0;
   private _dragSource: DragSource | null = null;
 
-  // Data from server
   private _components: ComponentInfo[] = [];
   private _metadataMap: Record<string, ComponentMetadata> = {};
   private _nestedBlockProperties: string[] = [];
   private _pageSectionCategories: string[] = [];
 
-  // Validation
   private _validationResult: ValidationResult = { isValid: true, duplicateProps: [] };
 
   // When true, the next treeChange handler should skip rebuilding the sidebar.
   // Set by updateNodeProperty so prop-editor inputs don't lose focus.
   private _propEditInProgress = false;
 
-  // Event listeners
   private _listeners: Map<string, Set<() => void>> = new Map();
 
-  // Undo/redo
   private _history: string[] = [];
   private _redoStack: string[] = [];
   private _lastTreeSnapshot = "[]";
   private _isUndoRedoOp = false;
 
-  /** Initialize state from builder data */
   initialize(data: BuilderData): void {
     this._components = data.components;
     this._metadataMap = data.metadataMap;
     this._nestedBlockProperties = data.nestedBlockProperties;
     this._pageSectionCategories = data.pageSectionCategories;
-
-    debugLog("State initialized with:", {
-      componentsCount: this._components.length,
-      categories: Object.keys(data.componentsByCategory),
-    });
 
     try {
       const restored = this.loadFromLocalStorage();
@@ -97,7 +75,6 @@ class BuilderState {
     }
   }
 
-  /** Initialize the default root component (custom-section) */
   private initializeRootComponent(): void {
     const customSectionInfo = this._components.find((c) => c.path === ROOT_COMPONENT_PATH);
     const fallbackRoot = this._components.find((c) => c.category === "page-builders");
@@ -148,7 +125,6 @@ class BuilderState {
     }
   }
 
-  /** Create a new component node with default props */
   createComponentNode(componentInfo: ComponentInfo): ComponentNode {
     const _nodeId = `component-${this._componentIdCounter++}`;
     const node: ComponentNode = {
@@ -157,20 +133,18 @@ class BuilderState {
       ...this.getDefaultProps(componentInfo),
     };
 
-    // Initialize slots if the component has them
     if (componentInfo.slots && componentInfo.slots.length > 0) {
       for (const slot of componentInfo.slots) {
         node[slot.propName] = [];
       }
     }
 
-    // Initialize _hardcoded_ flags for all input props based on DEFAULT_EXPOSED_PROPS
+    // `_hardcoded_<name>` polarity: false = exposed (in DEFAULT_EXPOSED_PROPS), true = hardcoded.
     if (componentInfo.inputs) {
       const componentName = componentInfo.name;
       const exposedProps = DEFAULT_EXPOSED_PROPS[componentName] || [];
 
       Object.keys(componentInfo.inputs).forEach((propName) => {
-        // Set to exposed (false) if in the auto-expose list, otherwise hardcoded (true)
         node[`_hardcoded_${propName}`] = !exposedProps.includes(propName);
       });
     }
@@ -178,7 +152,6 @@ class BuilderState {
     return node;
   }
 
-  /** Get default props from structure value */
   private getDefaultProps(componentInfo: ComponentInfo): Record<string, unknown> {
     const props: Record<string, unknown> = {};
 
@@ -193,7 +166,6 @@ class BuilderState {
     return props;
   }
 
-  // Getters
   get componentTree(): ComponentNode[] {
     return this._componentTree;
   }
@@ -240,7 +212,6 @@ class BuilderState {
     this.emit("validationChange");
   }
 
-  // Setters
   set selectedComponentId(id: string | null) {
     this._selectedComponentId = id;
     this.emit("selectionChange");
@@ -250,17 +221,14 @@ class BuilderState {
     this._dragSource = source;
   }
 
-  /** Get component metadata by path */
   getMetadata(path: string): ComponentMetadata | undefined {
     return this._metadataMap[path];
   }
 
-  /** Get component info by path */
   getComponentInfo(path: string): ComponentInfo | undefined {
     return this._components.find((c) => c.path === path);
   }
 
-  /** Find a component node by ID in the tree */
   findComponentNode(id: string, tree: ComponentNode[] = this._componentTree): ComponentNode | null {
     return findComponentNodeInTree(
       id,
@@ -270,7 +238,7 @@ class BuilderState {
     );
   }
 
-  /** Check if a node is an ancestor of or the same as another node */
+  /** True for the node itself as well as ancestors. */
   isNodeAncestorOf(ancestorId: string, descendantId: string): boolean {
     return isNodeAncestorOfInTree(
       ancestorId,
@@ -281,7 +249,6 @@ class BuilderState {
     );
   }
 
-  /** Find node location in tree */
   findNodeLocation(
     nodeId: string,
     tree: ComponentNode[] = this._componentTree,
@@ -298,7 +265,6 @@ class BuilderState {
     );
   }
 
-  /** Remove a node from the tree and return it */
   removeNodeFromTree(
     nodeId: string,
     tree: ComponentNode[] = this._componentTree
@@ -311,7 +277,6 @@ class BuilderState {
     );
   }
 
-  /** Add a component to a slot */
   addComponentToSlot(
     componentInfo: ComponentInfo,
     parentId: string,
@@ -336,7 +301,6 @@ class BuilderState {
     return nodeToAdd;
   }
 
-  /** Delete a component from the tree */
   deleteComponent(id: string): void {
     const result = deleteComponentOperation(id, this._selectedComponentId, (nodeId, tree) =>
       this.removeNodeFromTree(nodeId, tree)
@@ -351,7 +315,6 @@ class BuilderState {
     }
   }
 
-  /** Move a component to a new location (reorder) */
   moveComponent(
     nodeId: string,
     targetParentId: string | null,
@@ -374,7 +337,6 @@ class BuilderState {
     }
   }
 
-  /** Toggle slot mode between 'components' and 'prop' */
   toggleSlotMode(nodeId: string, slotPropName: string): void {
     const changed = toggleSlotModeOperation(nodeId, slotPropName, (id, tree) =>
       this.findComponentNode(id, tree)
@@ -388,7 +350,6 @@ class BuilderState {
     return this._propEditInProgress;
   }
 
-  /** Update a property value on a node */
   updateNodeProperty(nodeId: string, propName: string, value: unknown): void {
     const changed = updateNodePropertyOperation(nodeId, propName, value, (id, tree) =>
       this.findComponentNode(id, tree)
@@ -415,14 +376,12 @@ class BuilderState {
     }
   }
 
-  // Event system
   on(event: string, callback: () => void): () => void {
     if (!this._listeners.has(event)) {
       this._listeners.set(event, new Set());
     }
     this._listeners.get(event)?.add(callback);
 
-    // Return unsubscribe function
     return () => {
       this._listeners.get(event)?.delete(callback);
     };
@@ -448,7 +407,6 @@ class BuilderState {
     }
   }
 
-  /** Undo the last change */
   undo(): boolean {
     if (this._history.length === 0) return false;
 
@@ -466,7 +424,6 @@ class BuilderState {
     return true;
   }
 
-  /** Redo a previously undone change */
   redo(): boolean {
     if (this._redoStack.length === 0) return false;
 
@@ -492,7 +449,6 @@ class BuilderState {
     return this._redoStack.length > 0;
   }
 
-  /** Save the current tree to localStorage */
   saveToLocalStorage(): void {
     try {
       const data = {
@@ -506,7 +462,7 @@ class BuilderState {
     }
   }
 
-  /** Load a saved tree from localStorage. Returns true if restored successfully. */
+  /** Load a saved tree from localStorage. */
   private loadFromLocalStorage(): boolean {
     try {
       const raw = localStorage.getItem(BuilderState.STORAGE_KEY);
@@ -527,8 +483,6 @@ class BuilderState {
       this._componentIdCounter = Math.max(data.counter || 0, this._componentIdCounter);
 
       this.migrateNodeIds(this._componentTree);
-
-      debugLog("Restored state from localStorage");
 
       return true;
     } catch {
@@ -634,7 +588,6 @@ class BuilderState {
       const componentInfo = this.getComponentInfo(node._component);
       const metadata = this._metadataMap[node._component];
 
-      // Only force-expose on components that have a childComponent wrapper pattern
       if (componentInfo?.slots && metadata?.childComponent) {
         for (const slot of componentInfo.slots) {
           if (slotHasSameComponentInEveryItem(node, slot.propName)) {
@@ -666,7 +619,6 @@ class BuilderState {
         }
       }
 
-      // Recurse into all slots
       const fallbackProp = metadata?.fallbackFor;
       const slotsToRecurse = componentInfo?.slots
         ? componentInfo.slots.map((s) => s.propName)
@@ -685,5 +637,4 @@ class BuilderState {
   }
 }
 
-/** Singleton instance */
 export const builderState = new BuilderState();

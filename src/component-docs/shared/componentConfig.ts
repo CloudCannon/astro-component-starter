@@ -57,8 +57,7 @@ export function listComponentKeys(): string[] {
  * `_inputs_from_glob` to hoist `_inputs`/`_structures` onto the returned
  * object. Returns null when no structure-value file exists for the key.
  *
- * Extracted verbatim from the previous getStaticPaths loader in
- * [...slug].astro — preserve the exact merge semantics if this changes.
+ * Preserve the exact merge semantics if this changes.
  */
 export function loadComponentConfig(componentKey: string): ComponentConfig | null {
   if (componentConfigCache.has(componentKey)) {

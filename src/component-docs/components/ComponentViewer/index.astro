@@ -20,10 +20,9 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   const parts = relativePath.split("/");
   const filename = parts[parts.length - 1];
 
-  // Convert PascalCase filename to kebab-case
   const kebabFilename = pascalToKebab(filename);
 
-  // If filename (in kebab-case) matches parent folder, remove it
+  // Collapse e.g. `card/Card.astro` to `card`
   if (parts.length > 1 && kebabFilename === parts[parts.length - 2]) {
     parts.pop();
     parts[parts.length - 1] = kebabFilename;
@@ -34,7 +33,6 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   const componentName = parts.join("/");
   const component = (obj as any).default;
 
-  // Store component with path
   components[componentName] = component;
 });
 

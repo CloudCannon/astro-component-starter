@@ -201,7 +201,7 @@ const removeBlog = blogFiles.length
 const removePages = await confirm("Remove demo pages and reset the homepage?");
 const resetBranding = await confirm("Reset nav/footer/SEO branding?");
 
-// --- astro.config.mjs: the placeholder that breaks every absolute URL ---------
+// astro.config.mjs: the placeholder that breaks every absolute URL.
 const configPath = "astro.config.mjs";
 const config = readFileSync(abs(configPath), "utf8");
 const nextConfig = config.replace(/site: "https:\/\/example\.com",.*$/m, `site: ${yaml(siteUrl)},`);
@@ -211,7 +211,7 @@ if (nextConfig !== config) {
   record(`${configPath}   site → ${siteUrl}`);
 }
 
-// --- SEO defaults -------------------------------------------------------------
+// SEO defaults.
 const seo = readJson("src/data/seo.json");
 
 seo.name = siteName;
@@ -224,7 +224,7 @@ if (resetBranding) {
 writeJson("src/data/seo.json", seo);
 record(`src/data/seo.json  name, url, titleFormat${resetBranding ? ", description, logo" : ""}`);
 
-// --- Demo content -------------------------------------------------------------
+// Demo content.
 if (removeBlog) {
   for (const file of blogFiles) remove(`src/content/blog/${file}`);
   record(`removed ${blogFiles.length} demo blog post${blogFiles.length === 1 ? "" : "s"}`);
@@ -241,9 +241,9 @@ if (removePages) {
   }
 }
 
-// --- Navigation, footer -------------------------------------------------------
-// Both drop /why/ (deleted above) and /component-docs/, which `npm run build`
-// excludes from production — a nav link to it 404s on a real site.
+// Navigation, footer. Both drop /why/ (deleted above) and /component-docs/,
+// which `npm run build` excludes from production — a nav link to it 404s on a
+// real site.
 if (resetBranding) {
   const nav = readJson("src/data/mainNav.json");
 

@@ -607,8 +607,6 @@ export function preview(spec) {
   };
 }
 
-// Emit
-
 function attrs(pairs) {
   return pairs
     .filter(([, v]) => v != null)

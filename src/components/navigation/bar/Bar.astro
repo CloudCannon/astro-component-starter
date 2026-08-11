@@ -28,7 +28,6 @@ function hasCurrentChild(item: NavItem): boolean {
   return Boolean(item.children?.some((child) => hasCurrentChild(child)));
 }
 
-// Helper function to create navigation item data
 function createNavItemData(item: NavItem, level: string, parentGroupId?: string) {
   const hasChildren = Boolean(item.children?.length);
 
@@ -46,6 +45,7 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
   };
 }
 ---
+
 <nav
   aria-label={ariaLabel}
   class:list={["bar", className]}
@@ -253,7 +253,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     }
   }
 
-  // Handle toggle change events
   function handleToggleChange(e: Event) {
     const target = e.target as HTMLInputElement;
 
@@ -268,7 +267,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     updateAriaStates(target, target.checked);
 
     if (target.checked && barNav) {
-      // Close other open checkbox dropdowns
       barNav.querySelectorAll(".nav-item-toggle[type='checkbox']").forEach((toggle) => {
         const checkbox = toggle as HTMLInputElement;
         if (checkbox !== target && checkbox.checked) {
@@ -279,7 +277,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     }
   }
 
-  // Handle trigger click events
   function handleTriggerClick(e: Event) {
     const label = e.currentTarget as HTMLElement;
     const toggle = document.getElementById(label.getAttribute("for") || "") as HTMLInputElement;
@@ -291,7 +288,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     }
   }
 
-  // Handle keyboard events
   function handleKeydown(e: Event) {
     if (!(e instanceof KeyboardEvent)) return;
     if (e.key !== "Enter" && e.key !== " ") return;
@@ -308,17 +304,14 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     }
   }
 
-  // Initialize bar navigation
   function initBarNavigation() {
     if (!barGlobalHandlersBound) {
-      // Handle clicks outside bar navigation to close dropdowns
       document.addEventListener("click", (e) => {
         const target = e.target as HTMLElement;
         if (!target) return;
 
         const clickedBar = target.closest(".bar");
 
-        // Only close dropdowns if clicking completely outside the bar
         if (!clickedBar) {
           document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
             const checkbox = toggle as HTMLInputElement;
@@ -330,7 +323,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         }
       });
 
-      // Handle escape key to close all dropdowns
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
           document.querySelectorAll<HTMLInputElement>(".bar .nav-item-toggle").forEach((toggle) => {
@@ -345,7 +337,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
       barGlobalHandlersBound = true;
     }
 
-    // Initialize all bar navigation instances
     document.querySelectorAll(".bar").forEach((barNav) => {
       const navElement = barNav as HTMLElement;
       if (navElement.dataset.barInitialized === "true") return;
@@ -367,7 +358,7 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         trigger.addEventListener("keydown", handleKeydown);
       });
 
-      // Prevent clicks inside dropdown content from bubbling to document handler
+      // Clicks inside dropdown content must not reach the document handler, which closes dropdowns.
       barNav.querySelectorAll(".nav-item-content, .nav-item-nested").forEach((content) => {
         content.addEventListener("click", (e) => {
           const target = e.target as HTMLElement;

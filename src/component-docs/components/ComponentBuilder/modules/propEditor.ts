@@ -7,8 +7,6 @@
  *
  * Each prop can be toggled between "hardcoded" (value baked into the
  * exported component) and "exposed" (surfaced as a configurable prop).
- *
- * @module propEditor
  */
 
 import { builderState } from "../state";

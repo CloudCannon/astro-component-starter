@@ -3,8 +3,6 @@
  *
  * Controls the export configuration modal where the user chooses a
  * page-section category and name before triggering the ZIP download.
- *
- * @module exportModal
  */
 
 import { builderState } from "../state";

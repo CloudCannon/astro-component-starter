@@ -5,7 +5,6 @@ import { getCollection, render } from "astro:content";
 import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
 
 export async function getStaticPaths() {
-  // Skip component docs routes if DISABLE_COMPONENT_LIBRARY is set
   if (isComponentLibraryDisabled()) {
     return [
       {

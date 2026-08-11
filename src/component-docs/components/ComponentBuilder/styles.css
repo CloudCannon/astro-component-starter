@@ -1,12 +1,10 @@
 .component-builder {
-  /* ============================================
-     CSS Custom Properties
+  /* CSS Custom Properties
 
      Category colors identify component types in the
      picker and sandbox and intentionally stay consistent
      across light/dark themes. All other colors resolve
-     from the semantic theme tokens in `src/styles/themes/`.
-     ============================================ */
+     from the semantic theme tokens in `src/styles/themes/`. */
 
   --cb-category-builders: #8b5cf6;
   --cb-category-wrappers: #3b82f6;
@@ -15,9 +13,7 @@
 
   --cb-modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 
-  /* ============================================
-     Layout & Container
-     ============================================ */
+  /* Layout & Container */
   display: flex;
   flex-direction: column;
 
@@ -74,9 +70,7 @@
     width: 100%;
   }
 
-  /* ============================================
-     Builder Main Area
-     ============================================ */
+  /* Builder Main Area */
   .builder-main {
     display: flex;
     flex-direction: column;
@@ -88,9 +82,7 @@
     overflow: auto;
   }
 
-  /* ============================================
-     Build/Preview Toggle
-     ============================================ */
+  /* Build/Preview Toggle */
   .builder-view-toggle {
     border-bottom: 1px solid var(--color-border-subtle);
     display: flex;
@@ -133,9 +125,7 @@
     width: 100%;
   }
 
-  /* ============================================
-     Code View
-     ============================================ */
+  /* Code View */
   .builder-code-container {
     /* Ensure the code view's scroll container (.builder-code-content) fully
        contains horizontal overflow instead of expanding the parent. */
@@ -239,17 +229,13 @@
     }
   }
 
-  /* ============================================
-     Sandbox Area
-     ============================================ */
+  /* Sandbox Area */
   .sandbox {
     padding-right: var(--spacing-lg);
     position: relative;
   }
 
-  /* ============================================
-     Sandbox Items (Dropped Components)
-     ============================================ */
+  /* Sandbox Items (Dropped Components) */
   .sandbox-item {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
@@ -311,9 +297,7 @@
     }
   }
 
-  /* ============================================
-     Slots
-     ============================================ */
+  /* Slots */
   .sandbox-item-slots {
     border-top: 1px solid var(--color-border-subtle);
   }
@@ -487,9 +471,7 @@
     width: 1.5rem;
   }
 
-  /* ============================================
-     Drop Zones
-     ============================================ */
+  /* Drop Zones */
   .reorder-drop-zone {
     align-items: center;
     display: flex;
@@ -570,9 +552,7 @@
     width: 1.5rem;
   }
 
-  /* ============================================
-     Properties Sidebar (Right)
-     ============================================ */
+  /* Properties Sidebar (Right) */
   .prop-sidebar {
     align-self: start;
     border: 1px solid var(--color-border);
@@ -615,9 +595,7 @@
     }
   }
 
-  /* ============================================
-     Property Fields
-     ============================================ */
+  /* Property Fields */
   .prop-field {
     background: var(--color-bg-surface);
     border: 1px solid var(--color-border-subtle);
@@ -779,9 +757,7 @@
     }
   }
 
-  /* ============================================
-     Category-Specific Colors
-     ============================================ */
+  /* Category-Specific Colors */
 
   /* Page Builders - Purple */
   .sandbox-item[data-category="page-builders"],
@@ -828,9 +804,7 @@
   }
 }
 
-/* ============================================
-   Component Picker Modal (Body-level)
-   ============================================ */
+/* Component Picker Modal (Body-level) */
 
 /* Modal Overlay Base */
 .component-picker-overlay,
@@ -983,9 +957,7 @@
   line-height: 1.4;
 }
 
-/* ============================================
-   Export Configuration Modal (Body-level)
-   ============================================ */
+/* Export Configuration Modal (Body-level) */
 
 .export-config-header {
   align-items: center;
@@ -1043,9 +1015,7 @@
   padding: var(--spacing-md);
 }
 
-/* ============================================
-   Validation Panel & Error States
-   ============================================ */
+/* Validation Panel & Error States */
 
 /* Export button error state */
 #export-btn.has-errors > .button-inner {
@@ -1128,9 +1098,7 @@
   }
 }
 
-/* ============================================
-   Export Preview Panel
-   ============================================ */
+/* Export Preview Panel */
 
 .export-preview-panel {
   border-top: 1px solid var(--color-border-subtle);

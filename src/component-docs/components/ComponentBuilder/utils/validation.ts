@@ -1,17 +1,11 @@
 /**
- * Validation Utilities
- * Validates the component tree for export readiness.
- *
  * Currently checks for duplicate exposed prop names — two or more components
  * that expose the same prop name would create a naming collision in the
  * exported Astro component.
  */
 
-import { debugLog } from "../constants";
 import type { ComponentMetadata, ComponentNode } from "../types";
 import { type BuilderNode, shouldUseMapPattern } from "./shared";
-
-// Types
 
 /** Location of a prop in the component tree (used in validation errors). */
 export interface PropLocation {
@@ -33,8 +27,6 @@ export interface ValidationResult {
   isValid: boolean;
   duplicateProps: DuplicatePropError[];
 }
-
-// Public API
 
 /**
  * Validate the component tree for duplicate exposed prop names.
@@ -86,7 +78,6 @@ export function validateComponentTree(
       });
     }
 
-    // Slot props in page-building mode
     for (const key of Object.keys(node)) {
       if (!key.endsWith("_mode") || node[key as `_${string}_mode`] !== "prop") continue;
 
@@ -101,7 +92,7 @@ export function validateComponentTree(
       });
     }
 
-    // Recurse into active nested arrays, but stop at nested map pattern boundaries
+    // Stop at nested map pattern boundaries
     const activeSlotKeys = Object.keys(node).filter(
       (k) => Array.isArray(node[k]) && !k.startsWith("_") && node[`_${k}_mode` as const] !== "prop"
     );
@@ -125,9 +116,6 @@ export function validateComponentTree(
     return results;
   }
 
-  /**
-   * Recursively collect all exposed props from a node and its descendants.
-   */
   function collectExposedProps(node: BuilderNode, nodePath: string, parentPath = ""): void {
     if (!node) return;
 
@@ -147,7 +135,6 @@ export function validateComponentTree(
       }
     }
 
-    // --- Regular exposed props (marked as not hardcoded) ---
     // Include arrays too: exposed array props can collide across components.
     // (Map-pattern slots are still handled separately below.)
     for (const key of Object.keys(node)) {
@@ -155,9 +142,8 @@ export function validateComponentTree(
 
       const originalPropName = key.replace("_hardcoded_", "");
 
-      if (node[key]) continue; // hardcoded → skip
+      if (node[key]) continue;
 
-      // Skip slot props that are handled by the .map() pattern (collected below)
       if (mapPatternSlots.has(originalPropName)) continue;
 
       const renamedKey = node[`_renamed_${originalPropName}`] || originalPropName;
@@ -172,7 +158,7 @@ export function validateComponentTree(
       addExposedPropLocation(renamedKey, location);
     }
 
-    // --- Slots in page-building mode ---
+    // Slots in page-building mode
     for (const key of Object.keys(node)) {
       if (!key.endsWith("_mode") || node[key as `_${string}_mode`] !== "prop") continue;
 
@@ -189,7 +175,6 @@ export function validateComponentTree(
       addExposedPropLocation(renamedKey, location);
     }
 
-    // --- Recurse into nested component arrays ---
     const activeSlots = Object.keys(node).filter(
       (k) => Array.isArray(node[k]) && !k.startsWith("_") && node[`_${k}_mode` as const] !== "prop"
     );
@@ -263,7 +248,6 @@ export function validateComponentTree(
     }
   }
 
-  // Start collection from root components
   componentTree.forEach((node, index) => {
     if (node && typeof node === "object" && node._component) {
       const componentName = getComponentPath(node._component);
@@ -272,7 +256,7 @@ export function validateComponentTree(
     }
   });
 
-  // --- Find duplicates (same exposed name on different nodes) ---
+  // Find duplicates (same exposed name on different nodes)
   const duplicateProps: DuplicatePropError[] = [];
 
   exposedPropsMap.forEach((locations, exposedName) => {
@@ -284,10 +268,6 @@ export function validateComponentTree(
   });
 
   duplicateProps.push(...scopedDuplicateProps);
-
-  if (duplicateProps.length > 0) {
-    debugLog("Found duplicate exposed props:", duplicateProps);
-  }
 
   return {
     isValid: duplicateProps.length === 0,

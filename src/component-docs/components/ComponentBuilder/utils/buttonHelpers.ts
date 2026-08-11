@@ -7,8 +7,6 @@
  *
  * If a template is missing (e.g. during testing), each helper gracefully
  * falls back to a plain `<button>` element.
- *
- * @module buttonHelpers
  */
 
 let buttonGhostTemplate: HTMLTemplateElement | null = null;

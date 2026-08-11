@@ -34,4 +34,4 @@ create-component, screenshot-to-component, migrate-existing-site, editable-regio
 
 ## Current state
 
-The long-term roadmap and product strategy are kept in the gitignored `.local/` working area (`.local/plans/`, `.local/positioning.md`), not in the repo. A section not rendering usually means a `_component` path mismatch — check the dev-server console for the renderBlock warning listing available component keys.
+A section not rendering usually means a `_component` path mismatch — check the dev-server console for the renderBlock warning listing available component keys.

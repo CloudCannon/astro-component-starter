@@ -1,29 +1,6 @@
-/**
- * ComponentBuilder Constants
- *
- * Shared constants, lookup tables, and configuration values used throughout
- * the ComponentBuilder modules. Centralising these here makes it easy to
- * tweak behaviour and avoids magic strings scattered across the codebase.
- *
- * @module constants
- */
-
-// Debug
-
-/** Enable debug logging (set to `true` during development). */
-const DEBUG = false;
-
-/** Log helper that respects the {@link DEBUG} flag. */
-export function debugLog(...args: unknown[]): void {
-  if (DEBUG) {
-    console.log("[ComponentBuilder]", ...args);
-  }
-}
-
-/** Category display order */
 export const CATEGORY_ORDER = ["builders", "wrappers", "core-elements", "forms"] as const;
 
-/** Root component path - the base container for all builder compositions */
+/** The base container for all builder compositions. */
 export const ROOT_COMPONENT_PATH = "page-sections/builders/custom-section";
 
 /**

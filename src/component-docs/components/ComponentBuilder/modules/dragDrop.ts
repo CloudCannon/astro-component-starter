@@ -4,11 +4,8 @@
  * Handles all drag-and-drop interactions in the component builder including
  * palette → sandbox drops and intra-sandbox reordering. Provides helpers for
  * validating drop targets against slot restrictions.
- *
- * @module dragDrop
  */
 
-import { debugLog } from "../constants";
 import { builderState } from "../state";
 import type { ComponentInfo, DragSource, SlotDefinition } from "../types";
 
@@ -35,7 +32,6 @@ export function handleDragStart(e: DragEvent): void {
       e.dataTransfer.effectAllowed = "copy";
     }
     paletteComponent.classList.add("dragging");
-    debugLog("Palette drag started:", dragSource);
     return;
   }
 
@@ -69,7 +65,6 @@ export function handleDragStart(e: DragEvent): void {
       e.dataTransfer.setDragImage(sandboxItem, 20, 20);
     }
     sandboxItem.classList.add("dragging");
-    debugLog("Reorder drag started:", dragSource);
   }
 }
 
@@ -117,7 +112,6 @@ export function handleReorderDrop(
   targetSlot: string | null,
   targetIndex: number
 ): void {
-  debugLog("Reorder drop:", { nodeId, targetParentId, targetSlot, targetIndex });
   builderState.moveComponent(nodeId, targetParentId, targetSlot, targetIndex);
 }
 

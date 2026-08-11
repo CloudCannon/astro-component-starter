@@ -7,12 +7,9 @@ import type { ComponentMetadata as SharedComponentMetadata } from "../../../../s
 import type { ComponentInfo, InputConfig, SlotDefinition, StructureValue } from "../../types";
 import { isArrayStructureInput, structureHasComponentValues } from "./inputUtils";
 
-type Logger = (...args: unknown[]) => void;
-
 /** Scan building-blocks directories and return discovered components. */
 export function scanBuildingBlocksComponents(
-  metadataMap: Map<string, SharedComponentMetadata>,
-  log: Logger = () => {}
+  metadataMap: Map<string, SharedComponentMetadata>
 ): ComponentInfo[] {
   const componentsDir = join(process.cwd(), "src/components/building-blocks");
   const components: ComponentInfo[] = [];
@@ -116,9 +113,6 @@ export function scanBuildingBlocksComponents(
                     if (!nestedStructureRef) continue;
 
                     structureName = nestedStructureRef.replace("_structures.", "");
-                    log(
-                      `Resolved inline structure for slot "${propName}": ${structureRef} -> ${nestedStructureRef} (${structureName})`
-                    );
                     break;
                   }
                 }

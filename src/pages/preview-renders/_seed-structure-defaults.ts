@@ -117,7 +117,7 @@ export function seedEmptyArrays(
   }
 }
 
-// Structure registry loading (build-time, Node only)
+// Structure registry loading
 
 export interface StructureValueDoc {
   value?: Record<string, unknown> & { _component?: string };
@@ -182,7 +182,6 @@ export function loadGlobalStructures(): StructureDefs {
 
   const registry: StructureDefs = {};
 
-  // 1. Component inline structures first (grid items, select options, …).
   for (const file of globSync("src/components/**/*.cloudcannon.structure-value.yml").sort()) {
     const doc = yaml.load(readFileSync(file, "utf8")) as StructureValueDoc | null;
 
@@ -195,7 +194,6 @@ export function loadGlobalStructures(): StructureDefs {
     }
   }
 
-  // 2. Global structure files (may add named structures assembled from globs).
   for (const file of globSync(".cloudcannon/structures/*.cloudcannon.structures.yml").sort()) {
     const doc = yaml.load(readFileSync(file, "utf8")) as Record<string, StructureDefRaw> | null;
 

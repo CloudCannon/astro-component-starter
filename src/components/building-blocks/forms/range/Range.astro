@@ -197,7 +197,6 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
             0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
         }
 
-        /* Track — WebKit */
         &::-webkit-slider-runnable-track {
           background: linear-gradient(
             to right,
@@ -208,7 +207,6 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           height: var(--track-height);
         }
 
-        /* Track — Firefox */
         &::-moz-range-track {
           background: var(--color-border);
           border-radius: var(--radius-full);
@@ -221,7 +219,6 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           height: var(--track-height);
         }
 
-        /* Thumb — WebKit */
         &::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
@@ -233,7 +230,6 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           width: var(--thumb-size);
         }
 
-        /* Thumb — Firefox */
         &::-moz-range-thumb {
           appearance: none;
           background-color: var(--color-brand);

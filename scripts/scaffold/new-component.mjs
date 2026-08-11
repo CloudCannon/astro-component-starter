@@ -34,8 +34,6 @@ const die = (message) => {
   process.exit(1);
 };
 
-// Parse + validate the requested path.
-
 const rawArg = process.argv[2];
 
 if (!rawArg || rawArg.startsWith("-")) {
@@ -122,8 +120,6 @@ const label = slug
   .split("-")
   .map((word) => word[0].toUpperCase() + word.slice(1))
   .join(" ");
-
-// Render templates.
 
 const templateSet = tier === "page-sections" ? "page-section" : "building-block";
 

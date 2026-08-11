@@ -42,7 +42,7 @@ const ok = (label) => oks.push(label);
 // names. Any stray key NOT listed here FAILs, so renames are caught.
 const KNOWN_DEAD_INPUTS = {};
 
-// Build the world: every component .astro, its key, its parsed destructure.
+// Load every component .astro, its key, its parsed destructure.
 
 const componentsDir = join(root, "src", "components");
 const astroPaths = (await glob("**/*.astro", { cwd: componentsDir })).sort();
@@ -371,8 +371,6 @@ for (const [abs, maps] of arraySources) {
     ok(`array items ${rel(abs)}`);
   }
 }
-
-// Report.
 
 for (const label of oks) console.log(`ok     ${label}`);
 for (const { file, reason } of warns) console.warn(`WARN   ${file}\n   ${reason}`);

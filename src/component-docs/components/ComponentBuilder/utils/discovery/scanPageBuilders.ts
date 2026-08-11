@@ -7,8 +7,6 @@ import type { ComponentMetadata as SharedComponentMetadata } from "../../../../s
 import type { ComponentInfo, InputConfig, SlotDefinition, StructureValue } from "../../types";
 import { isArrayStructureInput, structureHasComponentValues } from "./inputUtils";
 
-type Logger = (...args: unknown[]) => void;
-
 function buildSlotFromInput(
   propName: string,
   inputConfig: InputConfig,
@@ -44,8 +42,7 @@ function buildSlotFromInput(
 
 /** Scan page-sections/builders and return discovered builder components. */
 export function scanPageBuilderComponents(
-  metadataMap: Map<string, SharedComponentMetadata>,
-  log: Logger = () => {}
+  metadataMap: Map<string, SharedComponentMetadata>
 ): ComponentInfo[] {
   const buildersDir = join(process.cwd(), "src/components/page-sections/builders");
   const components: ComponentInfo[] = [];
@@ -119,9 +116,7 @@ export function scanPageBuilderComponents(
     });
 
     if (structureValue?._structures) {
-      for (const [inlineStructName, inlineStructDef] of Object.entries(
-        structureValue._structures
-      )) {
+      for (const inlineStructDef of Object.values(structureValue._structures)) {
         if (inlineStructDef && typeof inlineStructDef === "object" && "values" in inlineStructDef) {
           const values = (inlineStructDef as Record<string, unknown>).values;
 
@@ -156,10 +151,6 @@ export function scanPageBuilderComponents(
 
                       nestedSlotDef.structureName = nestedStructureName;
                       componentSlots.push(nestedSlotDef);
-
-                      log(
-                        `Found nested slot "${nestedPropName}" in component "${componentPath}" via inline structure "${inlineStructName}" -> structure "${nestedStructureName}"`
-                      );
                     }
                   }
                 }

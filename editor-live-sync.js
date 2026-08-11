@@ -235,7 +235,6 @@ observer.observe(document.body, {
   subtree: true,
 });
 
-// Initialise any components already in the editor DOM.
 setupAllCarousels();
 setupAllImageCarousels();
 setupAllModals();

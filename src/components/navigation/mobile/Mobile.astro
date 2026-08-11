@@ -25,18 +25,15 @@ interface NavItem {
   children?: NavItem[];
 }
 
-// Check if item is current page
 function isCurrentPage(item: NavItem) {
   return Boolean(item.path && Astro.url.pathname === item.path);
 }
 
-// Check if any child is current page (recursive)
 function hasCurrentChild(item: NavItem): boolean {
   if (isCurrentPage(item)) return true;
   return Boolean(item.children?.some((child) => hasCurrentChild(child)));
 }
 
-// Create navigation item data
 function createNavItemData(item: NavItem, level: string, parentGroupId?: string) {
   const hasChildren = Boolean(item.children?.length);
 
@@ -304,7 +301,7 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
 
-  // Create overlays container for proper z-index stacking
+  // Overlays live in one container so z-index stacking is predictable.
   function getOrCreateOverlaysContainer() {
     let container = document.getElementById("overlays-container");
     if (!container) {
@@ -316,7 +313,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     return container;
   }
 
-  // Initialize mobile navigation instances
   function initMobileNavigation() {
     const allMobileNavs = document.querySelectorAll<HTMLElement>(".mobile");
     const overlaysContainer = getOrCreateOverlaysContainer();
@@ -325,13 +321,10 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
       if (nav.dataset.mobileInitialized === "true") return;
       nav.dataset.mobileInitialized = "true";
 
-      // Add a class to indicate JS is available
       nav.classList.add("js-enabled");
 
-      // Move entire nav to overlays container for proper z-index stacking
       overlaysContainer.appendChild(nav);
 
-      // Find the toggle for this specific nav instance
       const toggleId = nav.getAttribute("data-toggle-id");
       const toggleElement = toggleId ? document.getElementById(toggleId) : null;
       const toggle = toggleElement instanceof HTMLInputElement ? toggleElement : null;
@@ -339,7 +332,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         `label[for="${toggleId}"].nav-hamburger`
       );
 
-      // Handle navigation toggle state and accessibility
       function handleNavToggle(isOpen: boolean) {
         if (isOpen) {
           nav.setAttribute("aria-hidden", "false");
@@ -358,7 +350,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         }
       }
 
-      // Handle hamburger button interactions
       if (hamburger && toggle) {
         const toggleHandler = (e: Event) => {
           e.preventDefault();
@@ -377,7 +368,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         });
       }
 
-      // Handle close button interactions
       const closeButton = nav.querySelector<HTMLElement>(".mobile-close");
       if (closeButton && toggle) {
         const closeHandler = (e: Event) => {
@@ -390,7 +380,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         closeButton.addEventListener("click", closeHandler);
       }
 
-      // Handle toggle state changes
       if (toggle) {
         toggle.addEventListener("change", (e) => {
           if (e.target instanceof HTMLInputElement) {
@@ -399,7 +388,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         });
       }
 
-      // Handle dropdown interactions using event delegation
       const handleDropdownToggle = (e: Event) => {
         const target = e.target;
         if (!(target instanceof Element)) return;
@@ -432,7 +420,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         }
       });
 
-      // Handle escape key to close navigation
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && toggle?.checked) {
           toggle.checked = false;
@@ -447,13 +434,12 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 
 <style is:global>
   @layer components {
-    /* The checkbox is hidden by `.visually-hidden`, not `display: none`, which
-       would drop it out of the tab order and the accessibility tree. */
-
     .nav-toggle:checked ~ .mobile {
       transform: translateX(0);
     }
 
+    /* The checkbox is hidden by `.visually-hidden`, not `display: none`, which
+       would drop it out of the tab order and the accessibility tree. */
     /* Draw the hidden control's focus ring on whichever label is on screen —
        only one is, since the open panel covers the hamburger. */
     .nav-toggle:focus-visible ~ .nav-hamburger,
@@ -588,7 +574,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         }
       }
 
-      /* Split row: link column + chevron toggle column */
       .nav-item-split {
         align-items: stretch;
         border-radius: var(--radius-xs);

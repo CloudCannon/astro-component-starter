@@ -3,8 +3,6 @@
  *
  * Server-side utility that scans component directories and CloudCannon
  * structures to build the registry consumed by the ComponentBuilder.
- *
- * @module componentDiscovery
  */
 
 import { existsSync, readFileSync } from "fs";
@@ -25,16 +23,6 @@ import type { ComponentInfo, InputConfig, NestingRules, SlotDefinition } from ".
 
 // Re-export types so existing consumers don't break
 export type { ComponentInfo, NestingRules, SlotDefinition };
-
-/** Enable debug logging for component discovery (set to false in production). */
-const DEBUG = false;
-
-/** Debug log helper. */
-function debugLog(...args: unknown[]): void {
-  if (DEBUG) {
-    console.log("[ComponentDiscovery]", ...args);
-  }
-}
 
 /** Result returned by {@link discoverComponents}. */
 export interface ComponentDiscoveryResult {
@@ -89,27 +77,22 @@ function resolveSelectDataRefs(
 /** Discover components, slots, nesting rules, and category groupings. */
 export async function discoverComponents(): Promise<ComponentDiscoveryResult> {
   const metadataMap = await getComponentMetadataMap();
-  const nestingRules = parseNestingRules(debugLog);
+  const nestingRules = parseNestingRules();
 
   const components: ComponentInfo[] = [
-    ...scanBuildingBlocksComponents(metadataMap, debugLog),
-    ...scanPageBuilderComponents(metadataMap, debugLog),
+    ...scanBuildingBlocksComponents(metadataMap),
+    ...scanPageBuilderComponents(metadataMap),
   ];
 
-  debugLog("Registering virtual components from inline structures...");
-  const virtualComponents = registerVirtualComponents(components, metadataMap, debugLog);
+  const virtualComponents = registerVirtualComponents(components, metadataMap);
 
   components.push(...virtualComponents);
-  debugLog(`Added ${virtualComponents.length} virtual components`);
 
-  debugLog("Populating allowed components for slots...");
-  debugLog("Nesting rules:", nestingRules);
-  populateAllowedComponentsForSlots(components, nestingRules, debugLog);
+  populateAllowedComponentsForSlots(components, nestingRules);
 
   const selectData = loadSelectData();
 
   if (Object.keys(selectData).length > 0) {
-    debugLog("Resolving _select_data references in component inputs...");
     for (const component of components) {
       if (component.inputs) {
         resolveSelectDataRefs(component.inputs, selectData);

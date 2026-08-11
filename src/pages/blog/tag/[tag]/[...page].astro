@@ -4,9 +4,9 @@ import { slugifyLabel } from "@components/utils/slugify";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
 import {
-getBlogPostsSortedByDate,
-loadBlogPageContext,
-withListingHeading,
+  getBlogPostsSortedByDate,
+  loadBlogPageContext,
+  withListingHeading,
 } from "../../../../utils/blog";
 
 type Paginate = (_data: any[], _opts: { pageSize: number; params: Record<string, string> }) => any;

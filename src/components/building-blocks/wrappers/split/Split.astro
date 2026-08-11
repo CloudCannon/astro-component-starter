@@ -30,7 +30,6 @@ const effectiveFirstProp =
 const effectiveSecondProp =
   customSecondDataProp ?? (useDefaultEditableBinding ? "secondColumnContentSections" : null);
 
-// Get content blocks and prop names based on reverse setting
 const firstSplitBlocks = reverse ? secondColumnContentSections : firstColumnContentSections;
 const secondSplitBlocks = reverse ? firstColumnContentSections : secondColumnContentSections;
 const firstPropName = reverse ? effectiveSecondProp : effectiveFirstProp;

@@ -4,11 +4,8 @@
  * Renders the component tree inside the builder's main workspace. Each
  * component node is rendered as a collapsible card with a header, slot
  * containers, drop zones, and reorder handles.
- *
- * @module sandbox
  */
 
-import { debugLog } from "../constants";
 import { builderState } from "../state";
 import type { ComponentInfo, ComponentNode, SlotDefinition } from "../types";
 import { createDeleteButton } from "../utils/buttonHelpers";
@@ -628,7 +625,6 @@ function updateSelection(): void {
 
 /** Select a component */
 function selectComponent(id: string): void {
-  debugLog("Selecting component:", id);
   builderState.selectedComponentId = id;
   updateSelection();
 }

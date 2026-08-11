@@ -219,8 +219,6 @@ function renderTable(headers, rows) {
   return [line(headers), line(sep), ...rows.map(line)].join("\n");
 }
 
-// Build the world.
-
 const { byKey } = await buildComponentIndex(root);
 const mains = [...byKey.values()].filter(
   (e) => e.isMain && (e.key.startsWith("page-sections/") || e.key.startsWith("building-blocks/"))
@@ -282,8 +280,6 @@ function footnotesFor(entry, slug, structureValueDoc) {
 
   return [];
 }
-
-// Assemble per-tier, per-group rows.
 
 function buildTier(tier, headerLabel) {
   const entries = mains.filter((e) => e.key.startsWith(`${tier}/`));

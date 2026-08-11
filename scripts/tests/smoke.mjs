@@ -286,8 +286,6 @@ const tests = [
   },
 ];
 
-// Run.
-
 const marker = join(
   distDir,
   "component-docs",

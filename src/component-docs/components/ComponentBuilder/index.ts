@@ -1,16 +1,4 @@
-/**
- * ComponentBuilder — Main Entry Point
- *
- * Bootstraps the visual component builder by reading serialised data from
- * the DOM, initialising state, wiring up event listeners, and performing
- * the first render. This file is the single script entry imported by the
- * `.astro` template.
- *
- * @module index
- */
-
 import { onPageLoad } from "../../../components/utils/onPageLoad";
-import { debugLog } from "./constants";
 import { showExportConfigModal } from "./modules/exportModal";
 import { initLivePreview } from "./modules/livePreview";
 import { getExposedPropCount, renderPropEditor } from "./modules/propEditor";
@@ -27,7 +15,6 @@ type BuilderWindow = Window & {
   [BUILDER_INIT_GLOBAL]?: () => void;
 };
 
-/** Initialize the component builder */
 function initializeBuilder(): void {
   const builderElement = document.querySelector(".component-builder");
 
@@ -38,7 +25,6 @@ function initializeBuilder(): void {
   cleanupCallbacks = [];
   builderElement.setAttribute("data-builder-initialized", "true");
 
-  // Load builder data from data attribute
   const dataAttr = builderElement.getAttribute("data-builder-data");
 
   if (!dataAttr) {
@@ -55,15 +41,8 @@ function initializeBuilder(): void {
     return;
   }
 
-  // Initialize state
   builderState.initialize(builderData);
 
-  debugLog("Builder initialized with:", {
-    componentsCount: builderData.components?.length || 0,
-    categories: Object.keys(builderData.componentsByCategory || {}),
-  });
-
-  // Get DOM elements
   const sandbox = document.getElementById("sandbox");
   const sidebarContent = document.getElementById("sidebar-content");
   const sidebarTitle = document.getElementById("sidebar-title");
@@ -84,7 +63,6 @@ function initializeBuilder(): void {
   // Non-null alias so nested functions see the narrowed type from the guard above.
   const exportButtonInner = exportBtnInner;
 
-  // Set up render callback
   const render = (): void => {
     renderSandbox(sandbox);
     updateExportButton();
@@ -93,14 +71,12 @@ function initializeBuilder(): void {
 
   setRenderCallback(render);
 
-  // Selection change handler
   cleanupCallbacks.push(
     builderState.on("selectionChange", () => {
       updateSidebar();
     })
   );
 
-  // Tree change handler
   cleanupCallbacks.push(
     builderState.on("treeChange", () => {
       if (builderState.propEditInProgress) {
@@ -113,7 +89,6 @@ function initializeBuilder(): void {
     })
   );
 
-  // Validation change handler
   cleanupCallbacks.push(
     builderState.on("validationChange", () => {
       updateExportButton();
@@ -121,14 +96,12 @@ function initializeBuilder(): void {
     })
   );
 
-  // Export button handler
   exportBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     handleExport();
   });
 
-  // Reset button handler
   const resetBtn = document.getElementById("reset-btn");
 
   resetBtn?.addEventListener("click", (e) => {
@@ -141,7 +114,6 @@ function initializeBuilder(): void {
     buildTab?.click();
   });
 
-  // Update sidebar based on selection
   function updateSidebar(): void {
     // These are guaranteed to exist by the check above
     const title = sidebarTitle as HTMLElement;
@@ -186,12 +158,10 @@ function initializeBuilder(): void {
     renderPropEditor(node, componentInfo, content);
   }
 
-  // Update export button state
   function updateExportButton(): void {
     const hasComponents = builderState.componentTree.length > 0;
     const validation = builderState.validationResult;
 
-    // Disable if no components
     if (!hasComponents) {
       exportBtn.setAttribute("disabled", "");
       exportButtonInner.disabled = true;
@@ -200,13 +170,11 @@ function initializeBuilder(): void {
       return;
     }
 
-    // Show error state if validation fails
     if (!validation.isValid) {
       exportBtn.removeAttribute("disabled");
       exportButtonInner.disabled = false; // Keep enabled to show errors
       exportBtn.classList.add("has-errors");
 
-      // Update button text to show error count
       const errorCount = validation.duplicateProps.length;
 
       if (exportBtnLabel) {
@@ -220,12 +188,10 @@ function initializeBuilder(): void {
     }
   }
 
-  // Update validation panel
   function updateValidationPanel(): void {
     const validation = builderState.validationResult;
     let panel = document.getElementById("validation-panel");
 
-    // Remove existing panel if validation passes
     if (validation.isValid) {
       if (panel) {
         panel.remove();
@@ -233,7 +199,6 @@ function initializeBuilder(): void {
       return;
     }
 
-    // Create panel if it doesn't exist
     if (!panel) {
       panel = document.createElement("div");
       panel.id = "validation-panel";
@@ -242,7 +207,6 @@ function initializeBuilder(): void {
       exportBar.insertAdjacentElement("afterend", panel);
     }
 
-    // Build consolidated error list
     const allDuplicates = validation.duplicateProps
       .map((error) => {
         const locationsList = error.locations
@@ -285,18 +249,15 @@ function initializeBuilder(): void {
     `;
   }
 
-  // Handle export
   async function handleExport(): Promise<void> {
     if (builderState.componentTree.length === 0) {
       alert("Please add at least one component to the sandbox before exporting.");
       return;
     }
 
-    // Check validation
     const validation = builderState.validationResult;
 
     if (!validation.isValid) {
-      // Scroll to validation panel to show errors
       const panel = document.getElementById("validation-panel");
 
       if (panel) {
@@ -307,8 +268,6 @@ function initializeBuilder(): void {
 
     showExportConfigModal(async (config) => {
       try {
-        debugLog("Starting export:", config);
-
         await generateExport(
           builderState.componentTree,
           config.componentName,
@@ -317,8 +276,6 @@ function initializeBuilder(): void {
           builderState.nestedBlockProperties,
           config.componentPath
         );
-
-        debugLog("Export completed successfully");
       } catch (error) {
         console.error("[ComponentBuilder] Export error:", error);
         alert(`Error exporting component: ${(error as Error).message}`);
@@ -326,7 +283,6 @@ function initializeBuilder(): void {
     });
   }
 
-  // Live preview
   const viewToggle = document.getElementById("builder-view-toggle");
   const builderLayout = document.getElementById("builder-layout");
   const previewContainer = document.getElementById("builder-preview-container");
@@ -335,10 +291,8 @@ function initializeBuilder(): void {
     initLivePreview(builderLayout, previewContainer, viewToggle);
   }
 
-  // Initial render
   render();
 
-  // Run initial validation
   updateValidationPanel();
 }
 

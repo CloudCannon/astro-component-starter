@@ -141,9 +141,8 @@ export function mergeSlotMetadata(
       slotInfos.push({ name, fallbackFor: resolvedFallback, childComponent: resolvedChild });
     }
 
-    // Replicates the original single-pass selection: the first slot with
-    // both a child component and a fallback prop wins; failing that, the
-    // first slot with any fallback prop.
+    // The first slot with both a child component and a fallback prop wins;
+    // failing that, the first slot with any fallback prop.
     if (resolvedChild && resolvedFallback && !childComponent) {
       childComponent = resolvedChild;
       fallbackFor = resolvedFallback;

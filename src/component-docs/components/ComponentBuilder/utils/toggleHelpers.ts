@@ -4,8 +4,6 @@
  * Creates toggle-switch elements at runtime by cloning from a
  * `<template>` that was server-rendered in the Astro component. Falls back
  * to a plain checkbox when the template is unavailable.
- *
- * @module toggleHelpers
  */
 
 let toggleTemplate: HTMLTemplateElement | null = null;

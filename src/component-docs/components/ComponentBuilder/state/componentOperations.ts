@@ -1,4 +1,3 @@
-import { debugLog } from "../constants";
 import type { ComponentInfo, ComponentNode, SlotDefinition } from "../types";
 
 function autoWrapIfNeeded(
@@ -40,10 +39,6 @@ function autoWrapIfNeeded(
     wrapperNode[compatibleSlot.propName] = [];
   }
   (wrapperNode[compatibleSlot.propName] as ComponentNode[]).push(nestedNode);
-
-  debugLog(
-    `Auto-wrap: Wrapped ${componentInfo.displayName} in ${wrapperInfo.displayName} (slot: ${compatibleSlot.propName})`
-  );
 
   return wrapperNode;
 }

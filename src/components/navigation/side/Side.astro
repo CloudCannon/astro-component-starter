@@ -11,7 +11,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// Generate a unique ID for this navigation instance to scope radio buttons
+// Scopes radio buttons per navigation instance.
 const navInstanceId = crypto.randomUUID();
 
 interface NavItem {
@@ -20,12 +20,10 @@ interface NavItem {
   children?: NavItem[];
 }
 
-// Helper function to check if item is current page
 function isCurrentPage(item: NavItem) {
   return item.path && Astro.url.pathname === item.path;
 }
 
-// Helper function to check if any child is current page (recursive)
 function hasCurrentChild(item: NavItem): boolean {
   if (isCurrentPage(item)) return true;
   if (item.children && item.children.length > 0) {
@@ -246,7 +244,6 @@ function hasCurrentChild(item: NavItem): boolean {
       if (navElement.dataset.sideInitialized === "true") return;
       navElement.dataset.sideInitialized = "true";
 
-      // Handle radio button changes
       sideNav.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {
         toggle.addEventListener("change", (e) => {
           const target = e.target;
@@ -393,7 +390,6 @@ function hasCurrentChild(item: NavItem): boolean {
         font-weight: var(--font-weight-semibold);
       }
 
-      /* Split row: link column + chevron toggle column */
       .nav-item-split {
         align-items: stretch;
         border-radius: var(--radius-xs);
@@ -473,7 +469,6 @@ function hasCurrentChild(item: NavItem): boolean {
         }
       }
 
-      /* Current page indicator */
       .nav-item a[aria-current="page"] .nav-item-label,
       .nav-item .nav-item-trigger[aria-current="page"] .nav-item-label,
       .nav-item-split .nav-item-link[aria-current="page"] .nav-item-label {

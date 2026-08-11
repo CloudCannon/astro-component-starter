@@ -19,56 +19,44 @@ const currentPage = page.currentPage;
 const totalPages = page.lastPage;
 const lastPage = totalPages - 1;
 
-const maxVisible = maxVisiblePages - 1; // Convert to 0-based
+const maxVisible = maxVisiblePages - 1;
 let startPage = Math.max(0, currentPage - 2);
 let endPage = Math.min(lastPage, startPage + maxVisible);
 
-// Adjust if we're near the end
 if (endPage === lastPage && startPage > 0) {
   startPage = Math.max(0, lastPage - maxVisible);
 }
 
-// Calculate how many pages we'll show in total (including first/last if they're separate)
 const showFirst = startPage > 0;
 const showLast = endPage < lastPage;
 const visibleRange = endPage - startPage + 1;
 const totalVisible = visibleRange + (showFirst ? 1 : 0) + (showLast ? 1 : 0);
 
-// If we're showing too many pages, reduce the range
 if (totalVisible > maxVisiblePages) {
   const excess = totalVisible - maxVisiblePages;
 
-  if (showFirst && showLast) {
-    // If showing both first and last, reduce the middle range
-    endPage = Math.max(startPage, endPage - excess);
-  } else if (showFirst || showLast) {
-    // If showing one of first/last, reduce the range
+  if (showFirst || showLast) {
     endPage = Math.max(startPage, endPage - excess);
   }
 }
 
-// Helper function to generate page URL
 const getPageUrl = (pageNum: number) => {
-  // Always use first page URL for page 1
   if (pageNum === 1) {
     return page.url.first || page.url.current?.replace(/\/\d+\/?$/, "") || "/blog";
   }
 
-  // For other pages, construct from the first page URL
   if (page.url && page.url.first) {
     const baseUrl = page.url.first.replace(/\/$/, "");
 
     return `${baseUrl}/${pageNum}`;
   }
 
-  // Fallback: extract base from current URL
   if (page.url && page.url.current) {
     const baseUrl = page.url.current.replace(/\/\d+\/?$/, "").replace(/\/$/, "");
 
     return `${baseUrl}/${pageNum}`;
   }
 
-  // Final fallback
   return pageNum === 1 ? "/blog" : `/blog/${pageNum}`;
 };
 ---

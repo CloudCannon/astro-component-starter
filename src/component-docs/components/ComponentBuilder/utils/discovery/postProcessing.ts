@@ -6,13 +6,10 @@ import type { ComponentMetadata as SharedComponentMetadata } from "../../../../s
 import type { ComponentInfo, InputConfig, NestingRules, SlotDefinition } from "../../types";
 import { getAllowedComponentsForStructure } from "./structureMatching";
 
-type Logger = (...args: unknown[]) => void;
-
 /** Register virtual components from inline structure definitions. */
 export function registerVirtualComponents(
   components: ComponentInfo[],
-  metadataMap: Map<string, SharedComponentMetadata>,
-  log: Logger = () => {}
+  metadataMap: Map<string, SharedComponentMetadata>
 ): ComponentInfo[] {
   const virtualComponents: ComponentInfo[] = [];
 
@@ -36,8 +33,6 @@ export function registerVirtualComponents(
           ) {
             continue;
           }
-
-          log(`Registering virtual component: ${virtualPath}`);
 
           const virtualSlots: SlotDefinition[] = [];
           const valueInputs = valueItem._inputs as
@@ -190,7 +185,6 @@ export function registerVirtualComponents(
       }
     }
 
-    log(`Registering metadata virtual component: ${virtualPath}`);
     virtualComponents.push({
       path: virtualPath,
       category: component.category,
@@ -215,21 +209,16 @@ export function registerVirtualComponents(
 /** Populate slot allowed components using structure nesting rules. */
 export function populateAllowedComponentsForSlots(
   components: ComponentInfo[],
-  nestingRules: NestingRules,
-  log: Logger = () => {}
+  nestingRules: NestingRules
 ): void {
   for (const component of components) {
     if (component.slots) {
       for (const slot of component.slots) {
         if (slot.structureName) {
-          log(
-            `Processing slot "${slot.propName}" in component "${component.path}" with structure "${slot.structureName}"`
-          );
           slot.allowedComponents = getAllowedComponentsForStructure(
             slot.structureName,
             components,
-            nestingRules,
-            log
+            nestingRules
           );
           if (slot.isRepeatable) {
             const wrapperVirtualChildren = components
@@ -242,7 +231,6 @@ export function populateAllowedComponentsForSlots(
               }
             }
           }
-          log("-> Allowed components:", slot.allowedComponents);
         }
       }
     }

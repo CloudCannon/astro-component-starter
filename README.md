@@ -132,6 +132,7 @@ walks through it.
 | `npm run reset:starter`      | Clear the demo content and set your site name and URL          |
 | `npm run test:unit`          | Unit tests (Vitest)                                            |
 | `npm run test:render`        | Verify every component's defaults build                        |
+| `npm run test:smoke`         | Headless-browser checks against the built site                 |
 
 Run `npm run check` before you commit — it's what CI runs, and it catches schema drift between a
 component and its editor config, which nothing else will.
