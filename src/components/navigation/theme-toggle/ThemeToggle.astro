@@ -1,5 +1,5 @@
 ---
-import { Icon as AstroIcon } from "astro-icon/components";
+import Icon from "@core-elements/icon/Icon.astro";
 
 const { class: className, ...htmlAttributes } = Astro.props;
 ---
@@ -11,15 +11,15 @@ const { class: className, ...htmlAttributes } = Astro.props;
   {...htmlAttributes}
 >
   <span class="theme-toggle-icon theme-toggle-sun">
-    <AstroIcon
+    <Icon
       name="sun"
-      is:inline
+      size="none"
     />
   </span>
   <span class="theme-toggle-icon theme-toggle-moon">
-    <AstroIcon
+    <Icon
       name="moon"
-      is:inline
+      size="none"
     />
   </span>
 </button>

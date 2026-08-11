@@ -1,5 +1,5 @@
 ---
-import { Icon as AstroIcon } from "astro-icon/components";
+import { getIcon, suggestIconNames } from "@component-utils/icons";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
@@ -15,13 +15,22 @@ const {
 } = Astro.props;
 
 const isValidName = isNonEmptyString(name);
+const icon = isValidName ? getIcon(String(name)) : null;
 
-if (!_component && !isValidName) {
+// Ids come from editable content, so warn while authoring rather than failing
+// the build — same as renderBlock.astro does for an unknown `_component`.
+if (isValidName && !icon && import.meta.env.DEV) {
+  const suggestions = suggestIconNames(String(name));
+  const hint = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
+
+  console.warn(`[icon] Unknown icon "${String(name).trim()}".${hint}`);
+}
+
+// Render nothing without artwork
+if (!icon) {
   return;
 }
 
-// Social icons ship solid single-color artwork, so they are recolored to the
-// current text color. Every other icon keeps the colors it was drawn with.
 const matchTextColor = Boolean(name?.includes("social/"));
 ---
 
@@ -39,9 +48,9 @@ const matchTextColor = Boolean(name?.includes("social/"));
       matchTextColor && "fill",
     ]}
   >
-    <AstroIcon
-      name={String(name).trim()}
-      is:inline
+    <svg
+      {...icon.attributes}
+      set:html={icon.body}
     />
   </span>
 </span>
@@ -78,9 +87,6 @@ const matchTextColor = Boolean(name?.includes("social/"));
           width: fit-content;
         }
 
-        /* Each accent sets only the two ramp steps it uses; the rules above
-           consume them. `color-default` sets neither and falls back. Yellow
-           uses 400 rather than 500 — 500 is too dark against a pale tint. */
         &.color-blue {
           --icon-accent: var(--blue-500);
           --icon-accent-bg: var(--blue-100);

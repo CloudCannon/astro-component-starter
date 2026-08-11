@@ -6,118 +6,127 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+A big release: a browsable reference site for every component, tooling that
+catches editor problems before they ship, and a long list of accessibility
+fixes. If you have already built a site on this starter, read the **Heads-up**
+items under Changed before upgrading — a few change how things look.
+
 ### Added
 
-- `npm run reset:starter` turns a fresh clone into your own site: it prompts for a site name and production URL, then clears the demo blog posts, the starter's own pages, and its logos and navigation, and writes `site` in `astro.config.mjs` plus the SEO defaults in `src/data/seo.json`. The demo content stays in the repository — the live demo builds from it, and it's what makes a clone look like a working site on first `npm run dev` — so removing it had been an undocumented scavenger hunt through four data files and fifteen content files. Guarded on a clean git tree so `git checkout .` is always an undo, and `--dry-run` prints the plan without writing.
-- `npm run check:placeholders` (part of `npm run check`) reports starter placeholders that survive into a real site. `site` in `astro.config.mjs` is the base for every absolute URL Astro emits — canonical tags, sitemap entries, RSS links, the JSON-LD `@id` graph — so at its `https://example.com` default the build succeeds, the pages look correct, and all of them advertise a domain the project doesn't own. Nothing else catches it. It warns and exits 0 by default, since this repository legitimately holds the placeholders; `--strict` makes it an error for a site built from the starter.
-- `docs/DEPLOYMENT.md` covers deploying to CloudCannon: what the repository already configures, creating the site, setting the production URL, and how search indexing works. Deployment was previously undocumented anywhere despite visual editing being the point of the starter.
-- A `LICENSE` file. `package.json` and the README both declared MIT, but the license text itself was missing.
+#### Making the starter your own
 
-- An RSS feed at `/rss.xml`, built from the blog collection newest-first and advertised with a `<link rel="alternate">` in every page head so browsers and feed readers discover it. Items carry title, description, publication date, tags and a `dc:creator` author — posts are MDX and can embed any component in the library, so serialising rendered bodies into feed markup would produce output no reader honours.
-- Blog posts emit `BlogPosting` structured data, and every page now emits a linked JSON-LD `@graph` (Organization, WebSite, WebPage, plus BlogPosting on posts) whose entities cross-reference by `@id` instead of repeating themselves inline. Previously only a standalone sitewide Organization entity was output, so posts had no article-level markup at all.
-- Social share cards get a `twitter:card` tag (`summary_large_image` when the page has an image), plus an optional `twitterSite` handle in `src/data/seo.json` for the `twitter:site` tag. X falls back to the existing Open Graph tags for title, description and image, so nothing else needed duplicating.
-- Indexable pages emit `max-image-preview:large, max-snippet:-1, max-video-preview:-1` robots directives. Without them Google caps image previews and snippet length, which costs rich results and Discover eligibility.
-- Every component under `src/components/**` now gets a `/component-docs` page automatically, with no hand-written docs entry required — title, description, a live primary example, and props/slots tables all derive from its CloudCannon YAML and `.astro` source. `content/components/<key>/index.md` and `examples/*.md` are now optional enrichment (curated example groups, longer overview prose, slot description/overrides), not a required step.
-- Slot metadata (name, `fallback_for`, `child_component`) is derived directly from a component's `<slot>` usage in its `.astro` source instead of requiring hand-written frontmatter; only slots whose fallback content is genuinely ambiguous need a declared override.
-- `npm run docs:check` (part of `npm run check`) lints the docs-authoring layer against the components it documents: orphaned docs directories, example prop drift against the real component props, on-disk examples not wired into an `index.md`'s curated groups, and invalid slot overrides.
-- A generated component catalog in the `page-content-authoring` skill (`.agents/skills/page-content-authoring/component-catalog.md`), built by `npm run docs:catalog` from each component's own CloudCannon YAML — "Use for" and prop columns come from one source of truth instead of hand-duplicated prose.
+- `npm run reset:starter` clears the demo posts, pages, logos and navigation out of a fresh copy, and sets your site name and URL. `--dry-run` shows the plan first, and it only runs on a clean git tree so you can always undo it.
+- `npm run check:placeholders` warns when starter placeholders are still in place — most importantly the `example.com` URL, which otherwise ships and tells Google your site lives at a domain you don't own.
+- A deployment guide at `docs/DEPLOYMENT.md` for getting the site live on CloudCannon.
+- A `LICENSE` file. The README and `package.json` both said MIT, but the licence text itself was missing.
+- Guides for people and AI agents working on the project: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and `docs/ARCHITECTURE.md`.
+
+#### A reference site for every component
+
+- Every component gets its own documentation page automatically, with a live example and a table of its options. You can still add longer notes and extra examples on top.
+- A gallery at `/component-docs/` for browsing the whole library.
+- Preview thumbnails for every component, so CloudCannon's "add section" menu shows you what you are picking instead of a list of names.
+
+#### Being found: search, feeds and sharing
+
+- An RSS feed at `/rss.xml`, linked from every page so feed readers find it on their own.
+- Blog posts and pages now describe themselves to search engines — title, author, date, tags — so posts can qualify for richer search results.
+- Social share cards, so links posted to X and similar show a proper preview image and title.
+- Search engines are told they may show large image previews and full-length snippets, which they otherwise cut short.
+
+#### Tools that catch mistakes before you ship
+
+Most of these catch problems that used to build cleanly and look fine, while
+leaving the site quietly broken in the editor.
+
+- `npm run lint:cms` checks the visual editor setup against the actual components — a renamed option, a field that would never show up on a new block, a missing file.
+- `npm run lint:schema` checks the editor configuration against CloudCannon's own rules, catching invalid settings and wrong icon names.
+- `npm run lint:css-vars` checks that every design token you use actually exists. A mistyped token name is silently ignored, so it never looks like an error.
+- `npm run icons:sync` and `npm run icons:check` keep the icon picker in step with the icon files, a list that was previously maintained by hand.
+- `npm run previews:check` catches a missing or stale preview thumbnail, and `npm run previews:montage` renders them all onto one sheet for review.
+- `npm run docs:check` checks the documentation against the components it documents.
+- `npm run typecheck` and `npm run test:unit` cover types and the shared helper code.
+- `npm run test:smoke` drives a real browser over the built site to confirm the accordion, modal, carousel, mobile menu and theme toggle all still work.
+- `npm run test:render` builds a page containing every component, so one that stops rendering fails the build.
+- `npm run new:component` scaffolds a new component's files and tells you the remaining steps.
+- Editor autocomplete in VS Code for both the CloudCannon config and the design tokens.
+
+#### New component options
+
+- Form fields take a `hint` for help text under the field, and an `error` for validation messages.
+- Card and Custom Section backgrounds can stay fixed while the page scrolls, falling back to a normal background for anyone who prefers reduced motion.
+- Carousel gained `pauseOnHover`, and Image gained `decorative` for images screen readers should skip.
 
 ### Changed
 
-- Pagefind is a real `devDependency` and `npm run build` chains `npm run search:index`, so `npm run build && npm run preview` produces a working `/search/` page locally. Indexing previously ran only from `.cloudcannon/postbuild` via `npx`, which meant the search page shipped in the demo content was dead on every local build and every non-CloudCannon host, with nothing to explain why. `.cloudcannon/postbuild` is removed rather than left to index a second time — CloudCannon's build command is `npm run build`. The chaining is explicit rather than an npm `postbuild` lifecycle hook because `ignore-scripts=true`, a common hardening setting on build machines and in developers' npm configs, silently suppresses lifecycle hooks — which reproduces the original bug exactly, since a missing index looks like a working build and a search page that finds nothing. `@pagefind/linux-x64` and `@pagefind/windows-x64` are pinned in `optionalDependencies` alongside the equivalent `sharp` and `rollup` entries, since Pagefind ships its binary the same way and `npm ci` on Linux CI would otherwise miss it.
-- CloudCannon's `install_command` is `npm ci` rather than `npm install`. The lockfile is committed and CI already verifies it resolves on Linux, so `npm ci` is both faster and reproducible — and it matches the rule the README, `CONTRIBUTING.md` and `CLAUDE.md` all state for local work.
-- The README leads with the live demo, a screenshot, and the component gallery instead of describing them, and documents the parts of the project it previously omitted entirely: the skills system, `npm run check`, the component scaffolder, and deployment. It also states one Node version — 22.12 or later, the floor Astro 7 itself sets, noting the `.nvmrc` pin CI uses — where the README, `package.json` and `.nvmrc` had previously given three different answers, and it counts 55 components rather than "40+".
+#### Framework and dependencies
 
-- `robots.txt` is generated by a route rather than shipped as a static file in `public/`, so its new `Sitemap:` line resolves against `site` in `astro.config.mjs` instead of hardcoding a domain that goes stale when a project is renamed.
-- The 404 page is marked `noindex`. It was previously silent on the matter, and the new default robots directives would otherwise have told crawlers to index it.
+- Upgraded to **Astro 7**, with every other dependency refreshed. Node 22.12 or later is now required, and there are no known security advisories against the dependency tree.
+- Icons are built into the project instead of coming from the `astro-icon` package, which has been unmaintained for well over a year and was written for an older Astro. Icons look and behave the same, and a mistyped icon name now warns you while you work instead of failing the build.
+- **Heads-up:** React has been removed; nothing in the starter used it. If you add React components later, install `@astrojs/react`.
+- Accessibility, SEO, link and performance checking now happens with a separate tool outside this repository, so the partial version that lived here has been removed. Nothing in the project or its CI catches accessibility regressions any more.
+- Agent instructions live in one place (`.agents/skills/`) and are copied automatically to the Cursor and Claude folders.
 
-- Card and Custom Section background images can be pinned to the viewport for a parallax effect, via a new `background.fixed` switch. The image is clipped with `clip-path` rather than `overflow`, so rounded corners still hold, and it falls back to a normal background under `prefers-reduced-motion: reduce`. Linked cards drop their hover scale when it's on, since a transformed ancestor cancels fixed positioning. Both components have a "Fixed background image" docs example.
+#### Search
 
-- `npm run icons:sync` generates the `_select_data.icons` list in `cloudcannon.config.yml` from the SVGs in `src/icons/`, and `npm run icons:check` (part of `npm run check`) fails on drift in either direction — an id with no SVG renders a broken thumbnail in the picker, an SVG with no id is invisible to editors, and neither surfaces as an error anywhere. The list was previously maintained by hand across 343 entries.
-- `npm run lint:css-vars` checks that every `var(--x)` in `src/` resolves to a declared custom property. An unresolved `var()` is invalid at computed-value time, so the property silently inherits — invisible in review, in the build, and often on the page. References with a fallback and dynamically-built names are skipped by design; `--list` prints every declared token. Part of `npm run lint`.
-- Editor tooling wired up in `.vscode/`: the CloudCannon JSON Schemas are mapped to the component YAML globs (and `cloudcannon.config.yml`) for as-you-type validation and autocomplete — notably `icon:` now completes from the real Material Symbols enum instead of being guessed — and `cssVariables.lookupFiles` gives design-token autocomplete inside `<style is:global>`. Both resolve out of `node_modules`, so nothing is committed and the pinned schema package stays the single source of truth.
-- `npm run lint:schema` validates every CloudCannon YAML fragment against the official JSON Schemas from `@cloudcannon/configuration-types` (pinned devDependency), mapping each glob to the schema for the `*_from_glob` key that loads it. Part of `npm run check`, and complements `lint:cms` — that one checks the YAML against the components, this one against CloudCannon. Now also covers `cloudcannon.config.yml` itself, which isn't glob-collected and so was previously unvalidated.
-- Components that are also MDX snippets now show their preview thumbnail in the snippet picker; `previews:build` wires it and `previews:check` guards it. Snippets whose preview uses a `gallery:` block keep showing the author's own image instead.
-- `npm run lint:cms` now fails on a visible `type: array` input that declares neither a `<name>[*]` sub-input nor `options.structures`. CloudCannon needs one of the two to know what to insert when an editor clicks "+"; without it the field renders as "<Name> not configured" and the array is uneditable. Nothing else catches this — the prop still has a default and the site builds fine. Covers component `inputs.yml` and `snippets.yml`, `cloudcannon.config.yml`, and the shared structure files. `hidden: true` inputs are exempt, since they never render a field.
-- Hand-written docs example frontmatter (`content/components/<key>/examples/*.md`) now requires a non-empty `title:`. `ComponentViewer` reads `example.data.title` unconditionally, so a missing title previously crashed at render time; it now fails at build time with a clear `docs:check`/zod error naming the file instead.
-- The gray primitive ramp is renamed from `--gray-0…12` to the same Tailwind-style scale every other hue uses: `--gray-50…950`, with pure white and black promoted to their own `--white`/`--black` tokens. All hex values are unchanged, so nothing shifts visually — this is naming only, so a brand's existing 50–900 gray ramp can be pasted in without translating step names. **Migration for projects built on the starter:** references to the old names live only in the two theme files unless you added your own; map `--gray-0`→`--white`, `--gray-12`→`--black`, and `--gray-1…11`→`--gray-50,100,…,900,950` (`npm run lint:css-vars` finds any you miss).
+- Site search now works locally: `npm run build` builds the search index, so `npm run preview` gives you a working search page. Previously it only ever worked once deployed, and the search page found nothing locally with nothing to explain why.
+- **Heads-up:** the `/search/` page is now hidden from search engines and left out of the sitemap. There is nothing on it for them to read, and listing it competes with the pages it exists to help people find.
+
+#### Look and feel
+
+- **Heads-up:** light-theme link colours changed. The placeholder pure blues are now accessible blues that meet contrast requirements. Dark-theme links are unchanged.
+- **Heads-up:** the grey design tokens were renamed from `--gray-0…12` to `--gray-50…950`, matching every other colour. The colours themselves are identical — only the names changed, so a brand's grey scale can be pasted straight in. `npm run lint:css-vars` finds any old names you miss.
+- **Heads-up:** the colour palette is now complete, with a full range for all eight colours. Most things look the same; what shifts is the icon background tints, the green and yellow icon colours, and the dark theme's accent section backgrounds.
+- **Heads-up:** layout breakpoints are standardised on 640px and 768px. Three components had their own values nearby, so a few layouts now change shape at slightly different widths.
+- Focus outlines are consistent everywhere, and clicking with a mouse no longer leaves one behind.
+- Fonts are served from your own site rather than fetched from Google at build time.
+- Code in blog posts uses the theme's monospaced font instead of whatever the browser picked.
+- Blog listing headings say which list you are looking at. Every tag page and every page of the blog said "All posts".
+- Component preview thumbnails were all redrawn to look like one family, and they follow light or dark mode.
+- The README leads with the live demo and screenshots, and documents the tooling, the scaffolder and deployment. It also gives one Node version instead of the three different answers it used to.
 
 ### Fixed
 
-- Responsive images now offer the source's own width in the `srcset`. `getResponsiveWidths` only kept preset steps that fit within the asset, so native resolution was served only for images narrower than the smallest step — everything else was rounded down to the step below it and the detail in between was unreachable. A 1181px source produced a lone `640w` candidate, giving the browser nothing to choose from; aspect-ratio crops were worst hit, since the cropped width never lands on a step (a portrait-cropped 1707px image served `640w` into a slot up to 1280px wide). The native width is skipped when it exceeds every step — that ceiling is deliberate, and stops a 6000px upload becoming a 6000px variant — or when it sits within 10% of a step already emitted.
-- Full-bleed section backgrounds declared `sizes="(max-width: 1280px) 100vw, 1280px"`, capping the browser's request at 1280px on an element that is by definition the full viewport width. `CustomSection` now declares `sizes="100vw"` with a `1920` breakpoint added between `1280` and `2560`; every page section (both heroes, all three CTAs) renders its background through it. `Card` declares `100vw` too — a card can be laid out at any width, so the viewport is the only bound that holds without knowing the context; Chrome still measures the real box from the `auto` prefix, and elsewhere over-declaring costs bytes where under-declaring would cost sharpness. Chrome resolved the real layout width from the `auto` prefix already; this fixes Firefox and Safari, plus any background marked `priority` (which drops `auto`).
-- Heading icons sit flush against the heading text — the `margin-inline-end` that separated them was dropped in v1.0.1 when the icon rule was rewritten for vertical alignment. The Astro compiler strips whitespace-only nodes between adjacent elements, so there is no source newline to fall back on. Restored as `var(--spacing-em-xs)`, including the `.heading-icon-after` mirror.
-- The docs' "Accepted values" chips and the Component Builder's property fields render on `--color-bg-muted` (`#d4d4d4` in light), a heavy slab colour for a UI surface. Both previously pointed at undeclared variables (`--background-subtle-backgroundColor`, `--cb-bg-muted`), so they had no background at all until those were repointed at real tokens — and the chips' `padding: 0` only became visible once a background existed. Both now use `--color-bg-surface`, and the chips get real padding and a radius.
-- Removed `src/icons/medium.svg`, a byte-identical stray copy of `src/icons/social/medium.svg` that was in no picker and referenced by nothing. Found by the new `icons:check`. Keeping it would have added a second "Medium" option that renders black, since `Icon.astro` only recolors icons under `social/`.
-- A background colour set alongside a background video painted over the video in Custom Section and Card, hiding it entirely. Both stacked the video with a `> .background-video` rule, but `Video.astro` renders its background wrapper as `.video.background` — so the rule matched nothing, the video fell through to the unlayered `> .background` rule, and the colour div (same class, later in the DOM) won. Both selectors now target `> .video.background`, putting the video above the colour and below the overlay, matching how background images already behaved.
-- `code`, `pre`, `kbd` and `samp` now use `var(--font-mono)`. The token was declared in `_fonts.css` but nothing outside the docs site consumed it, so code blocks and inline code fell through to the browser's UA-default monospace — platform-dependent, and unaffected by changing the token. Blog code blocks are the visible case. Also dropped 5 dead `var(--font-mono, "SF Mono", …)` fallback stacks in the docs CSS; the token always resolves, so the fallback never rendered, and the fallback form made `lint:css-vars` skip the reference.
-- Replaced the last 7 hardcoded `font-weight` values with tokens, so a rebrand that changes the weight scale reaches everything: `.eyebrow` and Button's link variant were pinned at `600`, four docs rules at `400`/`300`, and the `h4`–`h6` reset used the `normal` keyword. Only the `300` shifted value (a docs-only glyph, now `normal`/400) — there is no 300 step in the scale.
-- Image and file uploads in the `pages` and `blog` collections were writing to CloudCannon's default upload directory instead of `src/assets/images`. Both collections set `paths:` at the collection level, which is only valid at the top level of `cloudcannon.config.yml`, so the key was ignored. Hoisted to the top level, where it now serves as the default for any input that doesn't set its own `options.paths`.
-- Fixed 19 unresolved `var()` references across 7 files, all of them plausible-looking names for scale steps that don't exist: `--font-size-body-sm`/`-xs` (no `body` infix), `--font-weight-regular` and `--font-weight-medium` (the weight scale is `normal`/`semibold`/`bold` — 400/600/700, with no 500 step), `--spacing-2xs` (the scale starts at `xs`), `--color-text-subtle`/`-body`/`-link`/`-accent`, `--color-bg-input`, `--z-index-2`/`-3` and `--layer-10` (the scale is `--layer-0`…`--layer-8`). Affected shipped components — mobile nav, top bar, blog listing, content selector, team grid — plus the docs site.
-- The remaining 10 page sections moved their section-wrapper `_inputs` out of `structure-value.yml` (and the duplicate copy in `snippets.yml`) into `inputs.yml`, completing the migration `cta-center` started. Drops 3,330 duplicated lines for 1,920 canonical ones (net −1,410), and puts the block where `lint:cms` can see it — which immediately surfaced that all 10 accepted `lockColorScheme` in the editor without wiring it to `CustomSection`. Now forwarded.
-- Corrected 31 invalid `icon:` values across 15 component YAML files. These were Heroicons names (`hero`, `eye-slash`, `device-phone-mobile`, `people`, …) in a field that takes **Material Symbols**, so CloudCannon silently fell back and the Add menu showed the wrong icon.
-- Nav item structures (`navItemLevel1/2/3`) now live once in `.cloudcannon/structures/navItems.cloudcannon.structures.yml` instead of an `_structures:` block inside each of the four nav components' `inputs.yml` — not a valid key there. All four declared the _same_ three names with three drifted definitions, so only one could ever take effect, chosen by glob load order. Footer's `linkItems`/`socialItems` moved likewise to `footerItems.cloudcannon.structures.yml`.
-- Main Nav's `buttonSections` was a bare `type: array` with no `options.structures`, so the editor rendered it as "not configured" and nav buttons could not be added or edited — the one remaining case of the same defect that hit the `keywords` fields in v1.0.2. Now points at `_structures.buttonSections`, matching every other `buttonSections` in the library; the prop is passed straight to `ButtonGroup` and reads the Button schema, so that shared structure is the right one. Found by the new `lint:cms` check.
-- `feature-slider`'s `slides` and the nav child/grandchild items gave `options.structures` as an array, which CloudCannon does not read as structures — the editor offered none. Now wrapped under `values:`.
-- `embed`'s `syntax: html` moved under `options:`, `split` dropped an invalid `default:` key, and `pagination` dropped a stray top-level `structures: []`.
-- `Split`'s `reverseOrderOnMobile` now defaults to `false`, matching the value seeded into the editor. `FeatureSplit` passes `true` explicitly, so its behaviour is unchanged.
-- `lockColorScheme` is now forwarded explicitly by `CtaCenter` rather than arriving via the rest-spread, and the CTA Center section-wrapper inputs moved from an inline `_inputs:` block in its `structure-value.yml` into its `inputs.yml`, where both the structure value and the MDX snippet already read from — and where `lint:cms` can see them.
-- `npm run new:component` was emitting the section-wrapper inputs into the wrong file; it now appends them to the new component's `inputs.yml`, sliced from a marker comment rather than a positional lookup.
-- Removed dead editor inputs the components never read, found by the new `lint:cms` check: Feature Grid's `gap`/`minItemWidth`/`maxItemWidth`, Icon's `inline`, Feature Slider's `eyebrow`/`heading`/`subtext`, FAQ Section's `headingLevel`/`headingSize`/`singleOpen`/`openFirst`, and Testimonial Section's `alignmentHorizontal`. Also dropped a stale form-blocks exclusion for the deleted `forms/slider`.
-- Feature Grid `alignment` and Team Grid `layout` controls now appear on freshly inserted sections.
-- Footer and Main Nav `logoAlternateSource` (the alternate-theme logo) now appears on a freshly inserted block; the input existed but was never seeded into the structure default.
-- Modal traps keyboard focus while open and restores focus to the trigger on close. Modal behavior also initializes inside the CloudCannon Visual Editor.
-- Accessibility fixes found by the new `test:a11y` scan: Bar and Main Nav dropdown triggers are real buttons (their `aria-controls` was invalid on a bare `<label>`), Content Selector is a disclosure-button group instead of a malformed tab widget, Toggle inputs without a visible label fall back to `name`, cards with a media background get a solid theme-colored backing so text stays legible if the media fails, and docs example previews are keyboard-scrollable labelled regions.
-- Rewrote the 12 form-field preview thumbnails, which were near-invisible and looked identical at picker size. Each control now has a distinguishing cue — a chevron on select, calendar tile on date, wrapped lines in textarea, filled track and knob on range/toggle, a selected option in choice-group, an active segment in segments.
-- Reduced-motion support now covers animated pseudo-elements (modal backdrops, accordion content) and stops carousel autoplay/auto-scroll, which are JS-driven.
-- Toggle's required marker uses the `--color-danger` token instead of a hardcoded red, so it follows the dark theme.
-- Custom section `paddingHorizontal`/`paddingVertical` now offer `4xl`/`5xl`/`6xl`, matching what the CSS supports.
-- Image's `aspectRatio: none` no longer emits inert `ratio ratio-none` classes; hidden `sizes`/`widths`/`width`/`height` copies were removed from its editor structure.
-- Footer social links accept an optional `label` overriding the auto-generated accessible label.
-- Content blocks missing a `_component` key log a warning instead of vanishing silently.
-- Production builds fail loudly if `DISABLE_COMPONENT_LIBRARY` is set to anything other than `true`/`false`/unset; the build log states whether the library is included.
-- Fixed three `hideText="true"` string-instead-of-boolean Button usages in Footer and mobile nav.
-- Restored the gap between property name and type in the component-docs property list. Astro 7's compiler drops whitespace-only nodes between adjacent elements, so the source newline separating the two `<span>`s stopped rendering as a space — worth knowing if your own components rely on that whitespace.
-- Removed a stray `:first-of-type` wrapper around the accordion summary's Firefox marker fix.
-- Removed the empty `src/components/page-sections/carousel/` stub directory and restored the missing `src/assets/images/placeholder.jpg`.
-- Component docs pages for List, Grid, Carousel, and other components whose repeatable prop (e.g. `items`, `slides`) shares a name with another component's slot-fallback prop showed a blank code sample. `componentFormatter` treated any prop name in the shared "nestable" set as slot-shaped for every component that has it, even where that component's own value is plain prop data rather than `_component` blocks; it now checks the actual value shape before treating a prop as slot content, and drops empty formatted lines instead of leaving blank ones.
+#### Accessibility
 
-### Changed
+- The navigation menus are properly labelled and keyboard-operable. The hamburger, the close button and every dropdown arrow were announced to screen readers as unlabelled, on every page. The menus still work in the CloudCannon editor.
+- The main, mobile and footer navigation now have distinct names, instead of appearing to a screen reader as three identical "navigation" areas.
+- The asterisk marking a required field read out as "star" and nothing else. It is hidden from screen readers now; the field itself already says it is required.
+- Pagination's current-page marker read out as a bare number with no context.
+- Modals hold keyboard focus while open and return it to whatever opened them on close, and they work inside the visual editor.
+- Icons are hidden from screen readers, which were announcing thousands of them across the site as unlabelled graphics.
+- Reduced-motion support now also covers modal and accordion animations, and stops carousels auto-playing.
+- Smaller fixes: the content selector is a proper set of expandable panels, toggles without a visible label fall back to their name, cards with a background image get a solid backing so text stays readable if the image fails, and footer social links accept a custom label.
 
-- Rebuilt the component preview thumbnails and the kit that generates them. All 55 previews are redrawn, and `scripts/previews/kit.mjs` now encodes the design system explicitly instead of leaving it to each recipe: nine `--pv-*` colour roles (no raw hex), a five-step type scale, a three-step stroke scale, four content width bands, and automatic centring on (640, 400). Previously recipes hand-picked heading heights — 18 distinct values across the set — which is why the old thumbnails didn't read as one family. Recipes are now `preview({ width, draw: [...] })` and the build **fails** if the drawn geometry doesn't match the declared width, so a preview cannot silently drift off-band. Previews also follow the viewer's colour scheme: each SVG carries its own `@media (prefers-color-scheme: dark)` block, which an external stylesheet could not do because CloudCannon loads previews by URL. Re-skin the whole set by editing `LIGHT`/`DARK` in the kit.
-- Upgraded to **Astro 7** (from 6) with `@astrojs/node` 11, `@astrojs/mdx` 7, and `@astrojs/compiler-rs` 0.3; all other dependencies refreshed. The Node floor is now `>=22.12.0` and `.nvmrc` pins `24.18.0`, an exact [CloudCannon-supported version](https://cloudcannon.com/documentation/developer-articles/pin-your-dependency-version/) that CI and CloudCannon both read. TypeScript stays on 5.9 until `@astrojs/check` and `typescript-eslint` support 6/7.
-- `js-yaml` v5 dropped its default export — it is now imported via named/namespace imports, and `@types/js-yaml` was removed since js-yaml ships its own types.
-- Security advisories are pinned through `overrides` rather than `npm audit fix`, which would break the cross-platform lockfile. Regenerate dependencies with `npm run deps:sync`, never a bare `npm install`.
-- Agent skills now live canonically in `.agents/skills/` (10 skills, tool-neutral). `.cursor/skills/` and `.claude/skills/` are generated copies, kept in sync by `npm run skills:sync` and drift-checked by `npm run skills:check`. Authoring standard: `.agents/skills/STYLE.md`.
-- Focus rings are consistent across every interactive component — one `:focus-visible` outline from the new `--focus-ring-width`/`--focus-ring-style` tokens. Forms, buttons, and navigation each drew a different ring on `:focus` before, so mouse clicks no longer leave a ring behind.
-- **Light-theme link colors changed:** the placeholder pure-blues (`#00f`/`#00008b`) are now `--blue-700` (#1d4ed8) and `--blue-800` (#1e40af), both meeting WCAG AA. Dark-theme links are unchanged.
-- Breakpoints are standardized on two canonical values, `640px` (mobile/stacking) and `768px` (nav/tablet), documented in `src/styles/variables/_breakpoints.css`. Footer's `599/600px`, MainNav's `768/769px`, and ContentSelector's `40rem` were normalized — small, intended layout shifts around 600→640px. Bento Box keeps its content-driven `700px`/`450px` grid-density steps.
-- `src/styles/variables/_colors.css` is now a complete palette: `--gray-0…12` plus a full `--{hue}-50…900` ramp for all eight hues, values straight from the Tailwind palette. Replaces the previous mix of `--{hue}-light`/`-dark` pairs, partial numeric ramps, and bespoke `-deep` one-offs. Semantic tokens and all status/link colors are unchanged; the visible shifts are the eight Icon background tints, the green and yellow Icon foregrounds (the old values were emerald-500 and amber-400), and the dark theme's accent/highlight section backgrounds.
-- Line heights, status/link colors, and easing are tokenized: `--line-height-*`, `--ease-out`/`--ease-in-out`/`--ease-smooth`, and status/link entries in the `_colors.css` palette. Appearance is unchanged.
-- Dark-theme accent/highlight backgrounds reference `--blue-900`/`--yellow-900` instead of inline `rgb()` literals. Computed colors are identical.
-- Fonts are self-hosted via `fontProviders.fontsource()` instead of fetched from Google at build time.
-- Modal's drop shadow uses the new `--shadow-lg` token (scale: `--shadow-sm/md/lg`).
-- Button icon spacing is themeable via `--button-icon-gap` (default unchanged).
-- Internal dedup (~400 lines, no visual or behavioral change): the `.pad-x-*`/`.pad-y-*`/`.gap-*` CSS that Custom Section, Card, and Split each hand-rolled is now one shared `@layer utils` stylesheet; markdown rendering, form label/ID boilerplate, string validation, and overlay color are shared utils under `src/components/utils/`; and the component-key derivation used by `renderBlock.astro`, `live-editing.js`, and `lint:cms` is a single `componentKey.mjs` instead of three hand-synced copies.
+#### Images
 
-### Added
+- Images now offer their own full resolution. Sizes were rounded down to the nearest preset, so a 1181px image only ever offered a 640px version and looked soft. Cropped images were worst affected.
+- Full-width section backgrounds loaded blurry in Firefox and Safari.
+- Blog listing images were far heavier than they needed to be — 3.7MB of images for cards a few hundred pixels wide, now 0.42MB.
 
-- `npm run lint:cms` (part of `npm run check`) — validates the CloudCannon layer against the components: prop drift (every `inputs.yml`/`structure-value.yml` key must be a prop the `.astro` destructures, catching renames), inputs with no seeded `value:` default (the field would never appear on a newly inserted block), missing or orphaned co-located YAML, `_component` resolution, and structures-glob registration.
-- Component preview thumbnails for the CloudCannon section picker and placed-block cards. Each component has a co-located `*.preview.mjs` recipe that `npm run previews:build` compiles to a 16:10 mockup SVG in `public/component-previews/` — deterministic and browser-free — then wires into its `preview`/`picker_preview` blocks.
-- `npm run previews:check` (part of `npm run check`) — fails on a missing recipe, a missing or stale SVG, an orphan SVG, or missing `image:` wiring.
-- `npm run previews:montage` — rasterizes every preview into one labelled PNG contact sheet (`.preview-montage.png`, gitignored) for reviewing legibility across the whole set, which `previews:check` can't judge. `npm run previews:screenshot` captures reference PNGs of the real components as an authoring aid.
-- Component docs gallery at `/component-docs/`, with a preview thumbnail on each component page.
-- `npm run new:component <tier/path/name>` — scaffolds a component's `.astro` plus both CloudCannon YAML files and prints the remaining manual steps.
-- `npm run test:unit` (Vitest) — covers the shared component utils: key derivation, markdown, overlay color, form-field IDs, string guards, image data.
-- `npm run test:smoke` — headless-Chrome tests for accordion, modal focus trap, carousel, mobile navigation, and theme-toggle persistence against the built site.
-- `npm run test:a11y` — axe-core scan over every component-docs page and the main site pages; fails on serious/critical violations.
-- `npm run test:render` — builds a kitchen-sink page of every structure default, so CI catches a page-builder component that stops rendering.
-- `npm run typecheck` (`astro check`), part of `npm run check` and CI. CI also gained a "Smoke & a11y" job and runs unit tests on every push.
-- Form fields (Input, Textarea, Select, Date, FileUpload, Range) support a `hint` prop for editor-authored help text, wired to the control via `aria-describedby`. They also accept an `error` prop, which marks the field `aria-invalid` and adds a danger-token border — a developer-set prop for server-rendered validation, deliberately not exposed as an editor field.
-- Carousel `pauseOnHover` option (off by default; applies only when auto-play is enabled).
-- Image `decorative` prop forcing an empty `alt` for screen-reader-skipped images.
-- `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, and `docs/ARCHITECTURE.md` — agent onboarding, the component-addition checklist and `deps:sync` rule, and an overview of the content → component pipeline, CloudCannon config aggregation, and theming tiers.
-- Documented the formBlocks structure design: the picker list is glob-owned by co-located `structure-value.yml` files, with `form` and `segments` intentionally excluded.
+#### The visual editor
+
+These all shared one symptom: the site built and looked fine, but a field in
+CloudCannon was missing, unusable or wrong.
+
+- Fields for adding a list of items showed "not configured" and could not be edited. Main Nav's buttons were the last case; `lint:cms` now fails on the whole class of mistake.
+- Options that existed in the editor but the component ignored, and options the component supported but the editor never offered, across a long list of components.
+- Controls that only appeared after you saved — alternate-theme logos, grid alignment, team grid layout — now show up on a freshly added block.
+- Uploaded images and files were going to the wrong folder instead of `src/assets/images`.
+- 31 wrong icon names across 15 files meant the "add section" menu showed the wrong icon.
+- Navigation and footer item definitions were duplicated across four components in three different versions.
+- Some component documentation pages showed a blank code sample.
+
+#### Visual and content
+
+- Heading icons sat flush against their text; the gap is back.
+- A background colour set alongside a background video painted over the video, hiding it completely.
+- The docs' "accepted values" chips and the Component Builder's fields rendered on a heavy grey slab with no padding.
+- Font weights are all tokens now, so changing the weight scale in a rebrand reaches everything.
+- Fixed 19 references to design tokens that do not exist, across the mobile menu, top bar, blog listing, content selector and team grid. A mistyped token name is silently ignored, so none of these looked like errors.
+- Removed a duplicate Medium icon that would have shown up as a second, black-rendering option.
+- Content blocks with no component set now log a warning instead of silently disappearing.
+- Production builds fail loudly on an invalid `DISABLE_COMPONENT_LIBRARY` value, and say whether the library was included.
 
 ## [1.0.2] - 2026-04-13
 

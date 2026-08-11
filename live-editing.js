@@ -1,5 +1,4 @@
 import { registerAstroComponent } from "@cloudcannon/editable-regions/astro";
-import "@cloudcannon/editable-regions/astro-react-renderer";
 import { componentKeyFromPath } from "./src/components/utils/componentKey.mjs";
 
 const componentModules = import.meta.glob("./src/components/**/*.astro", { eager: true });

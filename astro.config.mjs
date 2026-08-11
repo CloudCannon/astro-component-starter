@@ -1,6 +1,5 @@
 import sitemap from "@astrojs/sitemap";
 import editableRegions from "@cloudcannon/editable-regions/astro-integration";
-import icon from "astro-icon";
 import { defineConfig } from "astro/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -55,24 +54,13 @@ export default defineConfig({
       },
     },
     editableRegions(),
-    icon({
-      iconDir: path.resolve(__dirname, "src/icons"),
-      svgoOptions: {
-        plugins: [
-          {
-            name: "preset-default",
-            params: {
-              overrides: {
-                cleanupIds: false,
-              },
-            },
-          },
-        ],
-      },
-    }),
     sitemap({
       filter: (page) => {
         if (page.endsWith("/404") || page.endsWith("/404.html")) {
+          return false;
+        }
+        // `search.md` is noindex; listing it in the sitemap would contradict that.
+        if (page.endsWith("/search/") || page.endsWith("/search")) {
           return false;
         }
         if (page.includes("/component-docs")) {
@@ -86,6 +74,7 @@ export default defineConfig({
   vite: {
     build: {
       minify: "esbuild",
+      chunkSizeWarningLimit: 1024,
     },
     plugins: [
       {
@@ -121,9 +110,6 @@ export default defineConfig({
         },
       },
     ],
-    build: {
-      chunkSizeWarningLimit: 1024,
-    },
     css: {
       devSourcemap: true,
     },

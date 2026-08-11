@@ -3,6 +3,7 @@ _schema: default
 title: Search
 description: >-
   Static Pagefind search across pages and posts—filter by type, author, and tag with no backend.
+noindex: true
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:

@@ -10,6 +10,7 @@ const {
   logoAlt,
   navData = [],
   class: className,
+  "aria-label": ariaLabel = "Mobile",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -54,17 +55,20 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 }
 ---
 
+<!-- The checkbox is the real control: ARIA permits a `<label for>` no role, so a
+  name set there is discarded. Naming the checkbox keeps the CSS-only toggle the
+  CloudCannon editor needs while exposing a control that has a role and a name.
+  The labels stay as click targets. -->
 <input
   type="checkbox"
   id={toggleId}
-  class="nav-toggle"
+  class="nav-toggle visually-hidden"
+  aria-label="Toggle navigation menu"
   autocomplete="off"
 />
 <label
   for={toggleId}
   class="nav-hamburger mobile-button"
-  aria-label="Toggle navigation menu"
-  tabindex="0"
 >
   <Button
     variant="tertiary"
@@ -77,6 +81,7 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 </label>
 
 <nav
+  aria-label={ariaLabel}
   class:list={["mobile", className]}
   data-toggle-id={toggleId}
   {...htmlAttributes}
@@ -97,8 +102,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
       <label
         for={toggleId}
         class="mobile-close mobile-button"
-        aria-label="Close navigation menu"
-        tabindex="0"
       >
         <Button
           variant="tertiary"
@@ -137,7 +140,8 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                 type="radio"
                 name={itemData.groupName}
                 id={itemData.dropdownId}
-                class="nav-item-toggle"
+                class="nav-item-toggle visually-hidden"
+                aria-label={`Toggle ${itemData.name} submenu`}
                 aria-expanded={itemData.hasCurrent}
                 aria-controls={itemData.contentId}
                 autocomplete="off"
@@ -155,9 +159,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                   <label
                     for={itemData.dropdownId}
                     class="nav-item-trigger nav-item-toggle-btn"
-                    aria-controls={itemData.contentId}
-                    tabindex="0"
-                    aria-label={`Toggle ${itemData.name} submenu`}
                   >
                     <span class="nav-item-icon">
                       <Icon
@@ -172,8 +173,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                 <label
                   for={itemData.dropdownId}
                   class="nav-item-trigger"
-                  aria-controls={itemData.contentId}
-                  tabindex="0"
                   aria-current={itemData.isCurrent ? "page" : undefined}
                 >
                   {itemData.name}
@@ -216,7 +215,8 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                           type="radio"
                           name={childData.groupName}
                           id={childData.dropdownId}
-                          class="nav-item-toggle"
+                          class="nav-item-toggle visually-hidden"
+                          aria-label={`Toggle ${childData.name} submenu`}
                           aria-expanded={childData.hasCurrent}
                           aria-controls={childData.contentId}
                           autocomplete="off"
@@ -234,9 +234,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                             <label
                               for={childData.dropdownId}
                               class="nav-item-trigger nav-item-toggle-btn"
-                              aria-controls={childData.contentId}
-                              tabindex="0"
-                              aria-label={`Toggle ${childData.name} submenu`}
                             >
                               <span class="nav-item-icon">
                                 <Icon
@@ -251,8 +248,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                           <label
                             for={childData.dropdownId}
                             class="nav-item-trigger"
-                            aria-controls={childData.contentId}
-                            tabindex="0"
                             aria-current={childData.isCurrent ? "page" : undefined}
                           >
                             {childData.name}
@@ -350,12 +345,16 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
           nav.setAttribute("aria-hidden", "false");
           nav.style.transform = "translateX(0)";
           document.body.style.overflow = "hidden";
-          nav.querySelector<HTMLElement>(".mobile-close")?.focus();
+          // Into the panel, not the close affordance — that is a `<label>` and
+          // takes no focus. The panel is also moved into the overlays container,
+          // outside the checkbox's tab sequence, so place focus explicitly.
+          nav.querySelector<HTMLElement>("a[href], button, input, [tabindex]")?.focus();
         } else {
           nav.setAttribute("aria-hidden", "true");
           nav.style.transform = "translateX(-100%)";
           document.body.style.overflow = "";
-          hamburger?.focus();
+          // Focusing the checkbox draws the ring on the hamburger label.
+          toggle?.focus();
         }
       }
 
@@ -369,8 +368,10 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         };
 
         hamburger.addEventListener("click", toggleHandler);
-        hamburger.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
+
+        // A checkbox handles Space natively, but not Enter.
+        toggle.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
             toggleHandler(e);
           }
         });
@@ -387,11 +388,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         };
 
         closeButton.addEventListener("click", closeHandler);
-        closeButton.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            closeHandler(e);
-          }
-        });
       }
 
       // Handle toggle state changes
@@ -451,12 +447,18 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 
 <style is:global>
   @layer components {
-    .nav-toggle {
-      display: none;
-    }
+    /* The checkbox is hidden by `.visually-hidden`, not `display: none`, which
+       would drop it out of the tab order and the accessibility tree. */
 
     .nav-toggle:checked ~ .mobile {
       transform: translateX(0);
+    }
+
+    /* Draw the hidden control's focus ring on whichever label is on screen —
+       only one is, since the open panel covers the hamburger. */
+    .nav-toggle:focus-visible ~ .nav-hamburger,
+    .nav-toggle:focus-visible ~ .mobile .mobile-close {
+      outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
     }
 
     .mobile-button {
@@ -680,10 +682,17 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         }
       }
 
-      /* Hidden checkbox drives expand/collapse via `:checked ~` selectors */
-      .nav-item-toggle,
+      /* The radio drives expand/collapse via `:checked ~` selectors, and is
+         hidden by `.visually-hidden` so it stays focusable. */
       .nav-item-content {
         display: none;
+      }
+
+      /* Draw the hidden control's focus ring on the trigger the user can see. */
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       .nav-item-toggle:checked ~ .nav-item-content {

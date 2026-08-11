@@ -38,3 +38,9 @@ yarn-error.log*
 
 # Local working area: plans, strategy, scratch notes — never committed
 .local/
+
+# Siteready run artifacts (static-site QA is run from outside this repo)
+.siteready-last-run.json
+.siteready-baseline.json
+.siteready-history.json
+siteready-report.*

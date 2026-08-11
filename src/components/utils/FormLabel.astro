@@ -16,7 +16,7 @@ const { for: htmlFor, label, required = false, requiredClass } = Astro.props;
       {required && (
         <span
           class:list={[requiredClass]}
-          aria-label="required"
+          aria-hidden="true"
         >
           *
         </span>

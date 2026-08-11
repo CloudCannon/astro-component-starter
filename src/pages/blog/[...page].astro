@@ -2,7 +2,11 @@
 import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
-import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../utils/blog";
+import {
+  getBlogPostsSortedByDate,
+  loadBlogPageContext,
+  withListingHeading,
+} from "../../utils/blog";
 
 type Paginate = (_data: any[], _opts: { pageSize: number }) => any;
 
@@ -30,13 +34,18 @@ const pageDescription =
   page.currentPage > 1
     ? `${baseDescription} Page ${page.currentPage} of the blog archive.`
     : baseDescription;
+
+// Pages 2..n say so in the heading, so they don't all share one h1.
+const baseHeading = heroSections.find((s: any) => typeof s?.heading === "string")?.heading;
+const listingHeading =
+  page.currentPage > 1 ? `${baseHeading} – Page ${page.currentPage}` : baseHeading;
 ---
 
 <Page
   frontmatter={{
     title: pageTitle,
     description: pageDescription,
-    pageSections: heroSections,
+    pageSections: baseHeading ? withListingHeading(heroSections, listingHeading) : heroSections,
   }}
   disablePagefind={page.currentPage > 1}
 >

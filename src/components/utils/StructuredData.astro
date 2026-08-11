@@ -16,6 +16,7 @@ export interface Props {
     description: string;
   };
   title?: string;
+  heading?: string | null;
   description?: string | null;
   image?: string | null;
   canonical?: string | null;
@@ -25,6 +26,7 @@ export interface Props {
 
 const {
   site,
+  heading,
   title,
   description,
   image,
@@ -76,7 +78,7 @@ const graph: Record<string, any>[] = [
     "@type": "WebPage",
     "@id": pageUrl,
     url: pageUrl,
-    name: title || site.name,
+    name: heading || title || site.name,
     description: pageDescription,
     isPartOf: { "@id": websiteId },
     ...(pageImageUrl ? { primaryImageOfPage: { "@type": "ImageObject", url: pageImageUrl } } : {}),

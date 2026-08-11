@@ -1,6 +1,6 @@
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import typescriptParser from "@typescript-eslint/parser";
-import astroEslintParser from "astro-eslint-parser";
+import * as astroEslintParser from "astro-eslint-parser";
 import eslintPluginAstro from "eslint-plugin-astro";
 import jsoncPlugin from "eslint-plugin-jsonc";
 import ymlPlugin from "eslint-plugin-yml";

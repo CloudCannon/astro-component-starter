@@ -5,6 +5,7 @@ import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
 const {
   navData = [],
   class: className,
+  "aria-label": ariaLabel = "Sidebar",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -35,6 +36,7 @@ function hasCurrentChild(item: NavItem): boolean {
 ---
 
 <nav
+  aria-label={ariaLabel}
   class:list={["side", className]}
   {...htmlAttributes}
 >
@@ -56,7 +58,8 @@ function hasCurrentChild(item: NavItem): boolean {
                 type="radio"
                 name={`side-nav-top-${navInstanceId}`}
                 id={dropdownId}
-                class="nav-item-toggle"
+                class="nav-item-toggle visually-hidden"
+                aria-label={`Toggle ${item.name} submenu`}
                 aria-expanded={hasCurrent ? "true" : "false"}
                 aria-controls={contentId}
                 autocomplete="off"
@@ -74,9 +77,6 @@ function hasCurrentChild(item: NavItem): boolean {
                   <label
                     for={dropdownId}
                     class="nav-item-trigger nav-item-toggle-btn"
-                    aria-controls={contentId}
-                    tabindex="0"
-                    aria-label={`Toggle ${item.name} submenu`}
                   >
                     <span class="nav-item-icon">
                       <Icon
@@ -91,8 +91,6 @@ function hasCurrentChild(item: NavItem): boolean {
                 <label
                   for={dropdownId}
                   class="nav-item-trigger"
-                  aria-controls={contentId}
-                  tabindex="0"
                   aria-current={isCurrent ? "page" : undefined}
                 >
                   <span class="nav-item-label">{item.name}</span>
@@ -128,7 +126,8 @@ function hasCurrentChild(item: NavItem): boolean {
                             type="radio"
                             name={`side-nav-${parentGroupId}`}
                             id={childDropdownId}
-                            class="nav-item-toggle"
+                            class="nav-item-toggle visually-hidden"
+                            aria-label={`Toggle ${child.name} submenu`}
                             aria-expanded={childHasCurrent ? "true" : "false"}
                             aria-controls={childContentId}
                             autocomplete="off"
@@ -146,9 +145,6 @@ function hasCurrentChild(item: NavItem): boolean {
                               <label
                                 for={childDropdownId}
                                 class="nav-item-trigger nav-item-toggle-btn"
-                                aria-controls={childContentId}
-                                tabindex="0"
-                                aria-label={`Toggle ${child.name} submenu`}
                               >
                                 <span class="nav-item-icon">
                                   <Icon
@@ -163,8 +159,6 @@ function hasCurrentChild(item: NavItem): boolean {
                             <label
                               for={childDropdownId}
                               class="nav-item-trigger"
-                              aria-controls={childContentId}
-                              tabindex="0"
                               aria-current={childIsCurrent ? "page" : undefined}
                             >
                               <span class="nav-item-label">{child.name}</span>
@@ -259,23 +253,13 @@ function hasCurrentChild(item: NavItem): boolean {
           if (!(target instanceof HTMLInputElement)) return;
 
           const content = document.getElementById(target.getAttribute("aria-controls") || "");
-          const toggleBtn = sideNav.querySelector(`label.nav-item-toggle-btn[for="${target.id}"]`);
-          const rowLabel = sideNav.querySelector(
-            `label.nav-item-trigger:not(.nav-item-toggle-btn)[for="${target.id}"]`
-          );
 
           if (content) {
             const isOpen = target.checked;
 
+            // On the input only — a `<label>` exposes no role to carry the state.
             target.setAttribute("aria-expanded", isOpen.toString());
             content.setAttribute("aria-hidden", (!isOpen).toString());
-
-            if (toggleBtn) {
-              toggleBtn.setAttribute("aria-expanded", isOpen.toString());
-            }
-            if (rowLabel) {
-              rowLabel.setAttribute("aria-expanded", isOpen.toString());
-            }
           }
         });
       });
@@ -498,10 +482,17 @@ function hasCurrentChild(item: NavItem): boolean {
         text-underline-offset: 3px;
       }
 
-      /* Hidden checkbox drives expand/collapse via `:checked ~` selectors */
-      .nav-item-toggle,
+      /* The radio drives expand/collapse via `:checked ~` selectors, and is
+         hidden by `.visually-hidden` so it stays focusable. */
       .nav-item-content {
         display: none;
+      }
+
+      /* Draw the hidden control's focus ring on the trigger the user can see. */
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       .nav-item-toggle:checked ~ .nav-item-content {

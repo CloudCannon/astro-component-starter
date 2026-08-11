@@ -11,6 +11,7 @@ const pageSchema = z.object({
   keywords: z.array(z.string()).optional(),
   image: z.string().optional(),
   canonical: z.string().optional(),
+  noindex: z.boolean().optional(),
   pageSections: z.array(contentBlockSchema),
 });
 

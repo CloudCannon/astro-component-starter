@@ -10,6 +10,7 @@ import VideoElements from "@components/utils/VideoElements.astro";
 
 export interface Props {
   title: string;
+  heading?: string | null;
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
@@ -83,6 +84,7 @@ const props = Astro.props;
 
     <StructuredData
       site={seoData}
+      heading={props.heading}
       title={props.title}
       description={props.description}
       image={props.image}

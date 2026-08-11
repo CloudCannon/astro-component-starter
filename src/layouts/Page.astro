@@ -68,9 +68,14 @@ const type = frontmatter?.type ?? typeProp;
 const article = frontmatter?.article ?? articleProp;
 const noindex = frontmatter?.noindex ?? noindexProp ?? false;
 const sections = frontmatter?.pageSections ?? [];
+
+const primaryHeading = sections.find(
+  (section: any) => typeof section?.heading === "string" && section.heading.trim()
+)?.heading as string | undefined;
 ---
 
 <Layout
+  heading={primaryHeading}
   title={title}
   description={description}
   keywords={keywords}

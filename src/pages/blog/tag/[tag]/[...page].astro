@@ -3,7 +3,11 @@ import BlogPostListingGrid from "@component-utils/BlogPostListingGrid.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
-import { getBlogPostsSortedByDate, loadBlogPageContext } from "../../../../utils/blog";
+import {
+getBlogPostsSortedByDate,
+loadBlogPageContext,
+withListingHeading,
+} from "../../../../utils/blog";
 
 type Paginate = (_data: any[], _opts: { pageSize: number; params: Record<string, string> }) => any;
 
@@ -50,13 +54,17 @@ const pageDescription =
   page.currentPage > 1
     ? `${baseTagDescription} Page ${page.currentPage} of this archive.`
     : baseTagDescription;
+
+const baseTagHeading = `Posts tagged “${displayTag}”`;
+const listingHeading =
+  page.currentPage > 1 ? `${baseTagHeading} – Page ${page.currentPage}` : baseTagHeading;
 ---
 
 <Page
   frontmatter={{
     title: pageTitle,
     description: pageDescription,
-    pageSections: heroSections,
+    pageSections: withListingHeading(heroSections, listingHeading),
   }}
   disablePagefind
 >

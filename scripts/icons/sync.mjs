@@ -11,10 +11,11 @@
  *   node scripts/icons/sync.mjs           regenerate the block from src/icons/
  *   node scripts/icons/sync.mjs --check   verify the block matches disk (CI)
  *
- * Only the `icons:` block is rewritten; the rest of the config is untouched.
+ * Only the `icons:` block of the config is rewritten; the rest is untouched.
  */
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
+import { iconKeyFromPath } from "../../src/components/utils/iconKey.mjs";
 
 const mode = process.argv.includes("--check") ? "check" : "write";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
@@ -26,7 +27,7 @@ const configLabel = relative(root, configPath);
 /** Ids are emitted unquoted, so keep them to characters YAML never reinterprets. */
 const SAFE_ID = /^[a-z0-9]+(?:[-/][a-z0-9]+)*$/;
 
-/** Recursively collect POSIX-style relative paths of every SVG under `dir`. */
+/** Recursively collect the id of every SVG under `dir`. */
 function listIcons(dir, base = dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const absolute = join(dir, entry.name);
@@ -34,12 +35,7 @@ function listIcons(dir, base = dir, out = []) {
     if (entry.isDirectory()) {
       listIcons(absolute, base, out);
     } else if (entry.isFile() && entry.name.endsWith(".svg")) {
-      out.push(
-        relative(base, absolute)
-          .split(sep)
-          .join("/")
-          .replace(/\.svg$/, "")
-      );
+      out.push(iconKeyFromPath(relative(base, absolute).split(sep).join("/")));
     }
   }
   return out;

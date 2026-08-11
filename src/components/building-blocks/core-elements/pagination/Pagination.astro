@@ -101,12 +101,14 @@ const getPageUrl = (pageNum: number) => {
     Array.from({ length: endPage - startPage + 1 }, (_, i) => {
       const pageNum = startPage + i + 1;
 
+      // A bare `<span>` exposes no role that can carry an `aria-label`, so the
+      // context is given as visually hidden text instead.
       return pageNum === currentPage ? (
         <span
           class="current"
           aria-current="page"
-          aria-label={`Page ${pageNum}, current page`}
         >
+          <span class="visually-hidden">Page </span>
           {pageNum}
         </span>
       ) : (

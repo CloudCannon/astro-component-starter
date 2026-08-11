@@ -71,6 +71,9 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
                     source={post.data.image}
                     alt={post.data.title}
                     aspectRatio="landscape"
+                    sizes="(max-width: 400px) 100vw, 400px"
+                    widths={[320, 400, 640, 800]}
+                    width={800}
                   />
                 )}
                 <SimpleText

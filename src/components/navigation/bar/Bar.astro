@@ -5,6 +5,7 @@ import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
 const {
   navData = [],
   class: className,
+  "aria-label": ariaLabel = "Navigation",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -45,8 +46,8 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
   };
 }
 ---
-
 <nav
+  aria-label={ariaLabel}
   class:list={["bar", className]}
   {...htmlAttributes}
 >
@@ -74,7 +75,8 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
               type="checkbox"
               name={itemData.groupName}
               id={itemData.dropdownId}
-              class="nav-item-toggle"
+              class="nav-item-toggle visually-hidden"
+              aria-label={`Toggle ${itemData.name} submenu`}
               aria-expanded="false"
               aria-controls={itemData.contentId}
               autocomplete="off"
@@ -91,10 +93,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                 <label
                   for={itemData.dropdownId}
                   class="nav-item-trigger nav-item-toggle-btn"
-                  role="button"
-                  aria-controls={itemData.contentId}
-                  tabindex="0"
-                  aria-label={`Toggle ${itemData.name} submenu`}
                 >
                   <span class="nav-item-icon">
                     <Icon
@@ -109,9 +107,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
               <label
                 for={itemData.dropdownId}
                 class="nav-item-trigger"
-                role="button"
-                aria-controls={itemData.contentId}
-                tabindex="0"
                 aria-current={itemData.isCurrent ? "page" : undefined}
               >
                 {itemData.name}
@@ -154,7 +149,8 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                         type="radio"
                         name={childData.groupName}
                         id={childData.dropdownId}
-                        class="nav-item-toggle"
+                        class="nav-item-toggle visually-hidden"
+                        aria-label={`Toggle ${childData.name} submenu`}
                         aria-expanded="false"
                         aria-controls={childData.contentId}
                         autocomplete="off"
@@ -171,10 +167,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                           <label
                             for={childData.dropdownId}
                             class="nav-item-trigger nav-item-toggle-btn"
-                            role="button"
-                            aria-controls={childData.contentId}
-                            tabindex="0"
-                            aria-label={`Toggle ${childData.name} submenu`}
                           >
                             <span class="nav-item-icon">
                               <Icon
@@ -189,9 +181,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
                         <label
                           for={childData.dropdownId}
                           class="nav-item-trigger"
-                          role="button"
-                          aria-controls={childData.contentId}
-                          tabindex="0"
                           aria-current={childData.isCurrent ? "page" : undefined}
                         >
                           {childData.name}
@@ -253,13 +242,7 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     const contentId = toggle.getAttribute("aria-controls");
     const content = document.getElementById(contentId || "");
     const triggerId = toggle.getAttribute("id");
-    const barRoot = toggle.closest(".bar");
-    const toggleBtn = barRoot?.querySelector(`label.nav-item-toggle-btn[for="${triggerId}"]`);
-    const fullTrigger =
-      barRoot?.querySelector(
-        `label.nav-item-trigger:not(.nav-item-toggle-btn)[for="${triggerId}"]`
-      ) ?? null;
-
+    // On the input only — a `<label>` exposes no role to carry the state.
     toggle.setAttribute("aria-expanded", isExpanded.toString());
 
     if (content) {
@@ -267,13 +250,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
       content.querySelectorAll(".nav-item-nested").forEach((nested) => {
         nested.setAttribute("aria-hidden", (!isExpanded).toString());
       });
-    }
-
-    if (toggleBtn) {
-      toggleBtn.setAttribute("aria-expanded", isExpanded.toString());
-    }
-    if (fullTrigger) {
-      fullTrigger.setAttribute("aria-expanded", isExpanded.toString());
     }
   }
 
@@ -541,8 +517,13 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         transform: rotate(90deg);
       }
 
-      .nav-item-toggle {
-        display: none;
+      /* The input is hidden by `.visually-hidden`, not `display: none`, so it
+         stays in the tab order — which means drawing its focus ring on the
+         visible trigger, wrapped in `.nav-item-split` or not. */
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       .nav-item-toggle ~ .nav-item-content,
