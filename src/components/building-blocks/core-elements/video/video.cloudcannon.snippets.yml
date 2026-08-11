@@ -28,6 +28,12 @@ video:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: autoplay
+        type: boolean
+        optional: true
+      - editor_key: loop
+        type: boolean
+        optional: true
       - editor_key: thumbnail
         type: string
         optional: true

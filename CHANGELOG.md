@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+
+- The Video component now has `autoplay` and `loop` options, editable in CloudCannon for all three source types. Autoplayed videos start muted (so browsers allow them), and YouTube/Vimeo players load when scrolled into view instead of waiting for a click.
+
 ## [2.0.0] - 2026-08-11
 
 A big release: a browsable reference site for every component, tooling that

@@ -26,6 +26,12 @@ source:
     paths:
       uploads: public/videos
       static: public
+autoplay:
+  type: switch
+  comment: Start playing automatically. The video is muted so browsers allow it; YouTube and Vimeo players load when scrolled into view instead of waiting for a click.
+loop:
+  type: switch
+  comment: Restart the video from the beginning when it ends.
 thumbnail:
   type: image
   comment: Poster image before the video plays. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.

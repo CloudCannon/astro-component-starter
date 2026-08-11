@@ -9,4 +9,10 @@ examples:
       - vimeo
     size: xl
     title: Video Types
+  - slugs:
+      - autoplay-local-source
+      - autoplay-youtube
+      - autoplay-vimeo
+    size: xl
+    title: Autoplay & Loop
 ---

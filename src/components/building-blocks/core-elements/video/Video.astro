@@ -8,6 +8,8 @@ const {
   title,
   source,
   thumbnail,
+  autoplay = false,
+  loop = false,
   background = false,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -27,6 +29,16 @@ if (type === "local-source" && source) {
 
   localVideoSources = await discoverVideoSources(source);
 }
+
+// YouTube requires loop=1 to be paired with playlist=<videoId>. Autoplaying
+// YouTube renders a plain lazy iframe instead of the lite-youtube facade: the
+// facade's autoload path pins autoplay=0 in the embed URL and YouTube honours
+// the first occurrence of a duplicated param, so autoplay can never win.
+const youtubeParams =
+  [
+    ...(autoplay ? ["autoplay=1", "mute=1", "playsinline=1"] : []),
+    ...(loop ? ["loop=1", `playlist=${videoId}`] : []),
+  ].join("&") || undefined;
 ---
 
 {
@@ -35,6 +47,9 @@ if (type === "local-source" && source) {
       class:list={["video", className]}
       videotitle={`${title}`}
       videoid={`${videoId}`}
+      autoload={autoplay}
+      autoplay={autoplay}
+      loop={loop}
       {...htmlAttributes}
     >
       <a
@@ -44,11 +59,23 @@ if (type === "local-source" && source) {
         Watch on Vimeo: "{title}"
       </a>
     </lite-vimeo>
+  ) : type === "youtube" && autoplay ? (
+    <iframe
+      class:list={["video", "video-embed", className]}
+      src={`https://www.youtube.com/embed/${videoId}?${youtubeParams}`}
+      title={`${title}`}
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      {...htmlAttributes}
+    />
   ) : type === "youtube" ? (
     <lite-youtube
       class:list={["video", className]}
       videotitle={`${title}`}
       videoid={`${videoId}`}
+      params={youtubeParams}
       {...htmlAttributes}
     >
       <a
@@ -82,8 +109,12 @@ if (type === "local-source" && source) {
     </div>
   ) : (
     <video
-      preload="none"
+      preload={autoplay ? "auto" : "none"}
       controls
+      autoplay={autoplay}
+      muted={autoplay}
+      playsinline={autoplay}
+      loop={loop}
       poster={posterUrl}
       class:list={["video", className]}
       {...htmlAttributes}
@@ -104,6 +135,13 @@ if (type === "local-source" && source) {
     .video {
       display: block;
       margin-top: var(--spacing-lg);
+
+      &.video-embed {
+        aspect-ratio: 16 / 9;
+        border: 0;
+        height: auto;
+        width: 100%;
+      }
 
       &.background {
         inset: 0;
