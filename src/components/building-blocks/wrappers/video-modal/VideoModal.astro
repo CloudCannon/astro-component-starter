@@ -85,7 +85,7 @@ const embedSrc =
 
         if (newState === "open") {
           if (localVideo) {
-            localVideo.play();
+            localVideo.play().catch(() => {});
           } else if (embedContainer && embedSrc) {
             const iframe = document.createElement("iframe");
             iframe.src = embedSrc;

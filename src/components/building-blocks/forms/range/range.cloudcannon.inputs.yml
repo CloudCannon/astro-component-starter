@@ -16,6 +16,9 @@ step:
 value:
   type: number
   comment: The default value for the range field.
+unit:
+  type: text
+  comment: Optional unit suffix shown next to the value (e.g. "%", "px").
 required:
   type: switch
   comment: Whether the field is required.
@@ -25,3 +28,17 @@ showValue:
 hint:
   type: text
   comment: Optional help text shown between the label and the slider, announced to assistive technology.
+tickStyle:
+  type: select
+  comment: How the decorative scale marks below the track behave.
+  options:
+    values:
+      - id: uniform
+        name: Uniform
+      - id: nearest
+        name: Highlight nearest
+      - id: none
+        name: Hidden
+tickCount:
+  type: number
+  comment: Number of decorative scale marks below the track.

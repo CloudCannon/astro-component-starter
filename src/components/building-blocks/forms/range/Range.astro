@@ -10,6 +10,9 @@ const {
   max = 100,
   step = 1,
   value,
+  unit = "",
+  tickStyle = "uniform",
+  tickCount = 11,
   required = false,
   showValue = true,
   hint,
@@ -26,11 +29,27 @@ const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
 const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
 const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 const defaultValue = value ?? min;
-const initialPct = ((defaultValue - min) / (max - min)) * 100;
+const initialPct = ((defaultValue - min) / (max - min || 1)) * 100;
+const displayValue = Number.isInteger(step) ? Math.round(defaultValue) : defaultValue;
+
+// Purely decorative scale markings — even divisions regardless of the actual
+// min/max/step, matching a ruler rather than tracking real snap points.
+const showTicks = tickStyle !== "none";
+const ticks = showTicks
+  ? Array.from({ length: tickCount }, (_, i) => {
+      const p = (i / (tickCount - 1)) * 100;
+
+      return {
+        filled: p <= initialPct + 0.001,
+        near: tickStyle === "nearest" && Math.abs(p - initialPct) < 50 / (tickCount - 1),
+      };
+    })
+  : [];
 ---
 
 <div
   class:list={["range", className]}
+  data-tick-style={tickStyle}
   {...htmlAttributes}
 >
   {
@@ -43,12 +62,15 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
           requiredClass="range-required"
         />
         {showValue && (
-          <output
-            class="range-value"
-            for={fieldId}
-          >
-            {defaultValue}
-          </output>
+          <div class="range-readout">
+            <output
+              class="range-value"
+              for={fieldId}
+            >
+              {displayValue}
+            </output>
+            {unit && <span class="range-unit">{unit}</span>}
+          </div>
         )}
       </div>
     )
@@ -78,6 +100,18 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
     class="range-input"
     style={`--range-pct: ${initialPct}%`}
   />
+  {
+    showTicks && (
+      <div
+        class="range-ticks"
+        aria-hidden="true"
+      >
+        {ticks.map((tick) => (
+          <span class:list={["range-tick", tick.filled && "is-filled", tick.near && "is-near"]} />
+        ))}
+      </div>
+    )
+  }
   <div
     class="range-bounds"
     aria-hidden="true"
@@ -107,15 +141,62 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
     ranges.forEach((wrapper) => {
       const input = wrapper.querySelector<HTMLInputElement>(".range-input");
       const output = wrapper.querySelector<HTMLOutputElement>(".range-value");
+      const ticks = wrapper.querySelectorAll<HTMLSpanElement>(".range-tick");
       if (!input) return;
 
-      input.addEventListener("input", () => {
+      const tickStyle = wrapper.dataset.tickStyle || "uniform";
+
+      const update = () => {
         const min = Number(input.min) || 0;
         const max = Number(input.max) || 100;
+        const step = Number(input.step) || 1;
         const val = Number(input.value);
-        const pct = ((val - min) / (max - min)) * 100;
+        const span = max - min || 1;
+        const pct = ((val - min) / span) * 100;
+
         input.style.setProperty("--range-pct", `${pct}%`);
-        if (output) output.value = input.value;
+
+        if (output) {
+          output.value = String(Number.isInteger(step) ? Math.round(val) : val);
+        }
+
+        if (ticks.length > 1) {
+          const count = ticks.length;
+
+          ticks.forEach((tick, i) => {
+            const p = (i / (count - 1)) * 100;
+
+            tick.classList.toggle("is-filled", p <= pct + 0.001);
+            tick.classList.toggle(
+              "is-near",
+              tickStyle === "nearest" && Math.abs(p - pct) < 50 / (count - 1)
+            );
+          });
+        }
+      };
+
+      input.addEventListener("input", update);
+
+      // Native range inputs don't support a shift-for-bigger-step modifier, and
+      // browsers vary in how big a Page Up/Down jump is — make both exact.
+      input.addEventListener("keydown", (e) => {
+        const step = Number(input.step) || 1;
+        let delta = 0;
+
+        if (e.shiftKey && (e.key === "ArrowRight" || e.key === "ArrowUp")) delta = step * 10;
+        else if (e.shiftKey && (e.key === "ArrowLeft" || e.key === "ArrowDown")) delta = -step * 10;
+        else if (e.key === "PageUp") delta = step * 10;
+        else if (e.key === "PageDown") delta = -step * 10;
+        else return;
+
+        e.preventDefault();
+
+        const min = Number(input.min) || 0;
+        const max = Number(input.max) || 100;
+        const next = Math.min(max, Math.max(min, Number(input.value) + delta));
+
+        input.value = String(next);
+        input.dispatchEvent(new Event("input", { bubbles: true }));
       });
     });
   });
@@ -123,10 +204,18 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
 
 <style is:global>
   @layer components {
+    @property --range-pct {
+      syntax: "<percentage>";
+      inherits: true;
+      initial-value: 0%;
+    }
+
     .range {
+      --range-ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --thumb-size: 26px;
+
       display: flex;
       flex-direction: column;
-      gap: var(--spacing-xs);
       margin: 0;
       margin-bottom: var(--spacing-md);
       width: 100%;
@@ -134,8 +223,9 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
       .range-header {
         align-items: baseline;
         display: flex;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-lg);
         justify-content: space-between;
+        margin-bottom: var(--spacing-sm);
 
         .label {
           flex: 1;
@@ -150,57 +240,63 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
       .range-hint {
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
-        margin: 0;
+        margin: 0 0 var(--spacing-sm);
       }
 
       .range-error {
         color: var(--color-error);
         font-size: var(--font-size-sm);
-        margin: 0;
+        margin: var(--spacing-xs) 0 0;
+      }
+
+      .range-readout {
+        align-items: baseline;
+        color: var(--color-text-strong);
+        display: flex;
+        gap: 2px;
       }
 
       .range-value {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-sm);
+        font-size: var(--font-size-md);
         font-variant-numeric: tabular-nums;
-        min-width: 2.5ch;
+        font-weight: var(--font-weight-normal);
+        min-width: 2ch;
         text-align: end;
       }
 
+      .range-unit {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-xs);
+      }
+
       .range-input {
-        --thumb-size: 18px;
-        --track-height: 4px;
+        --track-height: 8px;
+        --hit-height: 44px;
 
         appearance: none;
         background: transparent;
         border: none;
         box-shadow: none;
         cursor: pointer;
-        height: var(--thumb-size);
-        margin: 0;
+        height: var(--hit-height);
+        margin-block: 0 2px;
+        margin-inline: 0;
         padding: 0;
+        transition: --range-pct 260ms var(--range-ease);
         width: 100%;
+
+        &:active {
+          transition: none;
+        }
 
         &:focus-visible {
           outline: none;
         }
 
-        &:focus-visible::-webkit-slider-thumb {
-          box-shadow:
-            0 0 0 3px var(--color-bg),
-            0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
-        }
-
-        &:focus-visible::-moz-range-thumb {
-          box-shadow:
-            0 0 0 3px var(--color-bg),
-            0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
-        }
-
         &::-webkit-slider-runnable-track {
           background: linear-gradient(
             to right,
-            var(--color-brand) var(--range-pct),
+            var(--color-text-strong) var(--range-pct),
             var(--color-border) var(--range-pct)
           );
           border-radius: var(--radius-full);
@@ -214,7 +310,7 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
         }
 
         &::-moz-range-progress {
-          background: var(--color-brand);
+          background: var(--color-text-strong);
           border-radius: var(--radius-full);
           height: var(--track-height);
         }
@@ -222,32 +318,70 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
         &::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          background-color: var(--color-brand);
+          background-color: var(--color-text-strong);
           border-radius: var(--radius-full);
+          box-shadow: 0 0 0 3px var(--color-bg);
           height: var(--thumb-size);
           margin-top: calc((var(--track-height) - var(--thumb-size)) / 2);
-          transition: background-color var(--animation-fast) var(--ease-in-out);
+          transform: scale(1);
+          transition:
+            transform 200ms var(--range-ease),
+            box-shadow 200ms ease;
           width: var(--thumb-size);
         }
 
         &::-moz-range-thumb {
           appearance: none;
-          background-color: var(--color-brand);
+          background-color: var(--color-text-strong);
           border: none;
           border-radius: var(--radius-full);
+          box-shadow: 0 0 0 3px var(--color-bg);
           height: var(--thumb-size);
-          transition: background-color var(--animation-fast) var(--ease-in-out);
+          transform: scale(1);
+          transition:
+            transform 200ms var(--range-ease),
+            box-shadow 200ms ease;
           width: var(--thumb-size);
         }
 
-        &:hover::-webkit-slider-thumb,
-        &:focus-visible::-webkit-slider-thumb {
-          background-color: var(--color-brand-muted);
+        &:hover::-webkit-slider-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 2px 10px rgba(0, 0, 0, 0.1);
+          transform: scale(1.06);
         }
 
-        &:hover::-moz-range-thumb,
+        &:hover::-moz-range-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 2px 10px rgba(0, 0, 0, 0.1);
+          transform: scale(1.06);
+        }
+
+        &:active::-webkit-slider-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 2px 10px rgba(0, 0, 0, 0.18);
+          transform: scale(1.1);
+        }
+
+        &:active::-moz-range-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 2px 10px rgba(0, 0, 0, 0.18);
+          transform: scale(1.1);
+        }
+
+        &:focus-visible::-webkit-slider-thumb {
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
+        }
+
         &:focus-visible::-moz-range-thumb {
-          background-color: var(--color-brand-muted);
+          box-shadow:
+            0 0 0 3px var(--color-bg),
+            0 0 0 calc(3px + var(--focus-ring-width)) var(--color-focus-ring);
         }
 
         &:disabled {
@@ -256,11 +390,62 @@ const initialPct = ((defaultValue - min) / (max - min)) * 100;
         }
       }
 
+      .range-ticks {
+        align-items: flex-start;
+        display: flex;
+        height: 7px;
+        justify-content: space-between;
+        margin-inline: calc(var(--thumb-size) / 2);
+        pointer-events: none;
+        width: calc(100% - var(--thumb-size));
+      }
+
+      .range-tick {
+        background-color: var(--color-border-subtle);
+        height: 5px;
+        transition:
+          height 220ms var(--range-ease),
+          background-color 180ms ease;
+        width: 1px;
+
+        &.is-filled {
+          background-color: var(--color-border);
+        }
+
+        &.is-near {
+          height: 7px;
+        }
+      }
+
       .range-bounds {
         color: var(--color-text-muted);
         display: flex;
+        font-family: var(--font-mono);
         font-size: var(--font-size-xs);
         justify-content: space-between;
+        letter-spacing: 0.02em;
+        margin-inline: calc(var(--thumb-size) / 2);
+        margin-top: var(--spacing-xs);
+        width: calc(100% - var(--thumb-size));
+
+        /* Centre each label on its tick (the container's own edges) rather
+           than left/right-aligning the text against them. */
+        span:first-child {
+          transform: translateX(-50%);
+        }
+
+        span:last-child {
+          transform: translateX(50%);
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .range-input,
+      .range-input::-webkit-slider-thumb,
+      .range-input::-moz-range-thumb,
+      .range-tick {
+        transition: none !important;
       }
     }
   }
