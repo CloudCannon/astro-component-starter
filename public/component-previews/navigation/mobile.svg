@@ -24,7 +24,7 @@
     <rect x="432" y="234" width="160" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
     <rect x="432" y="296" width="200" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
     <rect x="432" y="358" width="130" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="814,181 832,181 823,190" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="814,305 832,305 823,314" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="819,183 827,183 823,187" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
+    <polygon points="819,307 827,307 823,311" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
   </g>
 </svg>

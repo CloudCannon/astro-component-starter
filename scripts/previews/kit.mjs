@@ -183,14 +183,47 @@ export function dot(cx, cy, r, o = {}) {
   };
 }
 
-/** Polygon. @param {Array<[number, number]>} pts @param {object} [o] { fill, opacity } */
+/**
+ * Polygon. @param {Array<[number, number]>} pts @param {object} [o] { fill, opacity, round }
+ *
+ * `round` is a corner radius: the shape is drawn with a round-joined stroke of
+ * that radius, and the vertices are inset along their angle bisectors so the
+ * stroked outline lands exactly on the given points — same footprint, soft
+ * corners. Convex shapes only (all the kit's triangles are).
+ */
 export function poly(pts, o = {}) {
+  const round = o.round >= 1 ? Math.round(o.round) : null;
+
   return {
     k: "poly",
-    pts: pts.map(([x, y]) => [num(x), num(y)]),
+    pts: (round ? insetVertices(pts, round) : pts).map(([x, y]) => [num(x), num(y)]),
     fill: o.fill ?? glyph,
+    round,
     opacity: o.opacity ?? null,
   };
+}
+
+/** Move each vertex toward the polygon interior so a stroke of radius `r` restores the original outline. */
+function insetVertices(pts, r) {
+  const n = pts.length;
+
+  return pts.map(([x, y], i) => {
+    const [px, py] = pts[(i + n - 1) % n];
+    const [nx, ny] = pts[(i + 1) % n];
+    const unit = (dx, dy) => {
+      const len = Math.hypot(dx, dy) || 1;
+
+      return [dx / len, dy / len];
+    };
+    const [ax, ay] = unit(px - x, py - y);
+    const [bx, by] = unit(nx - x, ny - y);
+    const sinHalf = Math.sqrt(Math.max(0, (1 - (ax * bx + ay * by)) / 2));
+
+    if (!sinHalf) return [x, y];
+    const [cx2, cy2] = unit(ax + bx, ay + by);
+
+    return [x + (cx2 * r) / sinHalf, y + (cy2 * r) / sinHalf];
+  });
 }
 
 /** A hairline rule. */
@@ -397,7 +430,7 @@ export function peak(x1, x2, xApex, yBase, yApex, o = {}) {
       [xApex, yApex],
       [x2, yBase],
     ],
-    { fill: o.fill ?? glyph }
+    { fill: o.fill ?? glyph, round: o.round ?? Math.max(4, Math.round((yBase - yApex) * 0.08)) }
   );
 }
 
@@ -419,12 +452,14 @@ export function photoGlyph(x, y, w, h, o = {}) {
 
 /**
  * A play button: filled disc with a paper triangle. `r` drives the triangle,
- * so the two always stay in proportion.
+ * so the two always stay in proportion. The right-of-centre nudge is optical:
+ * enough that the triangle doesn't read left-heavy, sized for the rounded tip
+ * (which reaches ~0.11r short of the sharp point).
  */
 export function playDisc(cx, cy, r, o = {}) {
-  const left = cx - (o.back ?? Math.round(r * 0.2778));
+  const left = cx - (o.back ?? Math.round(r * 0.32));
   const half = o.half ?? Math.round(r * 0.5278);
-  const tip = cx + (o.reach ?? Math.round(r * 0.6389));
+  const tip = cx + (o.reach ?? Math.round(r * 0.6));
 
   return [
     dot(cx, cy, r, { fill: o.fill ?? subject }),
@@ -434,7 +469,7 @@ export function playDisc(cx, cy, r, o = {}) {
         [left, cy + half],
         [tip, cy],
       ],
-      { fill: o.tri ?? paper }
+      { fill: o.tri ?? paper, round: o.round ?? Math.max(3, Math.round(r * 0.11)) }
     ),
   ];
 }
@@ -449,7 +484,7 @@ export function caret(x, y, w, o = {}) {
       [x + w, y],
       [x + w / 2, y + h],
     ],
-    { fill: o.fill ?? subject }
+    { fill: o.fill ?? subject, round: o.round ?? Math.max(2, Math.round(w * 0.12)) }
   );
 }
 
@@ -490,7 +525,10 @@ export function navButton(cx, cy, dir, o = {}) {
           [cx - reach, cy],
         ];
 
-  return [dot(cx, cy, r, { fill: o.fill ?? subject }), poly(pts, { fill: o.tri ?? paper })];
+  return [
+    dot(cx, cy, r, { fill: o.fill ?? subject }),
+    poly(pts, { fill: o.tri ?? paper, round: o.round ?? Math.max(3, Math.round(r * 0.11)) }),
+  ];
 }
 
 /** A small square plate — icon tile, social button, avatar stand-in. */
@@ -645,6 +683,9 @@ function emit(e) {
   return `<polygon ${attrs([
     ["points", e.pts.map(([x, y]) => `${x},${y}`).join(" ")],
     ["fill", e.fill],
+    ["stroke", e.round ? e.fill : null],
+    ["stroke-width", e.round ? e.round * 2 : null],
+    ["stroke-linejoin", e.round ? "round" : null],
     ["opacity", e.opacity],
   ])}/>`;
 }

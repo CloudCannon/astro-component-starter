@@ -7,6 +7,7 @@ blocks:
   paddingHorizontal: md
   paddingVertical: md
   rounded: true
+  showBeforeAfter: true
   contentSections:
     - _component: building-blocks/core-elements/heading
       text: 'Card with After Content'

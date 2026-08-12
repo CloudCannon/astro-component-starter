@@ -19,11 +19,11 @@
   <g transform="translate(0 292)">
     <rect x="260" y="0" width="74" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="381" y="0" width="106" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="495,4 514,4 505,13" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="500,6 509,6 505,10" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
     <rect x="561" y="0" width="102" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="671,4 690,4 681,13" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="676,6 685,6 681,10" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
     <rect x="736" y="0" width="116" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="861,4 880,4 871,13" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="866,6 875,6 871,10" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
     <rect x="927" y="0" width="93" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="381" y="46" width="318" height="156" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <rect x="412" y="76" width="191" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>

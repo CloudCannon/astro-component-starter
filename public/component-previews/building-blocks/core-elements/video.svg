@@ -19,6 +19,6 @@
   <g>
     <rect x="160" y="130" width="960" height="540" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <circle cx="640" cy="400" r="72" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="620,362 620,438 686,400" fill="var(--pv-paper, #FFFFFF)"/>
+    <polygon points="625,376 625,424 667,400" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="16" stroke-linejoin="round"/>
   </g>
 </svg>

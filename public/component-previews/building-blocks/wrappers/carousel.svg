@@ -16,17 +16,17 @@
     }
   </style>
   <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 -10)">
-    <rect x="276" y="190" width="727" height="380" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <rect x="410" y="300" width="459" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="363" y="350" width="555" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
-    <rect x="420" y="374" width="440" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
-    <circle cx="200" cy="380" r="40" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="209,362 209,398 190,380" fill="var(--pv-paper, #FFFFFF)"/>
-    <circle cx="1080" cy="380" r="40" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="1071,362 1071,398 1090,380" fill="var(--pv-paper, #FFFFFF)"/>
-    <rect x="598" y="621" width="31" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
-    <circle cx="651" cy="625" r="5" fill="var(--pv-glyph, #CFCBC2)"/>
-    <circle cx="671" cy="625" r="5" fill="var(--pv-glyph, #CFCBC2)"/>
+  <g transform="translate(0 11)">
+    <rect x="160" y="150" width="960" height="380" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="410" y="260" width="459" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="363" y="310" width="555" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="420" y="334" width="440" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="550" cy="600" r="28" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="553,594 553,606 547,600" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="618" cy="600" r="6" fill="var(--pv-subject, #A8A398)"/>
+    <circle cx="640" cy="600" r="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="662" cy="600" r="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="730" cy="600" r="28" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="727,594 727,606 733,600" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="6" stroke-linejoin="round"/>
   </g>
 </svg>

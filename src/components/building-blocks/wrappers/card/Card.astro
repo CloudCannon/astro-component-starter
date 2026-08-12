@@ -19,7 +19,9 @@ const {
   backgroundColor,
   background,
   link,
-  showBeforeAfter = false,
+  // Purely for CloudCannon: gates whether the beforeContentSections/afterContentSections
+  // inputs are shown in the editor. Rendering itself is driven by content presence, below.
+  showBeforeAfter: _showBeforeAfter = false,
   rounded = false,
   border = false,
   class: className,
@@ -74,8 +76,8 @@ const isPopoverLink = link?.startsWith("^");
 const Tag = link ? (isPopoverLink ? "button" : "a") : "div";
 const hasBeforeSlot = Astro.slots.has("before");
 const hasAfterSlot = Astro.slots.has("after");
-const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeContentSections;
-const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterContentSections;
+const usesBeforeContentSections = !hasBeforeSlot && beforeContentSections;
+const usesAfterContentSections = !hasAfterSlot && afterContentSections;
 ---
 
 <div

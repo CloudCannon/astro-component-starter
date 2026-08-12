@@ -20,6 +20,6 @@
     <rect x="260" y="296" width="150" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="260" y="332" width="760" height="72" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
     <rect x="290" y="362" width="220" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="940,356 990,356 965,384" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="953,362 977,362 965,375" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="12" stroke-linejoin="round"/>
   </g>
 </svg>

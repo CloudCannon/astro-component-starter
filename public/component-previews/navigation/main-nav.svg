@@ -20,7 +20,7 @@
     <rect x="80" y="8" width="159" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
     <rect x="496" y="13" width="69" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="609" y="13" width="109" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="726,17 744,17 735,26" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="731,19 739,19 735,23" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
     <rect x="788" y="13" width="87" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="1033" y="0" width="42" height="42" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <rect x="1097" y="13" width="83" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>

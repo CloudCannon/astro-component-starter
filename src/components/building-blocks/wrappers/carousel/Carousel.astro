@@ -177,6 +177,23 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           width: 100%;
         }
 
+        &[data-autoscroll] > .viewport {
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black var(--spacing-sm),
+            black calc(100% - var(--spacing-sm)),
+            transparent
+          );
+          mask-image: linear-gradient(
+            to right,
+            transparent,
+            black var(--spacing-sm),
+            black calc(100% - var(--spacing-sm)),
+            transparent
+          );
+        }
+
         > .viewport > .track {
           display: flex;
           flex-wrap: nowrap;

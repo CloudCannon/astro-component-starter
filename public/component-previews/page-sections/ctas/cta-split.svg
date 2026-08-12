@@ -20,13 +20,13 @@
     <rect x="160" y="120" width="316" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
     <rect x="160" y="178" width="354" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="160" y="202" width="212" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="551" y="140" width="167" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
-    <rect x="605" y="158" width="60" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
-    <rect x="551" y="204" width="167" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
-    <rect x="605" y="222" width="60" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="246" width="167" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="214" y="264" width="60" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="343" y="246" width="167" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="397" y="264" width="60" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="774" y="0" width="346" height="400" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <circle cx="1053" cy="96" r="20" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="811,320 886,220 941,320" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="915,320 982,236 1053,320" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="827,312 885,235 927,312" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="930,313 982,247 1038,313" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="14" stroke-linejoin="round"/>
   </g>
 </svg>

@@ -16,20 +16,22 @@
     }
   </style>
   <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 196)">
-    <rect x="80" y="94" width="110" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
-    <rect x="80" y="126" width="379" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="80" y="186" width="418" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="80" y="210" width="418" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="80" y="234" width="259" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="638" y="0" width="562" height="340" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <circle cx="1126" cy="76" r="20" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="678,270 758,180 817,270" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="789,270 867,190 947,270" fill="var(--pv-glyph, #CFCBC2)"/>
-    <circle cx="102" cy="386" r="22" fill="var(--pv-surface, #EBE9E3)"/>
-    <circle cx="1178" cy="386" r="22" fill="var(--pv-surface, #EBE9E3)"/>
-    <circle cx="616" cy="386" r="6" fill="var(--pv-glyph, #CFCBC2)"/>
-    <circle cx="640" cy="386" r="6" fill="var(--pv-surface, #EBE9E3)"/>
-    <circle cx="664" cy="386" r="6" fill="var(--pv-surface, #EBE9E3)"/>
+  <g transform="translate(0 144)">
+    <rect x="80" y="140" width="110" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="80" y="172" width="470" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="80" y="232" width="520" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="80" y="256" width="520" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="80" y="280" width="330" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="850" y="0" width="350" height="440" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="1095" cy="141" r="21" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="932,333 996,240 1044,333" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="20" stroke-linejoin="round"/>
+    <polygon points="1024,335 1081,260 1135,335" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="16" stroke-linejoin="round"/>
+    <circle cx="550" cy="490" r="22" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="552,487 552,493 548,490" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="6" stroke-linejoin="round"/>
+    <circle cx="616" cy="490" r="6" fill="var(--pv-subject, #A8A398)"/>
+    <circle cx="640" cy="490" r="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="664" cy="490" r="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="730" cy="490" r="22" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="728,487 728,493 732,490" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="6" stroke-linejoin="round"/>
   </g>
 </svg>

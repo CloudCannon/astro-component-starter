@@ -30,7 +30,7 @@
     <rect x="202" y="488" width="62" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
     <rect x="613" y="0" width="507" height="560" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <circle cx="968" cy="179" r="31" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="704,437 825,280 917,437" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="841,437 947,314 1049,437" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="730,424 824,303 894,424" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="26" stroke-linejoin="round"/>
+    <polygon points="863,427 947,329 1028,427" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="20" stroke-linejoin="round"/>
   </g>
 </svg>

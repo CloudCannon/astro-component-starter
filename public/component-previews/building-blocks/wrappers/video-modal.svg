@@ -23,6 +23,6 @@
     <rect x="260" y="76" width="760" height="434" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
     <rect x="281" y="96" width="719" height="394" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <circle cx="640" cy="293" r="55" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="625,265 625,321 666,293" fill="var(--pv-paper, #FFFFFF)"/>
+    <polygon points="631,276 631,310 655,293" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="12" stroke-linejoin="round"/>
   </g>
 </svg>

@@ -2,7 +2,6 @@ import {
   preview,
   band,
   bar,
-  box,
   dot,
   media,
   navButton,
@@ -12,22 +11,21 @@ import {
 
 const B = band(960);
 
-// A content slide flanked by round arrow buttons that sit OUTSIDE the panel, plus
-// position dots below. The arrows are the component; without them this is a card.
-// The active dot is an elongated bar — at this size a bigger circle is invisible.
+// A content slide with the control row below — round arrow buttons flanking the
+// position dots, matching where the component actually puts them. The active
+// dot is the darker one, not a bigger or longer one.
 export default preview({
   width: B.w,
   draw: [
-    media(276, 190, 727, 380),
-    bar(410, 300, 459, "heading"),
-    bar(363, 350, 555, "body", { fill: glyph }),
-    bar(420, 374, 440, "body", { fill: glyph }),
+    media(B.left, 150, 960, 380),
+    bar(410, 260, 459, "heading"),
+    bar(363, 310, 555, "body", { fill: glyph }),
+    bar(420, 334, 440, "body", { fill: glyph }),
 
-    navButton(200, 380, "left"),
-    navButton(1080, 380, "right"),
-
-    box(598, 621, 31, 8, { r: 4, fill: subject }),
-    dot(651, 625, 5),
-    dot(671, 625, 5),
+    navButton(550, 600, "left", { r: 28, half: 13, reach: 7, stem: 6 }),
+    dot(618, 600, 6, { fill: subject }),
+    dot(640, 600, 6),
+    dot(662, 600, 6),
+    navButton(730, 600, "right", { r: 28, half: 13, reach: 7, stem: 6 }),
   ],
 });

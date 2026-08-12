@@ -9,27 +9,45 @@ blocks:
     - colSpan: 2
       rowSpan: 1
       contentSections:
-        - _component: building-blocks/core-elements/heading
-          text: Wide Item
-          level: h3
-        - _component: building-blocks/core-elements/text
-          text: This item spans the full width of a two-column bento layout.
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
+          paddingVertical: md
+          rounded: true
+          border: true
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Wide Item
+              level: h3
+            - _component: building-blocks/core-elements/text
+              text: This item spans the full width of a two-column bento layout.
     - colSpan: 1
       rowSpan: 1
       contentSections:
-        - _component: building-blocks/core-elements/heading
-          text: Item 2
-          level: h3
-        - _component: building-blocks/core-elements/text
-          text: A half-width item in the two-column layout.
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
+          paddingVertical: md
+          rounded: true
+          border: true
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Item 2
+              level: h3
+            - _component: building-blocks/core-elements/text
+              text: A half-width item in the two-column layout.
     - colSpan: 1
       rowSpan: 1
       contentSections:
-        - _component: building-blocks/core-elements/heading
-          text: Item 3
-          level: h3
-        - _component: building-blocks/core-elements/text
-          text: Another half-width item alongside Item 2.
+        - _component: building-blocks/wrappers/card
+          paddingHorizontal: md
+          paddingVertical: md
+          rounded: true
+          border: true
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Item 3
+              level: h3
+            - _component: building-blocks/core-elements/text
+              text: Another half-width item alongside Item 2.
   label: ''
   gap: md
 ---

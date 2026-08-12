@@ -21,7 +21,7 @@
     <rect x="260" y="26" width="760" height="54" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
     <rect x="260" y="108" width="205" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="260" y="134" width="760" height="54" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
-    <polygon points="958,155 985,155 972,169" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="965,158 978,158 972,165" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="6" stroke-linejoin="round"/>
     <rect x="260" y="216" width="117" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="260" y="242" width="760" height="110" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
     <rect x="260" y="384" width="166" height="52" rx="10" fill="var(--pv-ink, #151515)"/>

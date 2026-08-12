@@ -5,33 +5,34 @@ import {
   dot,
   lines,
   media,
-  peak,
-  sun,
+  navButton,
+  photoGlyph,
   glyph,
+  paper,
+  subject,
   surface,
 } from "../../../../../scripts/previews/kit.mjs";
 
 const B = band(1120);
 
-// One slide — copy left, photo right — with the nav controls and dots on a row
-// below. The controls are drawn in `surface` rather than `subject` here: this is
-// a section, so the arrows should stay quieter than the content.
+// One slide — copy in the wide two-thirds column, portrait photo in the third —
+// with the control row below: arrow buttons flanking the position dots, matching
+// the component. The controls are drawn quieter than the content (glyph, not
+// subject): this is a section. The active dot is the darker one.
 export default preview({
   width: B.w,
   draw: [
-    bar(B.left, 94, 110, "body", { fill: glyph }),
-    bar(B.left, 126, 379, "display"),
-    lines(B.left, 186, [418, 418, 259]),
+    bar(B.left, 140, 110, "body", { fill: glyph }),
+    bar(B.left, 172, 470, "display"),
+    lines(B.left, 232, [520, 520, 330]),
 
-    media(638, 0, 562, 340),
-    sun(1126, 76, 20),
-    peak(678, 817, 758, 270, 180),
-    peak(789, 947, 867, 270, 190),
+    media(850, 0, 350, 440),
+    photoGlyph(850, 0, 350, 440),
 
-    dot(102, 386, 22, { fill: surface }),
-    dot(1178, 386, 22, { fill: surface }),
-    dot(616, 386, 6, { fill: glyph }),
-    dot(640, 386, 6, { fill: surface }),
-    dot(664, 386, 6, { fill: surface }),
+    navButton(550, 490, "left", { r: 22, fill: glyph, tri: paper, half: 10, reach: 6, stem: 5 }),
+    dot(616, 490, 6, { fill: subject }),
+    dot(640, 490, 6, { fill: surface }),
+    dot(664, 490, 6, { fill: surface }),
+    navButton(730, 490, "right", { r: 22, fill: glyph, tri: paper, half: 10, reach: 6, stem: 5 }),
   ],
 });

@@ -2,14 +2,14 @@
 _schema: default
 title: Search
 description: >-
-  Static Pagefind search across pages and posts—filter by type, author, and tag with no backend.
+  Search every page on this site, and filter results by type, author, and tag.
 noindex: true
 pageSections:
   - _component: page-sections/heroes/hero-center
     eyebrow:
     heading: Search
     subtext: >-
-      Everything on your site is just one search away. (Free static search courtesy of [Pagefind](https://pagefind.app/) 💙)
+      Everything on this site is just one search away.
     buttonSections: []
     colorScheme: inherit
     backgroundColor: base

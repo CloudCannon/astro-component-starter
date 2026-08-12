@@ -28,7 +28,7 @@
     <rect x="370" y="287" width="60" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="632" y="0" width="488" height="400" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <circle cx="974" cy="128" r="24" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="720,312 836,200 925,312" fill="var(--pv-glyph, #CFCBC2)"/>
-    <polygon points="851,312 954,224 1051,312" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="742,303 835,213 906,303" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="18" stroke-linejoin="round"/>
+    <polygon points="870,305 954,233 1033,305" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="14" stroke-linejoin="round"/>
   </g>
 </svg>

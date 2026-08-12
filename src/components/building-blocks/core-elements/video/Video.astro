@@ -130,6 +130,20 @@ const youtubeParams =
   )
 }
 
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+
+  function playAutoplayVideos() {
+    document.querySelectorAll<HTMLVideoElement>(".video video[autoplay]").forEach((video) => {
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
+    });
+  }
+
+  onPageLoad(playAutoplayVideos);
+</script>
+
 <style is:global>
   @layer components {
     .video {
