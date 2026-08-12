@@ -6,6 +6,7 @@ blocks:
   paddingVertical: 2xl
   paddingHorizontal: sm
   colorScheme: dark
+  lockColorScheme: true
   rounded: true
   background:
     type: image

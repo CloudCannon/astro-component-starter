@@ -6,6 +6,7 @@ blocks:
   paddingVertical: 4xl
   paddingHorizontal: md
   colorScheme: dark
+  lockColorScheme: true
   background:
     type: video
     positionVertical: center

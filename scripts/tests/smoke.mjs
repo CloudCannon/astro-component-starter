@@ -249,6 +249,36 @@ const tests = [
     },
   },
   {
+    name: "announcement bar dismisses and stays dismissed across pages",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      // Relies on src/data/announcementBar.json shipping with enabled: true.
+      const bar = page.locator(".announcement-bar");
+
+      await bar.waitFor();
+      await page.locator(".announcement-bar-close").click();
+      await bar.waitFor({ state: "detached" });
+
+      const stored = await page.evaluate(() => localStorage.getItem("announcement-bar-dismissed"));
+
+      assert(
+        typeof stored === "string" && stored.length > 0,
+        "expected the dismissed announcement to be stored in localStorage"
+      );
+
+      // Dismissal is site-wide: navigate to another page and confirm the
+      // inline script removed the bar there too.
+      await page.locator('.desktop-main-nav a[href="/why/"]').first().click();
+      await page.waitForURL("**/why/", { waitUntil: "load" });
+
+      assert(
+        (await page.locator(".announcement-bar").count()) === 0,
+        "expected the announcement bar to stay dismissed on other pages"
+      );
+    },
+  },
+  {
     name: "theme toggle flips data-theme and persists across reload",
     path: "/",
     viewport: DESKTOP,

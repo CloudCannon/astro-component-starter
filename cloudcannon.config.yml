@@ -111,6 +111,24 @@ collections_config:
     _enabled_editors:
       - data
     schemas:
+      announcementBar:
+        name: Announcement Bar
+        path: .cloudcannon/schemas/announcementBar.json
+        remove_extra_inputs: false
+        preview:
+          text:
+            - Announcement Bar
+        _inputs:
+          enabled:
+            type: switch
+            comment: Show the announcement bar at the top of every page.
+          text:
+            type: markdown
+            comment: The announcement message. Add a Markdown link for an optional call to action.
+            options:
+              bold: true
+              italic: true
+              link: true
       seo:
         name: SEO Settings
         path: .cloudcannon/schemas/seo.json

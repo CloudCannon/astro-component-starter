@@ -1,6 +1,7 @@
 ---
 import { overlayColor } from "@components/utils/overlayColor";
 import Component from "@components/utils/renderBlock.astro";
+import { resolveImageSource } from "@components/utils/resolveImageSource";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
@@ -33,9 +34,12 @@ const {
   videoSource = "",
   overlay = 0,
   fixed = false,
+  patternSize = "natural",
 } = background || {};
 
 const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
+const patternImageUrl =
+  bgType === "pattern" && imageSource ? resolveImageSource(imageSource) : null;
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -81,6 +85,15 @@ const arrayDataAttributes =
           source={videoSource}
           background={true}
           style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+        />
+      )
+    }
+    {
+      patternImageUrl && (
+        <div
+          class:list={["background-pattern", `pattern-size-${patternSize}`]}
+          aria-hidden="true"
+          style={{ backgroundImage: `url("${patternImageUrl}")` }}
         />
       )
     }
@@ -210,6 +223,30 @@ const arrayDataAttributes =
 
         > .background-image {
           z-index: var(--layer-1);
+        }
+
+        > .background-pattern {
+          background-position: top left;
+          background-repeat: repeat;
+          inset: 0;
+          position: absolute;
+          z-index: var(--layer-1);
+
+          &.pattern-size-natural {
+            background-size: auto;
+          }
+
+          &.pattern-size-sm {
+            background-size: 2rem auto;
+          }
+
+          &.pattern-size-md {
+            background-size: 4rem auto;
+          }
+
+          &.pattern-size-lg {
+            background-size: 8rem auto;
+          }
         }
 
         > .video.background {

@@ -1,6 +1,7 @@
 ---
 import { overlayColor } from "@components/utils/overlayColor";
 import Component from "@components/utils/renderBlock.astro";
+import { resolveImageSource } from "@components/utils/resolveImageSource";
 import { slugifyLabel } from "@components/utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
@@ -14,6 +15,7 @@ const {
   paddingHorizontal,
   paddingVertical,
   colorScheme = "inherit",
+  lockColorScheme = false,
   backgroundColor,
   background,
   link,
@@ -39,9 +41,12 @@ const {
   videoSource = "",
   overlay = 0,
   fixed = false,
+  patternSize = "natural",
 } = background || {};
 
 const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
+const patternImageUrl =
+  bgType === "pattern" && imageSource ? resolveImageSource(imageSource) : null;
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -88,6 +93,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
       usesFixedBackground && "background-fixed",
     ]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+    data-theme-lock={lockColorScheme || undefined}
   >
     {
       bgType === "image" && (
@@ -110,6 +116,15 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           source={videoSource}
           background={true}
           style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+        />
+      )
+    }
+    {
+      patternImageUrl && (
+        <div
+          class:list={["background-pattern", `pattern-size-${patternSize}`]}
+          aria-hidden="true"
+          style={{ backgroundImage: `url("${patternImageUrl}")` }}
         />
       )
     }
@@ -237,6 +252,7 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
            is still buffering. The media is a child painted on top, so this is
            invisible when it loads. */
         &[data-theme]:has(> .background-image),
+        &[data-theme]:has(> .background-pattern),
         &[data-theme]:has(> .video.background) {
           background-color: var(--color-bg);
         }
@@ -349,6 +365,30 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
 
         > .background-image {
           z-index: var(--layer-1);
+        }
+
+        > .background-pattern {
+          background-position: top left;
+          background-repeat: repeat;
+          inset: 0;
+          position: absolute;
+          z-index: var(--layer-1);
+
+          &.pattern-size-natural {
+            background-size: auto;
+          }
+
+          &.pattern-size-sm {
+            background-size: 2rem auto;
+          }
+
+          &.pattern-size-md {
+            background-size: 4rem auto;
+          }
+
+          &.pattern-size-lg {
+            background-size: 8rem auto;
+          }
         }
 
         > .video.background {

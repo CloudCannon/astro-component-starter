@@ -37,9 +37,11 @@ value:
     type: image
     positionVertical: top
     positionHorizontal: center
+    fixed: false
     priority: false
     imageSource: ""
     imageAlt: ""
+    patternSize: natural
     videoSource: null
     overlay: 0
 preview:

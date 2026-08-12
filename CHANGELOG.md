@@ -8,7 +8,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Backgrounds can now be a repeating tiled pattern: a new `pattern` background type on Custom Section, Card, and every page section, reusing the background image picker with a Natural/Small/Medium/Large tile-size control. The overlay slider and background color still apply, so transparent tiles show the background color through.
+- Card now supports the `lockColorScheme` prop (developer-set, like Custom Section's) to pin a card's color scheme against the visitor's site-theme toggle.
+- New announcement bar shown at the top of every page, driven by `src/data/announcementBar.json` (editable in CloudCannon under Data). Toggle it with `enabled`, write the message in Markdown (with an optional link), and closing it hides it site-wide until the message changes.
 - The Video component now has `autoplay` and `loop` options, editable in CloudCannon for all three source types. Autoplayed videos start muted (so browsers allow them), and YouTube/Vimeo players load when scrolled into view instead of waiting for a click.
+
+### Fixed
+
+- The eleven page sections that forward background options were missing the "Fixed background (parallax)" toggle that Custom Section and Card expose — added it to their editor inputs.
 
 ## [2.0.0] - 2026-08-11
 

@@ -24,6 +24,12 @@ examples:
   - title: Background video
     slugs:
       - bg-video
+  - title: Background pattern
+    slugs:
+      - bg-pattern-natural
+      - bg-pattern-sm
+      - bg-pattern-md
+      - bg-pattern-lg
   - title: Background overlay
     slugs:
       - bg-overlay-darken

@@ -18,6 +18,7 @@ value:
     priority: false
     imageSource: ""
     imageAlt: ""
+    patternSize: natural
     videoSource: null
     overlay: 0
   rounded: false

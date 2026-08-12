@@ -5,7 +5,8 @@ blocks:
   _component: 'page-sections/builders/custom-section'
   paddingVertical: 2xl
   paddingHorizontal: md
-  colorScheme: dark
+  colorScheme: light
+  lockColorScheme: true
   background:
     type: image
     positionVertical: top
@@ -16,7 +17,8 @@ blocks:
     overlay: -0.3
   contentSections:
     - _component: building-blocks/core-elements/heading
-      alignmentHorizontal: end
       text: Build bold. Launch fast.
       level: h3
+    - _component: building-blocks/core-elements/text
+      text: 'The background image is anchored to the top-left corner, so that edge stays in view as the section crops.'
 ---

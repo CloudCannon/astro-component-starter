@@ -149,7 +149,7 @@ backgroundColor:
         name: Highlight
 background:
   type: object
-  comment: Optional background still image or looping HTML5 video (self-hosted). Shared positioning applies to whichever type you choose. Video is hidden when the user prefers reduced motion.
+  comment: "Optional background: a cover image, a looping HTML5 video (self-hosted), or a repeating tiled pattern image. Shared positioning applies to image and video. Video is hidden when the user prefers reduced motion."
   options:
     preview:
       icon: wallpaper
@@ -160,15 +160,17 @@ background:
 background.type:
   type: select
   label: Background type
-  comment: A cover image or a muted autoplay video.
+  comment: A cover image, a muted autoplay video, or a repeating tiled pattern.
   options:
     values:
       - id: image
         name: Image
       - id: video
         name: Video
+      - id: pattern
+        name: Pattern
 background.positionVertical:
-  comment: Vertical focal point (object-position for video; image position for pictures).
+  comment: Vertical focal point (object-position for video; image position for pictures). Not used for patterns.
   type: select
   options:
     values:
@@ -179,7 +181,7 @@ background.positionVertical:
       - id: bottom
         name: Bottom
 background.positionHorizontal:
-  comment: Horizontal focal point (object-position for video; image position for pictures).
+  comment: Horizontal focal point (object-position for video; image position for pictures). Not used for patterns.
   type: select
   options:
     values:
@@ -189,13 +191,18 @@ background.positionHorizontal:
         name: Center
       - id: right
         name: Right
+background.fixed:
+  type: switch
+  label: Fixed background (parallax)
+  comment: Pin the background image in place so the section scrolls over it.
+  hidden: "background.type !== 'image'"
 background.priority:
   type: switch
   label: Prioritize image load
   comment: When using a background image, load it eagerly (use for above-the-fold sections).
   hidden: "background.type !== 'image'"
 background.imageSource:
-  comment: URL or path to the background image.
+  comment: URL or path to the background or pattern image. Used by the Image and Pattern types.
   type: image
   hidden: "background.type !== 'image'"
   options:
@@ -205,6 +212,20 @@ background.imageSource:
     resize_style: contain
     width: 1920
     height: 1280
+background.patternSize:
+  type: select
+  label: Pattern tile size
+  comment: Only applies when Background type is Pattern. How large each repeated tile renders — Natural uses the image's own size.
+  options:
+    values:
+      - id: natural
+        name: Natural
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
 background.imageAlt:
   comment: Alt text for the background image.
   type: textarea

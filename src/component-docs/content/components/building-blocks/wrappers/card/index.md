@@ -62,6 +62,13 @@ examples:
     slugs:
       - bg-video
     size: md
+  - title: 'Background pattern'
+    slugs:
+      - bg-pattern-natural
+      - bg-pattern-sm
+      - bg-pattern-md
+      - bg-pattern-lg
+    size: md
   - title: 'Background overlay'
     slugs:
       - bg-overlay-darken

@@ -6,6 +6,7 @@ blocks:
   paddingVertical: 3xl
   paddingHorizontal: md
   colorScheme: dark
+  lockColorScheme: true
   background:
     type: image
     positionVertical: center

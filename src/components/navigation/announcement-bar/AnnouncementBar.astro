@@ -1,0 +1,122 @@
+---
+import { renderMarkdownInline } from "@component-utils/markdown";
+import Icon from "@core-elements/icon/Icon.astro";
+
+const {
+  enabled = false,
+  text = "",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const message = typeof text === "string" ? text.trim() : "";
+
+if (!enabled || !message) return;
+---
+
+<aside
+  class:list={["announcement-bar", className]}
+  aria-label="Announcement"
+  data-announcement={message}
+  {...htmlAttributes}
+>
+  <p class="announcement-bar-text">
+    <Fragment set:html={renderMarkdownInline(message)} />
+  </p>
+  <button
+    type="button"
+    class="announcement-bar-close"
+    aria-label="Dismiss announcement"
+  >
+    <Icon
+      name="x-mark"
+      size="sm"
+    />
+  </button>
+</aside>
+
+<script is:inline data-astro-rerun>
+  // is:inline so the dismissed check runs synchronously during parsing,
+  // before the bar can paint, and data-astro-rerun so the ClientRouter
+  // re-executes it when a client-side navigation swaps in a fresh bar.
+  // CloudCannon's editor strips inline scripts, which is the behaviour we
+  // want there: editors always see the bar, and the close button is inert
+  // instead of hiding the thing they're editing.
+  (function () {
+    var bar = document.querySelector(".announcement-bar:not([data-announcement-initialized])");
+
+    if (!bar) return;
+    bar.setAttribute("data-announcement-initialized", "");
+
+    var KEY = "announcement-bar-dismissed";
+    var message = bar.getAttribute("data-announcement") || "";
+
+    // Dismissal stores the message itself, so publishing a different
+    // announcement makes the bar reappear for everyone.
+    if (localStorage.getItem(KEY) === message) {
+      bar.remove();
+
+      return;
+    }
+
+    var close = bar.querySelector(".announcement-bar-close");
+
+    if (close) {
+      close.addEventListener("click", function () {
+        localStorage.setItem(KEY, message);
+        bar.remove();
+      });
+    }
+  })();
+</script>
+
+<style is:global>
+  @layer page-sections {
+    .announcement-bar {
+      align-items: center;
+      background-color: var(--color-bg-brand);
+      color: var(--color-text-on-brand);
+      display: flex;
+      font-size: var(--font-size-sm);
+      justify-content: center;
+      padding-block: var(--spacing-sm);
+      padding-inline: var(--spacing-2xl);
+      position: relative;
+      text-align: center;
+
+      > .announcement-bar-text {
+        /* The base layer's `p { color: var(--color-text) }` matches this p
+           directly, so re-assert the on-brand color at higher layer priority. */
+        color: var(--color-text-on-brand);
+        margin: 0;
+
+        > a {
+          color: inherit;
+          font-weight: var(--font-weight-semibold);
+          text-decoration: underline;
+          text-underline-offset: 0.2em;
+        }
+      }
+
+      > .announcement-bar-close {
+        background: none;
+        border: none;
+        border-radius: var(--radius-sm);
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        inset-inline-end: var(--spacing-sm);
+        padding: var(--spacing-xs);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      > .announcement-bar-close:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+</style>

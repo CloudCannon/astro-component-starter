@@ -1,0 +1,19 @@
+label: Announcement Bar
+icon: campaign
+description: "Dismissible site-wide announcement strip with an optional link."
+value:
+  _component: navigation/announcement-bar
+  enabled: true
+  text: "Announce something exciting here! [Learn more](/)"
+preview:
+  text:
+    - Announcement Bar
+  image: /component-previews/navigation/announcement-bar.svg
+  icon: campaign
+picker_preview:
+  text: Announcement Bar
+  subtext: "Dismissible site-wide announcement strip with an optional link."
+  image: /component-previews/navigation/announcement-bar.svg
+  icon: campaign
+_inputs_from_glob:
+  - /src/components/navigation/announcement-bar/announcement-bar.cloudcannon.inputs.yml
