@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-breadcrumbs">
+  <title id="t-breadcrumbs">Breadcrumbs component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 392)">
+    <rect x="360" y="0" width="88" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="462,1 462,15 476,8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="490" y="0" width="88" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="592,1 592,15 606,8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="620" y="0" width="300" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+  </g>
+</svg>

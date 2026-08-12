@@ -129,6 +129,16 @@ collections_config:
               bold: true
               italic: true
               link: true
+      breadcrumbs:
+        name: Breadcrumbs
+        path: .cloudcannon/schemas/breadcrumbs.json
+        remove_extra_inputs: false
+        preview:
+          text:
+            - Breadcrumbs
+        _inputs:
+          homeLabel:
+            comment: Label for the leading crumb that links to the homepage in blog breadcrumbs.
       seo:
         name: SEO Settings
         path: .cloudcannon/schemas/seo.json

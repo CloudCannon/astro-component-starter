@@ -4,8 +4,10 @@ import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Page from "@layouts/Page.astro";
+import Breadcrumbs from "@navigation/breadcrumbs/Breadcrumbs.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
+import { loadBlogPageContext } from "../../utils/blog";
 
 // Automatically import all components from building-blocks and page-sections for MDX
 const buildingBlocksImports = import.meta.glob("../../components/building-blocks/**/*.astro", {
@@ -51,6 +53,8 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const { blogPage } = await loadBlogPageContext();
+const blogListingLabel = blogPage?.data?.title ?? "Blog";
 const date = post.data.date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
@@ -81,6 +85,11 @@ const article = {
     class="post-container"
     data-pagefind-filter="Type:Article"
   >
+    <Breadcrumbs
+      class="post-breadcrumbs"
+      items={[{ label: blogListingLabel, url: "/blog/" }, { label: post.data.title }]}
+    />
+
     <SimpleText
       size="sm"
       class="post-meta"
@@ -93,8 +102,12 @@ const article = {
       >
         {date}
       </time>
-
-      •
+      <span
+        class="post-meta-separator"
+        aria-hidden="true"
+      >
+        •
+      </span>
       <span
         data-pagefind-filter="Author"
         data-pagefind-meta="author"
@@ -137,7 +150,7 @@ const article = {
         >
           {post.data.tags.map((tag, i) => (
             <>
-              {i > 0 && " • "}
+              {i > 0 && " "}
               <a
                 class="post-tag-link"
                 href={`/blog/tag/${slugifyLabel(tag.trim())}/`}
@@ -186,9 +199,17 @@ const article = {
     padding-bottom: 0 !important;
   }
 
+  .post-breadcrumbs {
+    margin-bottom: var(--spacing-md);
+  }
+
   .post-meta {
     color: var(--color-text-muted);
     margin-bottom: var(--spacing-sm);
+  }
+
+  .post-meta .post-meta-separator {
+    margin-inline: var(--spacing-xs);
   }
 
   .post-title {

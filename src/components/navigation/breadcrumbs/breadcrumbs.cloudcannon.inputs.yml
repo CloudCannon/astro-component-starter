@@ -1,0 +1,5 @@
+items:
+  type: array
+  comment: "Trail items after the leading Home crumb, in order. Give each ancestor a URL; the last item is the current page and renders as plain text, so leave its URL empty."
+  options:
+    structures: _structures.breadcrumbItems

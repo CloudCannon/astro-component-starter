@@ -4,25 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
-
-### Added
-
-- Backgrounds can now be a repeating tiled pattern: a new `pattern` background type on Custom Section, Card, and every page section, reusing the background image picker with a Natural/Small/Medium/Large tile-size control. The overlay slider and background color still apply, so transparent tiles show the background color through.
-- Card now supports the `lockColorScheme` prop (developer-set, like Custom Section's) to pin a card's color scheme against the visitor's site-theme toggle.
-- New announcement bar shown at the top of every page, driven by `src/data/announcementBar.json` (editable in CloudCannon under Data). Toggle it with `enabled`, write the message in Markdown (with an optional link), and closing it hides it site-wide until the message changes.
-- The Video component now has `autoplay` and `loop` options, editable in CloudCannon for all three source types. Autoplayed videos start muted (so browsers allow them), and YouTube/Vimeo players load when scrolled into view instead of waiting for a click.
-
-### Fixed
-
-- The eleven page sections that forward background options were missing the "Fixed background (parallax)" toggle that Custom Section and Card expose — added it to their editor inputs.
-
 ## [2.0.0] - 2026-08-11
 
-A big release: a browsable reference site for every component, tooling that
-catches editor problems before they ship, and a long list of accessibility
-fixes. If you have already built a site on this starter, read the **Heads-up**
-items under Changed before upgrading — a few change how things look.
+A big release: a browsable reference site for every component, new components
+and options, tooling that catches editor problems before they ship, and a long
+list of accessibility fixes. If you have already built a site on this starter,
+read the **Heads-up** items under Changed before upgrading — a few change how
+things look.
 
 ### Added
 
@@ -64,11 +52,16 @@ leaving the site quietly broken in the editor.
 - `npm run new:component` scaffolds a new component's files and tells you the remaining steps.
 - Editor autocomplete in VS Code for both the CloudCannon config and the design tokens.
 
-#### New component options
+#### New components and options
 
+- An announcement bar shown above the navigation on every page, driven by `src/data/announcementBar.json` and editable in CloudCannon under Data. Write the message in Markdown, with a link for an optional call to action; closing the bar hides it for that visitor until the message changes, so a new announcement brings it back for everyone.
+- Blog posts and tag pages show a breadcrumb trail above the title — Home › Blog › the page you are on. The Home label is editable in CloudCannon under Data, long titles are shortened to keep the trail on one line, and small screens swap the trail for a single link back to the blog. Search engines are given the trail as structured data, so results can show where a page sits in the site. Tag pages used to have a plain "All posts" link; the breadcrumb replaces it.
+- Backgrounds can be a repeating tiled pattern as well as an image or video, on Card, Custom Section and every page section. Pick the tile with the usual image picker and choose a tile size; the overlay and background colour still apply, so patterns with transparency show the background colour through.
+- The Video component gained autoplay and loop options for all three source types. Autoplayed video starts muted, since browsers refuse it otherwise, and YouTube and Vimeo players now load when scrolled into view instead of with the page.
 - Form fields take a `hint` for help text under the field, and an `error` for validation messages.
 - Card and Custom Section backgrounds can stay fixed while the page scrolls, falling back to a normal background for anyone who prefers reduced motion.
 - Carousel gained `pauseOnHover`, and Image gained `decorative` for images screen readers should skip.
+- Cards can pin their colour scheme against the visitor's theme toggle, as Custom Section already could.
 
 ### Changed
 
@@ -76,7 +69,6 @@ leaving the site quietly broken in the editor.
 
 - Upgraded to **Astro 7**, with every other dependency refreshed. Node 22.12 or later is now required, and there are no known security advisories against the dependency tree.
 - Icons are built into the project instead of coming from the `astro-icon` package, which has been unmaintained for well over a year and was written for an older Astro. Icons look and behave the same, and a mistyped icon name now warns you while you work instead of failing the build.
-- **Heads-up:** React has been removed; nothing in the starter used it. If you add React components later, install `@astrojs/react`.
 - Accessibility, SEO, link and performance checking now happens with a separate tool outside this repository, so the partial version that lived here has been removed. Nothing in the project or its CI catches accessibility regressions any more.
 - Agent instructions live in one place (`.agents/skills/`) and are copied automatically to the Cursor and Claude folders.
 
@@ -125,6 +117,7 @@ CloudCannon was missing, unusable or wrong.
 - Fields for adding a list of items showed "not configured" and could not be edited. Main Nav's buttons were the last case; `lint:cms` now fails on the whole class of mistake.
 - Options that existed in the editor but the component ignored, and options the component supported but the editor never offered, across a long list of components.
 - Controls that only appeared after you saved — alternate-theme logos, grid alignment, team grid layout — now show up on a freshly added block.
+- The "Fixed background (parallax)" toggle was missing from the eleven page sections that pass background options through, even though Custom Section and Card offered it.
 - Uploaded images and files were going to the wrong folder instead of `src/assets/images`.
 - 31 wrong icon names across 15 files meant the "add section" menu showed the wrong icon.
 - Navigation and footer item definitions were duplicated across four components in three different versions.

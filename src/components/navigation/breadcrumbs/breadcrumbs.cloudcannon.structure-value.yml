@@ -1,0 +1,21 @@
+label: Breadcrumbs
+icon: chevron_right
+description: "Wayfinding trail rendered above blog post and tag page titles."
+value:
+  _component: navigation/breadcrumbs
+  items:
+    - label: Blog
+      url: /blog/
+    - label: Post title
+preview:
+  text:
+    - Breadcrumbs
+  image: /component-previews/navigation/breadcrumbs.svg
+  icon: chevron_right
+picker_preview:
+  text: Breadcrumbs
+  subtext: "Wayfinding trail rendered above blog post and tag page titles."
+  image: /component-previews/navigation/breadcrumbs.svg
+  icon: chevron_right
+_inputs_from_glob:
+  - /src/components/navigation/breadcrumbs/breadcrumbs.cloudcannon.inputs.yml
