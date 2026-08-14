@@ -116,6 +116,7 @@ Containers that hold other building blocks (their child items are themselves `_c
 - `carousel` item (`slides[]`): `contentSections`.
 - `content-selector` item (`items[]`): `title`, `subtext`, `iconName`, `iconColor`, `contentSections`, `navigationPosition`.
 - `grid` item (`items[]`): `contentSections`.
+- `modal` item (`contentSections[]`): `popoverId`, `size`, `label`, `labelledby`, `fullScreenMobile`.
 
 ### Forms — `building-blocks/forms/<slug>`
 

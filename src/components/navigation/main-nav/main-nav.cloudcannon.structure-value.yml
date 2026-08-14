@@ -8,6 +8,8 @@ value:
   navData: []
   buttonSections: []
   logoAlternateSource: ""
+  search: true
+  searchPlaceholder: ""
 preview:
   text:
     - Main Nav

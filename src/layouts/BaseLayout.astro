@@ -49,7 +49,10 @@ const props = Astro.props;
       content={Astro.generator}
     />
     <style is:inline>
-      @layer reset, base, components, page-sections, utils, overrides;
+      /* `pagefind` sits below `components` so component styles win over the
+         Pagefind Component UI stylesheet (imported into that layer by the
+         search component) without specificity fights or !important. */
+      @layer reset, base, pagefind, components, page-sections, utils, overrides;
     </style>
 
     <SiteFonts />

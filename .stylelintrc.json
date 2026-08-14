@@ -1,7 +1,12 @@
 {
   "extends": "stylelint-config-standard",
   "plugins": ["stylelint-order"],
-  "ignoreFiles": ["dist/**/*", "node_modules/**/*"],
+  "ignoreFiles": [
+    "dist/**/*",
+    "node_modules/**/*",
+    "public/pagefind/**/*",
+    ".claude/worktrees/**/*"
+  ],
   "rules": {
     "declaration-empty-line-before": null,
     "no-descending-specificity": null,

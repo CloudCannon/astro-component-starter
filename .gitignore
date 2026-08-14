@@ -1,6 +1,11 @@
 # build output
 dist/
 
+# local dev search index + the built image assets its results reference
+# (regenerate with `npm run search:dev`)
+public/pagefind/
+public/_astro/
+
 _docs/
 /docGen.js
 
@@ -40,6 +45,9 @@ yarn-error.log*
 
 # Local working area: plans, strategy, scratch notes — never committed
 .local/
+
+# Agent worktrees (separate checkouts of this repo)
+.claude/worktrees/
 
 # Siteready run artifacts (static-site QA is run from outside this repo)
 .siteready-last-run.json

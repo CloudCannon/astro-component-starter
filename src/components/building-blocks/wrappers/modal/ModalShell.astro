@@ -1,0 +1,116 @@
+---
+/**
+ * Headless modal shell: the popover element, backdrop, open/close animation,
+ * and sizing — shared by `Modal.astro` (CMS-facing wrapper) and site-chrome
+ * modals like `navigation/search`. Consumers provide all interior markup via
+ * the default slot and their own trigger via `popovertarget={popoverId}`;
+ * focus trapping and scroll locking come from `setup.ts` (`setupModalShell`),
+ * which targets `.modal-popover` elements.
+ *
+ * Not a page-builder block: no CloudCannon YAML, never referenced by
+ * `_component`.
+ */
+const {
+  popoverId,
+  size = "md",
+  label,
+  labelledby,
+  fullScreenMobile = false,
+  class: className,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<div
+  id={popoverId}
+  popover="auto"
+  class:list={["modal-popover", `size-${size}`, fullScreenMobile && "fullscreen-mobile", className]}
+  role="dialog"
+  aria-label={label}
+  aria-labelledby={labelledby}
+  {...htmlAttributes}
+>
+  <slot />
+</div>
+
+<style is:global>
+  @layer components {
+    .modal-popover {
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xs);
+      box-shadow: var(--shadow-lg);
+      color: var(--color-text);
+      inset: 0;
+      margin: auto;
+      max-height: 85vh;
+      overflow: hidden;
+      padding: 0;
+      width: 90vw;
+
+      opacity: 0;
+      transform: translateY(16px);
+      transition:
+        opacity var(--animation-normal) var(--ease-out),
+        transform var(--animation-normal) var(--ease-out),
+        overlay var(--animation-normal) var(--ease-out) allow-discrete,
+        display var(--animation-normal) var(--ease-out) allow-discrete;
+
+      &:popover-open {
+        display: flex;
+        flex-direction: column;
+        opacity: 1;
+        transform: translateY(0);
+
+        @starting-style {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+      }
+
+      &::backdrop {
+        background-color: var(--color-overlay);
+        opacity: 0;
+        transition:
+          opacity var(--animation-normal) var(--ease-out),
+          overlay var(--animation-normal) var(--ease-out) allow-discrete,
+          display var(--animation-normal) var(--ease-out) allow-discrete;
+      }
+
+      &:popover-open::backdrop {
+        opacity: 1;
+
+        @starting-style {
+          opacity: 0;
+        }
+      }
+
+      &.size-sm {
+        max-width: var(--content-width-sm);
+      }
+
+      &.size-md {
+        max-width: var(--content-width-md);
+      }
+
+      &.size-lg {
+        max-width: var(--content-width-lg);
+      }
+
+      &.size-xl {
+        max-width: var(--content-width-xl);
+      }
+
+      @media (max-width: 639px) {
+        &.fullscreen-mobile {
+          border: none;
+          border-radius: 0;
+          height: 100dvh;
+          max-height: none;
+          max-width: none;
+          width: 100vw;
+        }
+      }
+    }
+  }
+</style>

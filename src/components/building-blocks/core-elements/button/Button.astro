@@ -46,6 +46,8 @@ const tagKeys = new Set<string>([
   "tabIndex",
   "popovertarget",
   "popovertargetaction",
+  // Toggle-button state must sit on the real <button> to mean anything.
+  "aria-pressed",
 ]);
 
 if (Tag === "a" && link) {

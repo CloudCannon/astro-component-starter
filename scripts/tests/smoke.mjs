@@ -314,6 +314,66 @@ const tests = [
       );
     },
   },
+  {
+    name: "search modal opens on Ctrl+K, returns results, and filters by type",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      const popoverSel = ".search .modal-popover";
+
+      await page.locator(popoverSel).waitFor({ state: "attached" });
+      await page.keyboard.press("Control+k");
+
+      // Open + focus lands on Pagefind's input (the popover's first
+      // focusable element) once the custom element has upgraded.
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const active = document.activeElement;
+
+        return Boolean(
+          popover && popover.matches(":popover-open") && active?.matches("pagefind-input input")
+        );
+      }, popoverSel);
+
+      // "component" appears in both site pages and blog articles, so both
+      // type tabs have results to show. Off-screen results stay as lazy
+      // skeletons, so assertions are href-based rather than count-based.
+      await page.keyboard.type("component");
+      await page.locator(`${popoverSel} .search-result .search-result-link`).first().waitFor();
+
+      const hadNonBlog = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .search-result-link`)].some(
+            (link) => !link.getAttribute("href")?.includes("/blog/")
+          ),
+        popoverSel
+      );
+
+      assert(hadNonBlog, 'expected the unfiltered "component" results to include a non-blog page');
+
+      // The Articles tab narrows results to blog posts via the Type filter.
+      await page.locator(`${popoverSel} [data-search-tab="Article"]`).click();
+      await page.waitForFunction((sel) => {
+        const links = [...document.querySelectorAll(`${sel} .search-result-link`)];
+
+        return (
+          links.length > 0 && links.every((link) => link.getAttribute("href")?.includes("/blog/"))
+        );
+      }, popoverSel);
+
+      // Escape closes the popover (native light dismiss) and focus returns
+      // to the nav trigger.
+      await page.keyboard.press("Escape");
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const active = document.activeElement;
+
+        return Boolean(
+          popover && !popover.matches(":popover-open") && active?.closest(".search-trigger")
+        );
+      }, popoverSel);
+    },
+  },
 ];
 
 const marker = join(

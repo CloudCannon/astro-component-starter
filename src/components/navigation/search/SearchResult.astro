@@ -1,0 +1,45 @@
+---
+/**
+ * The search result card, composed from the starter's own components.
+ *
+ * Results render in the browser at search time, so this partial is rendered
+ * once into an inert `<template>` (see `Search.astro`) and `setup.ts` clones
+ * it per result, replacing the placeholder text below with the real data.
+ *
+ * The thumbnail stays a plain `<img>`: the Image component runs sources
+ * through Astro's build-time asset pipeline, which can't process URLs that
+ * only exist at search time.
+ */
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+---
+
+<li class="search-result">
+  <div class="search-result-media">
+    <img
+      class="search-result-image"
+      alt=""
+      loading="lazy"
+    />
+  </div>
+  <div class="search-result-content">
+    <a class="search-result-link">
+      <Heading
+        text="Result title"
+        level="h3"
+        size="xs"
+        class="search-result-title"
+      />
+    </a>
+    <SimpleText
+      text="Published"
+      size="xs"
+      class="search-result-lead"
+    />
+    <SimpleText
+      text="Excerpt"
+      size="sm"
+      class="search-result-excerpt"
+    />
+  </div>
+</li>

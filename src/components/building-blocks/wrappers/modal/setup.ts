@@ -1,8 +1,10 @@
 /**
- * Shared setup logic for the Modal component.
+ * Shared setup logic for modal popovers (`.modal-popover`, rendered by
+ * `ModalShell.astro`).
  *
  * Used by:
  * - `Modal.astro`'s inline `<script>` on the live site
+ * - `navigation/search`'s setup module (its popover is a ModalShell)
  * - `editor-live-sync.js` in the CloudCannon editor, because CC's
  *   editable-regions renderer uses `renderToStaticMarkup` and does
  *   not execute inline scripts, so we need to initialize modals
@@ -33,17 +35,25 @@ function updateModalScrollLock(): void {
   document.body.toggleAttribute("data-modal-scroll-lock", hasOpenModal);
 }
 
-export function setupModal(modal: HTMLElement): void {
-  if (modal.hasAttribute("data-modal-initialized")) return;
-  modal.setAttribute("data-modal-initialized", "");
+/** The popover's opener: a `popovertarget` button outside the popover itself
+ * (the close button inside also targets it, so filter that out). */
+function findTrigger(popover: HTMLElement): HTMLElement | null {
+  if (!popover.id) return null;
 
-  const trigger = modal.querySelector<HTMLButtonElement>(".modal-trigger .button-inner");
-  const popover = modal.querySelector<HTMLElement>(".modal-popover");
+  return (
+    Array.from(
+      document.querySelectorAll<HTMLElement>(`[popovertarget="${CSS.escape(popover.id)}"]`)
+    ).find((el) => !popover.contains(el)) ?? null
+  );
+}
 
-  if (!popover) return;
+export function setupModalShell(popover: HTMLElement): void {
+  if (popover.hasAttribute("data-modal-initialized")) return;
+  popover.setAttribute("data-modal-initialized", "");
 
   popover.addEventListener("toggle", (e) => {
     const { newState } = e as ToggleEvent;
+    const trigger = findTrigger(popover);
 
     trigger?.setAttribute("aria-expanded", String(newState === "open"));
     updateModalScrollLock();
@@ -54,8 +64,8 @@ export function setupModal(modal: HTMLElement): void {
       getFocusableElements(popover)[0]?.focus();
     }
 
-    if (newState === "closed" && trigger) {
-      trigger.focus();
+    if (newState === "closed") {
+      trigger?.focus();
     }
   });
 
@@ -90,6 +100,6 @@ export function setupModal(modal: HTMLElement): void {
 }
 
 export function setupAllModals(root: ParentNode = document): void {
-  root.querySelectorAll<HTMLElement>(".modal").forEach((el) => setupModal(el));
+  root.querySelectorAll<HTMLElement>(".modal-popover").forEach((el) => setupModalShell(el));
   updateModalScrollLock();
 }

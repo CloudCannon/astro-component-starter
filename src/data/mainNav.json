@@ -3,6 +3,7 @@
   "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
   "logoAlt": "Astro Component Starter",
   "themeToggle": true,
+  "search": true,
   "navData": [
     {
       "name": "Home",
@@ -25,16 +26,5 @@
       "children": []
     }
   ],
-  "buttonSections": [
-    {
-      "_component": "building-blocks/core-elements/button",
-      "text": "Search",
-      "hideText": true,
-      "link": "/search/",
-      "iconName": "magnifying-glass",
-      "iconPosition": "before",
-      "variant": "ghost",
-      "size": "lg"
-    }
-  ]
+  "buttonSections": []
 }

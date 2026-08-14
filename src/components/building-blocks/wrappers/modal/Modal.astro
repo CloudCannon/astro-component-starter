@@ -2,6 +2,7 @@
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Button from "@core-elements/button/Button.astro";
+import ModalShell from "./ModalShell.astro";
 
 const {
   label,
@@ -56,13 +57,11 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     )
   }
 
-  <div
-    id={popoverId}
-    popover="auto"
-    class:list={["modal-popover", `size-${size}`]}
-    role="dialog"
-    aria-label={hasHeading ? undefined : label}
-    aria-labelledby={hasHeading ? `${popoverId}-header` : undefined}
+  <ModalShell
+    popoverId={popoverId}
+    size={size}
+    label={hasHeading ? undefined : label}
+    labelledby={hasHeading ? `${popoverId}-header` : undefined}
   >
     <div class:list={["modal-header", hasHeading ? "has-header" : "no-header"]}>
       {
@@ -102,7 +101,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         }
       </slot>
     </div>
-  </div>
+  </ModalShell>
 </div>
 
 <script>
@@ -117,73 +116,6 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     .modal {
       display: inline-flex;
       margin-top: var(--spacing-lg);
-    }
-
-    .modal-popover {
-      background-color: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xs);
-      box-shadow: var(--shadow-lg);
-      color: var(--color-text);
-      inset: 0;
-      margin: auto;
-      max-height: 85vh;
-      overflow: hidden;
-      padding: 0;
-      width: 90vw;
-
-      opacity: 0;
-      transform: translateY(16px);
-      transition:
-        opacity var(--animation-normal) var(--ease-out),
-        transform var(--animation-normal) var(--ease-out),
-        overlay var(--animation-normal) var(--ease-out) allow-discrete,
-        display var(--animation-normal) var(--ease-out) allow-discrete;
-
-      &:popover-open {
-        display: flex;
-        flex-direction: column;
-        opacity: 1;
-        transform: translateY(0);
-
-        @starting-style {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-      }
-
-      &::backdrop {
-        background-color: var(--color-overlay);
-        opacity: 0;
-        transition:
-          opacity var(--animation-normal) var(--ease-out),
-          overlay var(--animation-normal) var(--ease-out) allow-discrete,
-          display var(--animation-normal) var(--ease-out) allow-discrete;
-      }
-
-      &:popover-open::backdrop {
-        opacity: 1;
-
-        @starting-style {
-          opacity: 0;
-        }
-      }
-
-      &.size-sm {
-        max-width: var(--content-width-sm);
-      }
-
-      &.size-md {
-        max-width: var(--content-width-md);
-      }
-
-      &.size-lg {
-        max-width: var(--content-width-lg);
-      }
-
-      &.size-xl {
-        max-width: var(--content-width-xl);
-      }
     }
 
     .modal-header {

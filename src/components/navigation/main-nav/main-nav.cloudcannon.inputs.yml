@@ -25,3 +25,9 @@ buttonSections:
   comment: "Array of button components to display in the navigation bar. See the Button component documentation for more information."
   options:
     structures: _structures.buttonSections
+search:
+  type: switch
+  comment: "Show the site-wide search button in the navigation bar. The search index is generated when the site builds."
+searchPlaceholder:
+  type: text
+  comment: "Placeholder text for the search input. Leave empty for the default."

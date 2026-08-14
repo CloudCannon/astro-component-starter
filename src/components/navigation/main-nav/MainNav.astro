@@ -2,6 +2,7 @@
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Bar from "@components/navigation/bar/Bar.astro";
 import Mobile from "@components/navigation/mobile/Mobile.astro";
+import Search from "@components/navigation/search/Search.astro";
 import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
 import Image from "@core-elements/image/Image.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
@@ -21,6 +22,8 @@ const {
   navData = [],
   buttonSections = [] as NavButton[],
   themeToggle = false,
+  search = false,
+  searchPlaceholder,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -64,6 +67,7 @@ const mobileNavData = [
       aria-label="Main Navigation"
     />
 
+    {search && <Search placeholder={searchPlaceholder} />}
     {themeToggle && <ThemeToggle />}
     <ButtonGroup
       direction="row"

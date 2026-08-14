@@ -24,7 +24,11 @@ import {
   setupAllImageCarousels,
   setupImageCarousel,
 } from "./src/components/building-blocks/wrappers/image-carousel/setup";
-import { setupAllModals, setupModal } from "./src/components/building-blocks/wrappers/modal/setup";
+import {
+  setupAllModals,
+  setupModalShell,
+} from "./src/components/building-blocks/wrappers/modal/setup";
+import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -154,15 +158,32 @@ function initNewComponents(root) {
 
   const newModals = [];
 
-  if (root.classList?.contains("modal") && !root.hasAttribute("data-modal-initialized")) {
+  if (root.classList?.contains("modal-popover") && !root.hasAttribute("data-modal-initialized")) {
     newModals.push(root);
   }
 
-  root.querySelectorAll(".modal:not([data-modal-initialized])").forEach((el) => newModals.push(el));
+  root
+    .querySelectorAll(".modal-popover:not([data-modal-initialized])")
+    .forEach((el) => newModals.push(el));
 
   for (const el of newModals) {
     log("initialising new modal", el);
-    setupModal(el);
+    setupModalShell(el);
+  }
+
+  const newSearch = [];
+
+  if (root.classList?.contains("search") && !root.hasAttribute("data-search-initialized")) {
+    newSearch.push(root);
+  }
+
+  root
+    .querySelectorAll(".search:not([data-search-initialized])")
+    .forEach((el) => newSearch.push(el));
+
+  for (const el of newSearch) {
+    log("initialising new search", el);
+    setupSearch(el);
   }
 }
 
@@ -238,6 +259,7 @@ observer.observe(document.body, {
 setupAllCarousels();
 setupAllImageCarousels();
 setupAllModals();
+setupAllSearch();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,

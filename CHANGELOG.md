@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [2.0.0] - 2026-08-11
 
-A big release: a browsable reference site for every component, new components
-and options, tooling that catches editor problems before they ship, and a long
-list of accessibility fixes. If you have already built a site on this starter,
+A big release: a browsable reference site for every component, site-wide
+search, new components and options, tooling that catches editor problems
+before they ship, and a long list of accessibility fixes. If you have already built a site on this starter,
 read the **Heads-up** items under Changed before upgrading — a few change how
 things look.
 
@@ -30,6 +30,7 @@ things look.
 
 #### Being found: search, feeds and sharing
 
+- Site search lives in the navigation bar: a search button — or Cmd/Ctrl+K — opens a modal with results as you type, filters for pages and blog posts, and article thumbnails. Turn it on with `search: true` in the main navigation data. It replaces the old `/search/` page, and follows the theme toggle like everything else.
 - An RSS feed at `/rss.xml`, linked from every page so feed readers find it on their own.
 - Blog posts and pages now describe themselves to search engines — title, author, date, tags — so posts can qualify for richer search results.
 - Social share cards, so links posted to X and similar show a proper preview image and title.
@@ -47,7 +48,7 @@ leaving the site quietly broken in the editor.
 - `npm run previews:check` catches a missing or stale preview thumbnail, and `npm run previews:montage` renders them all onto one sheet for review.
 - `npm run docs:check` checks the documentation against the components it documents.
 - `npm run typecheck` and `npm run test:unit` cover types and the shared helper code.
-- `npm run test:smoke` drives a real browser over the built site to confirm the accordion, modal, carousel, mobile menu and theme toggle all still work.
+- `npm run test:smoke` drives a real browser over the built site to confirm the accordion, modal, carousel, mobile menu, theme toggle and search all still work.
 - `npm run test:render` builds a page containing every component, so one that stops rendering fails the build.
 - `npm run new:component` scaffolds a new component's files and tells you the remaining steps.
 - Editor autocomplete in VS Code for both the CloudCannon config and the design tokens.
@@ -60,7 +61,7 @@ leaving the site quietly broken in the editor.
 - The Video component gained autoplay and loop options for all three source types. Autoplayed video starts muted, since browsers refuse it otherwise, and YouTube and Vimeo players now load when scrolled into view instead of with the page.
 - Form fields take a `hint` for help text under the field, and an `error` for validation messages.
 - Card and Custom Section backgrounds can stay fixed while the page scrolls, falling back to a normal background for anyone who prefers reduced motion.
-- Carousel gained `pauseOnHover`, and Image gained `decorative` for images screen readers should skip.
+- Carousel gained `pauseOnHover`, Image gained `decorative` for images screen readers should skip, and Button passes `aria-pressed` through so it can act as a toggle button.
 - Cards can pin their colour scheme against the visitor's theme toggle, as Custom Section already could.
 
 ### Changed
@@ -74,8 +75,7 @@ leaving the site quietly broken in the editor.
 
 #### Search
 
-- Site search now works locally: `npm run build` builds the search index, so `npm run preview` gives you a working search page. Previously it only ever worked once deployed, and the search page found nothing locally with nothing to explain why.
-- **Heads-up:** the `/search/` page is now hidden from search engines and left out of the sitemap. There is nothing on it for them to read, and listing it competes with the pages it exists to help people find.
+- Site search now works locally: `npm run build` creates the search index, so `npm run preview` gives you working search, and `npm run search:dev` carries the index over to `npm run dev`. Previously search only ever worked once deployed, and found nothing locally with nothing to explain why.
 
 #### Look and feel
 
@@ -99,6 +99,7 @@ leaving the site quietly broken in the editor.
 - The asterisk marking a required field read out as "star" and nothing else. It is hidden from screen readers now; the field itself already says it is required.
 - Pagination's current-page marker read out as a bare number with no context.
 - Modals hold keyboard focus while open and return it to whatever opened them on close, and they work inside the visual editor.
+- Segments could not be operated from the keyboard at all — its hidden inputs are now focusable, the same way Toggle's are.
 - Icons are hidden from screen readers, which were announcing thousands of them across the site as unlabelled graphics.
 - Reduced-motion support now also covers modal and accordion animations, and stops carousels auto-playing.
 - Smaller fixes: the content selector is a proper set of expandable panels, toggles without a visible label fall back to their name, cards with a background image get a solid backing so text stays readable if the image fails, and footer social links accept a custom label.

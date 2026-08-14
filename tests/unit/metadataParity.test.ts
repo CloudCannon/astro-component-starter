@@ -303,16 +303,16 @@ const EXPECTED_CHANGES: Record<string, ComponentMetadata> = {
     childComponent: undefined,
     slots: [{ name: "default", fallbackFor: "html", childComponent: undefined }],
   },
-  // Had no `slots:` frontmatter at all. Its "logo" slot's fallback content
-  // references THREE props (logoSource, logoAlternateSource, logoAlt), so
-  // derivation correctly calls it ambiguous — supportsSlots flips true (a
-  // real <slot> exists) but no fallbackFor is derived, so `slots` stays
-  // undefined (nothing crosses the fallbackFor threshold to be included).
+  // Its "logo" slot's fallback content references THREE props (logoSource,
+  // logoAlternateSource, logoAlt), so derivation alone calls it ambiguous.
+  // The docs frontmatter now patches that with `fallback_for: logoSource`
+  // (which also silences the ambiguous-slot build warning), so the merged
+  // metadata resolves the slot to logoSource.
   "navigation/mobile": {
     supportsSlots: true,
-    fallbackFor: undefined,
+    fallbackFor: "logoSource",
     childComponent: undefined,
-    slots: undefined,
+    slots: [{ name: "logo", fallbackFor: "logoSource", childComponent: undefined }],
   },
   // Already declared `slots:` frontmatter (title: default, description) but
   // deliberately left off `fallback_for` — supportsSlots was already true.
