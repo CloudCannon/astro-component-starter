@@ -50,6 +50,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Masonry Card Grid and Gallery Grid covers keep each photo's own shape. Passing `width={800}` as a srcset cap used the file's native height with that width, so a 1707×1280 castle became an 800×1280 box and the image stretched. Height now scales with width when there is no crop.
+- Latest Posts no longer trips CloudCannon's "Failed to render array item" error. Card Grid was always stamping `data-editable="array-item"` on every card; Latest Posts synthesizes cards from the blog collection (no parent `items` array), so the editor rejected them. Array-item wiring now follows the same opt-in as Social Links.
 - Gallery Grid tiles are now array items in the Visual Editor, so each photo can be selected, reordered, or replaced on the canvas (with the caption as a nested text region).
 - CloudCannon structure picker cards now show the component preview SVG. The wired `image:` path was a site URL (`/component-previews/...`) that does not exist in the source tree; CloudCannon looks up files the same way as the icon picker (`src/icons/{id}.svg`), so the path is now `public/component-previews/...`. The thumbnails are 16:9 (1280×720) to match the picker's `.c-card__preview` slot (~286×160), and `gallery.image` uses `fit: cover` so a slightly-off card width still fills the frame.
 - The footer no longer trips CloudCannon's "Failed to render array editable" error. Social Links was always stamping `data-prop="links"`; on a page that key is undefined (the footer's socials live in `footer.json` as `socials`). The array binding now follows the same opt-in as List and ButtonGroup, and the footer turns it off like the rest of its chrome.

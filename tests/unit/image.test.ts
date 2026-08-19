@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getResponsiveWidths,
+  heightForWidth,
   prepareImageData,
   resolveImageSource,
 } from "../../src/components/utils/image";
@@ -20,6 +21,18 @@ describe("resolveImageSource", () => {
     expect(resolveImageSource("/src/assets/images/definitely-not-a-real-file-xyz.jpg")).toBe(
       "/src/assets/images/definitely-not-a-real-file-xyz.jpg"
     );
+  });
+});
+
+describe("heightForWidth", () => {
+  it("scales native height to a srcset-cap width without stretching", () => {
+    // Card Grid masonry: castle.jpg is 1707×1280, covers pass width={800}.
+    expect(heightForWidth(1707, 1280, 800)).toBe(600);
+    expect(heightForWidth(1440, 1080, 800)).toBe(600);
+  });
+
+  it("never returns a zero height", () => {
+    expect(heightForWidth(100, 1, 1)).toBe(1);
   });
 });
 

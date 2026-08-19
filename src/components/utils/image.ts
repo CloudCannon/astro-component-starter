@@ -76,6 +76,24 @@ const getLocalImageAsset = (source: string) => {
  */
 const NATIVE_WIDTH_TOLERANCE = 1.1;
 
+/**
+ * Pair a requested width with the source's native height so Picture/img
+ * keep the photo's own ratio. Callers often pass only `width` as a srcset
+ * cap (Card Grid and Gallery Grid masonry both use `width={800}` with
+ * `aspectRatio: none`)
+ */
+export const heightForWidth = (
+  nativeWidth: number,
+  nativeHeight: number,
+  requestedWidth: number
+): number => {
+  if (!Number.isFinite(nativeWidth) || nativeWidth <= 0) {
+    return Math.max(1, Math.round(nativeHeight));
+  }
+
+  return Math.max(1, Math.round((nativeHeight * requestedWidth) / nativeWidth));
+};
+
 export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
   const normalizedWidths = Array.isArray(candidates)
     ? [
@@ -208,6 +226,18 @@ export function prepareImageData({
         imageWidth = imageWidth || resolvedImage.width;
         imageHeight = imageHeight || resolvedImage.height;
         shouldRenderOptimizedPicture = true;
+
+        // Width-only requests keep the source ratio unless a named crop
+        // (landscape, square, …) is about to replace both edges.
+        if (
+          (!aspectRatio || aspectRatio === "none") &&
+          width &&
+          !height &&
+          resolvedImage.width &&
+          resolvedImage.height
+        ) {
+          imageHeight = heightForWidth(resolvedImage.width, resolvedImage.height, width);
+        }
       }
     } else {
       console.warn(`Local image not found for path: ${source}`);

@@ -46,6 +46,14 @@ const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
   : {};
 
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/card-grid/card-grid-item",
+      "data-editable": "array-item",
+    }
+  : {};
+const itemContentProp = effectiveChildrenProp ? "contentSections" : undefined;
+
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 
@@ -73,15 +81,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
                and a flex column, so measuring it after the row-span is set
                feeds back into an 8px-tall collapse. */}
           {items?.map((item: ItemProps) => (
-            <MasonryItem
-              data-id="building-blocks/wrappers/card-grid/card-grid-item"
-              data-editable="array-item"
-            >
+            <MasonryItem {...itemRegionAttributes}>
               <CardGridItem
                 useDefaultEditableBinding={!!effectiveChildrenProp}
                 {...item}
                 aspectRatio={cardRatio}
-                data-children-prop="contentSections"
+                data-children-prop={itemContentProp}
               />
             </MasonryItem>
           ))}
@@ -102,12 +107,11 @@ if (!_component && !hasItems && !hasSlotContent) return;
       <slot>
         {items?.map((item: ItemProps) => (
           <CardGridItem
-            data-id="building-blocks/wrappers/card-grid/card-grid-item"
-            data-editable="array-item"
             useDefaultEditableBinding={!!effectiveChildrenProp}
             {...item}
+            {...itemRegionAttributes}
             aspectRatio={cardRatio}
-            data-children-prop="contentSections"
+            data-children-prop={itemContentProp}
           />
         ))}
       </slot>
