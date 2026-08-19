@@ -27,6 +27,8 @@ export function setupCarousel(carousel: CarouselElement): void {
   const controlsWrapper = inner?.querySelector<HTMLElement>(".controls-wrapper");
   const indicatorsContainer = controlsWrapper?.querySelector<HTMLElement>(".indicators");
   const fractionEl = controlsWrapper?.querySelector<HTMLElement>(".carousel-fraction");
+  // A sibling of .controls-wrapper, not a child — it's a full-width strip.
+  const thumbnailsContainer = inner?.querySelector<HTMLElement>(".carousel-thumbnails");
 
   if (!inner || !viewport || !track || !slides || !slides.length) {
     // Silently skip: in the CloudCannon editor the inner DOM can be
@@ -79,6 +81,8 @@ export function setupCarousel(carousel: CarouselElement): void {
     watchDrag = false;
   }
 
+  const startIndex = Number(inner.getAttribute("data-start-index")) || 0;
+
   const embla = EmblaCarousel(
     viewport,
     {
@@ -87,7 +91,7 @@ export function setupCarousel(carousel: CarouselElement): void {
       align,
       watchDrag,
       duration: 20,
-      startIndex: 0,
+      startIndex,
       skipSnaps: false,
       inViewThreshold: 0.7,
     },
@@ -96,6 +100,21 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   carousel.setAttribute("data-embla-initialized", "true");
   carousel.__embla = embla;
+
+  // Consumers listen for this instead of reaching into Embla. Fired on
+  // init, selection, and reInit.
+  const emitSelect = () => {
+    carousel.dispatchEvent(
+      new CustomEvent("carousel:select", {
+        bubbles: true,
+        detail: { index: embla.selectedScrollSnap(), total: embla.scrollSnapList().length },
+      })
+    );
+  };
+
+  embla.on("select", emitSelect);
+  embla.on("reInit", emitSelect);
+  emitSelect();
 
   const prevButton = inner.querySelector<HTMLButtonElement>(".prev > .button-inner");
   const nextButton = inner.querySelector<HTMLButtonElement>(".next > .button-inner");
@@ -138,6 +157,50 @@ export function setupCarousel(carousel: CarouselElement): void {
     embla.on("select", updateSelectedDot);
     embla.on("reInit", renderDots);
     renderDots();
+  }
+
+  if (thumbnailsContainer) {
+    // One thumbnail per scroll snap, imaged from the snap's slide. Meaningful
+    // when each snap is one slide (the lightbox/product-gallery shape); a
+    // slide with no <img> falls back to a numbered button.
+    const renderThumbnails = () => {
+      thumbnailsContainer.innerHTML = "";
+
+      embla.scrollSnapList().forEach((_, index) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "carousel-thumbnail";
+        button.setAttribute("aria-label", `Go to slide ${index + 1}`);
+        button.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
+
+        const slideImg = slides[index]?.querySelector("img");
+
+        if (slideImg) {
+          const thumb = document.createElement("img");
+
+          thumb.src = slideImg.currentSrc || slideImg.src;
+          thumb.alt = "";
+          thumb.loading = "lazy";
+          button.appendChild(thumb);
+        } else {
+          button.textContent = String(index + 1);
+        }
+
+        button.addEventListener("click", () => embla.scrollTo(index));
+        thumbnailsContainer.appendChild(button);
+      });
+    };
+
+    const updateSelectedThumbnail = () => {
+      thumbnailsContainer.querySelectorAll(".carousel-thumbnail").forEach((button, index) => {
+        button.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
+      });
+    };
+
+    embla.on("select", updateSelectedThumbnail);
+    embla.on("reInit", renderThumbnails);
+    renderThumbnails();
   }
 
   if (fractionEl) {

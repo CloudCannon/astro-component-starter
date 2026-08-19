@@ -1,0 +1,651 @@
+---
+import { slugifyLabel } from "@components/utils/slugify";
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Image from "@core-elements/image/Image.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  images = [],
+  layout = "grid",
+  columns = 3,
+  gap = "md",
+  aspectRatio = "square",
+  lightbox = true,
+  showThumbnails = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const items = (images || []).filter((item: any) => item?.image);
+const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
+
+// Masonry keeps each image's own ratio and packs source order into the
+// shortest column (setup.ts upgrades the CSS-columns baseline via the shared
+// masonryEnhance util). `aspectRatio: natural` is the pre-`layout` spelling
+// of the same thing — honored so old content keeps rendering.
+const masonry = layout === "masonry" || aspectRatio === "natural";
+const tileRatio = masonry ? "none" : aspectRatio;
+
+const generatedLabel = sectionLabel || heading || `Gallery-${crypto.randomUUID()}`;
+const popoverId = `gallery-${slugifyLabel(generatedLabel)}`;
+const hasLightbox = lightbox && items.length > 0;
+---
+
+<CustomSection
+  class:list={["gallery-grid", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="gallery-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  <ul
+    class:list={["gallery-items", masonry ? "masonry" : "grid"]}
+    style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
+  >
+    {
+      items.map((item: any, index: number) => (
+        <li class="gallery-item">
+          <figure class="gallery-figure">
+            {hasLightbox ? (
+              <button
+                type="button"
+                class="gallery-tile"
+                aria-haspopup="dialog"
+                aria-label={`View image: ${item.alt || `image ${index + 1}`}`}
+              >
+                <Image
+                  source={item.image}
+                  alt={item.alt}
+                  aspectRatio={tileRatio}
+                  sizes="(max-width: 640px) 50vw, 400px"
+                  widths={[320, 400, 640, 800]}
+                  width={800}
+                />
+              </button>
+            ) : (
+              <div class="gallery-tile static">
+                <Image
+                  source={item.image}
+                  alt={item.alt}
+                  aspectRatio={tileRatio}
+                  sizes="(max-width: 640px) 50vw, 400px"
+                  widths={[320, 400, 640, 800]}
+                  width={800}
+                />
+              </div>
+            )}
+            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+          </figure>
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    hasLightbox && (
+      <div
+        id={popoverId}
+        popover="auto"
+        class="gallery-lightbox modal-popover"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Gallery image"
+      >
+        {/* Frame shrink-wraps the photo so optional thumbnails sit under it
+            without becoming a viewport-width band. Controls stay inside the
+            figure — never on this frame or the overlay. */}
+        <div class="gallery-lightbox-frame">
+          <figure class="gallery-lightbox-figure">
+            {items.map((item: any, index: number) => (
+              <Image
+                class="gallery-lightbox-photo"
+                data-active={index === 0 ? "true" : "false"}
+                data-caption={item.caption || ""}
+                aria-hidden={index !== 0}
+                source={item.image}
+                alt={item.alt}
+                sizes="min(1024px, calc(100vw - 4rem))"
+                widths={[640, 1280, 1920]}
+                width={1920}
+              />
+            ))}
+            <div
+              class="gallery-lightbox-scrim"
+              aria-hidden="true"
+            />
+            <div class="gallery-lightbox-chrome">
+              <span
+                class="gallery-lightbox-counter"
+                aria-live="polite"
+              >
+                1 / {items.length}
+              </span>
+              <button
+                type="button"
+                class="gallery-lightbox-close"
+                aria-label="Close"
+              >
+                <svg
+                  viewBox="0 0 20 20"
+                  width="17"
+                  height="17"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path d="M5 5l10 10M15 5L5 15" />
+                </svg>
+              </button>
+            </div>
+            {items.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  class="gallery-lightbox-prev"
+                  aria-label="Previous image"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 4l-6 6 6 6" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  class="gallery-lightbox-next"
+                  aria-label="Next image"
+                >
+                  <svg
+                    viewBox="0 0 20 20"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 4l6 6-6 6" />
+                  </svg>
+                </button>
+              </>
+            )}
+            <figcaption
+              class="gallery-lightbox-caption"
+              hidden={!items[0]?.caption}
+            >
+              {items[0]?.caption}
+            </figcaption>
+          </figure>
+          {showThumbnails && items.length > 1 && (
+            <div
+              class="gallery-lightbox-thumbs"
+              role="group"
+              aria-label="Gallery images"
+            >
+              {items.map((item: any, index: number) => (
+                <button
+                  type="button"
+                  class="gallery-lightbox-thumb"
+                  data-selected={index === 0 ? "true" : "false"}
+                  aria-label={`Go to image ${index + 1}`}
+                  aria-current={index === 0 ? "true" : undefined}
+                >
+                  <Image
+                    source={item.image}
+                    alt=""
+                    decorative
+                    sizes="64px"
+                    widths={[64, 128]}
+                    width={128}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
+</CustomSection>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllGalleries } from "./setup";
+
+  onPageLoad(() => setupAllGalleries());
+</script>
+
+<style is:global>
+  @layer page-sections {
+    .gallery-grid {
+      .gallery-items {
+        list-style: none;
+        margin: var(--spacing-2xl) 0 0;
+        padding: 0;
+
+        &.grid {
+          align-items: start;
+          display: grid;
+          gap: var(--gallery-gap, var(--spacing-md));
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+
+          /* 640px: canonical mobile breakpoint — the columns knob applies from here up. */
+          @media (width >= 640px) {
+            grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
+          }
+        }
+
+        /* Masonry layer 1 — no-JS baseline; see the Masonry wrapper for the
+           three-layer technique. */
+        &.masonry {
+          column-gap: var(--gallery-gap, var(--spacing-md));
+          columns: 2;
+
+          .gallery-item {
+            break-inside: avoid;
+            margin-bottom: var(--gallery-gap, var(--spacing-md));
+          }
+
+          @media (width >= 640px) {
+            columns: var(--gallery-columns, 3);
+          }
+        }
+
+        /* Masonry layer 2 — JS enhancement; `grid-auto-rows` must match
+           ROW_UNIT in masonryEnhance.ts. */
+        &.masonry[data-masonry-enhanced] {
+          column-gap: var(--gallery-gap, var(--spacing-md));
+          columns: auto;
+          display: grid;
+          grid-auto-rows: 8px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+
+          .gallery-item {
+            break-inside: auto;
+            margin-bottom: 0;
+          }
+
+          @media (width >= 640px) {
+            grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
+          }
+        }
+
+        /* Masonry layer 3 — native handoff. */
+        @supports (display: masonry) {
+          &.masonry,
+          &.masonry[data-masonry-enhanced] {
+            columns: auto;
+            display: masonry;
+            gap: var(--gallery-gap, var(--spacing-md));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+
+            .gallery-item {
+              margin-bottom: 0;
+            }
+
+            @media (width >= 640px) {
+              grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
+            }
+          }
+        }
+      }
+
+      .gallery-figure {
+        margin: 0;
+      }
+
+      .gallery-tile {
+        background: none;
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        display: block;
+        overflow: hidden;
+        padding: 0;
+        transition: border-color var(--animation-fast) var(--ease-out);
+        width: 100%;
+
+        .image,
+        img {
+          display: block;
+          margin: 0;
+          width: 100%;
+        }
+      }
+
+      button.gallery-tile {
+        cursor: pointer;
+
+        &:hover {
+          border-color: var(--color-border-strong);
+        }
+      }
+
+      .gallery-caption {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: var(--spacing-sm) 0 0;
+      }
+
+      /* Lightbox is one object: the photograph. Every control is positioned
+         against the figure (which shrink-wraps the photo), never the
+         viewport, so nothing drifts onto the page behind. The shared
+         .modal-popover class is kept for the focus trap and scroll-lock in
+         modal/setup.ts; every sheet style it brings is neutralized here
+         (page-sections layer wins). */
+      .gallery-lightbox {
+        /* Translucent darks and whites on this overlay are the sanctioned
+           exception to the token rule — chrome sits on a photograph and
+           cannot use --color-border / --color-text (or --color-overlay,
+           which stays at modal-dim strength). Swap for
+           --color-border-inverse / --color-text-inverse if those tokens
+           land as photo-safe values. --color-text-inverse already exists
+           but flips to black in the dark theme. */
+        background: rgba(12, 12, 12, 0.95);
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        height: 100%;
+        inset: 0;
+        margin: 0;
+        max-height: none;
+        overflow: hidden;
+        padding: var(--spacing-xl);
+        position: fixed;
+        transform: none;
+        width: 100%;
+        z-index: var(--layer-7);
+
+        &:popover-open {
+          display: grid;
+          place-items: center;
+          transform: none;
+        }
+
+        /* The overlay itself is the backdrop — don't stack the native one. */
+        &::backdrop {
+          background: transparent;
+        }
+      }
+
+      .gallery-lightbox-frame {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        max-width: 100%;
+      }
+
+      .gallery-lightbox-figure {
+        /* Definite vw/vh width — not fit-content / max-width: 100%. A
+           shrink-to-fit figure plus Image's `sizes: auto` (and the reset's
+           img { max-width: 100% }) collapses to Chrome's ~300px default
+           box, which is why the photo looked tiny. --gallery-photo-aspect
+           is the current photo's width/height (set in setup.ts) so a
+           height-capped portrait gets narrower and the arrows stay on it. */
+        --gallery-photo-aspect: 1.5;
+
+        aspect-ratio: var(--gallery-photo-aspect);
+        margin: 0;
+        max-height: calc(100vh - var(--spacing-xl) * 2);
+        overflow: hidden;
+        position: relative;
+        touch-action: none;
+        transition: width var(--animation-normal) var(--ease-out);
+        width: min(
+          var(--content-width-xl),
+          calc(100vw - var(--spacing-xl) * 2),
+          calc((100vh - var(--spacing-xl) * 2) * var(--gallery-photo-aspect))
+        );
+
+        &.is-instant {
+          transition: none;
+
+          .gallery-lightbox-photo {
+            transition: none;
+          }
+        }
+      }
+
+      .gallery-lightbox-photo {
+        height: 100%;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        transition: opacity var(--animation-normal) var(--ease-out);
+        width: 100%;
+
+        &[data-active="true"] {
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .image-inner,
+        picture,
+        img {
+          display: block;
+          height: 100%;
+          object-fit: contain;
+          width: 100%;
+        }
+      }
+
+      .gallery-lightbox-scrim {
+        background: linear-gradient(
+          to top,
+          rgba(12, 12, 12, 0.78) 0%,
+          rgba(12, 12, 12, 0.22) 26%,
+          rgba(12, 12, 12, 0) 46%,
+          rgba(12, 12, 12, 0) 82%,
+          rgba(12, 12, 12, 0.5) 100%
+        );
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+      }
+
+      .gallery-lightbox-chrome {
+        align-items: center;
+        display: flex;
+        inset-block-start: var(--spacing-sm);
+        inset-inline: var(--spacing-md) var(--spacing-sm);
+        justify-content: space-between;
+        pointer-events: none;
+        position: absolute;
+
+        > * {
+          pointer-events: auto;
+        }
+      }
+
+      .gallery-lightbox-counter {
+        color: rgba(255, 255, 255, 0.8);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-xs);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .gallery-lightbox-close,
+      .gallery-lightbox-prev,
+      .gallery-lightbox-next {
+        /* 2.75rem is the 44px minimum tap target — do not shrink. */
+        border: 0;
+        cursor: pointer;
+        display: grid;
+        flex: none;
+        height: 2.75rem;
+        padding: 0;
+        place-items: center;
+        transition: background var(--animation-fast) var(--ease-smooth);
+        width: 2.75rem;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) #fff;
+          outline-offset: var(--spacing-xs);
+        }
+      }
+
+      .gallery-lightbox-close {
+        background: transparent;
+        border-radius: var(--radius-sm);
+        color: rgba(255, 255, 255, 0.85);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.18);
+          color: #fff;
+        }
+      }
+
+      .gallery-lightbox-prev,
+      .gallery-lightbox-next {
+        background: rgba(12, 12, 12, 0.5);
+        border-radius: var(--radius-full);
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &:hover {
+          background: rgba(12, 12, 12, 0.8);
+        }
+      }
+
+      .gallery-lightbox-prev {
+        inset-inline-start: var(--spacing-sm);
+      }
+
+      .gallery-lightbox-next {
+        inset-inline-end: var(--spacing-sm);
+      }
+
+      .gallery-lightbox-caption {
+        bottom: var(--spacing-md);
+        color: #fff;
+        font-size: var(--font-size-md);
+        inset-inline: var(--spacing-md);
+        line-height: var(--line-height-tight);
+        margin: 0;
+        max-width: 32rem;
+        position: absolute;
+        text-align: start;
+        text-wrap: pretty;
+
+        &[hidden] {
+          display: none;
+        }
+      }
+
+      .gallery-lightbox-thumbs {
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+
+      .gallery-lightbox-thumb {
+        background: none;
+        border: var(--border-width-sm) solid rgba(255, 255, 255, 0.4);
+        border-radius: var(--radius-xs);
+        cursor: pointer;
+        flex: none;
+        height: 3rem;
+        overflow: hidden;
+        padding: 0;
+        width: 4rem;
+
+        .image {
+          height: 100%;
+          margin: 0;
+          width: 100%;
+        }
+
+        img {
+          display: block;
+          height: 100%;
+          object-fit: cover;
+          width: 100%;
+        }
+
+        &[data-selected="false"] {
+          opacity: 0.6;
+        }
+
+        &[data-selected="true"] {
+          border-color: #fff;
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) #fff;
+          outline-offset: var(--spacing-xs);
+        }
+      }
+
+      /* 640px: canonical mobile breakpoint — tighten figure insets; controls
+         stay 2.75rem. Caption uses the sm step (md already scales down). */
+      @media (width < 640px) {
+        .gallery-lightbox-chrome {
+          inset-inline: var(--spacing-sm);
+        }
+
+        .gallery-lightbox-caption {
+          bottom: var(--spacing-sm);
+          font-size: var(--font-size-sm);
+          inset-inline: var(--spacing-sm);
+        }
+      }
+    }
+  }
+</style>

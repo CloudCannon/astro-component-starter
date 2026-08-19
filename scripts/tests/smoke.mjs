@@ -374,6 +374,219 @@ const tests = [
       }, popoverSel);
     },
   },
+  {
+    name: "blog toc scroll-spy highlights the scrolled-to section",
+    path: "/blog/2025-10-15-why-we-built-our-component-starter/",
+    viewport: DESKTOP,
+    async run(page) {
+      const sidebar = page.locator(".toc-sidebar");
+
+      await sidebar.waitFor();
+
+      // Anchor navigation works without JS; the spy then marks the target's
+      // link as current once its heading sits in the top viewport band.
+      await page.evaluate(() => document.getElementById("what-it-ships-with").scrollIntoView());
+      await page.waitForFunction(() => {
+        const active = document.querySelector(".toc-sidebar a[aria-current='true']");
+
+        return active?.getAttribute("href") === "#what-it-ships-with";
+      });
+
+      // Scrolling back to an earlier section moves the highlight with it.
+      await page.evaluate(() => document.getElementById("why-another-starter").scrollIntoView());
+      await page.waitForFunction(() => {
+        const active = document.querySelector(".toc-sidebar a[aria-current='true']");
+
+        return active?.getAttribute("href") === "#why-another-starter";
+      });
+    },
+  },
+  {
+    name: "gallery lightbox opens on the clicked image, arrows advance, focus restores",
+    path: "/component-docs/components/page-sections/collections/gallery-grid/",
+    viewport: DESKTOP,
+    async run(page) {
+      const gallerySel = `${ACTIVE_PREVIEW} .gallery-grid[data-gallery-initialized]`;
+      const popoverSel = `${gallerySel} .gallery-lightbox`;
+
+      await page.waitForSelector(gallerySel);
+
+      // Click the SECOND tile: proves the lightbox opens on the clicked
+      // image, not just the first. Waiting for focus to land inside is
+      // load-bearing: the modal setup moves it on the async "toggle" event,
+      // and the ArrowRight below only reaches the popover's key listener
+      // once the active element is inside it.
+      const secondTile = page.locator(`${gallerySel} button.gallery-tile`).nth(1);
+
+      await secondTile.click();
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const photos = [...(popover?.querySelectorAll(".gallery-lightbox-photo") ?? [])];
+        const caption = popover?.querySelector(".gallery-lightbox-caption");
+        const figure = popover?.querySelector(".gallery-lightbox-figure");
+        const close = popover?.querySelector(".gallery-lightbox-close");
+        const prev = popover?.querySelector(".gallery-lightbox-prev");
+        const next = popover?.querySelector(".gallery-lightbox-next");
+        const figBox = figure?.getBoundingClientRect();
+        const inside = (el) => {
+          if (!el || !figBox) return false;
+          const box = el.getBoundingClientRect();
+
+          return (
+            box.left >= figBox.left &&
+            box.right <= figBox.right &&
+            box.top >= figBox.top &&
+            box.bottom <= figBox.bottom
+          );
+        };
+
+        return Boolean(
+          popover &&
+          popover.matches(":popover-open") &&
+          popover.contains(document.activeElement) &&
+          photos[1]?.getAttribute("data-active") === "true" &&
+          photos.every(
+            (photo, i) => (i === 1) === (photo.getAttribute("data-active") === "true")
+          ) &&
+          caption?.textContent.trim() === "Tunnel Beach cliffs" &&
+          popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "2 / 5" &&
+          inside(close) &&
+          inside(prev) &&
+          inside(next) &&
+          inside(caption)
+        );
+      }, popoverSel);
+
+      // A click on the photo itself must not close (the scrim is
+      // pointer-events: none, so the hit lands on the figure).
+      await page.evaluate((sel) => {
+        const figure = document.querySelector(`${sel} .gallery-lightbox-figure`);
+        const box = figure.getBoundingClientRect();
+
+        figure.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            clientX: box.left + box.width / 2,
+            clientY: box.top + box.height / 2,
+          })
+        );
+      }, popoverSel);
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.matches(":popover-open"),
+        popoverSel
+      );
+
+      // Arrow key advances to the third image and the counter follows.
+      await page.keyboard.press("ArrowRight");
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const photos = [...(popover?.querySelectorAll(".gallery-lightbox-photo") ?? [])];
+
+        return (
+          photos[2]?.getAttribute("data-active") === "true" &&
+          popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "3 / 5"
+        );
+      }, popoverSel);
+
+      // Escape closes and focus returns to the tile that opened the lightbox.
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        ({ popover, gallery }) => {
+          const el = document.querySelector(popover);
+          const tiles = document.querySelectorAll(`${gallery} button.gallery-tile`);
+
+          return Boolean(el && !el.matches(":popover-open") && document.activeElement === tiles[1]);
+        },
+        { popover: popoverSel, gallery: gallerySel }
+      );
+
+      // Clicking the dark surround closes too (the overlay fills the
+      // viewport, so this is the component's own handler, not light dismiss).
+      await page.locator(`${gallerySel} button.gallery-tile`).first().click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.matches(":popover-open"),
+        popoverSel
+      );
+      await page.mouse.click(8, 8);
+      await page.waitForFunction(
+        (sel) => !document.querySelector(sel).matches(":popover-open"),
+        popoverSel
+      );
+    },
+  },
+  {
+    name: "lightbox thumbnail strip jumps to the clicked photo",
+    path: "/component-docs/components/page-sections/collections/gallery-grid/",
+    viewport: DESKTOP,
+    async run(page) {
+      // The thumbnails example is the third preview on the page; scope to the
+      // gallery that actually renders a strip rather than to a preview index.
+      const gallerySel = `.gallery-grid:has(.gallery-lightbox-thumbs)[data-gallery-initialized]`;
+      const popoverSel = `${gallerySel} .gallery-lightbox`;
+
+      await page.waitForSelector(gallerySel);
+      await page.locator(`${gallerySel} button.gallery-tile`).first().click();
+
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+
+        return Boolean(
+          popover?.matches(":popover-open") &&
+          popover.querySelectorAll(".gallery-lightbox-thumb").length === 4
+        );
+      }, popoverSel);
+
+      // Clicking the third thumbnail jumps to that photo and the counter.
+      await page.locator(`${popoverSel} .gallery-lightbox-thumb`).nth(2).click();
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const thumbs = [...popover.querySelectorAll(".gallery-lightbox-thumb")];
+        const photos = [...popover.querySelectorAll(".gallery-lightbox-photo")];
+
+        return (
+          popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "3 / 4" &&
+          photos[2]?.getAttribute("data-active") === "true" &&
+          thumbs[2].getAttribute("data-selected") === "true" &&
+          thumbs[0].getAttribute("data-selected") === "false"
+        );
+      }, popoverSel);
+    },
+  },
+  {
+    name: "masonry enhances to order-preserving grid spans",
+    path: "/component-docs/components/building-blocks/wrappers/masonry/",
+    viewport: DESKTOP,
+    async run(page) {
+      const masonrySel = `${ACTIVE_PREVIEW} .masonry[data-masonry-enhanced]`;
+
+      await page.waitForSelector(masonrySel);
+
+      // Every item gets a measured row span (the enhancement's whole job)…
+      await page.waitForFunction((sel) => {
+        const items = [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")];
+
+        return (
+          items.length >= 3 && items.every((item) => /^span \d+$/.test(item.style.gridRow || ""))
+        );
+      }, masonrySel);
+
+      // …and the first three items sit in three distinct columns,
+      // left-to-right — source order preserved, unlike the columns fallback,
+      // which would stack items 1..N down the first column.
+      const xs = await page.evaluate(
+        (sel) =>
+          [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")]
+            .slice(0, 3)
+            .map((item) => Math.round(item.getBoundingClientRect().x)),
+        masonrySel
+      );
+
+      assert(
+        xs[0] < xs[1] && xs[1] < xs[2],
+        `expected the first three items in distinct columns left-to-right, got x positions ${xs.join(", ")}`
+      );
+    },
+  },
 ];
 
 const marker = join(

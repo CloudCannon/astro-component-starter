@@ -1,0 +1,60 @@
+label: Timeline
+icon: timeline
+description: A dated sequence on a rail. Vertical is a continuous history; horizontal scrolls.
+value:
+  _component: building-blocks/wrappers/timeline
+  label: ""
+  layout: vertical
+  entries:
+    - date: "2019"
+      title: Founded
+      body: Opened the studio and shipped the first client site.
+    - date: "2022"
+      title: Component library
+      body: The starter became a reusable system instead of a one-off theme.
+    - date: "2025"
+      title: Visual editing
+      body: Every section is assembled in the page builder.
+preview:
+  text:
+    - Timeline
+  subtext:
+    - key: label
+  image: /component-previews/building-blocks/wrappers/timeline.svg
+  icon: timeline
+picker_preview:
+  text: Timeline
+  subtext: A dated sequence on a rail. Vertical or horizontal.
+  image: /component-previews/building-blocks/wrappers/timeline.svg
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/timeline/timeline.cloudcannon.inputs.yml
+_structures:
+  timelineEntries:
+    values:
+      - label: Entry
+        icon: timeline
+        value:
+          year: ""
+          date: "2024"
+          title: Entry title
+          body: ""
+
+        preview:
+          text:
+            - key: title
+            - Entry
+          subtext:
+            - key: date
+        _inputs:
+          year:
+            type: text
+            comment: Optional. Set the same year on consecutive entries to group them (month goes in Date).
+          date:
+            type: text
+            comment: The date shown beside the rail — a year (`2019`), a quarter (`Q3 2026`), or a month when Year is set.
+          title:
+            type: text
+            comment: What happened.
+          body:
+            type: textarea
+            comment: Optional supporting copy. Title-only entries are valid.

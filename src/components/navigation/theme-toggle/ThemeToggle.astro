@@ -6,7 +6,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
 
 <button
   type="button"
-  class:list={["theme-toggle", className]}
+  class:list={["theme-toggle", "tap-target", className]}
   aria-label="Toggle dark mode"
   {...htmlAttributes}
 >
@@ -125,6 +125,8 @@ const { class: className, ...htmlAttributes } = Astro.props;
       justify-content: center;
       line-height: var(--line-height-none);
       padding: var(--spacing-em-xs);
+      /* Positioning context for the `tap-target` overlay. */
+      position: relative;
       transition-duration: var(--animation-normal);
       transition-property: background-color, color;
       transition-timing-function: var(--ease-in-out);

@@ -94,9 +94,9 @@ for (const [dir, { astroAbs, parsed }] of mainByDir) {
     const inputs = loadYaml(inputsAbs) || {};
     const stray = Object.keys(inputs)
       .filter((k) => !NON_PROP_KEY(k))
-      // CloudCannon addresses nested inputs with dotted keys (`background.type`);
-      // the actual prop is the first segment (`background`).
-      .map((k) => k.split(".")[0])
+      // CloudCannon addresses nested inputs with dotted keys (`background.type`)
+      // and array items with `name[*]`; the actual prop is the first segment.
+      .map((k) => k.split(".")[0].replace(/\[\*\]$/, ""))
       .filter((k) => !destructured.has(k));
 
     report(inputsAbs, "input key(s)", stray);
@@ -155,6 +155,44 @@ for (const relYaml of yamlPaths) {
 
   if (siblingMatch) ok(`co-located  ${rel(yamlAbs)}`);
   else fail(rel(yamlAbs), `no sibling .astro whose kebab name is "${prefix}"`);
+}
+
+// Check 3b — Input-group coverage (FAIL): page-section structure values group
+// their inputs (Content first, then a collapsed "Section settings" group) so
+// shell config doesn't present as a peer of the content. When a `groups` block
+// is present, every `value:` key except `_component` must sit in exactly one
+// group, and every listed input must exist under `value:` — otherwise a newly
+// added prop silently lands wherever the editor defaults ungrouped inputs.
+// A page section with no `groups` at all is a WARN, so new sections adopt the
+// pattern (the scaffold template ships it).
+
+for (const relYaml of yamlPaths.filter(
+  (p) => p.startsWith("page-sections/") && p.endsWith(".structure-value.yml")
+)) {
+  const yamlAbs = join(componentsDir, relYaml);
+  const doc = loadYaml(yamlAbs) || {};
+
+  if (!Array.isArray(doc.groups)) {
+    warn(
+      rel(yamlAbs),
+      "page section has no `groups` block — settings inputs present as peers of content"
+    );
+    continue;
+  }
+  const valueKeys = Object.keys(doc.value || {}).filter((k) => k !== "_component");
+  const listed = doc.groups.flatMap((g) => g.inputs || []);
+  const seen = new Set();
+  const dupes = [...new Set(listed.filter((k) => (seen.has(k) ? true : (seen.add(k), false))))];
+  const ungrouped = valueKeys.filter((k) => !seen.has(k));
+  const unknown = listed.filter((k) => !valueKeys.includes(k));
+  const problems = [];
+
+  if (ungrouped.length) problems.push(`value key(s) in no group: ${ungrouped.join(", ")}`);
+  if (unknown.length) problems.push(`group input(s) with no value key: ${unknown.join(", ")}`);
+  if (dupes.length) problems.push(`input(s) listed in two groups: ${dupes.join(", ")}`);
+
+  if (problems.length) fail(rel(yamlAbs), problems.join("; "));
+  else ok(`group cover ${rel(yamlAbs)}`);
 }
 
 // Check 4 — `_component` resolution (FAIL): every `_component` value found in
@@ -262,12 +300,15 @@ for (const abs of structureFiles) {
 // with no seeded key simply never renders a field for that block — the input
 // looks configured but is unreachable in the editor.
 //
-// Two exemptions, both deliberate:
+// Three exemptions, all deliberate:
 //   - `hidden: true` inputs are dev-set props (Image's `sizes`/`widths`), where
 //     the component's own default is the intended value and seeding it into
 //     every block would just duplicate that default into content.
 //   - `hidden: "<expression>"` inputs are conditionally shown; their parent key
 //     is what needs seeding, and dotted keys resolve through it.
+//   - `<name>[*]` keys configure an array's items, not a field of their own —
+//     the parent array is what needs seeding (and check 7 requires the `[*]`
+//     entry to exist for plain arrays).
 
 const hasPath = (obj, path) => {
   let cursor = obj;
@@ -288,7 +329,10 @@ for (const [dir] of mainByDir) {
 
   const value = (loadYaml(valueAbs) || {}).value || {};
   const unseeded = Object.entries(loadYaml(inputsAbs) || {})
-    .filter(([key, cfg]) => !NON_PROP_KEY(key) && cfg?.hidden !== true && !hasPath(value, key))
+    .filter(
+      ([key, cfg]) =>
+        !NON_PROP_KEY(key) && !key.endsWith("[*]") && cfg?.hidden !== true && !hasPath(value, key)
+    )
     .map(([key]) => key);
 
   if (unseeded.length) {

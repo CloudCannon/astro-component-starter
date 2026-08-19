@@ -125,7 +125,7 @@ pageSections:
   - _component: page-sections/heroes/hero-center
     heading: Welcome to my site
     subtext: Built with the Astro Component Starter.
-  - _component: page-sections/features/feature-split
+  - _component: page-sections/explainers/feature-split
     heading: Fast and easy
     subtext: Zero-JS by default.
     imageSource: /src/assets/images/feature.svg

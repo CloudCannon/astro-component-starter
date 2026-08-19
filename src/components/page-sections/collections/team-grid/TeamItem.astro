@@ -1,0 +1,61 @@
+---
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import CardGridItem from "@wrappers/card-grid/CardGridItem.astro";
+
+const {
+  name = "",
+  role = "",
+  bio = "",
+  imageSource = "",
+  imageAlt = "",
+  class: className,
+  _component,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CardGridItem
+  class:list={["team-item", className]}
+  image={imageSource}
+  imageAlt={imageAlt || name}
+  aspectRatio="square"
+  data-prop-src="imageSource"
+  data-prop-alt="imageAlt"
+  {...htmlAttributes}
+>
+  <Heading
+    class="team-name"
+    level="h3"
+    size="md"
+    alignmentHorizontal="start"
+    data-prop="name"
+  >
+    {name}
+  </Heading>
+  <SimpleText
+    class="team-role"
+    size="sm"
+    alignmentHorizontal="start"
+    data-prop="role"
+    text={role}
+  />
+  <SimpleText
+    class="team-bio"
+    size="sm"
+    alignmentHorizontal="start"
+    data-prop="bio"
+    text={bio}
+  />
+</CardGridItem>
+
+<style is:global>
+  @layer page-sections {
+    .team-item {
+      .team-role {
+        font-weight: var(--font-weight-bold);
+      }
+    }
+  }
+</style>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-contact-split">
+  <title id="t-contact-split">Contact split component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 210)">
+    <rect x="160" y="0" width="960" height="380" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="200" y="40" width="90" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="200" y="68" width="240" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="200" y="116" width="280" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="200" y="160" width="18" height="18" rx="5" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="228" y="163" width="180" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="200" y="200" width="18" height="18" rx="5" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="228" y="203" width="180" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="200" y="240" width="18" height="18" rx="5" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="228" y="243" width="180" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="200" y="280" width="18" height="18" rx="5" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="228" y="283" width="180" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="560" y="40" width="520" height="56" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
+    <rect x="560" y="112" width="520" height="56" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
+    <rect x="560" y="184" width="520" height="100" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
+    <rect x="560" y="300" width="180" height="48" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="610" y="320" width="81" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+  </g>
+</svg>

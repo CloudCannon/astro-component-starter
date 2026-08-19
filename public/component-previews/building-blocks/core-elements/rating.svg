@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-rating">
+  <title id="t-rating">Rating component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g>
+    <rect x="480" y="382" width="36" height="36" rx="8" fill="var(--pv-ink, #151515)"/>
+    <rect x="528" y="382" width="36" height="36" rx="8" fill="var(--pv-ink, #151515)"/>
+    <rect x="576" y="382" width="36" height="36" rx="8" fill="var(--pv-ink, #151515)"/>
+    <rect x="624" y="382" width="36" height="36" rx="8" fill="var(--pv-ink, #151515)"/>
+    <rect x="672" y="382" width="36" height="36" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="672" y="382" width="18" height="36" rx="8" fill="var(--pv-ink, #151515)"/>
+    <rect x="744" y="394" width="56" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+  </g>
+</svg>

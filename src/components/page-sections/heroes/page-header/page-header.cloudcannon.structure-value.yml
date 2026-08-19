@@ -1,0 +1,60 @@
+label: Page Header
+icon: title
+description: A slim title block for interior pages, with optional breadcrumbs.
+value:
+  _component: page-sections/heroes/page-header
+  sectionLabel: ""
+  eyebrow: ""
+  heading: About us
+  subtext: A short introduction to the page, one or two lines long.
+  showBreadcrumbs: true
+  alignmentHorizontal: start
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 2xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Page Header
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/heroes/page-header.svg
+  icon: title
+picker_preview:
+  text: Page Header
+  subtext: A slim title block for interior pages, with optional breadcrumbs.
+  image: /component-previews/page-sections/heroes/page-header.svg
+  icon: title
+_inputs_from_glob:
+  - /src/components/page-sections/heroes/page-header/page-header.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - showBreadcrumbs
+      - alignmentHorizontal
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

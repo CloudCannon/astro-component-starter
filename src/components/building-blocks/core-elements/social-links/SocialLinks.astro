@@ -1,0 +1,135 @@
+---
+import Icon from "@core-elements/icon/Icon.astro";
+
+type SocialLink = { icon?: string; link?: string; label?: string };
+
+const {
+  links = [],
+  variant = "ghost",
+  size = "md",
+  alignmentHorizontal = "none",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!_component && links.length === 0) return;
+---
+
+<nav
+  class:list={[
+    "social-links",
+    `variant-${variant}`,
+    `size-${size}`,
+    alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    className,
+  ]}
+  aria-label="Social"
+  {...htmlAttributes}
+>
+  <ul
+    class="social-links-list"
+    data-editable="array"
+    data-prop="links"
+    data-direction="row"
+  >
+    {
+      links.map((social: SocialLink) => (
+        <li data-editable="array-item">
+          <a
+            class="social-link"
+            href={social.link}
+            aria-label={social.label || `Visit our ${social.icon?.replace(/^.*\//, "")} page`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon
+              name={social.icon}
+              size="none"
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style is:global>
+  @layer components {
+    .social-links {
+      .social-links-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .social-link {
+        align-items: center;
+        border-radius: var(--radius-sm);
+        color: var(--color-text-muted);
+        display: flex;
+        font-size: var(--font-size-lg);
+        justify-content: center;
+        text-decoration: none;
+        transition-duration: var(--animation-normal);
+        transition-property: background-color, color, opacity;
+        transition-timing-function: var(--ease-in-out);
+
+        &:hover {
+          background-color: var(--color-bg-muted);
+          color: var(--color-text);
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      /* md is the 44px touch-target minimum; sm is for footers where the row
+         sits inline with legal text. */
+      &.size-md .social-link {
+        height: 2.75rem;
+        width: 2.75rem;
+      }
+
+      &.size-sm .social-link {
+        height: 2.25rem;
+        width: 2.25rem;
+      }
+
+      &.variant-solid {
+        .social-links-list {
+          gap: var(--spacing-sm);
+        }
+
+        .social-link {
+          background-color: var(--color-bg-brand);
+          color: var(--color-text-on-brand);
+
+          &:hover {
+            background-color: var(--color-bg-brand);
+            color: var(--color-text-on-brand);
+            opacity: 0.85;
+          }
+        }
+      }
+
+      &.align-start .social-links-list {
+        justify-content: flex-start;
+      }
+
+      &.align-center .social-links-list {
+        justify-content: center;
+      }
+
+      &.align-end .social-links-list {
+        justify-content: flex-end;
+      }
+    }
+  }
+</style>

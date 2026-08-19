@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-card-collection">
+  <title id="t-card-collection">Card collection component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 142)">
+    <rect x="480" y="0" width="320" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="420" y="44" width="440" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="120" width="304" height="396" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="160" y="120" width="304" height="176" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="396" cy="172" r="20" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="193,288 258,212 323,288" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="307,290 370,232 433,290" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="12" stroke-linejoin="round"/>
+    <rect x="184" y="320" width="92" height="28" rx="14" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="206" y="330" width="48" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="184" y="368" width="200" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="184" y="404" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="184" y="430" width="232" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="488" y="120" width="304" height="396" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="488" y="120" width="304" height="176" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="724" cy="172" r="20" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="521,288 586,212 651,288" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="635,290 698,232 761,290" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="12" stroke-linejoin="round"/>
+    <rect x="512" y="320" width="92" height="28" rx="14" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="534" y="330" width="48" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="512" y="368" width="200" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="512" y="404" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="512" y="430" width="232" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="816" y="120" width="304" height="396" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="816" y="120" width="304" height="176" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="1052" cy="172" r="20" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="849,288 914,212 979,288" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="963,290 1026,232 1089,290" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="12" stroke-linejoin="round"/>
+    <rect x="840" y="320" width="92" height="28" rx="14" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="862" y="330" width="48" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="840" y="368" width="200" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="840" y="404" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="840" y="430" width="232" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+  </g>
+</svg>

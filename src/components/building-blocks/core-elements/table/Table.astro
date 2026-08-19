@@ -1,0 +1,208 @@
+---
+import { columnCount, normalizeRow } from "@component-utils/tableCells";
+
+type RowProps = { cells?: string[] };
+
+const {
+  caption = "",
+  headerCells = [],
+  rows = [],
+  firstColumnHeader = true,
+  striped = false,
+  compact = false,
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const width = columnCount(headerCells, rows);
+const normalizedHeader = normalizeRow(headerCells, width);
+const normalizedRows = (rows as RowProps[]).map((row) => normalizeRow(row?.cells, width));
+
+if (!_component && width === 0) return;
+---
+
+<div
+  class:list={[
+    "table",
+    striped && "striped",
+    compact && "compact",
+    firstColumnHeader && "first-col-header",
+    className,
+  ]}
+  {...htmlAttributes}
+>
+  <p
+    class="table-scroll-hint"
+    aria-hidden="true"
+  >
+    Scroll →
+  </p>
+  <div
+    class="table-scroller"
+    role="region"
+    tabindex="0"
+    aria-label={caption || "Table"}
+  >
+    <table>
+      {
+        caption && (
+          <caption
+            data-editable="text"
+            data-prop="caption"
+          >
+            {caption}
+          </caption>
+        )
+      }
+      {
+        headerCells.length > 0 && (
+          <thead>
+            <tr>
+              {normalizedHeader.map((cell) => (
+                <th scope="col">{cell}</th>
+              ))}
+            </tr>
+          </thead>
+        )
+      }
+      <tbody>
+        {
+          normalizedRows.map((cells) => (
+            <tr>
+              {cells.map((cell, cellIndex) =>
+                cellIndex === 0 && firstColumnHeader ? <th scope="row">{cell}</th> : <td>{cell}</td>
+              )}
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .table {
+      .table-scroll-hint {
+        color: var(--color-text-muted);
+        display: none;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        margin: 0 0 var(--spacing-xs);
+        text-transform: uppercase;
+      }
+
+      .table-scroller {
+        overflow-x: auto;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      table {
+        border-collapse: collapse;
+        min-width: 34rem;
+        width: 100%;
+      }
+
+      caption {
+        caption-side: top;
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        padding-block-end: var(--spacing-sm);
+        text-align: start;
+      }
+
+      th,
+      td {
+        text-align: start;
+      }
+
+      /* `border` and `background` reset the boxed look the base layer gives
+         markdown-content tables — this component is horizontal rules only. */
+      thead th {
+        background: none;
+        border: 0;
+        border-bottom: 2px solid var(--color-border-strong);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.06em;
+        padding: var(--spacing-sm) var(--spacing-md);
+        text-transform: uppercase;
+      }
+
+      tbody th,
+      tbody td {
+        border: 0;
+        border-bottom: 1px solid var(--color-border);
+        font-size: var(--font-size-md);
+        padding: var(--spacing-md);
+      }
+
+      tbody tr:last-child th,
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      tbody th[scope="row"] {
+        font-weight: var(--font-weight-semibold);
+      }
+
+      &.striped {
+        tbody th,
+        tbody td {
+          border-bottom: none;
+        }
+
+        tbody tr:nth-child(2n) th,
+        tbody tr:nth-child(2n) td {
+          background-color: var(--color-bg-surface);
+        }
+      }
+
+      &.compact {
+        thead th {
+          font-size: var(--font-size-xs);
+          padding: var(--spacing-xs) var(--spacing-sm);
+        }
+
+        tbody th,
+        tbody td {
+          font-size: var(--font-size-sm);
+          padding: var(--spacing-xs) var(--spacing-sm);
+        }
+      }
+
+      /* 640px = canonical mobile/stacking breakpoint — below it the table pans
+         with a sticky row-header column. */
+      @media (width < 640px) {
+        .table-scroll-hint {
+          display: block;
+        }
+
+        .table-scroller {
+          mask-image: linear-gradient(90deg, #000 calc(100% - var(--spacing-xl)), transparent);
+        }
+
+        &.first-col-header {
+          thead th:first-child,
+          tbody th[scope="row"] {
+            background-color: var(--color-bg);
+            border-inline-end: 1px solid var(--color-border);
+            inset-inline-start: 0;
+            position: sticky;
+          }
+
+          &.striped tbody tr:nth-child(2n) th[scope="row"] {
+            background-color: var(--color-bg-surface);
+          }
+        }
+      }
+    }
+  }
+</style>

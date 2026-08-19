@@ -1,6 +1,22 @@
 {
-  "extends": "astro/tsconfigs/strict",
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "jsx": "preserve",
+    "types": ["astro/client"],
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
@@ -10,7 +26,7 @@
       "@wrappers/*": ["src/components/building-blocks/wrappers/*"],
       "@navigation/*": ["src/components/navigation/*"],
       "@page-sections/*": ["src/components/page-sections/*"],
-      "@features/*": ["src/components/page-sections/features/*"],
+      "@explainers/*": ["src/components/page-sections/explainers/*"],
       "@builders/*": ["src/components/page-sections/builders/*"],
       "@component-utils/*": ["src/components/utils/*"],
       "@component-docs/*": ["src/component-docs/*"],
@@ -21,6 +37,6 @@
       "@assets/*": ["src/assets/*"]
     }
   },
-  "include": [".astro/types.d.ts", "src/**/*"],
+  "include": [".astro/types.d.ts", "src/env.d.ts", "**/*"],
   "exclude": ["node_modules", "dist"]
 }

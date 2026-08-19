@@ -1,0 +1,45 @@
+faqSection:
+  template: mdx_component
+  inline: false
+  preview:
+    text:
+      - FAQ Section
+    subtext:
+      - key: heading
+    image: /component-previews/page-sections/explainers/faq-section.svg
+    icon: help
+  definitions:
+    component_name: FaqSection
+    named_args:
+      - editor_key: sectionLabel
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: maxContentWidth
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingHorizontal
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingVertical
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: heading
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: items
+        type: array
+      - editor_key: colorScheme
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: backgroundColor
+        type: string
+        optional: true
+        remove_empty: true
+  _inputs_from_glob:
+    - /src/components/page-sections/explainers/faq-section/faq-section.cloudcannon.inputs.yml

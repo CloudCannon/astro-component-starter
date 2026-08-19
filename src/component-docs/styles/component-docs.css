@@ -67,7 +67,6 @@
     & .heading-anchor {
       color: var(--color-text-muted);
       font-weight: var(--font-weight-normal);
-      margin-inline-start: 0.25em;
       opacity: 0;
       text-decoration: none;
       transition: opacity var(--animation-normal) ease;

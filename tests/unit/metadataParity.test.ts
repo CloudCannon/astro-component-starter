@@ -243,7 +243,7 @@ function buildOldMetadata(declaredSlots: SlotFrontmatter[]): ComponentMetadata {
       slotInfos.push({
         name: slot.title || "default",
         fallbackFor: slot.fallback_for,
-        childComponent: slot.child_component || undefined,
+        childComponent: (slot.child_component as ComponentMetadata["childComponent"]) || undefined,
       });
     }
 
@@ -320,6 +320,70 @@ const EXPECTED_CHANGES: Record<string, ComponentMetadata> = {
   // resolves unambiguously to `text` (MarkdownText is a one-level alias of
   // it), so the merge now fills in the previously-blank fallbackFor/slots.
   "building-blocks/core-elements/simple-text": {
+    supportsSlots: true,
+    fallbackFor: "text",
+    childComponent: undefined,
+    slots: [{ name: "default", fallbackFor: "text", childComponent: undefined }],
+  },
+  // New component, born after `slots:` frontmatter was retired — nothing to
+  // declare. Its default slot's fallback renders the `text` prop's markdown,
+  // which derives unambiguously, same as simple-text.
+  "building-blocks/core-elements/alert": {
+    supportsSlots: true,
+    fallbackFor: "text",
+    childComponent: undefined,
+    slots: [{ name: "default", fallbackFor: "text", childComponent: undefined }],
+  },
+  // New wrapper, born after `slots:` frontmatter was retired. Its default
+  // slot falls back to `items?.map(<MasonryItem …>)`, which derives to the
+  // `items` prop repeating MasonryItem — the same shape Grid declares.
+  "building-blocks/wrappers/masonry": {
+    supportsSlots: true,
+    fallbackFor: "items",
+    childComponent: { name: "MasonryItem", props: ["contentSections/slot"] },
+    slots: [
+      {
+        name: "default",
+        fallbackFor: "items",
+        childComponent: { name: "MasonryItem", props: ["contentSections/slot"] },
+      },
+    ],
+  },
+  // Same Grid/Masonry shape: default slot falls back to `items?.map(<StepsItem>)`.
+  // Docs frontmatter marks the item's contentSections as a nested slot so the
+  // Astro preview renders Heading/SimpleText children instead of
+  // contentSections="[object Object]".
+  "building-blocks/wrappers/steps": {
+    supportsSlots: true,
+    fallbackFor: "items",
+    childComponent: { name: "StepsItem", props: ["contentSections/slot"] },
+    slots: [
+      {
+        name: "default",
+        fallbackFor: "items",
+        childComponent: { name: "StepsItem", props: ["contentSections/slot"] },
+      },
+    ],
+  },
+  // Branched template (vertical / grouped / horizontal each wrap `<slot>`).
+  // The grouped branch maps a computed `groups` view; merge keeps the clean
+  // `entries.map(<TimelineItem>)` derivation so no docs override is needed.
+  "building-blocks/wrappers/timeline": {
+    supportsSlots: true,
+    fallbackFor: "entries",
+    childComponent: { name: "TimelineItem" },
+    slots: [
+      {
+        name: "default",
+        fallbackFor: "entries",
+        childComponent: { name: "TimelineItem" },
+      },
+    ],
+  },
+  // New component, born after `slots:` frontmatter was retired — nothing to
+  // declare. Its default slot's fallback is `<slot>{text}</slot>`, which
+  // derives unambiguously to the `text` prop, same as button.
+  "building-blocks/core-elements/badge": {
     supportsSlots: true,
     fallbackFor: "text",
     childComponent: undefined,

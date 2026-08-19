@@ -1,0 +1,83 @@
+label: FAQ Section
+icon: help
+description: Section displaying frequently asked questions in an accordion format.
+value:
+  _component: page-sections/explainers/faq-section
+  sectionLabel: ""
+  heading: Frequently Asked Questions
+  items: []
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - FAQ Section
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/explainers/faq-section.svg
+  icon: help
+picker_preview:
+  text: FAQ Section
+  subtext: Accordion of frequently asked questions.
+  image: /component-previews/page-sections/explainers/faq-section.svg
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/faq-section/faq-section.cloudcannon.inputs.yml
+_structures:
+  faqItems:
+    values:
+      - label: FAQ Item
+        icon: help
+        value:
+          title: Question text
+          contentSections:
+            - _component: building-blocks/core-elements/text
+              text: Answer text goes here.
+              size: md
+        preview:
+          text:
+            - key: title
+            - FAQ Item
+          subtext:
+            - key: contentSections.0.text
+            - Add answer text
+        _inputs:
+          title:
+            type: text
+            comment: The question text.
+          contentSections:
+            type: array
+            label: Answer Content
+            comment: Content sections for the answer (typically text).
+            options:
+              structures: _structures.accordionSections
+        _structures_from_glob:
+          - /.cloudcannon/structures/accordionSections.cloudcannon.structures.yml
+groups:
+  - heading: Content
+    inputs:
+      - heading
+      - items
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

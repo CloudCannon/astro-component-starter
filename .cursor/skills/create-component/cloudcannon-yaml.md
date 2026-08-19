@@ -155,6 +155,8 @@ buttonSections:
 | `carouselSections`        | Inside carousel slides              |
 | `contentSelectorSections` | Inside content-selector panels      |
 | `bentoBoxSections`        | Inside bento-box items              |
+| `masonryItemSections`     | Inside masonry items                |
+| `stepsItemSections`       | Inside step items                   |
 | `modalSections`           | Inside modals                       |
 | `formBlocks`              | Form field areas (Form, cta-form)   |
 | `buttonSections`          | Button groups (button only)         |

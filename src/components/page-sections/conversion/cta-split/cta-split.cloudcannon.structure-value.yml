@@ -1,0 +1,70 @@
+label: CTA Split
+icon: call_to_action
+description: Side-by-side CTA with copy on one side and stacked buttons on the other.
+value:
+  _component: page-sections/conversion/cta-split
+  sectionLabel: ""
+  heading: Heading text
+  subtext: Subtext placeholder text that will be replaced with actual content.
+  imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+  imageAlt: CTA image
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: My Button
+      hideText: false
+      link: ""
+      iconName: ""
+      iconColor: default
+      iconPosition: before
+      variant: primary
+      size: md
+  reverse: false
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - CTA Split
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/conversion/cta-split.svg
+  icon: call_to_action
+picker_preview:
+  text: CTA Split
+  subtext: Split layout CTA with button stack.
+  image: /component-previews/page-sections/conversion/cta-split.svg
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/cta-split/cta-split.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - heading
+      - subtext
+      - imageSource
+      - imageAlt
+      - buttonSections
+      - reverse
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

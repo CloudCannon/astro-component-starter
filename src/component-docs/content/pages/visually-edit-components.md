@@ -74,7 +74,7 @@ Some components contain arrays of child components, like a row of buttons or a s
 
 ## Putting it all together
 
-Here's [CTA Center](/component-docs/components/page-sections/ctas/cta-center/) as a real-world example using all three patterns:
+Here's [CTA Center](/component-docs/components/page-sections/conversion/cta-center/) as a real-world example using all three patterns:
 
 ```astro
 <CustomSection maxContentWidth="lg" paddingVertical={paddingVertical} {...htmlAttributes}>

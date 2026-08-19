@@ -1,0 +1,129 @@
+label: Feature Grid
+icon: apps
+description: Responsive grid layout for highlighting multiple product features.
+value:
+  _component: page-sections/explainers/feature-grid
+  sectionLabel: ""
+  eyebrow: Eyebrow text
+  heading: Heading text
+  subtext: Subtext placeholder text that will be replaced with actual content.
+  alignmentHorizontal: center
+  features: []
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Feature Grid
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/explainers/feature-grid.svg
+  icon: apps
+picker_preview:
+  text: Feature Grid
+  subtext: Grid of feature highlights with icons and descriptions.
+  image: /component-previews/page-sections/explainers/feature-grid.svg
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/feature-grid/feature-grid.cloudcannon.inputs.yml
+_structures:
+  featureGridItems:
+    values:
+      - label: Feature
+        icon: apps
+        value:
+          title: Feature title
+          description: Feature description placeholder text that will be replaced with actual content.
+          iconName: bolt
+          iconColor: yellow
+        preview:
+          text:
+            - key: title
+            - Feature
+          subtext:
+            - key: description
+          image:
+            - template: src/icons/{iconName}.svg
+        _inputs:
+          title:
+            type: text
+            comment: Name of the feature.
+          description:
+            type: markdown
+            comment: Supporting description for the feature.
+            options:
+              blockquote: false
+              bold: true
+              format:
+              italic: true
+              link: true
+              strike: false
+              subscript: true
+              superscript: true
+              underline: false
+              bulletedlist: false
+              numberedlist: false
+          iconName:
+            type: select
+            comment: Icon displayed with the feature. Sourced from [Heroicons](https://heroicons.com/).
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+          iconColor:
+            type: select
+            comment: Color accent applied to the icon.
+            options:
+              values:
+                - id: default
+                  name: Default
+                - id: blue
+                  name: Blue
+                - id: green
+                  name: Green
+                - id: yellow
+                  name: Yellow
+                - id: orange
+                  name: Orange
+                - id: red
+                  name: Red
+                - id: purple
+                  name: Purple
+                - id: pink
+                  name: Pink
+                - id: cyan
+                  name: Cyan
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - alignmentHorizontal
+      - features
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

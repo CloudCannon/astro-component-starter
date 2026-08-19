@@ -1,0 +1,145 @@
+---
+import { slugifyLabel } from "@components/utils/slugify";
+import Masonry from "@wrappers/masonry/Masonry.astro";
+import MasonryItem from "@wrappers/masonry/MasonryItem.astro";
+import CardGridItem from "./CardGridItem.astro";
+
+type ItemProps = Record<string, unknown>;
+
+const {
+  label,
+  layout = "grid",
+  columns = 3,
+  gap = "lg",
+  aspectRatio = "landscape",
+  items = [],
+  class: className,
+  style: userStyle,
+  useDefaultEditableBinding = false,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const masonry = layout === "masonry";
+const columnCount = Math.min(4, Math.max(2, Math.round(Number(columns) || 3)));
+
+// Masonry mode keeps each cover's own shape — a fixed crop there would make
+// every card the same height, which is the whole point of the grid layout.
+const cardRatio = masonry ? "none" : aspectRatio;
+const gapValue = gap === "none" ? "0px" : `var(--spacing-${gap})`;
+
+const gridStyles = [
+  `--card-grid-columns: ${columnCount}`,
+  `--card-grid-gap: ${gapValue}`,
+  userStyle,
+]
+  .filter(Boolean)
+  .join("; ");
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
+  : {};
+
+const hasItems = items?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasItems && !hasSlotContent) return;
+---
+
+{
+  masonry ? (
+    /* The Masonry wrapper brings its own order-preserving enhancement and
+       editor wiring, so masonry mode composes it rather than repeating the
+       layout JS here. */
+    <div
+      class:list={["card-grid", "is-masonry", className]}
+      {...htmlAttributes}
+    >
+      <Masonry
+        class="card-grid-masonry"
+        columns={columnCount}
+        gap={gap}
+        data-children-prop={effectiveChildrenProp}
+      >
+        <slot>
+          {/* MasonryItem is the measurement probe for the JS enhancement.
+               CardGridItem can't be the grid child: it has overflow:hidden
+               and a flex column, so measuring it after the row-span is set
+               feeds back into an 8px-tall collapse. */}
+          {items?.map((item: ItemProps) => (
+            <MasonryItem
+              data-id="building-blocks/wrappers/card-grid/card-grid-item"
+              data-editable="array-item"
+            >
+              <CardGridItem
+                useDefaultEditableBinding={!!effectiveChildrenProp}
+                {...item}
+                aspectRatio={cardRatio}
+                data-children-prop="contentSections"
+              />
+            </MasonryItem>
+          ))}
+        </slot>
+      </Masonry>
+    </div>
+  ) : (
+    /* Exact columns on this element (same as Gallery Grid / the old Card
+       Collection ul) so the grid has a definite stretch width. A nested
+       inner with minmax(0, 1fr) shrink-wraps to ~0 when its parent width
+       is indefinite. */
+    <div
+      class:list={["card-grid", className]}
+      style={gridStyles}
+      {...arrayDataAttributes}
+      {...htmlAttributes}
+    >
+      <slot>
+        {items?.map((item: ItemProps) => (
+          <CardGridItem
+            data-id="building-blocks/wrappers/card-grid/card-grid-item"
+            data-editable="array-item"
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...item}
+            aspectRatio={cardRatio}
+            data-children-prop="contentSections"
+          />
+        ))}
+      </slot>
+    </div>
+  )
+}
+
+<style is:global>
+  @layer components {
+    .card-grid {
+      margin-top: var(--spacing-lg);
+      width: 100%;
+
+      &:not(.is-masonry) {
+        display: grid;
+        gap: var(--card-grid-gap, var(--spacing-lg));
+        grid-template-columns: minmax(0, 1fr);
+
+        /* 640px: canonical mobile breakpoint — one card per row below it. */
+        @media (width >= 640px) {
+          grid-template-columns: repeat(var(--card-grid-columns, 3), minmax(0, 1fr));
+        }
+
+        > * {
+          min-width: 0;
+        }
+      }
+
+      /* Masonry owns its own inner spacing; Card Grid owns the outer offset. */
+      > .masonry {
+        margin-top: 0;
+      }
+    }
+  }
+</style>

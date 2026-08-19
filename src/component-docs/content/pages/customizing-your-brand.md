@@ -84,7 +84,7 @@ Themes aren't just a global toggle. They're used **per-section** within your pag
 For example, on a light-themed page, you can drop in a dark section:
 
 ```yaml
-- _component: page-sections/ctas/cta-center
+- _component: page-sections/conversion/cta-center
   heading: Ready to start building?
   colorScheme: dark
   backgroundColor: surface
@@ -138,7 +138,7 @@ Styles are organized into six layers, in order of precedence:
 1. **`reset`**: Normalizes browser defaults
 2. **`base`**: Typography, form elements, HTML element styles
 3. **`components`**: Building block component styles (buttons, cards, navigation)
-4. **`page-sections`**: Page section component styles (heroes, features, CTAs)
+4. **`page-sections`**: Page section component styles (heroes, explainers, conversion sections)
 5. **`utils`**: Utility classes (e.g., `.visually-hidden`)
 6. **`overrides`**: Custom overrides and page-specific styles
 

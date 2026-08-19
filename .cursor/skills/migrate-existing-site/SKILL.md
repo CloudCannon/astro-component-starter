@@ -69,15 +69,15 @@ For each inventoried section, match it to an existing page section before consid
 | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
 | Centered heading + subtext + buttons            | `page-sections/heroes/hero-center`                                                    |
 | Text + image side by side (hero position)       | `page-sections/heroes/hero-split`                                                     |
-| Grid of items with icons/titles                 | `page-sections/features/feature-grid`                                                 |
-| Text + image alternating, one feature at a time | `page-sections/features/feature-split`                                                |
-| Sliding/carousel cards                          | `page-sections/features/feature-slider`                                               |
-| Centered heading + buttons, no image            | `page-sections/ctas/cta-center`                                                       |
-| Text + image + buttons                          | `page-sections/ctas/cta-split`                                                        |
-| Contact form + image                            | `page-sections/ctas/cta-form`                                                         |
-| Accordion of Q&A                                | `page-sections/info-blocks/faq-section`                                               |
-| Grid of people/avatars                          | `page-sections/people/team-grid`                                                      |
-| Quote with attribution                          | `page-sections/people/testimonial-section`                                            |
+| Grid of items with icons/titles                 | `page-sections/explainers/feature-grid`                                               |
+| Text + image alternating, one feature at a time | `page-sections/explainers/feature-split`                                              |
+| Sliding/carousel cards                          | `page-sections/explainers/feature-slider`                                             |
+| Centered heading + buttons, no image            | `page-sections/conversion/cta-center`                                                 |
+| Text + image + buttons                          | `page-sections/conversion/cta-split`                                                  |
+| Contact form + image                            | `page-sections/conversion/cta-form`                                                   |
+| Accordion of Q&A                                | `page-sections/explainers/faq-section`                                                |
+| Grid of people/avatars                          | `page-sections/collections/team-grid`                                                 |
+| Quote with attribution                          | `page-sections/proof/testimonial-section`                                             |
 | Anything else                                   | `page-sections/builders/custom-section` composing building blocks, or a new component |
 
 ### Reuse-over-rebuild bias

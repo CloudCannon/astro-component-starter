@@ -1,0 +1,404 @@
+---
+import { slugifyLabel } from "@components/utils/slugify";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import TimelineItem from "./TimelineItem.astro";
+
+type EntryProps = {
+  year?: string;
+  date?: string;
+  title?: string;
+  body?: string;
+};
+
+const {
+  entries = [],
+  layout = "vertical",
+  label,
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const generatedLabel = label || `Timeline-${crypto.randomUUID()}`;
+
+if (!htmlAttributes.id) {
+  htmlAttributes.id = slugifyLabel(generatedLabel);
+}
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "entries" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-direction": layout === "horizontal" ? "row" : "column",
+    }
+  : {};
+
+const hasEntries = entries?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+const isHorizontal = layout === "horizontal";
+const isGrouped =
+  !isHorizontal && entries.some((entry: EntryProps) => isNonEmptyString(entry.year));
+
+type YearGroup = { year: string; entries: EntryProps[] };
+
+const groups: YearGroup[] = [];
+
+if (isGrouped) {
+  for (let i = 0; i < entries.length; i += 1) {
+    const entry = entries[i] as EntryProps;
+    const year = String(entry.year || "");
+    const last = groups[groups.length - 1];
+
+    if (last && last.year === year) last.entries.push(entry);
+    else groups.push({ year, entries: [entry] });
+  }
+}
+
+if (!_component && !hasEntries && !hasSlotContent) return;
+---
+
+<div
+  class:list={["timeline", `layout-${layout}`, isGrouped && "is-grouped", className]}
+  {...htmlAttributes}
+>
+  {
+    isHorizontal ? (
+      <div class="timeline-scroller">
+        <ol
+          class="timeline-list"
+          {...arrayDataAttributes}
+        >
+          <slot>
+            {entries?.map((entry: EntryProps, index: number) => (
+              <TimelineItem
+                layout={layout}
+                isLast={index === entries.length - 1}
+                useDefaultEditableBinding={!!effectiveChildrenProp}
+                data-editable="array-item"
+                data-id="building-blocks/wrappers/timeline/timeline-item"
+                {...entry}
+              />
+            ))}
+          </slot>
+        </ol>
+      </div>
+    ) : isGrouped ? (
+      <ol
+        class="timeline-list"
+        {...arrayDataAttributes}
+      >
+        <slot>
+          {groups.map((group, groupIndex) => (
+            <li class:list={["timeline-group", groupIndex === groups.length - 1 && "is-last"]}>
+              <h3 class="timeline-year">{group.year}</h3>
+              <ol class="timeline-group-list">
+                {group.entries.map((entry, index) => (
+                  <TimelineItem
+                    layout={layout}
+                    grouped={true}
+                    isLast={groupIndex === groups.length - 1 && index === group.entries.length - 1}
+                    useDefaultEditableBinding={!!effectiveChildrenProp}
+                    data-editable="array-item"
+                    data-id="building-blocks/wrappers/timeline/timeline-item"
+                    {...entry}
+                  />
+                ))}
+              </ol>
+            </li>
+          ))}
+        </slot>
+      </ol>
+    ) : (
+      <ol
+        class="timeline-list"
+        {...arrayDataAttributes}
+      >
+        <slot>
+          {entries?.map((entry: EntryProps, index: number) => (
+            <TimelineItem
+              layout={layout}
+              isLast={index === entries.length - 1}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              data-editable="array-item"
+              data-id="building-blocks/wrappers/timeline/timeline-item"
+              {...entry}
+            />
+          ))}
+        </slot>
+      </ol>
+    )
+  }
+</div>
+
+<style is:global>
+  @layer components {
+    .timeline {
+      --timeline-dot-size: 0.625rem;
+      --timeline-dot-size-horizontal: 0.75rem;
+      --timeline-date-col: 5.5rem;
+      --timeline-phase-width: 15rem;
+
+      margin-top: var(--spacing-lg);
+      min-width: 0;
+
+      .timeline-list,
+      .timeline-group-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .timeline-dot {
+        background-color: var(--color-bg-brand);
+        border-radius: var(--radius-full);
+        display: block;
+        flex: none;
+        height: var(--timeline-dot-size);
+        width: var(--timeline-dot-size);
+      }
+
+      .timeline-title {
+        font-size: var(--font-size-heading-xs);
+        line-height: var(--line-height-heading-xs);
+        margin: 0;
+      }
+
+      .timeline-title .heading-inner {
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0;
+      }
+
+      .timeline-body {
+        margin-top: var(--spacing-xs);
+      }
+
+      .timeline-body .simple-text-content {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-tight);
+        text-wrap: pretty;
+      }
+
+      /* Vertical (default): one unbroken rail from the first dot to the last.
+         Not gated on .layout-vertical — that's the default, and the docs
+         primary breaks if this CSS only runs when the class is present. */
+      &:not(.layout-horizontal):not(.is-grouped) {
+        .timeline-list {
+          display: grid;
+          gap: 0;
+        }
+
+        .timeline-entry {
+          display: grid;
+          gap: var(--spacing-xl);
+          grid-template-columns: var(--timeline-date-col) 1fr;
+        }
+
+        .timeline-date {
+          color: var(--color-text-muted);
+          font-family: var(--font-headings);
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-bold);
+          line-height: calc(var(--font-size-heading-xs) * var(--line-height-heading-xs));
+        }
+
+        .timeline-content {
+          border-inline-start: var(--border-width-sm) solid var(--color-border);
+          padding-block-end: var(--spacing-xl);
+          padding-inline-start: var(--spacing-xl);
+          position: relative;
+        }
+
+        .timeline-dot {
+          inset-block-start: calc(
+            (
+                var(--font-size-heading-xs) * var(--line-height-heading-xs) -
+                  var(--timeline-dot-size)
+              ) /
+              2
+          );
+          inset-inline-start: calc(-0.3125rem - var(--border-width-sm) / 2);
+          position: absolute;
+        }
+
+        .timeline-entry.is-last .timeline-content {
+          padding-block-end: 0;
+
+          &::after {
+            background-color: var(--color-bg);
+            content: "";
+            inset-block-end: 0;
+            inset-block-start: calc(
+              var(--font-size-heading-xs) * var(--line-height-heading-xs) / 2
+            );
+            inset-inline-start: calc(-1 * var(--border-width-sm));
+            position: absolute;
+            width: var(--border-width-sm);
+            z-index: var(--layer-1);
+          }
+        }
+
+        .timeline-entry.is-last .timeline-dot {
+          z-index: var(--layer-2);
+        }
+
+        /* 560px: content-driven — date moves above the title; the rail stays. */
+        @media (width < 560px) {
+          .timeline-entry {
+            grid-template-columns: 1fr;
+          }
+        }
+      }
+
+      /* Year-grouped: same continuous rail as ungrouped. Groups abut; each
+         group's padding-block-end carries the space so the line does not break. */
+      &.is-grouped {
+        .timeline-list {
+          display: grid;
+          gap: 0;
+        }
+
+        .timeline-group {
+          display: grid;
+          gap: var(--spacing-xl);
+          grid-template-columns: var(--timeline-date-col) 1fr;
+        }
+
+        .timeline-year {
+          color: var(--color-text-muted);
+          font-family: var(--font-headings);
+          font-size: var(--font-size-lg);
+          font-weight: var(--font-weight-bold);
+          line-height: var(--line-height-heading-sm);
+          margin: 0;
+        }
+
+        .timeline-group-list {
+          border-inline-start: var(--border-width-sm) solid var(--color-border);
+          display: grid;
+          gap: var(--spacing-xl);
+          padding-block-end: var(--spacing-2xl);
+          padding-inline-start: var(--spacing-xl);
+        }
+
+        .timeline-group.is-last .timeline-group-list {
+          padding-block-end: 0;
+        }
+
+        .timeline-entry {
+          position: relative;
+        }
+
+        .timeline-dot {
+          inset-block-start: 0.35rem;
+          inset-inline-start: calc(-1 * var(--spacing-xl) - 0.3125rem - var(--border-width-sm) / 2);
+          position: absolute;
+        }
+
+        .timeline-group.is-last .timeline-entry.is-last::after {
+          background-color: var(--color-bg);
+          content: "";
+          inset-block-end: 0;
+          inset-block-start: calc(0.35rem + var(--timeline-dot-size) / 2);
+          inset-inline-start: calc(-1 * var(--spacing-xl) - var(--border-width-sm));
+          position: absolute;
+          width: var(--border-width-sm);
+          z-index: var(--layer-1);
+        }
+
+        .timeline-group.is-last .timeline-entry.is-last .timeline-dot {
+          z-index: var(--layer-2);
+        }
+
+        .timeline-month {
+          color: var(--color-text-muted);
+          font-family: var(--font-mono);
+          font-size: var(--font-size-xs);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+
+        @media (width < 560px) {
+          .timeline-group {
+            grid-template-columns: 1fr;
+          }
+        }
+      }
+
+      /* Horizontal: unbounded phases scroll rather than wrap. */
+      &.layout-horizontal {
+        .timeline-scroller {
+          margin-inline-end: calc(-1 * var(--timeline-gutter, 0px));
+          min-width: 0;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          padding-inline-end: var(--timeline-gutter, 0px);
+          scroll-snap-type: x proximity;
+        }
+
+        .timeline-list {
+          display: flex;
+          gap: 0;
+        }
+
+        .timeline-entry {
+          flex: 0 0 var(--timeline-phase-width);
+          padding-inline-end: var(--spacing-lg);
+          scroll-snap-align: start;
+        }
+
+        .timeline-label {
+          color: var(--color-text-muted);
+          display: flex;
+          flex-wrap: wrap;
+          font-family: var(--font-mono);
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-semibold);
+          gap: var(--spacing-xs);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        .timeline-band {
+          align-items: center;
+          display: flex;
+          height: 1.5rem;
+          margin-block-start: var(--spacing-sm);
+          margin-inline-end: calc(-1 * var(--spacing-lg));
+          position: relative;
+
+          &::after {
+            background-color: var(--color-border);
+            content: "";
+            height: var(--border-width-sm);
+            inset-inline: 1.25rem 0;
+            position: absolute;
+          }
+        }
+
+        .timeline-dot {
+          height: var(--timeline-dot-size-horizontal);
+          position: relative;
+          width: var(--timeline-dot-size-horizontal);
+          z-index: var(--layer-1);
+        }
+
+        .timeline-title {
+          margin-block-start: var(--spacing-md);
+        }
+
+        .timeline-entry.is-last .timeline-band {
+          margin-inline-end: 0;
+
+          &::after {
+            background: linear-gradient(to right, var(--color-border), transparent);
+          }
+        }
+      }
+    }
+  }
+</style>

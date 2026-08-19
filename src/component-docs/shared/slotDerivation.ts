@@ -9,10 +9,12 @@
  * alias (`const markdownContent = renderMarkdown(text); ... {markdownContent}`).
  *
  * Anything that doesn't reduce to a single unambiguous prop (a slot name
- * reused across a branch with two different underlying props, a self-closing
+ * reused across a branch with two different *resolved* props, a self-closing
  * `<slot />` with the relationship expressed outside the slot, etc.) comes
  * back `ambiguous: true` with no `fallbackFor` — callers are expected to patch
  * those via a declared override (see metadata.ts's `mergeSlotMetadata`).
+ * A branch that maps a computed grouping of the same data (Timeline's
+ * `groups`) does not wipe a sibling branch that maps the authoring prop.
  *
  * Pure string-in/slots-out (no filesystem access) so it's cheap to unit test
  * against inline fixtures; `deriveSlotsForComponent` is the disk-reading,
@@ -53,6 +55,14 @@ const JS_RESERVED = new Set([
   "new",
   "void",
 ]);
+
+/** Drop block and line comments. Applied to the destructure before splitting:
+ *  prose is not code, and an apostrophe in a comment ("VideoModal's poster")
+ *  would otherwise open a string literal that never closes, swallowing every
+ *  prop after it. Mirrors the same strip in `scripts/lib/componentModel.mjs`. */
+function stripComments(str: string): string {
+  return str.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+}
 
 /** Split a string on a single-character separator, ignoring separators that
  *  appear inside (), [], {}, or string/template literals. */
@@ -165,7 +175,7 @@ function extractPropsInfo(script: string): PropsInfo {
 
   if (openBraceIdx === -1) return { propNames, localToProp };
 
-  const inner = script.slice(openBraceIdx + 1, closeBraceIdx);
+  const inner = stripComments(script.slice(openBraceIdx + 1, closeBraceIdx));
   const entries = splitTopLevel(inner, ",");
 
   for (const rawEntry of entries) {
@@ -347,8 +357,20 @@ function findChildComponent(content: string): { name: string } | undefined {
 }
 
 /** Merge two derivations of the same slot name (a slot name can appear more
- *  than once in source, e.g. Split's `reverse` ternary swapping "first"/"second"). */
+ *  than once in source, e.g. Split's `reverse` ternary swapping "first"/"second").
+ *
+ *  A branched template often has one clean fallback (`entries.map(<Item>)`)
+ *  and one computed view of the same data (`groups.map(...)`). Prefer the
+ *  resolved derivation so the docs preview still finds the authoring prop
+ *  instead of collapsing the whole slot to ambiguous. Two *resolved*
+ *  fallbacks that disagree (Split) still count as ambiguous. */
 function mergeSameNameSlot(a: DerivedSlot, b: DerivedSlot): DerivedSlot {
+  const aResolved = !a.ambiguous && !!a.fallbackFor;
+  const bResolved = !b.ambiguous && !!b.fallbackFor;
+
+  if (aResolved && !bResolved) return a;
+  if (bResolved && !aResolved) return b;
+
   if (a.ambiguous || b.ambiguous) {
     return { name: a.name, ambiguous: true };
   }

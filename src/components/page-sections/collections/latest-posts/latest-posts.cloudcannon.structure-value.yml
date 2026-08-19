@@ -1,0 +1,63 @@
+label: Latest Posts
+icon: newsmode
+description: The newest blog posts as cards, pulled automatically at build time.
+value:
+  _component: page-sections/collections/latest-posts
+  sectionLabel: ""
+  eyebrow: Writing
+  heading: From the blog
+  subtext: ""
+  count: 3
+  tag: ""
+  showViewAllButton: true
+  viewAllLabel: View all posts
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Latest Posts
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/collections/latest-posts.svg
+  icon: newsmode
+picker_preview:
+  text: Latest Posts
+  subtext: The newest blog posts as cards, pulled automatically at build time.
+  image: /component-previews/page-sections/collections/latest-posts.svg
+_inputs_from_glob:
+  - /src/components/page-sections/collections/latest-posts/latest-posts.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - count
+      - tag
+      - showViewAllButton
+      - viewAllLabel
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

@@ -47,3 +47,21 @@ picker_preview:
   icon: web_asset
 _inputs_from_glob:
   - /src/components/page-sections/heroes/hero-center/hero-center.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - buttonSections
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

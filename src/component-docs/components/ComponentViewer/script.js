@@ -22,25 +22,27 @@ function initializeComponentViewers() {
 
     const switchToExample = (exampleId) => {
       previews.forEach((preview) => {
-        preview.classList.toggle("active", preview.id === exampleId);
+        const active = preview.id === exampleId;
+
+        preview.classList.toggle("active", active);
+        preview.toggleAttribute("inert", !active);
+        preview.setAttribute("aria-hidden", active ? "false" : "true");
+        preview.tabIndex = active ? 0 : -1;
       });
 
       const viewMode =
         segments.view?.querySelector(`input[name="view-mode-${viewerId}"]:checked`)?.value ||
         "component";
 
+      viewer.classList.toggle("showing-code", viewMode !== "component");
+
       if (viewMode === "component") {
-        previews.forEach((preview) => {
-          preview.style.display = preview.classList.contains("active") ? "block" : "none";
-        });
         codeBlocks.forEach((block) => (block.style.display = "none"));
       } else if (viewMode === "astro") {
-        previews.forEach((preview) => (preview.style.display = "none"));
         codeBlocks.forEach((block) => {
           block.style.display = block.id === `astro-code-${exampleId}` ? "block" : "none";
         });
       } else if (viewMode === "frontmatter") {
-        previews.forEach((preview) => (preview.style.display = "none"));
         codeBlocks.forEach((block) => {
           block.style.display = block.id === `frontmatter-code-${exampleId}` ? "block" : "none";
         });
@@ -103,8 +105,15 @@ function initializeComponentViewers() {
         const maxHeight = window.innerHeight * 0.8;
 
         const clampedHeight = Math.min(maxHeight, newHeight);
+        const previewsEl = viewer.querySelector(".previews");
 
-        activePreview.style.height = `${clampedHeight}px`;
+        if (previewsEl) {
+          previewsEl.style.height = `${clampedHeight}px`;
+        }
+
+        previews.forEach((preview) => {
+          preview.style.height = "100%";
+        });
         codeBlocks.forEach((block) => {
           block.style.height = `${clampedHeight}px`;
         });

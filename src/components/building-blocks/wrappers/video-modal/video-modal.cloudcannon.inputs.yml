@@ -32,12 +32,49 @@ source:
     paths:
       uploads: public/videos
       static: public
+triggerStyle:
+  type: select
+  comment: Open the video from a button, or from a poster image with a play disc over it.
+  options:
+    values:
+      - id: button
+        name: Button
+      - id: poster
+        name: Poster image
+posterImage:
+  type: image
+  comment: The still frame shown before the video plays. Required for the poster trigger.
+  hidden: "triggerStyle !== 'poster'"
+  options:
+    paths:
+      uploads: src/assets/images
+      static: ""
+posterAlt:
+  type: text
+  comment: Accessible description of the poster image. Leave empty for a decorative still.
+  hidden: "triggerStyle !== 'poster'"
+posterAspectRatio:
+  type: select
+  comment: Crop of the poster image.
+  hidden: "triggerStyle !== 'poster'"
+  options:
+    values:
+      - id: widescreen
+        name: Widescreen (16:9)
+      - id: landscape
+        name: Landscape (4:3)
+      - id: square
+        name: Square (1:1)
+      - id: none
+        name: Natural
 triggerText:
   type: text
   comment: Text displayed on the button that opens the video modal.
+  hidden: "triggerStyle === 'poster'"
 triggerVariant:
   type: select
   comment: Visual style of the trigger button.
+  hidden: "triggerStyle === 'poster'"
   options:
     values:
       - id: primary

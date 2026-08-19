@@ -1,0 +1,72 @@
+label: Table
+icon: table
+description: Content table with a caption, header row, and striped and compact variants.
+value:
+  _component: building-blocks/core-elements/table
+  caption: Plan limits by tier
+  headerCells:
+    - Plan
+    - Sites
+    - Seats
+    - Bandwidth
+    - Support
+  rows:
+    - cells:
+        - Starter
+        - "1"
+        - "1"
+        - 100 GB
+        - Community
+    - cells:
+        - Studio
+        - "10"
+        - "5"
+        - 1 TB
+        - Business hours
+    - cells:
+        - Agency
+        - Unlimited
+        - "25"
+        - 5 TB
+        - "24/7"
+    - cells:
+        - Enterprise
+        - Unlimited
+        - Custom
+        - Custom
+        - Named contact
+  firstColumnHeader: true
+  striped: false
+  compact: false
+preview:
+  text:
+    - Table
+  subtext:
+    - key: caption
+  image: /component-previews/building-blocks/core-elements/table.svg
+  icon: table
+picker_preview:
+  text: Table
+  subtext: Content table with a caption, header row, and striped and compact variants.
+  image: /component-previews/building-blocks/core-elements/table.svg
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/table/table.cloudcannon.inputs.yml
+_structures:
+  tableRows:
+    values:
+      - label: Row
+        icon: table_rows
+        value:
+          cells:
+            - ""
+        preview:
+          text:
+            - key: cells
+            - Row
+        _inputs:
+          cells:
+            type: array
+            comment: One cell per column, in order. Missing cells render empty.
+          cells[*]:
+            type: text
+            comment: The cell contents.

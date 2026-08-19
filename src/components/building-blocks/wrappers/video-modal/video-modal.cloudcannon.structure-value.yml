@@ -8,6 +8,10 @@ value:
   videoId: ""
   title: ""
   source: ""
+  triggerStyle: button
+  posterImage: ""
+  posterAlt: ""
+  posterAspectRatio: widescreen
   triggerText: Watch video
   triggerVariant: primary
   triggerSize: md

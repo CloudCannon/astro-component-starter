@@ -3,7 +3,7 @@
  * YAML, so none of the create-component steps can be forgotten.
  *
  *   node scripts/scaffold/new-component.mjs <tier/path/kebab-name>
- *   node scripts/scaffold/new-component.mjs page-sections/features/feature-tabs
+ *   node scripts/scaffold/new-component.mjs page-sections/explainers/feature-tabs
  *
  * Generates <PascalCase>.astro plus both CloudCannon YAML files into
  * src/components/<path>/. Page sections also get the section-wrapper `_inputs`
@@ -25,7 +25,7 @@ const templatesDir = join(root, "scripts", "scaffold", "templates");
 // line that begins that block in the donor file.
 const SECTION_INPUTS_DONOR = join(
   componentsDir,
-  "page-sections/ctas/cta-center/cta-center.cloudcannon.inputs.yml"
+  "page-sections/conversion/cta-center/cta-center.cloudcannon.inputs.yml"
 );
 const SECTION_INPUTS_MARKER = "# --- section wrapper inputs (CustomSection) ---";
 
@@ -42,7 +42,7 @@ if (!rawArg || rawArg.startsWith("-")) {
       "usage: node scripts/scaffold/new-component.mjs <tier/path/kebab-name>",
       "",
       "  node scripts/scaffold/new-component.mjs building-blocks/core-elements/badge",
-      "  node scripts/scaffold/new-component.mjs page-sections/features/feature-tabs",
+      "  node scripts/scaffold/new-component.mjs page-sections/explainers/feature-tabs",
     ].join("\n")
   );
   process.exit(1);

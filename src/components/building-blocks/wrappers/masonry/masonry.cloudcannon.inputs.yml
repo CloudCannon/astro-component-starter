@@ -1,0 +1,37 @@
+label:
+  type: text
+  comment: Optional label to identify the wrapper in the editor. When set and no HTML id is provided, an id is derived from this value.
+columns:
+  type: range
+  comment: Number of columns on screens 640px and up (small screens always show two).
+  options:
+    min: 2
+    max: 5
+    step: 1
+gap:
+  comment: The gap between masonry items.
+  type: select
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+items:
+  label: Masonry Items
+  comment: Array of masonry items, each containing content blocks to render. Reading order is preserved left-to-right.
+  type: array
+  options:
+    structures: _structures.masonryItems

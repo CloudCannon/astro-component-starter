@@ -1,0 +1,114 @@
+label: Gallery Grid
+icon: photo_library
+description: An image grid with captions and a lightbox for viewing photos full size.
+value:
+  _component: page-sections/collections/gallery-grid
+  sectionLabel: ""
+  eyebrow: Gallery
+  heading: Field notes from the coast
+  subtext: ""
+  images:
+    - image: /src/assets/images/component-docs/dunedin-cliff.jpg
+      alt: Sea cliffs above a turquoise bay, gorse flowering in the foreground
+      caption: Tunnel Beach cliffs
+    - image: /src/assets/images/component-docs/sheep.jpg
+      alt: Two sheep grazing on a headland high above the ocean
+      caption: Grazing above the break
+    - image: /src/assets/images/component-docs/castle.jpg
+      alt: Ruined stone castle under a starry night sky
+      caption: Cargill's Castle at night
+    - image: /src/assets/images/component-docs/sunset.jpg
+      alt: Coastal cliffs at dusk with the sun low over the sea
+      caption: Last light on the cliffs
+    - image: /src/assets/images/component-docs/quiet-street.jpg
+      alt: Quiet hillside street with flowering rhododendrons and a no-exit sign
+      caption: Spring in the suburbs
+  layout: grid
+  columns: 3
+  gap: md
+  aspectRatio: square
+  lightbox: true
+  showThumbnails: false
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Gallery Grid
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/collections/gallery-grid.svg
+  icon: photo_library
+picker_preview:
+  text: Gallery Grid
+  subtext: An image grid with captions and a lightbox for viewing photos full size.
+  image: /component-previews/page-sections/collections/gallery-grid.svg
+_inputs_from_glob:
+  - /src/components/page-sections/collections/gallery-grid/gallery-grid.cloudcannon.inputs.yml
+_structures:
+  galleryImages:
+    values:
+      - label: Image
+        icon: photo_library
+        value:
+          image: ""
+          alt: ""
+          caption: ""
+        preview:
+          text:
+            - key: caption
+            - key: alt
+            - Image
+          image:
+            - key: image
+        _inputs:
+          image:
+            type: image
+            comment: The photo shown in the grid and, full size, in the lightbox.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+          alt:
+            type: text
+            comment: Accessible description of what the photo shows.
+          caption:
+            type: text
+            comment: Optional caption shown under the tile and in the lightbox.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - images
+      - layout
+      - columns
+      - gap
+      - aspectRatio
+      - lightbox
+      - showThumbnails
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

@@ -1,6 +1,8 @@
 ---
 import Modal from "@wrappers/modal/Modal.astro";
 import Video from "@core-elements/video/Video.astro";
+import Image from "@core-elements/image/Image.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 
 const {
   label,
@@ -8,10 +10,15 @@ const {
   videoId,
   title,
   source,
+  /** `"button"` (default) or `"poster"` — a still image with a play disc. */
+  triggerStyle = "button",
   triggerText,
   triggerVariant = "primary",
   triggerSize = "md",
   triggerIconName = "play-circle",
+  posterImage = "",
+  posterAlt = "",
+  posterAspectRatio = "widescreen",
   size = "lg",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -24,6 +31,13 @@ const hasVideo =
 
 if (!_component && !hasVideo) return;
 
+// A poster trigger lives outside the Modal, so the popover id can't be left to
+// Modal's own derivation — it's generated here and passed down.
+const usePoster = triggerStyle === "poster" && !!posterImage;
+const posterPopoverId = usePoster
+  ? `video-${slugifyLabel(label || title || crypto.randomUUID())}`
+  : undefined;
+
 // Modal videos autoplay with sound on open (allowed because opening is a user
 // gesture), so the embed URL is injected by the script below rather than using
 // the Video component's muted page-load autoplay.
@@ -35,13 +49,48 @@ const embedSrc =
       : undefined;
 ---
 
+{
+  usePoster && (
+    <button
+      type="button"
+      class="video-modal-poster"
+      popovertarget={posterPopoverId}
+      aria-label={title ? `Play video: ${title}` : "Play video"}
+    >
+      <Image
+        source={posterImage}
+        alt={posterAlt}
+        aspectRatio={posterAspectRatio}
+        sizes="(max-width: 640px) 100vw, 800px"
+        widths={[400, 800, 1280]}
+        width={1280}
+        data-prop-src="posterImage"
+        data-prop-alt="posterAlt"
+      />
+      <span
+        class="video-modal-poster-disc"
+        aria-hidden="true"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="28"
+          height="28"
+          fill="currentColor"
+        >
+          <path d="M8 5.5v13l11-6.5z" />
+        </svg>
+      </span>
+    </button>
+  )
+}
+
 <Modal
   label={label}
-  header={title}
-  triggerText={triggerText}
+  popoverId={posterPopoverId}
+  triggerText={usePoster ? undefined : triggerText}
   triggerVariant={triggerVariant}
   triggerSize={triggerSize}
-  triggerIconName={triggerIconName}
+  triggerIconName={usePoster ? undefined : triggerIconName}
   size={size}
   class:list={["video-modal", className]}
   _component={_component}
@@ -111,14 +160,152 @@ const embedSrc =
 
 <style is:global>
   @layer components {
-    .video-modal .modal-popover {
+    /* Poster trigger: a still frame with a play disc, sized by the image. The
+       button is the only focusable target, so the whole frame is clickable. */
+    .video-modal-poster {
+      background: none;
+      border: 0;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: block;
       overflow: hidden;
-      width: min(90vw, (85vh - 3rem) * 16 / 9);
+      padding: 0;
+      position: relative;
+      width: 100%;
+
+      .image,
+      img {
+        display: block;
+        margin: 0;
+        width: 100%;
+      }
+
+      .video-modal-poster-disc {
+        align-items: center;
+        background: var(--color-overlay);
+        border-radius: var(--radius-full);
+        color: #fff;
+        display: flex;
+        height: 4rem;
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
+        justify-content: center;
+        position: absolute;
+        transition: transform var(--animation-fast) var(--ease-out);
+        translate: -50% -50%;
+        width: 4rem;
+      }
+
+      &:hover .video-modal-poster-disc {
+        transform: scale(1.08);
+      }
+    }
+
+    /* Centred chrome overlay: no panel, video floating on a dark backdrop,
+       close in a bar above it. Modal's default close sits on the player,
+       and a YouTube/Vimeo iframe eats those clicks. Sheet styles from
+       .modal-popover are neutralized here (same layer, higher specificity). */
+    .video-modal .modal-popover {
+      --video-modal-column: min(
+        90vw,
+        calc((100dvh - var(--spacing-xl) * 2 - 2.75rem - var(--spacing-md)) * 16 / 9)
+      );
+
+      background: var(--color-overlay);
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      height: 100%;
+      inset: 0;
+      margin: 0;
+      max-height: none;
+      max-width: none;
+      overflow: hidden;
+      padding: var(--spacing-xl);
+      transform: none;
+      width: 100%;
+
+      /* Beat .modal-popover.size-* (same specificity as the rule above). */
+      &:is(.size-sm, .size-md, .size-lg, .size-xl) {
+        max-width: none;
+      }
+
+      &:popover-open {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        justify-content: center;
+        transform: none;
+
+        @starting-style {
+          transform: none;
+        }
+      }
+
+      &::backdrop {
+        background: transparent;
+      }
+
+      &.size-sm :is(.modal-header, .modal-body) {
+        max-width: var(--content-width-sm);
+      }
+
+      &.size-md :is(.modal-header, .modal-body) {
+        max-width: var(--content-width-md);
+      }
+
+      &.size-lg :is(.modal-header, .modal-body) {
+        max-width: var(--content-width-lg);
+      }
+
+      &.size-xl :is(.modal-header, .modal-body) {
+        max-width: var(--content-width-xl);
+      }
+    }
+
+    .video-modal .modal-header.no-header {
+      display: flex;
+      height: auto;
+      justify-content: flex-end;
+      position: static;
+      width: var(--video-modal-column);
+    }
+
+    .video-modal .modal-header.no-header .modal-close {
+      position: static;
+    }
+
+    /* Ghost tile, matching .gallery-lightbox-tile. Translucent whites and
+       #fff are the sanctioned exception — theme text/border would flip
+       under the overlay. */
+    .video-modal .modal-close .button-inner.variant-ghost {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: var(--radius-sm);
+      color: #fff;
+      height: 2.75rem;
+      padding: 0;
+      width: 2.75rem;
+
+      &:hover,
+      &:focus {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.4);
+        color: #fff;
+      }
+    }
+
+    .video-modal .modal-body {
+      overflow: hidden;
+      width: var(--video-modal-column);
     }
 
     .video-modal-body {
       aspect-ratio: 16 / 9;
+      border-radius: var(--radius-xs);
       line-height: var(--line-height-none);
+      overflow: hidden;
 
       > .video-modal-player,
       > .video-modal-embed {

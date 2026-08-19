@@ -1,6 +1,34 @@
 @import url("utils/_spacing-utilities.css");
 
 @layer utils {
+  /**
+   * Grow a small control's tap target to the 44px WCAG 2.5.8 minimum without
+   * growing what you can see — a centred, invisible overlay. Use it on any
+   * icon-only control (Button's `hideText`, the theme toggle, a close button):
+   * the chrome stays as designed and only the hit area changes.
+   *
+   * The host must establish a positioning context, or the overlay escapes to
+   * the nearest positioned ancestor and creates a phantom hit area. Most
+   * consumers already do; a statically-positioned one needs `position:
+   * relative` of its own. That line is deliberately NOT set here: `utils`
+   * layers over `components`, so it would override a control that positions
+   * itself (the announcement bar's close button is absolute).
+   *
+   * Targets can meet but not overlap while neighbours are spaced by at least
+   * the amount each one grows (up to 8px per side for a 28px control).
+   */
+  .tap-target::after {
+    content: "";
+    height: 100%;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 100%;
+  }
+
   .visually-hidden {
     border: 0;
     clip-path: inset(50%);

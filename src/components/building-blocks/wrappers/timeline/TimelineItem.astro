@@ -1,0 +1,126 @@
+---
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
+const {
+  year: _year = "",
+  date = "",
+  title = "",
+  body = "",
+  layout = "vertical",
+  grouped = false,
+  isLast = false,
+  useDefaultEditableBinding = false,
+  class: className,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const hasTitle = isNonEmptyString(title);
+const hasBody = isNonEmptyString(body);
+const hasDate = isNonEmptyString(date);
+const isHorizontal = layout === "horizontal";
+
+const dateBinding =
+  useDefaultEditableBinding && hasDate ? { "data-editable": "text", "data-prop": "date" } : {};
+---
+
+<li
+  class:list={["timeline-entry", isLast && "is-last", className]}
+  {...htmlAttributes}
+>
+  {
+    isHorizontal ? (
+      hasDate && (
+        <div
+          class="timeline-label"
+          {...dateBinding}
+        >
+          {date}
+        </div>
+      )
+    ) : grouped ? (
+      <>
+        {hasDate && (
+          <span
+            class="timeline-month"
+            {...dateBinding}
+          >
+            {date}
+          </span>
+        )}
+        <span
+          class="timeline-dot"
+          aria-hidden="true"
+        />
+      </>
+    ) : (
+      <span
+        class="timeline-date"
+        {...dateBinding}
+      >
+        {date}
+      </span>
+    )
+  }
+  {
+    isHorizontal ? (
+      <div
+        class="timeline-band"
+        aria-hidden="true"
+      >
+        <span class="timeline-dot" />
+      </div>
+    ) : (
+      !grouped && (
+        <div class="timeline-content">
+          <span
+            class="timeline-dot"
+            aria-hidden="true"
+          />
+          {hasTitle && (
+            <Heading
+              class="timeline-title"
+              level="h3"
+              size="xs"
+              data-prop={useDefaultEditableBinding ? "title" : undefined}
+            >
+              {title}
+            </Heading>
+          )}
+          {hasBody && (
+            <SimpleText
+              class="timeline-body"
+              size="sm"
+              data-prop={useDefaultEditableBinding ? "body" : undefined}
+              text={body}
+            />
+          )}
+        </div>
+      )
+    )
+  }
+  {
+    (isHorizontal || grouped) && hasTitle && (
+      <Heading
+        class="timeline-title"
+        level="h3"
+        size="xs"
+        data-prop={useDefaultEditableBinding ? "title" : undefined}
+      >
+        {title}
+      </Heading>
+    )
+  }
+  {
+    (isHorizontal || grouped) && hasBody && (
+      <SimpleText
+        class="timeline-body"
+        size="sm"
+        data-prop={useDefaultEditableBinding ? "body" : undefined}
+        text={body}
+      />
+    )
+  }
+</li>

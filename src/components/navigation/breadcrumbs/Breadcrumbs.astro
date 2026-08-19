@@ -2,22 +2,10 @@
 import Icon from "@core-elements/icon/Icon.astro";
 import breadcrumbsData from "@data/breadcrumbs.json";
 
-export interface BreadcrumbItem {
-  label: string;
-  /** Omit on the final (current page) item — it renders as plain text. */
-  url?: string;
-}
-
-interface Props {
-  /**
-   * The trail after the leading Home crumb, in order. The last item is the
-   * current page; items with a `url` render as links, the rest as text.
-   */
-  items?: BreadcrumbItem[];
-  class?: string;
-  style?: string;
-}
-
+/**
+ * `items` is the trail after the leading Home crumb, in order. The last item is
+ * the current page; items with a `url` render as links, the rest as text.
+ */
 const { items = [], class: className, ...htmlAttributes } = Astro.props;
 
 const homeLabel = String(breadcrumbsData.homeLabel ?? "").trim() || "Home";

@@ -1,5 +1,6 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import * as yaml from "js-yaml";
+import { listComponentKeys } from "./componentConfig";
 import { findStructureValueFiles } from "./structureFiles";
 import { deriveSlotsForComponent, type DerivedSlot } from "./slotDerivation";
 
@@ -164,6 +165,53 @@ export function mergeSlotMetadata(
 
 function toDeclaredSlots(docsData: { slots?: SlotFrontmatter[] } | undefined): SlotFrontmatter[] {
   return docsData?.slots ?? [];
+}
+
+/** Extract YAML frontmatter from a markdown file, or null. */
+function readFrontmatter(path: string): Record<string, unknown> | null {
+  const source = readFileSync(path, "utf8");
+  const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source);
+
+  if (!match) return null;
+
+  return (yaml.load(match[1]) as Record<string, unknown>) ?? null;
+}
+
+/** Declared `slots:` frontmatter from the component's docs index.md, if any. */
+export function readDeclaredSlotsFromDisk(componentKey: string): SlotFrontmatter[] {
+  const path = `src/component-docs/content/components/${componentKey}/index.md`;
+
+  if (!existsSync(path)) return [];
+
+  try {
+    const data = readFrontmatter(path);
+
+    return (data?.slots as SlotFrontmatter[] | undefined) ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Build the same slot metadata map `getComponentMetadataMap()` produces, but
+ * from the filesystem only — no `astro:content`. Used by the Component Builder
+ * discovery tests so they can run in Vitest.
+ */
+export function buildComponentMetadataMapFromDisk(): Map<string, ComponentMetadata> {
+  const map = new Map<string, ComponentMetadata>();
+
+  for (const key of listComponentKeys()) {
+    const merged = mergeSlotMetadata(deriveSlotsForComponent(key), readDeclaredSlotsFromDisk(key));
+
+    map.set(key, {
+      childComponent: merged.childComponent,
+      fallbackFor: merged.fallbackFor,
+      supportsSlots: merged.supportsSlots,
+      slots: merged.slots,
+    });
+  }
+
+  return map;
 }
 
 let metadataCache: Map<string, ComponentMetadata> | null = null;

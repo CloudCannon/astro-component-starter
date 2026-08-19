@@ -5,6 +5,8 @@ gridItemSections:
     - /src/components/building-blocks/wrappers/card/card.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/button-group/button-group.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/accordion/accordion.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/steps/steps.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/timeline/timeline.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/modal/modal.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/video-modal/video-modal.cloudcannon.structure-value.yml
     - /src/components/building-blocks/forms/form/form.cloudcannon.structure-value.yml

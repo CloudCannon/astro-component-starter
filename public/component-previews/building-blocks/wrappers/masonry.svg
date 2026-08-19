@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-masonry">
+  <title id="t-masonry">Masonry component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 136)">
+    <rect x="160" y="0" width="304" height="200" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="176" y="24" width="160" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="176" y="56" width="240" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="224" width="304" height="120" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="160" y="368" width="304" height="120" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="488" y="0" width="304" height="120" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="488" y="144" width="304" height="220" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="504" y="168" width="160" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="504" y="200" width="240" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="488" y="388" width="304" height="140" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="816" y="0" width="304" height="260" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="832" y="24" width="160" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="832" y="56" width="240" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="816" y="284" width="304" height="110" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="816" y="418" width="304" height="90" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+  </g>
+</svg>

@@ -9,11 +9,11 @@ Let's build a page section from scratch. We'll create the simplest possible comp
 
 Three files. That's all it takes.
 
-> **Shortcut:** `npm run new:component page-sections/info-blocks/section-intro` scaffolds all three files with the correct names, keys, and wiring, then prints the remaining steps. This guide builds them by hand so you understand what each file does — but for your second component onward, use the scaffolder.
+> **Shortcut:** `npm run new:component page-sections/explainers/section-intro` scaffolds all three files with the correct names, keys, and wiring, then prints the remaining steps. This guide builds them by hand so you understand what each file does — but for your second component onward, use the scaffolder.
 
 ## File 1: The Astro component
 
-Create `src/components/page-sections/info-blocks/section-intro/SectionIntro.astro`:
+Create `src/components/page-sections/explainers/section-intro/SectionIntro.astro`:
 
 ```astro
 ---
@@ -61,7 +61,7 @@ label: Section Intro
 icon: info
 description: Centered section with a headline and supporting text.
 value:
-  _component: page-sections/info-blocks/section-intro
+  _component: page-sections/explainers/section-intro
   heading: Your heading here
   subtext: Add some supporting text.
 preview:
@@ -74,7 +74,7 @@ picker_preview:
   text: Section Intro
   subtext: Centered section with a headline and supporting text.
 _inputs_from_glob:
-  - /src/components/page-sections/info-blocks/section-intro/section-intro.cloudcannon.inputs.yml
+  - /src/components/page-sections/explainers/section-intro/section-intro.cloudcannon.inputs.yml
 ```
 
 The `value` block defines the defaults when an editor adds this component. The `_component` path must match where the component lives. The `_inputs_from_glob` points to your inputs file.
@@ -84,7 +84,7 @@ The `value` block defines the defaults when an editor adds this component. The `
 That's three files:
 
 ```
-src/components/page-sections/info-blocks/section-intro/
+src/components/page-sections/explainers/section-intro/
 ├── SectionIntro.astro
 ├── section-intro.cloudcannon.inputs.yml
 └── section-intro.cloudcannon.structure-value.yml
@@ -94,7 +94,7 @@ Open `src/content/pages/index.md` and add the component under the `pageSections`
 
 ```yaml
 pageSections:
-  - _component: page-sections/info-blocks/section-intro
+  - _component: page-sections/explainers/section-intro
     heading: Ready to get started?
     subtext: Everything you need is right here.
 ```
@@ -103,12 +103,12 @@ Or add it in CloudCannon by clicking "Add Page Section" and picking "Section Int
 
 ## You already have documentation
 
-As soon as those three files exist, this docs site generates a page for your component — check the sidebar under Info Blocks and you'll find Section Intro with its title, description, a full props table (types, defaults, and the `comment` text from your inputs file), and a live example rendered from your `value:` defaults. The gallery and sidebar pick it up too. Nothing to write, nothing to keep in sync: improve a `comment` or a default in the YAML and the docs update with it.
+As soon as those three files exist, this docs site generates a page for your component — check the sidebar under Explainers and you'll find Section Intro with its title, description, a full props table (types, defaults, and the `comment` text from your inputs file), and a live example rendered from your `value:` defaults. The gallery and sidebar pick it up too. Nothing to write, nothing to keep in sync: improve a `comment` or a default in the YAML and the docs update with it.
 
 Two optional extras when you want more:
 
 - **A preview thumbnail** for the gallery and CloudCannon picker: add a `section-intro.preview.mjs` recipe next to the component and run `npm run previews:build` (see any existing component for an example recipe).
-- **Richer docs**: add `src/component-docs/content/components/page-sections/info-blocks/section-intro/index.md` with an `overview:` and hand-picked examples in an `examples/` folder. This is enrichment, not a requirement — the page exists either way.
+- **Richer docs**: add `src/component-docs/content/components/page-sections/explainers/section-intro/index.md` with an `overview:` and hand-picked examples in an `examples/` folder. This is enrichment, not a requirement — the page exists either way.
 
 `npm run check` validates all of it — prop names in the YAML against the component, example files against real props — so drift shows up in CI, not in production.
 
@@ -118,8 +118,8 @@ Prefer visual composition over hand-writing files? Use the [Component Builder](/
 
 1. Open the Component Builder. Under the Custom Section, press the "Add to Content Sections" button. Select Heading, then repeat and select Text.
 2. Both Heading and Text expose a prop called `text`, which causes a validation error at the same level. To fix this, click the Heading component to open the props sidebar and change the Exposed Name from `text` to `heading`. Do the same for Text, changing it to `subtext`. You can also expose other props if you want editors to be able to configure them.
-3. Select Export Component in the top bar. Choose "Info Blocks" for the category and enter `section-intro` for the component name. Select "Download Zip".
-4. Unzip and move the exported files into `src/components/page-sections/info-blocks/section-intro/`.
+3. Select Export Component in the top bar. Choose "Explainers" for the category and enter `section-intro` for the component name. Select "Download Zip".
+4. Unzip and move the exported files into `src/components/page-sections/explainers/section-intro/`.
 
 After that, add the section in CloudCannon from "Add Page Section" just like any hand-built component.
 
@@ -180,7 +180,7 @@ Many components land between these extremes. They have a fixed outer structure �
 FAQ Section is a good example. The developer defines the overall section with a heading and an accordion wrapper. Each accordion item has a title (structured) and a `contentSections` array (flexible):
 
 ```yaml
-- _component: page-sections/info-blocks/faq-section
+- _component: page-sections/explainers/faq-section
   heading: Frequently asked questions
   items:
     - title: How does this work?
@@ -203,8 +203,8 @@ There's no single right answer. Most projects use all three:
 
 You can push this much further, allowing editors to control any prop or setting you'd like. The existing page sections show how:
 
-- **[CTA Center](/component-docs/components/page-sections/ctas/cta-center/)** adds buttons, color schemes, and background options
-- **[FAQ Section](/component-docs/components/page-sections/info-blocks/faq-section/)** uses accordion items with expand/collapse behavior
+- **[CTA Center](/component-docs/components/page-sections/conversion/cta-center/)** adds buttons, color schemes, and background options
+- **[FAQ Section](/component-docs/components/page-sections/explainers/faq-section/)** uses accordion items with expand/collapse behavior
 
 Each follows the same three-file pattern, just with more props and building blocks composed together.
 

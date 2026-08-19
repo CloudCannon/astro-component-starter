@@ -87,9 +87,11 @@ const formattedCodeCache = await Promise.all(
             <div
               id={exampleId}
               class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}
-              tabindex="0"
+              tabindex={idx === 0 ? 0 : -1}
               role="region"
               aria-label={`${exampleName} example preview`}
+              aria-hidden={idx === 0 ? "false" : "true"}
+              inert={idx === 0 ? undefined : true}
             >
               <div
                 class="examples"

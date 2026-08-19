@@ -1,0 +1,32 @@
+alert:
+  template: mdx_component
+  inline: false
+  preview:
+    text:
+      - template: Alert - {variant}
+      - Alert
+    subtext:
+      - key: title
+    image: /component-previews/building-blocks/core-elements/alert.svg
+    icon: campaign
+  definitions:
+    component_name: Alert
+    named_args:
+      - editor_key: variant
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: title
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: text
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: iconName
+        type: string
+        optional: true
+        remove_empty: true
+  _inputs_from_glob:
+    - /src/components/building-blocks/core-elements/alert/alert.cloudcannon.inputs.yml

@@ -1,0 +1,118 @@
+label: Masonry
+icon: view_quilt
+description: A masonry column layout for mixed-height content, preserving reading order.
+value:
+  _component: building-blocks/wrappers/masonry
+  label: ""
+  columns: 3
+  gap: md
+  items:
+    - contentSections:
+        - _component: building-blocks/wrappers/card
+          border: true
+          rounded: true
+          paddingHorizontal: md
+          paddingVertical: md
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Fast by default
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/text
+              text: Static pages, optimized images, no client JavaScript unless a component asks for it.
+    - contentSections:
+        - _component: building-blocks/wrappers/card
+          border: true
+          rounded: true
+          paddingHorizontal: md
+          paddingVertical: md
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Brandable in one file
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/text
+              text: Every color, radius, and font resolves through a design token, so a client theme is a token swap and nothing else. Change the file once and the whole library follows — no per-component edits.
+    - contentSections:
+        - _component: building-blocks/wrappers/card
+          border: true
+          rounded: true
+          paddingHorizontal: md
+          paddingVertical: md
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Visually editable
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/text
+              text: Editors compose pages from the component library in CloudCannon.
+    - contentSections:
+        - _component: building-blocks/wrappers/card
+          border: true
+          rounded: true
+          paddingHorizontal: md
+          paddingVertical: md
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Documented as it grows
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/text
+              text: Every component ships with a reference page, live examples, and a props table generated from the same files the editor reads.
+    - contentSections:
+        - _component: building-blocks/wrappers/card
+          border: true
+          rounded: true
+          paddingHorizontal: md
+          paddingVertical: md
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Tested end to end
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/text
+              text: Rendering, linting, and headless-browser smoke tests run on every check.
+    - contentSections:
+        - _component: building-blocks/wrappers/card
+          border: true
+          rounded: true
+          paddingHorizontal: md
+          paddingVertical: md
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Accessible
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/text
+              text: Keyboard, focus, and screen-reader behavior are part of each component's definition of done, not an afterthought.
+preview:
+  text:
+    - Masonry
+  subtext:
+    - key: label
+  image: /component-previews/building-blocks/wrappers/masonry.svg
+  icon: view_quilt
+picker_preview:
+  text: Masonry
+  subtext: A masonry column layout for mixed-height content, preserving reading order.
+  image: /component-previews/building-blocks/wrappers/masonry.svg
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/masonry/masonry.cloudcannon.inputs.yml
+_structures:
+  masonryItems:
+    values:
+      - label: Masonry Item
+        value:
+          contentSections: []
+        preview:
+          icon: view_quilt
+          text: Masonry Item
+          subtext:
+            - template: Contains {contentSections|array_length} content {"block"|pluralize=contentSections}
+            - Add one or more content blocks to the masonry item
+        _inputs:
+          contentSections:
+            type: array
+            comment: Content sections to render within this masonry item.
+            options:
+              structures: _structures.masonryItemSections

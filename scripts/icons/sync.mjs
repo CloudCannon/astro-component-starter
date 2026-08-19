@@ -42,15 +42,48 @@ function listIcons(dir, base = dir, out = []) {
 }
 
 /**
- * `arrow-down-tray` -> `Arrow Down Tray`. Subdirectories keep their separator,
- * so `social/github` -> `Social/github`, which groups the socials together in
- * the picker's alphabetical list.
+ * Casing a filename can't express. Applied to the leaf segment of icons that
+ * live in a subdirectory only, so a future top-level `x.svg` is never caught by
+ * the entry for `social/x`.
  */
-function titleize(id) {
-  return id
+const LEAF_LABELS = {
+  github: "GitHub",
+  gitlab: "GitLab",
+  linkedin: "LinkedIn",
+  tiktok: "TikTok",
+  youtube: "YouTube",
+};
+
+/** `arrow-down-tray` -> `Arrow Down Tray`. */
+function titleizeSegment(segment) {
+  return segment
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
+}
+
+/**
+ * `arrow-down-tray` -> `Arrow Down Tray`; `social/github` -> `Social/GitHub`.
+ *
+ * Every path segment is titleized, so the directory prefix survives — typing
+ * "social" in the picker's filter is how editors pull up the brand marks as a
+ * set, and the alphabetical list keeps them together. The leaf then gets its
+ * real brand casing from `LEAF_LABELS`, since `github` -> `Github` is wrong in
+ * a picker an editor reads.
+ */
+function titleize(id) {
+  const segments = id.split("/");
+
+  return segments
+    .map((segment, index) => {
+      const isLeaf = index === segments.length - 1;
+      const hasPrefix = segments.length > 1;
+
+      return isLeaf && hasPrefix && LEAF_LABELS[segment]
+        ? LEAF_LABELS[segment]
+        : titleizeSegment(segment);
+    })
+    .join("/");
 }
 
 const ids = listIcons(iconsDir).sort();

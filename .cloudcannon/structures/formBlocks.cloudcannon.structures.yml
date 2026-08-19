@@ -1,6 +1,6 @@
 # formBlocks — the block picker for fields inside a form. It is consumed via
 # `_structures.formBlocks` by the `formBlocks` array inputs of
-# `building-blocks/forms/form` and `page-sections/ctas/cta-form`.
+# `building-blocks/forms/form` and `page-sections/conversion/cta-form`.
 #
 # The glob owns the list — any form component with a co-located
 # `*.cloudcannon.structure-value.yml` is offered automatically.

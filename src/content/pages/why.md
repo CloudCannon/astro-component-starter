@@ -24,7 +24,7 @@ pageSections:
     colorScheme: inherit
     backgroundColor: base
     paddingVertical: 4xl
-  - _component: page-sections/info-blocks/faq-section
+  - _component: page-sections/explainers/faq-section
     heading: Frequently asked questions
     items:
       - title: How does the Component Starter work?
@@ -89,7 +89,7 @@ pageSections:
     colorScheme: dark
     backgroundColor: surface
     rounded: false
-  - _component: page-sections/features/feature-slider
+  - _component: page-sections/explainers/feature-slider
     slides:
       - eyebrow: First slide demonstration
         title: Welcome to the carousel component
@@ -136,7 +136,7 @@ pageSections:
     heading: Why this approach works
     subtext: Highlight the core reasons in a simple, swipeable format.
     paddingVertical: 4xl
-  - _component: page-sections/people/testimonial-section
+  - _component: page-sections/proof/testimonial-section
     text: >-
       This testimonial component has completely changed the way I present my
       quotations on Astro sites. I couldn't be happier with the results.
@@ -149,7 +149,7 @@ pageSections:
     paddingVertical: 2xl
     colorScheme: dark
     backgroundColor: surface
-  - _component: page-sections/people/team-grid
+  - _component: page-sections/collections/team-grid
     eyebrow: Our Team
     heading: Meet the people
     subtext: We're a group of stock photography faces that fill out this team grid.
@@ -192,7 +192,7 @@ pageSections:
     colorScheme: dark
     backgroundColor: surface
     paddingVertical: 2xl
-  - _component: page-sections/ctas/cta-form
+  - _component: page-sections/conversion/cta-form
     heading: Form and function!
     subtext: >-
       This is a sample form component, so it's not wired up with a target inbox

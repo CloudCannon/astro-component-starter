@@ -68,22 +68,24 @@ Every building block accepts `useDefaultEditableBinding` (boolean, default `fals
 
 ### Default binding prop names
 
-| Building block                                        | Default prop(s) when `useDefaultEditableBinding` is on                                                 |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `Heading`, `Text`, `SimpleText`, `Button`, `ListItem` | `text`                                                                                                 |
-| `Testimonial`                                         | `text` + `authorName` + `authorDescription` (see [patterns.md](patterns.md))                           |
-| `Image`                                               | `source` (src) / `alt` (alt)                                                                           |
-| `Grid`, `Accordion`, `List`, `DefinitionList`         | `items`                                                                                                |
-| `ButtonGroup`                                         | `buttonSections`                                                                                       |
-| `Carousel`                                            | `slides`                                                                                               |
-| `Card`                                                | `contentSections` (+ `beforeContentSections` / `afterContentSections`, see [patterns.md](patterns.md)) |
-| `GridItem`, `AccordionItem`, `CarouselSlide`          | `contentSections`                                                                                      |
+| Building block                                            | Default prop(s) when `useDefaultEditableBinding` is on                                                 |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `Heading`, `Text`, `SimpleText`, `Button`, `ListItem`     | `text`                                                                                                 |
+| `Testimonial`                                             | `text` + `authorName` + `authorDescription` (see [patterns.md](patterns.md))                           |
+| `Image`                                                   | `source` (src) / `alt` (alt)                                                                           |
+| `Grid`, `Accordion`, `Steps`, `List`, `DefinitionList`    | `items`                                                                                                |
+| `Timeline`                                                | `entries`                                                                                              |
+| `ButtonGroup`                                             | `buttonSections`                                                                                       |
+| `Carousel`                                                | `slides`                                                                                               |
+| `Card`                                                    | `contentSections` (+ `beforeContentSections` / `afterContentSections`, see [patterns.md](patterns.md)) |
+| `GridItem`, `AccordionItem`, `CarouselSlide`, `StepsItem` | `contentSections`                                                                                      |
+| `TimelineItem`                                            | `date` / `title` / `body`                                                                              |
 
 Verify a default against the source before relying on it — each block computes `const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "<name>" : null)` in its frontmatter, where `customDataProp` is the passed `data-prop` (or `data-children-prop`) value.
 
 ## Wire inline editing on an existing component
 
-Work inside a page-section wrapper that composes building blocks (model: `src/components/page-sections/features/feature-grid/FeatureGrid.astro`).
+Work inside a page-section wrapper that composes building blocks (model: `src/components/page-sections/explainers/feature-grid/FeatureGrid.astro`).
 
 ### Text
 
@@ -124,7 +126,7 @@ Two shapes, depending on how children are rendered.
     features.map((feature) => (
       <FeatureItem
         data-editable="array-item"
-        data-id="page-sections/features/feature-grid/feature-item"
+        data-id="page-sections/explainers/feature-grid/feature-item"
         {...feature}
       />
     ))

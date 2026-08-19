@@ -21,6 +21,9 @@
   "[astro]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "files.associations": {
+    "*.astro": "astro"
+  },
   "[mdx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -48,7 +51,7 @@
     "json",
     "jsonc"
   ],
-  "stylelint.validate": ["css", "astro"],
+  "stylelint.validate": ["css"],
   "less.validate": false,
   "scss.validate": false,
 

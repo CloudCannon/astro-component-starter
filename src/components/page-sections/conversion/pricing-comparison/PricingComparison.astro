@@ -1,0 +1,308 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Button from "@core-elements/button/Button.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+
+type Plan = {
+  name?: string;
+  price?: string;
+  highlight?: boolean;
+  buttonText?: string;
+  buttonLink?: string;
+};
+type Row = { feature?: string; values?: (string | null)[] };
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  plans = [],
+  rows = [],
+  striped = true,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const planList = (plans as Plan[]).filter((plan) => plan?.name);
+
+// One cell per plan on every row, so a short row renders empty cells instead
+// of shifting the columns (same normalization rule as the Table block).
+const cellFor = (row: Row, index: number) => {
+  const raw = row?.values?.[index];
+
+  return raw == null ? "" : String(raw).trim();
+};
+
+// "yes"/"no" are the two marks; anything else is shown as text (e.g. "5 seats",
+// "Unlimited"). Case-insensitive so editors can type Yes or YES.
+const markFor = (value: string) => {
+  const token = value.toLowerCase();
+
+  if (token === "yes" || token === "true" || token === "✓") return "included";
+  if (token === "no" || token === "false" || token === "-" || token === "") return "excluded";
+  return "text";
+};
+
+const hasTable = planList.length > 0 && rows.length > 0;
+---
+
+<CustomSection
+  class:list={["pricing-comparison", striped && "striped", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="pricing-comparison-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  {
+    hasTable && (
+      <div class="pricing-comparison-frame">
+        <p
+          class="pricing-comparison-hint"
+          aria-hidden="true"
+        >
+          Scroll →
+        </p>
+        <div
+          class="pricing-comparison-scroller"
+          role="region"
+          tabindex="0"
+          aria-label={heading || "Plan comparison"}
+        >
+          <table>
+            <thead>
+              <tr>
+                <td />
+                {planList.map((plan) => (
+                  <th
+                    scope="col"
+                    class:list={[plan.highlight && "highlight"]}
+                  >
+                    <span class="pricing-comparison-plan">{plan.name}</span>
+                    {plan.price && <span class="pricing-comparison-price">{plan.price}</span>}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row: Row) => (
+                <tr>
+                  <th scope="row">{row?.feature}</th>
+                  {planList.map((plan, index) => {
+                    const value = cellFor(row, index);
+                    const mark = markFor(value);
+
+                    return (
+                      <td class:list={[plan.highlight && "highlight", `mark-${mark}`]}>
+                        {mark === "text" ? (
+                          value
+                        ) : (
+                          <>
+                            <Icon
+                              name={mark === "included" ? "check" : "minus"}
+                              size="sm"
+                            />
+                            <span class="visually-hidden">
+                              {mark === "included" ? "Included" : "Not included"}
+                            </span>
+                          </>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+              {planList.some((plan) => plan.buttonText) && (
+                <tr class="pricing-comparison-actions">
+                  <td />
+                  {planList.map((plan) => (
+                    <td class:list={[plan.highlight && "highlight"]}>
+                      {plan.buttonText && (
+                        <Button
+                          text={plan.buttonText}
+                          link={plan.buttonLink}
+                          variant={plan.highlight ? "primary" : "tertiary"}
+                          size="sm"
+                        />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )
+  }
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .pricing-comparison {
+      /* One transparent gray on even rows only. The same mix over --color-bg
+         is used on the sticky feature column so it matches on screen and
+         stays opaque when the table pans underneath. */
+      --pricing-stripe: color-mix(in srgb, var(--gray-500) 10%, transparent);
+      --pricing-stripe-solid: color-mix(in srgb, var(--gray-500) 10%, var(--color-bg));
+
+      .pricing-comparison-subtext {
+        margin-inline: auto;
+        max-width: 42rem;
+      }
+
+      .pricing-comparison-frame {
+        margin-top: var(--spacing-2xl);
+      }
+
+      .pricing-comparison-hint {
+        color: var(--color-text-muted);
+        display: none;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        margin: 0 0 var(--spacing-xs);
+        text-transform: uppercase;
+      }
+
+      .pricing-comparison-scroller {
+        overflow-x: auto;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      table {
+        border-collapse: collapse;
+        min-width: 34rem;
+        width: 100%;
+      }
+
+      thead th {
+        background: none;
+        border: 0;
+        border-bottom: 2px solid var(--color-border-strong);
+        padding: var(--spacing-md);
+        text-align: center;
+        vertical-align: bottom;
+      }
+
+      .pricing-comparison-plan {
+        display: block;
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-bold);
+      }
+
+      .pricing-comparison-price {
+        color: var(--color-text-muted);
+        display: block;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-normal);
+      }
+
+      tbody th,
+      tbody td {
+        border: 0;
+        border-bottom: 1px solid var(--color-border);
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-md);
+        text-align: center;
+      }
+
+      tbody th[scope="row"] {
+        font-weight: var(--font-weight-semibold);
+        text-align: start;
+      }
+
+      .mark-included .icon {
+        color: var(--color-success);
+      }
+
+      .mark-excluded .icon {
+        color: var(--color-text-muted);
+        opacity: 0.6;
+      }
+
+      /* Highlighted plans are marked by the primary CTA, not a tinted column
+         — column fills read as a second zebra axis and fight the row stripe. */
+      .pricing-comparison-actions td {
+        border-bottom: none;
+        padding-top: var(--spacing-lg);
+
+        .button {
+          margin-top: 0;
+        }
+      }
+
+      &.striped tbody tr:nth-child(2n) th,
+      &.striped tbody tr:nth-child(2n) td {
+        background-color: var(--pricing-stripe);
+      }
+
+      /* 640px = canonical mobile breakpoint — pans with the feature column
+         pinned, matching the Table block. */
+      @media (width < 640px) {
+        .pricing-comparison-hint {
+          display: block;
+        }
+
+        .pricing-comparison-scroller {
+          mask-image: linear-gradient(90deg, #000 calc(100% - var(--spacing-xl)), transparent);
+        }
+
+        tbody th[scope="row"] {
+          background-color: var(--color-bg);
+          border-inline-end: 1px solid var(--color-border);
+          inset-inline-start: 0;
+          position: sticky;
+        }
+
+        &.striped tbody tr:nth-child(2n) th[scope="row"] {
+          background-color: var(--pricing-stripe-solid);
+        }
+      }
+    }
+  }
+</style>

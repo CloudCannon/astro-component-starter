@@ -1,0 +1,24 @@
+caption:
+  type: text
+  comment: Short description of what the table shows. Shown above it and read to screen readers.
+headerCells:
+  type: array
+  comment: The column headings, in order.
+headerCells[*]:
+  type: text
+  comment: The column heading.
+rows:
+  type: array
+  label: Rows
+  comment: The table body, one row at a time.
+  options:
+    structures: _structures.tableRows
+firstColumnHeader:
+  type: switch
+  comment: Treat the first cell of each row as a row header (bold, and pinned while the table scrolls on small screens).
+striped:
+  type: switch
+  comment: Tint every second row instead of drawing row rules.
+compact:
+  type: switch
+  comment: Tighter padding and smaller text, for dense reference tables.

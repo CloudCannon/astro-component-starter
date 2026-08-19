@@ -141,6 +141,86 @@ describe("formatComponentWithSlots", () => {
 
     expect(result).toContain("<Grid");
     expect(result).toContain("<GridItem");
+    expect(result).toContain("<Text");
+    expect(result).toContain("Cell");
+    expect(result).not.toMatch(/contentSections=/);
+    expect(result).not.toContain("[object Object]");
+  });
+
+  it("renders StepsItem contentSections as nested JSX, not [object Object]", () => {
+    const metadataMap = new Map<string, ComponentMetadata>([
+      [
+        "building-blocks/wrappers/steps",
+        {
+          supportsSlots: true,
+          fallbackFor: "items",
+          childComponent: { name: "StepsItem" },
+          slots: [{ name: "default", fallbackFor: "items", childComponent: { name: "StepsItem" } }],
+        },
+      ],
+    ]);
+
+    const block = {
+      _component: "building-blocks/wrappers/steps",
+      orientation: "horizontal",
+      items: [
+        {
+          contentSections: [
+            { _component: "building-blocks/core-elements/heading", text: "Connect the repo" },
+            { _component: "building-blocks/core-elements/simple-text", text: "Point the starter." },
+          ],
+        },
+      ],
+    };
+
+    const result = formatComponentWithSlots(block, 0, metadataMap, new Set());
+
+    expect(result).toContain("<Steps");
+    expect(result).toContain("<StepsItem>");
+    expect(result).toContain("<Heading");
+    expect(result).toContain("Connect the repo");
+    expect(result).toContain("<SimpleText");
+    expect(result).not.toMatch(/contentSections=/);
+    expect(result).not.toContain("[object Object]");
+  });
+
+  it("renders Timeline entries as TimelineItem attributes, not [object Object]", () => {
+    const metadataMap = new Map<string, ComponentMetadata>([
+      [
+        "building-blocks/wrappers/timeline",
+        {
+          supportsSlots: true,
+          fallbackFor: "entries",
+          childComponent: { name: "TimelineItem", props: ["year", "date", "title", "body"] },
+          slots: [
+            {
+              name: "default",
+              fallbackFor: "entries",
+              childComponent: { name: "TimelineItem", props: ["year", "date", "title", "body"] },
+            },
+          ],
+        },
+      ],
+    ]);
+
+    const block = {
+      _component: "building-blocks/wrappers/timeline",
+      layout: "horizontal",
+      entries: [
+        { date: "Q1 2025", title: "Public beta", body: "The editor shipped." },
+        { date: "Q3 2025", title: "Component library" },
+      ],
+    };
+
+    const result = formatComponentWithSlots(block, 0, metadataMap, new Set());
+
+    expect(result).toContain("<Timeline");
+    expect(result).toContain("<TimelineItem");
+    expect(result).toContain('date="Q1 2025"');
+    expect(result).toContain('title="Public beta"');
+    expect(result).toContain('body="The editor shipped."');
+    expect(result).not.toMatch(/entries=/);
+    expect(result).not.toContain("[object Object]");
   });
 
   describe("malformed child blocks", () => {

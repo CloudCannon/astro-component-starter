@@ -29,6 +29,15 @@ import {
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
+import { setupAllTocs, setupToc } from "./src/components/navigation/toc/setup";
+import {
+  setupAllGalleries,
+  setupGallery,
+} from "./src/components/page-sections/collections/gallery-grid/setup";
+import {
+  setupAllMasonry,
+  setupMasonry,
+} from "./src/components/building-blocks/wrappers/masonry/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -185,6 +194,49 @@ function initNewComponents(root) {
     log("initialising new search", el);
     setupSearch(el);
   }
+
+  const newTocs = [];
+
+  if (root.classList?.contains("toc") && !root.hasAttribute("data-toc-initialized")) {
+    newTocs.push(root);
+  }
+
+  root.querySelectorAll(".toc:not([data-toc-initialized])").forEach((el) => newTocs.push(el));
+
+  for (const el of newTocs) {
+    log("initialising new toc", el);
+    setupToc(el);
+  }
+
+  const newGalleries = [];
+
+  if (root.classList?.contains("gallery-grid") && !root.hasAttribute("data-gallery-initialized")) {
+    newGalleries.push(root);
+  }
+
+  root
+    .querySelectorAll(".gallery-grid:not([data-gallery-initialized])")
+    .forEach((el) => newGalleries.push(el));
+
+  for (const el of newGalleries) {
+    log("initialising new gallery", el);
+    setupGallery(el);
+  }
+
+  const newMasonry = [];
+
+  if (root.classList?.contains("masonry") && !root.hasAttribute("data-masonry-initialized")) {
+    newMasonry.push(root);
+  }
+
+  root
+    .querySelectorAll(".masonry:not([data-masonry-initialized])")
+    .forEach((el) => newMasonry.push(el));
+
+  for (const el of newMasonry) {
+    log("initialising new masonry", el);
+    setupMasonry(el);
+  }
 }
 
 const observer = new MutationObserver((mutations) => {
@@ -260,6 +312,9 @@ setupAllCarousels();
 setupAllImageCarousels();
 setupAllModals();
 setupAllSearch();
+setupAllTocs();
+setupAllGalleries();
+setupAllMasonry();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,

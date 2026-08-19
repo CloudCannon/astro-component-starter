@@ -4,6 +4,7 @@ import { join } from "path";
 
 import { kebabToTitleCase, toPascalCase } from "../../../../shared/caseUtils";
 import type { ComponentMetadata as SharedComponentMetadata } from "../../../../shared/metadata";
+import { isBuilderExcluded } from "../../constants";
 import type { ComponentInfo, InputConfig, SlotDefinition, StructureValue } from "../../types";
 import { isArrayStructureInput, structureHasComponentValues } from "./inputUtils";
 
@@ -14,8 +15,6 @@ export function scanBuildingBlocksComponents(
   const componentsDir = join(process.cwd(), "src/components/building-blocks");
   const components: ComponentInfo[] = [];
 
-  const excludedComponents = new Set(["pagination"]);
-
   function scanDirectory(dir: string, category: string): void {
     try {
       const entries = readdirSync(dir, { withFileTypes: true });
@@ -24,7 +23,10 @@ export function scanBuildingBlocksComponents(
         const fullPath = join(dir, entry.name);
 
         if (!entry.isDirectory()) continue;
-        if (excludedComponents.has(entry.name)) continue;
+
+        const componentPath = `building-blocks/${category}/${entry.name}`;
+
+        if (isBuilderExcluded(componentPath)) continue;
 
         const astroFiles = readdirSync(fullPath).filter((f) => f.endsWith(".astro"));
         const kebabName = entry.name;
@@ -51,7 +53,6 @@ export function scanBuildingBlocksComponents(
           continue;
         }
 
-        const componentPath = `building-blocks/${category}/${entry.name}`;
         const inputsPath = join(fullPath, `${entry.name}.cloudcannon.inputs.yml`);
         const structureValuePath = join(fullPath, `${entry.name}.cloudcannon.structure-value.yml`);
 

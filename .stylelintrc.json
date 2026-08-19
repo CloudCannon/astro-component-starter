@@ -5,7 +5,9 @@
     "dist/**/*",
     "node_modules/**/*",
     "public/pagefind/**/*",
-    ".claude/worktrees/**/*"
+    "**/*.astro",
+    ".claude/worktrees/**/*",
+    ".local/**/*"
   ],
   "rules": {
     "declaration-empty-line-before": null,

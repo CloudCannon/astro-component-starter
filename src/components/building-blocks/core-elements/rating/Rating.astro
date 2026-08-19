@@ -1,0 +1,189 @@
+---
+import { getIcon } from "@component-utils/icons";
+
+const {
+  value = 5,
+  max = 5,
+  size = "md",
+  color = "default",
+  showValue = false,
+  alignmentHorizontal = "none",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const starCount = Math.max(1, Math.round(Number(max) || 5));
+const clampedValue = Math.min(Math.max(Number(value) || 0, 0), starCount);
+const fullStars = Math.floor(clampedValue);
+const partialStar = clampedValue - fullStars;
+
+// Overlay width in em: each star is 1em wide with a 0.25em gap after it.
+const overlayWidth = `${(fullStars * 1.25 + partialStar).toFixed(3)}em`;
+
+const star = getIcon("star");
+const stars = Array.from({ length: starCount });
+---
+
+<div
+  class:list={[
+    "rating",
+    alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    className,
+  ]}
+  {...htmlAttributes}
+>
+  <span
+    class:list={["rating-inner", `size-${size}`, `color-${color}`]}
+    role="img"
+    aria-label={`Rated ${clampedValue} out of ${starCount}`}
+  >
+    <span
+      class="rating-stars"
+      aria-hidden="true"
+    >
+      <span class="rating-row rating-base">
+        {
+          stars.map(
+            () =>
+              star && (
+                <svg
+                  {...star.attributes}
+                  set:html={star.body}
+                />
+              )
+          )
+        }
+      </span>
+      <span
+        class="rating-row rating-overlay"
+        style={`width: ${overlayWidth}`}
+      >
+        {
+          stars.map(
+            () =>
+              star && (
+                <svg
+                  {...star.attributes}
+                  set:html={star.body}
+                />
+              )
+          )
+        }
+      </span>
+    </span>
+    {showValue && <span class="rating-value">{clampedValue}</span>}
+  </span>
+</div>
+
+<style is:global>
+  @layer components {
+    .rating {
+      display: inline-block;
+      vertical-align: middle;
+
+      > .rating-inner {
+        align-items: center;
+        display: inline-flex;
+        gap: var(--spacing-em-sm);
+
+        &.size-sm {
+          font-size: var(--font-size-sm);
+        }
+
+        &.size-md {
+          font-size: var(--font-size-lg);
+        }
+
+        &.color-blue {
+          --rating-accent: var(--blue-500);
+        }
+
+        &.color-green {
+          --rating-accent: var(--green-500);
+        }
+
+        &.color-yellow {
+          --rating-accent: var(--yellow-400);
+        }
+
+        &.color-orange {
+          --rating-accent: var(--orange-500);
+        }
+
+        &.color-red {
+          --rating-accent: var(--red-500);
+        }
+
+        &.color-purple {
+          --rating-accent: var(--purple-500);
+        }
+
+        &.color-pink {
+          --rating-accent: var(--pink-500);
+        }
+
+        &.color-cyan {
+          --rating-accent: var(--cyan-500);
+        }
+      }
+
+      .rating-stars {
+        display: inline-flex;
+        position: relative;
+      }
+
+      .rating-row {
+        display: flex;
+        flex: none;
+        gap: var(--spacing-em-xs);
+        width: max-content;
+
+        svg {
+          display: block;
+          flex: none;
+          height: 1em;
+
+          /* Solid glyphs — outlined stars turn to mush at 14px. */
+          fill: currentcolor;
+          stroke: none;
+          width: 1em;
+        }
+      }
+
+      .rating-base {
+        color: var(--color-border);
+      }
+
+      .rating-overlay {
+        color: var(--rating-accent, var(--color-text));
+        inset-block: 0;
+        inset-inline-start: 0;
+        overflow: hidden;
+        position: absolute;
+      }
+
+      .rating-value {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        line-height: var(--line-height-none);
+      }
+
+      &.align-start {
+        display: block;
+        text-align: start;
+      }
+
+      &.align-center {
+        display: block;
+        text-align: center;
+      }
+
+      &.align-end {
+        display: block;
+        text-align: end;
+      }
+    }
+  }
+</style>

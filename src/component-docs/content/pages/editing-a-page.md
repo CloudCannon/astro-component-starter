@@ -48,7 +48,7 @@ Copy an existing section block and paste it into the `pageSections` array. Chang
 
 The `_component` path maps directly to a component in `src/components/`. When Astro builds your page, `renderBlock.astro` resolves each path and renders the matching component with the props you've defined.
 
-This means you can look at any `_component` value and immediately find its source file. `page-sections/features/feature-split` lives at `src/components/page-sections/features/feature-split/FeatureSplit.astro`.
+This means you can look at any `_component` value and immediately find its source file. `page-sections/explainers/feature-split` lives at `src/components/page-sections/explainers/feature-split/FeatureSplit.astro`.
 
 Every other key in a section block is a prop passed directly to that component. The props available for each component are documented right here in the component docs. Browse the sidebar to find any component.
 

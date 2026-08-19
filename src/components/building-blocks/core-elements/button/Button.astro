@@ -100,6 +100,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
       `size-${size}`,
       iconPosition === "after" && "icon-after",
       hideText && "icon-only",
+      hideText && "tap-target",
     ]}
     {...tagProps}
   >
@@ -161,8 +162,12 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           outline-offset: 2px;
         }
 
+        /* An icon-only button has no text to grow its hit area, so it carries
+           the `tap-target` utility (see styles/_utils.css) — the overlay needs
+           this positioning context. */
         &.icon-only {
           padding: var(--spacing-em-xs);
+          position: relative;
         }
 
         &.icon-after {

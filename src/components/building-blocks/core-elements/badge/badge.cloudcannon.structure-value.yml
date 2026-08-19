@@ -1,0 +1,26 @@
+label: Badge
+icon: sell
+description: Small pill label for statuses, tags, and announcements.
+value:
+  _component: building-blocks/core-elements/badge
+  text: New
+  iconName: ""
+  showDot: false
+  link: ""
+  showArrow: true
+  variant: neutral
+  size: md
+  alignmentHorizontal: none
+preview:
+  text:
+    - Badge
+  subtext:
+    - key: text
+  image: /component-previews/building-blocks/core-elements/badge.svg
+  icon: sell
+picker_preview:
+  text: Badge
+  subtext: Small pill label for statuses, tags, and announcements.
+  image: /component-previews/building-blocks/core-elements/badge.svg
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/badge/badge.cloudcannon.inputs.yml

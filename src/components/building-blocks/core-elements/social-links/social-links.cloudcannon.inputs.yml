@@ -1,0 +1,36 @@
+links:
+  type: array
+  comment: The social links, in order. Uses the same shape as the footer's socials.
+  options:
+    structures: _structures.socials
+variant:
+  type: select
+  comment: Ghost icons stay quiet; solid tiles use the brand fill and read like buttons.
+  options:
+    values:
+      - id: ghost
+        name: Ghost
+      - id: solid
+        name: Solid
+size:
+  type: select
+  comment: The hit-area size. Medium is the 44px touch-target minimum; small suits footer rows.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+alignmentHorizontal:
+  type: select
+  comment: Horizontal alignment of the row.
+  options:
+    values:
+      - id: none
+        name: None (in flow)
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+      - id: end
+        name: End

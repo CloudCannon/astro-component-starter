@@ -1,0 +1,193 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Embed from "@core-elements/embed/Embed.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Form from "@forms/form/Form.astro";
+import Split from "@wrappers/split/Split.astro";
+
+type DetailProps = { icon?: string; label?: string; value?: string; url?: string };
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  details = [],
+  formAction = "./",
+  formBlocks = [],
+  mapEmbedUrl = "",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["contact-split", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <div class="contact-split-card">
+    <div class="contact-split-columns">
+      <Split
+        distributionMode="fixed-flexible"
+        fixedWidth="400"
+        alignmentVertical="top"
+        minSplitWidth={640}
+        gap="2xl"
+      >
+        <Fragment slot="first">
+          <SimpleText
+            class="eyebrow"
+            size="sm"
+            data-prop="eyebrow"
+            text={eyebrow}
+          />
+          <Heading
+            level="h2"
+            size="md"
+            data-prop="heading"
+          >
+            {heading}
+          </Heading>
+          <Text
+            class="contact-split-subtext"
+            data-prop="subtext"
+            text={subtext}
+          />
+          {
+            details.length > 0 && (
+              <ul
+                class="contact-details"
+                data-editable="array"
+                data-prop="details"
+                data-direction="column"
+              >
+                {details.map((detail: DetailProps) => (
+                  <li
+                    class="contact-detail"
+                    data-editable="array-item"
+                  >
+                    <Icon
+                      name={detail.icon}
+                      size="md"
+                    />
+                    <span class="contact-detail-text">
+                      {detail.label && <span class="visually-hidden">{detail.label}: </span>}
+                      {detail.url ? (
+                        <a href={detail.url}>{detail.value}</a>
+                      ) : (
+                        <span
+                          data-editable="text"
+                          data-prop="value"
+                        >
+                          {detail.value}
+                        </span>
+                      )}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+        </Fragment>
+        <Fragment slot="second">
+          <Form
+            action={formAction}
+            data-children-prop="formBlocks"
+            formBlocks={formBlocks}
+          />
+        </Fragment>
+      </Split>
+    </div>
+    {
+      mapEmbedUrl && (
+        <div class="contact-split-map">
+          <Embed aspectRatio="none">
+            <iframe
+              src={mapEmbedUrl}
+              title="Map"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+            />
+          </Embed>
+        </div>
+      )
+    }
+  </div>
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .contact-split {
+      .contact-split-card {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+
+      .contact-split-columns {
+        padding: var(--spacing-2xl) var(--spacing-xl);
+      }
+
+      .contact-split-subtext .text-inner {
+        color: var(--color-text-muted);
+      }
+
+      .contact-details {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        list-style: none;
+        margin: var(--spacing-xl) 0 0;
+        padding: 0;
+
+        > .contact-detail {
+          display: flex;
+          gap: var(--spacing-md);
+
+          .icon {
+            color: var(--color-text-muted);
+            flex-shrink: 0;
+            margin-top: var(--spacing-xs);
+          }
+        }
+      }
+
+      .contact-split-map {
+        background-color: var(--color-bg-surface);
+        border-top: 1px solid var(--color-border);
+
+        .embed-wrapper {
+          margin-top: 0;
+        }
+
+        iframe {
+          border: none;
+          display: block;
+          height: 12rem;
+          width: 100%;
+        }
+      }
+    }
+  }
+</style>

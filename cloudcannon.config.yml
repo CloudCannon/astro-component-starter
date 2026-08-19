@@ -87,6 +87,9 @@ collections_config:
         comment: Optional meta keywords for this post.
       keywords[*]:
         type: text
+      showToc:
+        type: switch
+        comment: Show an "On this page" table of contents built from the post's headings.
     _editables:
       content:
         format: p h2 h3 h4 h5 h6
@@ -777,39 +780,39 @@ _select_data:
     - id: slash
       name: Slash
     - id: social/bluesky
-      name: Social/bluesky
+      name: Social/Bluesky
     - id: social/discord
-      name: Social/discord
+      name: Social/Discord
     - id: social/facebook
-      name: Social/facebook
+      name: Social/Facebook
     - id: social/github
-      name: Social/github
+      name: Social/GitHub
     - id: social/gitlab
-      name: Social/gitlab
+      name: Social/GitLab
     - id: social/gitter
-      name: Social/gitter
+      name: Social/Gitter
     - id: social/google
-      name: Social/google
+      name: Social/Google
     - id: social/instagram
-      name: Social/instagram
+      name: Social/Instagram
     - id: social/linkedin
-      name: Social/linkedin
+      name: Social/LinkedIn
     - id: social/medium
-      name: Social/medium
+      name: Social/Medium
     - id: social/pinterest
-      name: Social/pinterest
+      name: Social/Pinterest
     - id: social/reddit
-      name: Social/reddit
+      name: Social/Reddit
     - id: social/tiktok
-      name: Social/tiktok
+      name: Social/TikTok
     - id: social/twitch
-      name: Social/twitch
+      name: Social/Twitch
     - id: social/x
-      name: Social/x
+      name: Social/X
     - id: social/yelp
-      name: Social/yelp
+      name: Social/Yelp
     - id: social/youtube
-      name: Social/youtube
+      name: Social/YouTube
     - id: sparkles
       name: Sparkles
     - id: speaker-wave

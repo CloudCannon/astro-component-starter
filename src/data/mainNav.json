@@ -16,13 +16,13 @@
       "children": []
     },
     {
-      "name": "Components",
-      "path": "/component-docs/",
+      "name": "Blog",
+      "path": "/blog/",
       "children": []
     },
     {
-      "name": "Blog",
-      "path": "/blog/",
+      "name": "Components",
+      "path": "/component-docs/",
       "children": []
     }
   ],

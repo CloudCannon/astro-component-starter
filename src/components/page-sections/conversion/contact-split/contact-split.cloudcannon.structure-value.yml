@@ -1,0 +1,134 @@
+label: Contact Split
+icon: contact_mail
+description: Contact details beside a form, in a bordered card with an optional map strip.
+value:
+  _component: page-sections/conversion/contact-split
+  sectionLabel: ""
+  eyebrow: Contact
+  heading: Talk to a human
+  subtext: We answer within one business day.
+  details:
+    - icon: map-pin
+      label: Address
+      value: 12 Vogel Street, Dunedin 9016, New Zealand
+      url: ""
+    - icon: phone
+      label: Phone
+      value: +64 3 555 0142
+      url: "tel:+6435550142"
+    - icon: envelope
+      label: Email
+      value: hello@example.com
+      url: "mailto:hello@example.com"
+    - icon: clock
+      label: Hours
+      value: Mon–Fri, 9am–5pm NZST
+      url: ""
+  formAction: ./
+  formBlocks:
+    - _component: building-blocks/forms/input
+      label: Name
+      name: name
+      type: text
+      required: true
+    - _component: building-blocks/forms/input
+      label: Email
+      name: email
+      type: email
+      required: true
+    - _component: building-blocks/forms/textarea
+      label: Message
+      name: message
+      required: true
+    - _component: building-blocks/forms/submit
+      text: Send message
+      variant: primary
+  mapEmbedUrl: ""
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Contact Split
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/conversion/contact-split.svg
+  icon: contact_mail
+picker_preview:
+  text: Contact Split
+  subtext: Contact details beside a form, in a bordered card with an optional map strip.
+  image: /component-previews/page-sections/conversion/contact-split.svg
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/contact-split/contact-split.cloudcannon.inputs.yml
+_structures:
+  contactDetails:
+    values:
+      - label: Detail
+        icon: contact_mail
+        value:
+          icon: map-pin
+          label: Label
+          value: The detail itself
+          url: ""
+        preview:
+          text:
+            - key: label
+            - Detail
+          subtext:
+            - key: value
+          image:
+            - template: src/icons/{icon}.svg
+        _inputs:
+          icon:
+            type: select
+            comment: Small icon beside the detail. Sourced from [Heroicons](https://heroicons.com/).
+            options:
+              values: _select_data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+          label:
+            type: text
+            comment: What this detail is (Address, Phone, …). Read by screen readers, not shown.
+          value:
+            type: text
+            comment: The detail itself, as shown.
+          url:
+            type: text
+            comment: Optional link — use tel:… for phone numbers and mailto:… for email addresses.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - details
+      - formAction
+      - formBlocks
+      - mapEmbedUrl
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

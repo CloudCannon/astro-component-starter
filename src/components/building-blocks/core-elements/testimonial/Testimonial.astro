@@ -1,5 +1,5 @@
 ---
-import Image from "@core-elements/image/Image.astro";
+import Avatar from "@components/utils/Avatar.astro";
 import { renderMarkdown } from "@component-utils/markdown";
 const {
   text,
@@ -50,15 +50,19 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
       </slot>
     </div>
     <div class="author">
-      <Image
-        source={authorImage}
-        alt={authorName}
-        width={100}
-        height={100}
-        class="author-image"
-        data-prop-src="authorImage"
-        data-prop-alt="authorName"
-      />
+      {
+        authorImage && (
+          <Avatar
+            image={authorImage}
+            alt={authorName}
+            border={false}
+            class="author-image"
+            displaySize={80}
+            data-prop-src="authorImage"
+            data-prop-alt="authorName"
+          />
+        )
+      }
       <cite class="author-content">
         <strong
           class="name"
@@ -137,24 +141,13 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
           gap: var(--spacing-md);
           margin-top: var(--spacing-md);
 
+          > .author-image {
+            --avatar-size: 80px;
+          }
+
           > .author-content {
             font-style: normal;
             text-align: start;
-          }
-
-          > .author-image {
-            aspect-ratio: var(--ratio-square);
-            height: 80px;
-            width: 80px;
-
-            picture {
-              border-radius: var(--radius-full);
-              overflow: hidden;
-            }
-
-            img {
-              height: 100%;
-            }
           }
         }
       }

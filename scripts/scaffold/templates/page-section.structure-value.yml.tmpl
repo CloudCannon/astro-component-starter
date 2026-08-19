@@ -14,9 +14,11 @@ value:
     type: image
     positionVertical: top
     positionHorizontal: center
+    fixed: false
     priority: false
     imageSource: ""
     imageAlt: ""
+    patternSize: natural
     videoSource: null
     overlay: 0
 preview:
@@ -32,3 +34,20 @@ picker_preview:
   image: /component-previews/__KEY__.svg
 _inputs_from_glob:
   - /src/components/__KEY__/__SLUG__.cloudcannon.inputs.yml
+groups:
+  # Every key under value: (except _component) must appear in exactly one
+  # group — lint:cms fails otherwise. Add new content props to Content.
+  - heading: Content
+    inputs:
+      - heading
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

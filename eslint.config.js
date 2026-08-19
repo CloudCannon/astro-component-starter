@@ -190,6 +190,7 @@ export default [
     ignores: [
       "node_modules/**",
       "dist/**",
+      ".local/**",
       ".astro/**",
       "**/*.min.js",
       "packages/*/dist/**",

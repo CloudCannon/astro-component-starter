@@ -1,0 +1,218 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import { slugifyLabel } from "@components/utils/slugify";
+import Button from "@core-elements/button/Button.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
+import CardGrid from "@wrappers/card-grid/CardGrid.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  count = 3,
+  tag = "",
+  showViewAllButton = true,
+  viewAllLabel = "View all posts",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const postCount = Math.max(1, Math.round(Number(count) || 3));
+
+// The first data-driven section in the library. The fetch is gated on SSR so
+// the CloudCannon Visual Editor's client-side render (live-editing.js bundles
+// every component for the browser) never sees `astro:content` — the branch is
+// compile-time dead there. In the editor `posts` stays empty and the
+// placeholder cards below render instead.
+let posts: any[] = [];
+
+if (import.meta.env.SSR) {
+  const { getCollection } = await import("astro:content");
+  const all = await getCollection("blog");
+
+  posts = all
+    .filter((post: any) => !tag || post.data.tags?.includes(tag))
+    .sort((a: any, b: any) => b.data.date.valueOf() - a.data.date.valueOf())
+    .slice(0, postCount);
+}
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+const slugFor = (post: any) => post.id?.replace(/\.mdx?$/, "") || post.slug;
+
+const cardFromPost = ({
+  image,
+  title,
+  href,
+  tag: cardTag,
+  tagHref,
+  meta,
+  excerpt,
+}: {
+  image?: string;
+  title: string;
+  href: string;
+  tag?: string;
+  tagHref?: string;
+  meta: string;
+  excerpt?: string;
+}) => ({
+  image,
+  link: href,
+  contentSections: [
+    cardTag && {
+      _component: "building-blocks/core-elements/badge",
+      text: cardTag,
+      link: tagHref,
+      showArrow: false,
+      variant: "plain",
+      size: "sm",
+      alignmentHorizontal: "start",
+    },
+    {
+      _component: "building-blocks/core-elements/heading",
+      text: title,
+      level: "h3",
+      size: "xs",
+    },
+    {
+      _component: "building-blocks/core-elements/simple-text",
+      text: meta,
+      size: "sm",
+    },
+    excerpt && {
+      _component: "building-blocks/core-elements/simple-text",
+      text: excerpt,
+      size: "sm",
+    },
+  ].filter(Boolean),
+});
+
+const cards =
+  posts.length > 0
+    ? posts.map((post: any) =>
+        cardFromPost({
+          image: post.data.image,
+          title: post.data.title,
+          href: `/blog/${slugFor(post)}`,
+          tag: post.data.tags?.[0],
+          tagHref: post.data.tags?.[0]
+            ? `/blog/tag/${slugifyLabel(post.data.tags[0].trim())}/`
+            : "",
+          meta: `${formatDate(post.data.date)} · ${post.data.author || "Anonymous"}`,
+          excerpt: post.data.description,
+        })
+      )
+    : Array.from({ length: Math.min(postCount, 6) }, () =>
+        cardFromPost({
+          image: "/src/assets/images/placeholder.jpg",
+          title: "Post title",
+          href: "",
+          tag: "Tag",
+          meta: "Date · Author",
+          excerpt: "Excerpt from the post.",
+        })
+      );
+
+const showingPlaceholders = posts.length === 0;
+---
+
+<CustomSection
+  class:list={["latest-posts", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="latest-posts-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+  <div aria-hidden={showingPlaceholders ? "true" : undefined}>
+    <CardGrid
+      class="latest-posts-grid"
+      items={cards}
+      columns={3}
+      gap="lg"
+      aspectRatio="landscape"
+    />
+    {
+      showingPlaceholders && (
+        <SimpleText
+          class="latest-posts-notice"
+          alignmentHorizontal="center"
+          size="sm"
+          style="color: var(--color-text-muted);"
+        >
+          The latest blog posts appear here on the published site.
+        </SimpleText>
+      )
+    }
+  </div>
+  {
+    showViewAllButton && (
+      <ButtonGroup
+        class="latest-posts-view-all"
+        alignmentHorizontal="center"
+      >
+        <Button
+          text={viewAllLabel}
+          link="/blog/"
+          variant="tertiary"
+          data-prop="viewAllLabel"
+        />
+      </ButtonGroup>
+    )
+  }
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .latest-posts {
+      .latest-posts-grid {
+        margin-top: var(--spacing-2xl);
+      }
+
+      .latest-posts-view-all {
+        margin-top: var(--spacing-2xl);
+      }
+    }
+  }
+</style>

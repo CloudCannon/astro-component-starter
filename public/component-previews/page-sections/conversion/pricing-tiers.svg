@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-pricing-tiers">
+  <title id="t-pricing-tiers">Pricing tiers component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 190)">
+    <rect x="585" y="0" width="110" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="380" y="32" width="520" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="160" y="120" width="304" height="300" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="188" y="152" width="110" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="188" y="184" width="150" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="188" y="232" width="248" height="2" rx="1" fill="var(--pv-line, #E4E1DA)"/>
+    <rect x="188" y="252" width="200" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="188" y="276" width="176" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="188" y="300" width="200" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="188" y="340" width="248" height="48" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="256" y="360" width="112" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="488" y="120" width="304" height="300" rx="12" fill="none" stroke="var(--pv-ink, #151515)" stroke-width="3"/>
+    <rect x="516" y="108" width="96" height="26" rx="13" fill="var(--pv-ink, #151515)"/>
+    <rect x="516" y="152" width="110" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="516" y="184" width="150" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="516" y="232" width="248" height="2" rx="1" fill="var(--pv-line, #E4E1DA)"/>
+    <rect x="516" y="252" width="200" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="516" y="276" width="176" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="516" y="300" width="200" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="516" y="340" width="248" height="48" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="584" y="360" width="112" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="816" y="120" width="304" height="300" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="844" y="152" width="110" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="844" y="184" width="150" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="844" y="232" width="248" height="2" rx="1" fill="var(--pv-line, #E4E1DA)"/>
+    <rect x="844" y="252" width="200" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="844" y="276" width="176" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="844" y="300" width="200" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="844" y="340" width="248" height="48" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="912" y="360" width="112" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+  </g>
+</svg>

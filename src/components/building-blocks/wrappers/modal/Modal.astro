@@ -11,6 +11,9 @@ const {
   triggerVariant = "primary",
   triggerSize = "md",
   triggerIconName,
+  /** Override the derived popover id. Consumers that render their own trigger
+   * (VideoModal's poster) need to know the id up front to point at it. */
+  popoverId: providedPopoverId,
   size = "md",
   contentSections,
   useDefaultEditableBinding = false,
@@ -21,7 +24,7 @@ const {
 } = Astro.props;
 
 const generatedLabel = label || heading || `Modal-${crypto.randomUUID()}`;
-const popoverId = `modal-${slugifyLabel(generatedLabel)}`;
+const popoverId = providedPopoverId || `modal-${slugifyLabel(generatedLabel)}`;
 
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);

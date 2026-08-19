@@ -146,6 +146,48 @@ const { text, class: className } = Astro.props;
 <div class:list={["text", className]}>{text}</div>
 `;
 
+// Modeled on Timeline.astro: the same default slot appears in each layout
+// branch. Two map `entries`; one maps a computed `groups` view of those
+// entries. Merge must keep the resolved `entries` + TimelineItem derivation.
+const TIMELINE_LIKE = `---
+const { entries = [], layout = "vertical" } = Astro.props;
+const groups = [];
+---
+<div>
+  {
+    layout === "horizontal" ? (
+      <ol>
+        <slot>
+          {entries?.map((entry) => (
+            <TimelineItem {...entry} />
+          ))}
+        </slot>
+      </ol>
+    ) : groups.length > 0 ? (
+      <ol>
+        <slot>
+          {groups.map((group) => (
+            <li>
+              {group.entries.map((entry) => (
+                <TimelineItem {...entry} />
+              ))}
+            </li>
+          ))}
+        </slot>
+      </ol>
+    ) : (
+      <ol>
+        <slot>
+          {entries?.map((entry) => (
+            <TimelineItem {...entry} />
+          ))}
+        </slot>
+      </ol>
+    )
+  }
+</div>
+`;
+
 describe("deriveSlotsFromSource", () => {
   it("resolves Card-like named slots to their single fallback prop", () => {
     const slots = deriveSlotsFromSource(CARD_LIKE);
@@ -210,6 +252,38 @@ describe("deriveSlotsFromSource", () => {
     expect(deriveSlotsFromSource(NO_SLOTS_LIKE)).toEqual([]);
   });
 
+  it("keeps a resolved .map() fallback when a same-name branch maps a computed grouping", () => {
+    const slots = deriveSlotsFromSource(TIMELINE_LIKE);
+
+    expect(slots).toHaveLength(1);
+    expect(slots[0]).toMatchObject({
+      name: "default",
+      fallbackFor: "entries",
+      childComponent: { name: "TimelineItem" },
+    });
+    expect(slots[0].ambiguous).toBeFalsy();
+  });
+
+  it("ignores comments in the destructure, including apostrophes in prose", () => {
+    // Regression fixture: an apostrophe inside a JSDoc comment used to open a
+    // string literal that never closed, so every prop declared after the
+    // comment vanished from the parse and the fallback resolved to nothing.
+    const COMMENTED_LIKE = `---
+const {
+  /** Override the id. VideoModal's poster needs it up front. */
+  popoverId,
+  // A trailing line comment, with a comma, too.
+  contentSections,
+} = Astro.props;
+---
+<div><slot>{contentSections && <RenderBlock contentSections={contentSections} />}</slot></div>`;
+
+    const slots = deriveSlotsFromSource(COMMENTED_LIKE);
+
+    expect(slots).toHaveLength(1);
+    expect(slots[0]).toMatchObject({ name: "default", fallbackFor: "contentSections" });
+  });
+
   it("ignores unrelated identifiers referenced inside a .map() child (e.g. forwarded props)", () => {
     // Regression fixture for a real bug caught while building this: List.astro
     // forwards `showIcon={showIcons}` inside the same .map() callback that
@@ -272,6 +346,18 @@ describe("deriveSlotsForComponent (against real component sources on disk)", () 
     expect(byName.second?.ambiguous).toBe(true);
     expect(byName.first?.fallbackFor).toBeUndefined();
     expect(byName.second?.fallbackFor).toBeUndefined();
+  });
+
+  it("Timeline: default slot resolves to entries + TimelineItem despite the grouped branch", () => {
+    const slots = deriveSlotsForComponent("building-blocks/wrappers/timeline");
+
+    expect(slots).toHaveLength(1);
+    expect(slots[0]).toMatchObject({
+      name: "default",
+      fallbackFor: "entries",
+      childComponent: { name: "TimelineItem" },
+    });
+    expect(slots[0].ambiguous).toBeFalsy();
   });
 
   it("Select: the self-closing default slot has no fallback (inverted pattern lives outside it)", () => {

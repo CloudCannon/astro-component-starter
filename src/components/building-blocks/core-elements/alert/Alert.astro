@@ -1,0 +1,166 @@
+---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { renderMarkdown } from "@component-utils/markdown";
+import Icon from "@core-elements/icon/Icon.astro";
+
+const {
+  variant = "info",
+  title = "",
+  text = "",
+  iconName = "",
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-prop": customDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const DEFAULT_ICONS: Record<string, string> = {
+  info: "information-circle",
+  success: "check-circle",
+  warning: "exclamation-triangle",
+  danger: "exclamation-circle",
+  note: "pencil-square",
+};
+
+const ROLES: Record<string, "alert" | "status" | "note"> = {
+  info: "note",
+  success: "status",
+  warning: "alert",
+  danger: "alert",
+  note: "note",
+};
+
+const effectiveIcon = iconName || DEFAULT_ICONS[variant] || DEFAULT_ICONS.info;
+const role = ROLES[variant] ?? null;
+const MarkdownText = renderMarkdown(text);
+
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
+const textDataAttributes = effectiveDataProp
+  ? { "data-editable": "text", "data-prop": effectiveDataProp }
+  : {};
+
+const hasText = isNonEmptyString(text);
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) return;
+---
+
+<div
+  class:list={["alert", `variant-${variant}`, className]}
+  role={role}
+  {...htmlAttributes}
+>
+  <Icon
+    name={effectiveIcon}
+    size="none"
+  />
+  <div class="alert-content">
+    {
+      title && (
+        <p
+          class="alert-title"
+          data-editable="text"
+          data-prop="title"
+        >
+          {title}
+        </p>
+      )
+    }
+    <div
+      class="alert-text"
+      {...textDataAttributes}
+    >
+      <slot>{hasText && <Fragment set:html={MarkdownText} />}</slot>
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .alert {
+      --alert-accent: var(--color-info);
+      --alert-bg: var(--color-info-bg-subtle);
+      --alert-border: var(--color-info-border-subtle);
+
+      background-color: var(--alert-bg);
+      border: 1px solid var(--alert-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      gap: var(--spacing-md);
+
+      /* A full-width alert is unreadable — cap at prose width even inside a
+         wide section. */
+      max-width: var(--content-width-lg);
+      padding: var(--spacing-lg);
+
+      &.variant-success {
+        --alert-accent: var(--color-success);
+        --alert-bg: var(--color-success-bg-subtle);
+        --alert-border: var(--color-success-border-subtle);
+      }
+
+      &.variant-warning {
+        --alert-accent: var(--color-warning);
+        --alert-bg: var(--color-warning-bg-subtle);
+        --alert-border: var(--color-warning-border-subtle);
+      }
+
+      &.variant-danger {
+        --alert-accent: var(--color-danger);
+        --alert-bg: var(--color-danger-bg-subtle);
+        --alert-border: var(--color-danger-border-subtle);
+      }
+
+      &.variant-note {
+        --alert-accent: var(--color-text-muted);
+        --alert-bg: var(--color-bg-surface);
+        --alert-border: var(--color-border);
+      }
+
+      /* Center the icon on the first line of the adjacent text: half the
+         difference between that line's box and the icon's own 1em height.
+         Body-only alerts align to a body line; a title's line is taller. */
+      > .icon {
+        color: var(--alert-accent);
+        flex-shrink: 0;
+        font-size: var(--font-size-xl);
+        margin-top: calc((var(--line-height-normal) * var(--font-size-md) - 1em) / 2);
+      }
+
+      &:has(.alert-title) > .icon {
+        margin-top: calc((var(--line-height-heading-xs) * var(--font-size-heading-xs) - 1em) / 2);
+      }
+
+      .alert-title {
+        color: var(--alert-accent);
+        font-family: var(--font-headings);
+        font-size: var(--font-size-heading-xs);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-heading-xs);
+        margin: 0;
+      }
+
+      &.variant-note .alert-title {
+        color: var(--color-text);
+      }
+
+      /* Body copy stays --color-text so it never drops below AA on the tint. */
+      .alert-text {
+        color: var(--color-text);
+
+        > :first-child {
+          margin-top: 0;
+        }
+
+        > :last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      .alert-title + .alert-text {
+        margin-top: var(--spacing-xs);
+      }
+    }
+  }
+</style>

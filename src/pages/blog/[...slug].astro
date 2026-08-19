@@ -1,10 +1,11 @@
 ---
 import { slugifyLabel } from "@components/utils/slugify";
+import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Page from "@layouts/Page.astro";
-import Breadcrumbs from "@navigation/breadcrumbs/Breadcrumbs.astro";
+import Toc from "@navigation/toc/Toc.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { loadBlogPageContext } from "../../utils/blog";
@@ -52,7 +53,9 @@ interface Props {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = post.data.showToc && tocHeadings.length > 0;
 const { blogPage } = await loadBlogPageContext();
 const blogListingLabel = blogPage?.data?.title ?? "Blog";
 const date = post.data.date.toLocaleDateString("en-US", {
@@ -61,6 +64,8 @@ const date = post.data.date.toLocaleDateString("en-US", {
   day: "numeric",
 });
 const dateIso = post.data.date.toISOString().slice(0, 10);
+const category = post.data.tags[0]?.trim() ?? "";
+const categoryHref = category ? `/blog/tag/${slugifyLabel(category)}/` : "";
 const article = {
   publishedTime: post.data.date.toISOString(),
   author: post.data.author,
@@ -85,86 +90,82 @@ const article = {
     class="post-container"
     data-pagefind-filter="Type:Article"
   >
-    <Breadcrumbs
-      class="post-breadcrumbs"
-      items={[{ label: blogListingLabel, url: "/blog/" }, { label: post.data.title }]}
-    />
-
-    <SimpleText
-      size="sm"
-      class="post-meta"
-      data-prop="author"
-    >
-      <time
-        datetime={dateIso}
-        data-pagefind-meta={`published:${dateIso}`}
-        data-pagefind-sort={`date:${dateIso}`}
+    <header class="post-header">
+      <a
+        class="post-back"
+        href="/blog/"
       >
-        {date}
-      </time>
-      <span
-        class="post-meta-separator"
-        aria-hidden="true"
+        ← {blogListingLabel}
+      </a>
+
+      <Heading
+        data-prop="title"
+        data-pagefind-meta="title"
+        level="h1"
+        size="2xl"
+        class="post-title"
       >
-        •
-      </span>
-      <span
-        data-pagefind-filter="Author"
-        data-pagefind-meta="author"
+        {post.data.title}
+      </Heading>
+
+      {
+        post.data.description && (
+          <SimpleText
+            data-prop="description"
+            data-pagefind-meta="description"
+            data-pagefind-weight="3"
+            size="lg"
+            class="post-description"
+          >
+            {post.data.description}
+          </SimpleText>
+        )
+      }
+
+      <SimpleText
+        size="sm"
+        class="post-meta"
       >
-        {post.data.author}
-      </span>
-    </SimpleText>
-
-    <Heading
-      data-prop="title"
-      data-pagefind-meta="title"
-      level="h1"
-      size="2xl"
-      class="post-title"
-    >
-      {post.data.title}
-    </Heading>
-
-    {
-      post.data.description && (
-        <SimpleText
-          data-prop="description"
-          data-pagefind-meta="description"
-          data-pagefind-weight="3"
-          size="lg"
-          class="post-description"
-        >
-          {post.data.description}
-        </SimpleText>
-      )
-    }
-
-    {
-      post.data.tags.length > 0 && (
-        <p
-          class="post-tags"
-          data-editable="array"
-          data-prop="tags"
-          data-direction="row"
-        >
-          {post.data.tags.map((tag, i) => (
+        {
+          category && (
             <>
-              {i > 0 && " "}
               <a
-                class="post-tag-link"
-                href={`/blog/tag/${slugifyLabel(tag.trim())}/`}
-                data-pagefind-filter="Tag"
-                data-editable="array-item"
-                data-id={tag.trim()}
+                class="post-meta-category"
+                href={categoryHref}
               >
-                {tag.trim()}
+                {category}
               </a>
+              <span
+                class="post-meta-separator"
+                aria-hidden="true"
+              >
+                ·
+              </span>
             </>
-          ))}
-        </p>
-      )
-    }
+          )
+        }
+        <time
+          datetime={dateIso}
+          data-pagefind-meta={`published:${dateIso}`}
+          data-pagefind-sort={`date:${dateIso}`}
+        >
+          {date}
+        </time>
+        <span
+          class="post-meta-separator"
+          aria-hidden="true"
+        >
+          ·
+        </span>
+        <span
+          data-prop="author"
+          data-pagefind-filter="Author"
+          data-pagefind-meta="author"
+        >
+          {post.data.author}
+        </span>
+      </SimpleText>
+    </header>
 
     {
       post.data.image && (
@@ -175,7 +176,7 @@ const article = {
           data-prop-src="image"
           data-prop-alt="title"
           class="post-image"
-          aspectRatio="horizontal-strip"
+          aspectRatio="widescreen"
           positionVertical="center"
           imageElementAttributes={{
             "data-pagefind-meta": "image[src], image_alt[alt]",
@@ -184,12 +185,38 @@ const article = {
       )
     }
 
-    <div
-      class="post"
-      data-editable="text"
-      data-prop="@content"
-    >
-      <Content components={mdxComponents} />
+    <div class:list={[showToc && "post-with-toc"]}>
+      {showToc && <Toc headings={tocHeadings} />}
+      <div
+        class="post"
+        data-editable="text"
+        data-prop="@content"
+      >
+        <Content components={mdxComponents} />
+      </div>
+      {
+        post.data.tags.length > 0 && (
+          <div
+            class="post-tags"
+            data-editable="array"
+            data-prop="tags"
+            data-direction="row"
+          >
+            {post.data.tags.map((tag) => (
+              <Badge
+                text={tag.trim()}
+                link={`/blog/tag/${slugifyLabel(tag.trim())}/`}
+                showArrow={false}
+                variant="plain"
+                size="sm"
+                data-pagefind-filter="Tag"
+                data-editable="array-item"
+                data-id={tag.trim()}
+              />
+            ))}
+          </div>
+        )
+      }
     </div>
   </CustomSection>
 </Page>
@@ -199,34 +226,59 @@ const article = {
     padding-bottom: 0 !important;
   }
 
-  .post-breadcrumbs {
-    margin-bottom: var(--spacing-md);
+  .post-header {
+    margin-inline: auto;
+    max-width: 70ch;
   }
 
-  .post-meta {
+  .post-back {
     color: var(--color-text-muted);
-    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: color var(--animation-fast) var(--ease-out);
   }
 
-  .post-meta .post-meta-separator {
-    margin-inline: var(--spacing-xs);
+  .post-back:hover {
+    color: var(--color-text);
   }
 
   .post-title {
-    margin-bottom: var(--spacing-xs);
+    margin-top: var(--spacing-lg);
   }
 
   .post-description {
     color: var(--color-text-muted);
-    margin-bottom: 0;
-    margin-top: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+  }
+
+  .post-meta {
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-lg);
+  }
+
+  .post-meta .post-meta-separator {
+    color: var(--color-border);
+    padding-inline: var(--spacing-sm);
+  }
+
+  .post-meta .post-meta-category {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--animation-fast) var(--ease-out);
+  }
+
+  .post-meta .post-meta-category:hover {
+    color: var(--color-text);
   }
 
   .post-tags {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    margin-bottom: 0;
-    margin-top: var(--spacing-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-inline: auto;
+    margin-top: var(--spacing-xl);
+    max-width: 70ch;
   }
 
   .post {
@@ -237,6 +289,42 @@ const article = {
       minmax(0, 1fr);
     margin-inline: auto;
     margin-top: var(--spacing-xl);
+  }
+
+  .post-with-toc > .toc {
+    margin-top: var(--spacing-xl);
+  }
+
+  /* 1024px: enough room for the sidebar column beside the 70ch article. */
+  @media (width >= 1024px) {
+    .post-with-toc {
+      display: grid;
+      gap: var(--spacing-2xl);
+      grid-template-columns: 16rem minmax(0, 1fr);
+    }
+
+    .post-with-toc > .toc {
+      align-self: start;
+      position: sticky;
+      /* 5rem matches .main-nav's bar height so "On this page" stays
+         visible below the sticky header instead of sliding under it. */
+      top: calc(5rem + var(--spacing-lg));
+    }
+
+    .post-with-toc > .post {
+      /* Children are placed with `grid-column: 2`, so keep three tracks but
+         collapse the left rail — the sidebar occupies that space instead. */
+      grid-template-columns:
+        0
+        minmax(0, 70ch)
+        minmax(0, 1fr);
+      margin-inline: 0;
+    }
+
+    .post-with-toc > .post-tags {
+      grid-column: 2;
+      margin-inline: 0;
+    }
   }
 
   .post > * {
@@ -270,17 +358,5 @@ const article = {
 
   .post-image {
     margin-top: var(--spacing-xl);
-  }
-
-  .post-tags .post-tag-link {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
-  }
-
-  .post-tags .post-tag-link:hover {
-    color: var(--color-text-strong);
-    text-decoration-thickness: 2px;
   }
 </style>

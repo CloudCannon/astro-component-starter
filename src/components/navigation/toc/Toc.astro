@@ -1,0 +1,175 @@
+---
+/**
+ * "On this page" table of contents for blog articles — chrome, not a
+ * page-builder block (no CloudCannon YAML, never referenced by `_component`).
+ * Fed the `headings` array from Astro's `render()` by the blog post page.
+ *
+ * Renders both presentations and lets CSS pick one: a sticky sidebar beside
+ * the article from 1024px up, and a collapsed `<details>` disclosure above it
+ * below that (not sticky — a pinned bar eats too much of a small viewport).
+ */
+type TocHeading = { depth: number; slug: string; text: string };
+
+const { headings = [], class: className, ...htmlAttributes } = Astro.props;
+
+const items = (headings as TocHeading[]).filter((h) => h.depth === 2 || h.depth === 3);
+const sectionCount = items.filter((h) => h.depth === 2).length;
+
+if (items.length === 0) return;
+---
+
+<div
+  class:list={["toc", className]}
+  {...htmlAttributes}
+>
+  <nav
+    class="toc-sidebar"
+    aria-label="On this page"
+  >
+    <p class="toc-heading">On this page</p>
+    <ul class="toc-list">
+      {
+        items.map((h) => (
+          <li class:list={[h.depth === 3 && "toc-sub"]}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <details class="toc-disclosure">
+    <summary>
+      <span>On this page · {sectionCount} section{sectionCount === 1 ? "" : "s"}</span>
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        ><path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m19.5 8.25-7.5 7.5-7.5-7.5"
+        ></path></svg
+      >
+    </summary>
+    <nav aria-label="On this page">
+      <ul class="toc-list">
+        {
+          items.map((h) => (
+            <li class:list={[h.depth === 3 && "toc-sub"]}>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </details>
+</div>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllTocs } from "./setup";
+
+  onPageLoad(setupAllTocs);
+</script>
+
+<style is:global>
+  @layer components {
+    .toc {
+      .toc-heading {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        margin: 0 0 var(--spacing-sm);
+        text-transform: uppercase;
+      }
+
+      .toc-list {
+        border-inline-start: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        a {
+          border-inline-start: 2px solid transparent;
+          color: var(--color-text-muted);
+          display: block;
+          font-size: var(--font-size-sm);
+          margin-inline-start: -1px;
+          padding: var(--spacing-xs) var(--spacing-md);
+          text-decoration: none;
+
+          &:hover {
+            color: var(--color-text);
+          }
+
+          /* Active = position and weight, not color, so it survives a brand
+             swap and dark theme. */
+          &[aria-current="true"] {
+            border-inline-start-color: var(--color-border-strong);
+            color: var(--color-text);
+            font-weight: var(--font-weight-semibold);
+          }
+        }
+
+        .toc-sub a {
+          padding-inline-start: var(--spacing-xl);
+        }
+      }
+
+      .toc-sidebar {
+        display: none;
+      }
+
+      .toc-disclosure {
+        background-color: var(--color-bg-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+
+        > summary {
+          align-items: center;
+          cursor: pointer;
+          display: flex;
+          font-size: var(--font-size-sm);
+          font-weight: var(--font-weight-semibold);
+          justify-content: space-between;
+          list-style: none;
+
+          &::-webkit-details-marker {
+            display: none;
+          }
+
+          svg {
+            height: 14px;
+            transition: transform var(--animation-fast) var(--ease-in-out);
+            width: 14px;
+          }
+        }
+
+        &[open] > summary svg {
+          transform: rotate(180deg);
+        }
+
+        > nav {
+          margin-top: var(--spacing-md);
+        }
+      }
+
+      @media (width >= 1024px) {
+        .toc-sidebar {
+          display: block;
+        }
+
+        .toc-disclosure {
+          display: none;
+        }
+      }
+    }
+  }
+</style>

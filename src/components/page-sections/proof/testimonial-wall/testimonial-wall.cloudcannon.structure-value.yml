@@ -1,0 +1,114 @@
+label: Testimonial Wall
+icon: reviews
+description: Several customer quotes as cards in a masonry wall.
+value:
+  _component: page-sections/proof/testimonial-wall
+  sectionLabel: ""
+  eyebrow: Testimonials
+  heading: What teams say after shipping
+  subtext: ""
+  testimonials:
+    - text: This framework has completely changed the way we build. The sites come together fast, they run even faster, and the whole process feels effortless.
+      authorName: Richard Johnson
+      authorDescription: CEO, Tech Innovations
+      authorImage: /src/assets/images/component-docs/profile.jpg
+    - text: We handed the site to our marketing team on a Friday and they had three new landing pages live by Monday. No tickets, no deploys, nothing broken.
+      authorName: Priya Raman
+      authorDescription: Head of Marketing, Northwind
+      authorImage: /src/assets/images/component-docs/profile1.jpg
+    - text: The editing experience is the part that sold us. Everything is visual, and the guardrails mean nobody can wreck the design.
+      authorName: Tom Alvarez
+      authorDescription: Founder, Fieldnote
+      authorImage: /src/assets/images/component-docs/profile2.jpg
+    - text: Our Lighthouse scores went up without anyone working on performance. That never happens on a redesign.
+      authorName: Dana Whitfield
+      authorDescription: Engineering Lead, Cascade
+      authorImage: /src/assets/images/component-docs/profile3.jpg
+    - text: Two weeks from kickoff to launch, including content. The component library did most of the work for us.
+      authorName: Sam Okafor
+      authorDescription: Design Director, Loam Studio
+      authorImage: /src/assets/images/component-docs/profile4.jpg
+  columns: 3
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Testimonial Wall
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/proof/testimonial-wall.svg
+  icon: reviews
+picker_preview:
+  text: Testimonial Wall
+  subtext: Several customer quotes as cards in a masonry wall.
+  image: /component-previews/page-sections/proof/testimonial-wall.svg
+  icon: reviews
+_inputs_from_glob:
+  - /src/components/page-sections/proof/testimonial-wall/testimonial-wall.cloudcannon.inputs.yml
+_structures:
+  testimonialWallItems:
+    values:
+      - label: Testimonial
+        icon: format_quote
+        value:
+          text: ""
+          authorName: ""
+          authorDescription: ""
+          authorImage: ""
+        preview:
+          text:
+            - key: authorName
+            - Testimonial
+          subtext:
+            - key: text
+          icon: format_quote
+        _inputs:
+          text:
+            type: markdown
+            comment: The quote itself.
+          authorName:
+            type: text
+            comment: Who said it.
+          authorDescription:
+            type: text
+            comment: Their role and company. Leave empty to hide.
+          authorImage:
+            type: image
+            comment: Optional headshot. Falls back to the author's initials.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - testimonials
+      - columns
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

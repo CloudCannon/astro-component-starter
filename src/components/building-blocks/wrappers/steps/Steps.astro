@@ -1,0 +1,290 @@
+---
+import { slugifyLabel } from "@components/utils/slugify";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import StepsItem from "./StepsItem.astro";
+
+type ItemProps = Record<string, unknown>;
+
+const {
+  items = [],
+  orientation = "vertical",
+  imageAspectRatio = "landscape",
+  label,
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const generatedLabel = label || `Steps-${crypto.randomUUID()}`;
+
+if (!htmlAttributes.id) {
+  htmlAttributes.id = slugifyLabel(generatedLabel);
+}
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-direction": orientation === "horizontal" ? "row" : "column",
+    }
+  : {};
+
+const hasItems = items?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+const hasImages = items.some((item: ItemProps) => isNonEmptyString(item.image));
+
+if (!_component && !hasItems && !hasSlotContent) return;
+---
+
+<div
+  class:list={["steps", `orientation-${orientation}`, hasImages && "has-images", className]}
+  {...htmlAttributes}
+>
+  <ol
+    class:list={["steps-list", `orientation-${orientation}`]}
+    {...arrayDataAttributes}
+  >
+    <slot>
+      {
+        items?.map((item: ItemProps, index: number) => (
+          <StepsItem
+            index={index}
+            isLast={index === items.length - 1}
+            imageAspectRatio={imageAspectRatio}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            data-editable="array-item"
+            data-id="building-blocks/wrappers/steps/steps-item"
+            {...item}
+          />
+        ))
+      }
+    </slot>
+  </ol>
+</div>
+
+<style is:global>
+  @layer components {
+    .steps {
+      --step-marker-size: 1.75rem;
+
+      margin-top: var(--spacing-lg);
+      min-width: 0;
+
+      .steps-list {
+        display: grid;
+        gap: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        /* Half the marker hangs past the rail; keep it inside this box so
+           overflow:hidden ancestors (section, docs viewer) don't clip it. */
+        padding-inline-start: calc(var(--step-marker-size) / 2);
+      }
+
+      /* No-image vertical (and horizontal below 768px): entries abut so the
+         rail is one line. Spacing lives in padding-block-end — a list gap
+         would leave a stub shorter than the marker. */
+      .step {
+        border-inline-start: var(--border-width-sm) solid var(--color-border);
+        padding-block-end: var(--spacing-2xl);
+        padding-inline-start: var(--spacing-xl);
+        position: relative;
+
+        &.is-last {
+          border-inline-start-color: transparent;
+          padding-block-end: 0;
+        }
+      }
+
+      .step-band {
+        display: contents;
+      }
+
+      .step-marker {
+        align-items: center;
+        background-color: var(--color-bg-brand);
+        border-radius: var(--radius-full);
+        color: var(--color-text-on-brand);
+        display: flex;
+        flex: none;
+        font-family: var(--font-headings);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-bold);
+        height: var(--step-marker-size);
+        inset-inline-start: calc(var(--step-marker-size) / -2 - var(--border-width-sm) / 2);
+        justify-content: center;
+        line-height: 1;
+        position: absolute;
+        top: 0;
+        width: var(--step-marker-size);
+        z-index: var(--layer-1);
+      }
+
+      .step-image {
+        margin: 0;
+
+        .image-inner.rounded {
+          border-radius: var(--radius-md);
+        }
+      }
+
+      .step-content > *:first-child {
+        margin-top: 0 !important;
+      }
+
+      .step-content .heading {
+        font-size: var(--font-size-heading-xs);
+        line-height: var(--step-marker-size);
+        margin: 0;
+      }
+
+      .step-content .heading-inner {
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0;
+      }
+
+      .step-content .simple-text {
+        margin-top: var(--spacing-xs);
+      }
+
+      .step-content .simple-text-content {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-tight);
+        text-wrap: pretty;
+      }
+
+      /* With-image: larger marker, image beside the words. Same continuous
+         rail as no-image — entries abut, last item drops the segment. */
+      &.has-images {
+        --step-marker-size: 2.25rem;
+
+        .step {
+          padding-inline-start: var(--spacing-2xl);
+        }
+
+        .step-marker {
+          font-size: var(--font-size-sm);
+          inset-inline-start: calc(-1.125rem + var(--border-width-sm) / 2);
+        }
+
+        .step-body {
+          align-items: start;
+          column-gap: var(--spacing-xl);
+          display: flex;
+          flex-wrap: wrap;
+          row-gap: var(--spacing-sm);
+        }
+
+        .step-image {
+          flex: 0 1 16rem;
+          min-width: 11rem;
+        }
+
+        .step-content {
+          display: flex;
+          flex: 1 1 16rem;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+          padding-top: calc(
+            (
+                var(--step-marker-size) - var(--font-size-heading-xs) *
+                  var(--line-height-heading-xs)
+              ) /
+              2
+          );
+        }
+
+        .step-content > * {
+          margin-top: 0 !important;
+        }
+
+        .step-content .heading {
+          line-height: var(--line-height-heading-xs);
+        }
+      }
+
+      /* 500px: content-driven — image and text stack; the rail stays. */
+      @media (width < 500px) {
+        &.has-images .step-image {
+          flex-basis: 100%;
+          min-width: 0;
+        }
+
+        &.has-images .step-content {
+          padding-top: 0;
+        }
+      }
+
+      /* 768px = canonical nav/tablet breakpoint — columns above, vertical below. */
+      @media (width >= 768px) {
+        .steps-list.orientation-horizontal {
+          gap: var(--spacing-xl);
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          padding-inline-start: 0;
+
+          > .step {
+            border-inline-start: none;
+            display: flex;
+            flex-direction: column;
+            padding-block-end: 0;
+            padding-inline-start: 0;
+          }
+
+          .step-body {
+            display: contents;
+          }
+
+          .step-image {
+            flex: none;
+            min-width: 0;
+            order: 1;
+          }
+
+          /* Each column owns a rail from its marker to its own edge, including
+             the last. Nothing crosses the gap, so every segment is equal. */
+          .step-band {
+            align-items: center;
+            display: flex;
+            height: var(--step-marker-size);
+            order: 2;
+            position: relative;
+
+            &::after {
+              background-color: var(--color-border);
+              content: "";
+              height: var(--border-width-sm);
+              inset-inline: calc(var(--step-marker-size) + var(--spacing-sm)) 0;
+              position: absolute;
+            }
+          }
+
+          .step-marker {
+            inset-inline-start: auto;
+            position: relative;
+            top: auto;
+          }
+
+          .step-content {
+            flex: none;
+            margin-top: var(--spacing-md);
+            order: 3;
+            padding-top: 0;
+          }
+        }
+
+        &.has-images .steps-list.orientation-horizontal {
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+          .step-band {
+            margin-top: var(--spacing-md);
+          }
+        }
+      }
+    }
+  }
+</style>

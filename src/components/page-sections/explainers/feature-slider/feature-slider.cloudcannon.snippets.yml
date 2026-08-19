@@ -1,0 +1,39 @@
+featureSlider:
+  template: mdx_component
+  inline: false
+  preview:
+    text:
+      - Feature Slider
+    image: /component-previews/page-sections/explainers/feature-slider.svg
+    icon: view_carousel
+  definitions:
+    component_name: FeatureSlider
+    named_args:
+      - editor_key: sectionLabel
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: maxContentWidth
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingHorizontal
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: paddingVertical
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: slides
+        type: array
+      - editor_key: colorScheme
+        type: string
+        optional: true
+        remove_empty: true
+      - editor_key: backgroundColor
+        type: string
+        optional: true
+        remove_empty: true
+  _inputs_from_glob:
+    - /src/components/page-sections/explainers/feature-slider/feature-slider.cloudcannon.inputs.yml

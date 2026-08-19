@@ -101,10 +101,10 @@ When it's off, the children you've placed in the builder are baked into the expo
 When you're happy with your composition, click the **Export** button. A modal appears where you configure:
 
 1. **Component type**: Page Section or Building Block
-2. **Category**: Where it lives in the component hierarchy. For page sections, you can choose from existing categories (heroes, features, ctas, etc.) or enter a custom one. For building blocks, choose from core-elements, wrappers, or forms.
+2. **Category**: Where it lives in the component hierarchy. For page sections, you can choose from existing categories (heroes, explainers, conversion, etc.) or enter a custom one. For building blocks, choose from core-elements, wrappers, or forms.
 3. **Component name**: A kebab-case name like `info-block` or `feature-cards`
 
-A live path preview shows where the component will live: `page-sections/ctas/info-block`
+A live path preview shows where the component will live: `page-sections/conversion/info-block`
 
 Click **Confirm** to download a ZIP file containing all three files:
 

@@ -1,11 +1,10 @@
 ---
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Bar from "@components/navigation/bar/Bar.astro";
-import Button from "@core-elements/button/Button.astro";
 import Divider from "@core-elements/divider/Divider.astro";
 import Image from "@core-elements/image/Image.astro";
+import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import Text from "@core-elements/text/Text.astro";
-import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 import type { SocialLink } from "../../../types";
 
 const {
@@ -62,26 +61,18 @@ const {
         />
       </div>
       <div class="content-container">
-        <ButtonGroup
+        {
+          /* The same block editors can place on a page — it owns the nav/list
+            semantics, the 44px targets, and the new-tab rel attributes, so the
+            footer doesn't hand-roll a second social row. */
+        }
+        <SocialLinks
+          class="footer-socials"
+          links={socials}
+          variant="ghost"
+          size="md"
           alignmentHorizontal="end"
-          useDefaultEditableBinding={false}
-        >
-          {
-            socials.map((social: SocialLink) => (
-              <Button
-                variant="ghost"
-                size="lg"
-                iconName={social.icon}
-                link={social.link}
-                hideText={true}
-                aria-label={social.label || `Visit our ${social.icon.replace(/^.*\//, "")} page`}
-                target="_blank"
-                rel="noopener noreferrer"
-                useDefaultEditableBinding={false}
-              />
-            ))
-          }
-        </ButtonGroup>
+        />
       </div>
     </div>
   </CustomSection>
@@ -92,9 +83,11 @@ const {
     .footer {
       container-type: inline-size;
 
-      .button-group {
-        &.align-end {
-          @container (max-width: 639px) {
+      /* Stacked footer: the socials centre under the legal line rather than
+         sitting hard against the edge. */
+      .footer-socials {
+        @container (max-width: 639px) {
+          .social-links-list {
             justify-content: center;
           }
         }

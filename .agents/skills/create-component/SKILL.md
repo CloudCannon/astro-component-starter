@@ -44,7 +44,7 @@ This skill owns the CloudCannon YAML templates and structures registration for t
 | Wrapper      | `building-blocks/wrappers/{slug}/`      | Container holding other components (card, grid, accordion) |
 | Page section | `page-sections/{category}/{slug}/`      | Full-width section composing building blocks (hero, cta)   |
 
-Page-section categories: `builders`, `ctas`, `features`, `heroes`, `info-blocks`, `people`. A category is just a directory — create a new one if none fits, and it is picked up by the same globs.
+Page-section categories: `builders`, `collections`, `conversion`, `explainers`, `heroes`, `proof` — named for the job a section does on the page (open it, explain, prove, convert, list content). A category is just a directory — create a new one if none fits, and it is picked up by the same globs.
 
 | Item              | Convention                      | Example                                          |
 | ----------------- | ------------------------------- | ------------------------------------------------ |

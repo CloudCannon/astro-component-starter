@@ -74,7 +74,7 @@ const GROUP_INTRO = {
 // Rendered as an extra footnote bullet under that component's group table.
 // Keyed by full `_component` key.
 const EDITORIAL_NOTES = {
-  "page-sections/features/feature-slider":
+  "page-sections/explainers/feature-slider":
     "No section-level heading — each slide carries its own text.",
   "page-sections/builders/custom-section":
     "The escape hatch for arbitrary layouts; `rounded` is unique to this section (page-section wrappers do not forward it).",
@@ -111,14 +111,24 @@ const isInfraProp = (key) => INFRA_PROPS.has(key) || key.startsWith("data-");
 
 // Wiring props specific to the fixed set of *child-item* components a parent
 // wrapper passes state into — `isOpen`/`accordionName` (AccordionItem),
-// `checked`/`groupName` (ContentSelectorPanel). These names collide with
-// genuine content props elsewhere (`toggle`'s own `checked`, `choice-group`'s
-// per-option `checked`), so — unlike INFRA_PROPS — this set is scoped to
-// exactly one call site: filtering a sibling `.astro`'s own destructure for a
-// child-item footnote. Never apply it to a main component's props column or
-// to structure-derived footnotes. `navigationPosition` stays out of both sets
-// — it's a real content prop on the main `content-selector` component too.
-const CHILD_WIRING_PROPS = new Set(["isOpen", "accordionName", "checked", "groupName"]);
+// `checked`/`groupName` (ContentSelectorPanel), `imageAspectRatio`/`isLast`
+// (StepsItem). These names collide with genuine content props elsewhere
+// (`toggle`'s own `checked`, the parent Steps wrapper's own `imageAspectRatio`),
+// so — unlike INFRA_PROPS — this set is scoped to exactly one call site:
+// filtering a sibling `.astro`'s own destructure for a child-item footnote.
+// Never apply it to a main component's props column or to structure-derived
+// footnotes. `navigationPosition` stays out of both sets — it's a real
+// content prop on the main `content-selector` component too.
+const CHILD_WIRING_PROPS = new Set([
+  "isOpen",
+  "accordionName",
+  "checked",
+  "groupName",
+  "imageAspectRatio",
+  "isLast",
+  "layout",
+  "grouped",
+]);
 
 /**
  * The inputs.yml doc for a component, restricted (for page sections) to the

@@ -115,6 +115,9 @@ const blogPostSchema = z.object({
   image: z.string().optional(),
   tags: z.array(z.string()).default([]),
   keywords: z.array(z.string()).optional(),
+  // "On this page" table of contents, built from the post's h2/h3s. On by
+  // default so a post with headings shows the sidebar without extra setup.
+  showToc: z.boolean().default(true),
 });
 
 const blogCollection = defineCollection({

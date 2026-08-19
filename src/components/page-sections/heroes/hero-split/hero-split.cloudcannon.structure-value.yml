@@ -50,3 +50,25 @@ picker_preview:
   image: /component-previews/page-sections/heroes/hero-split.svg
 _inputs_from_glob:
   - /src/components/page-sections/heroes/hero-split/hero-split.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - imageSource
+      - imageAlt
+      - imageAspectRatio
+      - buttonSections
+      - reverse
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

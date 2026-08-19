@@ -30,7 +30,7 @@ pageSections:
         size: md
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-split
+  - _component: page-sections/explainers/feature-split
     eyebrow: Built for Astro
     heading: Fast, modern, and easy to work with
     subtext: >-
@@ -45,7 +45,7 @@ pageSections:
     reverse: false
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-split
+  - _component: page-sections/explainers/feature-split
     eyebrow: CloudCannon Ready
     heading: Easy visual editing
     subtext: >-
@@ -62,7 +62,7 @@ pageSections:
     colorScheme: inherit
     backgroundColor:
     paddingVertical: lg
-  - _component: page-sections/features/feature-split
+  - _component: page-sections/explainers/feature-split
     eyebrow: Performance
     heading: Fast by architecture, not by accident
     subtext: >-
@@ -77,7 +77,7 @@ pageSections:
     reverse: false
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-split
+  - _component: page-sections/explainers/feature-split
     eyebrow: Documentation
     heading: Every component, clearly documented
     subtext: >-
@@ -92,7 +92,7 @@ pageSections:
     reverse: true
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-grid
+  - _component: page-sections/explainers/feature-grid
     eyebrow: Principles
     heading: Built for real-world web projects
     subtext: No trends. No noise. Just reliability.
@@ -130,7 +130,7 @@ pageSections:
     colorScheme: inherit
     backgroundColor: surface
     alignmentHorizontal: center
-  - _component: page-sections/ctas/cta-center
+  - _component: page-sections/conversion/cta-center
     heading: Ready to start building?
     subtext: >-
       Browse the complete Astro Component Starter and see live examples of every

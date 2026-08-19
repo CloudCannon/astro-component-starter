@@ -1,0 +1,105 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Breadcrumbs from "@navigation/breadcrumbs/Breadcrumbs.astro";
+import { trailFromPathname } from "@components/utils/breadcrumbTrail";
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  showBreadcrumbs = false,
+  alignmentHorizontal = "start",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "2xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+// The trail comes from the page's own URL — nested paths become linked
+// ancestors, and the heading names the current page.
+const trail = showBreadcrumbs ? trailFromPathname(Astro.url.pathname, heading) : [];
+---
+
+<CustomSection
+  class:list={["page-header", `align-${alignmentHorizontal}`, className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  {
+    showBreadcrumbs && trail.length > 0 && (
+      <Breadcrumbs
+        class="page-header-breadcrumbs"
+        items={trail}
+      />
+    )
+  }
+  <SimpleText
+    alignmentHorizontal={alignmentHorizontal}
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    class="page-header-heading"
+    level="h1"
+    size="lg"
+    alignmentHorizontal={alignmentHorizontal}
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="page-header-subtext"
+    alignmentHorizontal={alignmentHorizontal}
+    data-prop="subtext"
+    text={subtext}
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .page-header {
+      .page-header-breadcrumbs {
+        margin-bottom: var(--spacing-md);
+      }
+
+      .page-header-heading {
+        margin-top: 0;
+      }
+
+      .page-header-subtext {
+        max-width: 42rem;
+      }
+
+      &.align-center {
+        .page-header-breadcrumbs .breadcrumbs-trail {
+          justify-content: center;
+        }
+
+        .page-header-subtext {
+          margin-inline: auto;
+        }
+      }
+    }
+  }
+</style>

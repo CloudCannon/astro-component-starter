@@ -29,6 +29,12 @@
   --color-border-strong: var(--gray-900);
   --color-border-subtle: var(--gray-50);
 
+  /* Opaque "plain" set for chrome sitting on imagery or tints (e.g. the plain
+     Badge) — the theme's base surface, so it flips with light/dark. */
+  --color-bg-plain: var(--white);
+  --color-border-plain: var(--gray-300);
+  --color-text-plain: var(--gray-950);
+
   --color-state-hover: rgba(0, 0, 0, 0.04);
   --color-state-active: rgba(0, 0, 0, 0.08);
   --color-overlay: rgba(0, 0, 0, 0.5);
@@ -44,5 +50,9 @@
   --color-info-border-subtle: var(--blue-200);
   --color-success: var(--green-600);
   --color-success-bg-subtle: var(--green-100);
+  --color-success-border-subtle: var(--green-300);
+  --color-warning: var(--yellow-700);
+  --color-warning-bg-subtle: var(--yellow-50);
+  --color-warning-border-subtle: var(--yellow-300);
   --color-error: var(--color-danger);
 }

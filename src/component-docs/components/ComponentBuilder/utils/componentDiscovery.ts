@@ -9,7 +9,10 @@ import { existsSync, readFileSync } from "fs";
 import * as yaml from "js-yaml";
 import { join } from "path";
 
-import { getComponentMetadataMap } from "../../../shared/metadata";
+import {
+  getComponentMetadataMap,
+  type ComponentMetadata as SharedComponentMetadata,
+} from "../../../shared/metadata";
 import {
   discoverPageSectionCategories,
   groupComponentsByCategory,
@@ -74,9 +77,10 @@ function resolveSelectDataRefs(
   }
 }
 
-/** Discover components, slots, nesting rules, and category groupings. */
-export async function discoverComponents(): Promise<ComponentDiscoveryResult> {
-  const metadataMap = await getComponentMetadataMap();
+/** Discover components from an already-loaded metadata map. Safe for Vitest. */
+export function discoverComponentsFrom(
+  metadataMap: Map<string, SharedComponentMetadata>
+): ComponentDiscoveryResult {
   const nestingRules = parseNestingRules();
 
   const components: ComponentInfo[] = [
@@ -106,4 +110,9 @@ export async function discoverComponents(): Promise<ComponentDiscoveryResult> {
     nestingRules,
     pageSectionCategories: discoverPageSectionCategories(),
   };
+}
+
+/** Discover components, slots, nesting rules, and category groupings. */
+export async function discoverComponents(): Promise<ComponentDiscoveryResult> {
+  return discoverComponentsFrom(await getComponentMetadataMap());
 }

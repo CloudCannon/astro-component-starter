@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-social-links">
+  <title id="t-social-links">Social links component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(20 6)">
+    <rect x="492" y="330" width="28" height="28" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="568" y="330" width="28" height="28" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="644" y="330" width="28" height="28" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="720" y="330" width="28" height="28" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="480" y="406" width="52" height="52" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="494" y="420" width="24" height="24" rx="7" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="556" y="406" width="52" height="52" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="570" y="420" width="24" height="24" rx="7" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="632" y="406" width="52" height="52" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="646" y="420" width="24" height="24" rx="7" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="708" y="406" width="52" height="52" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="722" y="420" width="24" height="24" rx="7" fill="var(--pv-on-ink, #9A9A9A)"/>
+  </g>
+</svg>

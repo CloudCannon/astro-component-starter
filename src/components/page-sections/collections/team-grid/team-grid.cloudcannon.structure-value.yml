@@ -1,0 +1,100 @@
+label: Team Grid
+icon: groups
+description: Team member cards in a three-column card grid.
+value:
+  _component: page-sections/collections/team-grid
+  sectionLabel: ""
+  eyebrow: Our team
+  heading: Meet the team
+  subtext: Get to know the people behind our work.
+  teamMembers: []
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Team Grid
+  subtext:
+    - key: subtext
+  image: /component-previews/page-sections/collections/team-grid.svg
+  icon: groups
+picker_preview:
+  text: Team Grid
+  subtext: Grid of team member cards with photos and bios.
+  image: /component-previews/page-sections/collections/team-grid.svg
+_inputs_from_glob:
+  - /src/components/page-sections/collections/team-grid/team-grid.cloudcannon.inputs.yml
+_structures:
+  teamGridItems:
+    values:
+      - label: Team Member
+        icon: person
+        value:
+          name: Team member name
+          role: Job title
+          bio: Brief bio or description of the team member.
+          imageSource: /src/assets/images/component-docs/profile.jpg
+          imageAlt: Team member photo
+        preview:
+          text:
+            - key: name
+            - Team Member
+          subtext:
+            - key: role
+            - Job title
+          image:
+            - key: imageSource
+        _inputs:
+          name:
+            type: text
+            comment: Full name of the team member.
+          role:
+            type: text
+            comment: Job title or role of the team member.
+          bio:
+            type: textarea
+            comment: Brief biography or description of the team member.
+          imageSource:
+            type: image
+            comment: Photo of the team member.
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ""
+              resize_style: contain
+              width: 1920
+              height: 1280
+          imageAlt:
+            type: text
+            comment: Alt text describing the team member photo.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - teamMembers
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

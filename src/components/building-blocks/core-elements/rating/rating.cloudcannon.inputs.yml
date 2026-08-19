@@ -1,0 +1,62 @@
+value:
+  type: number
+  comment: The rating shown, 0 to the maximum. Halves work (e.g. 4.5).
+  options:
+    step: 0.5
+    min: 0
+    max: 5
+max:
+  type: number
+  comment: How many stars the scale has.
+  options:
+    step: 1
+    min: 1
+    max: 10
+size:
+  type: select
+  comment: The size of the stars.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+color:
+  type: select
+  comment: The color of the filled stars. Default inherits the text color; empty stars stay muted.
+  options:
+    values:
+      - id: default
+        name: Default (inherit)
+      - id: blue
+        name: Blue
+      - id: green
+        name: Green
+      - id: yellow
+        name: Yellow
+      - id: orange
+        name: Orange
+      - id: red
+        name: Red
+      - id: purple
+        name: Purple
+      - id: pink
+        name: Pink
+      - id: cyan
+        name: Cyan
+showValue:
+  type: switch
+  comment: Show the numeric value beside the stars.
+alignmentHorizontal:
+  type: select
+  comment: Horizontal alignment of the rating.
+  options:
+    values:
+      - id: none
+        name: None (in flow)
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+      - id: end
+        name: End

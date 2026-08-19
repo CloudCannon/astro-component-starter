@@ -1,0 +1,18 @@
+label:
+  comment: Optional label for the timeline to help identify it in the editor.
+  type: text
+layout:
+  type: select
+  comment: Vertical list with a continuous rail, or a horizontal row that scrolls.
+  options:
+    values:
+      - id: vertical
+        name: Vertical
+      - id: horizontal
+        name: Horizontal
+entries:
+  type: array
+  label: Entries
+  comment: Events in chronological order. Title-only entries are valid.
+  options:
+    structures: _structures.timelineEntries

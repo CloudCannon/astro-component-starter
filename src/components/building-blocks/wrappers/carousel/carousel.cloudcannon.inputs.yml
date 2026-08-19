@@ -22,12 +22,13 @@ showIndicators:
   comment: Show dot indicators below the carousel.
   type: switch
 indicatorStyle:
-  comment: Dot indicators or a slide counter (e.g. 1/3).
+  comment: Dot indicators, a slide counter (e.g. 1/3), or a strip of clickable image thumbnails.
   type: select
   options:
     values:
       - dots
       - fraction
+      - thumbnails
 showArrows:
   comment: Show previous and next arrow buttons.
   type: switch

@@ -1,0 +1,49 @@
+---
+import Testimonial from "@core-elements/testimonial/Testimonial.astro";
+import MasonryItem from "@wrappers/masonry/MasonryItem.astro";
+
+const {
+  text = "",
+  authorName = "",
+  authorDescription = "",
+  authorImage = "",
+  class: className,
+  _component,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<MasonryItem {...htmlAttributes}>
+  {
+    /* The card chrome (background, border, padding) comes from Testimonial
+      itself — the wall only supplies the layout and the start alignment that
+      suits a column of quotes. */
+  }
+  <Testimonial
+    class:list={["testimonial-wall-item", className]}
+    text={text}
+    authorName={authorName}
+    authorDescription={authorDescription}
+    authorImage={authorImage}
+    alignmentHorizontal="start"
+    data-prop="text"
+    data-prop-author-name="authorName"
+    data-prop-author-description="authorDescription"
+  />
+</MasonryItem>
+
+<style is:global>
+  @layer page-sections {
+    .testimonial-wall-item {
+      margin-top: 0;
+
+      /* Wall quotes are shorter than the single-quote section's, so the avatar
+         reads better small. Card height stays content-driven on purpose — it
+         feeds the masonry span measurement. */
+      > .testimonial-inner > .author > .author-image {
+        --avatar-size: 48px;
+      }
+    }
+  }
+</style>

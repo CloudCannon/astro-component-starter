@@ -1,0 +1,97 @@
+label: Timeline
+icon: timeline
+description: A dated sequence on a rail — company story, funding, or what's next.
+value:
+  _component: page-sections/explainers/timeline
+  sectionLabel: ""
+  eyebrow: Our story
+  heading: How we got here
+  subtext: ""
+  layout: vertical
+  entries:
+    - date: "2019"
+      title: Founded
+      body: Opened the studio and shipped the first client site.
+    - date: "2022"
+      title: Component library
+      body: The starter became a reusable system instead of a one-off theme.
+    - date: "2025"
+      title: Visual editing
+      body: Every section is assembled in the page builder.
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Timeline
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/explainers/timeline.svg
+  icon: timeline
+picker_preview:
+  text: Timeline
+  subtext: A dated sequence on a rail. Vertical or horizontal.
+  image: /component-previews/page-sections/explainers/timeline.svg
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/timeline/timeline.cloudcannon.inputs.yml
+_structures:
+  explainerTimelineEntries:
+    values:
+      - label: Entry
+        icon: timeline
+        value:
+          year: ""
+          date: "2024"
+          title: Entry title
+          body: ""
+        preview:
+          text:
+            - key: title
+            - Entry
+          subtext:
+            - key: date
+        _inputs:
+          year:
+            type: text
+            comment: Optional. Set the same year on consecutive entries to group them (month goes in Date).
+          date:
+            type: text
+            comment: The date shown beside the rail — a year (`2019`), a quarter (`Q3 2026`), or a month when Year is set.
+          title:
+            type: text
+            comment: What happened.
+          body:
+            type: textarea
+            comment: Optional supporting copy. Title-only entries are valid.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - layout
+      - entries
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

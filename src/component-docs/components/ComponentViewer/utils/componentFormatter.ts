@@ -10,6 +10,48 @@ function hasSlotBlocks(value: unknown): boolean {
   return typeof value === "object";
 }
 
+/** Nested `_component` trees belong as JSX children, not `foo="[object Object]"`. */
+function isNestedBlockTree(value: unknown): boolean {
+  if (value == null) return false;
+
+  const items = Array.isArray(value) ? value : [value];
+
+  return items.some((item) => item !== null && typeof item === "object" && "_component" in item);
+}
+
+function formatAttribute(key: string, value: unknown, indent: string): string {
+  if (typeof value === "string") {
+    return `${key}="${value}"`;
+  }
+  if (typeof value === "boolean") {
+    return value ? key : "";
+  }
+  if (typeof value === "number") {
+    return `${key}={${value}}`;
+  }
+  if (Array.isArray(value)) {
+    const formattedArray = JSON.stringify(value, null, 2)
+      .split("\n")
+      .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
+      .join("\n");
+
+    return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
+  }
+  if (typeof value === "object" && value !== null) {
+    return `${key}={${JSON.stringify(value)}}`;
+  }
+
+  return `${key}="${String(value)}"`;
+}
+
+function formatAttributes(props: Record<string, unknown>, indent: string): string {
+  return Object.entries(props)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => formatAttribute(key, value, indent))
+    .filter(Boolean)
+    .join(" ");
+}
+
 function formatBlockArray(
   blocks: unknown,
   childIndentLevel: number,
@@ -156,29 +198,7 @@ export function formatComponentWithSlots(
     delete props.options;
   }
 
-  const propsString = Object.entries(props)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => {
-      if (typeof value === "string") {
-        return `${key}="${value}"`;
-      } else if (typeof value === "boolean") {
-        return value ? key : "";
-      } else if (typeof value === "number") {
-        return `${key}={${value}}`;
-      } else if (Array.isArray(value)) {
-        const formattedArray = JSON.stringify(value, null, 2)
-          .split("\n")
-          .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
-          .join("\n");
-
-        return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
-      } else if (typeof value === "object" && value !== null) {
-        return `${key}={${JSON.stringify(value)}}`;
-      }
-      return `${key}="${String(value)}"`;
-    })
-    .filter(Boolean)
-    .join(" ");
+  const propsString = formatAttributes(props, indent);
 
   const items = block.items;
 
@@ -394,29 +414,23 @@ ${indent}</${componentName}>`;
     const itemsContent = itemsArray
       .map((item) => {
         const itemProps = { ...item };
+        const itemSlotProps = new Set(slotProps);
 
-        for (const slotProp of slotProps) {
+        for (const [key, value] of Object.entries(itemProps)) {
+          if (isNestedBlockTree(value)) {
+            itemSlotProps.add(key);
+          }
+        }
+
+        for (const slotProp of itemSlotProps) {
           delete itemProps[slotProp];
         }
 
-        const itemPropsString = Object.entries(itemProps)
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([key, value]) => {
-            if (typeof value === "string") {
-              return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : "";
-            } else if (typeof value === "number") {
-              return `${key}={${value}}`;
-            }
-            return `${key}="${String(value)}"`;
-          })
-          .filter(Boolean)
-          .join(" ");
+        const itemPropsString = formatAttributes(itemProps, `${indent}  `);
 
         const slotContentParts: string[] = [];
 
-        for (const slotProp of slotProps) {
+        for (const slotProp of itemSlotProps) {
           if (item[slotProp]) {
             const nestedBlocks = Array.isArray(item[slotProp]) ? item[slotProp] : [item[slotProp]];
 

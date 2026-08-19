@@ -169,11 +169,14 @@ const arrayDataAttributes =
           position: relative;
           z-index: var(--layer-1);
 
-          > *:first-child {
+          /* Strip content edge margins — but never from a popover: it lays out
+             in the top layer, where forcing an edge margin breaks its
+             `margin: auto` centering (e.g. GalleryGrid's lightbox). */
+          > *:first-child:not([popover]) {
             margin-top: 0 !important;
           }
 
-          > *:last-child {
+          > *:last-child:not([popover]) {
             margin-bottom: 0 !important;
           }
 

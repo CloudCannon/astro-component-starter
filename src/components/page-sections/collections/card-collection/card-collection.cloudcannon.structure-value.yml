@@ -1,0 +1,157 @@
+label: Card Collection
+icon: grid_view
+description: A grid of linked cards — services, case studies, projects, or resources.
+value:
+  _component: page-sections/collections/card-collection
+  sectionLabel: ""
+  eyebrow: What we do
+  heading: Services built for the long run
+  subtext: ""
+  items:
+    - image: /src/assets/images/component-docs/dunedin-cliff.jpg
+      imageAlt: Sea cliffs above a turquoise bay
+      link: "#"
+      contentSections:
+        - _component: building-blocks/core-elements/badge
+          text: Strategy
+          variant: plain
+          size: sm
+          showArrow: false
+        - _component: building-blocks/core-elements/heading
+          text: Discovery and planning
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Two weeks of research, content audit, and a sitemap you can actually build against.
+          size: sm
+    - image: /src/assets/images/component-docs/castle.jpg
+      imageAlt: Ruined stone castle under a starry night sky
+      link: "#"
+      contentSections:
+        - _component: building-blocks/core-elements/badge
+          text: Design
+          variant: plain
+          size: sm
+          showArrow: false
+        - _component: building-blocks/core-elements/heading
+          text: Design systems
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: A component library and token set your team can extend without a redesign.
+          size: sm
+    - image: /src/assets/images/component-docs/sunset.jpg
+      imageAlt: Coastal cliffs at dusk with the sun low over the sea
+      link: "#"
+      contentSections:
+        - _component: building-blocks/core-elements/badge
+          text: Build
+          variant: plain
+          size: sm
+          showArrow: false
+        - _component: building-blocks/core-elements/heading
+          text: Site build and migration
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Your content moved across, page by page, with redirects and no lost search rankings.
+          size: sm
+  layout: grid
+  columns: 3
+  gap: lg
+  aspectRatio: landscape
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Card Collection
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/collections/card-collection.svg
+  icon: grid_view
+picker_preview:
+  text: Card Collection
+  subtext: A grid of linked cards — services, case studies, projects, or resources.
+  image: /component-previews/page-sections/collections/card-collection.svg
+  icon: grid_view
+_inputs_from_glob:
+  - /src/components/page-sections/collections/card-collection/card-collection.cloudcannon.inputs.yml
+_structures:
+  cardCollectionItems:
+    values:
+      - label: Card
+        icon: article
+        value:
+          image: ""
+          imageAlt: ""
+          link: ""
+          contentSections: []
+        preview:
+          text:
+            - key: contentSections.1.text
+            - key: contentSections.0.text
+            - Card
+          subtext:
+            - key: contentSections.2.text
+            - Add one or more content blocks
+          image:
+            - key: image
+          icon: article
+        _inputs:
+          image:
+            type: image
+            comment: Cover image for the card. Leave empty for a text-only card.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+          imageAlt:
+            type: text
+            comment: Accessible description of the cover image. Falls back to the first heading in the card.
+          link:
+            type: url
+            comment: Where the card goes. A stretched hit area covers the tile; links inside the content (a category badge) stay their own targets. Leave empty for a static card.
+          contentSections:
+            type: array
+            label: Card content
+            comment: Building blocks for this card — typically a badge, heading, and short description. Add a date, author, or anything else the card needs.
+            options:
+              structures: _structures.cardSections
+        _structures_from_glob:
+          - /.cloudcannon/structures/cardSections.cloudcannon.structures.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - items
+      - layout
+      - columns
+      - gap
+      - aspectRatio
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

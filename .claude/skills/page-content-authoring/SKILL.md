@@ -79,7 +79,7 @@ pageSections:
         size: md
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-grid
+  - _component: page-sections/explainers/feature-grid
     eyebrow: Principles
     heading: Built for real-world web projects
     subtext: No trends. No noise. Just reliability.
@@ -90,7 +90,7 @@ pageSections:
         iconColor: blue
     colorScheme: inherit
     backgroundColor: surface
-  - _component: page-sections/ctas/cta-center
+  - _component: page-sections/conversion/cta-center
     heading: Ready to start building?
     subtext: Browse the complete component library.
     buttonSections:
@@ -112,18 +112,18 @@ In short: `colorScheme` sets the section's theme; `backgroundColor` paints its b
 
 ## Pick a section for a content need
 
-| Content need                          | Section (`_component`)                             |
-| ------------------------------------- | -------------------------------------------------- |
-| Page intro / banner                   | `page-sections/heroes/hero-center` or `hero-split` |
-| Grid of features with icons           | `page-sections/features/feature-grid`              |
-| One feature explained beside an image | `page-sections/features/feature-split`             |
-| Swipeable feature highlights          | `page-sections/features/feature-slider`            |
-| Closing call to action                | `page-sections/ctas/cta-center` or `cta-split`     |
-| Contact / lead-capture form           | `page-sections/ctas/cta-form`                      |
-| Questions and answers                 | `page-sections/info-blocks/faq-section`            |
-| Staff / people                        | `page-sections/people/team-grid`                   |
-| A single customer quote               | `page-sections/people/testimonial-section`         |
-| Anything else — free composition      | `page-sections/builders/custom-section`            |
+| Content need                          | Section (`_component`)                               |
+| ------------------------------------- | ---------------------------------------------------- |
+| Page intro / banner                   | `page-sections/heroes/hero-center` or `hero-split`   |
+| Grid of features with icons           | `page-sections/explainers/feature-grid`              |
+| One feature explained beside an image | `page-sections/explainers/feature-split`             |
+| Swipeable feature highlights          | `page-sections/explainers/feature-slider`            |
+| Closing call to action                | `page-sections/conversion/cta-center` or `cta-split` |
+| Contact / lead-capture form           | `page-sections/conversion/cta-form`                  |
+| Questions and answers                 | `page-sections/explainers/faq-section`               |
+| Staff / people                        | `page-sections/collections/team-grid`                |
+| A single customer quote               | `page-sections/proof/testimonial-section`            |
+| Anything else — free composition      | `page-sections/builders/custom-section`              |
 
 See [component-catalog.md](component-catalog.md) for each section's props and the full building-block list.
 

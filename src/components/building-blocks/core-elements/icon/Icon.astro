@@ -29,8 +29,6 @@ if (isValidName && !icon && import.meta.env.DEV) {
 if (!icon) {
   return;
 }
-
-const matchTextColor = Boolean(name?.includes("social/"));
 ---
 
 <span
@@ -44,7 +42,6 @@ const matchTextColor = Boolean(name?.includes("social/"));
       `color-${color}`,
       background && "background",
       alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
-      matchTextColor && "fill",
     ]}
   >
     <svg
@@ -74,10 +71,6 @@ const matchTextColor = Boolean(name?.includes("social/"));
 
         &.background-subtle {
           padding: 0.15em;
-        }
-
-        &.fill {
-          fill: currentcolor;
         }
 
         &.background {

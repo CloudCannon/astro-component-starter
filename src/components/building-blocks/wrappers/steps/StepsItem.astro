@@ -1,0 +1,73 @@
+---
+import RenderBlock from "@components/utils/renderBlock.astro";
+import Image from "@core-elements/image/Image.astro";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
+const {
+  image = "",
+  imageAlt = "",
+  contentSections,
+  index = 0,
+  isLast = false,
+  imageAspectRatio = "landscape",
+  useDefaultEditableBinding = false,
+  class: className,
+  "data-children-prop": childrenDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+
+const showImage = isNonEmptyString(image);
+const stepNumber = Number(index) + 1;
+---
+
+<li
+  class:list={["step", isLast && "is-last", className]}
+  {...htmlAttributes}
+>
+  <div
+    class="step-band"
+    aria-hidden="true"
+  >
+    <span class="step-marker">{stepNumber}</span>
+  </div>
+  <div class="step-body">
+    {
+      showImage && (
+        <Image
+          class="step-image"
+          source={image}
+          alt={imageAlt || ""}
+          rounded={true}
+          aspectRatio={imageAspectRatio}
+          sizes="(max-width: 768px) 100vw, 360px"
+          widths={[320, 480, 720]}
+          width={720}
+          data-prop-src="image"
+          data-prop-alt="imageAlt"
+        />
+      )
+    }
+    <div
+      class="step-content"
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {
+          contentSections && (
+            <RenderBlock
+              contentSections={contentSections}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+            />
+          )
+        }
+      </slot>
+    </div>
+  </div>
+</li>

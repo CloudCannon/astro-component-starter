@@ -1,0 +1,166 @@
+label: Pricing Comparison
+icon: table_chart
+description: A feature-by-feature comparison table across plans.
+value:
+  _component: page-sections/conversion/pricing-comparison
+  sectionLabel: ""
+  eyebrow: Pricing
+  heading: Compare plans feature by feature
+  subtext: ""
+  plans:
+    - name: Starter
+      price: $19/mo
+      highlight: false
+      buttonText: Choose Starter
+      buttonLink: "#"
+    - name: Team
+      price: $49/mo
+      highlight: true
+      buttonText: Choose Team
+      buttonLink: "#"
+    - name: Enterprise
+      price: Custom
+      highlight: false
+      buttonText: Talk to sales
+      buttonLink: "#"
+  rows:
+    - feature: Editors
+      values:
+        - "3"
+        - "15"
+        - Unlimited
+    - feature: Visual editing
+      values:
+        - "yes"
+        - "yes"
+        - "yes"
+    - feature: Scheduled publishing
+      values:
+        - "no"
+        - "yes"
+        - "yes"
+    - feature: Custom domains
+      values:
+        - "1"
+        - "10"
+        - Unlimited
+    - feature: SSO and audit log
+      values:
+        - "no"
+        - "no"
+        - "yes"
+    - feature: Support
+      values:
+        - Email
+        - Priority email
+        - Dedicated manager
+  striped: true
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Pricing Comparison
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/conversion/pricing-comparison.svg
+  icon: table_chart
+picker_preview:
+  text: Pricing Comparison
+  subtext: A feature-by-feature comparison table across plans.
+  image: /component-previews/page-sections/conversion/pricing-comparison.svg
+  icon: table_chart
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/pricing-comparison/pricing-comparison.cloudcannon.inputs.yml
+_structures:
+  pricingComparisonPlans:
+    values:
+      - label: Plan
+        icon: sell
+        value:
+          name: ""
+          price: ""
+          highlight: false
+          buttonText: ""
+          buttonLink: ""
+        preview:
+          text:
+            - key: name
+            - Plan
+          subtext:
+            - key: price
+          icon: sell
+        _inputs:
+          name:
+            type: text
+            comment: The plan's name, shown as the column header.
+          price:
+            type: text
+            comment: Price line under the name (e.g. "$49/mo" or "Custom"). Leave empty to hide.
+          highlight:
+            type: switch
+            comment: Tint this plan's column to mark it as the recommended one.
+          buttonText:
+            type: text
+            comment: Call to action under the column. Leave empty for no button.
+          buttonLink:
+            type: url
+            comment: Where the button goes.
+  pricingComparisonRows:
+    values:
+      - label: Feature row
+        icon: check_circle
+        value:
+          feature: ""
+          values:
+            - ""
+        preview:
+          text:
+            - key: feature
+            - Feature row
+          subtext:
+            - key: values
+          icon: check_circle
+        _inputs:
+          feature:
+            type: text
+            comment: The feature being compared, shown in the first column.
+          values:
+            type: array
+            comment: One value per plan, in the same order as the plans. Missing values render as an empty cell.
+          values[*]:
+            type: text
+            comment: 'Enter "yes" or "no" for a tick or a dash, or any text (e.g. "5 seats") to show as-is.'
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - plans
+      - rows
+      - striped
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

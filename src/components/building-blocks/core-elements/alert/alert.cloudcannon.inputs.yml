@@ -1,0 +1,43 @@
+variant:
+  type: select
+  comment: The tone of the alert. Warning and danger announce themselves to screen readers.
+  options:
+    values:
+      - id: info
+        name: Info
+      - id: success
+        name: Success
+      - id: warning
+        name: Warning
+      - id: danger
+        name: Danger
+      - id: note
+        name: Note
+title:
+  type: text
+  comment: Optional bold title. Without it, the icon aligns to the first line of text.
+text:
+  type: markdown
+  comment: The alert body.
+  options:
+    blockquote: false
+    bold: true
+    format:
+    italic: true
+    link: true
+    strike: false
+    subscript: true
+    superscript: true
+    underline: false
+    bulletedlist: true
+    numberedlist: true
+iconName:
+  type: select
+  comment: Overrides the variant's default icon. Sourced from [Heroicons](https://heroicons.com/).
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg

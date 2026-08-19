@@ -1,0 +1,153 @@
+---
+import RenderBlock from "@components/utils/renderBlock.astro";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import Image from "@core-elements/image/Image.astro";
+import type { ContentBlock } from "../../../../types";
+
+const {
+  image = "",
+  imageAlt = "",
+  link = "",
+  contentSections = [],
+  aspectRatio = "landscape",
+  class: className,
+  _component,
+  useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  "data-prop-src": imageSrcDataProp,
+  "data-prop-alt": imageAltDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+const blocks: ContentBlock[] = Array.isArray(contentSections) ? contentSections : [];
+const headingText = blocks.find(
+  (block) => block._component === "building-blocks/core-elements/heading"
+)?.text;
+const headingLabel = typeof headingText === "string" ? headingText : "";
+const hasLink = isNonEmptyString(link);
+const linkLabel = isNonEmptyString(headingLabel) ? headingLabel : "View";
+const coverAlt = imageAlt || headingLabel;
+
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+const imageEditable = useDefaultEditableBinding || effectiveChildrenProp;
+const imageSrcProp = imageSrcDataProp ?? (imageEditable ? "image" : undefined);
+const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined);
+---
+
+<article
+  class:list={["card-grid-item", hasLink && "linked", className]}
+  {...htmlAttributes}
+>
+  {
+    image && (
+      <Image
+        class="card-grid-image"
+        source={image}
+        alt={coverAlt}
+        aspectRatio={aspectRatio}
+        sizes="(max-width: 640px) 100vw, 400px"
+        widths={[320, 400, 640, 800]}
+        width={800}
+        data-prop-src={imageSrcProp}
+        data-prop-alt={imageAltProp}
+      />
+    )
+  }
+  <div
+    class="card-grid-body"
+    {...arrayDataAttributes}
+  >
+    <slot>
+      {
+        blocks.length > 0 && (
+          <RenderBlock
+            contentSections={blocks}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )
+      }
+    </slot>
+  </div>
+  {
+    hasLink && (
+      <a
+        class="card-grid-hit"
+        href={link}
+      >
+        <span class="visually-hidden">{linkLabel}</span>
+      </a>
+    )
+  }
+</article>
+
+<style is:global>
+  @layer components {
+    .card-grid-item {
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+
+      &.linked {
+        position: relative;
+        transition:
+          border-color var(--animation-fast) var(--ease-out),
+          box-shadow var(--animation-fast) var(--ease-out);
+
+        &:hover {
+          border-color: var(--color-border-strong);
+          box-shadow: var(--shadow-sm);
+
+          .heading {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .card-grid-image {
+        margin: 0;
+
+        img {
+          display: block;
+          width: 100%;
+        }
+      }
+
+      .card-grid-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-lg);
+
+        > * {
+          margin-block: 0;
+        }
+
+        > .simple-text,
+        > .text {
+          color: var(--color-text-muted);
+        }
+
+        /* Nested links (a category badge) sit above the stretched card hit. */
+        a,
+        .badge {
+          position: relative;
+          z-index: var(--layer-1);
+        }
+      }
+
+      .card-grid-hit {
+        inset: 0;
+        position: absolute;
+        z-index: var(--layer-0);
+      }
+    }
+  }
+</style>

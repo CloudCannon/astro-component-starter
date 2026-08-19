@@ -16,13 +16,13 @@
     }
   </style>
   <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 145)">
+  <g transform="translate(0 132)">
     <rect x="537" y="0" width="205" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
     <circle cx="568" cy="22" r="10" fill="var(--pv-on-ink, #9A9A9A)"/>
     <rect x="589" y="18" width="113" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
-    <rect x="260" y="76" width="760" height="434" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
-    <rect x="281" y="96" width="719" height="394" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <circle cx="640" cy="293" r="55" fill="var(--pv-subject, #A8A398)"/>
-    <polygon points="631,276 631,310 655,293" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="12" stroke-linejoin="round"/>
+    <rect x="992" y="68" width="28" height="28" rx="6" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="260" y="108" width="760" height="428" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="640" cy="322" r="55" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="631,305 631,339 655,322" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-paper, #FFFFFF)" stroke-width="12" stroke-linejoin="round"/>
   </g>
 </svg>

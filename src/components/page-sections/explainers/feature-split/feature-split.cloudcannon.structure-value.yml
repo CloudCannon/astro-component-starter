@@ -1,0 +1,67 @@
+label: Feature Split
+icon: view_week
+description: One feature explained beside an image.
+value:
+  _component: page-sections/explainers/feature-split
+  sectionLabel: ""
+  eyebrow: Eyebrow text
+  heading: Heading text
+  subtext: Subtext placeholder text that will be replaced with actual content.
+  buttonSections: []
+  imageSource: /src/assets/images/component-docs/quiet-street.jpg
+  imageAlt: Feature image
+  imageAspectRatio: portrait
+  imageRounded: true
+  reverse: false
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Feature Split
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/explainers/feature-split.svg
+  icon: view_week
+picker_preview:
+  text: Feature Split
+  subtext: Split view with story content and supporting feature list.
+  image: /component-previews/page-sections/explainers/feature-split.svg
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/feature-split/feature-split.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - buttonSections
+      - imageSource
+      - imageAlt
+      - imageAspectRatio
+      - imageRounded
+      - reverse
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

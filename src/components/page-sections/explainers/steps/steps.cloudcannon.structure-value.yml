@@ -1,0 +1,134 @@
+label: Steps
+icon: format_list_numbered
+description: A numbered "how it works" sequence. Markers sit on a per-step rail; optional images share one crop.
+value:
+  _component: page-sections/explainers/steps
+  sectionLabel: ""
+  eyebrow: How it works
+  heading: Live in three steps
+  subtext: ""
+  items:
+    - image: ""
+      imageAlt: ""
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Connect the repo
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Point the starter at your Git repository and it builds on every push.
+          size: sm
+    - image: ""
+      imageAlt: ""
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Swap the tokens
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Brand color, fonts, and radius are one token file — change it once.
+          size: sm
+    - image: ""
+      imageAlt: ""
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Ship it
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Publish from the editor. The CDN and SSL are already handled.
+          size: sm
+  orientation: horizontal
+  imageAspectRatio: landscape
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Steps
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/explainers/steps.svg
+  icon: format_list_numbered
+picker_preview:
+  text: Steps
+  subtext: A numbered "how it works" sequence with connected step markers.
+  image: /component-previews/page-sections/explainers/steps.svg
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/steps/steps.cloudcannon.inputs.yml
+_structures:
+  explainerStepsItems:
+    values:
+      - label: Step
+        icon: format_list_numbered
+        value:
+          image: ""
+          imageAlt: ""
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Step heading
+              level: h3
+              size: xs
+            - _component: building-blocks/core-elements/simple-text
+              text: What happens in this step.
+              size: sm
+        preview:
+          text:
+            - key: contentSections.0.text
+            - Step
+          subtext:
+            - key: contentSections.1.text
+          image:
+            - key: image
+        _inputs:
+          image:
+            type: image
+            comment: Optional product or process photo. Every step shares the section's image aspect ratio.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+          imageAlt:
+            type: text
+            comment: Accessible description of the step image.
+          contentSections:
+            type: array
+            label: Step content
+            comment: Building blocks for this step — typically a heading and a short description.
+            options:
+              structures: _structures.stepsItemSections
+        _structures_from_glob:
+          - /.cloudcannon/structures/stepsItemSections.cloudcannon.structures.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - items
+      - orientation
+      - imageAspectRatio
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

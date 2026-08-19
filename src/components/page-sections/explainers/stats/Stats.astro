@@ -1,0 +1,187 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Counter from "@core-elements/counter/Counter.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+
+type StatProps = {
+  number?: number;
+  prefix?: string;
+  suffix?: string;
+  label?: string;
+  sublabel?: string;
+};
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  stats = [],
+  dividers = true,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["stats", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="stats-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+  {
+    stats.length > 0 && (
+      <dl
+        class:list={["stats-grid", dividers && "dividers"]}
+        data-editable="array"
+        data-prop="stats"
+        data-direction="row"
+      >
+        {stats.map((stat: StatProps) => (
+          <div
+            class="stat"
+            data-editable="array-item"
+          >
+            <dt
+              class="stat-label"
+              data-editable="text"
+              data-prop="label"
+            >
+              {stat.label}
+            </dt>
+            <dd class="stat-value">
+              <Counter
+                number={stat.number}
+                prefix={stat.prefix}
+                suffix={stat.suffix}
+                alignmentHorizontal="center"
+              />
+            </dd>
+            {stat.sublabel && (
+              <dd
+                class="stat-sublabel"
+                data-editable="text"
+                data-prop="sublabel"
+              >
+                {stat.sublabel}
+              </dd>
+            )}
+          </div>
+        ))}
+      </dl>
+    )
+  }
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .stats {
+      .stats-grid {
+        display: grid;
+        gap: var(--spacing-xl) 0;
+        grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+        margin: var(--spacing-2xl) 0 0;
+
+        > .stat {
+          display: flex;
+          flex-direction: column;
+          padding: 0 var(--spacing-lg);
+          text-align: center;
+        }
+      }
+
+      /* The number reads first; the <dt> label stays first in source order
+         for assistive tech. */
+      .stat-label {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        order: 2;
+        text-transform: uppercase;
+      }
+
+      .stat-value {
+        margin: 0;
+        order: 1;
+
+        .counter {
+          margin-top: 0;
+
+          > .counter-inner {
+            font-family: var(--font-headings);
+            letter-spacing: -0.03em;
+            line-height: var(--line-height-tight);
+          }
+        }
+      }
+
+      .stat-sublabel {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: var(--spacing-xs) 0 0;
+        order: 3;
+      }
+
+      .stats-grid.dividers > .stat {
+        border-inline-start: 1px solid var(--color-border);
+
+        &:first-child {
+          border-inline-start: none;
+        }
+      }
+
+      /* 640px = canonical mobile/stacking breakpoint. */
+      @media (width < 640px) {
+        .stats-grid.dividers > .stat {
+          border-inline-start: none;
+          border-top: 1px solid var(--color-border);
+          padding-top: var(--spacing-xl);
+
+          &:first-child {
+            border-top: none;
+            padding-top: 0;
+          }
+        }
+      }
+    }
+  }
+</style>

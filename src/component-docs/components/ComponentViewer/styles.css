@@ -4,6 +4,7 @@
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
+  overflow-anchor: none;
 
   > .controls {
     align-items: center;
@@ -91,6 +92,7 @@
 
   > .previews {
     container-type: inline-size;
+    display: grid;
     max-height: 30rem;
     min-height: 10rem;
 
@@ -101,30 +103,41 @@
       border-radius: var(--radius-xs);
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
-      display: none;
-      height: 100%;
+      grid-area: 1 / 1;
+      justify-self: start;
       max-height: inherit;
       min-height: inherit;
       overflow-y: auto;
+      pointer-events: none;
       position: relative;
       transition: max-width var(--animation-slow) ease-in-out;
+      visibility: hidden;
+      width: 100%;
+      z-index: 0;
 
       > .examples > *:first-child {
         margin-top: 0 !important;
       }
     }
 
+    /* Stay in the grid (visibility, not display) so the frame is always as
+       tall as the tallest variant. Toggling display:none is what made the
+       page jump when the example select changed. */
     > .preview.active {
-      display: block;
+      pointer-events: auto;
+      visibility: visible;
+      z-index: 1;
     }
 
     > .code {
       display: none;
+      grid-area: 1 / 1;
       height: 100%;
       max-height: inherit;
       min-height: inherit;
       overflow-y: auto;
       position: relative;
+      z-index: 2;
 
       .astro-code {
         overflow-y: scroll;
@@ -188,4 +201,9 @@
 
 .component-viewer[data-device-size="desktop"] .preview {
   max-width: 100%;
+}
+
+.component-viewer.showing-code > .previews > .preview {
+  pointer-events: none;
+  visibility: hidden;
 }

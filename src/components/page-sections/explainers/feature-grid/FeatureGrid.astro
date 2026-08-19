@@ -1,0 +1,91 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import FeatureItem from "@explainers/feature-grid/FeatureItem.astro";
+import Grid from "@wrappers/grid/Grid.astro";
+
+type FeatureProps = Record<string, unknown>;
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  features = [],
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  alignmentHorizontal = "center",
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["feature-grid", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal={alignmentHorizontal}
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal={alignmentHorizontal}
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="feature-grid-subtext"
+    alignmentHorizontal={alignmentHorizontal}
+    data-prop="subtext"
+    text={subtext}
+  />
+  <Grid
+    gap="lg"
+    minItemWidth="360"
+    maxItemWidth="400"
+    class="feature-grid-grid"
+    data-children-prop="features"
+  >
+    {
+      features.map((feature: FeatureProps) => (
+        <FeatureItem
+          data-id="page-sections/explainers/feature-grid/feature-item"
+          data-editable="array-item"
+          {...feature}
+        />
+      ))
+    }
+  </Grid>
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .feature-grid-grid {
+      margin-top: var(--spacing-2xl);
+    }
+  }
+</style>

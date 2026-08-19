@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-gallery-grid">
+  <title id="t-gallery-grid">Gallery grid component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 163)">
+    <rect x="160" y="0" width="304" height="198" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="160" y="214" width="132" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="252" width="304" height="198" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="160" y="466" width="132" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="488" y="0" width="304" height="198" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="488" y="214" width="132" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="488" y="252" width="304" height="198" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="488" y="466" width="132" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="816" y="0" width="304" height="198" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="816" y="214" width="132" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="816" y="252" width="304" height="198" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="816" y="466" width="132" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+  </g>
+</svg>

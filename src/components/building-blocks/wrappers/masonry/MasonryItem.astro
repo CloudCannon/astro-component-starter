@@ -1,0 +1,58 @@
+---
+import RenderBlock from "@components/utils/renderBlock.astro";
+
+const {
+  contentSections,
+  useDefaultEditableBinding = false,
+  class: className,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+---
+
+<div
+  class:list={["masonry-item", className]}
+  {...htmlAttributes}
+>
+  <div
+    class="masonry-item-content"
+    {...arrayDataAttributes}
+  >
+    <slot>
+      {
+        contentSections && (
+          <RenderBlock
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )
+      }
+    </slot>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .masonry-item {
+      container-type: inline-size;
+
+      /* The content div is the measurement probe for the JS enhancement —
+         its height must stay content-driven (never 100%), or measuring it
+         would feed back into the span it produces. */
+      > .masonry-item-content > *:first-child {
+        margin-top: 0 !important;
+      }
+
+      > .masonry-item-content > *:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+</style>

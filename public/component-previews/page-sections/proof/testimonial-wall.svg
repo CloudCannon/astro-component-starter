@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-testimonial-wall">
+  <title id="t-testimonial-wall">Testimonial wall component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 104)">
+    <rect x="460" y="0" width="360" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="400" y="44" width="480" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="108" width="304" height="236" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="184" y="136" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="184" y="162" width="240" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="184" y="188" width="208" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="200" cy="300" r="16" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="228" y="292" width="120" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="228" y="314" width="88" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="368" width="304" height="200" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="184" y="396" width="240" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="184" y="422" width="176" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="200" cy="524" r="16" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="228" y="516" width="120" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="228" y="538" width="88" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="488" y="108" width="304" height="196" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="512" y="136" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="512" y="162" width="184" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="528" cy="260" r="16" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="556" y="252" width="120" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="556" y="274" width="88" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="488" y="328" width="304" height="258" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="512" y="356" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="512" y="382" width="248" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="512" y="408" width="232" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="512" y="434" width="160" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="528" cy="542" r="16" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="556" y="534" width="120" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="556" y="556" width="88" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="816" y="108" width="304" height="272" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="840" y="136" width="256" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="840" y="162" width="244" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="840" y="188" width="224" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="840" y="214" width="180" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="856" cy="336" r="16" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="884" y="328" width="120" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="884" y="350" width="88" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="816" y="404" width="304" height="188" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="840" y="432" width="232" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="840" y="458" width="152" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <circle cx="856" cy="548" r="16" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="884" y="540" width="120" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="884" y="562" width="88" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+  </g>
+</svg>

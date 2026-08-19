@@ -1,0 +1,112 @@
+label: Stats
+icon: monitoring
+description: A row of big numbers with labels — the confident-metrics section.
+value:
+  _component: page-sections/explainers/stats
+  sectionLabel: ""
+  eyebrow: ""
+  heading: Numbers that hold up
+  subtext: ""
+  stats:
+    - number: 12
+      prefix: ""
+      suffix: k+
+      label: Customers
+      sublabel: ""
+    - number: 99.95
+      prefix: ""
+      suffix: "%"
+      label: Uptime
+      sublabel: Last 12 months
+    - number: 1.4
+      prefix: ""
+      suffix: s
+      label: Median build
+      sublabel: ""
+    - number: 4.9
+      prefix: ""
+      suffix: ""
+      label: Support score
+      sublabel: Out of 5
+  dividers: true
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Stats
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/explainers/stats.svg
+  icon: monitoring
+picker_preview:
+  text: Stats
+  subtext: A row of big numbers with labels — the confident-metrics section.
+  image: /component-previews/page-sections/explainers/stats.svg
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/stats/stats.cloudcannon.inputs.yml
+_structures:
+  statsItems:
+    values:
+      - label: Stat
+        icon: monitoring
+        value:
+          number: 100
+          prefix: ""
+          suffix: ""
+          label: Label
+          sublabel: ""
+        preview:
+          text:
+            - key: label
+            - Stat
+          subtext:
+            - key: number
+        _inputs:
+          number:
+            type: number
+            comment: The number that counts up when scrolled into view. Decimals are kept (e.g. 99.95).
+          prefix:
+            type: text
+            comment: Text shown before the number (e.g. $).
+          suffix:
+            type: text
+            comment: Text shown after the number (e.g. k+, %).
+          label:
+            type: text
+            comment: What the number measures.
+          sublabel:
+            type: text
+            comment: Optional smaller line under the label.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - stats
+      - dividers
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

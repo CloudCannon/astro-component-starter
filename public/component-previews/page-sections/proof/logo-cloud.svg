@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-logo-cloud">
+  <title id="t-logo-cloud">Logo cloud component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 354)">
+    <rect x="530" y="0" width="220" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="160" y="48" width="120" height="44" rx="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="184" y="66" width="72" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="328" y="48" width="120" height="44" rx="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="352" y="66" width="72" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="496" y="48" width="120" height="44" rx="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="520" y="66" width="72" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="664" y="48" width="120" height="44" rx="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="688" y="66" width="72" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="832" y="48" width="120" height="44" rx="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="856" y="66" width="72" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="1000" y="48" width="120" height="44" rx="6" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="1024" y="66" width="72" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
+  </g>
+</svg>

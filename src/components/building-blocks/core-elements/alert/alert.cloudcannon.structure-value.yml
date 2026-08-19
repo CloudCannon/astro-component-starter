@@ -1,0 +1,22 @@
+label: Alert
+icon: campaign
+description: Status callout box — info, success, warning, danger, or a neutral note.
+value:
+  _component: building-blocks/core-elements/alert
+  variant: info
+  title: Good to know
+  text: Alerts hold a short piece of prose, and the body can carry a [link](#).
+  iconName: ""
+preview:
+  text:
+    - Alert
+  subtext:
+    - key: title
+  image: /component-previews/building-blocks/core-elements/alert.svg
+  icon: campaign
+picker_preview:
+  text: Alert
+  subtext: Status callout box — info, success, warning, danger, or a neutral note.
+  image: /component-previews/building-blocks/core-elements/alert.svg
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/alert/alert.cloudcannon.inputs.yml

@@ -1,0 +1,194 @@
+---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import Icon from "@core-elements/icon/Icon.astro";
+
+const {
+  text,
+  iconName,
+  showDot = false,
+  link = "",
+  showArrow = true,
+  variant = "neutral",
+  size = "md",
+  alignmentHorizontal = "none",
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-prop": customDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
+const textDataAttributes = effectiveDataProp
+  ? { "data-editable": "text", "data-prop": effectiveDataProp }
+  : {};
+
+const hasText = isNonEmptyString(text);
+const hasIcon = isNonEmptyString(iconName);
+const hasLink = isNonEmptyString(link);
+
+const Inner = hasLink ? "a" : "span";
+const innerAttributes = hasLink ? { href: link } : {};
+
+if (!_component && !hasText && !hasIcon) return;
+---
+
+<div
+  class:list={[
+    "badge",
+    alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    className,
+  ]}
+  {...htmlAttributes}
+>
+  <Inner
+    class:list={["badge-inner", `variant-${variant}`, `size-${size}`]}
+    {...innerAttributes}
+  >
+    {
+      showDot && (
+        <span
+          class="badge-dot"
+          aria-hidden="true"
+        />
+      )
+    }
+    <Icon
+      name={iconName}
+      size="none"
+    />
+    <span
+      class="badge-text"
+      {...textDataAttributes}
+    >
+      <slot>{text}</slot>
+    </span>
+    {
+      hasLink && showArrow && (
+        <Icon
+          name="arrow-right"
+          size="none"
+          class="badge-arrow"
+        />
+      )
+    }
+  </Inner>
+</div>
+
+<style is:global>
+  @layer components {
+    .badge {
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: middle;
+
+      > .badge-inner {
+        align-items: center;
+        background-color: var(--color-bg-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        color: var(--color-text);
+        display: inline-flex;
+        font-weight: var(--font-weight-semibold);
+        gap: var(--spacing-em-xs);
+        line-height: var(--line-height-normal);
+
+        &.variant-brand {
+          background-color: var(--color-bg-brand);
+          border-color: transparent;
+          color: var(--color-text-on-brand);
+        }
+
+        &.variant-info {
+          background-color: var(--color-info-bg-subtle);
+          border-color: var(--color-info-border-subtle);
+          color: var(--color-info);
+        }
+
+        &.variant-success {
+          background-color: var(--color-success-bg-subtle);
+          border-color: var(--color-success-border-subtle);
+          color: var(--color-success);
+        }
+
+        &.variant-warning {
+          background-color: var(--color-warning-bg-subtle);
+          border-color: var(--color-warning-border-subtle);
+          color: var(--color-warning);
+        }
+
+        &.variant-danger {
+          background-color: var(--color-danger-bg-subtle);
+          border-color: var(--color-danger-border-subtle);
+          color: var(--color-danger);
+        }
+
+        /* Opaque base surface — sits on tints and imagery, and follows the
+           active theme (white in light, near-black in dark). */
+        &.variant-plain {
+          background-color: var(--color-bg-plain);
+          border-color: var(--color-border-plain);
+          color: var(--color-text-plain);
+        }
+
+        &.variant-accent {
+          background-color: var(--color-bg-accent);
+          border-color: transparent;
+          color: var(--color-text);
+        }
+
+        &.size-sm {
+          font-size: var(--font-size-xs);
+          padding: var(--spacing-xs) var(--spacing-sm);
+        }
+
+        &.size-md {
+          font-size: var(--font-size-sm);
+          padding: var(--spacing-xs) var(--spacing-md);
+        }
+
+        &.size-lg {
+          font-size: var(--font-size-sm);
+          min-height: 2.25rem;
+          padding: var(--spacing-xs) var(--spacing-md);
+        }
+      }
+
+      > a.badge-inner {
+        text-decoration: none;
+        transition: border-color var(--animation-fast) var(--ease-out);
+
+        &:hover {
+          border-color: var(--color-border-strong);
+        }
+      }
+
+      .badge-dot {
+        background-color: currentcolor;
+        border-radius: var(--radius-full);
+        flex: none;
+        height: var(--spacing-sm);
+        width: var(--spacing-sm);
+      }
+
+      .badge-arrow {
+        color: var(--color-text-muted);
+      }
+
+      &.align-start {
+        display: block;
+        text-align: start;
+      }
+
+      &.align-center {
+        display: block;
+        text-align: center;
+      }
+
+      &.align-end {
+        display: block;
+        text-align: end;
+      }
+    }
+  }
+</style>

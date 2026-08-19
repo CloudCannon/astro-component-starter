@@ -1,0 +1,192 @@
+---
+import Badge from "@core-elements/badge/Badge.astro";
+import Button from "@core-elements/button/Button.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import GridItem from "@wrappers/grid/GridItem.astro";
+
+type TierFeature = { text?: string; included?: boolean };
+
+const {
+  name = "",
+  price = "",
+  priceSuffix = "",
+  description = "",
+  features = [],
+  buttonText = "",
+  buttonLink = "",
+  highlight = false,
+  badgeText = "",
+  class: className,
+  _component,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<GridItem {...htmlAttributes}>
+  <article class:list={["pricing-tier", highlight && "highlight", className]}>
+    {
+      highlight && badgeText && (
+        <Badge
+          class="pricing-tier-badge"
+          variant="brand"
+          size="sm"
+          text={badgeText}
+          data-prop="badgeText"
+        />
+      )
+    }
+    <Heading
+      class="pricing-tier-name"
+      level="h3"
+      size="xs"
+      data-prop="name"
+    >
+      {name}
+    </Heading>
+    <SimpleText
+      class="pricing-tier-description"
+      size="sm"
+      data-prop="description"
+      text={description}
+    />
+    <p class="pricing-tier-price">
+      <span
+        class="pricing-tier-amount"
+        data-editable="text"
+        data-prop="price"
+      >
+        {price}
+      </span>
+      {
+        priceSuffix && (
+          <span
+            class="pricing-tier-suffix"
+            data-editable="text"
+            data-prop="priceSuffix"
+          >
+            {priceSuffix}
+          </span>
+        )
+      }
+    </p>
+    {
+      features.length > 0 && (
+        <ul class="pricing-tier-features">
+          {features.map((feature: TierFeature) => (
+            <li class:list={["pricing-tier-feature", feature.included === false && "excluded"]}>
+              <Icon
+                name={feature.included === false ? "minus" : "check"}
+                size="sm"
+              />
+              <span>{feature.text}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <Button
+      class="pricing-tier-button"
+      text={buttonText}
+      link={buttonLink}
+      variant={highlight ? "primary" : "tertiary"}
+      data-prop="buttonText"
+    />
+  </article>
+</GridItem>
+
+<style is:global>
+  @layer page-sections {
+    .pricing-tier {
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      padding: var(--spacing-xl);
+      position: relative;
+
+      &.highlight {
+        /* Inset ring doubles the border to 2px without shifting layout
+           against the sibling cards. */
+        border-color: var(--color-border-strong);
+        box-shadow:
+          inset 0 0 0 1px var(--color-border-strong),
+          var(--shadow-md);
+      }
+
+      .pricing-tier-badge {
+        left: var(--spacing-xl);
+        position: absolute;
+        top: calc(-1 * var(--spacing-md));
+      }
+
+      .pricing-tier-name .heading-inner {
+        margin: 0;
+      }
+
+      .pricing-tier-description .simple-text-content {
+        color: var(--color-text-muted);
+        margin-block: var(--spacing-xs) 0;
+      }
+
+      .pricing-tier-price {
+        align-items: baseline;
+        display: flex;
+        gap: var(--spacing-xs);
+        margin-top: var(--spacing-lg);
+
+        > .pricing-tier-amount {
+          font-family: var(--font-headings);
+          font-size: var(--font-size-heading-lg);
+          font-weight: var(--font-weight-bold);
+          letter-spacing: -0.02em;
+          line-height: var(--line-height-tight);
+        }
+
+        > .pricing-tier-suffix {
+          color: var(--color-text-muted);
+          font-size: var(--font-size-sm);
+        }
+      }
+
+      .pricing-tier-features {
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        list-style: none;
+        margin: var(--spacing-lg) 0 0;
+        padding: var(--spacing-lg) 0 0;
+
+        > .pricing-tier-feature {
+          display: flex;
+          font-size: var(--font-size-sm);
+          gap: var(--spacing-sm);
+
+          > .icon {
+            flex-shrink: 0;
+            margin-top: var(--spacing-xs);
+          }
+
+          &.excluded {
+            color: var(--color-text-muted);
+          }
+        }
+      }
+
+      .pricing-tier-button {
+        display: flex;
+        margin-top: auto;
+        padding-top: var(--spacing-xl);
+
+        > .button-inner {
+          flex: 1;
+        }
+      }
+    }
+  }
+</style>

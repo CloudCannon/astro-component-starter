@@ -1,0 +1,68 @@
+text:
+  type: text
+  comment: Text displayed inside the badge.
+iconName:
+  type: select
+  comment: Optional leading icon. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  options:
+    values: _select_data.icons
+    preview:
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+showDot:
+  type: switch
+  comment: Show a small status-colored dot before the text (an alternative to the icon).
+link:
+  type: url
+  comment: Optional link. The badge becomes an anchor with a hover state, and a trailing arrow unless you turn that off.
+showArrow:
+  type: switch
+  comment: Show a trailing arrow when the badge has a link. Turn off for a quieter linked tag.
+  hidden: "!link"
+variant:
+  type: select
+  comment: The color treatment of the badge. Brand and Accent are filled; Plain is an opaque base surface for use on imagery and tinted backgrounds; the rest are subtle tints.
+  options:
+    values:
+      - id: neutral
+        name: Neutral
+      - id: brand
+        name: Brand
+      - id: info
+        name: Info
+      - id: success
+        name: Success
+      - id: warning
+        name: Warning
+      - id: danger
+        name: Danger
+      - id: plain
+        name: Plain
+      - id: accent
+        name: Accent
+size:
+  type: select
+  comment: The size of the badge.
+  options:
+    values:
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+alignmentHorizontal:
+  type: select
+  comment: Horizontal alignment of the badge.
+  options:
+    values:
+      - id: none
+        name: None (in flow)
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+      - id: end
+        name: End

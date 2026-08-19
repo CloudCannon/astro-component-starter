@@ -135,7 +135,7 @@ To hold arbitrary building blocks instead of a fixed child component, render the
 
 ## Page section (full-width section composed of building blocks)
 
-Model on `src/components/page-sections/ctas/cta-center/CtaCenter.astro`. Page sections wrap content in `CustomSection` and compose existing building blocks — do not hand-write section chrome.
+Model on `src/components/page-sections/conversion/cta-center/CtaCenter.astro`. Page sections wrap content in `CustomSection` and compose existing building blocks — do not hand-write section chrome.
 
 ```astro
 ---

@@ -1,0 +1,185 @@
+label: Pricing Tiers
+icon: payments
+description: Plan comparison cards with feature checklists and a highlighted tier.
+value:
+  _component: page-sections/conversion/pricing-tiers
+  sectionLabel: ""
+  eyebrow: Plans
+  heading: Simple pricing that scales with you
+  subtext: Every plan includes global CDN hosting and automatic SSL.
+  tiers:
+    - name: Starter
+      price: $19
+      priceSuffix: /month
+      description: For a single marketing site.
+      features:
+        - text: 1 site
+          included: true
+        - text: 1 seat
+          included: true
+        - text: CDN + SSL
+          included: true
+        - text: Form endpoints
+          included: false
+        - text: Staging environment
+          included: false
+      buttonText: Get started
+      buttonLink: "#"
+      highlight: false
+      badgeText: ""
+    - name: Studio
+      price: $59
+      priceSuffix: /month
+      description: For small teams shipping several sites.
+      features:
+        - text: 10 sites
+          included: true
+        - text: 5 seats
+          included: true
+        - text: Form endpoints
+          included: true
+        - text: Staging environment
+          included: true
+        - text: SSO
+          included: false
+      buttonText: Get started
+      buttonLink: "#"
+      highlight: true
+      badgeText: Most popular
+    - name: Agency
+      price: $149
+      priceSuffix: /month
+      description: For agencies running client fleets.
+      features:
+        - text: Unlimited sites
+          included: true
+        - text: SSO + audit log
+          included: true
+        - text: Named support contact
+          included: true
+        - text: 99.95% uptime SLA
+          included: true
+      buttonText: Talk to sales
+      buttonLink: "#"
+      highlight: false
+      badgeText: ""
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Pricing Tiers
+  subtext:
+    - key: heading
+  image: /component-previews/page-sections/conversion/pricing-tiers.svg
+  icon: payments
+picker_preview:
+  text: Pricing Tiers
+  subtext: Plan comparison cards with feature checklists and a highlighted tier.
+  image: /component-previews/page-sections/conversion/pricing-tiers.svg
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/pricing-tiers/pricing-tiers.cloudcannon.inputs.yml
+_structures:
+  pricingTiers:
+    values:
+      - label: Tier
+        icon: payments
+        value:
+          name: Plan name
+          price: $29
+          priceSuffix: /month
+          description: Who this plan is for.
+          features:
+            - text: Included feature
+              included: true
+          buttonText: Get started
+          buttonLink: "#"
+          highlight: false
+          badgeText: ""
+        preview:
+          text:
+            - key: name
+            - Tier
+          subtext:
+            - key: price
+        _inputs:
+          name:
+            type: text
+            comment: Name of the plan.
+          price:
+            type: text
+            comment: The price, including the currency symbol (e.g. $19).
+          priceSuffix:
+            type: text
+            comment: Billing period shown after the price (e.g. /month). Leave empty to hide.
+          description:
+            type: text
+            comment: One line on who the plan is for.
+          features:
+            type: array
+            label: Features
+            comment: Feature checklist. Excluded rows render muted with a dash so the lists align across tiers.
+            options:
+              structures: _structures.pricingTierFeatures
+          buttonText:
+            type: text
+            comment: Call-to-action button label.
+          buttonLink:
+            type: url
+            comment: Where the call-to-action button links.
+          highlight:
+            type: switch
+            comment: Emphasize this tier with a stronger border, shadow, filled button, and the badge.
+          badgeText:
+            type: text
+            comment: Badge shown atop the card (e.g. Most popular).
+            hidden: "!highlight"
+  pricingTierFeatures:
+    values:
+      - label: Feature
+        icon: check
+        value:
+          text: Feature
+          included: true
+        preview:
+          text:
+            - key: text
+            - Feature
+        _inputs:
+          text:
+            type: text
+            comment: The feature name.
+          included:
+            type: switch
+            comment: Whether this plan includes the feature.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - tiers
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

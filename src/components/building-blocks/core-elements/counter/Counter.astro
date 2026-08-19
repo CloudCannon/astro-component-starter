@@ -62,6 +62,8 @@ const duration = 500;
       const start = parseFloat(element.dataset.start || "0");
       const target = parseFloat(element.dataset.target || "0");
       const duration = parseInt(element.dataset.duration || "2000", 10);
+      // Animate at the target's own precision, so "99.95" doesn't get floored.
+      const decimals = (element.dataset.target?.split(".")[1] || "").length;
 
       let startTime: number | null = null;
 
@@ -69,7 +71,13 @@ const duration = 500;
         if (!startTime) startTime = ts;
         const progress = Math.min((ts - startTime) / duration, 1);
         const value = start + (target - start) * progress;
-        element.textContent = Math.floor(value).toLocaleString();
+        element.textContent =
+          decimals > 0
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: decimals,
+                maximumFractionDigits: decimals,
+              })
+            : Math.floor(value).toLocaleString();
         if (progress < 1) requestAnimationFrame(step);
       }
 

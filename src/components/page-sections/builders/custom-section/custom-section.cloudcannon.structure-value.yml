@@ -36,3 +36,20 @@ picker_preview:
   image: /component-previews/page-sections/builders/custom-section.svg
 _inputs_from_glob:
   - /src/components/page-sections/builders/custom-section/custom-section.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - contentSections
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - label
+      - useDefaultEditableBinding
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background
+      - rounded

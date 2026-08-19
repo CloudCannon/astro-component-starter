@@ -1,0 +1,91 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import CardGrid from "@wrappers/card-grid/CardGrid.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  items = [],
+  layout = "grid",
+  columns = 3,
+  gap = "lg",
+  aspectRatio = "landscape",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["card-collection", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="card-collection-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  <CardGrid
+    class="card-collection-grid"
+    items={items}
+    layout={layout}
+    columns={columns}
+    gap={gap}
+    aspectRatio={aspectRatio}
+    data-children-prop="items"
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .card-collection {
+      .card-collection-subtext {
+        margin-inline: auto;
+        max-width: 42rem;
+      }
+
+      .card-collection-grid {
+        margin-top: var(--spacing-2xl);
+      }
+    }
+  }
+</style>

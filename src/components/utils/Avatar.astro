@@ -1,0 +1,160 @@
+---
+/**
+ * Internal headshot util — deliberately not an editor-facing block (no
+ * CloudCannon YAML, not in any picker; FormLabel is the precedent). Renders a
+ * round (or radius-md) image at a fixed size, falling back to initials on a
+ * muted background when there is no image. Consumers may override the exact
+ * size with `--avatar-size` (e.g. Testimonial's 80px headshot). Pass
+ * `displaySize` in CSS pixels when you override so the srcset matches.
+ */
+import Image from "@core-elements/image/Image.astro";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
+const {
+  image = "",
+  alt = "",
+  size = "md",
+  displaySize,
+  radius = "full",
+  border = true,
+  class: className,
+  "data-prop-src": dataPropSrc,
+  "data-prop-alt": dataPropAlt,
+  ...htmlAttributes
+} = Astro.props;
+
+// CSS display size (1x). Image's default srcset is 640/1280/2560 and
+// getResponsiveWidths drops every step above `width`, so a small width
+// used to emit a single ~88px variant — sharp on 1x, blurry on retina.
+const TOKEN_DISPLAY_PX: Record<string, number> = { sm: 32, md: 44, lg: 64 };
+const TOKEN_SIZES: Record<string, string> = { sm: "2rem", md: "2.75rem", lg: "4rem" };
+const hasDisplaySize = Number(displaySize) > 0;
+const displayPx = hasDisplaySize
+  ? Math.round(Number(displaySize))
+  : (TOKEN_DISPLAY_PX[size] ?? TOKEN_DISPLAY_PX.md);
+const renderWidth = displayPx * 3;
+const srcWidths = [displayPx, displayPx * 2, renderWidth];
+const sizes = hasDisplaySize ? `${displayPx}px` : (TOKEN_SIZES[size] ?? TOKEN_SIZES.md);
+
+const hasImage = isNonEmptyString(image);
+const initials = String(alt || "")
+  .trim()
+  .split(/\s+/)
+  .slice(0, 2)
+  .map((word) => word[0]?.toUpperCase() ?? "")
+  .join("");
+---
+
+<span
+  class:list={[
+    "avatar",
+    `size-${size}`,
+    `radius-${radius}`,
+    border && "bordered",
+    !hasImage && "fallback",
+    className,
+  ]}
+  {...htmlAttributes}
+>
+  {
+    hasImage ? (
+      <Image
+        source={image}
+        alt={alt}
+        width={renderWidth}
+        height={renderWidth}
+        widths={srcWidths}
+        sizes={sizes}
+        aspectRatio="square"
+        data-prop-src={dataPropSrc}
+        data-prop-alt={dataPropAlt}
+      />
+    ) : (
+      <span
+        class="avatar-initials"
+        role="img"
+        aria-label={alt || undefined}
+      >
+        {initials}
+      </span>
+    )
+  }
+</span>
+
+<style is:global>
+  @layer components {
+    .avatar {
+      display: inline-flex;
+      flex-shrink: 0;
+      height: var(--avatar-size);
+      overflow: hidden;
+      vertical-align: middle;
+      width: var(--avatar-size);
+
+      &.size-sm {
+        --avatar-size: 2rem;
+      }
+
+      &.size-md {
+        --avatar-size: 2.75rem;
+      }
+
+      &.size-lg {
+        --avatar-size: 4rem;
+      }
+
+      &.radius-full {
+        border-radius: var(--radius-full);
+      }
+
+      &.radius-md {
+        border-radius: var(--radius-md);
+      }
+
+      /* An edge so a light-background headshot still reads on --color-bg. */
+      &.bordered {
+        border: 1px solid var(--color-border);
+      }
+
+      /* Image.astro adds a content-block top margin and `height: auto` on
+         the img. Both would shift or clip a headshot inside this fixed circle,
+         so the fill rules here have to win on specificity. */
+      .image,
+      .image-inner,
+      picture,
+      img {
+        display: block;
+        height: 100%;
+        margin: 0;
+        width: 100%;
+      }
+
+      img {
+        object-fit: cover;
+      }
+
+      > .avatar-initials {
+        align-items: center;
+        background-color: var(--color-bg-muted);
+        color: var(--color-text-muted);
+        display: flex;
+        font-weight: var(--font-weight-semibold);
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      &.size-sm > .avatar-initials {
+        font-size: var(--font-size-xs);
+      }
+
+      &.size-md > .avatar-initials {
+        font-size: var(--font-size-sm);
+      }
+
+      &.size-lg > .avatar-initials {
+        font-size: var(--font-size-xl);
+      }
+    }
+  }
+</style>

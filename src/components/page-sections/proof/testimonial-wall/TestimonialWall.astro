@@ -1,0 +1,102 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Masonry from "@wrappers/masonry/Masonry.astro";
+import TestimonialWallItem from "./TestimonialWallItem.astro";
+
+type TestimonialProps = Record<string, unknown>;
+
+const {
+  eyebrow = "",
+  heading = "",
+  subtext = "",
+  testimonials = [],
+  columns = 3,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor,
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["testimonial-wall", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level="h2"
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="testimonial-wall-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  {
+    testimonials.length > 0 && (
+      /* Quotes are uneven by nature, so the wall is a Masonry — the wrapper's
+         JS enhancement keeps reading order while packing the columns. */
+      <Masonry
+        class="testimonial-wall-masonry"
+        columns={columns}
+        gap="md"
+        data-children-prop="testimonials"
+      >
+        {testimonials.map((testimonial: TestimonialProps) => (
+          <TestimonialWallItem
+            data-editable="array-item"
+            data-id="page-sections/proof/testimonial-wall/testimonial-wall-item"
+            {...testimonial}
+          />
+        ))}
+      </Masonry>
+    )
+  }
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .testimonial-wall {
+      .testimonial-wall-subtext {
+        margin-inline: auto;
+        max-width: 42rem;
+      }
+
+      .testimonial-wall-masonry {
+        margin-top: var(--spacing-2xl);
+      }
+    }
+  }
+</style>

@@ -10,7 +10,7 @@ function getImportAliasPath(componentPath: string): string {
     { prefix: "building-blocks/forms/", alias: "@forms/" },
     { prefix: "building-blocks/wrappers/", alias: "@wrappers/" },
     { prefix: "page-sections/builders/", alias: "@builders/" },
-    { prefix: "page-sections/features/", alias: "@features/" },
+    { prefix: "page-sections/explainers/", alias: "@explainers/" },
     { prefix: "page-sections/", alias: "@page-sections/" },
     { prefix: "navigation/", alias: "@navigation/" },
     { prefix: "sections/", alias: "@sections/" },
