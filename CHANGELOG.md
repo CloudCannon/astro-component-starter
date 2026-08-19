@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- The footer no longer trips CloudCannon's "Failed to render array editable" error. Social Links was always stamping `data-prop="links"`; on a page that key is undefined (the footer's socials live in `footer.json` as `socials`). The array binding now follows the same opt-in as List and ButtonGroup, and the footer turns it off like the rest of its chrome.
 - The blog table of contents no longer slides under the sticky nav — "On this page" stays visible while you scroll.
 - The move/reorder controls on the first page section in the Visual Editor are reachable again. The whole `pageSections` list was wrapped in a second editable region whose controls pinned to the same top-right corner as the first section's, covering its drag handle. The wrapper was redundant — the array region already stamps each section as its own re-rendering component via `data-component-key` — so it has been removed and the array now binds straight to `pageSections`.
 - Small icon-only controls now meet the 44px minimum tap target: icon-only buttons (the mobile menu and search buttons at 35px, carousel arrows at 28px), the light/dark theme toggle (27px), and the announcement bar's dismiss button (20px) were all awkward to hit on a phone and failed WCAG 2.5.8. The tap area is an invisible overlay, so nothing looks bigger — carousel arrows are still small discs, just no longer fiddly to hit. New controls can opt in with the `tap-target` utility class.

@@ -9,12 +9,18 @@ const {
   size = "md",
   alignmentHorizontal = "none",
   class: className,
-  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
 if (!_component && links.length === 0) return;
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "links" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
+  : {};
 ---
 
 <nav
@@ -30,13 +36,11 @@ if (!_component && links.length === 0) return;
 >
   <ul
     class="social-links-list"
-    data-editable="array"
-    data-prop="links"
-    data-direction="row"
+    {...arrayDataAttributes}
   >
     {
       links.map((social: SocialLink) => (
-        <li data-editable="array-item">
+        <li data-editable={effectiveChildrenProp ? "array-item" : undefined}>
           <a
             class="social-link"
             href={social.link}

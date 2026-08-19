@@ -74,6 +74,7 @@ Every building block accepts `useDefaultEditableBinding` (boolean, default `fals
 | `Testimonial`                                             | `text` + `authorName` + `authorDescription` (see [patterns.md](patterns.md))                           |
 | `Image`                                                   | `source` (src) / `alt` (alt)                                                                           |
 | `Grid`, `Accordion`, `Steps`, `List`, `DefinitionList`    | `items`                                                                                                |
+| `SocialLinks`                                             | `links`                                                                                                |
 | `Timeline`                                                | `entries`                                                                                              |
 | `ButtonGroup`                                             | `buttonSections`                                                                                       |
 | `Carousel`                                                | `slides`                                                                                               |
