@@ -10,6 +10,7 @@ featureGrid:
     icon: apps
     gallery:
       image: public/component-previews/page-sections/explainers/feature-grid.svg
+      fit: cover
   definitions:
     component_name: FeatureGrid
     named_args:

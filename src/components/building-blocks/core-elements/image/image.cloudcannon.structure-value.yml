@@ -21,11 +21,13 @@ preview:
   icon: image
   gallery:
     image: public/component-previews/building-blocks/core-elements/image.svg
+    fit: cover
 picker_preview:
   text: Image
   subtext: Optimized image component for local and remote sources.
   image: public/component-previews/building-blocks/core-elements/image.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/image.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/image/image.cloudcannon.inputs.yml

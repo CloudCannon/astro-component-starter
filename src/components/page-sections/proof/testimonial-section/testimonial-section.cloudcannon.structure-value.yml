@@ -33,12 +33,14 @@ preview:
   icon: format_quote
   gallery:
     image: public/component-previews/page-sections/proof/testimonial-section.svg
+    fit: cover
 picker_preview:
   text: Testimonial Section
   subtext: Section with customer testimonial and author details.
   image: public/component-previews/page-sections/proof/testimonial-section.svg
   gallery:
     image: public/component-previews/page-sections/proof/testimonial-section.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/proof/testimonial-section/testimonial-section.cloudcannon.inputs.yml
 groups:

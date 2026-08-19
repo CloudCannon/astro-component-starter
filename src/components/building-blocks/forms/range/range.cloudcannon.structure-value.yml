@@ -24,11 +24,13 @@ preview:
   icon: linear_scale
   gallery:
     image: public/component-previews/building-blocks/forms/range.svg
+    fit: cover
 picker_preview:
   text: Range
   subtext: Slider input for selecting a numeric value within a range.
   image: public/component-previews/building-blocks/forms/range.svg
   gallery:
     image: public/component-previews/building-blocks/forms/range.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/range/range.cloudcannon.inputs.yml

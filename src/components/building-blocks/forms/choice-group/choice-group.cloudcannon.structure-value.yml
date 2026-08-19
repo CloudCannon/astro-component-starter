@@ -24,12 +24,14 @@ preview:
   icon: check_box
   gallery:
     image: public/component-previews/building-blocks/forms/choice-group.svg
+    fit: cover
 picker_preview:
   text: Choice Group
   subtext: Form field for selecting one or more options.
   image: public/component-previews/building-blocks/forms/choice-group.svg
   gallery:
     image: public/component-previews/building-blocks/forms/choice-group.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/choice-group/choice-group.cloudcannon.inputs.yml
 _structures:

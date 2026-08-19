@@ -12,11 +12,13 @@ preview:
   icon: data_object
   gallery:
     image: public/component-previews/building-blocks/core-elements/embed.svg
+    fit: cover
 picker_preview:
   text: Embed
   subtext: Responsive wrapper for third-party embeds.
   image: public/component-previews/building-blocks/core-elements/embed.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/embed.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/embed/embed.cloudcannon.inputs.yml

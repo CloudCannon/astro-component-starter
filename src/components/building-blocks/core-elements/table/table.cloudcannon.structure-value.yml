@@ -47,12 +47,14 @@ preview:
   icon: table
   gallery:
     image: public/component-previews/building-blocks/core-elements/table.svg
+    fit: cover
 picker_preview:
   text: Table
   subtext: Content table with a caption, header row, and striped and compact variants.
   image: public/component-previews/building-blocks/core-elements/table.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/table.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/table/table.cloudcannon.inputs.yml
 _structures:

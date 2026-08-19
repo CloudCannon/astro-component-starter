@@ -69,12 +69,14 @@ preview:
   icon: contact_mail
   gallery:
     image: public/component-previews/page-sections/conversion/contact-split.svg
+    fit: cover
 picker_preview:
   text: Contact Split
   subtext: Contact details beside a form, in a bordered card with an optional map strip.
   image: public/component-previews/page-sections/conversion/contact-split.svg
   gallery:
     image: public/component-previews/page-sections/conversion/contact-split.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/conversion/contact-split/contact-split.cloudcannon.inputs.yml
 _structures:

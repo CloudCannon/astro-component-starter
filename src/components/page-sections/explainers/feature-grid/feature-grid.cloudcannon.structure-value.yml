@@ -34,12 +34,14 @@ preview:
   icon: apps
   gallery:
     image: public/component-previews/page-sections/explainers/feature-grid.svg
+    fit: cover
 picker_preview:
   text: Feature Grid
   subtext: Grid of feature highlights with icons and descriptions.
   image: public/component-previews/page-sections/explainers/feature-grid.svg
   gallery:
     image: public/component-previews/page-sections/explainers/feature-grid.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/explainers/feature-grid/feature-grid.cloudcannon.inputs.yml
 _structures:

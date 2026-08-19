@@ -31,12 +31,14 @@ preview:
   icon: help
   gallery:
     image: public/component-previews/page-sections/explainers/faq-section.svg
+    fit: cover
 picker_preview:
   text: FAQ Section
   subtext: Accordion of frequently asked questions.
   image: public/component-previews/page-sections/explainers/faq-section.svg
   gallery:
     image: public/component-previews/page-sections/explainers/faq-section.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/explainers/faq-section/faq-section.cloudcannon.inputs.yml
 _structures:

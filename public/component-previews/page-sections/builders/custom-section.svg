@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-custom-section">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-custom-section">
   <title id="t-custom-section">Custom section component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 280)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 240)">
     <rect x="80" y="0" width="1120" height="240" fill="var(--pv-surface, #EBE9E3)"/>
     <rect x="139" y="70" width="511" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
     <rect x="139" y="122" width="747" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>

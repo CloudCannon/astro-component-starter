@@ -11,6 +11,7 @@ preview:
   image: public/component-previews/building-blocks/core-elements/pagination.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/pagination.svg
+    fit: cover
 picker_preview:
   text: Pagination
   subtext: "Navigation component for multi-page content."
@@ -18,5 +19,6 @@ picker_preview:
   icon: list
   gallery:
     image: public/component-previews/building-blocks/core-elements/pagination.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/pagination/pagination.cloudcannon.inputs.yml

@@ -84,8 +84,9 @@ for (const component of components) {
   const file = componentFile.get(component);
   const absFile = join(root, file);
   const imageLine = `image: ${previewImagePath(component)}`;
+  const source = readFileSync(absFile, "utf8");
 
-  if (!readFileSync(absFile, "utf8").includes(imageLine)) {
+  if (!source.includes(imageLine) || !source.includes("fit: cover")) {
     unwired.push({ component, file });
   }
 
@@ -97,9 +98,12 @@ for (const component of components) {
   );
 
   if (existsSync(join(root, snippetFile))) {
-    const source = readFileSync(join(root, snippetFile), "utf8");
+    const snippetSource = readFileSync(join(root, snippetFile), "utf8");
 
-    if (snippetWantsPreviewImage(source) && !source.includes(imageLine)) {
+    if (
+      snippetWantsPreviewImage(snippetSource) &&
+      (!snippetSource.includes(imageLine) || !snippetSource.includes("fit: cover"))
+    ) {
       unwired.push({ component, file: snippetFile });
     }
   }
@@ -134,7 +138,7 @@ if (orphans.length) {
 if (unwired.length) {
   console.error(`UNWIRED — structure YAML missing the preview image line:`);
   for (const { component, file } of unwired) {
-    console.error(`   ${file} needs: image: ${previewImagePath(component)}`);
+    console.error(`   ${file} needs: image: ${previewImagePath(component)} and gallery.fit: cover`);
   }
 }
 

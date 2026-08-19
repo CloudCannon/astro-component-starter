@@ -94,12 +94,14 @@ preview:
   icon: view_quilt
   gallery:
     image: public/component-previews/building-blocks/wrappers/masonry.svg
+    fit: cover
 picker_preview:
   text: Masonry
   subtext: A masonry column layout for mixed-height content, preserving reading order.
   image: public/component-previews/building-blocks/wrappers/masonry.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/masonry.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/masonry/masonry.cloudcannon.inputs.yml
 _structures:

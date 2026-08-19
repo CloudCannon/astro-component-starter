@@ -11,6 +11,7 @@ preview:
   icon: navigation
   gallery:
     image: public/component-previews/navigation/bar.svg
+    fit: cover
 picker_preview:
   text: Bar Navigation
   subtext: "Horizontal navigation bar with dropdown menus."
@@ -18,5 +19,6 @@ picker_preview:
   icon: navigation
   gallery:
     image: public/component-previews/navigation/bar.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/navigation/bar/bar.cloudcannon.inputs.yml

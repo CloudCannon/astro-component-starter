@@ -11,6 +11,7 @@ alert:
     icon: campaign
     gallery:
       image: public/component-previews/building-blocks/core-elements/alert.svg
+      fit: cover
   definitions:
     component_name: Alert
     named_args:

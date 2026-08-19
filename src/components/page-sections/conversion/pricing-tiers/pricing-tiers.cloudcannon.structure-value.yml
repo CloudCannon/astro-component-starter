@@ -88,12 +88,14 @@ preview:
   icon: payments
   gallery:
     image: public/component-previews/page-sections/conversion/pricing-tiers.svg
+    fit: cover
 picker_preview:
   text: Pricing Tiers
   subtext: Plan comparison cards with feature checklists and a highlighted tier.
   image: public/component-previews/page-sections/conversion/pricing-tiers.svg
   gallery:
     image: public/component-previews/page-sections/conversion/pricing-tiers.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/conversion/pricing-tiers/pricing-tiers.cloudcannon.inputs.yml
 _structures:

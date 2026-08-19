@@ -10,6 +10,7 @@ featureSplit:
     icon: view_week
     gallery:
       image: public/component-previews/page-sections/explainers/feature-split.svg
+      fit: cover
   definitions:
     component_name: FeatureSplit
     named_args:

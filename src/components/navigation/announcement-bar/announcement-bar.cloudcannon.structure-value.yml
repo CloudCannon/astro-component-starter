@@ -12,6 +12,7 @@ preview:
   icon: campaign
   gallery:
     image: public/component-previews/navigation/announcement-bar.svg
+    fit: cover
 picker_preview:
   text: Announcement Bar
   subtext: "Dismissible site-wide announcement strip with an optional link."
@@ -19,5 +20,6 @@ picker_preview:
   icon: campaign
   gallery:
     image: public/component-previews/navigation/announcement-bar.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/navigation/announcement-bar/announcement-bar.cloudcannon.inputs.yml

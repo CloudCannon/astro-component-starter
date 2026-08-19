@@ -22,12 +22,14 @@ preview:
   icon: gallery_thumbnail
   gallery:
     image: public/component-previews/building-blocks/wrappers/image-carousel.svg
+    fit: cover
 picker_preview:
   text: Image Carousel
   subtext: Displays images in a carousel with a thumbnail strip for navigation.
   image: public/component-previews/building-blocks/wrappers/image-carousel.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/image-carousel.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/image-carousel/image-carousel.cloudcannon.inputs.yml
 _structures:

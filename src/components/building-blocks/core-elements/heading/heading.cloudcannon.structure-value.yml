@@ -19,11 +19,13 @@ preview:
     - key: text
   gallery:
     image: public/component-previews/building-blocks/core-elements/heading.svg
+    fit: cover
 picker_preview:
   text: Heading
   subtext: Headings for content hierarchy.
   image: public/component-previews/building-blocks/core-elements/heading.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/heading.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/heading/heading.cloudcannon.inputs.yml

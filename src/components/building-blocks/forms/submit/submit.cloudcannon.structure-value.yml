@@ -20,11 +20,13 @@ preview:
   icon: check
   gallery:
     image: public/component-previews/building-blocks/forms/submit.svg
+    fit: cover
 picker_preview:
   text: Submit
   subtext: Button for submitting a form.
   image: public/component-previews/building-blocks/forms/submit.svg
   gallery:
     image: public/component-previews/building-blocks/forms/submit.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/submit/submit.cloudcannon.inputs.yml

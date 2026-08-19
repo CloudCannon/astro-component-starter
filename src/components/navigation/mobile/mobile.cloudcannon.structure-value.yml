@@ -12,6 +12,7 @@ preview:
   image: public/component-previews/navigation/mobile.svg
   gallery:
     image: public/component-previews/navigation/mobile.svg
+    fit: cover
 picker_preview:
   text: Mobile Navigation
   subtext: "Mobile navigation with full-screen overlay."
@@ -19,5 +20,6 @@ picker_preview:
   icon: smartphone
   gallery:
     image: public/component-previews/navigation/mobile.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/navigation/mobile/mobile.cloudcannon.inputs.yml

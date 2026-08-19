@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-cta-split">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-cta-split">
   <title id="t-cta-split">Cta split component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 200)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 160)">
     <rect x="160" y="120" width="316" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
     <rect x="160" y="178" width="354" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="160" y="202" width="212" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>

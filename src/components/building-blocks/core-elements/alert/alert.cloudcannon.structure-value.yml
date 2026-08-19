@@ -16,11 +16,13 @@ preview:
   icon: campaign
   gallery:
     image: public/component-previews/building-blocks/core-elements/alert.svg
+    fit: cover
 picker_preview:
   text: Alert
   subtext: Status callout box — info, success, warning, danger, or a neutral note.
   image: public/component-previews/building-blocks/core-elements/alert.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/alert.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/alert/alert.cloudcannon.inputs.yml

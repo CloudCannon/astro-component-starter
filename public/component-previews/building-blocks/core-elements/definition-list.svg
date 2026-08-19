@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-definition-list">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-definition-list">
   <title id="t-definition-list">Definition list component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 -4)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -44)">
     <rect x="360" y="300" width="200" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="620" y="302" width="220" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="360" y="348" width="180" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>

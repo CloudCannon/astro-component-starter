@@ -27,12 +27,14 @@ preview:
   icon: view_list
   gallery:
     image: public/component-previews/building-blocks/forms/select.svg
+    fit: cover
 picker_preview:
   text: Select
   subtext: Form field for selecting one option from a list.
   image: public/component-previews/building-blocks/forms/select.svg
   gallery:
     image: public/component-previews/building-blocks/forms/select.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/select/select.cloudcannon.inputs.yml
 _structures:

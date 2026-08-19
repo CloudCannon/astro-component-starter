@@ -34,6 +34,7 @@ preview:
   icon: title
   gallery:
     image: public/component-previews/page-sections/heroes/page-header.svg
+    fit: cover
 picker_preview:
   text: Page Header
   subtext: A slim title block for interior pages, with optional breadcrumbs.
@@ -41,6 +42,7 @@ picker_preview:
   icon: title
   gallery:
     image: public/component-previews/page-sections/heroes/page-header.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/heroes/page-header/page-header.cloudcannon.inputs.yml
 groups:

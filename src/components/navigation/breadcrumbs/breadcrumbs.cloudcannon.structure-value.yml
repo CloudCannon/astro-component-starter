@@ -14,6 +14,7 @@ preview:
   icon: chevron_right
   gallery:
     image: public/component-previews/navigation/breadcrumbs.svg
+    fit: cover
 picker_preview:
   text: Breadcrumbs
   subtext: "Wayfinding trail rendered above blog post and tag page titles."
@@ -21,5 +22,6 @@ picker_preview:
   icon: chevron_right
   gallery:
     image: public/component-previews/navigation/breadcrumbs.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/navigation/breadcrumbs/breadcrumbs.cloudcannon.inputs.yml

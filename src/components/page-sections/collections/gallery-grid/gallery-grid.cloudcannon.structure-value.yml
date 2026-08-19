@@ -54,12 +54,14 @@ preview:
   icon: photo_library
   gallery:
     image: public/component-previews/page-sections/collections/gallery-grid.svg
+    fit: cover
 picker_preview:
   text: Gallery Grid
   subtext: An image grid with captions and a lightbox for viewing photos full size.
   image: public/component-previews/page-sections/collections/gallery-grid.svg
   gallery:
     image: public/component-previews/page-sections/collections/gallery-grid.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/collections/gallery-grid/gallery-grid.cloudcannon.inputs.yml
 _structures:

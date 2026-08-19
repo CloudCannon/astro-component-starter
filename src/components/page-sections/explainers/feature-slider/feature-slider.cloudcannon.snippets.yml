@@ -8,6 +8,7 @@ featureSlider:
     icon: view_carousel
     gallery:
       image: public/component-previews/page-sections/explainers/feature-slider.svg
+      fit: cover
   definitions:
     component_name: FeatureSlider
     named_args:

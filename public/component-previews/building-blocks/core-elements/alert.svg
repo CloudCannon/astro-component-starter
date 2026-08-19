@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-alert">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-alert">
   <title id="t-alert">Alert component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 334)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 294)">
     <rect x="260" y="0" width="760" height="132" rx="12" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
     <rect x="292" y="32" width="24" height="24" rx="12" fill="var(--pv-subject, #A8A398)"/>
     <rect x="332" y="34" width="190" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>

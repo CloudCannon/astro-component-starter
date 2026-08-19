@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-modal">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-modal">
   <title id="t-modal">Modal component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 277)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 237)">
     <rect x="555" y="0" width="171" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
     <rect x="607" y="18" width="68" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
     <rect x="360" y="76" width="560" height="170" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>

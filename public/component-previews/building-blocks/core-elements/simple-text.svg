@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-simple-text">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-simple-text">
   <title id="t-simple-text">Simple text component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -40)">
     <rect x="260" y="358" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="260" y="382" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="260" y="406" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>

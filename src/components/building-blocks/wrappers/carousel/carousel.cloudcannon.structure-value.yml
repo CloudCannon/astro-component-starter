@@ -26,12 +26,14 @@ preview:
   icon: image
   gallery:
     image: public/component-previews/building-blocks/wrappers/carousel.svg
+    fit: cover
 picker_preview:
   text: Carousel
   subtext: Displays multiple items in a sliding gallery.
   image: public/component-previews/building-blocks/wrappers/carousel.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/carousel.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/carousel/carousel.cloudcannon.inputs.yml
 _structures:

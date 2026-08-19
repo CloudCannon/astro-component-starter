@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-pricing-comparison">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-pricing-comparison">
   <title id="t-pricing-comparison">Pricing comparison component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 122)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 82)">
     <rect x="660" y="80" width="152" height="348" fill="var(--pv-surface, #EBE9E3)"/>
     <rect x="160" y="88" width="120" height="16" rx="8" fill="var(--pv-glyph, #CFCBC2)"/>
     <rect x="524" y="84" width="96" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>

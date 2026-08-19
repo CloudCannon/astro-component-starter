@@ -18,11 +18,13 @@ preview:
   icon: text_ad
   gallery:
     image: public/component-previews/building-blocks/forms/textarea.svg
+    fit: cover
 picker_preview:
   text: Textarea
   subtext: Form field for entering multi-line text.
   image: public/component-previews/building-blocks/forms/textarea.svg
   gallery:
     image: public/component-previews/building-blocks/forms/textarea.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/textarea/textarea.cloudcannon.inputs.yml

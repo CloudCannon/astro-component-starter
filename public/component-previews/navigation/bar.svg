@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-bar">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-bar">
   <title id="t-bar">Bar component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 292)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 252)">
     <rect x="260" y="0" width="74" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="381" y="0" width="106" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <polygon points="500,6 509,6 505,10" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>

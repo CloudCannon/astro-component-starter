@@ -17,11 +17,13 @@ preview:
   icon: star
   gallery:
     image: public/component-previews/building-blocks/core-elements/icon.svg
+    fit: cover
 picker_preview:
   text: Icon
   subtext: SVG icon component.
   image: public/component-previews/building-blocks/core-elements/icon.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/icon.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/icon/icon.cloudcannon.inputs.yml

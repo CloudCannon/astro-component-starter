@@ -10,6 +10,7 @@ teamGrid:
     icon: groups
     gallery:
       image: public/component-previews/page-sections/collections/team-grid.svg
+      fit: cover
   definitions:
     component_name: TeamGrid
     named_args:

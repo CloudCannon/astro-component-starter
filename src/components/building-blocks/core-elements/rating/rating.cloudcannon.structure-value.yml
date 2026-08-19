@@ -18,11 +18,13 @@ preview:
   icon: star_rate
   gallery:
     image: public/component-previews/building-blocks/core-elements/rating.svg
+    fit: cover
 picker_preview:
   text: Rating
   subtext: Star rating out of five, with half-star support and an optional value label.
   image: public/component-previews/building-blocks/core-elements/rating.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/rating.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/rating/rating.cloudcannon.inputs.yml

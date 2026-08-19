@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-latest-posts">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-latest-posts">
   <title id="t-latest-posts">Latest posts component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 208)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 168)">
     <rect x="160" y="0" width="304" height="296" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
     <rect x="176" y="16" width="272" height="120" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <rect x="176" y="152" width="56" height="22" rx="11" fill="none" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>

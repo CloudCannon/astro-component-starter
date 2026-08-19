@@ -223,7 +223,7 @@ Every structure value should include both `picker_preview` and `preview`:
 
 Both accept cascading arrays for `text`, `icon`, `image`, and `subtext`. CloudCannon tries each cascade entry in order and uses the first non-empty result. Literal strings (not `{key: ...}` objects) serve as fallbacks.
 
-> **In this starter:** preview `image` paths are source-tree paths (`public/component-previews/<component>.svg`), not site URLs. CloudCannon's picker looks up files in the repo — the same convention as `src/icons/{id}.svg` on icon selects. The large card slot on the Add-menu modal is `gallery.image`; `npm run previews:build` wires both.
+> **In this starter:** preview `image` paths are source-tree paths (`public/component-previews/<component>.svg`), not site URLs. CloudCannon's picker looks up files in the repo — the same convention as `src/icons/{id}.svg` on icon selects. The large card slot on the Add-menu modal is `gallery.image` with `fit: cover`. Previews are 16:9 (1280×720) to match `.c-card__preview` (~286×160). `npm run previews:build` wires both.
 
 ## Structure-value file anatomy
 

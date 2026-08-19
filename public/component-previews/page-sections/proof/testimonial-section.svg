@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-testimonial-section">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-testimonial-section">
   <title id="t-testimonial-section">Testimonial section component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -40)">
     <rect x="160" y="200" width="960" height="400" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
     <rect x="252" y="260" width="775" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
     <rect x="280" y="294" width="720" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>

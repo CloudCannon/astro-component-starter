@@ -85,6 +85,7 @@ preview:
   icon: grid_view
   gallery:
     image: public/component-previews/page-sections/collections/card-collection.svg
+    fit: cover
 picker_preview:
   text: Card Collection
   subtext: A grid of linked cards — services, case studies, projects, or resources.
@@ -92,6 +93,7 @@ picker_preview:
   icon: grid_view
   gallery:
     image: public/component-previews/page-sections/collections/card-collection.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/collections/card-collection/card-collection.cloudcannon.inputs.yml
 _structures:

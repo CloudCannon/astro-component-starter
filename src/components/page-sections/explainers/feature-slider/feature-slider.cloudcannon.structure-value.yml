@@ -28,12 +28,14 @@ preview:
   icon: view_carousel
   gallery:
     image: public/component-previews/page-sections/explainers/feature-slider.svg
+    fit: cover
 picker_preview:
   text: Feature Slider
   subtext: Carousel of feature-focused cards.
   image: public/component-previews/page-sections/explainers/feature-slider.svg
   gallery:
     image: public/component-previews/page-sections/explainers/feature-slider.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/explainers/feature-slider/feature-slider.cloudcannon.inputs.yml
 groups:

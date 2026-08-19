@@ -18,12 +18,14 @@ preview:
   icon: grid_on
   gallery:
     image: public/component-previews/building-blocks/wrappers/grid.svg
+    fit: cover
 picker_preview:
   text: Grid
   subtext: Arranges content into a grid that adapts to screen size.
   image: public/component-previews/building-blocks/wrappers/grid.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/grid.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/grid/grid.cloudcannon.inputs.yml
 _structures:

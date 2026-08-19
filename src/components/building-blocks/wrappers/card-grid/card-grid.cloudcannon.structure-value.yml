@@ -66,6 +66,7 @@ preview:
   icon: view_module
   gallery:
     image: public/component-previews/building-blocks/wrappers/card-grid.svg
+    fit: cover
 picker_preview:
   text: Card Grid
   subtext: An exact-column grid of cards — cover, optional tile link, and an open content body.
@@ -73,6 +74,7 @@ picker_preview:
   icon: view_module
   gallery:
     image: public/component-previews/building-blocks/wrappers/card-grid.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/card-grid/card-grid.cloudcannon.inputs.yml
 _structures:

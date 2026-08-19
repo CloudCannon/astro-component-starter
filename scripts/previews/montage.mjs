@@ -24,10 +24,10 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
 const out = process.argv[2] || join(root, ".preview-montage.png");
 
-// Grid geometry. Tiles keep the previews' native 16:10; each gets a label strip.
+// Grid geometry. Tiles keep the previews' native 16:9; each gets a label strip.
 const COLS = 7;
 const TILE_W = 224;
-const TILE_H = 140;
+const TILE_H = 126;
 const LABEL_H = 22;
 const PAD = 4;
 const CELL_W = TILE_W + PAD * 2;

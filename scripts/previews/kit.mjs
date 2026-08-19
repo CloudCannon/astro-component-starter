@@ -2,7 +2,7 @@
  * Component-preview kit — the authoring API for `*.preview.mjs` recipe files.
  *
  * A recipe declares a content `width` and drawing primitives in absolute canvas
- * coordinates; `compile()` centres the bounding box on (640, 400) and asserts it
+ * coordinates; `compile()` centres the bounding box on (640, 360) and asserts it
  * matches the declared width. Deterministic and browser-free, so CI rebuilds and
  * diffs to catch drift. Screenshots (`screenshot.mjs`) are an authoring reference
  * only, never an input.
@@ -16,7 +16,7 @@
  *   3. A THREE-STEP STROKE SCALE (control 2 / field 3 / active 4).
  *   4. FOUR CONTENT WIDTH BANDS (560 / 760 / 960 / 1120), asserted at build
  *      time. Components that would read as distorted set `exempt: true`.
- *   5. EVERYTHING CENTRES on (640, 400) — `compile()` emits the offset, so a
+ *   5. EVERYTHING CENTRES on (640, 360) — `compile()` emits the offset, so a
  *      picker grid stays even regardless of composition height.
  *
  * Geometry is integer throughout. Prefer the composites (`pill`, `field`,
@@ -24,10 +24,12 @@
  * radii and insets. Absolute y values are arbitrary; start at 0 and work down.
  */
 
-// Canvas
+// Canvas — 16:9, matching CloudCannon's structure-picker gallery
+// (`.c-card__preview` is ~286×160). `gallery.fit: cover` absorbs the leftover
+// sub-pixel when the card width isn't an exact 16:9.
 
 export const W = 1280;
-export const H = 800;
+export const H = 720;
 export const CX = W / 2;
 export const CY = H / 2;
 
@@ -738,9 +740,16 @@ export function compile(spec, key = "preview") {
     );
   }
 
-  // Centre the drawn box on (640, 400) — recipes never do this arithmetic.
+  // Centre the drawn box on (640, 360) — recipes never do this arithmetic.
   const dx = Math.round(CX - (b.x0 + b.x1) / 2);
   const dy = Math.round(CY - (b.y0 + b.y1) / 2);
+
+  if (b.x0 + dx < 0 || b.x1 + dx > W || b.y0 + dy < 0 || b.y1 + dy > H) {
+    throw new Error(
+      `compile(): centred content overflows the ${W}×${H} canvas ` +
+        `(content ${b.w}×${b.h}). Shrink the drawing or raise an exempt band.`
+    );
+  }
 
   const slug = key.split("/").pop();
   const id = `t-${slug}`;

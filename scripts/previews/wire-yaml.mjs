@@ -120,8 +120,10 @@ export function ensureImageLine(lines, blockName, imagePath, indent = "") {
 }
 
 /**
- * Ensure `gallery.image: <imagePath>` exists under a preview block. The
- * structure-picker modal uses this gallery slot for the large card image.
+ * Ensure `gallery.image` + `gallery.fit: cover` exist under a preview block.
+ * The structure-picker modal uses this gallery slot for the large card image;
+ * `cover` fills CloudCannon's card frame instead of pillarboxing the 16:9 SVG
+ * inside the default `padded` fit.
  *
  * Leaves a gallery that already binds a content key (`image: { key: ... }` or
  * a list) alone — those show the author's own image, which beats a thumbnail.
@@ -140,14 +142,16 @@ export function ensureGalleryImage(lines, blockName, imagePath, indent = "") {
   const { start, end, childIndent } = block;
   const galleryHeader = `${childIndent}gallery:`;
   const galleryIdx = lines.findIndex((line, i) => i > start && i < end && line === galleryHeader);
+  const galleryChildIndent = `${childIndent}  `;
+  const imageLine = `${galleryChildIndent}image: ${imagePath}`;
+  const fitLine = `${galleryChildIndent}fit: cover`;
 
   if (galleryIdx === -1) {
-    const galleryBlock = [`${childIndent}gallery:`, `${childIndent}  image: ${imagePath}`];
+    const galleryBlock = [`${childIndent}gallery:`, imageLine, fitLine];
 
     return [...lines.slice(0, end), ...galleryBlock, ...lines.slice(end)];
   }
 
-  const galleryChildIndent = `${childIndent}  `;
   let galleryEnd = end;
 
   for (let i = galleryIdx + 1; i < end; i++) {
@@ -162,27 +166,41 @@ export function ensureGalleryImage(lines, blockName, imagePath, indent = "") {
       i > galleryIdx && i < galleryEnd && isDirectChild(line, galleryChildIndent, "image")
   );
 
+  if (imageIdx !== -1) {
+    const current = lines[imageIdx].replace(/^\s+image:\s*/, "").trim();
+
+    // A `key:` / list-style gallery is the author's content image — do not replace.
+    if (current === "" || current.startsWith("-") || current.includes("key:")) {
+      return lines;
+    }
+  }
+
+  let next = [...lines];
+
   if (imageIdx === -1) {
-    return [
-      ...lines.slice(0, galleryIdx + 1),
-      `${galleryChildIndent}image: ${imagePath}`,
-      ...lines.slice(galleryIdx + 1),
-    ];
+    next = [...next.slice(0, galleryIdx + 1), imageLine, ...next.slice(galleryIdx + 1)];
+    galleryEnd += 1;
+  } else if (next[imageIdx] !== imageLine) {
+    next[imageIdx] = imageLine;
   }
 
-  const current = lines[imageIdx].replace(/^\s+image:\s*/, "").trim();
+  const fitIdx = next.findIndex(
+    (line, i) => i > galleryIdx && i < galleryEnd && isDirectChild(line, galleryChildIndent, "fit")
+  );
+  const imageAt = next.findIndex(
+    (line, i) =>
+      i > galleryIdx && i < galleryEnd + 1 && isDirectChild(line, galleryChildIndent, "image")
+  );
 
-  // A `key:` / list-style gallery is the author's content image — do not replace.
-  if (current === "" || current.startsWith("-") || current.includes("key:")) {
-    return lines;
+  if (fitIdx === -1) {
+    const insertAt = (imageAt !== -1 ? imageAt : galleryIdx) + 1;
+
+    next = [...next.slice(0, insertAt), fitLine, ...next.slice(insertAt)];
+  } else if (next[fitIdx] !== fitLine) {
+    next[fitIdx] = fitLine;
   }
 
-  if (current === imagePath) return lines;
-
-  const next = [...lines];
-
-  next[imageIdx] = `${galleryChildIndent}image: ${imagePath}`;
-  return next;
+  return next.join("\n") === lines.join("\n") ? lines : next;
 }
 
 /**

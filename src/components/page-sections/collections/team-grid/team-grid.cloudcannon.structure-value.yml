@@ -33,12 +33,14 @@ preview:
   icon: groups
   gallery:
     image: public/component-previews/page-sections/collections/team-grid.svg
+    fit: cover
 picker_preview:
   text: Team Grid
   subtext: Grid of team member cards with photos and bios.
   image: public/component-previews/page-sections/collections/team-grid.svg
   gallery:
     image: public/component-previews/page-sections/collections/team-grid.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/collections/team-grid/team-grid.cloudcannon.inputs.yml
 _structures:

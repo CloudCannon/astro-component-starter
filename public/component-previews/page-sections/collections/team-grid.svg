@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-team-grid">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-team-grid">
   <title id="t-team-grid">Team grid component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 116)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 76)">
     <rect x="592" y="0" width="97" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
     <rect x="466" y="36" width="349" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
     <rect x="475" y="98" width="330" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>

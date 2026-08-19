@@ -53,12 +53,14 @@ preview:
   icon: call_to_action
   gallery:
     image: public/component-previews/page-sections/conversion/cta-form.svg
+    fit: cover
 picker_preview:
   text: CTA Form
   subtext: Split layout CTA with form and image.
   image: public/component-previews/page-sections/conversion/cta-form.svg
   gallery:
     image: public/component-previews/page-sections/conversion/cta-form.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/conversion/cta-form/cta-form.cloudcannon.inputs.yml
 groups:

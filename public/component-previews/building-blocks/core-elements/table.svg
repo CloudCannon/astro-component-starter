@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" role="img" aria-labelledby="t-table">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-table">
   <title id="t-table">Table component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
@@ -15,8 +15,8 @@
       }
     }
   </style>
-  <rect x="0" y="0" width="1280" height="800" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 280)">
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 240)">
     <rect x="260" y="0" width="220" height="8" rx="4" fill="var(--pv-glyph, #CFCBC2)"/>
     <rect x="260" y="32" width="110" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="468" y="32" width="110" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>

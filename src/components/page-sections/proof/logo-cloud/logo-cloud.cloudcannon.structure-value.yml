@@ -48,12 +48,14 @@ preview:
   icon: workspaces
   gallery:
     image: public/component-previews/page-sections/proof/logo-cloud.svg
+    fit: cover
 picker_preview:
   text: Logo Cloud
   subtext: A "trusted by" strip of client logos with an optional muted lead line.
   image: public/component-previews/page-sections/proof/logo-cloud.svg
   gallery:
     image: public/component-previews/page-sections/proof/logo-cloud.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/proof/logo-cloud/logo-cloud.cloudcannon.inputs.yml
 _structures:

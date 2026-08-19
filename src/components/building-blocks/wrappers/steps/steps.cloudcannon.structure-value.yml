@@ -46,12 +46,14 @@ preview:
   icon: format_list_numbered
   gallery:
     image: public/component-previews/building-blocks/wrappers/steps.svg
+    fit: cover
 picker_preview:
   text: Steps
   subtext: A numbered how-it-works sequence. Each step owns its own rail.
   image: public/component-previews/building-blocks/wrappers/steps.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/steps.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/steps/steps.cloudcannon.inputs.yml
 _structures:

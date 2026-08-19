@@ -11,11 +11,13 @@ preview:
   icon: horizontal_rule
   gallery:
     image: public/component-previews/building-blocks/core-elements/divider.svg
+    fit: cover
 picker_preview:
   text: Divider
   subtext: Visual separator for dividing content sections.
   image: public/component-previews/building-blocks/core-elements/divider.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/divider.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/divider/divider.cloudcannon.inputs.yml

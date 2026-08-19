@@ -18,11 +18,13 @@ preview:
   icon: upload
   gallery:
     image: public/component-previews/building-blocks/forms/file-upload.svg
+    fit: cover
 picker_preview:
   text: File Upload
   subtext: Form field for uploading files.
   image: public/component-previews/building-blocks/forms/file-upload.svg
   gallery:
     image: public/component-previews/building-blocks/forms/file-upload.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/file-upload/file-upload.cloudcannon.inputs.yml

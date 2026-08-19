@@ -65,12 +65,14 @@ preview:
   icon: format_list_numbered
   gallery:
     image: public/component-previews/page-sections/explainers/steps.svg
+    fit: cover
 picker_preview:
   text: Steps
   subtext: A numbered "how it works" sequence with connected step markers.
   image: public/component-previews/page-sections/explainers/steps.svg
   gallery:
     image: public/component-previews/page-sections/explainers/steps.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/explainers/steps/steps.cloudcannon.inputs.yml
 _structures:

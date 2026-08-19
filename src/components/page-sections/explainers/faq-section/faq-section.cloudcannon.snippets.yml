@@ -10,6 +10,7 @@ faqSection:
     icon: help
     gallery:
       image: public/component-previews/page-sections/explainers/faq-section.svg
+      fit: cover
   definitions:
     component_name: FaqSection
     named_args:
