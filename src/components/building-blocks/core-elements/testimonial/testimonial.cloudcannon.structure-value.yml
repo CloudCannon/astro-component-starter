@@ -13,11 +13,15 @@ preview:
     - Testimonial
   subtext:
     - key: authorName
-  image: /component-previews/building-blocks/core-elements/testimonial.svg
+  image: public/component-previews/building-blocks/core-elements/testimonial.svg
   icon: format_quote
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/testimonial.svg
 picker_preview:
   text: Testimonial
   subtext: Displays customer quotes and reviews.
-  image: /component-previews/building-blocks/core-elements/testimonial.svg
+  image: public/component-previews/building-blocks/core-elements/testimonial.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/testimonial.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/testimonial/testimonial.cloudcannon.inputs.yml

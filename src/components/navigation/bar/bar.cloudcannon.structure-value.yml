@@ -7,12 +7,16 @@ value:
 preview:
   text:
     - Bar Navigation
-  image: /component-previews/navigation/bar.svg
+  image: public/component-previews/navigation/bar.svg
   icon: navigation
+  gallery:
+    image: public/component-previews/navigation/bar.svg
 picker_preview:
   text: Bar Navigation
   subtext: "Horizontal navigation bar with dropdown menus."
-  image: /component-previews/navigation/bar.svg
+  image: public/component-previews/navigation/bar.svg
   icon: navigation
+  gallery:
+    image: public/component-previews/navigation/bar.svg
 _inputs_from_glob:
   - /src/components/navigation/bar/bar.cloudcannon.inputs.yml

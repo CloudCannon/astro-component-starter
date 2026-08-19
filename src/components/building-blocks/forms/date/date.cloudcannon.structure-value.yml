@@ -15,11 +15,15 @@ preview:
     - Date
   subtext:
     - key: label
-  image: /component-previews/building-blocks/forms/date.svg
+  image: public/component-previews/building-blocks/forms/date.svg
   icon: calendar_month
+  gallery:
+    image: public/component-previews/building-blocks/forms/date.svg
 picker_preview:
   text: Date
   subtext: Form field for selecting a date.
-  image: /component-previews/building-blocks/forms/date.svg
+  image: public/component-previews/building-blocks/forms/date.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/date.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/date/date.cloudcannon.inputs.yml

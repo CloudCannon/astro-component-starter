@@ -7,8 +7,10 @@ alert:
       - Alert
     subtext:
       - key: title
-    image: /component-previews/building-blocks/core-elements/alert.svg
+    image: public/component-previews/building-blocks/core-elements/alert.svg
     icon: campaign
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/alert.svg
   definitions:
     component_name: Alert
     named_args:

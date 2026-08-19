@@ -84,12 +84,16 @@ preview:
     - Pricing Tiers
   subtext:
     - key: heading
-  image: /component-previews/page-sections/conversion/pricing-tiers.svg
+  image: public/component-previews/page-sections/conversion/pricing-tiers.svg
   icon: payments
+  gallery:
+    image: public/component-previews/page-sections/conversion/pricing-tiers.svg
 picker_preview:
   text: Pricing Tiers
   subtext: Plan comparison cards with feature checklists and a highlighted tier.
-  image: /component-previews/page-sections/conversion/pricing-tiers.svg
+  image: public/component-previews/page-sections/conversion/pricing-tiers.svg
+  gallery:
+    image: public/component-previews/page-sections/conversion/pricing-tiers.svg
 _inputs_from_glob:
   - /src/components/page-sections/conversion/pricing-tiers/pricing-tiers.cloudcannon.inputs.yml
 _structures:

@@ -30,13 +30,17 @@ preview:
     - Page Header
   subtext:
     - key: heading
-  image: /component-previews/page-sections/heroes/page-header.svg
+  image: public/component-previews/page-sections/heroes/page-header.svg
   icon: title
+  gallery:
+    image: public/component-previews/page-sections/heroes/page-header.svg
 picker_preview:
   text: Page Header
   subtext: A slim title block for interior pages, with optional breadcrumbs.
-  image: /component-previews/page-sections/heroes/page-header.svg
+  image: public/component-previews/page-sections/heroes/page-header.svg
   icon: title
+  gallery:
+    image: public/component-previews/page-sections/heroes/page-header.svg
 _inputs_from_glob:
   - /src/components/page-sections/heroes/page-header/page-header.cloudcannon.inputs.yml
 groups:

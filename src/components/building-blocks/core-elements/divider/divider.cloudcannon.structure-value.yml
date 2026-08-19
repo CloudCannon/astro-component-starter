@@ -7,11 +7,15 @@ value:
 preview:
   text:
     - Divider
-  image: /component-previews/building-blocks/core-elements/divider.svg
+  image: public/component-previews/building-blocks/core-elements/divider.svg
   icon: horizontal_rule
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/divider.svg
 picker_preview:
   text: Divider
   subtext: Visual separator for dividing content sections.
-  image: /component-previews/building-blocks/core-elements/divider.svg
+  image: public/component-previews/building-blocks/core-elements/divider.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/divider.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/divider/divider.cloudcannon.inputs.yml

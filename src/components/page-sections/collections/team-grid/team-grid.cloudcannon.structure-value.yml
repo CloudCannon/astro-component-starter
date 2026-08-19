@@ -29,12 +29,16 @@ preview:
     - Team Grid
   subtext:
     - key: subtext
-  image: /component-previews/page-sections/collections/team-grid.svg
+  image: public/component-previews/page-sections/collections/team-grid.svg
   icon: groups
+  gallery:
+    image: public/component-previews/page-sections/collections/team-grid.svg
 picker_preview:
   text: Team Grid
   subtext: Grid of team member cards with photos and bios.
-  image: /component-previews/page-sections/collections/team-grid.svg
+  image: public/component-previews/page-sections/collections/team-grid.svg
+  gallery:
+    image: public/component-previews/page-sections/collections/team-grid.svg
 _inputs_from_glob:
   - /src/components/page-sections/collections/team-grid/team-grid.cloudcannon.inputs.yml
 _structures:

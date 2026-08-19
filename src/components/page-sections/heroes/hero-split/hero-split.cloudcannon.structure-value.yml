@@ -42,12 +42,16 @@ preview:
     - Hero Split
   subtext:
     - key: heading
-  image: /component-previews/page-sections/heroes/hero-split.svg
+  image: public/component-previews/page-sections/heroes/hero-split.svg
   icon: web_asset
+  gallery:
+    image: public/component-previews/page-sections/heroes/hero-split.svg
 picker_preview:
   text: Hero Split
   subtext: Prominent section block for landing pages.
-  image: /component-previews/page-sections/heroes/hero-split.svg
+  image: public/component-previews/page-sections/heroes/hero-split.svg
+  gallery:
+    image: public/component-previews/page-sections/heroes/hero-split.svg
 _inputs_from_glob:
   - /src/components/page-sections/heroes/hero-split/hero-split.cloudcannon.inputs.yml
 groups:

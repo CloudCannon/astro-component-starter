@@ -198,4 +198,4 @@ Booleans use `type: boolean`. The `named_args` mirror the editor keys the sectio
 
 **MUST NOT** add an inline `_inputs:` block here — `_inputs_from_glob` already pulls the whole `inputs.yml`, section-wrapper block included. An inline copy shadows it and drifts silently (see the convention section above).
 
-Add `image: /component-previews/<tier>/<path>/<slug>.svg` under `preview:` so the MDX snippet picker shows the same thumbnail as the structure picker. `npm run previews:build` wires this for you; a snippet whose `preview:` has its own `gallery:` block is deliberately skipped.
+Add `image: public/component-previews/<tier>/<path>/<slug>.svg` under `preview:` (and `gallery.image` with the same path) so the structure picker and MDX snippet picker show the thumbnail. The path is the **source-tree** location — CloudCannon loads picker images from the repo, the same way the icon picker uses `src/icons/{id}.svg`. A site URL (`/component-previews/...`) does not exist as a file and the card shows "No preview available". `npm run previews:build` wires this for you; a snippet whose `preview:` has its own `gallery:` block bound to a content key is deliberately skipped.

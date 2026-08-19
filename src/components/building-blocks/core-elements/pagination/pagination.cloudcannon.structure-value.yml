@@ -8,11 +8,15 @@ value:
 preview:
   text:
     - Pagination
-  image: /component-previews/building-blocks/core-elements/pagination.svg
+  image: public/component-previews/building-blocks/core-elements/pagination.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/pagination.svg
 picker_preview:
   text: Pagination
   subtext: "Navigation component for multi-page content."
-  image: /component-previews/building-blocks/core-elements/pagination.svg
+  image: public/component-previews/building-blocks/core-elements/pagination.svg
   icon: list
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/pagination.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/pagination/pagination.cloudcannon.inputs.yml

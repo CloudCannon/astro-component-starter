@@ -18,11 +18,15 @@ preview:
     - Split
   subtext:
     - key: label
-  image: /component-previews/building-blocks/wrappers/split.svg
+  image: public/component-previews/building-blocks/wrappers/split.svg
   icon: vertical_split
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/split.svg
 picker_preview:
   text: Split
   subtext: Two-column layout for side-by-side content.
-  image: /component-previews/building-blocks/wrappers/split.svg
+  image: public/component-previews/building-blocks/wrappers/split.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/split.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/split/split.cloudcannon.inputs.yml

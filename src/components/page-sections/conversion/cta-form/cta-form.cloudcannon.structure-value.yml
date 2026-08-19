@@ -49,12 +49,16 @@ preview:
     - CTA Form
   subtext:
     - key: heading
-  image: /component-previews/page-sections/conversion/cta-form.svg
+  image: public/component-previews/page-sections/conversion/cta-form.svg
   icon: call_to_action
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-form.svg
 picker_preview:
   text: CTA Form
   subtext: Split layout CTA with form and image.
-  image: /component-previews/page-sections/conversion/cta-form.svg
+  image: public/component-previews/page-sections/conversion/cta-form.svg
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-form.svg
 _inputs_from_glob:
   - /src/components/page-sections/conversion/cta-form/cta-form.cloudcannon.inputs.yml
 groups:

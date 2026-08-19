@@ -23,12 +23,16 @@ preview:
     - Select
   subtext:
     - key: name
-  image: /component-previews/building-blocks/forms/select.svg
+  image: public/component-previews/building-blocks/forms/select.svg
   icon: view_list
+  gallery:
+    image: public/component-previews/building-blocks/forms/select.svg
 picker_preview:
   text: Select
   subtext: Form field for selecting one option from a list.
-  image: /component-previews/building-blocks/forms/select.svg
+  image: public/component-previews/building-blocks/forms/select.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/select.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/select/select.cloudcannon.inputs.yml
 _structures:

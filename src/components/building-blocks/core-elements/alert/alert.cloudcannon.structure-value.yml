@@ -12,11 +12,15 @@ preview:
     - Alert
   subtext:
     - key: title
-  image: /component-previews/building-blocks/core-elements/alert.svg
+  image: public/component-previews/building-blocks/core-elements/alert.svg
   icon: campaign
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/alert.svg
 picker_preview:
   text: Alert
   subtext: Status callout box — info, success, warning, danger, or a neutral note.
-  image: /component-previews/building-blocks/core-elements/alert.svg
+  image: public/component-previews/building-blocks/core-elements/alert.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/alert.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/alert/alert.cloudcannon.inputs.yml

@@ -6,8 +6,10 @@ form:
       - Form
     subtext:
       - key: label
-    image: /component-previews/building-blocks/forms/form.svg
+    image: public/component-previews/building-blocks/forms/form.svg
     icon: checklist_rtl
+    gallery:
+      image: public/component-previews/building-blocks/forms/form.svg
   definitions:
     component_name: Form
     named_args:

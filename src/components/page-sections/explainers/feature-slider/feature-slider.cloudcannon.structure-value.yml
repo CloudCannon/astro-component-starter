@@ -24,12 +24,16 @@ value:
 preview:
   text:
     - Feature Slider
-  image: /component-previews/page-sections/explainers/feature-slider.svg
+  image: public/component-previews/page-sections/explainers/feature-slider.svg
   icon: view_carousel
+  gallery:
+    image: public/component-previews/page-sections/explainers/feature-slider.svg
 picker_preview:
   text: Feature Slider
   subtext: Carousel of feature-focused cards.
-  image: /component-previews/page-sections/explainers/feature-slider.svg
+  image: public/component-previews/page-sections/explainers/feature-slider.svg
+  gallery:
+    image: public/component-previews/page-sections/explainers/feature-slider.svg
 _inputs_from_glob:
   - /src/components/page-sections/explainers/feature-slider/feature-slider.cloudcannon.inputs.yml
 groups:

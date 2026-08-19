@@ -11,11 +11,15 @@ preview:
     - Text
   subtext:
     - key: text
-  image: /component-previews/building-blocks/core-elements/text.svg
+  image: public/component-previews/building-blocks/core-elements/text.svg
   icon: edit_note
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/text.svg
 picker_preview:
   text: Text
   subtext: Content component for markdown-formatted text.
-  image: /component-previews/building-blocks/core-elements/text.svg
+  image: public/component-previews/building-blocks/core-elements/text.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/text.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/text/text.cloudcannon.inputs.yml

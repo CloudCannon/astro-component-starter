@@ -50,12 +50,16 @@ preview:
     - Stats
   subtext:
     - key: heading
-  image: /component-previews/page-sections/explainers/stats.svg
+  image: public/component-previews/page-sections/explainers/stats.svg
   icon: monitoring
+  gallery:
+    image: public/component-previews/page-sections/explainers/stats.svg
 picker_preview:
   text: Stats
   subtext: A row of big numbers with labels — the confident-metrics section.
-  image: /component-previews/page-sections/explainers/stats.svg
+  image: public/component-previews/page-sections/explainers/stats.svg
+  gallery:
+    image: public/component-previews/page-sections/explainers/stats.svg
 _inputs_from_glob:
   - /src/components/page-sections/explainers/stats/stats.cloudcannon.inputs.yml
 _structures:

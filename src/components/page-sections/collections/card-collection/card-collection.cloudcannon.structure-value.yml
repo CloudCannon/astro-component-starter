@@ -81,13 +81,17 @@ preview:
     - Card Collection
   subtext:
     - key: heading
-  image: /component-previews/page-sections/collections/card-collection.svg
+  image: public/component-previews/page-sections/collections/card-collection.svg
   icon: grid_view
+  gallery:
+    image: public/component-previews/page-sections/collections/card-collection.svg
 picker_preview:
   text: Card Collection
   subtext: A grid of linked cards — services, case studies, projects, or resources.
-  image: /component-previews/page-sections/collections/card-collection.svg
+  image: public/component-previews/page-sections/collections/card-collection.svg
   icon: grid_view
+  gallery:
+    image: public/component-previews/page-sections/collections/card-collection.svg
 _inputs_from_glob:
   - /src/components/page-sections/collections/card-collection/card-collection.cloudcannon.inputs.yml
 _structures:

@@ -29,12 +29,16 @@ preview:
     - Testimonial Section
   subtext:
     - key: authorName
-  image: /component-previews/page-sections/proof/testimonial-section.svg
+  image: public/component-previews/page-sections/proof/testimonial-section.svg
   icon: format_quote
+  gallery:
+    image: public/component-previews/page-sections/proof/testimonial-section.svg
 picker_preview:
   text: Testimonial Section
   subtext: Section with customer testimonial and author details.
-  image: /component-previews/page-sections/proof/testimonial-section.svg
+  image: public/component-previews/page-sections/proof/testimonial-section.svg
+  gallery:
+    image: public/component-previews/page-sections/proof/testimonial-section.svg
 _inputs_from_glob:
   - /src/components/page-sections/proof/testimonial-section/testimonial-section.cloudcannon.inputs.yml
 groups:

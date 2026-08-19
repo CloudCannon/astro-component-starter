@@ -6,8 +6,10 @@ teamGrid:
       - Team Grid
     subtext:
       - key: subtext
-    image: /component-previews/page-sections/collections/team-grid.svg
+    image: public/component-previews/page-sections/collections/team-grid.svg
     icon: groups
+    gallery:
+      image: public/component-previews/page-sections/collections/team-grid.svg
   definitions:
     component_name: TeamGrid
     named_args:

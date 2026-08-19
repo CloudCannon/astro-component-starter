@@ -8,12 +8,16 @@ value:
 preview:
   text:
     - Definition List
-  image: /component-previews/building-blocks/core-elements/definition-list.svg
+  image: public/component-previews/building-blocks/core-elements/definition-list.svg
   icon: dns
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/definition-list.svg
 picker_preview:
   text: Definition List
   subtext: Lists term/definition pairs for structured content.
-  image: /component-previews/building-blocks/core-elements/definition-list.svg
+  image: public/component-previews/building-blocks/core-elements/definition-list.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/definition-list.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/definition-list/definition-list.cloudcannon.inputs.yml
 _structures:

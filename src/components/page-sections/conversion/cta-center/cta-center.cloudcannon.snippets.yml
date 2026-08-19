@@ -6,8 +6,10 @@ ctaCenter:
       - CTA Center
     subtext:
       - key: heading
-    image: /component-previews/page-sections/conversion/cta-center.svg
+    image: public/component-previews/page-sections/conversion/cta-center.svg
     icon: call_to_action
+    gallery:
+      image: public/component-previews/page-sections/conversion/cta-center.svg
   definitions:
     component_name: CtaCenter
     named_args:

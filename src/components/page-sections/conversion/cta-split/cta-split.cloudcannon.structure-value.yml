@@ -40,12 +40,16 @@ preview:
     - CTA Split
   subtext:
     - key: heading
-  image: /component-previews/page-sections/conversion/cta-split.svg
+  image: public/component-previews/page-sections/conversion/cta-split.svg
   icon: call_to_action
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-split.svg
 picker_preview:
   text: CTA Split
   subtext: Split layout CTA with button stack.
-  image: /component-previews/page-sections/conversion/cta-split.svg
+  image: public/component-previews/page-sections/conversion/cta-split.svg
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-split.svg
 _inputs_from_glob:
   - /src/components/page-sections/conversion/cta-split/cta-split.cloudcannon.inputs.yml
 groups:

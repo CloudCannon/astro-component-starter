@@ -7,8 +7,10 @@ video:
       - Video
     subtext:
       - key: title
-    image: /component-previews/building-blocks/core-elements/video.svg
+    image: public/component-previews/building-blocks/core-elements/video.svg
     icon: videocam
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/video.svg
   definitions:
     component_name: Video
     named_args:

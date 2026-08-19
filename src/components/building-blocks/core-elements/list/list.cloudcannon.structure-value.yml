@@ -23,12 +23,16 @@ value:
 preview:
   text:
     - List
-  image: /component-previews/building-blocks/core-elements/list.svg
+  image: public/component-previews/building-blocks/core-elements/list.svg
   icon: list
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/list.svg
 picker_preview:
   text: List
   subtext: Lists items with icons, bullets, or numbers as markers.
-  image: /component-previews/building-blocks/core-elements/list.svg
+  image: public/component-previews/building-blocks/core-elements/list.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/list.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/list/list.cloudcannon.inputs.yml
 _structures:

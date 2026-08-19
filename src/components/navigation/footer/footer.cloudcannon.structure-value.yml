@@ -12,12 +12,16 @@ value:
 preview:
   text:
     - Footer
-  image: /component-previews/navigation/footer.svg
+  image: public/component-previews/navigation/footer.svg
   icon: dock_to_bottom
+  gallery:
+    image: public/component-previews/navigation/footer.svg
 picker_preview:
   text: Footer
   subtext: "Footer block with logo, links, and legal information."
-  image: /component-previews/navigation/footer.svg
+  image: public/component-previews/navigation/footer.svg
   icon: dock_to_bottom
+  gallery:
+    image: public/component-previews/navigation/footer.svg
 _inputs_from_glob:
   - /src/components/navigation/footer/footer.cloudcannon.inputs.yml

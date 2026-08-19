@@ -14,11 +14,15 @@ preview:
     - Rating
   subtext:
     - key: value
-  image: /component-previews/building-blocks/core-elements/rating.svg
+  image: public/component-previews/building-blocks/core-elements/rating.svg
   icon: star_rate
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/rating.svg
 picker_preview:
   text: Rating
   subtext: Star rating out of five, with half-star support and an optional value label.
-  image: /component-previews/building-blocks/core-elements/rating.svg
+  image: public/component-previews/building-blocks/core-elements/rating.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/rating.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/rating/rating.cloudcannon.inputs.yml

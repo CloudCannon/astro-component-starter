@@ -16,11 +16,15 @@ preview:
     - Submit
   subtext:
     - key: text
-  image: /component-previews/building-blocks/forms/submit.svg
+  image: public/component-previews/building-blocks/forms/submit.svg
   icon: check
+  gallery:
+    image: public/component-previews/building-blocks/forms/submit.svg
 picker_preview:
   text: Submit
   subtext: Button for submitting a form.
-  image: /component-previews/building-blocks/forms/submit.svg
+  image: public/component-previews/building-blocks/forms/submit.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/submit.svg
 _inputs_from_glob:
   - /src/components/building-blocks/forms/submit/submit.cloudcannon.inputs.yml

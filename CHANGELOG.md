@@ -49,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- CloudCannon structure picker cards now show the component preview SVG. The wired `image:` path was a site URL (`/component-previews/...`) that does not exist in the source tree; CloudCannon looks up files the same way as the icon picker (`src/icons/{id}.svg`), so the path is now `public/component-previews/...`, and it is also set on `gallery.image` for the large card slot.
 - The footer no longer trips CloudCannon's "Failed to render array editable" error. Social Links was always stamping `data-prop="links"`; on a page that key is undefined (the footer's socials live in `footer.json` as `socials`). The array binding now follows the same opt-in as List and ButtonGroup, and the footer turns it off like the rest of its chrome.
 - The blog table of contents no longer slides under the sticky nav — "On this page" stays visible while you scroll.
 - The move/reorder controls on the first page section in the Visual Editor are reachable again. The whole `pageSections` list was wrapped in a second editable region whose controls pinned to the same top-right corner as the first section's, covering its drag handle. The wrapper was redundant — the array region already stamps each section as its own re-rendering component via `data-component-key` — so it has been removed and the array now binds straight to `pageSections`.

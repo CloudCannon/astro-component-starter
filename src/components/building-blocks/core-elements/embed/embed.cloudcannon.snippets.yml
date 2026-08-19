@@ -6,8 +6,10 @@ embed:
       - Embed
     subtext:
       - key: html
-    image: /component-previews/building-blocks/core-elements/embed.svg
+    image: public/component-previews/building-blocks/core-elements/embed.svg
     icon: data_object
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/embed.svg
   definitions:
     component_name: Embed
     content_key: html

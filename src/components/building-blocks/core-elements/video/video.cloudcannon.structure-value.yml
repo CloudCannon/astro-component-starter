@@ -16,11 +16,15 @@ preview:
     - Video
   subtext:
     - key: title
-  image: /component-previews/building-blocks/core-elements/video.svg
+  image: public/component-previews/building-blocks/core-elements/video.svg
   icon: videocam
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/video.svg
 picker_preview:
   text: Video
   subtext: Video component for YouTube, Vimeo, and HTML5 sources.
-  image: /component-previews/building-blocks/core-elements/video.svg
+  image: public/component-previews/building-blocks/core-elements/video.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/video.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/video/video.cloudcannon.inputs.yml

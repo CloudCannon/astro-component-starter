@@ -4,8 +4,10 @@ featureSlider:
   preview:
     text:
       - Feature Slider
-    image: /component-previews/page-sections/explainers/feature-slider.svg
+    image: public/component-previews/page-sections/explainers/feature-slider.svg
     icon: view_carousel
+    gallery:
+      image: public/component-previews/page-sections/explainers/feature-slider.svg
   definitions:
     component_name: FeatureSlider
     named_args:

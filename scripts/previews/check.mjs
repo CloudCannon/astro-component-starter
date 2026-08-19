@@ -13,7 +13,7 @@
  *   - a component has no `public/component-previews/<_component>.svg`;
  *   - an SVG under `public/component-previews/` matches no component (orphan);
  *   - a component's structure YAML is missing the
- *     `image: /component-previews/<_component>.svg` wiring.
+ *     `image: public/component-previews/<_component>.svg` wiring.
  *
  * The "are the committed SVGs in sync with their recipes?" drift guard is
  * `previews:build --check`, run alongside this in `previews:check`.
@@ -22,7 +22,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, sep } from "node:path";
 import { glob, globSync } from "glob";
 import * as yaml from "js-yaml";
-import { snippetWantsPreviewImage } from "./wire-yaml.mjs";
+import { previewImagePath, snippetWantsPreviewImage } from "./wire-yaml.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
@@ -83,7 +83,7 @@ const unwired = [];
 for (const component of components) {
   const file = componentFile.get(component);
   const absFile = join(root, file);
-  const imageLine = `image: /component-previews/${component}.svg`;
+  const imageLine = `image: ${previewImagePath(component)}`;
 
   if (!readFileSync(absFile, "utf8").includes(imageLine)) {
     unwired.push({ component, file });
@@ -134,7 +134,7 @@ if (orphans.length) {
 if (unwired.length) {
   console.error(`UNWIRED — structure YAML missing the preview image line:`);
   for (const { component, file } of unwired) {
-    console.error(`   ${file} needs: image: /component-previews/${component}.svg`);
+    console.error(`   ${file} needs: image: ${previewImagePath(component)}`);
   }
 }
 

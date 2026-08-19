@@ -6,8 +6,10 @@ ctaSplit:
       - CTA Split
     subtext:
       - key: heading
-    image: /component-previews/page-sections/conversion/cta-split.svg
+    image: public/component-previews/page-sections/conversion/cta-split.svg
     icon: call_to_action
+    gallery:
+      image: public/component-previews/page-sections/conversion/cta-split.svg
   definitions:
     component_name: CtaSplit
     named_args:

@@ -24,11 +24,15 @@ preview:
     - Social Links
   subtext:
     - key: variant
-  image: /component-previews/building-blocks/core-elements/social-links.svg
+  image: public/component-previews/building-blocks/core-elements/social-links.svg
   icon: share
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/social-links.svg
 picker_preview:
   text: Social Links
   subtext: A row of social-media icon links — ghost icons or solid brand tiles.
-  image: /component-previews/building-blocks/core-elements/social-links.svg
+  image: public/component-previews/building-blocks/core-elements/social-links.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/social-links.svg
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/social-links/social-links.cloudcannon.inputs.yml

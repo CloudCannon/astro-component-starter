@@ -16,11 +16,15 @@ preview:
     - Modal
   subtext:
     - key: label
-  image: /component-previews/building-blocks/wrappers/modal.svg
+  image: public/component-previews/building-blocks/wrappers/modal.svg
   icon: open_in_new
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/modal.svg
 picker_preview:
   text: Modal
   subtext: Dialog overlay triggered by a button, for focused content or actions.
-  image: /component-previews/building-blocks/wrappers/modal.svg
+  image: public/component-previews/building-blocks/wrappers/modal.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/modal.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/modal/modal.cloudcannon.inputs.yml

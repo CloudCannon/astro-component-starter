@@ -6,8 +6,10 @@ featureGrid:
       - Feature Grid
     subtext:
       - key: heading
-    image: /component-previews/page-sections/explainers/feature-grid.svg
+    image: public/component-previews/page-sections/explainers/feature-grid.svg
     icon: apps
+    gallery:
+      image: public/component-previews/page-sections/explainers/feature-grid.svg
   definitions:
     component_name: FeatureGrid
     named_args:

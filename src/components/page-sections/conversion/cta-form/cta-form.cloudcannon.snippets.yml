@@ -6,8 +6,10 @@ ctaForm:
       - CTA Form
     subtext:
       - key: heading
-    image: /component-previews/page-sections/conversion/cta-form.svg
+    image: public/component-previews/page-sections/conversion/cta-form.svg
     icon: call_to_action
+    gallery:
+      image: public/component-previews/page-sections/conversion/cta-form.svg
   definitions:
     component_name: CtaForm
     named_args:

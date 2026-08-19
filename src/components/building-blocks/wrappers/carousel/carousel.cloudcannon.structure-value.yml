@@ -22,12 +22,16 @@ preview:
     - Carousel
   subtext:
     - key: label
-  image: /component-previews/building-blocks/wrappers/carousel.svg
+  image: public/component-previews/building-blocks/wrappers/carousel.svg
   icon: image
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/carousel.svg
 picker_preview:
   text: Carousel
   subtext: Displays multiple items in a sliding gallery.
-  image: /component-previews/building-blocks/wrappers/carousel.svg
+  image: public/component-previews/building-blocks/wrappers/carousel.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/carousel.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/carousel/carousel.cloudcannon.inputs.yml
 _structures:

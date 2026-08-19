@@ -8,12 +8,16 @@ value:
 preview:
   text:
     - Announcement Bar
-  image: /component-previews/navigation/announcement-bar.svg
+  image: public/component-previews/navigation/announcement-bar.svg
   icon: campaign
+  gallery:
+    image: public/component-previews/navigation/announcement-bar.svg
 picker_preview:
   text: Announcement Bar
   subtext: "Dismissible site-wide announcement strip with an optional link."
-  image: /component-previews/navigation/announcement-bar.svg
+  image: public/component-previews/navigation/announcement-bar.svg
   icon: campaign
+  gallery:
+    image: public/component-previews/navigation/announcement-bar.svg
 _inputs_from_glob:
   - /src/components/navigation/announcement-bar/announcement-bar.cloudcannon.inputs.yml

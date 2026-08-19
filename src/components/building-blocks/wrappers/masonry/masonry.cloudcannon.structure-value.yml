@@ -90,12 +90,16 @@ preview:
     - Masonry
   subtext:
     - key: label
-  image: /component-previews/building-blocks/wrappers/masonry.svg
+  image: public/component-previews/building-blocks/wrappers/masonry.svg
   icon: view_quilt
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/masonry.svg
 picker_preview:
   text: Masonry
   subtext: A masonry column layout for mixed-height content, preserving reading order.
-  image: /component-previews/building-blocks/wrappers/masonry.svg
+  image: public/component-previews/building-blocks/wrappers/masonry.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/masonry.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/masonry/masonry.cloudcannon.inputs.yml
 _structures:

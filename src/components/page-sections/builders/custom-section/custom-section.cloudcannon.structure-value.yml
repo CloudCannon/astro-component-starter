@@ -28,12 +28,16 @@ preview:
     - Custom Section
   subtext:
     - key: label
-  image: /component-previews/page-sections/builders/custom-section.svg
+  image: public/component-previews/page-sections/builders/custom-section.svg
   icon: width_full
+  gallery:
+    image: public/component-previews/page-sections/builders/custom-section.svg
 picker_preview:
   text: Custom Section
   subtext: Used to group and style large sections of a page.
-  image: /component-previews/page-sections/builders/custom-section.svg
+  image: public/component-previews/page-sections/builders/custom-section.svg
+  gallery:
+    image: public/component-previews/page-sections/builders/custom-section.svg
 _inputs_from_glob:
   - /src/components/page-sections/builders/custom-section/custom-section.cloudcannon.inputs.yml
 groups:

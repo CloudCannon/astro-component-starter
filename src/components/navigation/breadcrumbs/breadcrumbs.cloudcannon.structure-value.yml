@@ -10,12 +10,16 @@ value:
 preview:
   text:
     - Breadcrumbs
-  image: /component-previews/navigation/breadcrumbs.svg
+  image: public/component-previews/navigation/breadcrumbs.svg
   icon: chevron_right
+  gallery:
+    image: public/component-previews/navigation/breadcrumbs.svg
 picker_preview:
   text: Breadcrumbs
   subtext: "Wayfinding trail rendered above blog post and tag page titles."
-  image: /component-previews/navigation/breadcrumbs.svg
+  image: public/component-previews/navigation/breadcrumbs.svg
   icon: chevron_right
+  gallery:
+    image: public/component-previews/navigation/breadcrumbs.svg
 _inputs_from_glob:
   - /src/components/navigation/breadcrumbs/breadcrumbs.cloudcannon.inputs.yml

@@ -6,8 +6,10 @@ faqSection:
       - FAQ Section
     subtext:
       - key: heading
-    image: /component-previews/page-sections/explainers/faq-section.svg
+    image: public/component-previews/page-sections/explainers/faq-section.svg
     icon: help
+    gallery:
+      image: public/component-previews/page-sections/explainers/faq-section.svg
   definitions:
     component_name: FaqSection
     named_args:

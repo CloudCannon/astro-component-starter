@@ -20,12 +20,16 @@ preview:
     - Timeline
   subtext:
     - key: label
-  image: /component-previews/building-blocks/wrappers/timeline.svg
+  image: public/component-previews/building-blocks/wrappers/timeline.svg
   icon: timeline
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/timeline.svg
 picker_preview:
   text: Timeline
   subtext: A dated sequence on a rail. Vertical or horizontal.
-  image: /component-previews/building-blocks/wrappers/timeline.svg
+  image: public/component-previews/building-blocks/wrappers/timeline.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/timeline.svg
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/timeline/timeline.cloudcannon.inputs.yml
 _structures:

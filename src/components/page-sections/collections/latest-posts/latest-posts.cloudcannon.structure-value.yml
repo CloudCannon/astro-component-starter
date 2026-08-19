@@ -32,12 +32,16 @@ preview:
     - Latest Posts
   subtext:
     - key: heading
-  image: /component-previews/page-sections/collections/latest-posts.svg
+  image: public/component-previews/page-sections/collections/latest-posts.svg
   icon: newsmode
+  gallery:
+    image: public/component-previews/page-sections/collections/latest-posts.svg
 picker_preview:
   text: Latest Posts
   subtext: The newest blog posts as cards, pulled automatically at build time.
-  image: /component-previews/page-sections/collections/latest-posts.svg
+  image: public/component-previews/page-sections/collections/latest-posts.svg
+  gallery:
+    image: public/component-previews/page-sections/collections/latest-posts.svg
 _inputs_from_glob:
   - /src/components/page-sections/collections/latest-posts/latest-posts.cloudcannon.inputs.yml
 groups:

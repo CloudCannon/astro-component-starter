@@ -44,12 +44,16 @@ preview:
     - Logo Cloud
   subtext:
     - key: heading
-  image: /component-previews/page-sections/proof/logo-cloud.svg
+  image: public/component-previews/page-sections/proof/logo-cloud.svg
   icon: workspaces
+  gallery:
+    image: public/component-previews/page-sections/proof/logo-cloud.svg
 picker_preview:
   text: Logo Cloud
   subtext: A "trusted by" strip of client logos with an optional muted lead line.
-  image: /component-previews/page-sections/proof/logo-cloud.svg
+  image: public/component-previews/page-sections/proof/logo-cloud.svg
+  gallery:
+    image: public/component-previews/page-sections/proof/logo-cloud.svg
 _inputs_from_glob:
   - /src/components/page-sections/proof/logo-cloud/logo-cloud.cloudcannon.inputs.yml
 _structures:

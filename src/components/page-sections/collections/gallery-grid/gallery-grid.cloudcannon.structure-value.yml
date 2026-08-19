@@ -50,12 +50,16 @@ preview:
     - Gallery Grid
   subtext:
     - key: heading
-  image: /component-previews/page-sections/collections/gallery-grid.svg
+  image: public/component-previews/page-sections/collections/gallery-grid.svg
   icon: photo_library
+  gallery:
+    image: public/component-previews/page-sections/collections/gallery-grid.svg
 picker_preview:
   text: Gallery Grid
   subtext: An image grid with captions and a lightbox for viewing photos full size.
-  image: /component-previews/page-sections/collections/gallery-grid.svg
+  image: public/component-previews/page-sections/collections/gallery-grid.svg
+  gallery:
+    image: public/component-previews/page-sections/collections/gallery-grid.svg
 _inputs_from_glob:
   - /src/components/page-sections/collections/gallery-grid/gallery-grid.cloudcannon.inputs.yml
 _structures:
