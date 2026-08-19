@@ -111,7 +111,9 @@ Pass **both** src and alt bindings:
 
 ### Array (repeating items)
 
-Two shapes, depending on how children are rendered.
+**MUST:** every repeating array the editor can add/remove/reorder has an array region on the **list** and an array-item region on **each row**. Heading chrome being editable is not enough — without the per-row region, tiles render but cannot be selected or reordered on the canvas.
+
+Three shapes, depending on how children are rendered. Prefer A, then B; C is the escape hatch when no wrapper's markup can host the layout.
 
 **A. Children rendered through `renderBlock`** (structured arrays: `buttonSections`, `contentSections`, accordion/carousel/card content). Only the wrapper needs the prop — `renderBlock` stamps `data-editable="array-item"` + `data-id={block._component}` on each row:
 
@@ -135,13 +137,34 @@ Two shapes, depending on how children are rendered.
 </Grid>
 ```
 
+**C. Plain object array mapped to custom markup** (no child `.astro` — Gallery Grid tiles, Logo Cloud logos, Stats figures). Stamp both attributes yourself: `data-editable="array"` + `data-prop` on the list, `data-editable="array-item"` on each row. Omit `data-id` — there is no component path. Nested fields bind relative to the item (`data-prop-src="image"` when the object key is `image`, not `source`).
+
+```astro
+<ul data-editable="array" data-prop="images" data-direction="row">
+  {
+    images.map((item) => (
+      <li data-editable="array-item">
+        <Image
+          source={item.image}
+          alt={item.alt}
+          data-prop-src="image"
+          data-prop-alt="alt"
+        />
+      </li>
+    ))
+  }
+</ul>
+```
+
+**MUST NOT:** bind duplicate copies of the same items (lightbox photos, thumbnail strips). Those stay unbound so they do not compete with the on-canvas row.
+
 ## Array-item wiring rules
 
-| Attribute                           | Goes on             | Value                                                                                                                                                                                            |
-| ----------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` — you do not write it directly.                                                                                                                 |
-| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for manually mapped children.                                                                                                   |
-| `data-id`                           | each **item** root  | The item's own **kebab component path** (`.astro` PascalCase collapsed to kebab, same format as `_component`), e.g. `.../accordion/accordion-item`. `renderBlock` sets it to `block._component`. |
+| Attribute                           | Goes on             | Value                                                                                                                                                                                                 |
+| ----------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` (shapes A/B). **Written by hand** for shape C.                                                                                                       |
+| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for shapes B and C.                                                                                                                  |
+| `data-id`                           | each **item** root  | Shape B: the child's kebab component path (`.astro` PascalCase collapsed to kebab), e.g. `.../accordion/accordion-item`. Shape A: `renderBlock` sets it to `block._component`. Shape C: omit.         |
 
 **MUST NOT:** put `data-editable="array-item"` on the array container, or `data-editable="array"` on an item — the editor needs the container/item split to CRUD rows.
 
@@ -158,6 +181,7 @@ Follow the [debug-cloudcannon playbook](../debug-cloudcannon/SKILL.md) for the f
 | Image edits src but not alt (or vice versa)  | Only one of `data-prop-src` / `data-prop-alt` passed; the other fell back to a wrong default.        |
 | Whole item vanishes from the array editor    | `data-editable` or `display: contents` on the component root, colliding with the array-item region.  |
 | Item edits but reorder/add/remove misbehaves | Missing or wrong `data-id` on the mapped child, or `data-editable="array"` and `array-item` swapped. |
+| Tiles render but clicking one has no card chrome | Shape C (or B) missing `data-editable="array-item"` on each row — only the section heading is bound. |
 
 ## Verify your work
 

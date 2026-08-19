@@ -193,6 +193,8 @@ const {
 </style>
 ```
 
+The template above is array shape A (`data-children-prop` on a composed wrapper). Mapping a `{Name}Item` (shape B) or a plain object array into custom markup (shape C) is in the [editable-regions skill](../editable-regions/SKILL.md#array-repeating-items) — do that before leaving the `.astro`. Heading chrome being editable is not enough.
+
 ### CustomSection props (page sections forward these)
 
 Page section wrappers expose `label` to authors as `sectionLabel` and forward it. Common props: `maxContentWidth` (`none`/`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`none`/`xs`..`6xl`; only `paddingVertical` has a default, `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `lockColorScheme` (bool — pins the scheme when the visitor toggles site theme), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `background` (object: `type` image/video/pattern, positioning, `overlay` -1..1, image/video fields, `patternSize` natural/sm/md/lg for tiled patterns — pattern reuses `imageSource` and repeats it). Read `@builders/custom-section/CustomSection.astro` for the authoritative list. `rounded` is only on `CustomSection` directly, not forwarded by page section wrappers.

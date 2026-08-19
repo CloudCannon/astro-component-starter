@@ -2,9 +2,9 @@
  * Sync agent skills from the canonical source to the tool-specific dirs.
  *
  * `.agents/skills/` is the single source of truth for agent skills (one
- * directory per skill, each with a SKILL.md). `.cursor/skills/` and
- * `.claude/skills/` are generated, byte-identical copies read by Cursor and
- * Claude Code respectively — never hand-edit them.
+ * directory per skill, each with a SKILL.md). Cursor reads that folder
+ * directly. `.claude/skills/` is a generated, byte-identical copy for
+ * Claude Code — never hand-edit it.
  *
  *   node scripts/skills/sync.mjs           regenerate both copies
  *   node scripts/skills/sync.mjs --check   verify copies match the canonical tree (CI)
@@ -16,7 +16,7 @@ const mode = process.argv.includes("--check") ? "check" : "write";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 
 const sourceDir = join(root, ".agents", "skills");
-const targets = [join(root, ".cursor", "skills"), join(root, ".claude", "skills")];
+const targets = [join(root, ".claude", "skills")];
 
 /** Recursively collect POSIX-style relative paths of every file under `dir`. */
 function listFiles(dir, base = dir, out = []) {

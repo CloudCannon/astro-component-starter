@@ -19,7 +19,7 @@ Astro component starter: brandable base components for informational websites, v
 ## Detailed workflow guides
 
 `.agents/skills/*/SKILL.md` are the canonical playbooks — follow them when the task matches:
-create-component, screenshot-to-component, migrate-existing-site, editable-regions, theming, adding-fonts, page-content-authoring, blog-mdx-content, site-data-navigation, debug-cloudcannon. Canonical skills live in `.agents/skills/`; `.cursor/skills/` and `.claude/skills/` are generated copies — resync with `npm run skills:sync`.
+create-component, screenshot-to-component, migrate-existing-site, editable-regions, theming, adding-fonts, page-content-authoring, blog-mdx-content, site-data-navigation, debug-cloudcannon. Canonical skills live in `.agents/skills/` (Cursor reads them there). `.claude/skills/` is a generated copy for Claude Code — resync with `npm run skills:sync`.
 
 ## Conventions that bite
 

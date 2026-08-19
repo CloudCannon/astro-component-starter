@@ -4,15 +4,15 @@ Astro component starter: brandable base components for informational websites, v
 
 ## Agent skills
 
-Agent skills live canonically in `.agents/skills/` — one directory per skill, each containing a `SKILL.md`. `.cursor/skills/` and `.claude/skills/` are generated, byte-identical copies read by Cursor and Claude Code respectively.
+Agent skills live canonically in `.agents/skills/` — one directory per skill, each containing a `SKILL.md`. Cursor reads that folder directly. `.claude/skills/` is a generated, byte-identical copy for Claude Code, which still requires its own path.
 
-**Never hand-edit `.cursor/skills/` or `.claude/skills/`.** Edit the canonical skill under `.agents/skills/`, then run:
+**Never hand-edit `.claude/skills/`.** Edit the canonical skill under `.agents/skills/`, then run:
 
 ```
 npm run skills:sync
 ```
 
-`npm run skills:check` (part of `npm run check`) fails CI if the copies drift from the canonical tree.
+`npm run skills:check` (part of `npm run check`) fails CI if the Claude copy drifts from the canonical tree.
 
 ### Available skills
 

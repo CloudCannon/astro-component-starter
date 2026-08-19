@@ -84,10 +84,16 @@ const hasLightbox = lightbox && items.length > 0;
   <ul
     class:list={["gallery-items", masonry ? "masonry" : "grid"]}
     style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
+    data-editable="array"
+    data-prop="images"
+    data-direction="row"
   >
     {
       items.map((item: any, index: number) => (
-        <li class="gallery-item">
+        <li
+          class="gallery-item"
+          data-editable="array-item"
+        >
           <figure class="gallery-figure">
             {hasLightbox ? (
               <button
@@ -103,6 +109,8 @@ const hasLightbox = lightbox && items.length > 0;
                   sizes="(max-width: 640px) 50vw, 400px"
                   widths={[320, 400, 640, 800]}
                   width={800}
+                  data-prop-src="image"
+                  data-prop-alt="alt"
                 />
               </button>
             ) : (
@@ -114,10 +122,20 @@ const hasLightbox = lightbox && items.length > 0;
                   sizes="(max-width: 640px) 50vw, 400px"
                   widths={[320, 400, 640, 800]}
                   width={800}
+                  data-prop-src="image"
+                  data-prop-alt="alt"
                 />
               </div>
             )}
-            {item.caption && <figcaption class="gallery-caption">{item.caption}</figcaption>}
+            {item.caption && (
+              <figcaption
+                class="gallery-caption"
+                data-editable="text"
+                data-prop="caption"
+              >
+                {item.caption}
+              </figcaption>
+            )}
           </figure>
         </li>
       ))

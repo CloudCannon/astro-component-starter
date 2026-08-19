@@ -1,6 +1,6 @@
 # Architecture
 
-How the load-bearing machinery fits together. For workflows (adding components, theming, content authoring), see the skills in `.agents/skills/` (canonical; `.cursor/skills/` and `.claude/skills/` are generated copies).
+How the load-bearing machinery fits together. For workflows (adding components, theming, content authoring), see the skills in `.agents/skills/` (canonical; `.claude/skills/` is a generated copy for Claude Code).
 
 ## The one-paragraph version
 

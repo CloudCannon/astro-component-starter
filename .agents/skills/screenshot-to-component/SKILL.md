@@ -100,7 +100,7 @@ Key rules that bite:
 
 ### 5. Wire editable bindings
 
-Editors change content in the visual preview, so text, image, and array props need bindings. Follow [editable-regions](../editable-regions/SKILL.md) for the attribute reference. In short: `data-prop` on text blocks, `data-prop-src`/`data-prop-alt` on `Image`, `data-children-prop` on the array wrapper, and `data-editable="array-item"` + `data-id="{component-path}"` on each mapped child.
+Editors change content in the visual preview, so text, image, and array props need bindings. Follow [editable-regions](../editable-regions/SKILL.md) for the attribute reference. In short: `data-prop` on text blocks, `data-prop-src`/`data-prop-alt` on `Image`, `data-children-prop` on the array wrapper, and `data-editable="array-item"` on each mapped child (`data-id` when the child is a `{Name}Item`; omit it for a plain object row). A repeating group of tiles that you map into custom markup still needs the array + array-item pair — heading chrome alone leaves the cards unselectable.
 
 ### 6. Fill defaults and produce a content entry
 
