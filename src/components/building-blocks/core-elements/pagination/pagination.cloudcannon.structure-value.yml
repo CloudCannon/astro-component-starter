@@ -1,6 +1,6 @@
 label: Pagination
 icon: list
-description: "Navigation component for multi-page content."
+description: Page links for content that spans multiple pages.
 value:
   _component: building-blocks/core-elements/pagination
   page: null

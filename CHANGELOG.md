@@ -6,75 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
-### Added
-
-- Card Grid wrapper (`building-blocks/wrappers/card-grid`) — an exact-column (or masonry) row of open cards: cover, optional tile link, and a `contentSections` body. Nested links (a category badge) stay their own targets. 2–4 columns. Not Grid's auto-fit — that stays for Feature Grid, Pricing Tiers, and freeform Grids.
-- Badge component (`building-blocks/core-elements/badge`) — a pill label for statuses, tags, and announcements. Eight variants (the six status tones plus a theme-aware Plain for imagery and a filled Accent), three sizes, an icon or status-dot prefix, and an optional link that renders the badge as an anchor with a hover state and, by default, a trailing arrow (`showArrow` to hide it).
-- Warning status color tokens (`--color-warning`, `--color-warning-bg-subtle`, `--color-warning-border-subtle`) and the previously missing `--color-success-border-subtle`, in both light and dark themes.
-- Pricing Tiers section (`page-sections/conversion/pricing-tiers`) — plan cards with feature checklists (included and excluded rows), per-card call-to-action, and an optional highlighted tier with a "Most popular" badge.
-- Logo Cloud section (`page-sections/proof/logo-cloud`) — a "trusted by" strip of client logos, height-aligned and optionally grayscale. Linked logos restore color on hover in grayscale, or scale up slightly in full color. Plus six placeholder logo assets.
-- Stats section (`page-sections/explainers/stats`) — a row of big count-up numbers (via Counter) with uppercase labels, optional sublabels, and divider rules that rotate when the row stacks on mobile.
-- Steps wrapper (`building-blocks/wrappers/steps`) — a numbered how-it-works sequence. Each step owns its own rail segment (a column connector or a left border that stops at the last marker). Horizontal reading order is image → number → words; vertical puts the image beside the words. Featured images share one crop. Markers are ordinal numbers as real text.
-- Steps section (`page-sections/explainers/steps`) — heading chrome around the Steps wrapper for a full-width "how it works" block.
-- Timeline wrapper (`building-blocks/wrappers/timeline`) — a dated sequence on a rail. Dates sit in their own column beside a small rail dot. Vertical entries share one continuous rail that stops at the last marker; horizontal scrolls and fades at the tail. Consecutive entries with the same year group under that year.
-- Timeline section (`page-sections/explainers/timeline`) — heading chrome around the Timeline wrapper.
-- Border width tokens (`--border-width-sm`, `--border-width-md`) for shared rail and emphasis strokes.
-- Contact Split section (`page-sections/conversion/contact-split`) — contact details (address, phone, email, hours, each with an icon and optional tel:/mailto: link) beside a form built from the existing form blocks, in a bordered card with an optional map-embed strip.
-- Table component (`building-blocks/core-elements/table`) — a content table with caption, header row, row headers, and striped/compact variants. Ragged rows render empty cells instead of collapsing, and on small screens the table pans horizontally with a pinned first column, an edge fade, and a scroll hint.
-- Alert component (`building-blocks/core-elements/alert`) — a status callout with info/success/warning/danger/note variants, default per-variant icons, an optional title, and a markdown body. Insertable into blog posts as an MDX snippet. Warning and danger variants announce themselves to screen readers.
-- Rating component (`building-blocks/core-elements/rating`) — a CSS-only star rating with half-star support, small/medium sizes, an optional numeric label, and a filled-star color option using the same palette as Icon. Read as a single value by screen readers.
-- Social Links component (`building-blocks/core-elements/social-links`) — a row of social icon links in ghost or solid-brand style, using the same data shape as the footer's socials.
-- Latest Posts section (`page-sections/collections/latest-posts`) — the newest blog posts as cards (cover, tag badge, linked title, date and author, excerpt) with an optional tag filter and view-all button. Posts are pulled at build time; the Visual Editor shows placeholder cards.
-- Gallery Grid section (`page-sections/collections/gallery-grid`) — an image grid with captions, 2–5 columns, an adjustable tile gap, a Grid layout (square/landscape crops) or an order-preserving Masonry layout sharing the Masonry wrapper's technique, and a lightbox bound to the photograph: counter, close, arrows and caption sit inside the photo's rectangle over a gradient scrim, on a near-opaque backdrop. Arrow keys and swipe step (wrapping) with a short crossfade, Escape or a backdrop click closes, and focus returns to the clicked tile.
-- Pricing Comparison section (`page-sections/conversion/pricing-comparison`) — the feature-by-feature table that complements Pricing Tiers' cards. Plans become columns (a highlighted plan gets the primary call to action), each feature row takes one value per plan (`yes`/`no` for a tick or dash, or free text like "5 seats"), and each plan can carry its own call to action. Optional zebra striping is a single transparent gray on even rows only. Pans horizontally with the feature column pinned on small screens.
-- Video Modal can be opened from a poster image with a play disc (`triggerStyle: poster`) instead of a button — the treatment hero and feature media usually want.
-- Page Header section (`page-sections/heroes/page-header`) — the slim title block interior pages open with: an `h1`, an optional eyebrow and intro line, start or center alignment, and optional breadcrumbs derived from the page's own URL (nested paths become linked ancestors; the trail is hidden on the home page). Breadcrumbs are no longer blog-only.
-- Card Collection section (`page-sections/collections/card-collection`) — a grid of linked cards with optional covers and an open `contentSections` body, so a badge, date, author, or anything else is just another building block. Grid or masonry layout, 2–4 columns. Set `link` to make the tile clickable; nested links (a category badge) stay their own targets. Cards work without images too.
-- Testimonial Wall section (`page-sections/proof/testimonial-wall`) — several customer quotes at once as cards in a masonry wall, so uneven quote lengths pack tightly while reading order is preserved. Each card is the existing Testimonial block (markdown quotes, headshot with initials fallback), 2–4 columns.
-- Logo Cloud can scroll: switch on `scrolling` for a continuous marquee of logos, built on Carousel's auto-scroll. Visitors who prefer reduced motion see a still strip.
-- Masonry wrapper (`building-blocks/wrappers/masonry`) — a Pinterest-style column layout for mixed-height content that keeps reading order (items flow left-to-right into the shortest column). Falls back to CSS columns without JavaScript and hands over to native CSS masonry where browsers support it. 2–5 columns, the Grid gap scale, and Grid-style items that hold any content blocks.
-- Component-docs examples for every new component, showing each one's prop variations inline like the rest of the library.
-- An internal Avatar utility (initials fallback, three sizes) now renders Testimonial's author headshot.
-- Blog posts show an "On this page" table of contents by default (`showToc` in the post's frontmatter, on unless turned off) — a sticky sidebar with scroll-spy highlighting beside the article on wide screens, and a collapsed disclosure above it on small ones. Demo posts include headings so the sidebar has something to list.
-
-### Changed
-
-- Blog post pages open with a back link, then the title, subtitle, and one muted meta line (category, date, author). The category is plain text that links to its tag archive. The hero image is 16:9. Tags sit at the end of the article as badges, not in the header.
-- Card Collection, Latest Posts, and Team Grid now compose the Card Grid wrapper for layout and the card itself. Card Collection keeps curated `items`; Latest Posts still fetches posts; Team Grid still authors `name` / `role` / `bio` as fields. Team Grid's `layout: start | center` is gone — exact columns don't need it.
-- Card Collection cards now take open `contentSections` instead of fixed badge/title/description fields. Latest Posts feeds that same card (cover, tag badge linked to the archive, title, date and author, excerpt) so a date is just another block, not a second card design.
-- Video Modal's close now sits above the player on a dark overlay. The previous sheet put the control on the video, where a YouTube or Vimeo iframe covered it.
-- Carousel gained a `startIndex`, a `carousel:select` event, and a `thumbnails` indicator style — useful for product galleries and any consumer that needs to sync chrome to the selected snap.
-- Page-section editing panels now group inputs: content fields come first, and the shared shell settings (section label, width, padding, color scheme, background) sit below in a collapsed "Section settings" group. Data files are unchanged — this only reorders the editor. New sections scaffold with the groups included, and `npm run lint:cms` fails if a prop is missing from the groups (it would otherwise land wherever the editor defaults ungrouped inputs).
-- **Heads-up:** page sections are reorganized into six categories named for the job a section does on a page: `heroes`, `explainers` (was features + info-blocks), `proof` (was social-proof + testimonials from people), `conversion` (was ctas + pricing + contact), `collections` (was blog + galleries + team-grid from people), and `builders`. The category is part of each section's `_component` path, so **existing content needs a find-and-replace** — e.g. `page-sections/ctas/cta-center` → `page-sections/conversion/cta-center`, `page-sections/features/feature-grid` → `page-sections/explainers/feature-grid`. Component docs URLs move the same way. The `@features` import alias is now `@explainers`.
-- Skills are no longer copied into `.cursor/skills/`. Cursor reads `.agents/skills/` directly; `skills:sync` still copies to `.claude/skills/` for Claude Code.
-
-### Fixed
-
-- Masonry Card Grid and Gallery Grid covers keep each photo's own shape. Passing `width={800}` as a srcset cap used the file's native height with that width, so a 1707×1280 castle became an 800×1280 box and the image stretched. Height now scales with width when there is no crop.
-- Latest Posts no longer trips CloudCannon's "Failed to render array item" error. Card Grid was always stamping `data-editable="array-item"` on every card; Latest Posts synthesizes cards from the blog collection (no parent `items` array), so the editor rejected them. Array-item wiring now follows the same opt-in as Social Links.
-- Gallery Grid tiles are now array items in the Visual Editor, so each photo can be selected, reordered, or replaced on the canvas (with the caption as a nested text region).
-- CloudCannon structure picker cards now show the component preview SVG. The wired `image:` path was a site URL (`/component-previews/...`) that does not exist in the source tree; CloudCannon looks up files the same way as the icon picker (`src/icons/{id}.svg`), so the path is now `public/component-previews/...`. The thumbnails are 16:9 (1280×720) to match the picker's `.c-card__preview` slot (~286×160), and `gallery.image` uses `fit: cover` so a slightly-off card width still fills the frame.
-- The footer no longer trips CloudCannon's "Failed to render array editable" error. Social Links was always stamping `data-prop="links"`; on a page that key is undefined (the footer's socials live in `footer.json` as `socials`). The array binding now follows the same opt-in as List and ButtonGroup, and the footer turns it off like the rest of its chrome.
-- The blog table of contents no longer slides under the sticky nav — "On this page" stays visible while you scroll.
-- The move/reorder controls on the first page section in the Visual Editor are reachable again. The whole `pageSections` list was wrapped in a second editable region whose controls pinned to the same top-right corner as the first section's, covering its drag handle. The wrapper was redundant — the array region already stamps each section as its own re-rendering component via `data-component-key` — so it has been removed and the array now binds straight to `pageSections`.
-- Small icon-only controls now meet the 44px minimum tap target: icon-only buttons (the mobile menu and search buttons at 35px, carousel arrows at 28px), the light/dark theme toggle (27px), and the announcement bar's dismiss button (20px) were all awkward to hit on a phone and failed WCAG 2.5.8. The tap area is an invisible overlay, so nothing looks bigger — carousel arrows are still small discs, just no longer fiddly to hit. New controls can opt in with the `tap-target` utility class.
-- The footer's social row is now the Social Links component rather than its own copy of the markup, so it announces itself as a labelled list to screen readers. Its icons pick up that component's quieter muted styling.
-- The icon picker now shows brand marks with their real names — `Social/GitHub`, `Social/LinkedIn`, `Social/TikTok` instead of `Social/github` and friends. The `Social/` prefix stays, so filtering the picker by "social" still pulls up the whole set.
-- Passing a `class` to the Carousel wrapper no longer drops its own `carousel` class, which silently disabled both its styling and its JavaScript setup.
-- Video Modal no longer emits a stray `header` attribute on its wrapper element (it was passing a prop the Modal wrapper doesn't have).
-- Counter now animates decimal targets at their own precision — a target of `99.95` used to be floored to `99` mid-animation and at rest.
-- Testimonial author avatars were clipped — the shared Image block's content margin and auto height sat inside Avatar's overflow-hidden circle, so the headshot was shifted and cropped. The circle now fills edge to edge. The srcset was also a single ~88px variant (Image's 640/1280/2560 steps all sit above that width and were dropped), so the headshot looked soft on retina; it now ships 1x/2x/3x of the displayed size.
-- Switching examples in the component-docs viewer no longer jumps the page. Variants are stacked in one frame sized to the tallest, so changing the select does not grow or shrink the document.
-- Logo Cloud's placeholder logos are now colored, so the full-color docs example is actually visible.
-- The component-docs Astro preview no longer prints `contentSections="[object Object]"` for item wrappers. Nested `_component` trees always render as JSX children, and a layout branch that maps a computed grouping (Timeline's year groups) no longer hides the real `entries`/`items` slot — so current and future wrappers get the same `<StepsItem>` / `<TimelineItem>` preview without a per-component override.
-
-## [2.0.0] - 2026-08-11
+## [2.0.0] - 2026-08-19
 
 A big release: a browsable reference site for every component, site-wide
-search, new components and options, tooling that catches editor problems
-before they ship, and a long list of accessibility fixes. If you have already built a site on this starter,
-read the **Heads-up** items under Changed before upgrading — a few change how
-things look.
+search, a much larger library of page sections and building blocks, tooling
+that catches editor problems before they ship, and a long list of
+accessibility fixes. If you have already built a site on this starter, read
+the **Heads-up** items under Changed before upgrading — several change how
+things look, and every page section moves to a new path.
 
 ### Added
 
@@ -83,6 +22,7 @@ things look.
 - `npm run reset:starter` clears the demo posts, pages, logos and navigation out of a fresh copy, and sets your site name and URL. `--dry-run` shows the plan first, and it only runs on a clean git tree so you can always undo it.
 - `npm run check:placeholders` warns when starter placeholders are still in place — most importantly the `example.com` URL, which otherwise ships and tells Google your site lives at a domain you don't own.
 - A deployment guide at `docs/DEPLOYMENT.md` for getting the site live on CloudCannon.
+- Live sites send the usual browser security headers (HTTPS-only, no embedding on other sites, a tight referrer policy) and still allow the CloudCannon visual editor to embed the page. A per-request script nonce is not included, because a static build cannot mint a new one on every load.
 - A `LICENSE` file. The README and `package.json` both said MIT, but the licence text itself was missing.
 - Guides for people and AI agents working on the project: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and `docs/ARCHITECTURE.md`.
 
@@ -96,8 +36,9 @@ things look.
 
 - Site search lives in the navigation bar: a search button — or Cmd/Ctrl+K — opens a modal with results as you type, filters for pages and blog posts, and article thumbnails. Turn it on with `search: true` in the main navigation data. It replaces the old `/search/` page, and follows the theme toggle like everything else.
 - An RSS feed at `/rss.xml`, linked from every page so feed readers find it on their own.
-- Blog posts and pages now describe themselves to search engines — title, author, date, tags — so posts can qualify for richer search results.
-- Social share cards, so links posted to X and similar show a proper preview image and title.
+- An `llms.txt` file at the site root listing the pages worth citing, so AI crawlers have a curated index.
+- Blog posts and pages now describe themselves to search engines — title, author, date, tags — so posts can qualify for richer search results. Posts also include a Home › Blog › title trail as structured data, even though the visible chrome is a back link.
+- Social share cards, so links posted to X and similar show a proper preview image and title. Share images include size and alt text; local photos are cropped to the 1200×630 frame social platforms actually show, and the site logo still fills in when a page has no image of its own.
 - Search engines are told they may show large image previews and full-length snippets, which they otherwise cut short.
 
 #### Tools that catch mistakes before you ship
@@ -105,7 +46,7 @@ things look.
 Most of these catch problems that used to build cleanly and look fine, while
 leaving the site quietly broken in the editor.
 
-- `npm run lint:cms` checks the visual editor setup against the actual components — a renamed option, a field that would never show up on a new block, a missing file.
+- `npm run lint:cms` checks the visual editor setup against the actual components — a renamed option, a field that would never show up on a new block, a missing file, or a page-section option left out of the content / section-settings groups.
 - `npm run lint:schema` checks the editor configuration against CloudCannon's own rules, catching invalid settings and wrong icon names.
 - `npm run lint:css-vars` checks that every design token you use actually exists. A mistyped token name is silently ignored, so it never looks like an error.
 - `npm run icons:sync` and `npm run icons:check` keep the icon picker in step with the icon files, a list that was previously maintained by hand.
@@ -117,25 +58,59 @@ leaving the site quietly broken in the editor.
 - `npm run new:component` scaffolds a new component's files and tells you the remaining steps.
 - Editor autocomplete in VS Code for both the CloudCannon config and the design tokens.
 
-#### New components and options
+#### New page sections
+
+- Page Header — the slim title block interior pages open with: a heading, optional eyebrow and intro, and a breadcrumb trail taken from the URL. Nested pages link to their parents; the home page hides the trail. Breadcrumbs are no longer blog-only.
+- Stats — a row of large count-up numbers with labels, optional extra lines, and dividers that turn into rules when the row stacks.
+- Steps — a numbered how-it-works sequence, as a full-width section or as a building block you can drop inside something else. Each step has its own stretch of the connecting line, which stops at the last marker.
+- Timeline — a dated sequence on a rail, as a section or a building block. Matching years group together. Vertical entries share one line; horizontal ones scroll.
+- Logo Cloud — a "trusted by" strip of client logos, height-matched and optionally grey. Linked logos restore colour on hover, or scale up slightly in full colour. Can also scroll as a continuous marquee; visitors who prefer reduced motion see a still strip. Ships with six placeholder logos.
+- Testimonial Wall — several quotes at once as cards in a masonry layout, so uneven lengths pack tightly while reading order stays left-to-right.
+- Pricing Tiers — plan cards with included and excluded features, a call to action on each, an optional highlighted "Most popular" plan, and an optional monthly/annual switch.
+- Pricing Comparison — the feature-by-feature table that sits next to those cards. Plans are columns, each feature is a tick, a dash, or a short note, and a highlighted plan gets the primary button.
+- Contact Split — contact details (address, phone, email, hours) beside a form, with an optional map.
+- Latest Posts — the newest blog posts as cards, with an optional tag filter and a view-all button. Posts are chosen at build time; the visual editor shows placeholders.
+- Gallery Grid — a captioned image grid, two to five columns, as a regular grid or masonry. Opening a photo shows a lightbox on that image — arrows, caption and close sit on the photo — with keyboard, swipe, and click-outside to dismiss.
+- Card Collection — a grid of linked cards with optional covers and an open body, so a badge, date or author is just another building block. Two to four columns, grid or masonry. Nested links (a category badge) stay their own targets.
+
+#### New building blocks
+
+- Card Grid — the layout Card Collection, Latest Posts and Team Grid share: a fixed number of columns (or masonry) of open cards. Not the auto-fit Grid used by Feature Grid and freeform layouts.
+- Masonry — a Pinterest-style column layout that keeps reading order. Falls back without JavaScript, and uses the browser's native masonry where it exists.
+- Badge — a pill for statuses, tags and announcements. Status colours plus a plain and accent look, three sizes, an optional icon or dot, and an optional link.
+- Alert — a status callout (info, success, warning, danger, note) with a markdown body, insertable into blog posts. Warning and danger announce themselves to screen readers.
+- Rating — star ratings with half stars, an optional number, and a colour option. Read as a single value by screen readers.
+- Table — caption, header row, optional row headers, striped and compact. Ragged rows fill empty cells instead of collapsing. Small screens pan sideways with the first column pinned.
+- Social Links — a row of social icons in a quiet or brand-colour style, using the same data as the footer.
+
+#### New options
 
 - An announcement bar shown above the navigation on every page, driven by `src/data/announcementBar.json` and editable in CloudCannon under Data. Write the message in Markdown, with a link for an optional call to action; closing the bar hides it for that visitor until the message changes, so a new announcement brings it back for everyone.
-- Blog posts and tag pages show a breadcrumb trail above the title — Home › Blog › the page you are on. The Home label is editable in CloudCannon under Data, long titles are shortened to keep the trail on one line, and small screens swap the trail for a single link back to the blog. Search engines are given the trail as structured data, so results can show where a page sits in the site. Tag pages used to have a plain "All posts" link; the breadcrumb replaces it.
+- Tag pages show a Home › Blog › tag trail above the title, replacing the old "All posts" link. Long titles are shortened to keep the trail on one line, and small screens swap it for a single link back to the blog. The Home label is editable in CloudCannon under Data.
+- Blog posts show an "On this page" list of headings by default — a sticky sidebar on wide screens, a collapsed disclosure on small ones. Turn it off with `showToc: false` in the post.
 - Backgrounds can be a repeating tiled pattern as well as an image or video, on Card, Custom Section and every page section. Pick the tile with the usual image picker and choose a tile size; the overlay and background colour still apply, so patterns with transparency show the background colour through.
-- The Video component gained autoplay and loop options for all three source types. Autoplayed video starts muted, since browsers refuse it otherwise, and YouTube and Vimeo players now load when scrolled into view instead of with the page.
+- The Video component gained autoplay and loop options for all three source types. Autoplayed video starts muted, since browsers refuse it otherwise. YouTube and Vimeo players load when scrolled into view, and each library loads only if that kind of embed is actually on the page — a Vimeo-only page never downloads the YouTube player.
+- Video Modal can open from a poster image with a play button, the treatment hero and feature media usually want.
 - Form fields take a `hint` for help text under the field, and an `error` for validation messages.
 - Card and Custom Section backgrounds can stay fixed while the page scrolls, falling back to a normal background for anyone who prefers reduced motion.
-- Carousel gained `pauseOnHover`, Image gained `decorative` for images screen readers should skip, and Button passes `aria-pressed` through so it can act as a toggle button.
+- Carousel gained pause-on-hover, a starting slide, a thumbnail indicator, and an event when the selected slide changes. Image gained `decorative` for images screen readers should skip. Button passes `aria-pressed` through so it can act as a toggle button.
 - Cards can pin their colour scheme against the visitor's theme toggle, as Custom Section already could.
+- Warning is now a first-class status colour, with matching background and border tokens in both themes, and the missing success border token is filled in. Shared thin and medium border widths cover the rails on Steps and Timeline.
 
 ### Changed
+
+#### Page sections
+
+- **Heads-up:** page sections are grouped by the job they do on a page — heroes, explainers (was features and info-blocks), proof (was social-proof and testimonials), conversion (was CTAs, pricing and contact), collections (was blog, galleries and team), and builders. The group is part of each section's path, so existing pages need a find-and-replace — for example `page-sections/ctas/cta-center` becomes `page-sections/conversion/cta-center`, and `page-sections/features/feature-grid` becomes `page-sections/explainers/feature-grid`. Component docs URLs move the same way. The `@features` import alias is now `@explainers`.
+- **Heads-up:** Team Grid's start/center layout option is gone — a fixed number of columns does not need it. Card Collection, Latest Posts and Team Grid now share one card layout. Card Collection still holds a curated list; Latest Posts still fetches posts; Team Grid still has name, role and bio fields. Adding Team Grid from the picker starts with three people, matching the three-column layout.
+- Page-section editing panels put content fields first, with the shared shell settings (width, padding, colour scheme, background) in a collapsed group underneath. Data files are unchanged — this only reorders the editor. Component docs match that grouping.
 
 #### Framework and dependencies
 
 - Upgraded to **Astro 7**, with every other dependency refreshed. Node 22.12 or later is now required, and there are no known security advisories against the dependency tree.
 - Icons are built into the project instead of coming from the `astro-icon` package, which has been unmaintained for well over a year and was written for an older Astro. Icons look and behave the same, and a mistyped icon name now warns you while you work instead of failing the build.
 - Accessibility, SEO, link and performance checking now happens with a separate tool outside this repository, so the partial version that lived here has been removed. Nothing in the project or its CI catches accessibility regressions any more.
-- Agent instructions live in one place (`.agents/skills/`) and are copied automatically to the Cursor and Claude folders.
+- Agent instructions live in `.agents/skills/`. Cursor reads that folder directly; they are still copied to the Claude folder for Claude Code.
 
 #### Search
 
@@ -147,10 +122,15 @@ leaving the site quietly broken in the editor.
 - **Heads-up:** the grey design tokens were renamed from `--gray-0…12` to `--gray-50…950`, matching every other colour. The colours themselves are identical — only the names changed, so a brand's grey scale can be pasted straight in. `npm run lint:css-vars` finds any old names you miss.
 - **Heads-up:** the colour palette is now complete, with a full range for all eight colours. Most things look the same; what shifts is the icon background tints, the green and yellow icon colours, and the dark theme's accent section backgrounds.
 - **Heads-up:** layout breakpoints are standardised on 640px and 768px. Three components had their own values nearby, so a few layouts now change shape at slightly different widths.
+- h2 and h3 headings now get a linkable id from their text when you don't set one, so sections can be cited. Duplicate titles on the same page get a number on the end. Page titles (h1) are left alone.
+- Video Modal's close control sits above the player on a dark overlay, and clicking the overlay closes it. The old sheet put the control on the video, where a YouTube or Vimeo player covered it. It also defaults to extra-large instead of large.
+- The placeholder image is a photo glyph on a warm grey field, so it still reads as a stand-in when a card crops it. The old corner-to-corner X looked broken once a 16:9 file was covered to 4:3.
+- Component picker short descriptions and component-docs overviews are rewritten in simpler language.
 - Focus outlines are consistent everywhere, and clicking with a mouse no longer leaves one behind.
 - Fonts are served from your own site rather than fetched from Google at build time.
 - Code in blog posts uses the theme's monospaced font instead of whatever the browser picked.
 - Blog listing headings say which list you are looking at. Every tag page and every page of the blog said "All posts".
+- Blog posts open with a back link, then the title, subtitle, and one muted line for category, date and author. The category links to its tag archive. The hero image is 16:9. Tags sit at the end of the article as badges, not in the header.
 - Component preview thumbnails were all redrawn to look like one family, and they follow light or dark mode.
 - The README leads with the live demo and screenshots, and documents the tooling, the scaffolder and deployment. It also gives one Node version instead of the three different answers it used to.
 
@@ -160,6 +140,9 @@ leaving the site quietly broken in the editor.
 
 - The navigation menus are properly labelled and keyboard-operable. The hamburger, the close button and every dropdown arrow were announced to screen readers as unlabelled, on every page. The menus still work in the CloudCannon editor.
 - The main, mobile and footer navigation now have distinct names, instead of appearing to a screen reader as three identical "navigation" areas.
+- Small icon-only controls now have a 44px tap area: the mobile menu and search buttons, carousel arrows, the theme toggle, and the announcement bar's dismiss. Nothing looks bigger — the extra area is invisible.
+- The footer's social row is now the Social Links component rather than its own copy of the markup, so it announces itself as a labelled list. Its icons pick up that component's quieter muted styling.
+- The blog "On this page" list no longer exposes two navigation landmarks with the same name. Only the sidebar counts as navigation; the small-screen disclosure is just a control.
 - The asterisk marking a required field read out as "star" and nothing else. It is hidden from screen readers now; the field itself already says it is required.
 - Pagination's current-page marker read out as a bare number with no context.
 - Modals hold keyboard focus while open and return it to whatever opened them on close, and they work inside the visual editor.
@@ -173,6 +156,9 @@ leaving the site quietly broken in the editor.
 - Images now offer their own full resolution. Sizes were rounded down to the nearest preset, so a 1181px image only ever offered a 640px version and looked soft. Cropped images were worst affected.
 - Full-width section backgrounds loaded blurry in Firefox and Safari.
 - Blog listing images were far heavier than they needed to be — 3.7MB of images for cards a few hundred pixels wide, now 0.42MB.
+- Masonry cards and gallery tiles keep each photo's own shape. A width cap was pairing that width with the file's original height, which stretched portraits.
+- Testimonial author photos were clipped and soft. The circle now fills edge to edge, initials still show when there is no photo, and the image ships extra resolutions for retina screens.
+- Logo Cloud's placeholder logos are coloured, so the full-colour example is actually visible.
 
 #### The visual editor
 
@@ -181,8 +167,13 @@ CloudCannon was missing, unusable or wrong.
 
 - Fields for adding a list of items showed "not configured" and could not be edited. Main Nav's buttons were the last case; `lint:cms` now fails on the whole class of mistake.
 - Options that existed in the editor but the component ignored, and options the component supported but the editor never offered, across a long list of components.
-- Controls that only appeared after you saved — alternate-theme logos, grid alignment, team grid layout — now show up on a freshly added block.
+- Controls that only appeared after you saved — alternate-theme logos, grid alignment — now show up on a freshly added block.
 - The "Fixed background (parallax)" toggle was missing from the eleven page sections that pass background options through, even though Custom Section and Card offered it.
+- CloudCannon's add-section cards now show each component's preview thumbnail. The old path was a site URL that does not exist in the source tree, so the picker had nothing to display.
+- Several lists no longer trip CloudCannon's "Failed to render array item" error: Latest Posts cards (which are built from the blog, not a hand-edited list), the footer's social row, and Gallery Grid tiles, which can now be selected and reordered on the canvas.
+- The move handle on the first page section is reachable again. A second editable wrapper was covering it.
+- Adding a Step or Timeline entry now keeps the rail and numbering in sequence. The old last-item styles were baked in at render time, so they went stale until you rebuilt.
+- The icon picker now shows brand marks with their real names (GitHub, LinkedIn, TikTok) instead of the filename.
 - Uploaded images and files were going to the wrong folder instead of `src/assets/images`.
 - 31 wrong icon names across 15 files meant the "add section" menu showed the wrong icon.
 - Navigation and footer item definitions were duplicated across four components in three different versions.
@@ -192,6 +183,13 @@ CloudCannon was missing, unusable or wrong.
 
 - Heading icons sat flush against their text; the gap is back.
 - A background colour set alongside a background video painted over the video, hiding it completely.
+- The announcement bar's default link now says "Why we built this" instead of "Learn more".
+- The blog table of contents no longer slides under the sticky navigation.
+- Passing a class to Carousel no longer strips its own class, which silently disabled both its styling and its JavaScript.
+- Video Modal no longer emits a leftover attribute the modal wrapper does not use.
+- Counter now animates decimal targets at their own precision — 99.95 no longer drops to 99.
+- Switching examples in the component-docs viewer no longer jumps the page. The frame stays sized to the tallest variant.
+- The component-docs preview no longer prints `[object Object]` for nested content. Item wrappers like Steps and Timeline show their real children.
 - The docs' "accepted values" chips and the Component Builder's fields rendered on a heavy grey slab with no padding.
 - Font weights are all tokens now, so changing the weight scale in a rebrand reaches everything.
 - Fixed 19 references to design tokens that do not exist, across the mobile menu, top bar, blog listing, content selector and team grid. A mistyped token name is silently ignored, so none of these looked like errors.

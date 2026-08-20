@@ -8,7 +8,8 @@
  *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
- *      (e.g. Carousel / ImageCarousel Embla setup, Modal focus trap)
+ *      (e.g. Carousel / ImageCarousel Embla setup, Modal focus trap,
+ *      Video's lite-youtube / lite-vimeo custom elements)
  *      never initialise in the editor, so we initialise them here instead.
  *
  * Logs editor mutations to the console in dev; silent in production.
@@ -28,6 +29,7 @@ import {
   setupAllModals,
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
+import { setupAllVideos } from "./src/components/building-blocks/core-elements/video/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
 import { setupAllTocs, setupToc } from "./src/components/navigation/toc/setup";
 import {
@@ -237,6 +239,8 @@ function initNewComponents(root) {
     log("initialising new masonry", el);
     setupMasonry(el);
   }
+
+  setupAllVideos(root);
 }
 
 const observer = new MutationObserver((mutations) => {
@@ -315,6 +319,7 @@ setupAllSearch();
 setupAllTocs();
 setupAllGalleries();
 setupAllMasonry();
+setupAllVideos();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,

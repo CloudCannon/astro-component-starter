@@ -1,6 +1,6 @@
 label: Testimonial Section
 icon: format_quote
-description: Section displaying a customer testimonial with author information.
+description: "Customer quote with the author's name and photo."
 value:
   _component: page-sections/proof/testimonial-section
   sectionLabel: ""

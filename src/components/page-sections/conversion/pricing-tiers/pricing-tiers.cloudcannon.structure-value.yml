@@ -1,16 +1,23 @@
 label: Pricing Tiers
 icon: payments
-description: Plan comparison cards with feature checklists and a highlighted tier.
+description: Plan cards with feature lists, a highlighted plan, and an optional monthly or annual price switch.
 value:
   _component: page-sections/conversion/pricing-tiers
   sectionLabel: ""
   eyebrow: Plans
   heading: Simple pricing that scales with you
   subtext: Every plan includes global CDN hosting and automatic SSL.
+  showAnnualPricing: false
+  monthlyLabel: Monthly
+  annualLabel: Annual
+  annualBadge: ""
+  defaultInterval: monthly
   tiers:
     - name: Starter
       price: $19
       priceSuffix: /month
+      annualPrice: ""
+      annualPriceSuffix: /year
       description: For a single marketing site.
       features:
         - text: 1 site
@@ -30,6 +37,8 @@ value:
     - name: Studio
       price: $59
       priceSuffix: /month
+      annualPrice: ""
+      annualPriceSuffix: /year
       description: For small teams shipping several sites.
       features:
         - text: 10 sites
@@ -49,6 +58,8 @@ value:
     - name: Agency
       price: $149
       priceSuffix: /month
+      annualPrice: ""
+      annualPriceSuffix: /year
       description: For agencies running client fleets.
       features:
         - text: Unlimited sites
@@ -91,7 +102,7 @@ preview:
     fit: cover
 picker_preview:
   text: Pricing Tiers
-  subtext: Plan comparison cards with feature checklists and a highlighted tier.
+  subtext: Plan comparison cards with feature checklists, a highlighted tier, and an optional monthly/annual billing switch.
   image: public/component-previews/page-sections/conversion/pricing-tiers.svg
   gallery:
     image: public/component-previews/page-sections/conversion/pricing-tiers.svg
@@ -107,6 +118,8 @@ _structures:
           name: Plan name
           price: $29
           priceSuffix: /month
+          annualPrice: ""
+          annualPriceSuffix: /year
           description: Who this plan is for.
           features:
             - text: Included feature
@@ -127,10 +140,17 @@ _structures:
             comment: Name of the plan.
           price:
             type: text
-            comment: The price, including the currency symbol (e.g. $19).
+            comment: The price, including the currency symbol (e.g. $19). Shown on the monthly option, and whenever annual pricing is off.
           priceSuffix:
             type: text
             comment: Billing period shown after the price (e.g. /month). Leave empty to hide.
+          annualPrice:
+            type: text
+            comment: Optional annual price (e.g. $190). Used when Annual pricing is on. Leave empty to keep showing the monthly price in both modes.
+          annualPriceSuffix:
+            type: text
+            comment: Billing period shown after the annual price (e.g. /year). Leave empty to hide.
+            hidden: "!annualPrice"
           description:
             type: text
             comment: One line on who the plan is for.
@@ -177,6 +197,11 @@ groups:
       - eyebrow
       - heading
       - subtext
+      - showAnnualPricing
+      - monthlyLabel
+      - annualLabel
+      - annualBadge
+      - defaultInterval
       - tiers
   - heading: Section settings
     comment: Width, spacing, color scheme, and background for this section.

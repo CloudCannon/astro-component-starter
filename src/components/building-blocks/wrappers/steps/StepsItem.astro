@@ -7,8 +7,6 @@ const {
   image = "",
   imageAlt = "",
   contentSections,
-  index = 0,
-  isLast = false,
   imageAspectRatio = "landscape",
   useDefaultEditableBinding = false,
   class: className,
@@ -24,18 +22,17 @@ const arrayDataAttributes = effectiveChildrenProp
   : {};
 
 const showImage = isNonEmptyString(image);
-const stepNumber = Number(index) + 1;
 ---
 
 <li
-  class:list={["step", isLast && "is-last", className]}
+  class:list={["step", className]}
   {...htmlAttributes}
 >
   <div
     class="step-band"
     aria-hidden="true"
   >
-    <span class="step-marker">{stepNumber}</span>
+    <span class="step-marker"></span>
   </div>
   <div class="step-body">
     {

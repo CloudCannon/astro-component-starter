@@ -587,6 +587,49 @@ const tests = [
       );
     },
   },
+  {
+    name: "pricing tiers annual toggle swaps the visible price",
+    path: "/component-docs/components/page-sections/conversion/pricing-tiers/",
+    viewport: DESKTOP,
+    async run(page) {
+      const sectionSel = ".pricing-tiers:has(.pricing-tiers-billing)";
+
+      await page.waitForSelector(sectionSel);
+
+      const before = await page.evaluate((sel) => {
+        const card = document.querySelector(`${sel} .pricing-tier`);
+        const monthly = card?.querySelector(".pricing-tier-price-monthly");
+        const annual = card?.querySelector(".pricing-tier-price-annual");
+
+        return {
+          monthlyText: monthly?.querySelector(".pricing-tier-amount")?.textContent.trim(),
+          annualText: annual?.querySelector(".pricing-tier-amount")?.textContent.trim(),
+          monthlyDisplay: monthly ? getComputedStyle(monthly).display : null,
+          annualDisplay: annual ? getComputedStyle(annual).display : null,
+        };
+      }, sectionSel);
+
+      assert(before.monthlyText === "$19", `expected monthly $19, got ${before.monthlyText}`);
+      assert(before.annualText === "$190", `expected annual $190, got ${before.annualText}`);
+      assert(before.monthlyDisplay === "flex", "monthly price should be visible initially");
+      assert(before.annualDisplay === "none", "annual price should be hidden initially");
+
+      await page.locator(`${sectionSel} .segments-option`).nth(1).click();
+
+      await page.waitForFunction((sel) => {
+        const card = document.querySelector(`${sel} .pricing-tier`);
+        const monthly = card?.querySelector(".pricing-tier-price-monthly");
+        const annual = card?.querySelector(".pricing-tier-price-annual");
+
+        return (
+          monthly &&
+          annual &&
+          getComputedStyle(monthly).display === "none" &&
+          getComputedStyle(annual).display === "flex"
+        );
+      }, sectionSel);
+    },
+  },
 ];
 
 const marker = join(

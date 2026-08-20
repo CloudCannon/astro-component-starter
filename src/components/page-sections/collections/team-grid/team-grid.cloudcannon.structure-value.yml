@@ -1,13 +1,28 @@
 label: Team Grid
 icon: groups
-description: Team member cards in a three-column card grid.
+description: Team member cards in a three-column grid.
 value:
   _component: page-sections/collections/team-grid
   sectionLabel: ""
   eyebrow: Our team
   heading: Meet the team
   subtext: Get to know the people behind our work.
-  teamMembers: []
+  teamMembers:
+    - name: Michael Chen
+      role: CEO & Founder
+      bio: Michael brings over 15 years of experience in product development and team leadership.
+      imageSource: /src/assets/images/component-docs/profile.jpg
+      imageAlt: Michael Chen
+    - name: Sarah Johnson
+      role: Lead Developer
+      bio: Sarah specializes in building scalable applications and mentoring engineering teams.
+      imageSource: /src/assets/images/component-docs/profile1.jpg
+      imageAlt: Sarah Johnson
+    - name: David Kim
+      role: Design Director
+      bio: David creates beautiful, user-centered designs that solve real problems.
+      imageSource: /src/assets/images/component-docs/profile2.jpg
+      imageAlt: David Kim
   maxContentWidth: 2xl
   paddingHorizontal: lg
   paddingVertical: 4xl

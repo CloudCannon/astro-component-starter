@@ -1,6 +1,6 @@
 label: Card Collection
 icon: grid_view
-description: A grid of linked cards — services, case studies, projects, or resources.
+description: Grid of linked cards for services, case studies, projects, or resources.
 value:
   _component: page-sections/collections/card-collection
   sectionLabel: ""

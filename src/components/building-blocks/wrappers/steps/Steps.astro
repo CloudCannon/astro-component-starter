@@ -49,10 +49,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
   >
     <slot>
       {
-        items?.map((item: ItemProps, index: number) => (
+        items?.map((item: ItemProps) => (
           <StepsItem
-            index={index}
-            isLast={index === items.length - 1}
             imageAspectRatio={imageAspectRatio}
             useDefaultEditableBinding={!!effectiveChildrenProp}
             data-editable="array-item"
@@ -74,6 +72,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
       min-width: 0;
 
       .steps-list {
+        counter-reset: step;
         display: grid;
         gap: 0;
         list-style: none;
@@ -86,17 +85,21 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
       /* No-image vertical (and horizontal below 768px): entries abut so the
          rail is one line. Spacing lives in padding-block-end — a list gap
-         would leave a stub shorter than the marker. */
+         would leave a stub shorter than the marker. Last-item rail/spacing
+         is :last-of-type, not an is-last class: CloudCannon inserts array
+         items without re-rendering the parent, so a class baked in at SSR
+         would stick to the original last item. */
       .step {
         border-inline-start: var(--border-width-sm) solid var(--color-border);
+        counter-increment: step;
         padding-block-end: var(--spacing-2xl);
         padding-inline-start: var(--spacing-xl);
         position: relative;
+      }
 
-        &.is-last {
-          border-inline-start-color: transparent;
-          padding-block-end: 0;
-        }
+      .step:last-of-type {
+        border-inline-start-color: transparent;
+        padding-block-end: 0;
       }
 
       .step-band {
@@ -121,6 +124,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
         top: 0;
         width: var(--step-marker-size);
         z-index: var(--layer-1);
+
+        &::before {
+          content: counter(step);
+        }
       }
 
       .step-image {

@@ -1,6 +1,6 @@
 label: Textarea
 icon: text_ad
-description: Form field for entering multi-line text.
+description: Form field for longer text.
 value:
   _component: building-blocks/forms/textarea
   label: My textarea

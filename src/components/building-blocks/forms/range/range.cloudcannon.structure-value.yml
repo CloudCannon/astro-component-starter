@@ -1,6 +1,6 @@
 label: Range
 icon: linear_scale
-description: Slider input for selecting a numeric value within a range.
+description: Slider for choosing a number in a range.
 value:
   _component: building-blocks/forms/range
   label: My range

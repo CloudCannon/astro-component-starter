@@ -1,6 +1,6 @@
 label: Masonry
 icon: view_quilt
-description: A masonry column layout for mixed-height content, preserving reading order.
+description: Column layout for mixed-height items that keeps reading order.
 value:
   _component: building-blocks/wrappers/masonry
   label: ""

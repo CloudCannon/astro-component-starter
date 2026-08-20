@@ -1,6 +1,6 @@
 label: Social Links
 icon: share
-description: A row of social-media icon links — ghost icons or solid brand tiles.
+description: Row of social media icon links.
 value:
   _component: building-blocks/core-elements/social-links
   links:

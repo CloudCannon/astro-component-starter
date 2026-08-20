@@ -1,6 +1,6 @@
 ---
 title: Content Selector
-overview: 'Displays content panels in CSS-only tabs. Supports slot-based composition with `ContentSelectorPanel` children and `items` fallback, with navigation positions at top or start.'
+overview: Tabs that switch between content panels. Navigation can sit at the top or the start.
 slots:
   - title: default
     description: The tab items inside the selector.

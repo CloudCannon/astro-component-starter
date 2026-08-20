@@ -10,7 +10,6 @@ const {
   body = "",
   layout = "vertical",
   grouped = false,
-  isLast = false,
   useDefaultEditableBinding = false,
   class: className,
   _component,
@@ -27,7 +26,7 @@ const dateBinding =
 ---
 
 <li
-  class:list={["timeline-entry", isLast && "is-last", className]}
+  class:list={["timeline-entry", className]}
   {...htmlAttributes}
 >
   {

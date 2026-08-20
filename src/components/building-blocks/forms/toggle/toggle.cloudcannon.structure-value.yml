@@ -1,6 +1,6 @@
 label: Toggle
 icon: toggle_on
-description: Toggle switch form field for binary choices.
+description: On/off switch.
 value:
   _component: building-blocks/forms/toggle
   label: My toggle

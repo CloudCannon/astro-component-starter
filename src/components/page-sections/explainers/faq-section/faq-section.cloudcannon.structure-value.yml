@@ -1,6 +1,6 @@
 label: FAQ Section
 icon: help
-description: Section displaying frequently asked questions in an accordion format.
+description: Frequently asked questions in an accordion.
 value:
   _component: page-sections/explainers/faq-section
   sectionLabel: ""

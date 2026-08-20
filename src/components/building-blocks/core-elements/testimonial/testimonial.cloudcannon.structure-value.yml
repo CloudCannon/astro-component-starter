@@ -1,6 +1,6 @@
 label: Testimonial
 icon: format_quote
-description: Displays customer quotes and reviews.
+description: Customer quote with an optional name, role, and photo.
 value:
   _component: building-blocks/core-elements/testimonial
   text: My testimonial text.

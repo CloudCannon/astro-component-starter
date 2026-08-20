@@ -1,6 +1,6 @@
 label: Button Group
 icon: rectangle
-description: Arranges buttons side by side with consistent spacing.
+description: Arranges buttons in a row or column with even spacing.
 value:
   _component: building-blocks/wrappers/button-group
   label: null

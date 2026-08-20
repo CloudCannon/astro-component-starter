@@ -1,6 +1,6 @@
 label: Pricing Comparison
 icon: table_chart
-description: A feature-by-feature comparison table across plans.
+description: Table that compares features across plans.
 value:
   _component: page-sections/conversion/pricing-comparison
   sectionLabel: ""

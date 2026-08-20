@@ -1,6 +1,6 @@
 label: Card Grid
 icon: view_module
-description: An exact-column grid of cards — cover, optional tile link, and an open content body.
+description: Grid of cards with a cover image and freeform content.
 value:
   _component: building-blocks/wrappers/card-grid
   label: ""

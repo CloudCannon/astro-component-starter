@@ -233,76 +233,263 @@ type PropertyMeta = {
   arrayItemProperties?: PropertyMeta[];
 };
 
+type InputGroup = {
+  heading?: string;
+  comment?: string;
+  collapsed?: boolean;
+  inputs?: string[];
+};
+
+type PropertyGroup = {
+  heading: string;
+  comment: string;
+  collapsed: boolean;
+  properties: PropertyMeta[];
+};
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+/**
+ * Mirror CloudCannon's `groups` block so page-section shell props sit in a
+ * collapsed "Section settings" disclosure instead of mixing with content.
+ * Building blocks have no groups and stay a flat list.
+ */
+function groupProperties(properties: PropertyMeta[], configData: any): PropertyGroup[] {
+  const groups = configData?.groups as InputGroup[] | undefined;
+
+  if (!Array.isArray(groups) || groups.length === 0) {
+    return [{ heading: "", comment: "", collapsed: false, properties }];
+  }
+
+  const byName = new Map(properties.map((property) => [property.name, property]));
+  const used = new Set<string>();
+  const result: PropertyGroup[] = [];
+
+  for (const group of groups) {
+    const groupProps = (group.inputs || [])
+      .map((name) => byName.get(name))
+      .filter((property): property is PropertyMeta => Boolean(property));
+
+    for (const property of groupProps) {
+      used.add(property.name);
+    }
+
+    if (groupProps.length === 0) continue;
+
+    result.push({
+      heading: group.heading || "",
+      comment: group.comment || "",
+      collapsed: Boolean(group.collapsed),
+      properties: groupProps,
+    });
+  }
+
+  const leftover = properties.filter((property) => !used.has(property.name));
+
+  if (leftover.length > 0) {
+    const firstOpen = result.find((group) => !group.collapsed);
+
+    if (firstOpen) {
+      firstOpen.properties = [...leftover, ...firstOpen.properties];
+    } else {
+      result.unshift({ heading: "", comment: "", collapsed: false, properties: leftover });
+    }
+  }
+
+  return result;
+}
+
 const properties: PropertyMeta[] = configData ? parseConfigProperties(configData) : [];
+const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
 ---
 
 <div class="properties">
   {
-    properties.length > 0 ? (
-      properties.map((prop: PropertyMeta) => {
-        function renderProperty(prop: PropertyMeta) {
+    (() => {
+      function renderProperty(prop: PropertyMeta) {
+        return (
+          <div class="property">
+            <h3>
+              <span class="property-name">{prop.name}</span>{" "}
+              <span class="property-type">
+                {prop.type}
+                {prop.default && prop.type !== "object" && ` | default: ${prop.default}`}
+              </span>
+            </h3>
+            {prop.description && <p>{prop.description}</p>}
+
+            {prop.enumValues && prop.enumValues.length > 0 && (
+              <div class="enum-values">
+                <strong>Accepted values:</strong>
+                <ul>
+                  {prop.enumValues.map((value: string) => (
+                    <li>
+                      <code>{value}</code>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {prop.nestedProperties && prop.nestedProperties.length > 0 && (
+              <div class="nested-properties">
+                <strong>Properties:</strong>
+                <div class="nested-property-list">
+                  {prop.nestedProperties.map((nestedProp: PropertyMeta) =>
+                    renderProperty(nestedProp)
+                  )}
+                </div>
+              </div>
+            )}
+
+            {prop.arrayItemProperties && prop.arrayItemProperties.length > 0 && (
+              <div class="nested-properties">
+                <strong>Item Properties:</strong>
+                <div class="nested-property-list">
+                  {prop.arrayItemProperties.map((itemProp: PropertyMeta) =>
+                    renderProperty(itemProp)
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      if (propertyGroups.length === 0 || properties.length === 0) {
+        return (
+          <p>
+            No properties available. Make sure the component has a valid
+            .cloudcannon.structure-value.yml file.
+          </p>
+        );
+      }
+
+      return propertyGroups.map((group) => {
+        const list = group.properties.map((prop) => renderProperty(prop));
+        const showHeading = Boolean(group.heading) && group.heading !== "Content";
+
+        if (group.collapsed) {
           return (
-            <div class="property">
-              <h3>
-                <span class="property-name">{prop.name}</span>{" "}
-                <span class="property-type">
-                  {prop.type}
-                  {prop.default && prop.type !== "object" && ` | default: ${prop.default}`}
+            <details
+              class="property-group"
+              id={group.heading ? slugify(group.heading) : undefined}
+            >
+              <summary>
+                <span class="property-group-text">
+                  <span class="property-group-heading">{group.heading || "More settings"}</span>
+                  {group.comment && <span class="property-group-comment">{group.comment}</span>}
                 </span>
-              </h3>
-              {prop.description && <p>{prop.description}</p>}
-
-              {prop.enumValues && prop.enumValues.length > 0 && (
-                <div class="enum-values">
-                  <strong>Accepted values:</strong>
-                  <ul>
-                    {prop.enumValues.map((value: string) => (
-                      <li>
-                        <code>{value}</code>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {prop.nestedProperties && prop.nestedProperties.length > 0 && (
-                <div class="nested-properties">
-                  <strong>Properties:</strong>
-                  <div class="nested-property-list">
-                    {prop.nestedProperties.map((nestedProp: PropertyMeta) =>
-                      renderProperty(nestedProp)
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {prop.arrayItemProperties && prop.arrayItemProperties.length > 0 && (
-                <div class="nested-properties">
-                  <strong>Item Properties:</strong>
-                  <div class="nested-property-list">
-                    {prop.arrayItemProperties.map((itemProp: PropertyMeta) =>
-                      renderProperty(itemProp)
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </summary>
+              <div class="property-group-body">{list}</div>
+            </details>
           );
         }
 
-        return renderProperty(prop);
-      })
-    ) : (
-      <p>
-        No properties available. Make sure the component has a valid
-        .cloudcannon.structure-value.yml file.
-      </p>
-    )
+        return (
+          <div class="property-group-open">
+            {showHeading && <h3 class="property-group-title">{group.heading}</h3>}
+            {list}
+          </div>
+        );
+      });
+    })()
   }
 </div>
 
 <style is:global>
   .properties {
+    .property-group {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      margin-top: var(--spacing-lg);
+      overflow: hidden;
+
+      > summary {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: space-between;
+        list-style: none;
+        padding: var(--spacing-md);
+        user-select: none;
+
+        &:hover {
+          background-color: var(--color-bg-surface);
+        }
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        svg {
+          flex-shrink: 0;
+          height: 14px;
+          transition: transform var(--animation-fast) var(--ease-in-out);
+          width: 14px;
+        }
+      }
+
+      &[open] > summary {
+        border-bottom: 1px solid var(--color-border-subtle);
+
+        svg {
+          transform: rotate(180deg);
+        }
+      }
+
+      .property-group-text {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xs);
+        min-width: 0;
+      }
+
+      .property-group-heading {
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-semibold);
+      }
+
+      .property-group-comment {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+      }
+
+      .property-group-body {
+        padding-inline: var(--spacing-md);
+        padding-bottom: var(--spacing-md);
+
+        > .property:first-child {
+          border-top: none;
+        }
+      }
+    }
+
+    .property-group-title {
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      margin-block: var(--spacing-lg) 0;
+    }
+
     .property {
       border-top: 1px solid var(--color-border-subtle);
       padding-block: var(--spacing-md);

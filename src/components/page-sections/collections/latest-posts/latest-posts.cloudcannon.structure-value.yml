@@ -1,6 +1,6 @@
 label: Latest Posts
 icon: newsmode
-description: The newest blog posts as cards, pulled automatically at build time.
+description: Newest blog posts as cards, loaded automatically when the site builds.
 value:
   _component: page-sections/collections/latest-posts
   sectionLabel: ""

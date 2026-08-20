@@ -1,6 +1,6 @@
 label: Alert
 icon: campaign
-description: Status callout box — info, success, warning, danger, or a neutral note.
+description: 'Status message: info, success, warning, danger, or a note.'
 value:
   _component: building-blocks/core-elements/alert
   variant: info

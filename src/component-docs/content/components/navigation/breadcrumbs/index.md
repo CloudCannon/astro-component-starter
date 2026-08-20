@@ -1,7 +1,7 @@
 ---
 title: 'Breadcrumbs'
-description: 'A wayfinding trail showing where the current page sits in the site.'
-overview: 'Renders a Home › Blog › page trail above blog post and tag page titles, with the current page as plain text. The leading crumb links to the homepage and its label comes from `src/data/breadcrumbs.json` (editable in CloudCannon under Data). Long titles clamp with an ellipsis so the trail stays on one line, on small screens the trail collapses to a single back-link to the parent, and every trail emits schema.org `BreadcrumbList` structured data for search engines. It is rendered automatically by the blog templates rather than added through the page builder.'
+description: Trail of links showing where the current page sits in the site.
+overview: A trail of links showing where the current page sits in the site. Blog templates add it automatically. On small screens it becomes a single back link.
 examples:
   - title: 'Long titles clamp'
     slugs:

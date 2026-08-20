@@ -1,8 +1,11 @@
 ---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
+import Segments from "@forms/segments/Segments.astro";
 import PricingTiersItem from "@page-sections/conversion/pricing-tiers/PricingTiersItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
 
@@ -12,6 +15,11 @@ const {
   eyebrow = "",
   heading = "",
   subtext = "",
+  showAnnualPricing = false,
+  monthlyLabel = "Monthly",
+  annualLabel = "Annual",
+  annualBadge = "",
+  defaultInterval = "monthly",
   tiers = [],
   sectionLabel,
   maxContentWidth = "2xl",
@@ -26,6 +34,9 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const billingName = `pricing-billing-${crypto.randomUUID()}`;
+const annualSelected = defaultInterval === "annual";
 ---
 
 <CustomSection
@@ -62,6 +73,38 @@ const {
     data-prop="subtext"
     text={subtext}
   />
+  {
+    showAnnualPricing && (
+      <div class="pricing-tiers-billing">
+        <Segments
+          class="pricing-tiers-billing-segments"
+          name={billingName}
+          aria-label={`${monthlyLabel} or ${annualLabel}`}
+          options={[
+            {
+              value: "monthly",
+              label: monthlyLabel,
+              checked: !annualSelected,
+            },
+            {
+              value: "annual",
+              label: annualLabel,
+              checked: annualSelected,
+            },
+          ]}
+        />
+        {isNonEmptyString(annualBadge) && (
+          <Badge
+            class="pricing-tiers-billing-badge"
+            variant="success"
+            size="sm"
+            text={annualBadge}
+            data-prop="annualBadge"
+          />
+        )}
+      </div>
+    )
+  }
   <Grid
     gap="lg"
     minItemWidth={272}
@@ -76,6 +119,7 @@ const {
           data-id="page-sections/conversion/pricing-tiers/pricing-tiers-item"
           data-editable="array-item"
           {...tier}
+          showAnnualPricing={showAnnualPricing}
         />
       ))
     }
@@ -84,6 +128,36 @@ const {
 
 <style is:global>
   @layer page-sections {
+    .pricing-tiers-billing {
+      align-items: center;
+      column-gap: var(--spacing-sm);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      margin-top: var(--spacing-xl);
+
+      > .pricing-tiers-billing-segments {
+        grid-column: 2;
+        width: max-content;
+      }
+
+      > .pricing-tiers-billing-badge {
+        justify-self: start;
+      }
+
+      /* Stack so a long savings chip can't shove the switch off-center. */
+      @media (width < 640px) {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        row-gap: var(--spacing-sm);
+
+        > .pricing-tiers-billing-segments,
+        > .pricing-tiers-billing-badge {
+          grid-column: 1;
+          justify-self: center;
+        }
+      }
+    }
+
     .pricing-tiers-grid {
       /* The highlighted tier's "Most popular" badge overhangs its card top —
          the extra top margin is its headroom. */

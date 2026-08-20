@@ -11,5 +11,5 @@ blocks:
   triggerVariant: 'primary'
   triggerSize: 'md'
   triggerIconName: 'play-circle'
-  size: 'lg'
+  size: 'xl'
 ---

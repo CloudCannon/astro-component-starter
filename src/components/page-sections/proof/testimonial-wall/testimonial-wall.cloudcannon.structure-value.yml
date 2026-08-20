@@ -1,6 +1,6 @@
 label: Testimonial Wall
 icon: reviews
-description: Several customer quotes as cards in a masonry wall.
+description: Several customer quotes as cards in a masonry layout.
 value:
   _component: page-sections/proof/testimonial-wall
   sectionLabel: ""

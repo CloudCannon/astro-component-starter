@@ -1,6 +1,6 @@
 label: Timeline
 icon: timeline
-description: A dated sequence on a rail — company story, funding, or what's next.
+description: Dated timeline for a company story, funding history, or what comes next.
 value:
   _component: page-sections/explainers/timeline
   sectionLabel: ""

@@ -1,6 +1,6 @@
 label: Content Selector
 icon: view_sidebar
-description: Lets users switch between different content panels using tabs.
+description: Tabs that switch between content panels.
 value:
   _component: building-blocks/wrappers/content-selector
   label: ""

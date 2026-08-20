@@ -1,6 +1,6 @@
 label: Divider
 icon: horizontal_rule
-description: Visual separator for dividing content sections.
+description: Horizontal line that separates content.
 value:
   _component: building-blocks/core-elements/divider
   paddingVertical: lg

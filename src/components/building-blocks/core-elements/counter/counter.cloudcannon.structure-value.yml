@@ -1,6 +1,6 @@
 label: Counter
 icon: speed
-description: Animated counter for highlighting key stats or figures.
+description: Number that counts up to a target value.
 value:
   _component: building-blocks/core-elements/counter
   number: 100

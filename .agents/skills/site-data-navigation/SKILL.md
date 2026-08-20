@@ -157,7 +157,7 @@ Real content of `src/data/seo.json`:
 | `name`        | string | `og:site_name` meta tag; `Organization` JSON-LD `name`.                                                                                                                                         |
 | `url`         | string | Fallback base for resolving `logoSource` into an absolute URL (`new URL(site.logoSource, site.url)` in `StructuredData.astro`); also the fallback if `Astro.site` isn't set in `SeoHead.astro`. |
 | `description` | string | Fallback `<meta name="description">` / `og:description` when a page doesn't set its own.                                                                                                        |
-| `logoSource`  | string | Fallback `og:image`; also the JSON-LD `Organization.logo`.                                                                                                                                      |
+| `logoSource`  | string | Fallback `og:image` (with width/height/alt; local photos are cropped to 1200×630); also the JSON-LD `Organization.logo`.                                                                          |
 | `titleFormat` | string | `<title>` template — literal substring `{title}` is replaced with the page's title.                                                                                                             |
 
 **MUST:** keep `_schema: seo` in the file. **Why:** it's what makes CloudCannon apply the `seo` schema (`cloudcannon.config.yml` → `collections_config.data.schemas.seo`, backed by `.cloudcannon/schemas/seo.json`) instead of the generic data-file editor.

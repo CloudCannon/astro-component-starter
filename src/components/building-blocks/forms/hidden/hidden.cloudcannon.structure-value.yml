@@ -1,6 +1,6 @@
 label: Hidden
 icon: visibility_off
-description: Hidden form field for storing data.
+description: Hidden form field for extra data.
 value:
   _component: building-blocks/forms/hidden
   name: my_hidden

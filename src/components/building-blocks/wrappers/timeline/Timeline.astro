@@ -72,10 +72,9 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           {...arrayDataAttributes}
         >
           <slot>
-            {entries?.map((entry: EntryProps, index: number) => (
+            {entries?.map((entry: EntryProps) => (
               <TimelineItem
                 layout={layout}
-                isLast={index === entries.length - 1}
                 useDefaultEditableBinding={!!effectiveChildrenProp}
                 data-editable="array-item"
                 data-id="building-blocks/wrappers/timeline/timeline-item"
@@ -91,15 +90,14 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         {...arrayDataAttributes}
       >
         <slot>
-          {groups.map((group, groupIndex) => (
-            <li class:list={["timeline-group", groupIndex === groups.length - 1 && "is-last"]}>
+          {groups.map((group) => (
+            <li class="timeline-group">
               <h3 class="timeline-year">{group.year}</h3>
               <ol class="timeline-group-list">
-                {group.entries.map((entry, index) => (
+                {group.entries.map((entry) => (
                   <TimelineItem
                     layout={layout}
                     grouped={true}
-                    isLast={groupIndex === groups.length - 1 && index === group.entries.length - 1}
                     useDefaultEditableBinding={!!effectiveChildrenProp}
                     data-editable="array-item"
                     data-id="building-blocks/wrappers/timeline/timeline-item"
@@ -117,10 +115,9 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         {...arrayDataAttributes}
       >
         <slot>
-          {entries?.map((entry: EntryProps, index: number) => (
+          {entries?.map((entry: EntryProps) => (
             <TimelineItem
               layout={layout}
-              isLast={index === entries.length - 1}
               useDefaultEditableBinding={!!effectiveChildrenProp}
               data-editable="array-item"
               data-id="building-blocks/wrappers/timeline/timeline-item"
@@ -185,7 +182,10 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
       /* Vertical (default): one unbroken rail from the first dot to the last.
          Not gated on .layout-vertical — that's the default, and the docs
-         primary breaks if this CSS only runs when the class is present. */
+         primary breaks if this CSS only runs when the class is present.
+         Last-item overlay is :last-of-type, not an is-last class: CloudCannon
+         inserts array items without re-rendering the parent, so a class
+         baked in at SSR would stick to the original last item. */
       &:not(.layout-horizontal):not(.is-grouped) {
         .timeline-list {
           display: grid;
@@ -225,7 +225,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           position: absolute;
         }
 
-        .timeline-entry.is-last .timeline-content {
+        .timeline-entry:last-of-type .timeline-content {
           padding-block-end: 0;
 
           &::after {
@@ -242,7 +242,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           }
         }
 
-        .timeline-entry.is-last .timeline-dot {
+        .timeline-entry:last-of-type .timeline-dot {
           z-index: var(--layer-2);
         }
 
@@ -285,7 +285,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           padding-inline-start: var(--spacing-xl);
         }
 
-        .timeline-group.is-last .timeline-group-list {
+        .timeline-group:last-of-type .timeline-group-list {
           padding-block-end: 0;
         }
 
@@ -299,7 +299,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           position: absolute;
         }
 
-        .timeline-group.is-last .timeline-entry.is-last::after {
+        .timeline-group:last-of-type .timeline-entry:last-of-type::after {
           background-color: var(--color-bg);
           content: "";
           inset-block-end: 0;
@@ -310,7 +310,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           z-index: var(--layer-1);
         }
 
-        .timeline-group.is-last .timeline-entry.is-last .timeline-dot {
+        .timeline-group:last-of-type .timeline-entry:last-of-type .timeline-dot {
           z-index: var(--layer-2);
         }
 
@@ -391,7 +391,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           margin-block-start: var(--spacing-md);
         }
 
-        .timeline-entry.is-last .timeline-band {
+        .timeline-entry:last-of-type .timeline-band {
           margin-inline-end: 0;
 
           &::after {

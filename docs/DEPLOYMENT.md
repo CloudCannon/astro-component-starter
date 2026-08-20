@@ -11,7 +11,7 @@ no build settings to fill in by hand.
 | `.cloudcannon/initial-site-settings.json` | Build defaults CloudCannon reads on first sync: SSG `astro`, `npm ci`, `npm run build`, output `dist`, Node version from `.nvmrc`. |
 | `cloudcannon.config.yml`                  | Collections, data editing, the icon picker, and the globs that pull in every component's schema.                                   |
 | `.cloudcannon/structures/`                | Generated "Add section" entries — one per component, with previews.                                                                |
-| `.cloudcannon/routing.json`               | 404 handling and the `X-Robots-Tag` header on the 404 page.                                                                        |
+| `.cloudcannon/routing.json`               | 404 handling, security headers (HSTS, nosniff, framing, referrer, permissions), and `X-Robots-Tag` on the 404 page.                |
 | `.cloudcannon/schemas/`                   | Front matter schemas for new pages and posts.                                                                                      |
 
 Because component schemas are aggregated by glob, a component you add is registered with the
@@ -75,6 +75,7 @@ in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages
 - `npm run build && npm run preview` — production build with search indexed.
 - Confirm `src/data/seo.json` has your name, description, and logo, and that
   `src/data/mainNav.json` and `footer.json` don't still link to `/component-docs/`.
+- Edit `public/llms.txt` so it lists _your_ pages, not the starter's Home / Why / Blog.
 
 `npm run build` strips the component documentation from the output: the per-component pages
 aren't generated at all, and `/component-docs/`, `/gallery/` and `/component-builder/` render

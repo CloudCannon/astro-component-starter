@@ -1,6 +1,6 @@
 label: Accordion
 icon: expand_all
-description: Interactive component for showing and hiding content panels.
+description: Expandable panels that show or hide content.
 value:
   _component: building-blocks/wrappers/accordion
   label: null

@@ -1,6 +1,6 @@
 label: Rating
 icon: star_rate
-description: Star rating out of five, with half-star support and an optional value label.
+description: Star rating out of five, with half stars and an optional number.
 value:
   _component: building-blocks/core-elements/rating
   value: 4.5

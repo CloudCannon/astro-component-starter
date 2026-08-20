@@ -1,6 +1,6 @@
 label: Steps
 icon: format_list_numbered
-description: A numbered "how it works" sequence. Markers sit on a per-step rail; optional images share one crop.
+description: Numbered how-it-works sequence with optional images.
 value:
   _component: page-sections/explainers/steps
   sectionLabel: ""

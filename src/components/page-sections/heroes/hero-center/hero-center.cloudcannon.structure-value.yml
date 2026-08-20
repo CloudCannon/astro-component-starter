@@ -1,6 +1,6 @@
 label: Hero Center
 icon: web_asset
-description: Centered hero with heading, supporting text, and buttons.
+description: Centered hero with a heading, supporting text, and buttons.
 value:
   _component: page-sections/heroes/hero-center
   sectionLabel: ""

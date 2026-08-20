@@ -1,7 +1,7 @@
 ---
 title: Grid
 order: 4
-overview: 'A responsive grid layout for displaying multiple items in rows and columns. Supports adjustable spacing, layouts, and width bounds.'
+overview: A responsive grid of items in rows and columns. Set spacing, layout, and width.
 slots:
   - title: default
     description: The contents for the the Grid.

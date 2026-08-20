@@ -1,6 +1,6 @@
 label: Bar Navigation
 icon: navigation
-description: "Horizontal navigation bar with dropdown menus."
+description: Horizontal navigation bar with dropdown menus.
 value:
   _component: navigation/bar
   navData: []

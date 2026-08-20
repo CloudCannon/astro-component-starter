@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { humanizeSlug, trailFromPathname } from "../../src/components/utils/breadcrumbTrail";
+import {
+  breadcrumbListJsonLd,
+  humanizeSlug,
+  trailFromPathname,
+} from "../../src/components/utils/breadcrumbTrail";
 
 describe("humanizeSlug", () => {
   it("turns a slug into sentence case", () => {
@@ -37,5 +41,46 @@ describe("trailFromPathname", () => {
       { label: "Services", url: "/services/" },
       { label: "Design" },
     ]);
+  });
+});
+
+describe("breadcrumbListJsonLd", () => {
+  it("prepends Home and omits item on the current page", () => {
+    expect(
+      breadcrumbListJsonLd([{ label: "Blog", url: "/blog/" }, { label: "A post" }], {
+        base: "https://example.com",
+      })
+    ).toEqual({
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://example.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: "https://example.com/blog/",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "A post",
+        },
+      ],
+    });
+  });
+
+  it("uses the configured home label", () => {
+    const data = breadcrumbListJsonLd([], {
+      homeLabel: "Start",
+      base: "https://example.com",
+    });
+
+    expect(data.itemListElement[0]).toMatchObject({ name: "Start", item: "https://example.com/" });
   });
 });

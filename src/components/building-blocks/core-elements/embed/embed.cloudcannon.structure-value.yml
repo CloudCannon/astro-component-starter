@@ -1,6 +1,6 @@
 label: Embed
 icon: data_object
-description: Responsive wrapper for third-party embeds and raw HTML content.
+description: Embed for maps, iframes, or raw HTML.
 value:
   _component: building-blocks/core-elements/embed
   html: ""

@@ -1,6 +1,6 @@
 label: Feature Grid
 icon: apps
-description: Responsive grid layout for highlighting multiple product features.
+description: Grid of features with icons and short descriptions.
 value:
   _component: page-sections/explainers/feature-grid
   sectionLabel: ""

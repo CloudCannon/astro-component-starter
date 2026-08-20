@@ -23,3 +23,27 @@ export function trailFromPathname(pathname: string, currentLabel?: string): Brea
     return isCurrent ? { label } : { label, url: `/${segments.slice(0, index + 1).join("/")}/` };
   });
 }
+
+/**
+ * Schema.org BreadcrumbList for a trail *after* Home. Same shape `Breadcrumbs`
+ * emits next to the visible nav — posts reuse this without rendering the trail.
+ */
+export function breadcrumbListJsonLd(
+  items: BreadcrumbItem[],
+  options: { homeLabel?: string; base: URL | string }
+) {
+  const homeLabel = String(options.homeLabel ?? "").trim() || "Home";
+  const trail = [{ label: homeLabel, url: "/" }, ...items];
+  const base = options.base;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: trail.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.label,
+      ...(item.url ? { item: new URL(item.url, base).href } : {}),
+    })),
+  };
+}

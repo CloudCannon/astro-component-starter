@@ -1,6 +1,6 @@
 label: Logo Cloud
 icon: workspaces
-description: A "trusted by" strip of client logos with an optional muted lead line.
+description: Row of client logos, with an optional heading.
 value:
   _component: page-sections/proof/logo-cloud
   sectionLabel: ""

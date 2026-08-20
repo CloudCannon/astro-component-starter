@@ -19,7 +19,7 @@ const {
   posterImage = "",
   posterAlt = "",
   posterAspectRatio = "widescreen",
-  size = "lg",
+  size = "xl",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -151,6 +151,17 @@ const embedSrc =
             embedContainer.replaceChildren();
           }
         }
+      });
+
+      // The overlay fills the viewport, so the popover API's light dismiss
+      // never fires — a click on the dark surround closes instead. Clicks on
+      // the player or the close control stay inside the chrome.
+      popover.addEventListener("click", (e) => {
+        const target = e.target as HTMLElement;
+
+        if (target.closest(".modal-body") || target.closest(".modal-close")) return;
+
+        popover.hidePopover();
       });
     });
   }

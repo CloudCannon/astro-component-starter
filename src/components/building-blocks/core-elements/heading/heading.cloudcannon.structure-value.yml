@@ -1,6 +1,6 @@
 label: Heading
 icon: title
-description: Headings for content hierarchy.
+description: Heading from h1 to h6.
 value:
   _component: building-blocks/core-elements/heading
   text: My Heading

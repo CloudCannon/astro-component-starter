@@ -1,6 +1,6 @@
 label: Video
 icon: videocam
-description: Video component for YouTube, Vimeo, and HTML5 sources.
+description: Video from YouTube, Vimeo, or a local file.
 value:
   _component: building-blocks/core-elements/video
   type: youtube

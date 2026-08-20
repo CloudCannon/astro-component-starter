@@ -1,6 +1,6 @@
 label: Grid
 icon: grid_on
-description: Arranges content into a grid that adapts to screen size.
+description: Arranges content in a grid that adapts to the screen size.
 value:
   _component: building-blocks/wrappers/grid
   label: ""

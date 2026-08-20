@@ -1,5 +1,5 @@
 {
   "_schema": "announcementBar",
   "enabled": true,
-  "text": "Announce something exciting here! [Learn more](/why/)"
+  "text": "Announce something exciting here! [Why we built this](/why/)"
 }

@@ -111,8 +111,9 @@ const isInfraProp = (key) => INFRA_PROPS.has(key) || key.startsWith("data-");
 
 // Wiring props specific to the fixed set of *child-item* components a parent
 // wrapper passes state into — `isOpen`/`accordionName` (AccordionItem),
-// `checked`/`groupName` (ContentSelectorPanel), `imageAspectRatio`/`isLast`
-// (StepsItem). These names collide with genuine content props elsewhere
+// `checked`/`groupName` (ContentSelectorPanel), `imageAspectRatio`
+// (StepsItem), `showAnnualPricing` (PricingTiersItem). These names collide
+// with genuine content props elsewhere
 // (`toggle`'s own `checked`, the parent Steps wrapper's own `imageAspectRatio`),
 // so — unlike INFRA_PROPS — this set is scoped to exactly one call site:
 // filtering a sibling `.astro`'s own destructure for a child-item footnote.
@@ -125,9 +126,9 @@ const CHILD_WIRING_PROPS = new Set([
   "checked",
   "groupName",
   "imageAspectRatio",
-  "isLast",
   "layout",
   "grouped",
+  "showAnnualPricing",
 ]);
 
 /**

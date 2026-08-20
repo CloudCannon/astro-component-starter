@@ -4,6 +4,7 @@ import {
   heightForWidth,
   prepareImageData,
   resolveImageSource,
+  resolveShareImage,
 } from "../../src/components/utils/image";
 
 // image.ts eagerly globs /src/assets/images/**/* and imports `astro:assets`
@@ -21,6 +22,24 @@ describe("resolveImageSource", () => {
     expect(resolveImageSource("/src/assets/images/definitely-not-a-real-file-xyz.jpg")).toBe(
       "/src/assets/images/definitely-not-a-real-file-xyz.jpg"
     );
+  });
+});
+
+describe("resolveShareImage", () => {
+  it("returns remote and public paths with no dimensions", () => {
+    expect(resolveShareImage("https://example.com/share.jpg")).toEqual({
+      src: "https://example.com/share.jpg",
+      isSvg: false,
+    });
+    expect(resolveShareImage("/images/uploaded.png")).toEqual({
+      src: "/images/uploaded.png",
+      isSvg: false,
+    });
+  });
+
+  it("flags SVG sources so callers skip the 1200×630 raster crop", () => {
+    expect(resolveShareImage("https://example.com/mark.svg").isSvg).toBe(true);
+    expect(resolveShareImage("/brand.svg").isSvg).toBe(true);
   });
 });
 

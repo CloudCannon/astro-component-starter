@@ -148,15 +148,19 @@
 
         .line {
           &::before {
+            box-sizing: content-box;
             color: #6e7681;
             content: counter(line);
             counter-increment: line;
             display: inline-block;
+            font-variant-numeric: tabular-nums;
             margin-right: 16px;
-            min-width: 2em;
             padding-left: 16px;
             text-align: right;
             user-select: none;
+            /* Fixed width so 9 → 10 doesn't grow the gutter and shift that
+               line's YAML one space right of its siblings. */
+            width: 2em;
           }
         }
       }

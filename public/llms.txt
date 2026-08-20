@@ -1,0 +1,14 @@
+# Astro Component Starter
+
+> Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.
+
+## Pages
+
+- [Home](/): Fast, visually editable components for Astro and CloudCannon.
+- [Why](/why/): Why this starter was built and how it helps teams ship static sites.
+- [Blog](/blog/): Articles on development, design, and the component library.
+
+## Blog
+
+- [A Better Starting Point for Modern Websites](/blog/2025-10-15-why-we-built-our-component-starter/): Predictable structure, honest docs, and a component set you can actually ship.
+- [Accessibility Shouldn't Be an Afterthought](/blog/2025-12-10-accessibility-by-default/): Semantic structure, focusable controls, and inclusive defaults.

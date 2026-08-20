@@ -1,4 +1,5 @@
 ---
+import { breadcrumbListJsonLd } from "@components/utils/breadcrumbTrail";
 import Icon from "@core-elements/icon/Icon.astro";
 import breadcrumbsData from "@data/breadcrumbs.json";
 
@@ -17,18 +18,10 @@ const backTarget = trail
   .reverse()
   .find((item) => item.url);
 
-// The last position may omit `item`: schema.org reads it as the current page.
-const base = Astro.site ?? Astro.url;
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: trail.map((item, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    name: item.label,
-    ...(item.url ? { item: new URL(item.url, base).href } : {}),
-  })),
-};
+const structuredData = breadcrumbListJsonLd(items, {
+  homeLabel,
+  base: Astro.site ?? Astro.url,
+});
 ---
 
 <nav

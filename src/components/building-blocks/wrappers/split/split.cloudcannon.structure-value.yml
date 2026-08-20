@@ -1,6 +1,6 @@
 label: Split
 icon: vertical_split
-description: Two-column layout for side-by-side content.
+description: Two columns of content side by side.
 value:
   _component: building-blocks/wrappers/split
   label: ""

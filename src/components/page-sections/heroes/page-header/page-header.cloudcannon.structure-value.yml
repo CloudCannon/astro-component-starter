@@ -1,6 +1,6 @@
 label: Page Header
 icon: title
-description: A slim title block for interior pages, with optional breadcrumbs.
+description: Slim title block for inner pages, with optional breadcrumbs.
 value:
   _component: page-sections/heroes/page-header
   sectionLabel: ""

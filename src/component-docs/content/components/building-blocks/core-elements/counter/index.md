@@ -1,6 +1,6 @@
 ---
 title: Counter
-overview: 'Displays animated numeric values for key stats or figures, with support for prefix and suffix text, sizing, and alignment. For a unanimated version use [Heading](/component-docs/components/building-blocks/core-elements/heading/).'
+overview: 'A number that counts up when it scrolls into view. For a number that does not animate, use [Heading](/component-docs/components/building-blocks/core-elements/heading/) instead.'
 examples:
   - slugs:
       - alignment-start

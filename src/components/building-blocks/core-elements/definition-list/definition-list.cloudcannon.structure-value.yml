@@ -1,6 +1,6 @@
 label: Definition List
 icon: dns
-description: Lists term/definition pairs for structured content.
+description: List of terms and their definitions.
 value:
   _component: building-blocks/core-elements/definition-list
   items: []

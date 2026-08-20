@@ -1,6 +1,6 @@
 label: Mobile Navigation
 icon: smartphone
-description: "Mobile navigation with full-screen overlay."
+description: Mobile navigation that opens as a full-screen menu.
 value:
   _component: navigation/mobile
   logoSource: null

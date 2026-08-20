@@ -1,6 +1,6 @@
 label: Modal
 icon: open_in_new
-description: Dialog overlay triggered by a button, for focused content or actions.
+description: Popup dialog opened by a button.
 value:
   _component: building-blocks/wrappers/modal
   label: null

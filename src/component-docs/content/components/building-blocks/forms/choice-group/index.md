@@ -1,6 +1,6 @@
 ---
 title: Choice Group
-overview: 'Lets users choose one or more options from a list. Can display as checkboxes for multiple selections or radio buttons for a single choice. Supports labels and orientation settings.'
+overview: Lets users choose one or more options. Checkboxes for several selections, radio buttons for one. Supports labels and layout direction.
 examples:
   - title: Types
     slugs:

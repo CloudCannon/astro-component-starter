@@ -1,10 +1,10 @@
 label: Announcement Bar
 icon: campaign
-description: "Dismissible site-wide announcement strip with an optional link."
+description: Site-wide announcement that visitors can dismiss. Optional link.
 value:
   _component: navigation/announcement-bar
   enabled: true
-  text: "Announce something exciting here! [Learn more](/)"
+  text: "Announce something exciting here! [Why we built this](/why/)"
 preview:
   text:
     - Announcement Bar

@@ -1,7 +1,7 @@
 ---
 title: Split
 order: 3
-overview: 'Displays two content areas side by side with adjustable widths. Supports different column ratios, vertical alignment, and the option to reverse column order.'
+overview: Two content areas side by side. Set column widths, vertical alignment, and optionally reverse the order.
 slots:
   - title: first
     description: The contents for the first side of the Split.

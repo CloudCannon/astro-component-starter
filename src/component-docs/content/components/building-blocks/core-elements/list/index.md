@@ -1,6 +1,6 @@
 ---
 title: List
-overview: 'Displays a list with icons, bullets, or numbers as markers. Supports vertical or horizontal layouts, custom styling, alignment, markdown formatting, and optional per-item links on the text (icons stay outside the anchor).'
+overview: A list with icons, bullets, or numbers. Layout can be vertical or horizontal.
 slots:
   - title: default
     description: The content inside the List.

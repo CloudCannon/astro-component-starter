@@ -1,6 +1,6 @@
 label: Submit
 icon: check
-description: Button for submitting a form.
+description: Button that submits a form.
 value:
   _component: building-blocks/forms/submit
   text: Submit

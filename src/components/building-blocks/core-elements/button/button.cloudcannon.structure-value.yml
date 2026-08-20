@@ -1,6 +1,6 @@
 label: Button
 icon: variables
-description: Clickable button for calls-to-action and navigation.
+description: Clickable button for actions and links.
 value:
   _component: building-blocks/core-elements/button
   text: My Button

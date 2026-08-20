@@ -1,6 +1,6 @@
 label: Card
 icon: crop_square
-description: Groups related content within a section.
+description: Groups related content in a card.
 value:
   _component: building-blocks/wrappers/card
   label: null

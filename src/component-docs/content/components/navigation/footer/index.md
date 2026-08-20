@@ -1,5 +1,5 @@
 ---
 title: 'Footer'
-description: 'A footer component with logo, navigation links, social media links, and legal text.'
-overview: 'A comprehensive footer block with logo, navigation links, social media icons, and legal information. Supports multiple link columns and copyright text.'
+description: Footer with a logo, links, and legal information.
+overview: Footer with a logo, navigation links, social icons, and legal information. Supports several link columns and copyright text.
 ---

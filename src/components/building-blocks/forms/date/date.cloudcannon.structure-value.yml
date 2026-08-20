@@ -1,6 +1,6 @@
 label: Date
 icon: calendar_month
-description: Form field for selecting a date.
+description: Form field for choosing a date.
 value:
   _component: building-blocks/forms/date
   label: My date

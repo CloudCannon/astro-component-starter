@@ -1,6 +1,6 @@
 ---
 title: Carousel
-overview: 'A carousel for displaying multiple slides of content. Supports autoplay and auto-scroll options, dot or fraction indicators (e.g. 1/3), and configurable slide widths and minimum sizes to maintain responsive layouts.'
+overview: A sliding gallery of content. Supports autoplay, indicators, and slide widths.
 
 slots:
   - title: default

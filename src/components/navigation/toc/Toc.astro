@@ -53,7 +53,8 @@ if (items.length === 0) return;
         ></path></svg
       >
     </summary>
-    <nav aria-label="On this page">
+    <!-- Sidebar is the one "On this page" landmark; the summary names this control. -->
+    <div>
       <ul class="toc-list">
         {
           items.map((h) => (
@@ -63,7 +64,7 @@ if (items.length === 0) return;
           ))
         }
       </ul>
-    </nav>
+    </div>
   </details>
 </div>
 
@@ -156,7 +157,7 @@ if (items.length === 0) return;
           transform: rotate(180deg);
         }
 
-        > nav {
+        > div {
           margin-top: var(--spacing-md);
         }
       }

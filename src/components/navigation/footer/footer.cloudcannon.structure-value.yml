@@ -1,6 +1,6 @@
 label: Footer
 icon: dock_to_bottom
-description: "Footer block with logo, links, and legal information."
+description: Footer with a logo, links, and legal information.
 value:
   _component: navigation/footer
   logoSource: ""

@@ -1,5 +1,5 @@
 ---
 title: 'Hero Split'
-description: 'A hero section component with eyebrow label, heading, subtext, call-to-action buttons, and feature image using a flexible split layout.'
-overview: 'A prominent section block for landing pages. Combines an optional eyebrow, large heading, subtext, call-to-action buttons, and feature image in a responsive split layout, with configurable colorScheme/backgroundColor treatment.'
+description: Hero with text on one side and an image on the other.
+overview: A landing-page intro with text and buttons on one side and a feature image on the other.
 ---

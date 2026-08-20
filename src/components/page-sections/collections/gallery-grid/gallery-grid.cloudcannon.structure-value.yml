@@ -1,6 +1,6 @@
 label: Gallery Grid
 icon: photo_library
-description: An image grid with captions and a lightbox for viewing photos full size.
+description: Image grid with captions. Click a photo to view it full size.
 value:
   _component: page-sections/collections/gallery-grid
   sectionLabel: ""

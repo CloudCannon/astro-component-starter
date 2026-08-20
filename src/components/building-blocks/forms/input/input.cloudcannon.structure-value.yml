@@ -1,6 +1,6 @@
 label: Input
 icon: rectangle
-description: Single text input form field.
+description: Single-line text field.
 value:
   _component: building-blocks/forms/input
   label: My input

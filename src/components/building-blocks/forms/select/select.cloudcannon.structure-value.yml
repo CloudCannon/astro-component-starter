@@ -1,6 +1,6 @@
 label: Select
 icon: view_list
-description: Form field for selecting one option from a list.
+description: Dropdown for choosing one option.
 value:
   _component: building-blocks/forms/select
   label: My Select

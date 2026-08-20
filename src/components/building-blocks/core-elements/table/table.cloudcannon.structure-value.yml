@@ -1,6 +1,6 @@
 label: Table
 icon: table
-description: Content table with a caption, header row, and striped and compact variants.
+description: Table with a caption, header row, and optional stripes.
 value:
   _component: building-blocks/core-elements/table
   caption: Plan limits by tier

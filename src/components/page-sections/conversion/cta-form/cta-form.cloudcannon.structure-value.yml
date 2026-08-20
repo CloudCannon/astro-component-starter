@@ -1,6 +1,6 @@
 label: CTA Form
 icon: call_to_action
-description: Side-by-side CTA with copy and form on one side and image on the other.
+description: Call to action with a form on one side and an image on the other.
 value:
   _component: page-sections/conversion/cta-form
   sectionLabel: ""

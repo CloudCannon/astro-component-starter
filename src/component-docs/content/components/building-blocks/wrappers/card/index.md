@@ -1,8 +1,8 @@
 ---
 title: Card
-description: A container component that provides card layout with background options, padding controls, and optional link.
+description: Groups related content in a card.
 order: 2
-overview: 'A card for grouping related content within a section. Provides background, and padding. Includes before and after slots that render outside the card’s inner padding (ideal for edge-to-edge images or banners), plus a padded body area for regular content.'
+overview: Groups related content with background and padding. Before and after slots sit outside the inner padding, for edge-to-edge images or banners.
 
 slots:
   - title: default

@@ -1,6 +1,6 @@
 label: List
 icon: list
-description: Lists items with icons, bullets, or numbers as markers.
+description: List with icons, bullets, or numbers.
 value:
   _component: building-blocks/core-elements/list
   items:

@@ -1,7 +1,7 @@
 ---
 title: CTA Center
-description: 'Centered CTA with headline, supporting copy, and stacked buttons.'
-overview: 'Keeps messaging compact and focused in the middle of the page while aligning buttons under the copy, now with optional colorScheme and backgroundColor controls to match any theme.'
+description: Centered call to action with a headline, supporting text, and buttons.
+overview: A short, centered call to action with buttons under the text.
 examples:
   - title: Two buttons
     slugs: [dual-buttons]

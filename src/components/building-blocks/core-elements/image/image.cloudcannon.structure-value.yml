@@ -1,9 +1,9 @@
 label: Image
 icon: image
-description: Optimized image component for local and remote sources.
+description: Image from a local file or a URL.
 value:
   _component: building-blocks/core-elements/image
-  source: /src/assets/images/placeholder.png
+  source: /src/assets/images/placeholder.jpg
   alternateSource:
   alt: ""
   decorative: false

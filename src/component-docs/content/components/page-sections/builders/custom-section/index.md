@@ -1,7 +1,7 @@
 ---
 title: Custom Section
 order: 1
-overview: 'Defines the primary sections of a page and manages their appearance. Controls background, padding, and overall page width to keep layouts consistent.'
+overview: The main building block for a page section. Sets background, padding, and width so layouts stay consistent.
 slots:
   - title: default
     description: The contents of the Custom Section.

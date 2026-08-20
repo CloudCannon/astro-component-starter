@@ -1,6 +1,6 @@
 label: Text
 icon: edit_note
-description: Content component for markdown-formatted text.
+description: Markdown text with headings, lists, and links.
 value:
   _component: building-blocks/core-elements/text
   text: My text goes here.

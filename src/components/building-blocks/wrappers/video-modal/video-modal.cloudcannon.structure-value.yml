@@ -1,6 +1,6 @@
 label: Video Modal
 icon: play_circle
-description: Dialog overlay with an embedded video that autoplays on open and pauses on close.
+description: Popup video that plays when opened and pauses when closed.
 value:
   _component: building-blocks/wrappers/video-modal
   label: null
@@ -16,7 +16,7 @@ value:
   triggerVariant: primary
   triggerSize: md
   triggerIconName: play-circle
-  size: lg
+  size: xl
 preview:
   text:
     - Video Modal

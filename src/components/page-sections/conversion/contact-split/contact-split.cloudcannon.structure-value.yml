@@ -1,6 +1,6 @@
 label: Contact Split
 icon: contact_mail
-description: Contact details beside a form, in a bordered card with an optional map strip.
+description: Contact details beside a form, with an optional map.
 value:
   _component: page-sections/conversion/contact-split
   sectionLabel: ""

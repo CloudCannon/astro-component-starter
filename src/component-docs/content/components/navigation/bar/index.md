@@ -1,8 +1,8 @@
 ---
 title: 'Bar'
-description: 'A horizontal navigation bar with dropdown menus for top-level navigation structures.'
+description: Horizontal navigation bar with dropdown menus.
 defaultSize: 'xl'
-overview: 'Displays a horizontal navigation bar with dropdown menus for organizing multi-level links. Typically used inside [Main Nav](/component-docs/components/navigation/main-nav/) for desktop layouts.'
+overview: 'A horizontal navigation bar with dropdown menus for multi-level links. Usually used inside [Main Nav](/component-docs/components/navigation/main-nav/) for desktop layouts.'
 examples:
   - slugs:
       - link-and-children

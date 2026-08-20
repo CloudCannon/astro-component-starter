@@ -1,6 +1,6 @@
 label: Icon
 icon: star
-description: SVG icon component.
+description: Icon from the icon library.
 value:
   _component: building-blocks/core-elements/icon
   name: bolt

@@ -1,6 +1,6 @@
 label: Form
 icon: checklist_rtl
-description: Groups form fields into one submission area.
+description: Groups form fields into one submission.
 value:
   _component: building-blocks/forms/form
   action: ./

@@ -1,6 +1,6 @@
 label: Bento Box
 icon: dashboard
-description: A grid layout where items can span multiple columns and rows.
+description: Grid where items can span more than one column or row.
 value:
   _component: building-blocks/wrappers/bento-box
   label: ""

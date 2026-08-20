@@ -1,6 +1,6 @@
 ---
 title: Select
-overview: 'A form field that lets users select one option from a dropdown list. Supports custom labels, placeholders, default selections, and required validation. Each option includes a label and a value used in the form submission.'
+overview: A dropdown for choosing one option.
 slots:
   - title: default
     description: Select options.

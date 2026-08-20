@@ -1,6 +1,6 @@
 label: Breadcrumbs
 icon: chevron_right
-description: "Wayfinding trail rendered above blog post and tag page titles."
+description: Trail of links showing where the current page sits in the site.
 value:
   _component: navigation/breadcrumbs
   items:

@@ -1,6 +1,6 @@
 label: Stats
 icon: monitoring
-description: A row of big numbers with labels — the confident-metrics section.
+description: Row of big numbers with labels.
 value:
   _component: page-sections/explainers/stats
   sectionLabel: ""

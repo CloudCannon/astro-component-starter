@@ -9,6 +9,35 @@
   ],
   "headers": [
     {
+      "match": "*",
+      "headers": [
+        {
+          "name": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "name": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "name": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "name": "Content-Security-Policy",
+          "value": "frame-ancestors 'self' https://app.cloudcannon.com https://*.cloudcannon.com"
+        },
+        {
+          "name": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "name": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        }
+      ]
+    },
+    {
       "match": "/404.html",
       "headers": [
         {

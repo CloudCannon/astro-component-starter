@@ -3,6 +3,8 @@ import { getImage } from "astro:assets";
 
 const VIDEO_POSTER_MAX_WIDTH = 1920;
 const VIDEO_POSTER_MAX_HEIGHT = 1080;
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
 
 type ImageModule = string | ImageMetadata;
 
@@ -135,17 +137,68 @@ export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
 };
 
 export function resolveImageSource(source: string) {
+  return resolveShareImage(source).src;
+}
+
+export type ShareImage = {
+  src: string;
+  width?: number;
+  height?: number;
+  /** Set for local raster assets so callers can produce a 1200×630 OG crop. */
+  metadata?: ImageMetadata;
+  isSvg: boolean;
+};
+
+export function resolveShareImage(source: string): ShareImage {
+  const isSvg = source.toLowerCase().endsWith(".svg");
+
   if (!source.startsWith("/src/")) {
-    return source;
+    return { src: source, isSvg };
   }
 
   const resolvedImage = getLocalImageAsset(source);
 
   if (!resolvedImage) {
-    return source;
+    return { src: source, isSvg };
   }
 
-  return typeof resolvedImage === "string" ? resolvedImage : resolvedImage.src;
+  if (typeof resolvedImage === "string") {
+    return { src: resolvedImage, isSvg };
+  }
+
+  return {
+    src: resolvedImage.src,
+    width: resolvedImage.width,
+    height: resolvedImage.height,
+    metadata: isSvg ? undefined : resolvedImage,
+    isSvg,
+  };
+}
+
+/** Site-relative src plus width/height for Open Graph. Local photos become a 1200×630 cover crop. */
+export async function resolveOpenGraphImage(source: string): Promise<{
+  src: string;
+  width?: number;
+  height?: number;
+}> {
+  const share = resolveShareImage(source);
+
+  if (share.metadata) {
+    const { src, attributes } = await getImage({
+      src: share.metadata,
+      width: OG_IMAGE_WIDTH,
+      height: OG_IMAGE_HEIGHT,
+      fit: "cover",
+    });
+
+    return {
+      src,
+      width: Number(attributes.width) || OG_IMAGE_WIDTH,
+      height: Number(attributes.height) || OG_IMAGE_HEIGHT,
+    };
+  }
+
+  return { src: share.src, width: share.width, height: share.height };
 }
 
 export async function resolveVideoPosterSource(source: string): Promise<string> {

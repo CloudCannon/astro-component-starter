@@ -1,6 +1,6 @@
 label: Carousel
 icon: image
-description: Displays multiple items in a sliding gallery.
+description: Sliding gallery of items.
 value:
   _component: building-blocks/wrappers/carousel
   label: ""

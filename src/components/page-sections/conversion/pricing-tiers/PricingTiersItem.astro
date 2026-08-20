@@ -1,4 +1,5 @@
 ---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import Badge from "@core-elements/badge/Badge.astro";
 import Button from "@core-elements/button/Button.astro";
 import Heading from "@core-elements/heading/Heading.astro";
@@ -12,17 +13,41 @@ const {
   name = "",
   price = "",
   priceSuffix = "",
+  annualPrice = "",
+  annualPriceSuffix = "",
   description = "",
   features = [],
   buttonText = "",
   buttonLink = "",
   highlight = false,
   badgeText = "",
+  showAnnualPricing = false,
   class: className,
   _component,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   ...htmlAttributes
 } = Astro.props;
+
+const priceRows = [
+  {
+    interval: "monthly",
+    amount: price,
+    suffix: priceSuffix,
+    amountProp: "price",
+    suffixProp: "priceSuffix",
+  },
+  ...(showAnnualPricing && isNonEmptyString(annualPrice)
+    ? [
+        {
+          interval: "annual",
+          amount: annualPrice,
+          suffix: annualPriceSuffix,
+          amountProp: "annualPrice",
+          suffixProp: "annualPriceSuffix",
+        },
+      ]
+    : []),
+];
 ---
 
 <GridItem {...htmlAttributes}>
@@ -52,26 +77,34 @@ const {
       data-prop="description"
       text={description}
     />
-    <p class="pricing-tier-price">
-      <span
-        class="pricing-tier-amount"
-        data-editable="text"
-        data-prop="price"
-      >
-        {price}
-      </span>
-      {
-        priceSuffix && (
+    {
+      priceRows.map((row) => (
+        <p
+          class:list={[
+            "pricing-tier-price",
+            showAnnualPricing && `pricing-tier-price-${row.interval}`,
+          ]}
+          aria-live={showAnnualPricing ? "polite" : undefined}
+        >
           <span
-            class="pricing-tier-suffix"
+            class="pricing-tier-amount"
             data-editable="text"
-            data-prop="priceSuffix"
+            data-prop={row.amountProp}
           >
-            {priceSuffix}
+            {row.amount}
           </span>
-        )
-      }
-    </p>
+          {row.suffix && (
+            <span
+              class="pricing-tier-suffix"
+              data-editable="text"
+              data-prop={row.suffixProp}
+            >
+              {row.suffix}
+            </span>
+          )}
+        </p>
+      ))
+    }
     {
       features.length > 0 && (
         <ul class="pricing-tier-features">
@@ -139,6 +172,10 @@ const {
         gap: var(--spacing-xs);
         margin-top: var(--spacing-lg);
 
+        &.pricing-tier-price-annual {
+          display: none;
+        }
+
         > .pricing-tier-amount {
           font-family: var(--font-headings);
           font-size: var(--font-size-heading-lg);
@@ -186,6 +223,16 @@ const {
         > .button-inner {
           flex: 1;
         }
+      }
+    }
+
+    .pricing-tiers:has(.pricing-tiers-billing .segments-field[value="annual"]:checked) {
+      .pricing-tier:has(.pricing-tier-price-annual) .pricing-tier-price-monthly {
+        display: none;
+      }
+
+      .pricing-tier .pricing-tier-price-annual {
+        display: flex;
       }
     }
   }

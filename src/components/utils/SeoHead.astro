@@ -1,5 +1,5 @@
 ---
-import { resolveImageSource } from "@component-utils/resolveImageSource";
+import { resolveOpenGraphImage } from "@component-utils/image";
 
 interface SiteSeoData {
   name: string;
@@ -23,6 +23,7 @@ export interface Props {
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
+  imageAlt?: string | null;
   canonical?: string | null;
   type?: "website" | "article";
   article?: ArticleSeoData | null;
@@ -35,6 +36,7 @@ const {
   description,
   keywords,
   image,
+  imageAlt,
   canonical,
   type: pageType = "website",
   article,
@@ -42,10 +44,12 @@ const {
 } = Astro.props;
 const formattedTitle = site.titleFormat.replace("{title}", title);
 const pageDescription = description || site.description;
-const pageImage = resolveImageSource(image || site.logoSource);
+const shareSource = image || site.logoSource;
+const share = shareSource ? await resolveOpenGraphImage(shareSource) : undefined;
 const canonicalUrl = canonical || Astro.url.href;
 const siteUrl = Astro.site || new URL(site.url);
-const pageImageUrl = pageImage ? new URL(pageImage, siteUrl).href : undefined;
+const pageImageUrl = share ? new URL(share.src, siteUrl).href : undefined;
+const pageImageAlt = imageAlt || (image ? title : site.name);
 const keywordContent = keywords?.filter(Boolean).join(", ");
 const articleAuthors = Array.isArray(article?.author)
   ? article.author.filter(Boolean)
@@ -118,6 +122,24 @@ const twitterSite = site.twitterSite?.trim();
         property="og:image"
         content={pageImageUrl}
       />
+      {share?.width ? (
+        <meta
+          property="og:image:width"
+          content={String(share.width)}
+        />
+      ) : null}
+      {share?.height ? (
+        <meta
+          property="og:image:height"
+          content={String(share.height)}
+        />
+      ) : null}
+      {pageImageAlt ? (
+        <meta
+          property="og:image:alt"
+          content={pageImageAlt}
+        />
+      ) : null}
     </>
   ) : null
 }

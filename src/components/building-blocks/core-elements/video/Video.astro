@@ -134,82 +134,9 @@ const youtubeParams =
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllVideos } from "./setup";
 
-  function isBroken(video: HTMLVideoElement) {
-    return (
-      Boolean(video.error) ||
-      video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE ||
-      (video.paused && video.readyState === HTMLMediaElement.HAVE_NOTHING)
-    );
-  }
-
-  function repairAndPlay(video: HTMLVideoElement) {
-    // load() alone isn't enough in Firefox: the <source> nodes themselves
-    // can carry over a failed-selection state from the view-transition
-    // swap, so replace them with fresh nodes (no prior loading history)
-    // before retrying.
-    video.querySelectorAll("source").forEach((source) => {
-      const fresh = document.createElement("source");
-
-      fresh.src = source.src;
-      fresh.type = source.type;
-      source.replaceWith(fresh);
-    });
-
-    video.load();
-    video.play().catch(() => {});
-  }
-
-  function tryPlay(video: HTMLVideoElement) {
-    video.play().catch(() => {});
-
-    // A <video> adopted via a view-transition swap can end up genuinely
-    // stuck (Firefox: "All candidate resources failed to load", without
-    // ever setting video.error). By the time this runs the browser has
-    // usually already tried and failed, so the synchronous check catches
-    // it with no added delay; the one deferred recheck covers a failure
-    // that lands moments later. Repair only on confirmed failure — a
-    // video whose load is merely still in flight would be aborted by an
-    // unconditional load() (seen in Chrome).
-    if (isBroken(video)) {
-      repairAndPlay(video);
-      return;
-    }
-
-    setTimeout(() => {
-      if (isBroken(video)) repairAndPlay(video);
-    }, 2000);
-  }
-
-  function playAutoplayVideos() {
-    // Not scoped under a ".video" ancestor: the "video" class sits directly
-    // on the <video> tag itself except for the background-media variant, so
-    // a ".video video[autoplay]" descendant selector silently misses every
-    // other case (vimeo, youtube, and the plain native <video>).
-    const videos = document.querySelectorAll<HTMLVideoElement>("video[autoplay]");
-    if (!videos.length) return;
-
-    // Waiting until the video is actually scrolled into view gives the
-    // browser plenty of time to settle before we touch it, and naturally
-    // matches when the user would expect to see it play.
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          const video = entry.target as HTMLVideoElement;
-
-          if (video.paused) tryPlay(video);
-          obs.unobserve(video);
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    videos.forEach((video) => observer.observe(video));
-  }
-
-  onPageLoad(playAutoplayVideos);
+  onPageLoad(setupAllVideos);
 </script>
 
 <style is:global>

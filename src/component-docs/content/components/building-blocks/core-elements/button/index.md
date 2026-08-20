@@ -1,6 +1,6 @@
 ---
 title: Button
-overview: 'A button component for calls-to-action and navigation. Supports multiple variants (primary, secondary, ghost, outline), sizes, and optional icons. Can only be used within a [Button Group](/component-docs/components/building-blocks/wrappers/button-group/). Use [Submit](/component-docs/components/building-blocks/forms/submit) for form submissions.'
+overview: 'A button for actions and links. Must sit inside a [Button Group](/component-docs/components/building-blocks/wrappers/button-group/). For submitting a form, use [Submit](/component-docs/components/building-blocks/forms/submit) instead.'
 slots:
   - title: default
     description: The button content.

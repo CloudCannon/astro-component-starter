@@ -1,6 +1,6 @@
 label: Image Carousel
 icon: gallery_thumbnail
-description: Displays images in a carousel with a thumbnail strip for navigation.
+description: Image carousel with a thumbnail strip.
 value:
   _component: building-blocks/wrappers/image-carousel
   label: ""

@@ -1,6 +1,6 @@
 label: Side Navigation
 icon: view_sidebar
-description: "Sidebar navigation with expandable sections."
+description: Sidebar with expandable navigation sections.
 value:
   _component: navigation/side
   navData: []

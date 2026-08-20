@@ -1,6 +1,6 @@
 label: Simple Text
 icon: view_headline
-description: Paragraph for plain text content with inline markdown formatting.
+description: Paragraph with optional bold, italic, and links.
 value:
   _component: building-blocks/core-elements/simple-text
   text: My text goes here.

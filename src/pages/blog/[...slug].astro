@@ -1,9 +1,11 @@
 ---
+import { breadcrumbListJsonLd } from "@components/utils/breadcrumbTrail";
 import { slugifyLabel } from "@components/utils/slugify";
 import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import breadcrumbsData from "@data/breadcrumbs.json";
 import Page from "@layouts/Page.astro";
 import Toc from "@navigation/toc/Toc.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
@@ -71,6 +73,11 @@ const article = {
   author: post.data.author,
   tags: post.data.tags,
 };
+
+const breadcrumbJsonLd = breadcrumbListJsonLd(
+  [{ label: blogListingLabel, url: "/blog/" }, { label: post.data.title }],
+  { homeLabel: breadcrumbsData.homeLabel, base: Astro.site ?? Astro.url }
+);
 ---
 
 <Page
@@ -81,6 +88,10 @@ const article = {
   type="article"
   article={article}
 >
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbJsonLd)}
+  />
   <CustomSection
     maxContentWidth="xl"
     paddingHorizontal="lg"

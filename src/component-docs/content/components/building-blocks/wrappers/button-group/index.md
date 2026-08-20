@@ -1,6 +1,6 @@
 ---
 title: Button Group
-overview: 'Groups buttons into rows or columns with even spacing and alignment. Keeps button layout consistent.'
+overview: Groups buttons in a row or column with even spacing and alignment.
 slots:
   - title: default
     description: The contents for the the ButtonGroup.

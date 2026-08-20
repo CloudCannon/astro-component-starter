@@ -1,6 +1,6 @@
 label: Spacer
 icon: space_bar
-description: Adds adjustable spacing between content sections.
+description: Adds space between content.
 value:
   _component: building-blocks/core-elements/spacer
   size: md
