@@ -90,7 +90,7 @@ const pathname = Astro.url.pathname;
   <div class="mobile-content">
     <ul class="mobile-list">
       {
-        navData.map((item: NavItem) => {
+        navData?.map((item: NavItem) => {
           const itemData = createNavItemData(pathname, item, `mobile-nav-top-${navInstanceId}`);
 
           if (itemHasMegaMenu(item)) {
@@ -222,7 +222,8 @@ const pathname = Astro.url.pathname;
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
-  import { syncExpanded } from "@components/navigation/bar/toggleState";
+  import { trapFocus } from "@component-utils/focusTrap";
+  import { bindToggleKeys, syncExpanded } from "@components/navigation/bar/toggleState";
 
   // Overlays live in one container so z-index stacking is predictable.
   function getOrCreateOverlaysContainer() {
@@ -338,11 +339,10 @@ const pathname = Astro.url.pathname;
 
       nav.addEventListener("click", handleDropdownToggle);
       nav.addEventListener("change", () => syncExpanded(nav));
-      nav.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleDropdownToggle(e);
-        }
-      });
+      bindToggleKeys(nav);
+      // The open panel covers the page, so Tab must not walk into content
+      // behind it. `aria-hidden` is the open flag `handleNavToggle` maintains.
+      trapFocus(nav, () => nav.getAttribute("aria-hidden") === "false");
 
       document.addEventListener("keydown", (e) => {
         if (e.key === "Escape" && toggle?.checked) {
@@ -358,8 +358,18 @@ const pathname = Astro.url.pathname;
 
 <style is:global>
   @layer components {
-    .nav-toggle:checked ~ .mobile {
+    /* `.nav-toggle:checked ~` covers the pre-JS/editor DOM; `[aria-hidden]`
+       covers the live site, where the panel is relocated into
+       #overlays-container and is no longer the checkbox's sibling. */
+    .nav-toggle:checked ~ .mobile,
+    .mobile[aria-hidden="false"] {
       transform: translateX(0);
+      /* No visibility delay on the way in, so the panel is focusable from the
+         first frame of the slide. */
+      transition:
+        transform var(--animation-normal) var(--ease-in-out),
+        visibility 0s;
+      visibility: visible;
     }
 
     /* The checkbox is hidden by `.visually-hidden`, not `display: none`, which
@@ -390,7 +400,13 @@ const pathname = Astro.url.pathname;
       inset: 0;
       position: fixed;
       transform: translateX(-100%);
-      transition: transform var(--animation-normal) var(--ease-in-out);
+      /* transform alone leaves every link focusable off-canvas, so a desktop
+         visitor tabs through the whole mobile menu. `visibility` is delayed by
+         the slide duration so closing still animates. */
+      transition:
+        transform var(--animation-normal) var(--ease-in-out),
+        visibility 0s linear var(--animation-normal);
+      visibility: hidden;
       z-index: var(--layer-5);
 
       .mobile-header {

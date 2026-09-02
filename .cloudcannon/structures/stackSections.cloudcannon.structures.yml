@@ -18,6 +18,7 @@ stackSections:
     - /src/components/building-blocks/wrappers/modal/modal.cloudcannon.structure-value.yml
     - /src/components/building-blocks/wrappers/video-modal/video-modal.cloudcannon.structure-value.yml
     - /src/components/building-blocks/forms/form/form.cloudcannon.structure-value.yml
+    - /src/components/building-blocks/wrappers/split/split.cloudcannon.structure-value.yml
     - /src/components/building-blocks/core-elements/**/*.cloudcannon.structure-value.yml
     - "!/src/components/building-blocks/core-elements/button/button.cloudcannon.structure-value.yml"
     - "!/src/components/building-blocks/core-elements/pagination/pagination.cloudcannon.structure-value.yml"

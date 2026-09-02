@@ -7,7 +7,7 @@ value:
   authorName: Charlie Parker
   authorDescription: Author
   authorImage: ""
-  alignmentHorizontal: start
+  alignmentHorizontal: center
 preview:
   text:
     - Testimonial

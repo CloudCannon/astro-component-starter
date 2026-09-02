@@ -39,7 +39,7 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
 ---
 
 <article
-  class:list={["card-grid-item", hasLink && "linked", className]}
+  class:list={["card-grid-item", className]}
   {...htmlAttributes}
 >
   {
@@ -94,7 +94,7 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
       flex-direction: column;
       overflow: hidden;
 
-      &.linked {
+      &:has(> .card-grid-hit) {
         position: relative;
         transition:
           border-color var(--animation-fast) var(--ease-out),

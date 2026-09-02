@@ -27,7 +27,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -111,10 +111,11 @@ const annualSelected = defaultInterval === "annual";
     maxItemWidth={420}
     layout="center"
     class="pricing-tiers-grid"
+    spaceBefore="loose"
     data-children-prop="tiers"
   >
     {
-      tiers.map((tier: TierProps) => (
+      tiers?.map((tier: TierProps) => (
         <PricingTiersItem
           data-id="page-sections/conversion/pricing-tiers/pricing-tiers-item"
           data-editable="array-item"
@@ -133,7 +134,6 @@ const annualSelected = defaultInterval === "annual";
       column-gap: var(--spacing-sm);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
-      margin-top: var(--spacing-xl);
 
       > .pricing-tiers-billing-segments {
         grid-column: 2;
@@ -156,12 +156,6 @@ const annualSelected = defaultInterval === "annual";
           justify-self: center;
         }
       }
-    }
-
-    .pricing-tiers-grid {
-      /* The highlighted tier's "Most popular" badge overhangs its card top —
-         the extra top margin is its headroom. */
-      margin-top: var(--space-before-loose);
     }
   }
 </style>

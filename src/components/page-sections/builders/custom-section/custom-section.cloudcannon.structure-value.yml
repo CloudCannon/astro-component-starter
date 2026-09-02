@@ -7,8 +7,9 @@ value:
   contentSections: []
   maxContentWidth: 2xl
   paddingHorizontal: md
-  paddingVertical: md
+  paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -23,7 +24,6 @@ value:
     videoSource: null
     overlay: 0
   rounded: false
-  useDefaultEditableBinding: true
 preview:
   text:
     - Custom Section
@@ -53,11 +53,11 @@ groups:
     collapsed: true
     inputs:
       - label
-      - useDefaultEditableBinding
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background
       - rounded

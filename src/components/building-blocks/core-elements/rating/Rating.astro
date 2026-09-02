@@ -27,15 +27,16 @@ const stars = Array.from({ length: starCount });
 ---
 
 <div
-  class:list={[
-    "rating",
-    alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
-    className,
-  ]}
+  class:list={["rating", className]}
   {...htmlAttributes}
 >
   <span
-    class:list={["rating-inner", `size-${size}`, `color-${color}`]}
+    class:list={[
+      "rating-inner",
+      `size-${size}`,
+      `color-${color}`,
+      alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    ]}
     role="img"
     aria-label={`Rated ${clampedValue} out of ${starCount}`}
   >
@@ -170,17 +171,19 @@ const stars = Array.from({ length: starCount });
         line-height: var(--line-height-none);
       }
 
-      &.align-start {
+      /* The alignment class rides on the inner box — a prop-driven class on a
+         region root goes stale in the editor — so `:has()` hoists it back. */
+      &:has(> .rating-inner.align-start) {
         display: block;
         text-align: start;
       }
 
-      &.align-center {
+      &:has(> .rating-inner.align-center) {
         display: block;
         text-align: center;
       }
 
-      &.align-end {
+      &:has(> .rating-inner.align-end) {
         display: block;
         text-align: end;
       }

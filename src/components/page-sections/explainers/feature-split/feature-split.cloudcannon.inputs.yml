@@ -148,8 +148,8 @@ colorScheme:
         name: Dark
 lockColorScheme:
   type: switch
-  comment: Keep the selected color scheme from flipping when the visitor toggles the site theme.
-  hidden: true
+  label: Lock color scheme
+  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
   comment: Solid background color token behind the section content.

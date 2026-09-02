@@ -7,13 +7,14 @@ const {
   checked = false,
   required = false,
   value = "on",
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("toggle", htmlAttributes.id);
+const fieldId = generateFieldId("toggle", customId);
 ---
 
 <div
@@ -115,6 +116,12 @@ const fieldId = generateFieldId("toggle", htmlAttributes.id);
         position: absolute;
         transition: var(--animation-normal) var(--ease-smooth);
         width: 20px;
+      }
+
+      /* The input is `opacity: 0`, so its own ring is invisible. */
+      .toggle-input:focus-visible + .toggle-track {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       .toggle-input:checked + .toggle-track {

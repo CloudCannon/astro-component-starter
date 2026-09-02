@@ -10,7 +10,7 @@ const {
   eyebrow = "",
   heading = "",
   subtext = "",
-  showBreadcrumbs = false,
+  showBreadcrumbs = true,
   alignmentHorizontal = "start",
   sectionLabel,
   maxContentWidth = "2xl",
@@ -18,7 +18,7 @@ const {
   paddingVertical = "2xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -32,7 +32,7 @@ const trail = showBreadcrumbs ? trailFromPathname(Astro.url.pathname, heading) :
 ---
 
 <CustomSection
-  class:list={["page-header", `align-${alignmentHorizontal}`, className]}
+  class:list={["page-header", className]}
   label={sectionLabel}
   maxContentWidth={maxContentWidth}
   paddingHorizontal={paddingHorizontal}
@@ -47,7 +47,7 @@ const trail = showBreadcrumbs ? trailFromPathname(Astro.url.pathname, heading) :
   {
     showBreadcrumbs && trail.length > 0 && (
       <Breadcrumbs
-        class="page-header-breadcrumbs"
+        class:list={["page-header-breadcrumbs", `align-${alignmentHorizontal}`]}
         items={trail}
       />
     )
@@ -83,22 +83,18 @@ const trail = showBreadcrumbs ? trailFromPathname(Astro.url.pathname, heading) :
         margin-bottom: var(--spacing-md);
       }
 
-      .page-header-heading {
-        margin-top: 0;
-      }
-
       .page-header-subtext {
         max-width: 42rem;
       }
 
-      &.align-center {
-        .page-header-breadcrumbs .breadcrumbs-trail {
-          justify-content: center;
-        }
+      /* Alignment is read off the children that carry it — a prop-driven class
+         on this region root goes stale in the editor. */
+      .page-header-breadcrumbs.align-center .breadcrumbs-trail {
+        justify-content: center;
+      }
 
-        .page-header-subtext {
-          margin-inline: auto;
-        }
+      .page-header-subtext:has(> .text-inner.align-center) {
+        margin-inline: auto;
       }
     }
   }

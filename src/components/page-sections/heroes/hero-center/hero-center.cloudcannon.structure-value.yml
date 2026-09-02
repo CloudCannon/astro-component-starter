@@ -4,14 +4,14 @@ description: Centered hero with a heading, supporting text, and buttons.
 value:
   _component: page-sections/heroes/hero-center
   sectionLabel: ""
-  eyebrow: Eyebrow text
-  heading: Heading text
-  subtext: Subtext placeholder text that will be replaced with actual content.
+  eyebrow: Introducing
+  heading: A clear promise in one line
+  subtext: One or two sentences on who this is for and what they get.
   buttonSections:
     - _component: building-blocks/core-elements/button
-      text: My Button
+      text: Get started
       hideText: false
-      link: ""
+      link: /
       iconName: ""
       iconColor: default
       iconPosition: before
@@ -21,6 +21,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -71,5 +72,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

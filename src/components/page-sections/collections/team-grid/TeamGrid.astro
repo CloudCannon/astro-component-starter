@@ -18,7 +18,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   useDefaultEditableBinding = false,
   _component,
@@ -71,7 +71,7 @@ const {
     data-children-prop="teamMembers"
   >
     {
-      teamMembers.map((member: MemberProps) => (
+      teamMembers?.map((member: MemberProps) => (
         <TeamItem
           data-id="page-sections/collections/team-grid/team-item"
           data-editable="array-item"
@@ -90,11 +90,9 @@ const {
     }
 
     .team-grid-subtext {
-      margin-top: 0;
     }
 
     .team-grid-grid {
-      margin-top: var(--spacing-xl);
     }
   }
 </style>

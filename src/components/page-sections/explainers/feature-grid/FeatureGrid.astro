@@ -19,7 +19,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   alignmentHorizontal = "center",
   class: className,
@@ -70,7 +70,7 @@ const {
     data-children-prop="features"
   >
     {
-      features.map((feature: FeatureProps) => (
+      features?.map((feature: FeatureProps) => (
         <FeatureItem
           data-id="page-sections/explainers/feature-grid/feature-item"
           data-editable="array-item"
@@ -83,8 +83,5 @@ const {
 
 <style is:global>
   @layer page-sections {
-    .feature-grid-grid {
-      margin-top: var(--space-before-loose);
-    }
   }
 </style>

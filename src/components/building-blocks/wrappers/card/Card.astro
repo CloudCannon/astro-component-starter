@@ -234,6 +234,15 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         transform: none;
       }
 
+      /* The global reset only kills the transition, leaving the scale as an
+         instant jump — the movement itself has to go. */
+      @media (prefers-reduced-motion: reduce) {
+        > a.card-inner:hover,
+        > button.card-inner:hover {
+          transform: none;
+        }
+      }
+
       > button.card-inner {
         appearance: none;
         background: none;

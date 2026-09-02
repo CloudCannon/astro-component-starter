@@ -42,7 +42,7 @@ const hasEntries = entries?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const isHorizontal = layout === "horizontal";
 const isGrouped =
-  !isHorizontal && entries.some((entry: EntryProps) => isNonEmptyString(entry.year));
+  !isHorizontal && entries?.some((entry: EntryProps) => isNonEmptyString(entry.year));
 
 type YearGroup = { year: string; entries: EntryProps[] };
 
@@ -63,7 +63,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["timeline", "stackable", `layout-${layout}`, isGrouped && "is-grouped", className]}
+  class:list={["timeline", "stackable", className]}
   {...htmlAttributes}
 >
   {
@@ -71,6 +71,9 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       <div
         class="timeline-scroller"
         data-space-before={spaceBeforeAttr(spaceBefore)}
+        role="region"
+        tabindex="0"
+        aria-label={label || "Timeline"}
       >
         <ol
           class="timeline-list"
@@ -186,13 +189,14 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         text-wrap: pretty;
       }
 
-      /* Vertical (default): one unbroken rail from the first dot to the last.
-         Not gated on .layout-vertical — that's the default, and the docs
-         primary breaks if this CSS only runs when the class is present.
+      /* Layout is read off the rendered shape, never a class on this root: a
+         prop-driven class on a region root goes stale in the editor. The
+         horizontal branch renders a `.timeline-scroller`, the grouped one a
+         `.timeline-group`; the vertical default is what's left.
          Last-item overlay is :last-of-type, not an is-last class: CloudCannon
          inserts array items without re-rendering the parent, so a class
          baked in at SSR would stick to the original last item. */
-      &:not(.layout-horizontal):not(.is-grouped) {
+      &:has(> .timeline-list):not(:has(.timeline-group)) {
         .timeline-list {
           display: grid;
           gap: 0;
@@ -263,7 +267,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
       /* Year-grouped: same continuous rail as ungrouped. Groups abut; each
          group's padding-block-end carries the space so the line does not break. */
-      &.is-grouped {
+      &:has(.timeline-group) {
         --timeline-year-line: calc(var(--font-size-lg) * var(--line-height-heading-sm));
 
         .timeline-list {
@@ -344,11 +348,17 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       }
 
       /* Horizontal: unbounded phases scroll rather than wrap. */
-      &.layout-horizontal {
+      &:has(> .timeline-scroller) {
         .timeline-scroller {
           margin-inline-end: calc(-1 * var(--timeline-gutter, 0px));
           min-width: 0;
           overflow-x: auto;
+
+          /* Focusable so the pan is reachable without a pointer. */
+          &:focus-visible {
+            outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+            outline-offset: 2px;
+          }
           overscroll-behavior-x: contain;
           padding-inline-end: var(--timeline-gutter, 0px);
           scroll-snap-type: x proximity;

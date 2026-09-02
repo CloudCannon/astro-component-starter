@@ -27,6 +27,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: 2xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -67,7 +68,7 @@ _structures:
         icon: workspaces
         value:
           image: ""
-          alt: ""
+          alt: Company name
           url: ""
         preview:
           text:
@@ -105,5 +106,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

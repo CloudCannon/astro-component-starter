@@ -33,6 +33,9 @@ _structures:
         icon: place_item
         value:
           title: Section Title
+          subtext: ""
+          iconName: ""
+          iconColor: default
           contentSections: []
         preview:
           text:

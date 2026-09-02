@@ -19,10 +19,12 @@ if (!enabled || !message) return;
 <aside
   class:list={["announcement-bar", className]}
   aria-label="Announcement"
-  data-announcement={message}
   {...htmlAttributes}
 >
-  <p class="announcement-bar-text">
+  <p
+    class="announcement-bar-text"
+    data-announcement={message}
+  >
     <Fragment set:html={renderMarkdownInline(message)} />
   </p>
   <button
@@ -51,7 +53,8 @@ if (!enabled || !message) return;
     bar.setAttribute("data-announcement-initialized", "");
 
     var KEY = "announcement-bar-dismissed";
-    var message = bar.getAttribute("data-announcement") || "";
+    var text = bar.querySelector(".announcement-bar-text");
+    var message = (text && text.getAttribute("data-announcement")) || "";
 
     // Dismissal stores the message itself, so publishing a different
     // announcement makes the bar reappear for everyone.

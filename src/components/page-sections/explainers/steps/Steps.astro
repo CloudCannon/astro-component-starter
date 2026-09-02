@@ -18,7 +18,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -63,6 +63,7 @@ const {
   />
   <Steps
     items={items}
+    spaceBefore="loose"
     orientation={orientation}
     imageAspectRatio={imageAspectRatio}
     data-children-prop="items"
@@ -77,10 +78,6 @@ const {
       .steps-section-subtext {
         margin-inline: auto;
         max-width: 42rem;
-      }
-
-      .steps {
-        margin-top: var(--space-before-loose);
       }
     }
   }

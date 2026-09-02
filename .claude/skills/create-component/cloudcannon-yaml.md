@@ -49,6 +49,9 @@ _inputs_from_glob:
 
 - **`_component`** is the kebab-case directory path under `src/components/`, resolved by `renderBlock.astro`. A mismatch is the #1 cause of a section not rendering (see Verify in SKILL.md).
 - **Every field the component reads must appear in `value:`** with a sensible default. See [structures.md rule #1](../references/structures.md#field-completeness-rule-rule-1) and the caveat on not over-seeding `""` for genuinely-optional fields.
+- **A knob's seed must equal its `.astro` destructure default.** `npm run lint:cms` (Check 1b) fails on a mismatch: the seed is what a newly inserted block starts as, the default is what a composed or programmatic use gets, and a disagreement makes the docs page and a fresh block render differently for no stated reason. It applies to knobs only — a prop whose `inputs.yml` type is `select`, `switch`, `checkbox`, `number`, `range` or `multiselect`.
+- **Starting _content_ is meant to differ.** Prose (`text`, `markdown`, `textarea`) is seeded with sample copy, and a few number knobs seed content too (Counter's `number`, Rating's `value`) — those are listed in `SAMPLE_SEEDS` in `scripts/cms/lint.mjs`.
+- **Omitting the destructure default is a decision, not drift.** It means "whatever the caller passes": `Text`/`Heading` `size` left unset inherits when a page section composes the block while a placed block gets the seed, and `Card` deliberately has no padding or background until a composer asks. Check 1b skips a prop with no default for that reason, so state the intent in the plan or a comment rather than "fixing" it by adding one.
 
 ## inputs.yml template
 
@@ -149,6 +152,7 @@ buttonSections:
 | ------------------------- | ----------------------------------- |
 | `containerSections`       | Custom sections (main content area) |
 | `splitSections`           | Inside split layouts                |
+| `stackSections`           | Inside stacks                       |
 | `gridItemSections`        | Inside grid items                   |
 | `cardSections`            | Inside cards                        |
 | `accordionSections`       | Inside accordion items              |
@@ -164,7 +168,24 @@ buttonSections:
 
 (`navData`, `links`, `socials` also live here but define site-data shapes, not component pickers — see the [site-data-navigation skill](../site-data-navigation/SKILL.md).)
 
-**To place a new wrapper:** add its `structure-value.yml` path to `containerSections` plus every other context where it makes sense. Copy an existing entry for the exact path format (leading `/src/...`).
+### Which context gets which component (policy, 2026-09-02)
+
+Contexts come in two tiers, and every context in a tier lists the **same** set. `npm run lint:nesting` enforces it.
+
+| Tier       | Contexts                                                                                                                                 | Takes                                                                                                         |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Wide**   | `containerSections`, `splitSections`, `stackSections`, `carouselSections`, `contentSelectorSections`                                     | every wrapper and core element, **including its own type**                                                    |
+| **Narrow** | `cardSections`, `gridItemSections`, `masonryItemSections`, `bentoBoxSections`, `modalSections`, `accordionSections`, `stepsItemSections` | content blocks only — card, button-group, accordion, steps, timeline, modal, video-modal, form, core elements |
+
+A narrow context is a card-sized cell inside a measured layout, so it takes **no layout wrapper**: no split, stack, grid, masonry, card-grid, content-selector, bento-box, carousel or image-carousel.
+
+**Why the tiers are uniform, including self-nesting:** the contexts form a graph — allowing `stack` inside `splitSections` also makes everything in `stackSections` reachable from a split. Any exclusion that some other wrapper routes around is not a restriction, only an inconsistent picker: the editor is told "not here", then finds it works one wrapper down. `lint:nesting` computes that reachability and fails on an exclusion that buys nothing.
+
+`modal` and `video-modal` are **portals** — their panel renders in the top layer, so a block inside a modal is not visually nested inside whatever holds the modal. Reachability is computed with modal as a boundary, which is why `modal` appears in `modalSections` (only its trigger nests) while a layout wrapper still does not.
+
+`button` and `pagination` are excluded everywhere by the two `!` lines every context carries: buttons belong in a Button Group, pagination is page chrome.
+
+**To place a new wrapper:** add its `structure-value.yml` path to every context in the tier it belongs to (all five wide ones for a layout wrapper; all twelve for a content block). Copy an existing entry for the exact path format (leading `/src/...`).
 
 **To give a component a new nested content area:** create `.cloudcannon/structures/{name}Sections.cloudcannon.structures.yml` (copy `modalSections` or `cardSections`), list the components allowed inside, and reference it from the array input as `_structures.{name}Sections`.
 

@@ -16,6 +16,10 @@ const {
 
 const inputType = multiple ? "checkbox" : "radio";
 const inputName = multiple ? `${name}[]` : name;
+
+// Native `required` on one checkbox of a group means "tick this box", not
+// "pick at least one" — only radio groups can express the group constraint.
+const requireEachInput = required && !multiple;
 ---
 
 <div
@@ -25,6 +29,7 @@ const inputName = multiple ? `${name}[]` : name;
   <fieldset
     class="choice-group-fieldset"
     role={multiple ? "group" : "radiogroup"}
+    aria-required={required ? "true" : undefined}
   >
     {
       title && (
@@ -45,15 +50,14 @@ const inputName = multiple ? `${name}[]` : name;
       class:list={["choice-group-options", `orientation-${orientation}`, multiple && "multiple"]}
     >
       {
-        options.map((option: SegmentOption, index: number) => (
+        options?.map((option: SegmentOption, index: number) => (
           <label class="choice-group-option">
             <input
               type={inputType}
               name={inputName}
               value={option.value}
               checked={option.checked || false}
-              required={required && index === 0}
-              aria-required={required && index === 0}
+              required={requireEachInput && index === 0}
               class="choice-group-field"
             />
             <span class="choice-group-label-text">{option.label}</span>

@@ -9,44 +9,55 @@ export interface Props {
 
 type AstroComponent = (_props: Record<string, unknown>) => unknown;
 
-const components: Record<string, AstroComponent> = {};
-const componentImports = import.meta.glob("../**/*.{jsx,astro}", {
-  eager: true,
-});
+type ComponentLoader = () => Promise<Record<string, AstroComponent>>;
 
-Object.entries(componentImports).forEach(([path, obj]) => {
+const loaders: Record<string, ComponentLoader> = {};
+const componentImports = import.meta.glob("../**/*.{jsx,astro}");
+
+Object.entries(componentImports).forEach(([path, loader]) => {
   const componentName = componentKeyFromPath(path.replace("../", ""));
 
-  components[componentName] = (obj as Record<string, AstroComponent>).default;
+  loaders[componentName] = loader as ComponentLoader;
 });
 
 const { contentSections, useDefaultEditableBinding = true } = Astro.props;
+
+const resolved = await Promise.all(
+  (contentSections ?? []).map(async (block) => {
+    const loader = block._component ? loaders[block._component] : undefined;
+
+    if (!loader) {
+      if (block._component) {
+        console.warn(
+          `Component not found: ${block._component}. Available components:`,
+          Object.keys(loaders)
+        );
+      } else {
+        console.warn(
+          "Skipping content block with no _component key:",
+          JSON.stringify(block).slice(0, 200)
+        );
+      }
+      return { block, Component: null as AstroComponent | null };
+    }
+
+    const module = await loader();
+
+    return { block, Component: module.default };
+  })
+);
 ---
 
 {
   // Array-level editable attributes are owned by the caller's container element.
-  contentSections?.map((block) => {
-    const Component = components[block._component];
-
-    if (!Component && block._component) {
-      console.warn(
-        `Component not found: ${block._component}. Available components:`,
-        Object.keys(components)
-      );
-    } else if (!block._component) {
-      console.warn(
-        "Skipping content block with no _component key:",
-        JSON.stringify(block).slice(0, 200)
-      );
-    }
-
-    return Component ? (
+  resolved.map(({ block, Component }) =>
+    Component ? (
       <Component
         data-editable={useDefaultEditableBinding ? "array-item" : undefined}
         data-id={block._component}
         {...block}
         useDefaultEditableBinding={useDefaultEditableBinding}
       />
-    ) : null;
-  })
+    ) : null
+  )
 }

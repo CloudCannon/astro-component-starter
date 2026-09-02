@@ -18,7 +18,7 @@ const {
   paddingVertical = "2xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -28,7 +28,7 @@ const {
 ---
 
 <CustomSection
-  class:list={["logo-cloud", grayscale && "grayscale", className]}
+  class:list={["logo-cloud", className]}
   label={sectionLabel}
   maxContentWidth={maxContentWidth}
   paddingHorizontal={paddingHorizontal}
@@ -48,13 +48,13 @@ const {
     text={heading}
   />
   {
-    logos.length > 0 &&
+    logos?.length > 0 &&
       (scrolling ? (
         /* Marquee mode: the Carousel wrapper's auto-scroll does the work — it
            already hides the arrows and indicators, and honors
            prefers-reduced-motion (the strip then sits still, fully readable). */
         <Carousel
-          class="logo-cloud-marquee"
+          class:list={["logo-cloud-marquee", grayscale && "grayscale"]}
           label="Client logos"
           autoScroll={true}
           loop={true}
@@ -63,7 +63,7 @@ const {
           alignmentHorizontal="start"
           data-children-prop="logos"
         >
-          {logos.map((logo: LogoProps) => {
+          {logos?.map((logo: LogoProps) => {
             const LogoWrapper = logo.url ? "a" : "span";
             const wrapperProps = logo.url ? { href: logo.url } : {};
 
@@ -91,12 +91,12 @@ const {
         </Carousel>
       ) : (
         <ul
-          class="logo-cloud-grid"
+          class:list={["logo-cloud-grid", grayscale && "grayscale"]}
           data-editable="array"
           data-prop="logos"
           data-direction="row"
         >
-          {logos.map((logo: LogoProps) => {
+          {logos?.map((logo: LogoProps) => {
             const LogoWrapper = logo.url ? "a" : "span";
             const wrapperProps = logo.url ? { href: logo.url } : {};
 
@@ -142,7 +142,7 @@ const {
         gap: var(--spacing-lg) var(--spacing-xl);
         grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
         list-style: none;
-        margin: var(--spacing-xl) 0 0;
+        margin: 0;
         padding: 0;
       }
 
@@ -154,8 +154,6 @@ const {
       /* Marquee mode: the carousel replaces the grid, so it inherits the
          grid's top spacing and its slides carry the item centring. */
       .logo-cloud-marquee {
-        margin-top: var(--spacing-xl);
-
         .slide__content {
           display: flex;
           justify-content: center;
@@ -175,14 +173,17 @@ const {
         }
       }
 
-      &.grayscale .logo-cloud-logo {
+      /* The grayscale class rides on the grid/marquee, the only elements that
+         carry it — a prop-driven class on a region root goes stale in the
+         editor. */
+      .grayscale .logo-cloud-logo {
         filter: grayscale(1);
         opacity: 0.75;
       }
 
       /* Link affordances only — static marks do not react. Grayscale
          restores brand color; full-color logos scale up instead. */
-      &.grayscale a.logo-cloud-logo {
+      .grayscale a.logo-cloud-logo {
         transition:
           filter var(--animation-normal) var(--ease-in-out),
           opacity var(--animation-normal) var(--ease-in-out);
@@ -194,7 +195,7 @@ const {
         }
       }
 
-      &:not(.grayscale) a.logo-cloud-logo {
+      &:not(:has(> .grayscale)) a.logo-cloud-logo {
         transition: transform var(--animation-normal) var(--ease-in-out);
 
         &:hover,

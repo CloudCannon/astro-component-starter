@@ -57,7 +57,7 @@
      there goes stale in the visual editor (see editor-live-sync.js). :has()
      hoists it back to the root. The bare-attribute selectors stay as the
      fallback for roots with no child to carry it (Video's media-element
-     roots, Pagination, Card Grid's grid mode) — those render correctly but
+     roots, Pagination) — those render correctly but
      don't live-update when spaceBefore itself is edited. Beats
      component-layer type defaults (utils layers over components) and the
      zero-specificity kicker above. */

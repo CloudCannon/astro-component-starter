@@ -1,7 +1,6 @@
 ---
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
-import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import StepsItem from "./StepsItem.astro";
 
 type ItemProps = Record<string, unknown>;
@@ -36,19 +35,12 @@ const arrayDataAttributes = effectiveChildrenProp
 
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const hasImages = items.some((item: ItemProps) => isNonEmptyString(item.image));
 
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={[
-    "steps",
-    "stackable",
-    `orientation-${orientation}`,
-    hasImages && "has-images",
-    className,
-  ]}
+  class:list={["steps", "stackable", className]}
   {...htmlAttributes}
 >
   <ol
@@ -174,7 +166,9 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
       /* With-image: larger marker, image beside the words. Same continuous
          rail as no-image — entries abut, last item drops the segment. */
-      &.has-images {
+      /* Read off the rendered image, not a prop: a class on this region root
+         goes stale in the editor, and slotted items never set the prop. */
+      &:has(.step-image) {
         --step-marker-size: 2.25rem;
 
         .step {
@@ -225,12 +219,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
       /* 500px: content-driven — image and text stack; the rail stays. */
       @media (width < 500px) {
-        &.has-images .step-image {
+        &:has(.step-image) .step-image {
           flex-basis: 100%;
           min-width: 0;
         }
 
-        &.has-images .step-content {
+        &:has(.step-image) .step-content {
           padding-top: 0;
         }
       }
@@ -292,7 +286,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           }
         }
 
-        &.has-images .steps-list.orientation-horizontal {
+        &:has(.step-image) .steps-list.orientation-horizontal {
           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 
           .step-band {

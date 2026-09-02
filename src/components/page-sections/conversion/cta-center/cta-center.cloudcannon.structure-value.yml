@@ -4,13 +4,13 @@ description: Centered call to action with a headline, supporting text, and butto
 value:
   _component: page-sections/conversion/cta-center
   sectionLabel: ""
-  heading: Heading text
-  subtext: Subtext placeholder text that will be replaced with actual content.
+  heading: Ready to get started?
+  subtext: One line that makes the next step obvious.
   buttonSections:
     - _component: building-blocks/core-elements/button
-      text: My Button
+      text: Get started
       hideText: false
-      link: ""
+      link: /
       iconName: ""
       iconColor: default
       iconPosition: before
@@ -20,6 +20,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -68,5 +69,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

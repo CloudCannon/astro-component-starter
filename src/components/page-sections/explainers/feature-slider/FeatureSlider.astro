@@ -12,7 +12,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   slides = [],
@@ -44,7 +44,7 @@ const {
     data-children-prop="slides"
   >
     {
-      slides.map((slide: SlideProps, index: number) => (
+      slides?.map((slide: SlideProps, index: number) => (
         <FeatureSliderItem
           aria-label={`Slide ${index + 1} of ${slides.length}`}
           data-editable="array-item"

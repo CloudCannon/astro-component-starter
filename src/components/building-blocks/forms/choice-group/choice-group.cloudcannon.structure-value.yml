@@ -14,7 +14,7 @@ value:
       label: Item 2
       checked: false
   orientation: vertical
-  multiple: true
+  multiple: false
 preview:
   text:
     - Choice Group

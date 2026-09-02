@@ -1,6 +1,6 @@
 ---
 import FormLabel from "@component-utils/FormLabel.astro";
-import { generateFieldId } from "@component-utils/formField";
+import { generateFieldId, toDateInputValue } from "@component-utils/formField";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
@@ -12,13 +12,17 @@ const {
   max,
   hint,
   error,
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("date", htmlAttributes.id);
+const fieldId = generateFieldId("date", customId);
+const dateValue = toDateInputValue(value);
+const dateMin = toDateInputValue(min);
+const dateMax = toDateInputValue(max);
 const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
 const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
 const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
@@ -52,9 +56,9 @@ const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
     aria-required={required}
     aria-invalid={errorId ? "true" : undefined}
     aria-describedby={describedBy}
-    value={value}
-    min={min}
-    max={max}
+    value={dateValue}
+    min={dateMin}
+    max={dateMax}
     class="field"
   />
   {

@@ -35,7 +35,7 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
 
   syncThumbnailSources(mainSlides, thumbButtons);
 
-  const loop = carousel.getAttribute("data-loop") !== "false";
+  const loop = carousel.querySelector<HTMLElement>(".carousel-content")?.dataset.loop !== "false";
 
   const mainEmbla = EmblaCarousel(mainViewport, {
     loop,
@@ -59,7 +59,15 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
       btn.setAttribute("data-selected", isSelected.toString());
 
       if (isSelected && !isInitialUpdate) {
-        btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        // `scroll-behavior: auto !important` in the reduced-motion reset does
+        // not override a behaviour passed to scrollIntoView.
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        btn.scrollIntoView({
+          behavior: reduceMotion ? "auto" : "smooth",
+          block: "nearest",
+          inline: "center",
+        });
       }
     });
 

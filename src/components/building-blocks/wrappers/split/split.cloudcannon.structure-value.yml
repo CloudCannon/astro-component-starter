@@ -8,8 +8,8 @@ value:
   secondColumnContentSections: []
   distributionMode: half
   fixedWidth: null
-  minSplitWidth: 760
-  alignmentVertical: center
+  minSplitWidth: 700
+  alignmentVertical: top
   reverse: false
   reverseOrderOnMobile: false
   gap: lg

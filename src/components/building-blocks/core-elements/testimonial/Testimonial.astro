@@ -14,6 +14,7 @@ const {
   "data-prop": customDataProp,
   "data-prop-author-name": customDataPropAuthorName,
   "data-prop-author-description": customDataPropAuthorDescription,
+  "data-prop-author-image": customDataPropAuthorImage,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -35,6 +36,16 @@ const effectiveAuthorDescProp =
   customDataPropAuthorDescription ?? (useDefaultEditableBinding ? "authorDescription" : null);
 const authorDescriptionDataAttributes = effectiveAuthorDescProp
   ? { "data-editable": "text", "data-prop": effectiveAuthorDescProp }
+  : {};
+
+const effectiveAuthorImageProp =
+  customDataPropAuthorImage ?? (useDefaultEditableBinding ? "authorImage" : null);
+// The avatar's alt *is* the author name, so alt edits write to that same prop.
+const authorImageDataAttributes = effectiveAuthorImageProp
+  ? {
+      "data-prop-src": effectiveAuthorImageProp,
+      ...(effectiveAuthorNameProp ? { "data-prop-alt": effectiveAuthorNameProp } : {}),
+    }
   : {};
 ---
 
@@ -63,8 +74,7 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
             border={false}
             class="author-image"
             displaySize={80}
-            data-prop-src="authorImage"
-            data-prop-alt="authorName"
+            {...authorImageDataAttributes}
           />
         )
       }
@@ -118,23 +128,25 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
         > .quote {
           margin: 0;
 
-          * {
+          /* Direct children only: a descendant selector puts a quote mark on
+             every nested leaf, so a quote starting with bold renders ““Bold”. */
+          > * {
             font-size: var(--font-size-2xl);
           }
 
-          *:first-child {
+          > *:first-child {
             margin-top: 0;
           }
 
-          *:last-child {
+          > *:last-child {
             margin-bottom: 0;
           }
 
-          *:first-child::before {
+          > *:first-child::before {
             content: "\201C";
           }
 
-          *:last-child::after {
+          > *:last-child::after {
             content: "\201D";
           }
         }

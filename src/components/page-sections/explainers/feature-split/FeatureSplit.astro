@@ -23,7 +23,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -32,7 +32,6 @@ const {
 } = Astro.props;
 
 const minSplitWidth = 800;
-const featureSplitId = `feature-split-${crypto.randomUUID()}`;
 ---
 
 <CustomSection
@@ -45,7 +44,6 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
   lockColorScheme={lockColorScheme}
   backgroundColor={backgroundColor}
   background={background}
-  data-feature-split-id={featureSplitId}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
@@ -88,7 +86,7 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     </Fragment>
     <Image
       slot="second"
-      class:list={["feature-split-image", reverse && "reverse"]}
+      class="feature-split-image"
       source={imageSource}
       alt={imageAlt}
       rounded={imageRounded}
@@ -98,26 +96,6 @@ const featureSplitId = `feature-split-${crypto.randomUUID()}`;
     />
   </Split>
 </CustomSection>
-
-{
-  imageAspectRatio == "portrait" && (
-    <style
-      is:inline
-      set:html={`
-        @container feature-split-layout (min-width: ${minSplitWidth}px) {
-        .feature-split-image.image.rounded.reverse {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        .feature-split-image.image.rounded:not(.reverse) {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        }
-    `}
-    />
-  )
-}
 
 <style is:global>
   @layer page-sections {

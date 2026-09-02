@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { generateFieldId } from "../../src/components/utils/formField";
+import { generateFieldId, toDateInputValue } from "../../src/components/utils/formField";
 
 // `generateFieldId` uses crypto.randomUUID() when no id is provided, so these
 // tests assert the contract (prefix, uniqueness, precedence of the provided
@@ -25,5 +25,28 @@ describe("generateFieldId", () => {
 
     expect(first).not.toBe(second);
     expect(first.length).toBeGreaterThan("field-".length);
+  });
+});
+
+describe("toDateInputValue", () => {
+  it("keeps a bare YYYY-MM-DD value", () => {
+    expect(toDateInputValue("2026-01-01")).toBe("2026-01-01");
+  });
+
+  it("drops the time part of an ISO datetime", () => {
+    expect(toDateInputValue("2026-01-01T15:30:00")).toBe("2026-01-01");
+    expect(toDateInputValue("2026-01-01T15:30:00.000Z")).toBe("2026-01-01");
+  });
+
+  it("formats a Date object", () => {
+    expect(toDateInputValue(new Date("2026-01-01T15:30:00Z"))).toBe("2026-01-01");
+  });
+
+  it("returns undefined for anything a date input cannot use", () => {
+    expect(toDateInputValue(undefined)).toBeUndefined();
+    expect(toDateInputValue(null)).toBeUndefined();
+    expect(toDateInputValue("")).toBeUndefined();
+    expect(toDateInputValue("next tuesday")).toBeUndefined();
+    expect(toDateInputValue(new Date("nope"))).toBeUndefined();
   });
 });

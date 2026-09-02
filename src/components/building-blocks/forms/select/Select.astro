@@ -17,17 +17,22 @@ const {
   error,
   iconName,
   iconColor = "default",
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("select", htmlAttributes.id);
+const fieldId = generateFieldId("select", customId);
 const hasLeadingIcon = isNonEmptyString(iconName);
 const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
 const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
 const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
+
+// A disabled placeholder that isn't `selected` never shows — the browser falls
+// through to the first enabled option, and `required` is satisfied on load.
+const placeholderSelected = !options?.some((option: SegmentOption) => option.value === value);
 ---
 
 <div
@@ -77,14 +82,15 @@ const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
           <option
             value=""
             disabled
+            selected={placeholderSelected}
           >
             {placeholder}
           </option>
         )
       }
       {
-        options.length > 0 ? (
-          options.map((option: SegmentOption) => (
+        options?.length > 0 ? (
+          options?.map((option: SegmentOption) => (
             <SelectOption
               value={option.value}
               label={option.label}

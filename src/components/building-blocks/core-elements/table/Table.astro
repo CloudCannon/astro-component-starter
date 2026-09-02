@@ -13,27 +13,27 @@ const {
   compact = false,
   spaceBefore = "default",
   class: className,
-  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  useDefaultEditableBinding = false,
+  "data-prop-caption": customDataPropCaption,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
 const width = columnCount(headerCells, rows);
 const normalizedHeader = normalizeRow(headerCells, width);
-const normalizedRows = (rows as RowProps[]).map((row) => normalizeRow(row?.cells, width));
+const normalizedRows = ((rows ?? []) as RowProps[]).map((row) => normalizeRow(row?.cells, width));
+
+const effectiveCaptionProp =
+  customDataPropCaption ?? (useDefaultEditableBinding ? "caption" : null);
+const captionDataAttributes = effectiveCaptionProp
+  ? { "data-editable": "text", "data-prop": effectiveCaptionProp }
+  : {};
 
 if (!_component && width === 0) return;
 ---
 
 <div
-  class:list={[
-    "table",
-    "stackable",
-    striped && "striped",
-    compact && "compact",
-    firstColumnHeader && "first-col-header",
-    className,
-  ]}
+  class:list={["table", "stackable", className]}
   {...htmlAttributes}
 >
   <p
@@ -43,25 +43,21 @@ if (!_component && width === 0) return;
     Scroll →
   </p>
   <div
-    class="table-scroller"
+    class:list={[
+      "table-scroller",
+      striped && "striped",
+      compact && "compact",
+      firstColumnHeader && "first-col-header",
+    ]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
     role="region"
     tabindex="0"
     aria-label={caption || "Table"}
   >
     <table>
+      {caption && <caption {...captionDataAttributes}>{caption}</caption>}
       {
-        caption && (
-          <caption
-            data-editable="text"
-            data-prop="caption"
-          >
-            {caption}
-          </caption>
-        )
-      }
-      {
-        headerCells.length > 0 && (
+        headerCells?.length > 0 && (
           <thead>
             <tr>
               {normalizedHeader.map((cell) => (
@@ -110,7 +106,8 @@ if (!_component && width === 0) return;
 
       table {
         border-collapse: collapse;
-        min-width: 34rem;
+        /* A cap, not a floor: a two-column table must not force a pan. */
+        min-width: min(34rem, 100%);
         width: 100%;
       }
 
@@ -157,7 +154,9 @@ if (!_component && width === 0) return;
         font-weight: var(--font-weight-semibold);
       }
 
-      &.striped {
+      /* The striped/compact/first-col-header classes ride on the scroller — a
+         prop-driven class on a region root goes stale in the editor. */
+      > .table-scroller.striped {
         tbody th,
         tbody td {
           border-bottom: none;
@@ -169,7 +168,7 @@ if (!_component && width === 0) return;
         }
       }
 
-      &.compact {
+      > .table-scroller.compact {
         thead th {
           font-size: var(--font-size-xs);
           padding: var(--spacing-xs) var(--spacing-sm);
@@ -193,7 +192,7 @@ if (!_component && width === 0) return;
           mask-image: linear-gradient(90deg, #000 calc(100% - var(--spacing-xl)), transparent);
         }
 
-        &.first-col-header {
+        > .table-scroller.first-col-header {
           thead th:first-child,
           tbody th[scope="row"] {
             background-color: var(--color-bg);

@@ -4,15 +4,31 @@ description: Grid of features with icons and short descriptions.
 value:
   _component: page-sections/explainers/feature-grid
   sectionLabel: ""
-  eyebrow: Eyebrow text
-  heading: Heading text
-  subtext: Subtext placeholder text that will be replaced with actual content.
+  eyebrow: What you get
+  heading: Three things worth knowing
+  subtext: One line that frames the points below.
   alignmentHorizontal: center
-  features: []
+  features:
+    - title: Fast by default
+      description: Static HTML and CSS, so a page renders before any JavaScript runs.
+      iconName: bolt
+      iconColor: yellow
+      iconBackground: true
+    - title: Yours to brand
+      description: Color, type, and spacing come from one token file you set once.
+      iconName: swatch
+      iconColor: blue
+      iconBackground: true
+    - title: Editable in place
+      description: Anyone on the team can update a page without opening the code.
+      iconName: pencil-square
+      iconColor: green
+      iconBackground: true
   maxContentWidth: 2xl
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -56,6 +72,7 @@ _structures:
           description: Feature description placeholder text that will be replaced with actual content.
           iconName: bolt
           iconColor: yellow
+          iconBackground: true
         preview:
           text:
             - key: title
@@ -116,6 +133,9 @@ _structures:
                   name: Pink
                 - id: cyan
                   name: Cyan
+          iconBackground:
+            type: switch
+            comment: Draw a tinted plate behind the icon.
 groups:
   - heading: Content
     inputs:
@@ -133,5 +153,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

@@ -29,24 +29,17 @@ if (!_component && ((!hasTitle && !hasTitleSlotContent) || (!hasText && !hasSlot
 ---
 
 <div
-  class="definition-list-item"
+  class:list={["definition-list-item", className]}
   {...htmlAttributes}
 >
-  <dt
-    class:list={["title", className]}
-    role="term"
-    {...titleDataAttributes}
-  >
+  <dt class="title">
     <span {...titleDataAttributes}>
       <slot name="title">
         {title}
       </slot>
     </span>
   </dt>
-  <dd
-    class:list={["content", className]}
-    role="definition"
-  >
+  <dd class="content">
     <span {...contentDataAttributes}>
       <slot>
         {text}

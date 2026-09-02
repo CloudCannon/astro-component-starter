@@ -4,12 +4,12 @@ description: One feature explained beside an image.
 value:
   _component: page-sections/explainers/feature-split
   sectionLabel: ""
-  eyebrow: Eyebrow text
-  heading: Heading text
-  subtext: Subtext placeholder text that will be replaced with actual content.
+  eyebrow: How it works
+  heading: One idea, shown beside it
+  subtext: A short paragraph that explains the idea in the image next to it.
   buttonSections: []
   imageSource: /src/assets/images/component-docs/quiet-street.jpg
-  imageAlt: Feature image
+  imageAlt: A quiet residential street
   imageAspectRatio: portrait
   imageRounded: true
   reverse: false
@@ -17,6 +17,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -71,5 +72,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

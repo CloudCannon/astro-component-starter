@@ -5,7 +5,7 @@ const {
   prefix,
   suffix,
   alignmentHorizontal = "start",
-  size,
+  size = "2xl",
   spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -13,11 +13,21 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const target = Number(number);
+const parsedTarget = Number(number);
+const target = Number.isFinite(parsedTarget) ? parsedTarget : 0;
 // 20% of the target, except 0 — that would start at 0 and never move, so
 // count down from a small integer instead.
 const startNumber = target === 0 ? 20 : Math.floor(target * 0.2);
 const duration = 500;
+
+// Animate at the target's own precision, so "99.95" doesn't get floored.
+const decimals = (String(number).split(".")[1] || "").length;
+// The SSR text has to be grouped the same way the script groups it, or the
+// number reflows the moment the first frame runs ("1000" -> "1,000").
+const formattedTarget = target.toLocaleString(undefined, {
+  minimumFractionDigits: decimals,
+  maximumFractionDigits: decimals,
+});
 ---
 
 <div
@@ -34,8 +44,9 @@ const duration = 500;
       data-target={`${target}`}
       data-start={`${startNumber}`}
       data-duration={`${duration}`}
+      data-decimals={`${decimals}`}
       aria-live="off"
-      >{number}</span
+      >{formattedTarget}</span
     >
     {suffix && <span class="suffix">{suffix}</span>}
   </span>
@@ -70,8 +81,21 @@ const duration = 500;
       const start = parseFloat(element.dataset.start || "0");
       const target = parseFloat(element.dataset.target || "0");
       const duration = parseInt(element.dataset.duration || "2000", 10);
-      // Animate at the target's own precision, so "99.95" doesn't get floored.
-      const decimals = (element.dataset.target?.split(".")[1] || "").length;
+      const decimals = parseInt(element.dataset.decimals || "0", 10);
+
+      const format = (value: number) =>
+        value.toLocaleString(undefined, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        });
+
+      // requestAnimationFrame is invisible to the global reduced-motion CSS
+      // reset, so the count-up has to opt out here.
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        element.textContent = format(target);
+
+        return;
+      }
 
       let startTime: number | null = null;
 
@@ -79,13 +103,7 @@ const duration = 500;
         if (!startTime) startTime = ts;
         const progress = Math.min((ts - startTime) / duration, 1);
         const value = start + (target - start) * progress;
-        element.textContent =
-          decimals > 0
-            ? value.toLocaleString(undefined, {
-                minimumFractionDigits: decimals,
-                maximumFractionDigits: decimals,
-              })
-            : Math.floor(value).toLocaleString();
+        element.textContent = format(decimals > 0 ? value : Math.floor(value));
         if (progress < 1) requestAnimationFrame(step);
       }
 

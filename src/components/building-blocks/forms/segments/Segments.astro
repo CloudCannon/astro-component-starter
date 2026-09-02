@@ -19,11 +19,15 @@ const {
 
 const groupId = generateFieldId("segments", htmlAttributes.id);
 const inputType = multiple ? "checkbox" : "radio";
+
+// Native `required` on one checkbox of a group means "tick this box", not
+// "pick at least one" — only radio groups can express the group constraint.
+const requireEachInput = required && !multiple;
 ---
 
 <fieldset
   class:list={["segments", className]}
-  role={multiple ? "group" : "radiogroup"}
+  aria-required={required ? "true" : undefined}
   aria-labelledby={title ? `${groupId}-legend` : undefined}
   {...htmlAttributes}
 >
@@ -58,8 +62,7 @@ const inputType = multiple ? "checkbox" : "radio";
             value={option.value}
             checked={option.checked ? "checked" : undefined}
             data-checked={option.checked}
-            required={required && index === 0}
-            aria-required={required && index === 0}
+            required={requireEachInput && index === 0}
             autocomplete={keepStateOnRefresh ? "on" : "off"}
             class="segments-field"
           />

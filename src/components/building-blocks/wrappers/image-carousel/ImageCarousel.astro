@@ -45,7 +45,6 @@ if (!_component && !hasImages) return;
   class:list={["image-carousel", "stackable", className]}
   role="region"
   aria-label={label || "Image carousel"}
-  data-loop={String(loop)}
   {...htmlAttributes}
 >
   {
@@ -66,6 +65,7 @@ if (!_component && !hasImages) return;
 
   <div
     class="carousel-content"
+    data-loop={String(loop)}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
     <div class="main-viewport">
@@ -74,7 +74,7 @@ if (!_component && !hasImages) return;
         {...arrayDataAttributes}
       >
         {
-          images.map((img: ImageItem, index: number) => (
+          images?.map((img: ImageItem, index: number) => (
             <div
               class="main-slide"
               data-editable="array-item"
@@ -99,7 +99,7 @@ if (!_component && !hasImages) return;
 
     <div class:list={["thumbs-strip", aspectRatio && `thumbs-ratio-${aspectRatio}`]}>
       {
-        images.map((img: ImageItem, index: number) => (
+        images?.map((img: ImageItem, index: number) => (
           <button
             type="button"
             class="thumb"

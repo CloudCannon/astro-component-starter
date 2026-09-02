@@ -34,15 +34,16 @@ if (!_component && !hasText && !hasIcon) return;
 ---
 
 <div
-  class:list={[
-    "badge",
-    alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
-    className,
-  ]}
+  class:list={["badge", className]}
   {...htmlAttributes}
 >
   <Inner
-    class:list={["badge-inner", `variant-${variant}`, `size-${size}`]}
+    class:list={[
+      "badge-inner",
+      `variant-${variant}`,
+      `size-${size}`,
+      alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    ]}
     {...innerAttributes}
   >
     {
@@ -175,17 +176,19 @@ if (!_component && !hasText && !hasIcon) return;
         color: var(--color-text-muted);
       }
 
-      &.align-start {
+      /* The alignment class rides on the inner box — a prop-driven class on a
+         region root goes stale in the editor — so `:has()` hoists it back. */
+      &:has(> .badge-inner.align-start) {
         display: block;
         text-align: start;
       }
 
-      &.align-center {
+      &:has(> .badge-inner.align-center) {
         display: block;
         text-align: center;
       }
 
-      &.align-end {
+      &:has(> .badge-inner.align-end) {
         display: block;
         text-align: end;
       }

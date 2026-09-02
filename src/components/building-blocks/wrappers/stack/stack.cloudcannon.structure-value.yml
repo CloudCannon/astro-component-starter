@@ -8,8 +8,8 @@ value:
   direction: column
   distribution: content
   gap: md
-  alignmentHorizontal: start
-  alignmentVertical: start
+  alignmentHorizontal: null
+  alignmentVertical: null
   wrap: true
   stackOnMobile: true
 preview:

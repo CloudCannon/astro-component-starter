@@ -6,8 +6,8 @@ value:
   name: bolt
   size: lg
   color: default
-  background: true
-  alignmentHorizontal: start
+  background: false
+  alignmentHorizontal: ""
 preview:
   text:
     - Icon

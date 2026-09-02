@@ -4,17 +4,17 @@ description: Hero with text on one side and an image on the other.
 value:
   _component: page-sections/heroes/hero-split
   sectionLabel: ""
-  eyebrow: Eyebrow text
-  heading: Heading text
-  subtext: Subtitle placeholder text that will be replaced with actual content.
+  eyebrow: Introducing
+  heading: A clear promise in one line
+  subtext: One or two sentences on who this is for and what they get.
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
-  imageAlt: Hero image
+  imageAlt: Sea cliffs above a bay
   imageAspectRatio: none
   buttonSections:
     - _component: building-blocks/core-elements/button
-      text: My Button
+      text: Get started
       hideText: false
-      link: ""
+      link: /
       iconName: ""
       iconColor: default
       iconPosition: before
@@ -25,6 +25,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -78,5 +79,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

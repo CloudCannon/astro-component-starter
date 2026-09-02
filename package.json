@@ -15,12 +15,13 @@
     "search:dev": "npm run build && node scripts/search/dev-index.mjs",
     "preview": "astro preview",
     "astro": "astro",
-    "check": "npm run lint && npm run format && npm run typecheck && npm run previews:check && npm run docs:catalog:check && npm run agents:check && npm run icons:check && npm run lint:cms && npm run docs:check && npm run lint:schema && npm run check:placeholders",
+    "check": "npm run lint && npm run format && npm run typecheck && npm run previews:check && npm run docs:catalog:check && npm run agents:check && npm run icons:check && npm run lint:cms && npm run lint:roots && npm run lint:nesting && npm run docs:check && npm run lint:schema && npm run check:placeholders",
     "check:placeholders": "node scripts/check/placeholders.mjs",
     "reset:starter": "node scripts/setup/reset-starter.mjs",
     "check:fix": "npm run lint:fix && npm run format:fix",
     "typecheck": "astro check",
     "lint:cms": "node scripts/cms/lint.mjs",
+    "lint:roots": "node scripts/cms/lint-roots.mjs",
     "docs:check": "node scripts/docs/check.mjs",
     "docs:catalog": "node scripts/docs/catalog.mjs && npm run agents:sync",
     "docs:catalog:check": "node scripts/docs/catalog.mjs --check",
@@ -31,6 +32,7 @@
     "test:render": "node scripts/tests/render-all-sections.mjs",
     "test:unit": "vitest run",
     "test:smoke": "node scripts/tests/smoke.mjs",
+    "test:flow-margins": "node scripts/tests/flow-margins.mjs",
     "new:component": "node scripts/scaffold/new-component.mjs",
     "previews:build": "node scripts/previews/build.mjs",
     "previews:screenshot": "node scripts/previews/screenshot.mjs",
@@ -49,7 +51,8 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "deps:sync": "rm -rf node_modules && npm install --os=linux --cpu=x64 --libc=glibc --ignore-scripts --no-audit && npm ci",
-    "deps:check": "npm ci --dry-run"
+    "deps:check": "npm ci --dry-run",
+    "lint:nesting": "node scripts/cms/lint-nesting.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.5",

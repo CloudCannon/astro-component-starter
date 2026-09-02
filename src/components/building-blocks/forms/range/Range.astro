@@ -49,7 +49,6 @@ const ticks = showTicks
 
 <div
   class:list={["range", className]}
-  data-tick-style={tickStyle}
   {...htmlAttributes}
 >
   {
@@ -104,6 +103,7 @@ const ticks = showTicks
     showTicks && (
       <div
         class="range-ticks"
+        data-tick-style={tickStyle}
         aria-hidden="true"
       >
         {ticks.map((tick) => (
@@ -144,7 +144,8 @@ const ticks = showTicks
       const ticks = wrapper.querySelectorAll<HTMLSpanElement>(".range-tick");
       if (!input) return;
 
-      const tickStyle = wrapper.dataset.tickStyle || "uniform";
+      const tickStyle =
+        wrapper.querySelector<HTMLElement>(".range-ticks")?.dataset.tickStyle || "uniform";
 
       const update = () => {
         const min = Number(input.min) || 0;

@@ -26,6 +26,10 @@ import {
   setupImageCarousel,
 } from "./src/components/building-blocks/wrappers/image-carousel/setup";
 import {
+  setupAllContentSelectors,
+  setupContentSelector,
+} from "./src/components/building-blocks/wrappers/content-selector/setup";
+import {
   setupAllModals,
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
@@ -85,7 +89,7 @@ const CAROUSEL_INNER_ATTRS = [
  * Image list and arrow visibility are rendered conditionally, so those
  * are handled via childList mutations below.
  */
-const IMAGE_CAROUSEL_ROOT_ATTRS = ["data-loop"];
+const IMAGE_CAROUSEL_CONTENT_ATTRS = ["data-loop"];
 
 function makeResetScheduler({ destroy, init, label }) {
   const pending = new Set();
@@ -241,6 +245,19 @@ function initNewComponents(root) {
     setupMasonry(el);
   }
 
+  const newContentSelectors = [];
+
+  if (root.classList?.contains("content-selector-items")) {
+    newContentSelectors.push(root);
+  }
+
+  root.querySelectorAll(".content-selector-items").forEach((el) => newContentSelectors.push(el));
+
+  for (const el of newContentSelectors) {
+    log("initialising new content selector", el);
+    setupContentSelector(el);
+  }
+
   setupAllVideos(root);
 }
 
@@ -265,10 +282,10 @@ const observer = new MutationObserver((mutations) => {
       }
 
       if (
-        IMAGE_CAROUSEL_ROOT_ATTRS.includes(attributeName) &&
-        target.classList.contains("image-carousel")
+        IMAGE_CAROUSEL_CONTENT_ATTRS.includes(attributeName) &&
+        target.classList.contains("carousel-content")
       ) {
-        queueImageCarouselReset(target, `attr:${attributeName}`);
+        queueImageCarouselReset(target.closest(".image-carousel"), `attr:${attributeName}`);
         continue;
       }
     }
@@ -308,7 +325,7 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, {
   attributes: true,
-  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS, ...IMAGE_CAROUSEL_ROOT_ATTRS],
+  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS, ...IMAGE_CAROUSEL_CONTENT_ATTRS],
   childList: true,
   subtree: true,
 });
@@ -321,10 +338,11 @@ setupAllSearch();
 setupAllTocs();
 setupAllGalleries();
 setupAllMasonry();
+setupAllContentSelectors();
 setupAllVideos();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,
   carouselAttrs: CAROUSEL_INNER_ATTRS,
-  imageCarouselAttrs: IMAGE_CAROUSEL_ROOT_ATTRS,
+  imageCarouselAttrs: IMAGE_CAROUSEL_CONTENT_ATTRS,
 });

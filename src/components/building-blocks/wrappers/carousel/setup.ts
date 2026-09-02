@@ -67,6 +67,7 @@ export function setupCarousel(carousel: CarouselElement): void {
         delay: autoplayInterval,
         stopOnInteraction: false,
         stopOnMouseEnter: pauseOnHover,
+        stopOnFocusIn: true,
       })
     );
   }
@@ -77,7 +78,7 @@ export function setupCarousel(carousel: CarouselElement): void {
     const scrollValue = parseFloat(inner.getAttribute("data-autoscroll") || "1");
     const speed = isNaN(scrollValue) ? 1 : scrollValue;
 
-    plugins.push(AutoScroll({ speed }));
+    plugins.push(AutoScroll({ speed, stopOnFocusIn: true }));
     watchDrag = false;
   }
 
@@ -137,10 +138,15 @@ export function setupCarousel(carousel: CarouselElement): void {
       indicatorsContainer.innerHTML = "";
 
       embla.scrollSnapList().forEach((_, index) => {
-        const dot = document.createElement("div");
+        // A button, not a div: a dot is a control, and a div takes no focus.
+        const dot = document.createElement("button");
+        const selected = index === embla.selectedScrollSnap();
 
+        dot.type = "button";
         dot.className = "indicator";
-        dot.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
+        dot.setAttribute("aria-label", `Go to slide ${index + 1}`);
+        dot.setAttribute("data-selected", selected.toString());
+        if (selected) dot.setAttribute("aria-current", "true");
         dot.addEventListener("click", () => embla.scrollTo(index));
         indicatorsContainer.appendChild(dot);
       });
@@ -151,12 +157,39 @@ export function setupCarousel(carousel: CarouselElement): void {
         const isSelected = index === embla.selectedScrollSnap();
 
         dot.setAttribute("data-selected", isSelected.toString());
+        if (isSelected) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
       });
     };
 
     embla.on("select", updateSelectedDot);
     embla.on("reInit", renderDots);
     renderDots();
+  }
+
+  const motion = embla.plugins().autoplay ?? embla.plugins().autoScroll;
+
+  if (motion && controlsWrapper) {
+    // WCAG 2.2.2: movement that starts on its own and runs past five seconds
+    // needs a control to stop it. Hover and focus only pause it while they
+    // last, so neither counts.
+    const pause = document.createElement("button");
+    const setLabel = () => {
+      const playing = motion.isPlaying();
+
+      pause.textContent = playing ? "Pause" : "Play";
+      pause.setAttribute("aria-label", playing ? "Pause slideshow" : "Play slideshow");
+    };
+
+    pause.type = "button";
+    pause.className = "carousel-pause";
+    setLabel();
+    pause.addEventListener("click", () => {
+      if (motion.isPlaying()) motion.stop();
+      else motion.play();
+      setLabel();
+    });
+    controlsWrapper.appendChild(pause);
   }
 
   if (thumbnailsContainer) {

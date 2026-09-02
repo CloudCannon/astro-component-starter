@@ -40,7 +40,7 @@ function hasCurrentChild(item: NavItem): boolean {
 >
   <ul class="side-list">
     {
-      navData.map((item: NavItem) => {
+      navData?.map((item: NavItem) => {
         const hasChildren = item.children && item.children.length > 0;
         const dropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
         const contentId = `dropdown-content-${crypto.randomUUID()}`;
@@ -230,7 +230,7 @@ function hasCurrentChild(item: NavItem): boolean {
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
-  import { syncExpanded } from "@components/navigation/bar/toggleState";
+  import { bindToggleKeys, syncExpanded } from "@components/navigation/bar/toggleState";
 
   function setupSideNavigation() {
     const sideNavs = document.querySelectorAll(".side");
@@ -242,6 +242,7 @@ function hasCurrentChild(item: NavItem): boolean {
       navElement.dataset.sideInitialized = "true";
 
       sideNav.addEventListener("change", () => syncExpanded(sideNav));
+      bindToggleKeys(sideNav);
 
       function bindTriggerHandlers(trigger: Element) {
         trigger.addEventListener("click", (e) => {
@@ -255,27 +256,6 @@ function hasCurrentChild(item: NavItem): boolean {
             e.preventDefault();
             toggleEl.checked = false;
             toggleEl.dispatchEvent(new Event("change", { bubbles: true }));
-          }
-        });
-
-        trigger.addEventListener("keydown", (e) => {
-          if (e instanceof KeyboardEvent && (e.key === "Enter" || e.key === " ")) {
-            e.preventDefault();
-            e.stopPropagation();
-            const label = e.currentTarget;
-            if (!(label instanceof Element)) return;
-
-            const toggleId = label.getAttribute("for");
-            const toggleEl = document.getElementById(toggleId || "");
-
-            if (toggleEl instanceof HTMLInputElement) {
-              if (toggleEl.checked) {
-                toggleEl.checked = false;
-              } else {
-                toggleEl.checked = true;
-              }
-              toggleEl.dispatchEvent(new Event("change", { bubbles: true }));
-            }
           }
         });
       }

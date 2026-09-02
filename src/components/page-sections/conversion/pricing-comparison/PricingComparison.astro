@@ -28,7 +28,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -36,7 +36,9 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const planList = (plans as Plan[]).filter((plan) => plan?.name);
+// Not filtered: a row's `values` are positional, so dropping an unnamed plan
+// would shift every later column's cells onto the wrong plan.
+const planList = (plans ?? []) as Plan[];
 
 // One cell per plan on every row, so a short row renders empty cells instead
 // of shifting the columns (same normalization rule as the Table block).
@@ -56,11 +58,11 @@ const markFor = (value: string) => {
   return "text";
 };
 
-const hasTable = planList.length > 0 && rows.length > 0;
+const hasTable = planList.length > 0 && rows?.length > 0;
 ---
 
 <CustomSection
-  class:list={["pricing-comparison", striped && "striped", className]}
+  class:list={["pricing-comparison", className]}
   label={sectionLabel}
   maxContentWidth={maxContentWidth}
   paddingHorizontal={paddingHorizontal}
@@ -96,7 +98,7 @@ const hasTable = planList.length > 0 && rows.length > 0;
 
   {
     hasTable && (
-      <div class="pricing-comparison-frame">
+      <div class:list={["pricing-comparison-frame", striped && "striped"]}>
         <p
           class="pricing-comparison-hint"
           aria-hidden="true"
@@ -111,23 +113,54 @@ const hasTable = planList.length > 0 && rows.length > 0;
         >
           <table>
             <thead>
-              <tr>
+              {/* The only place `plans` is bound — the body and footer cells
+                  are copies of the same items, and duplicate bindings compete
+                  for the same rows on the canvas. */}
+              <tr
+                data-editable="array"
+                data-prop="plans"
+                data-direction="row"
+              >
                 <td />
                 {planList.map((plan) => (
                   <th
                     scope="col"
                     class:list={[plan.highlight && "highlight"]}
+                    data-editable="array-item"
                   >
-                    <span class="pricing-comparison-plan">{plan.name}</span>
-                    {plan.price && <span class="pricing-comparison-price">{plan.price}</span>}
+                    <span
+                      class="pricing-comparison-plan"
+                      data-editable="text"
+                      data-prop="name"
+                    >
+                      {plan.name}
+                    </span>
+                    {plan.price && (
+                      <span
+                        class="pricing-comparison-price"
+                        data-editable="text"
+                        data-prop="price"
+                      >
+                        {plan.price}
+                      </span>
+                    )}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody>
-              {rows.map((row: Row) => (
-                <tr>
-                  <th scope="row">{row?.feature}</th>
+            <tbody
+              data-editable="array"
+              data-prop="rows"
+            >
+              {rows?.map((row: Row) => (
+                <tr data-editable="array-item">
+                  <th
+                    scope="row"
+                    data-editable="text"
+                    data-prop="feature"
+                  >
+                    {row?.feature}
+                  </th>
                   {planList.map((plan, index) => {
                     const value = cellFor(row, index);
                     const mark = markFor(value);
@@ -152,7 +185,11 @@ const hasTable = planList.length > 0 && rows.length > 0;
                   })}
                 </tr>
               ))}
-              {planList.some((plan) => plan.buttonText) && (
+            </tbody>
+            {/* In `tfoot`, not `tbody`: the CTA row is not one of `rows`, and a
+                non-item child inside the array region confuses row insertion. */}
+            {planList.some((plan) => plan.buttonText) && (
+              <tfoot>
                 <tr class="pricing-comparison-actions">
                   <td />
                   {planList.map((plan) => (
@@ -168,8 +205,8 @@ const hasTable = planList.length > 0 && rows.length > 0;
                     </td>
                   ))}
                 </tr>
-              )}
-            </tbody>
+              </tfoot>
+            )}
           </table>
         </div>
       </div>
@@ -192,7 +229,7 @@ const hasTable = planList.length > 0 && rows.length > 0;
       }
 
       .pricing-comparison-frame {
-        margin-top: var(--space-before-loose);
+        --space-before: var(--space-before-loose);
       }
 
       .pricing-comparison-hint {
@@ -243,12 +280,17 @@ const hasTable = planList.length > 0 && rows.length > 0;
       }
 
       tbody th,
-      tbody td {
+      tbody td,
+      tfoot td {
         border: 0;
-        border-bottom: 1px solid var(--color-border);
         font-size: var(--font-size-sm);
         padding: var(--spacing-md);
         text-align: center;
+      }
+
+      tbody th,
+      tbody td {
+        border-bottom: 1px solid var(--color-border);
       }
 
       tbody th[scope="row"] {
@@ -268,7 +310,6 @@ const hasTable = planList.length > 0 && rows.length > 0;
       /* Highlighted plans are marked by the primary CTA, not a tinted column
          — column fills read as a second zebra axis and fight the row stripe. */
       .pricing-comparison-actions td {
-        border-bottom: none;
         padding-top: var(--spacing-lg);
 
         .button {
@@ -276,8 +317,10 @@ const hasTable = planList.length > 0 && rows.length > 0;
         }
       }
 
-      &.striped tbody tr:nth-child(2n) th,
-      &.striped tbody tr:nth-child(2n) td {
+      /* The striped class rides on the frame — a prop-driven class on a region
+         root goes stale in the editor. */
+      .pricing-comparison-frame.striped tbody tr:nth-child(2n) th,
+      .pricing-comparison-frame.striped tbody tr:nth-child(2n) td {
         background-color: var(--pricing-stripe);
       }
 
@@ -299,7 +342,7 @@ const hasTable = planList.length > 0 && rows.length > 0;
           position: sticky;
         }
 
-        &.striped tbody tr:nth-child(2n) th[scope="row"] {
+        .pricing-comparison-frame.striped tbody tr:nth-child(2n) th[scope="row"] {
           background-color: var(--pricing-stripe-solid);
         }
       }

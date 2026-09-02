@@ -23,7 +23,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -288,7 +288,7 @@ const hasLightbox = lightbox && items.length > 0;
     .gallery-grid {
       .gallery-items {
         list-style: none;
-        margin: var(--spacing-2xl) 0 0;
+        margin: 0;
         padding: 0;
 
         &.grid {

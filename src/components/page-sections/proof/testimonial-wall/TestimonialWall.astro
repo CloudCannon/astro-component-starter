@@ -20,7 +20,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -65,7 +65,7 @@ const {
   />
 
   {
-    testimonials.length > 0 && (
+    testimonials?.length > 0 && (
       /* Quotes are uneven by nature, so the wall is a Masonry — the wrapper's
          JS enhancement keeps reading order while packing the columns. */
       <Masonry
@@ -74,7 +74,7 @@ const {
         gap="md"
         data-children-prop="testimonials"
       >
-        {testimonials.map((testimonial: TestimonialProps) => (
+        {testimonials?.map((testimonial: TestimonialProps) => (
           <TestimonialWallItem
             data-editable="array-item"
             data-id="page-sections/proof/testimonial-wall/testimonial-wall-item"
@@ -92,10 +92,6 @@ const {
       .testimonial-wall-subtext {
         margin-inline: auto;
         max-width: 42rem;
-      }
-
-      .testimonial-wall-masonry {
-        margin-top: var(--space-before-loose);
       }
     }
   }

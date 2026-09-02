@@ -22,6 +22,9 @@ const {
   size = "xl",
   spaceBefore = "default",
   class: className,
+  // Deliberately not forwarded to Modal: Modal's default binding would put an
+  // array region for `contentSections` on the modal body, which here holds the
+  // video and has no such prop. Trigger text is bound explicitly below.
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -32,8 +35,8 @@ const hasVideo =
 
 if (!_component && !hasVideo) return;
 
-// A poster trigger lives outside the Modal, so the popover id can't be left to
-// Modal's own derivation — it's generated here and passed down.
+// The poster trigger is rendered here (into Modal's `trigger` slot), so it has
+// to know the popover id up front rather than leaving Modal to derive one.
 const usePoster = triggerStyle === "poster" && !!posterImage;
 const posterPopoverId = usePoster
   ? `video-${slugifyLabel(label || title || crypto.randomUUID())}`
@@ -50,45 +53,11 @@ const embedSrc =
       : undefined;
 ---
 
-{
-  usePoster && (
-    <button
-      type="button"
-      class="video-modal-poster"
-      popovertarget={posterPopoverId}
-      aria-label={title ? `Play video: ${title}` : "Play video"}
-    >
-      <Image
-        source={posterImage}
-        alt={posterAlt}
-        aspectRatio={posterAspectRatio}
-        sizes="(max-width: 640px) 100vw, 800px"
-        widths={[400, 800, 1280]}
-        width={1280}
-        data-prop-src="posterImage"
-        data-prop-alt="posterAlt"
-      />
-      <span
-        class="video-modal-poster-disc"
-        aria-hidden="true"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          width="28"
-          height="28"
-          fill="currentColor"
-        >
-          <path d="M8 5.5v13l11-6.5z" />
-        </svg>
-      </span>
-    </button>
-  )
-}
-
 <Modal
   label={label}
   popoverId={posterPopoverId}
   triggerText={usePoster ? undefined : triggerText}
+  data-prop-trigger-text="triggerText"
   triggerVariant={triggerVariant}
   triggerSize={triggerSize}
   triggerIconName={usePoster ? undefined : triggerIconName}
@@ -96,11 +65,48 @@ const embedSrc =
   class:list={["video-modal", "stackable", className]}
   spaceBefore={spaceBefore}
   _component={_component}
-  data-video-embed-src={embedSrc}
-  data-video-title={title}
   {...htmlAttributes}
 >
-  <div class="video-modal-body">
+  {
+    usePoster && (
+      <button
+        slot="trigger"
+        type="button"
+        class="video-modal-poster"
+        popovertarget={posterPopoverId}
+        aria-label={title ? `Play video: ${title}` : "Play video"}
+      >
+        <Image
+          source={posterImage}
+          alt={posterAlt}
+          aspectRatio={posterAspectRatio}
+          sizes="(max-width: 640px) 100vw, 800px"
+          widths={[400, 800, 1280]}
+          width={1280}
+          data-prop-src="posterImage"
+          data-prop-alt="posterAlt"
+        />
+        <span
+          class="video-modal-poster-disc"
+          aria-hidden="true"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="28"
+            height="28"
+            fill="currentColor"
+          >
+            <path d="M8 5.5v13l11-6.5z" />
+          </svg>
+        </span>
+      </button>
+    )
+  }
+  <div
+    class="video-modal-body"
+    data-video-embed-src={embedSrc}
+    data-video-title={title}
+  >
     {
       type === "local-source" ? (
         <Video
@@ -126,8 +132,9 @@ const embedSrc =
       const popover = modal.querySelector<HTMLElement>(".modal-popover");
       if (!popover) return;
 
-      const embedSrc = modal.dataset.videoEmbedSrc;
-      const videoTitle = modal.dataset.videoTitle;
+      const body = popover.querySelector<HTMLElement>(".video-modal-body");
+      const embedSrc = body?.dataset.videoEmbedSrc;
+      const videoTitle = body?.dataset.videoTitle;
       const embedContainer = popover.querySelector<HTMLElement>(".video-modal-embed");
       const localVideo = popover.querySelector<HTMLVideoElement>(".video-modal-player");
 
@@ -173,6 +180,12 @@ const embedSrc =
 
 <style is:global>
   @layer components {
+    /* Modal's root is inline-flex to shrink-wrap a button trigger; a poster
+       trigger is a full-width block instead. */
+    .video-modal:has(> .video-modal-poster) {
+      display: block;
+    }
+
     /* Poster trigger: a still frame with a play disc, sized by the image. The
        button is the only focusable target, so the whole frame is clickable. */
     .video-modal-poster {

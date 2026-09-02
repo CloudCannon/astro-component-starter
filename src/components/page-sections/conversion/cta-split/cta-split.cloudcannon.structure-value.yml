@@ -4,15 +4,15 @@ description: Call to action with text on one side and buttons on the other.
 value:
   _component: page-sections/conversion/cta-split
   sectionLabel: ""
-  heading: Heading text
-  subtext: Subtext placeholder text that will be replaced with actual content.
+  heading: Ready to get started?
+  subtext: One line that makes the next step obvious.
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
-  imageAlt: CTA image
+  imageAlt: Sea cliffs above a bay
   buttonSections:
     - _component: building-blocks/core-elements/button
-      text: My Button
+      text: Get started
       hideText: false
-      link: ""
+      link: /
       iconName: ""
       iconColor: default
       iconPosition: before
@@ -23,6 +23,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -74,5 +75,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

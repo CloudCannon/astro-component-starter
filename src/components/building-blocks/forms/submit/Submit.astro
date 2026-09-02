@@ -11,10 +11,13 @@ const {
   hideText = false,
   disabled = false,
   class: className,
-  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  useDefaultEditableBinding = false,
+  "data-prop": customDataProp,
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 ---
 
 <Button
@@ -28,7 +31,7 @@ const {
   iconPosition={iconPosition}
   hideText={hideText}
   disabled={disabled}
-  data-prop="text"
+  {...effectiveDataProp ? { "data-prop": effectiveDataProp } : {}}
   class:list={["submit", className]}
   {...htmlAttributes}
 />

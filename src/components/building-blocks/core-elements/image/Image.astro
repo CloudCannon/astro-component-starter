@@ -13,7 +13,7 @@ const {
   widths = [640, 1280, 2560],
   rounded = false,
   priority = false,
-  aspectRatio = null,
+  aspectRatio = "none",
   width,
   height,
   positionVertical = "center",
@@ -97,7 +97,7 @@ if (hasAlternate) {
 ---
 
 <div
-  class:list={["image", !background && "stackable", className]}
+  class:list={["image", "stackable", className]}
   {...htmlAttributes}
 >
   <div
@@ -156,9 +156,13 @@ if (hasAlternate) {
       display: block;
       overflow: hidden;
 
+      /* A background image fills its section rather than joining the flow, so
+         it takes no space before it — `stackable` stays on the root because
+         `_flow.css` selects that class directly and `:has()` can't hoist it. */
       &:has(> .image-inner.background) {
+        --space-before: var(--space-before-none);
+
         inset: 0;
-        margin-top: 0;
         position: absolute;
       }
 

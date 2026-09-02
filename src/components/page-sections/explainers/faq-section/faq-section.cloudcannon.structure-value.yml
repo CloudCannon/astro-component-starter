@@ -5,11 +5,27 @@ value:
   _component: page-sections/explainers/faq-section
   sectionLabel: ""
   heading: Frequently Asked Questions
-  items: []
+  items:
+    - title: How long does a build take?
+      contentSections:
+        - _component: building-blocks/core-elements/text
+          text: Most sites go live inside a week once the content is ready.
+          size: md
+    - title: Can our team edit the site themselves?
+      contentSections:
+        - _component: building-blocks/core-elements/text
+          text: Yes. Every section is editable on the page, with guardrails so the design holds.
+          size: md
+    - title: What happens after launch?
+      contentSections:
+        - _component: building-blocks/core-elements/text
+          text: You own the repository and the content. We stay on call for the first month.
+          size: md
   maxContentWidth: xl
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -87,5 +103,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

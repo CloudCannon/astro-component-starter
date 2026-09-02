@@ -33,6 +33,29 @@ function defineUsedVideoElements(root: ParentNode = document): void {
   }
 }
 
+/**
+ * Strips autoplay from hosted embeds for a reduced-motion visitor. Runs before
+ * `defineUsedVideoElements` on purpose: until the facade library is imported
+ * the custom elements are inert, so their attributes are still free to change.
+ */
+function disarmHostedAutoplay(root: ParentNode = document): void {
+  const scope = (selector: string) => [
+    ...(root instanceof Element && root.matches(selector) ? [root] : []),
+    ...Array.from(root.querySelectorAll(selector)),
+  ];
+
+  scope("lite-vimeo[autoload], lite-youtube[autoplay]").forEach((embed) => {
+    embed.removeAttribute("autoload");
+    embed.removeAttribute("autoplay");
+  });
+
+  scope('iframe.video-embed[src*="autoplay=1"]').forEach((embed) => {
+    const iframe = embed as HTMLIFrameElement;
+
+    iframe.src = iframe.src.replace("autoplay=1", "autoplay=0");
+  });
+}
+
 function isBroken(video: HTMLVideoElement) {
   return (
     Boolean(video.error) ||
@@ -80,6 +103,10 @@ function tryPlay(video: HTMLVideoElement) {
 }
 
 function playAutoplayVideos(root: ParentNode = document) {
+  // This repair calls play() directly, which the global reduced-motion CSS
+  // reset cannot reach — a visitor who asked for no motion gets no autoplay.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
   // Not scoped under a ".video" ancestor: the "video" class sits directly
   // on the <video> tag itself except for the background-media variant, so
   // a ".video video[autoplay]" descendant selector silently misses every
@@ -117,6 +144,10 @@ function playAutoplayVideos(root: ParentNode = document) {
 }
 
 export function setupAllVideos(root: ParentNode = document): void {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    disarmHostedAutoplay(root);
+  }
+
   defineUsedVideoElements(root);
   playAutoplayVideos(root);
 }

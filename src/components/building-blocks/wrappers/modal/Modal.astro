@@ -21,6 +21,8 @@ const {
   spaceBefore = "default",
   class: className,
   "data-children-prop": childrenDataProp,
+  "data-prop-heading": customDataPropHeading,
+  "data-prop-trigger-text": customDataPropTriggerText,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -33,9 +35,14 @@ const effectiveChildrenProp =
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
-const headingDataAttributes = useDefaultEditableBinding
-  ? { "data-editable": "text", "data-prop": "heading" }
+const effectiveHeadingProp =
+  customDataPropHeading ?? (useDefaultEditableBinding ? "heading" : null);
+const headingDataAttributes = effectiveHeadingProp
+  ? { "data-editable": "text", "data-prop": effectiveHeadingProp }
   : {};
+
+const effectiveTriggerTextProp =
+  customDataPropTriggerText ?? (useDefaultEditableBinding ? "triggerText" : null);
 
 const hasHeading = heading?.trim().length > 0;
 const hasContentSections = contentSections?.length > 0;
@@ -50,15 +57,23 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
   {...htmlAttributes}
 >
   {
-    hasTrigger && (
-      <Button
-        text={triggerText}
-        variant={triggerVariant}
-        size={triggerSize}
-        iconName={triggerIconName}
-        link={`^${popoverId}`}
-        class="modal-trigger"
-      />
+    /* A consumer-supplied trigger has to render INSIDE this root: outside it
+       the trigger falls out of the array-item region and picks up its own
+       flow margin (see VideoModal's poster). */
+    Astro.slots.has("trigger") ? (
+      <slot name="trigger" />
+    ) : (
+      hasTrigger && (
+        <Button
+          text={triggerText}
+          variant={triggerVariant}
+          size={triggerSize}
+          iconName={triggerIconName}
+          link={`^${popoverId}`}
+          class="modal-trigger"
+          data-prop={effectiveTriggerTextProp}
+        />
+      )
     )
   }
 

@@ -12,6 +12,7 @@ value:
   paddingHorizontal: lg
   paddingVertical: sm
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: surface
   background:
     type: image
@@ -61,5 +62,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

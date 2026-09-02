@@ -10,21 +10,7 @@
  *   not execute inline scripts, so we need to initialize modals
  *   from the live-sync script in that context.
  */
-
-const FOCUSABLE_SELECTOR = [
-  "a[href]",
-  "button:not([disabled])",
-  "input:not([disabled])",
-  "select:not([disabled])",
-  "textarea:not([disabled])",
-  '[tabindex]:not([tabindex="-1"])',
-].join(", ");
-
-function getFocusableElements(container: HTMLElement): HTMLElement[] {
-  return Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)).filter(
-    (el) => el.getClientRects().length > 0
-  );
-}
+import { getFocusableElements, trapFocus } from "@component-utils/focusTrap";
 
 function updateModalScrollLock(): void {
   const openPopovers = Array.from(document.querySelectorAll<HTMLElement>(".modal-popover")).filter(
@@ -51,6 +37,8 @@ export function setupModalShell(popover: HTMLElement): void {
   if (popover.hasAttribute("data-modal-initialized")) return;
   popover.setAttribute("data-modal-initialized", "");
 
+  let opener: HTMLElement | null = null;
+
   popover.addEventListener("toggle", (e) => {
     const { newState } = e as ToggleEvent;
     const trigger = findTrigger(popover);
@@ -59,44 +47,31 @@ export function setupModalShell(popover: HTMLElement): void {
     updateModalScrollLock();
 
     if (newState === "open") {
+      // Captured before focus moves inside: several controls can target one
+      // modal, and focus has to return to the one that was actually used —
+      // `findTrigger` only ever reports the first. Anything else that had
+      // focus is not an invoker (Search opens on Ctrl+K with focus on the
+      // body), so fall back to the declared trigger.
+      const active = document.activeElement;
+      const invoker =
+        active instanceof HTMLElement && popover.id && !popover.contains(active)
+          ? active.closest<HTMLElement>(`[popovertarget="${CSS.escape(popover.id)}"]`)
+          : null;
+
+      opener = invoker ?? trigger;
+
       // The popover API leaves focus on the invoker when a popover opens,
       // so move it to the first focusable element inside the modal.
       getFocusableElements(popover)[0]?.focus();
     }
 
     if (newState === "closed") {
-      trigger?.focus();
+      (opener ?? trigger)?.focus();
+      opener = null;
     }
   });
 
-  // Trap focus while the modal is open: Tab from the last focusable element
-  // wraps to the first, and Shift+Tab from the first wraps to the last.
-  popover.addEventListener("keydown", (e) => {
-    if (e.key !== "Tab" || !popover.matches(":popover-open")) return;
-
-    const focusable = getFocusableElements(popover);
-
-    if (!focusable.length) {
-      e.preventDefault();
-
-      return;
-    }
-
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    const active = document.activeElement;
-    const activeInPopover = active instanceof Node && popover.contains(active);
-
-    if (e.shiftKey) {
-      if (active === first || !activeInPopover) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else if (active === last || !activeInPopover) {
-      e.preventDefault();
-      first.focus();
-    }
-  });
+  trapFocus(popover, () => popover.matches(":popover-open"));
 }
 
 export function setupAllModals(root: ParentNode = document): void {

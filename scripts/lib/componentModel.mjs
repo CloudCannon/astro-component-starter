@@ -21,9 +21,10 @@ import { componentKeyFromPath, pascalToKebab } from "../../src/components/utils/
 // and the rest element (`...htmlAttributes`).
 
 /**
- * @returns {{ props: Set<string>, hasRest: boolean } | null}
- *   props = the concrete property names the component reads; null if no
- *   `Astro.props` destructure was found (component takes no props).
+ * @returns {{ props: Set<string>, hasRest: boolean, defaults: Map<string, string> } | null}
+ *   props = the concrete property names the component reads; defaults = the raw
+ *   default expression per prop that has one; null if no `Astro.props`
+ *   destructure was found (component takes no props).
  */
 export function parseDestructure(source) {
   const marker = "= Astro.props";
@@ -62,6 +63,7 @@ export function parseDestructure(source) {
   const parts = splitTopLevel(inner);
 
   const props = new Set();
+  const defaults = new Map();
   let hasRest = false;
 
   for (const raw of parts) {
@@ -78,10 +80,22 @@ export function parseDestructure(source) {
 
     if (cut !== -1) key = part.slice(0, cut);
     key = key.trim().replace(/^['"]|['"]$/g, "");
-    if (key) props.add(key);
+    if (!key) continue;
+    props.add(key);
+
+    // A rename (`class: className = "x"`) puts the default after a second `=`.
+    const rest = cut === -1 ? "" : part.slice(cut);
+    const eq = rest.startsWith("=") ? 0 : firstTopLevelDelimiter(rest.slice(1)) + 1;
+    const value = rest.startsWith("=")
+      ? rest.slice(1)
+      : eq > 0 && rest[eq] === "="
+        ? rest.slice(eq + 1)
+        : "";
+
+    if (value.trim()) defaults.set(key, value.trim());
   }
 
-  return { props, hasRest };
+  return { props, hasRest, defaults };
 }
 
 /** Split a destructure body on top-level commas (ignoring nested brackets/strings). */

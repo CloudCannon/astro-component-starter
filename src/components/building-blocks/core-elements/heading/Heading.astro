@@ -8,7 +8,7 @@ import Icon from "@core-elements/icon/Icon.astro";
 const {
   text,
   level = "h2",
-  size,
+  size = "default",
   alignmentHorizontal = "start",
   iconName,
   iconColor = "default",
@@ -88,7 +88,11 @@ if (!_component && !hasText && !hasSlotContent) return;
   {...htmlAttributes}
 >
   <span
-    class:list={["heading-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}
+    class:list={[
+      "heading-inner",
+      size && size !== "default" && `size-${size}`,
+      `align-${alignmentHorizontal}`,
+    ]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
     {

@@ -3,7 +3,7 @@ icon: horizontal_rule
 description: Horizontal line that separates content.
 value:
   _component: building-blocks/core-elements/divider
-  paddingVertical: lg
+  paddingVertical: md
 preview:
   text:
     - Divider

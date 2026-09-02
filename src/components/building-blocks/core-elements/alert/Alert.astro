@@ -13,6 +13,7 @@ const {
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
+  "data-prop-title": customDataPropTitle,
   _component,
   ...htmlAttributes
 } = Astro.props;
@@ -25,21 +26,17 @@ const DEFAULT_ICONS: Record<string, string> = {
   note: "pencil-square",
 };
 
-const ROLES: Record<string, "alert" | "status" | "note"> = {
-  info: "note",
-  success: "status",
-  warning: "alert",
-  danger: "alert",
-  note: "note",
-};
-
 const effectiveIcon = iconName || DEFAULT_ICONS[variant] || DEFAULT_ICONS.info;
-const role = ROLES[variant] ?? null;
 const MarkdownText = renderMarkdown(text);
 
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
+  : {};
+
+const effectiveTitleProp = customDataPropTitle ?? (useDefaultEditableBinding ? "title" : null);
+const titleDataAttributes = effectiveTitleProp
+  ? { "data-editable": "text", "data-prop": effectiveTitleProp }
   : {};
 
 const hasText = isNonEmptyString(text);
@@ -49,8 +46,8 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
 ---
 
 <div
-  class:list={["alert", "stackable", `variant-${variant}`, className]}
-  role={role}
+  class:list={["alert", "stackable", className]}
+  role="note"
   {...htmlAttributes}
 >
   <Icon
@@ -58,15 +55,14 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
     size="none"
   />
   <div
-    class="alert-content"
+    class:list={["alert-content", `variant-${variant}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
     {
       title && (
         <p
           class="alert-title"
-          data-editable="text"
-          data-prop="title"
+          {...titleDataAttributes}
         >
           {title}
         </p>
@@ -99,25 +95,27 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
       max-width: var(--content-width-lg);
       padding: var(--spacing-lg);
 
-      &.variant-success {
+      /* The variant class rides on `.alert-content` — a prop-driven class on a
+         region root goes stale in the editor — so `:has()` hoists it back. */
+      &:has(> .alert-content.variant-success) {
         --alert-accent: var(--color-success);
         --alert-bg: var(--color-success-bg-subtle);
         --alert-border: var(--color-success-border-subtle);
       }
 
-      &.variant-warning {
+      &:has(> .alert-content.variant-warning) {
         --alert-accent: var(--color-warning);
         --alert-bg: var(--color-warning-bg-subtle);
         --alert-border: var(--color-warning-border-subtle);
       }
 
-      &.variant-danger {
+      &:has(> .alert-content.variant-danger) {
         --alert-accent: var(--color-danger);
         --alert-bg: var(--color-danger-bg-subtle);
         --alert-border: var(--color-danger-border-subtle);
       }
 
-      &.variant-note {
+      &:has(> .alert-content.variant-note) {
         --alert-accent: var(--color-text-muted);
         --alert-bg: var(--color-bg-surface);
         --alert-border: var(--color-border);
@@ -146,7 +144,7 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
         margin: 0;
       }
 
-      &.variant-note .alert-title {
+      &:has(> .alert-content.variant-note) .alert-title {
         color: var(--color-text);
       }
 

@@ -51,7 +51,7 @@ Re-renders a component when its data changes so the rendered slice updates holis
 
 On the page, manages ordered lists with full CRUD (add, remove, reorder) and drag-and-drop. Array items on their own don't re-render contents — adding `data-component` to an array item element enables component re-rendering alongside the CRUD controls. For complex arrays, the array wrapper needs `data-component-key` and optionally `data-id-key` to declare which data fields identify each item's type and stable identity (see [Complex array attributes](#complex-array-attributes-wrapper-vs-item)).
 
-> **In this starter:** the array wrapper (`data-editable="array"`) is owned by the **caller's container element**. `renderBlock.astro` stamps each rendered block with `data-editable="array-item"` and `data-id={block._component}` — it never adds the `array` wrapper itself. The `data-component-key` is `_component`. Confirm in `src/components/utils/renderBlock.astro` and `src/components/utils/MainComponent.astro` (which carries `data-editable="array" data-prop="sections"`).
+> **In this starter:** the array wrapper (`data-editable="array"`) is owned by the **caller's container element**. `renderBlock.astro` stamps each rendered block with `data-editable="array-item"` and `data-id={block._component}` — it never adds the `array` wrapper itself. The `data-component-key` is `_component`. Confirm in `src/components/utils/renderBlock.astro` and `src/components/utils/MainComponent.astro` (which carries `data-editable="array" data-prop="pageSections"` — the frontmatter key, not its own `sections` prop).
 
 ### EditableSource
 

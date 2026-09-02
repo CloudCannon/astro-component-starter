@@ -21,14 +21,19 @@ const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 const DESKTOP = { width: 1280, height: 800 };
 const MOBILE = { width: 390, height: 844 };
 
-// Same list as src/components/building-blocks/wrappers/modal/setup.ts, so the
-// test counts exactly the elements the focus trap manages.
+// Same list as src/components/utils/focusTrap.ts, so the test counts exactly
+// the elements the focus trap manages.
 const FOCUSABLE_SELECTOR = [
   "a[href]",
   "button:not([disabled])",
   "input:not([disabled])",
   "select:not([disabled])",
   "textarea:not([disabled])",
+  "iframe",
+  "audio[controls]",
+  "video[controls]",
+  "summary",
+  '[contenteditable]:not([contenteditable="false"])',
   '[tabindex]:not([tabindex="-1"])',
 ].join(", ");
 
@@ -295,6 +300,135 @@ const tests = [
       await page.waitForFunction(
         () =>
           document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === false
+      );
+    },
+  },
+  {
+    name: "bar nav toggle opens on Enter and closes on Space",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      // The focusable control is the hidden `<input role="button">`; the
+      // visible trigger is a `<label>`, which never receives a key event.
+      const item = page.locator(".preview.active .bar .nav-item.has-children").first();
+      const toggle = item.locator("> .nav-item-toggle");
+
+      await item.waitFor({ state: "attached" });
+      await toggle.focus();
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          true
+      );
+      assert(
+        (await toggle.getAttribute("aria-expanded")) === "true",
+        "aria-expanded did not follow the toggle open"
+      );
+
+      await page.keyboard.press(" ");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          false
+      );
+    },
+  },
+  {
+    name: "bar dropdown closes when focus leaves the nav",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      const item = page.locator(".preview.active .bar .nav-item.has-children").first();
+      const toggle = item.locator("> .nav-item-toggle");
+
+      await item.waitFor({ state: "attached" });
+      await toggle.focus();
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          true
+      );
+
+      await page.evaluate(() => {
+        const outside = document.createElement("button");
+
+        outside.id = "outside-the-bar";
+        outside.textContent = "outside";
+        document.body.append(outside);
+        outside.focus();
+      });
+
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          false
+      );
+    },
+  },
+  {
+    name: "content selector tab switches panels on Enter",
+    path: "/component-docs/components/building-blocks/wrappers/content-selector/",
+    viewport: DESKTOP,
+    async run(page) {
+      const items = page.locator(`${ACTIVE_PREVIEW} .content-selector-item`);
+
+      await items.first().waitFor();
+      assert((await items.count()) > 1, "expected more than one content selector tab");
+
+      const second = items.nth(1);
+
+      await second.locator(".content-selector-tab").focus();
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(() => {
+        const item = document.querySelectorAll(
+          ".component-viewer .preview.active .content-selector-item"
+        )[1];
+
+        return item?.querySelector(".content-selector-input")?.checked === true;
+      });
+      assert(
+        (await second.locator(".content-selector-tab").getAttribute("aria-expanded")) === "true",
+        "the activated tab did not report aria-expanded=true"
+      );
+      assert(
+        (await second.locator(".content-selector-panel").getAttribute("aria-hidden")) === "false",
+        "the activated panel is still aria-hidden"
+      );
+    },
+  },
+  {
+    name: "carousel indicators are focusable buttons and mark the current slide",
+    path: "/component-docs/components/building-blocks/wrappers/carousel/",
+    viewport: DESKTOP,
+    async run(page) {
+      const dots = page.locator(`${ACTIVE_PREVIEW} .carousel .indicators > .indicator`);
+
+      await dots.first().waitFor();
+      assert((await dots.count()) > 1, "expected more than one indicator");
+      assert(
+        await dots.first().evaluate((el) => el.tagName === "BUTTON"),
+        "indicators must be buttons — a div takes no focus"
+      );
+      assert(
+        (await dots.first().getAttribute("aria-current")) === "true",
+        "the first indicator should be aria-current on load"
+      );
+
+      const second = dots.nth(1);
+
+      await second.focus();
+      assert(
+        await second.evaluate((el) => el === document.activeElement),
+        "an indicator could not take focus"
+      );
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document
+            .querySelectorAll(".component-viewer .preview.active .indicators > .indicator")[1]
+            ?.getAttribute("aria-current") === "true"
       );
     },
   },
@@ -634,6 +768,62 @@ const tests = [
       assert(
         xs[0] < xs[1] && xs[1] < xs[2],
         `expected the first three items in distinct columns left-to-right, got x positions ${xs.join(", ")}`
+      );
+    },
+  },
+  {
+    // Pins the fix for stale row spans after a CloudCannon region re-render.
+    // The probe `masonryEnhance` measures is the item's first child, which the
+    // re-render replaces; the swap itself self-heals (the detached probe
+    // reports 0x0, which fires a relayout), but the REPLACEMENT is only
+    // observed if the item's own childList is watched. So this swaps the child
+    // and then resizes the new one, which is an image load or another keypress
+    // in the editor.
+    name: "masonry re-measures an item after its contents are replaced",
+    path: "/component-docs/components/building-blocks/wrappers/masonry/",
+    viewport: DESKTOP,
+    async run(page) {
+      const masonrySel = `${ACTIVE_PREVIEW} .masonry[data-masonry-enhanced]`;
+
+      await page.waitForSelector(masonrySel);
+      await page.waitForFunction((sel) => {
+        const first = document.querySelector(sel)?.querySelector(".masonry-inner > *");
+
+        return /^span \d+$/.test(first?.style.gridRow || "");
+      }, masonrySel);
+
+      const before = await page.evaluate((sel) => {
+        const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+        return item.style.gridRow;
+      }, masonrySel);
+
+      await page.evaluate((sel) => {
+        const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+        item.firstElementChild.replaceWith(item.firstElementChild.cloneNode(true));
+      }, masonrySel);
+
+      // Let the relayout the swap queued actually run before growing the
+      // replacement. Otherwise that pending frame can measure the grown probe
+      // by luck, and the assertion below passes without anything observing it.
+      await page.evaluate(
+        () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      );
+
+      await page.evaluate((sel) => {
+        const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+        item.firstElementChild.style.height = "900px";
+      }, masonrySel);
+
+      await page.waitForFunction(
+        ({ sel, previous }) => {
+          const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+          return item.style.gridRow !== previous;
+        },
+        { sel: masonrySel, previous: before }
       );
     },
   },

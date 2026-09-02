@@ -3,10 +3,12 @@ label:
   type: text
 items:
   type: array
+  comment: The tabs to switch between. Each item is one tab and the panel it shows.
   options:
     structures: _structures.contentSelectorItems
 navigationPosition:
   type: select
+  comment: Where the tabs sit relative to the panel. Both collapse to an accordion on narrow screens.
   options:
     values:
       - id: start

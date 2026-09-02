@@ -106,15 +106,27 @@ const priceRows = [
       ))
     }
     {
-      features.length > 0 && (
-        <ul class="pricing-tier-features">
-          {features.map((feature: TierFeature) => (
-            <li class:list={["pricing-tier-feature", feature.included === false && "excluded"]}>
+      features?.length > 0 && (
+        <ul
+          class="pricing-tier-features"
+          data-editable="array"
+          data-prop="features"
+        >
+          {features?.map((feature: TierFeature) => (
+            <li
+              class:list={["pricing-tier-feature", feature.included === false && "excluded"]}
+              data-editable="array-item"
+            >
               <Icon
                 name={feature.included === false ? "minus" : "check"}
                 size="sm"
               />
-              <span>{feature.text}</span>
+              <span
+                data-editable="text"
+                data-prop="text"
+              >
+                {feature.text}
+              </span>
             </li>
           ))}
         </ul>

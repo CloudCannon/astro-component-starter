@@ -4,11 +4,30 @@ description: Carousel of features, one slide at a time.
 value:
   _component: page-sections/explainers/feature-slider
   sectionLabel: ""
-  slides: []
+  slides:
+    - _component: page-sections/explainers/feature-slider/feature-slider-item
+      eyebrow: Northwind
+      title: A site the marketing team runs
+      description: Campaign pages go out weekly without a design ticket or a deploy.
+      imageSource: /src/assets/images/component-docs/sunset.jpg
+      imageAlt: Sun setting over a headland
+    - _component: page-sections/explainers/feature-slider/feature-slider-item
+      eyebrow: Globex
+      title: One system, four brands
+      description: Shared components, separate token files, so each brand keeps its own look.
+      imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+      imageAlt: Sea cliffs above a bay
+    - _component: page-sections/explainers/feature-slider/feature-slider-item
+      eyebrow: Fieldnote
+      title: From brief to launch in three weeks
+      description: The component library did the layout work, so the time went into content.
+      imageSource: /src/assets/images/component-docs/quiet-street.jpg
+      imageAlt: A quiet residential street
   maxContentWidth: xl
   paddingHorizontal: lg
   paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
@@ -53,5 +72,6 @@ groups:
       - paddingHorizontal
       - paddingVertical
       - colorScheme
+      - lockColorScheme
       - backgroundColor
       - background

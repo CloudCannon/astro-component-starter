@@ -59,6 +59,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
             groupName={groupName}
             navigationPosition={navigationPosition}
             useDefaultEditableBinding={!!effectiveChildrenProp}
+            data-id="building-blocks/wrappers/content-selector/content-selector-panel"
             data-editable="array-item"
           />
         ))
@@ -69,88 +70,9 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
 <script>
   import { onPageLoad } from "@components/utils/onPageLoad";
+  import { setupAllContentSelectors } from "./setup";
 
-  function updatePanelAriaState(input: HTMLInputElement, isSelected: boolean) {
-    const tab = input.nextElementSibling;
-    const panel = tab?.nextElementSibling;
-
-    if (!(tab instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
-
-    tab.setAttribute("aria-expanded", isSelected.toString());
-    panel.setAttribute("aria-hidden", (!isSelected).toString());
-  }
-
-  function syncContentSelectorAriaState(contentSelector: HTMLElement) {
-    const inputs = Array.from(
-      contentSelector.querySelectorAll<HTMLInputElement>(".content-selector-input")
-    );
-
-    if (!inputs.length) return;
-
-    let selectedInput = inputs.find((input) => input.checked);
-
-    if (!selectedInput) {
-      [selectedInput] = inputs;
-      selectedInput.checked = true;
-    }
-
-    inputs.forEach((input) => {
-      updatePanelAriaState(input, input === selectedInput);
-    });
-  }
-
-  function handleInputChange(event: Event) {
-    const input = event.currentTarget;
-
-    if (!(input instanceof HTMLInputElement)) return;
-
-    const contentSelector = input.closest(".content-selector-items");
-
-    if (!(contentSelector instanceof HTMLElement)) return;
-
-    syncContentSelectorAriaState(contentSelector);
-  }
-
-  function handleTabKeydown(event: Event) {
-    if (!(event instanceof KeyboardEvent)) return;
-    if (event.key !== "Enter" && event.key !== " ") return;
-
-    event.preventDefault();
-
-    const tab = event.currentTarget;
-
-    if (!(tab instanceof HTMLLabelElement)) return;
-
-    const inputId = tab.getAttribute("for");
-    const input = inputId ? document.getElementById(inputId) : null;
-
-    if (!(input instanceof HTMLInputElement)) return;
-
-    input.checked = true;
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-
-  function initContentSelectors() {
-    document.querySelectorAll(".content-selector-items").forEach((contentSelector) => {
-      if (!(contentSelector instanceof HTMLElement)) return;
-
-      syncContentSelectorAriaState(contentSelector);
-
-      if (contentSelector.dataset.contentSelectorInitialized === "true") return;
-
-      contentSelector.querySelectorAll(".content-selector-input").forEach((input) => {
-        input.addEventListener("change", handleInputChange);
-      });
-
-      contentSelector.querySelectorAll(".content-selector-tab").forEach((tab) => {
-        tab.addEventListener("keydown", handleTabKeydown);
-      });
-
-      contentSelector.dataset.contentSelectorInitialized = "true";
-    });
-  }
-
-  onPageLoad(initContentSelectors);
+  onPageLoad(() => setupAllContentSelectors());
 </script>
 
 <style is:global>
@@ -179,6 +101,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
           column-gap: var(--spacing-em-lg);
           display: grid;
           grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
+          /* One row per tab, plus a filler row that absorbs the panel's extra
+             height so a tall panel doesn't stretch the tab rows. The count is
+             static because this element is the array region root: a value
+             derived from the item count would go stale the moment the editor
+             adds one. Empty `auto` rows collapse to zero, so overshooting is
+             free; past the 12th tab a tab falls back to auto placement. */
+          grid-template-rows: repeat(12, auto) 1fr;
 
           .content-selector-tab {
             border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
@@ -191,9 +120,61 @@ if (!_component && !hasItems && !hasSlotContent) return;
             }
           }
 
+          /* Items all overlay the same area, so a tab's row has to come from
+             its position in the DOM. Read off `:nth-of-type` rather than a
+             prop, so a reorder or a single-item re-render can't leave a stale
+             index behind. */
+          .content-selector-item:nth-of-type(1) > .content-selector-tab {
+            grid-row: 1;
+          }
+
+          .content-selector-item:nth-of-type(2) > .content-selector-tab {
+            grid-row: 2;
+          }
+
+          .content-selector-item:nth-of-type(3) > .content-selector-tab {
+            grid-row: 3;
+          }
+
+          .content-selector-item:nth-of-type(4) > .content-selector-tab {
+            grid-row: 4;
+          }
+
+          .content-selector-item:nth-of-type(5) > .content-selector-tab {
+            grid-row: 5;
+          }
+
+          .content-selector-item:nth-of-type(6) > .content-selector-tab {
+            grid-row: 6;
+          }
+
+          .content-selector-item:nth-of-type(7) > .content-selector-tab {
+            grid-row: 7;
+          }
+
+          .content-selector-item:nth-of-type(8) > .content-selector-tab {
+            grid-row: 8;
+          }
+
+          .content-selector-item:nth-of-type(9) > .content-selector-tab {
+            grid-row: 9;
+          }
+
+          .content-selector-item:nth-of-type(10) > .content-selector-tab {
+            grid-row: 10;
+          }
+
+          .content-selector-item:nth-of-type(11) > .content-selector-tab {
+            grid-row: 11;
+          }
+
+          .content-selector-item:nth-of-type(12) > .content-selector-tab {
+            grid-row: 12;
+          }
+
           .content-selector-panel {
             grid-column: 2;
-            grid-row: 1 / span 999;
+            grid-row: 1 / -1;
             padding: 0 var(--spacing-md);
             width: 100%;
           }
@@ -201,11 +182,79 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
         &.nav-top {
           display: grid;
-          grid-auto-columns: minmax(max-content, 1fr);
-          grid-auto-flow: column;
+          /* An explicit track list rather than `grid-auto-flow: column`: the
+             panel spans `1 / -1` so that it starts at the container's inline
+             edge, and `-1` only resolves against explicit tracks. Same static
+             count as nav-start, and empty `max-content` columns collapse. */
+          grid-template-columns: repeat(12, minmax(max-content, auto));
           grid-template-rows: auto auto;
+          justify-content: start;
           overflow-x: auto;
           scroll-snap-type: x proximity;
+
+          /* Content-sized tabs no longer tile the full width, so the strip's
+             baseline rule comes from here. `width: 100cqi` with the matching
+             negative margin draws the full width while contributing nothing to
+             track sizing, which would otherwise re-stretch the tabs. */
+          &::before {
+            align-self: end;
+            background: var(--color-bg-muted);
+            content: "";
+            grid-column: 1;
+            grid-row: 1;
+            height: var(--content-selector-border-width);
+            margin-inline-end: -100cqi;
+            pointer-events: none;
+            width: 100cqi;
+          }
+
+          .content-selector-item:nth-of-type(1) > .content-selector-tab {
+            grid-column: 1;
+          }
+
+          .content-selector-item:nth-of-type(2) > .content-selector-tab {
+            grid-column: 2;
+          }
+
+          .content-selector-item:nth-of-type(3) > .content-selector-tab {
+            grid-column: 3;
+          }
+
+          .content-selector-item:nth-of-type(4) > .content-selector-tab {
+            grid-column: 4;
+          }
+
+          .content-selector-item:nth-of-type(5) > .content-selector-tab {
+            grid-column: 5;
+          }
+
+          .content-selector-item:nth-of-type(6) > .content-selector-tab {
+            grid-column: 6;
+          }
+
+          .content-selector-item:nth-of-type(7) > .content-selector-tab {
+            grid-column: 7;
+          }
+
+          .content-selector-item:nth-of-type(8) > .content-selector-tab {
+            grid-column: 8;
+          }
+
+          .content-selector-item:nth-of-type(9) > .content-selector-tab {
+            grid-column: 9;
+          }
+
+          .content-selector-item:nth-of-type(10) > .content-selector-tab {
+            grid-column: 10;
+          }
+
+          .content-selector-item:nth-of-type(11) > .content-selector-tab {
+            grid-column: 11;
+          }
+
+          .content-selector-item:nth-of-type(12) > .content-selector-tab {
+            grid-column: 12;
+          }
 
           .content-selector-tab {
             grid-row: 1;
@@ -232,7 +281,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
            */
           .content-selector-panel {
             container-type: normal;
-            grid-column: 1;
+            grid-column: 1 / -1;
             grid-row: 2;
             overflow: visible;
             width: 0;
@@ -254,6 +303,19 @@ if (!_component && !hasItems && !hasSlotContent) return;
             display: block;
             overflow-x: visible;
             scroll-snap-type: none;
+
+            /* Stacked, not overlaid: the item is an ordinary block again and
+               takes its own clicks. */
+            .content-selector-item {
+              display: block;
+              pointer-events: auto;
+            }
+
+            /* The tab-strip baseline is a grid item; in this block layout it
+               would render as an inline box and add a line box of height. */
+            &::before {
+              content: none;
+            }
 
             .content-selector-tab {
               align-items: center;

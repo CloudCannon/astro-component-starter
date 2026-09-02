@@ -5,8 +5,8 @@ value:
   _component: building-blocks/wrappers/grid
   label: ""
   columns: auto
-  minItemWidth: 280
-  maxItemWidth: 400
+  minItemWidth: 200
+  maxItemWidth: null
   items: []
   gap: md
 preview:

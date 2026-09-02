@@ -7,7 +7,7 @@ value:
   max: 5
   size: md
   color: default
-  showValue: true
+  showValue: false
   alignmentHorizontal: none
 preview:
   text:

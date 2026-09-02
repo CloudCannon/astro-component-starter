@@ -17,7 +17,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -65,6 +65,7 @@ const gutter =
   />
   <Timeline
     entries={entries}
+    spaceBefore="loose"
     layout={layout}
     data-children-prop="entries"
     style={`--timeline-gutter: ${gutter}`}
@@ -79,10 +80,6 @@ const gutter =
       .timeline-section-subtext {
         margin-inline: auto;
         max-width: 42rem;
-      }
-
-      .timeline {
-        margin-top: var(--space-before-loose);
       }
     }
   }

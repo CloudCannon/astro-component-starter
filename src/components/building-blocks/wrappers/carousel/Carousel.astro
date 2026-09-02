@@ -70,8 +70,6 @@ const arrayDataAttributes = effectiveChildrenProp
 // A consumer's `class` must merge, not replace — a spread `class` attribute
 // beats `class:list`, which would drop the `carousel` hook that setup.ts and
 // every style rule key on. (ImageCarousel does the same.)
-const carouselClasses = ["carousel", "stackable", className];
-
 const slideGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
 
 const carouselStyles = `
@@ -88,7 +86,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 ---
 
 <section
-  class:list={carouselClasses}
+  class:list={["carousel", "stackable", className]}
   role="region"
   aria-label={label || "Carousel"}
   {...htmlAttributes}
@@ -257,6 +255,22 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           justify-content: center;
         }
 
+        > .controls-wrapper > .carousel-pause {
+          background: none;
+          border: none;
+          color: var(--color-text-muted);
+          cursor: pointer;
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-semibold);
+          letter-spacing: 0.08em;
+          padding: 0;
+          text-transform: uppercase;
+
+          &:hover {
+            color: var(--color-text);
+          }
+        }
+
         > .controls-wrapper > .indicators > .indicator {
           aspect-ratio: 1/1;
           background-color: var(--color-border);
@@ -270,6 +284,11 @@ if (!_component && !hasSlides && !hasSlotContent) return;
             transform var(--animation-normal) ease,
             background-color var(--animation-normal) ease;
           width: 8px;
+
+          &:focus-visible {
+            outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+            outline-offset: 2px;
+          }
 
           &[data-selected="true"] {
             background-color: var(--color-brand-muted);

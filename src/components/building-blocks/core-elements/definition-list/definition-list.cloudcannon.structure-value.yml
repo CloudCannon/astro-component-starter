@@ -3,7 +3,13 @@ icon: dns
 description: List of terms and their definitions.
 value:
   _component: building-blocks/core-elements/definition-list
-  items: []
+  items:
+    - title: Lead time
+      text: Two to four weeks from signed brief to a live site.
+    - title: What you own
+      text: The repository, the content, and every component in it.
+    - title: Support
+      text: A month of changes included, then an hourly retainer.
   alignmentHorizontal: start
 preview:
   text:

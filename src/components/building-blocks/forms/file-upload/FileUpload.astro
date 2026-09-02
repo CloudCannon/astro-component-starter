@@ -11,13 +11,14 @@ const {
   multiple = false,
   hint,
   error,
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("file-upload", htmlAttributes.id);
+const fieldId = generateFieldId("file-upload", customId);
 const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
 const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
 const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;

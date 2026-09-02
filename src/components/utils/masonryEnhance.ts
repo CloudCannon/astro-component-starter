@@ -43,6 +43,10 @@ export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): voi
 
   const observeItems = () => {
     for (const item of Array.from(inner.children)) {
+      // An editable-region re-render swaps an item's contents, detaching the
+      // probe this observes — watch each item so the new probe is picked up.
+      mutationObserver.observe(item, { childList: true });
+
       if (item.firstElementChild) resizeObserver.observe(item.firstElementChild);
     }
   };
@@ -51,14 +55,15 @@ export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): voi
   // typing) both re-span. Observing an element twice is a no-op.
   const resizeObserver = new ResizeObserver(queueRelayout);
 
-  resizeObserver.observe(inner);
-  observeItems();
-
-  // The editor adds and removes items live.
-  new MutationObserver(() => {
+  // The editor adds, removes and re-renders items live.
+  const mutationObserver = new MutationObserver(() => {
     observeItems();
     queueRelayout();
-  }).observe(inner, { childList: true });
+  });
+
+  resizeObserver.observe(inner);
+  mutationObserver.observe(inner, { childList: true });
+  observeItems();
 
   queueRelayout();
 }

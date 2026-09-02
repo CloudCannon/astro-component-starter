@@ -23,7 +23,7 @@ const pathname = Astro.url.pathname;
 >
   <ul class="bar-list">
     {
-      navData.map((item: NavItem) => {
+      navData?.map((item: NavItem) => {
         if (itemHasMegaMenu(item)) {
           return (
             <MegaPanel
@@ -59,7 +59,7 @@ const pathname = Astro.url.pathname;
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
-  import { syncExpanded } from "./toggleState";
+  import { bindToggleKeys, syncExpanded } from "./toggleState";
 
   let barGlobalHandlersBound = false;
 
@@ -99,22 +99,6 @@ const pathname = Astro.url.pathname;
     }
   }
 
-  function handleKeydown(e: Event) {
-    if (!(e instanceof KeyboardEvent)) return;
-    if (e.key !== "Enter" && e.key !== " ") return;
-
-    e.preventDefault();
-    const label = e.currentTarget;
-    if (!(label instanceof HTMLElement)) return;
-
-    const toggle = document.getElementById(label.getAttribute("for") || "");
-
-    if (toggle instanceof HTMLInputElement) {
-      toggle.checked = !toggle.checked;
-      toggle.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-  }
-
   function initBarNavigation() {
     if (!barGlobalHandlersBound) {
       document.addEventListener("click", (e) => {
@@ -145,14 +129,25 @@ const pathname = Astro.url.pathname;
       barNav.dataset.barInitialized = "true";
 
       syncExpanded(barNav);
+      bindToggleKeys(barNav);
       barNav.addEventListener("change", handleToggleChange);
 
       barNav
         .querySelectorAll(".nav-item-toggle-btn, .nav-item.has-children > .nav-item-trigger")
         .forEach((trigger) => {
           trigger.addEventListener("click", handleTriggerClick);
-          trigger.addEventListener("keydown", handleKeydown);
         });
+
+      // Tabbing out of an open dropdown leaves it hanging over the page; the
+      // document click handler only covers the mouse. `relatedTarget` is the
+      // element about to receive focus (null when focus leaves the document).
+      barNav.addEventListener("focusout", (e) => {
+        const next = (e as FocusEvent).relatedTarget;
+
+        if (next instanceof Node && barNav.contains(next)) return;
+
+        closeAll(barNav);
+      });
 
       // Clicks inside dropdown content must not reach the document handler, which closes dropdowns.
       barNav.querySelectorAll(".nav-item-content, .nav-item-nested").forEach((content) => {

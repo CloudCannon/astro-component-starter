@@ -157,6 +157,98 @@ for (const relYaml of yamlPaths) {
   else fail(rel(yamlAbs), `no sibling .astro whose kebab name is "${prefix}"`);
 }
 
+// Check 1b — Default-value drift (FAIL): where a structure-value `value:` seeds
+// a knob AND the component destructures a default for it, the two must agree.
+// They are two sources of truth for the same thing: the seed is what a newly
+// inserted block starts as, the destructure default is what a composed or
+// programmatic use gets, and a disagreement means the docs page and a fresh
+// block render differently for no stated reason.
+//
+// Only literal-vs-literal comparisons are made, and only for props the
+// co-located inputs.yml declares as a knob (a select, switch, checkbox or
+// number). Prose inputs are starting content and are meant to differ from the
+// component's fallback; so is any prop listed in SAMPLE_SEEDS, and any prop
+// whose destructure default is an expression or absent (absent is deliberate —
+// "whatever the caller passes").
+
+const KNOB_INPUT_TYPES = new Set([
+  "checkbox",
+  "multiselect",
+  "number",
+  "range",
+  "select",
+  "switch",
+]);
+
+// Number knobs that seed starting *content* rather than configuring layout, so
+// the seed is meant to differ from the component's fallback.
+const SAMPLE_SEEDS = {
+  "building-blocks/core-elements/counter": ["number"],
+  "building-blocks/core-elements/rating": ["value"],
+};
+
+// Components whose real value lives in `src/data/*.json`; the destructure
+// default is the fail-safe for "prop omitted entirely", so it differs from the
+// seed on purpose.
+const DATA_BACKED = new Set([
+  "navigation/main-nav",
+  "navigation/announcement-bar",
+  "navigation/footer",
+]);
+
+/** Parse a destructure default into a JS literal, or report that it isn't one. */
+const asLiteral = (raw) => {
+  if (raw === undefined) return { literal: false };
+
+  const text = raw.trim();
+
+  if (text === "true") return { literal: true, value: true };
+  if (text === "false") return { literal: true, value: false };
+  if (text === "null") return { literal: true, value: null };
+  if (/^-?\d+(?:\.\d+)?$/.test(text)) return { literal: true, value: Number(text) };
+  if (/^"[^"\\]*"$/.test(text) || /^'[^'\\]*'$/.test(text)) {
+    return { literal: true, value: text.slice(1, -1) };
+  }
+
+  return { literal: false };
+};
+
+for (const [dir, { astroAbs, parsed }] of mainByDir) {
+  if (!parsed) continue;
+
+  const valueAbs = join(dir, `${dir.split("/").pop()}.cloudcannon.structure-value.yml`);
+
+  if (!existsSync(valueAbs)) continue;
+
+  const componentKey = componentKeyFromPath(relative(componentsDir, astroAbs));
+
+  if (DATA_BACKED.has(componentKey)) continue;
+
+  const sampleSeeds = new Set(SAMPLE_SEEDS[componentKey] || []);
+  const inputsAbs = join(dir, `${dir.split("/").pop()}.cloudcannon.inputs.yml`);
+  const inputs = existsSync(inputsAbs) ? loadYaml(inputsAbs) || {} : {};
+  const value = (loadYaml(valueAbs) || {}).value || {};
+  const drift = [];
+
+  for (const [key, seeded] of Object.entries(value)) {
+    if (key === "_component" || NON_PROP_KEY(key)) continue;
+    if (!parsed.props.has(key) || sampleSeeds.has(key)) continue;
+    if (seeded !== null && typeof seeded === "object") continue;
+    if (!KNOB_INPUT_TYPES.has(inputs[key]?.type)) continue;
+
+    const fallback = asLiteral(parsed.defaults.get(key));
+
+    if (!fallback.literal || fallback.value === seeded) continue;
+
+    drift.push(
+      `${key}: seed ${JSON.stringify(seeded)} vs default ${JSON.stringify(fallback.value)}`
+    );
+  }
+
+  if (drift.length) fail(rel(valueAbs), `default drift vs ${rel(astroAbs)} — ${drift.join("; ")}`);
+  else ok(`defaults    ${rel(valueAbs)}`);
+}
+
 // Check 3b — Input-group coverage (FAIL): page-section structure values group
 // their inputs (Content first, then a collapsed "Section settings" group) so
 // shell config doesn't present as a peer of the content. When a `groups` block

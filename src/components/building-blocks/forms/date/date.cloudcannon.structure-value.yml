@@ -6,7 +6,7 @@ value:
   label: My date
   name: my_date
   required: false
-  value: "2026-01-01T15:30:00"
+  value: "2026-01-01"
   min: null
   max: null
   hint: null

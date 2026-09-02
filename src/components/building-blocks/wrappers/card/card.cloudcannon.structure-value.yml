@@ -9,6 +9,7 @@ value:
   paddingHorizontal: sm
   paddingVertical: sm
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image

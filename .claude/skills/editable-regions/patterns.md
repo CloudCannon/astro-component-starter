@@ -40,21 +40,19 @@ To make a file's Markdown body editable (blog posts, MDX pages), wrap the render
 
 `@content` targets the file's body, not a frontmatter key. Model: `src/pages/blog/[...slug].astro`. See `data-type` / rich-text modes in the [reference](../references/editable-regions-api.md#editabletext).
 
-## Page-level component region (layout only)
+## Page-level array region (layout only)
 
-`src/layouts/Page.astro` wraps the whole page-sections array in a **component** region so the editor re-renders section chrome on data change:
+`src/layouts/Page.astro` renders `<MainComponent sections={sections} />`, and `MainComponent.astro` carries the one region that makes a page's sections editable:
 
 ```astro
-<div
-  data-editable="component"
-  data-component="utils/main-component"
-  data-prop-sections="pageSections"
->
-  <MainComponent sections={sections} />
+<div data-editable="array" data-prop="pageSections" data-component-key="_component">
+  <Components contentSections={sections} />
 </div>
 ```
 
-`MainComponent.astro` in turn carries the `data-editable="array" data-prop="sections" data-component-key="_component"` container that `renderBlock` fills. This is wired once at the layout level — **page-section and building-block authors do not create component regions.** Component registration lives in `live-editing.js` (globbed `registerAstroComponent` calls). See [EditableComponent in the reference](../references/editable-regions-api.md#editablecomponent).
+`data-prop` is the **frontmatter key** (`pageSections`), not the component's own prop name (`sections`) — the region writes to the file, not to the template. `renderBlock` then stamps each row with `data-editable="array-item"`.
+
+This is wired once at the layout level — **page-section and building-block authors never write it.** There is no `data-editable="component"` wrapper around the array: component registration for every component is globbed in `live-editing.js` (`registerAstroComponent`), and the array region alone is enough for the editor to re-render a changed row. See [EditableComponent in the reference](../references/editable-regions-api.md#editablecomponent) for when a component region is the right tool.
 
 ## Mixed-type arrays
 

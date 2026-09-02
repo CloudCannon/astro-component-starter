@@ -17,7 +17,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-if (!_component && links.length === 0) return;
+if (!_component && !links?.length) return;
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "links" : null);
 const arrayDataAttributes = effectiveChildrenProp
@@ -26,24 +26,22 @@ const arrayDataAttributes = effectiveChildrenProp
 ---
 
 <nav
-  class:list={[
-    "social-links",
-    "stackable",
-    `variant-${variant}`,
-    `size-${size}`,
-    alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
-    className,
-  ]}
+  class:list={["social-links", "stackable", className]}
   aria-label="Social"
   {...htmlAttributes}
 >
   <ul
-    class="social-links-list"
+    class:list={[
+      "social-links-list",
+      `variant-${variant}`,
+      `size-${size}`,
+      alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    ]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
     {
-      links.map((social: SocialLink) => (
+      links?.map((social: SocialLink) => (
         <li data-editable={effectiveChildrenProp ? "array-item" : undefined}>
           <a
             class="social-link"
@@ -98,22 +96,23 @@ const arrayDataAttributes = effectiveChildrenProp
         }
       }
 
+      /* The variant/size/alignment classes ride on the list, not the root — a
+         prop-driven class on a region root goes stale in the editor. */
+
       /* md is the 44px touch-target minimum; sm is for footers where the row
          sits inline with legal text. */
-      &.size-md .social-link {
+      > .social-links-list.size-md .social-link {
         height: 2.75rem;
         width: 2.75rem;
       }
 
-      &.size-sm .social-link {
+      > .social-links-list.size-sm .social-link {
         height: 2.25rem;
         width: 2.25rem;
       }
 
-      &.variant-solid {
-        .social-links-list {
-          gap: var(--spacing-sm);
-        }
+      > .social-links-list.variant-solid {
+        gap: var(--spacing-sm);
 
         .social-link {
           background-color: var(--color-bg-brand);
@@ -127,15 +126,15 @@ const arrayDataAttributes = effectiveChildrenProp
         }
       }
 
-      &.align-start .social-links-list {
+      > .social-links-list.align-start {
         justify-content: flex-start;
       }
 
-      &.align-center .social-links-list {
+      > .social-links-list.align-center {
         justify-content: center;
       }
 
-      &.align-end .social-links-list {
+      > .social-links-list.align-end {
         justify-content: flex-end;
       }
     }

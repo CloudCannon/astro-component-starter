@@ -24,7 +24,7 @@ const hasIcon = showIcon && iconName;
 ---
 
 <li
-  class:list={["item", className, hasIcon && "list-item-has-icon"]}
+  class:list={["item", className]}
   {...htmlAttributes}
 >
   {
@@ -61,9 +61,9 @@ const hasIcon = showIcon && iconName;
 <style is:global>
   @layer components {
     .item {
-      &.list-item-has-icon {
-        display: flex;
+      &:has(> .list-icon) {
         align-items: baseline;
+        display: flex;
       }
 
       > .list-icon {

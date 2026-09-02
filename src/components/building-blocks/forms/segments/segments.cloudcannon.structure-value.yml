@@ -6,10 +6,18 @@ value:
   title: My Segments
   name: my_segments
   required: false
-  options: []
+  options:
+    - value: item-1
+      label: Item 1
+      checked: true
+      icon: ""
+    - value: item-2
+      label: Item 2
+      checked: false
+      icon: ""
   iconOnly: false
   multiple: false
-  keepStateOnRefresh: true
+  keepStateOnRefresh: false
 preview:
   text:
     - Segments

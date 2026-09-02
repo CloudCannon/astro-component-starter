@@ -68,7 +68,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
        editor wiring, so masonry mode composes it rather than repeating the
        layout JS here. */
     <div
-      class:list={["card-grid", "stackable", "is-masonry", className]}
+      class:list={["card-grid", "stackable", className]}
       {...htmlAttributes}
     >
       {/* data-space-before rides a child so flow's :has() hoist finds it — on
@@ -99,30 +99,28 @@ if (!_component && !hasItems && !hasSlotContent) return;
       </Masonry>
     </div>
   ) : (
-    /* Exact columns on this element (same as Gallery Grid / the old Card
-       Collection ul) so the grid has a definite stretch width. A nested
-       inner with minmax(0, 1fr) shrink-wraps to ~0 when its parent width
-       is indefinite. */
-    /* Only the items are children here, so data-space-before rides the root:
-       live edits to spaceBefore need a reload (see _flow.css). */
     <div
       class:list={["card-grid", "stackable", className]}
-      data-space-before={spaceBeforeAttr(spaceBefore)}
-      style={gridStyles}
-      {...arrayDataAttributes}
       {...htmlAttributes}
     >
-      <slot>
-        {items?.map((item: ItemProps) => (
-          <CardGridItem
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            {...item}
-            {...itemRegionAttributes}
-            aspectRatio={cardRatio}
-            data-children-prop={itemContentProp}
-          />
-        ))}
-      </slot>
+      <div
+        class="card-grid-inner"
+        data-space-before={spaceBeforeAttr(spaceBefore)}
+        style={gridStyles}
+        {...arrayDataAttributes}
+      >
+        <slot>
+          {items?.map((item: ItemProps) => (
+            <CardGridItem
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              {...item}
+              {...itemRegionAttributes}
+              aspectRatio={cardRatio}
+              data-children-prop={itemContentProp}
+            />
+          ))}
+        </slot>
+      </div>
     </div>
   )
 }
@@ -133,10 +131,11 @@ if (!_component && !hasItems && !hasSlotContent) return;
       --space-before: var(--space-before-loose);
       width: 100%;
 
-      &:not(.is-masonry) {
+      > .card-grid-inner {
         display: grid;
         gap: var(--card-grid-gap, var(--spacing-lg));
         grid-template-columns: minmax(0, 1fr);
+        width: 100%;
 
         /* 640px: canonical mobile breakpoint — one card per row below it. */
         @media (width >= 640px) {
