@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Button from "@core-elements/button/Button.astro";
 import CarouselSlide from "./CarouselSlide.astro";
 import { slugifyLabel } from "@components/utils/slugify";
@@ -24,6 +25,7 @@ const {
   minSlideWidth = 0,
   gap = "none",
   style = "",
+  spaceBefore = "default",
   class: className,
   label,
   "data-children-prop": childrenDataProp,
@@ -68,7 +70,7 @@ const arrayDataAttributes = effectiveChildrenProp
 // A consumer's `class` must merge, not replace — a spread `class` attribute
 // beats `class:list`, which would drop the `carousel` hook that setup.ts and
 // every style rule key on. (ImageCarousel does the same.)
-const carouselClasses = ["carousel", className];
+const carouselClasses = ["carousel", "stackable", className];
 
 const slideGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
 
@@ -93,6 +95,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 >
   <div
     class="carousel-inner"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     style={carouselStyles}
     {...dataAttributes}
   >
@@ -178,7 +181,6 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .carousel {
-      margin-top: var(--spacing-lg);
       width: 100%;
 
       > .carousel-inner {

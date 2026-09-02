@@ -69,6 +69,7 @@ value:
     imageSource: ""
     imageAlt: ""
     patternSize: natural
+    mask: none
     videoSource: null
     overlay: 0
 preview:
@@ -91,6 +92,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/conversion/pricing-comparison/pricing-comparison.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background-mask.yml
 _structures:
   pricingComparisonPlans:
     values:

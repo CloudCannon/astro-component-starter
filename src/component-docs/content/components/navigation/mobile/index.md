@@ -7,6 +7,10 @@ slots:
     fallback_for: logoSource
     child_component:
 examples:
-  - slugs:
+  - title: 'Dropdowns'
+    slugs:
       - link-and-children
+  - title: 'Mega menu'
+    slugs:
+      - mega-menu
 ---

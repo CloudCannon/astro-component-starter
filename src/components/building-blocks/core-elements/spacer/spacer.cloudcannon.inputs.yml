@@ -1,6 +1,6 @@
 size:
   type: select
-  comment: The amount of space to add.
+  comment: The whole gap between the neighbouring blocks, replacing their automatic spacing.
   options:
     values:
       - id: xs

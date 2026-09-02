@@ -1,7 +1,9 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 const {
   html,
   aspectRatio = "landscape",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -10,10 +12,13 @@ const {
 ---
 
 <div
-  class:list={["embed-wrapper", className]}
+  class:list={["embed-wrapper", "stackable", className]}
   {...htmlAttributes}
 >
-  <div class:list={["embed-content", `ratio-${aspectRatio}`]}>
+  <div
+    class:list={["embed-content", `ratio-${aspectRatio}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     <slot>
       <Fragment set:html={html} />
     </slot>
@@ -23,8 +28,6 @@ const {
 <style is:global>
   @layer components {
     .embed-wrapper {
-      margin-top: var(--spacing-lg);
-
       > .embed-content {
         > iframe {
           border: none;

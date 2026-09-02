@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
 import AccordionItem from "./AccordionItem.astro";
 
@@ -9,6 +10,7 @@ const {
   openFirst,
   singleOpen = false,
   label,
+  spaceBefore = "default",
   useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
   _component,
@@ -35,10 +37,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["accordion"]}
+  class:list={["accordion", "stackable"]}
   {...htmlAttributes}
 >
-  <div {...arrayDataAttributes}>
+  <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         items?.map((item: ItemProps, index: number) => {
@@ -63,7 +68,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .accordion {
-      margin-top: var(--spacing-lg);
     }
   }
 </style>

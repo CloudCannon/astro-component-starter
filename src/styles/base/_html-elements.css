@@ -43,11 +43,16 @@
 
     p,
     ul,
-    ol {
-      code {
-        background: var(--color-bg);
-        border-radius: 0.25rem;
-        padding: 0.1rem 0.2rem;
+    ol,
+    td,
+    th {
+      code:not(pre code) {
+        background: var(--color-bg-code);
+        border-radius: var(--radius-xs);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        font-size: 0.925em;
+        padding: 0.125em 0.375em;
       }
     }
 

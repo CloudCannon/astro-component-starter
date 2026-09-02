@@ -30,23 +30,25 @@ const {
     border
     backgroundColor="base"
   >
-    <Icon
-      class="feature-icon"
-      name={iconName}
-      size="lg"
-      color={iconColor}
-      background={iconBackground}
-      alignmentHorizontal="start"
-    />
-    <Heading
-      class="feature-title"
-      level="h3"
-      size="md"
-      alignmentHorizontal="start"
-      data-prop="title"
-    >
-      {title}
-    </Heading>
+    <div class="feature-item-heading">
+      <Icon
+        class="feature-icon"
+        name={iconName}
+        size="lg"
+        color={iconColor}
+        background={iconBackground}
+        alignmentHorizontal="start"
+      />
+      <Heading
+        class="feature-title"
+        level="h3"
+        size="md"
+        alignmentHorizontal="start"
+        data-prop="title"
+      >
+        {title}
+      </Heading>
+    </div>
     <Text
       class="feature-description"
       alignmentHorizontal="start"
@@ -58,13 +60,24 @@ const {
 
 <style is:global>
   @layer page-sections {
+    .feature-item-heading {
+      align-items: start;
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .feature-item-heading .feature-icon {
+      flex-shrink: 0;
+    }
+
     .feature-title {
-      margin-bottom: var(--spacing-sm);
-      margin-top: var(--spacing-sm);
+      flex: 1;
+      margin-block: 0;
+      min-width: 0;
     }
 
     .feature-description {
-      margin-top: 0;
+      margin-top: var(--spacing-sm);
     }
   }
 </style>

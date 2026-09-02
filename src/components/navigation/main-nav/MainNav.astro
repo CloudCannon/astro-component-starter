@@ -88,9 +88,22 @@ const mobileNavData = [
   />
 </CustomSection>
 
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllMainNavs } from "./setup";
+
+  onPageLoad(setupAllMainNavs);
+</script>
+
 <style is:global>
   @layer page-sections {
     .main-nav {
+      /* is-stuck is toggled by setup.ts once the bar pins. */
+      transition: box-shadow var(--animation-normal) var(--ease-in-out);
+
+      &.is-stuck {
+        box-shadow: var(--shadow-sm);
+      }
       background-color: var(--color-bg);
       padding-block: 0;
       position: sticky;
@@ -128,7 +141,6 @@ const mobileNavData = [
 
         > .main-nav-logo-link > .main-nav-logo {
           display: flex;
-          margin-top: 0 !important;
           max-width: none;
           width: 100%;
         }

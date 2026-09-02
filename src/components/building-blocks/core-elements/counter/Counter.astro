@@ -1,29 +1,37 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 const {
   number = 0,
   prefix,
   suffix,
   alignmentHorizontal = "start",
   size,
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const startNumber = Math.floor(number * 0.2);
+const target = Number(number);
+// 20% of the target, except 0 — that would start at 0 and never move, so
+// count down from a small integer instead.
+const startNumber = target === 0 ? 20 : Math.floor(target * 0.2);
 const duration = 500;
 ---
 
 <div
-  class:list={["counter", className]}
+  class:list={["counter", "stackable", className]}
   {...htmlAttributes}
 >
-  <span class:list={["counter-inner", `alignment-${alignmentHorizontal}`, size && `size-${size}`]}>
+  <span
+    class:list={["counter-inner", `alignment-${alignmentHorizontal}`, size && `size-${size}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     {prefix && <span class="prefix">{prefix}</span>}
     <span
       class="number"
-      data-target={`${number}`}
+      data-target={`${target}`}
       data-start={`${startNumber}`}
       data-duration={`${duration}`}
       aria-live="off"
@@ -91,13 +99,11 @@ const duration = 500;
 <style is:global>
   @layer components {
     .counter {
-      margin-top: var(--spacing-lg);
-
       > .counter-inner {
         align-items: flex-start;
         display: flex;
         font-size: var(--font-size-heading-2xl);
-        font-variant-numeric: tabular-nums;
+        font-variant-numeric: lining-nums tabular-nums;
         font-weight: var(--font-weight-bold);
 
         &.alignment-end {

@@ -32,7 +32,7 @@ const cellStyles = [
   {...htmlAttributes}
 >
   <div
-    class="bento-box-item-content"
+    class="bento-box-item-content flow"
     data-col-span={colSpan}
     data-row-span={rowSpan}
     {...arrayDataAttributes}
@@ -61,10 +61,6 @@ const cellStyles = [
 
       > .bento-box-item-content > *:only-child {
         height: 100%;
-      }
-
-      > .bento-box-item-content > *:first-child {
-        margin-top: 0 !important;
       }
     }
   }

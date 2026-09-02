@@ -37,6 +37,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/list/list.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   listItems:
     values:

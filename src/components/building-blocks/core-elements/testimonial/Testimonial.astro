@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Avatar from "@components/utils/Avatar.astro";
 import { renderMarkdown } from "@component-utils/markdown";
 const {
@@ -7,6 +8,7 @@ const {
   authorDescription,
   alignmentHorizontal = "center",
   authorImage = "",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -37,10 +39,13 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
 ---
 
 <blockquote
-  class:list={["testimonial", className]}
+  class:list={["testimonial", "stackable", className]}
   {...htmlAttributes}
 >
-  <div class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}>
+  <div
+    class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     <div
       class="quote"
       {...textDataAttributes}
@@ -93,7 +98,6 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
     .testimonial {
       border-inline-start: 0;
       margin: 0;
-      margin-top: var(--spacing-lg);
       padding-inline-start: 0;
 
       > .testimonial-inner {

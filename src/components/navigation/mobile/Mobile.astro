@@ -2,7 +2,13 @@
 import Button from "@core-elements/button/Button.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
-import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
+import NavItemTrigger from "@components/navigation/bar/NavItemTrigger.astro";
+import {
+  createNavItemData,
+  isCurrentPage,
+  itemHasMegaMenu,
+  type NavItem,
+} from "@components/navigation/bar/navState";
 
 const {
   logoSource,
@@ -18,38 +24,7 @@ const {
 
 const toggleId = `mobile-toggle-${crypto.randomUUID()}`;
 const navInstanceId = crypto.randomUUID();
-
-interface NavItem {
-  name?: string;
-  path?: string;
-  children?: NavItem[];
-}
-
-function isCurrentPage(item: NavItem) {
-  return Boolean(item.path && Astro.url.pathname === item.path);
-}
-
-function hasCurrentChild(item: NavItem): boolean {
-  if (isCurrentPage(item)) return true;
-  return Boolean(item.children?.some((child) => hasCurrentChild(child)));
-}
-
-function createNavItemData(item: NavItem, level: string, parentGroupId?: string) {
-  const hasChildren = Boolean(item.children?.length);
-
-  return {
-    ...item,
-    hasChildren,
-    hasSplitLink: itemHasSplitNavLink(item),
-    level,
-    dropdownId: `dropdown-toggle-${crypto.randomUUID()}`,
-    contentId: `dropdown-content-${crypto.randomUUID()}`,
-    isCurrent: isCurrentPage(item),
-    hasCurrent: hasCurrentChild(item),
-    groupName: level === "top" ? `mobile-nav-top-${navInstanceId}` : `mobile-nav-${parentGroupId}`,
-    parentGroupId: parentGroupId || crypto.randomUUID(),
-  };
-}
+const pathname = Astro.url.pathname;
 ---
 
 <!-- The checkbox is the real control: ARIA permits a `<label for>` no role, so a
@@ -116,7 +91,50 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
     <ul class="mobile-list">
       {
         navData.map((item: NavItem) => {
-          const itemData = createNavItemData(item, "top");
+          const itemData = createNavItemData(pathname, item, `mobile-nav-top-${navInstanceId}`);
+
+          if (itemHasMegaMenu(item)) {
+            return (
+              <li class="nav-item has-children">
+                <NavItemTrigger
+                  item={itemData}
+                  inputType="radio"
+                  expanded={itemData.hasCurrent}
+                />
+                <div
+                  id={itemData.contentId}
+                  class="nav-item-content mobile-mega"
+                >
+                  {(item.megaMenu?.columns ?? []).map((column) => (
+                    <Fragment>
+                      {column.heading && <p class="mobile-mega-heading">{column.heading}</p>}
+                      <ul class="nav-list">
+                        {(column.items ?? []).map((link) => (
+                          <li class="nav-item">
+                            <a
+                              href={link.path}
+                              aria-current={isCurrentPage(pathname, link) ? "page" : undefined}
+                            >
+                              {link.icon && (
+                                <span class="mobile-mega-icon">
+                                  <Icon
+                                    name={link.icon}
+                                    size="none"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              )}
+                              {link.name}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </Fragment>
+                  ))}
+                </div>
+              </li>
+            );
+          }
 
           if (!itemData.hasChildren) {
             return (
@@ -133,65 +151,22 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 
           return (
             <li class="nav-item has-children">
-              <input
-                type="radio"
-                name={itemData.groupName}
-                id={itemData.dropdownId}
-                class="nav-item-toggle visually-hidden"
-                aria-label={`Toggle ${itemData.name} submenu`}
-                aria-expanded={itemData.hasCurrent}
-                aria-controls={itemData.contentId}
-                autocomplete="off"
-                checked={itemData.hasCurrent}
+              <NavItemTrigger
+                item={itemData}
+                inputType="radio"
+                expanded={itemData.hasCurrent}
               />
-              {itemData.hasSplitLink ? (
-                <div class="nav-item-split">
-                  <a
-                    href={itemData.path}
-                    class="nav-item-link"
-                    aria-current={itemData.isCurrent ? "page" : undefined}
-                  >
-                    {itemData.name}
-                  </a>
-                  <label
-                    for={itemData.dropdownId}
-                    class="nav-item-trigger nav-item-toggle-btn"
-                  >
-                    <span class="nav-item-icon">
-                      <Icon
-                        name="chevron-right"
-                        size="none"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </label>
-                </div>
-              ) : (
-                <label
-                  for={itemData.dropdownId}
-                  class="nav-item-trigger"
-                  aria-current={itemData.isCurrent ? "page" : undefined}
-                >
-                  {itemData.name}
-                  <span class="nav-item-icon">
-                    <Icon
-                      name="chevron-right"
-                      size="none"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </label>
-              )}
               <div
                 id={itemData.contentId}
                 class="nav-item-content"
-                role="region"
-                aria-label={`${itemData.name} submenu`}
-                aria-hidden={!itemData.hasCurrent}
               >
                 <ul class="nav-list">
                   {itemData.children!.map((child) => {
-                    const childData = createNavItemData(child, "child", itemData.parentGroupId);
+                    const childData = createNavItemData(
+                      pathname,
+                      child,
+                      `mobile-nav-${itemData.parentGroupId}`
+                    );
 
                     if (!childData.hasChildren) {
                       return (
@@ -208,81 +183,28 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 
                     return (
                       <li class="nav-item has-children">
-                        <input
-                          type="radio"
-                          name={childData.groupName}
-                          id={childData.dropdownId}
-                          class="nav-item-toggle visually-hidden"
-                          aria-label={`Toggle ${childData.name} submenu`}
-                          aria-expanded={childData.hasCurrent}
-                          aria-controls={childData.contentId}
-                          autocomplete="off"
-                          checked={childData.hasCurrent}
+                        <NavItemTrigger
+                          item={childData}
+                          inputType="radio"
+                          expanded={childData.hasCurrent}
                         />
-                        {childData.hasSplitLink ? (
-                          <div class="nav-item-split">
-                            <a
-                              href={childData.path}
-                              class="nav-item-link"
-                              aria-current={childData.isCurrent ? "page" : undefined}
-                            >
-                              {childData.name}
-                            </a>
-                            <label
-                              for={childData.dropdownId}
-                              class="nav-item-trigger nav-item-toggle-btn"
-                            >
-                              <span class="nav-item-icon">
-                                <Icon
-                                  name="chevron-right"
-                                  size="none"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </label>
-                          </div>
-                        ) : (
-                          <label
-                            for={childData.dropdownId}
-                            class="nav-item-trigger"
-                            aria-current={childData.isCurrent ? "page" : undefined}
-                          >
-                            {childData.name}
-                            <span class="nav-item-icon">
-                              <Icon
-                                name="chevron-right"
-                                size="none"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </label>
-                        )}
                         <div
                           id={childData.contentId}
                           class="nav-item-content"
-                          role="region"
-                          aria-label={`${childData.name} submenu`}
-                          aria-hidden={!childData.hasCurrent}
                         >
                           <ul class="nav-list">
-                            {childData.children!.map((grandChild) => {
-                              const grandChildData = createNavItemData(
-                                grandChild,
-                                "child",
-                                childData.parentGroupId
-                              );
-
-                              return (
-                                <li class="nav-item">
-                                  <a
-                                    href={grandChildData.path}
-                                    aria-current={grandChildData.isCurrent ? "page" : undefined}
-                                  >
-                                    {grandChildData.name}
-                                  </a>
-                                </li>
-                              );
-                            })}
+                            {childData.children!.map((grandChild) => (
+                              <li class="nav-item">
+                                <a
+                                  href={grandChild.path}
+                                  aria-current={
+                                    isCurrentPage(pathname, grandChild) ? "page" : undefined
+                                  }
+                                >
+                                  {grandChild.name}
+                                </a>
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </li>
@@ -300,6 +222,7 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { syncExpanded } from "@components/navigation/bar/toggleState";
 
   // Overlays live in one container so z-index stacking is predictable.
   function getOrCreateOverlaysContainer() {
@@ -409,11 +332,12 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         if (dropdownToggle) {
           e.preventDefault();
           dropdownToggle.checked = !dropdownToggle.checked;
-          dropdownToggle.dispatchEvent(new Event("change"));
+          dropdownToggle.dispatchEvent(new Event("change", { bubbles: true }));
         }
       };
 
       nav.addEventListener("click", handleDropdownToggle);
+      nav.addEventListener("change", () => syncExpanded(nav));
       nav.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
           handleDropdownToggle(e);
@@ -685,6 +609,28 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
         display: block;
       }
 
+      .mobile-mega .mobile-mega-heading {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        margin: 0;
+        padding: var(--spacing-sm) var(--spacing-xl);
+        text-transform: uppercase;
+      }
+
+      .mobile-mega .nav-list:not(:last-child) > .nav-item:last-child {
+        border-bottom: 1px solid var(--color-border-subtle);
+      }
+
+      .mobile-mega-icon {
+        align-items: center;
+        color: var(--color-text-muted);
+        display: inline-flex;
+        font-size: var(--font-size-lg);
+        margin-inline-end: var(--spacing-sm);
+      }
+
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
@@ -740,7 +686,6 @@ function createNavItemData(item: NavItem, level: string, parentGroupId?: string)
 
     .mobile .mobile-header .mobile-logo .mobile-logo-image {
       display: flex;
-      margin-top: 0 !important;
       max-width: none;
       width: 100%;
     }

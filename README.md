@@ -45,8 +45,8 @@ errors. `npm run check` warns until it's set.
 
 ## What You'll See
 
-- **Your site** at [localhost:4321](http://localhost:4321), a fully working demo with pages, blog,
-  search, and navigation
+- **Your site** at [localhost:4321](http://localhost:4321), a working product demo with
+  pages, labeled example templates, blog, search, and navigation
 - **Component docs** at [localhost:4321/component-docs/](http://localhost:4321/component-docs/) —
   eight guides, a live example and prop table for every component, a gallery, and a drag-and-drop
   component builder that exports a complete component package

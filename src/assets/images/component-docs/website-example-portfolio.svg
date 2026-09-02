@@ -1,0 +1,58 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="efBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf4ff"/>
+      <stop offset="1" stop-color="#fafcff"/>
+    </linearGradient>
+    <linearGradient id="efImg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#e9d5ff"/>
+    </linearGradient>
+    <linearGradient id="efImg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#cffafe"/>
+      <stop offset="1" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <pattern id="efDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#bfdbfe" opacity=".3"/>
+    </pattern>
+    <filter id="efShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#1e3a8a" flood-opacity=".14"/>
+    </filter>
+    <clipPath id="efT1"><rect x="60" y="60" width="200" height="190" rx="12"/></clipPath>
+    <clipPath id="efT2"><rect x="300" y="200" width="200" height="210" rx="12"/></clipPath>
+    <clipPath id="efT3"><rect x="540" y="240" width="200" height="200" rx="12"/></clipPath>
+  </defs>
+  <rect width="800" height="600" fill="url(#efBg)"/>
+  <rect width="800" height="600" fill="url(#efDots)"/>
+
+  <!-- column 1 -->
+  <g filter="url(#efShadow)"><rect x="60" y="60" width="200" height="190" rx="12" fill="url(#efImg)"/></g>
+  <g clip-path="url(#efT1)">
+    <circle cx="102" cy="108" r="13" fill="#fff" opacity=".85"/>
+    <path d="m60 250 56-46 44 32 36-24 64 34v4h-200z" fill="#fff" opacity=".5"/>
+  </g>
+  <rect x="60" y="270" width="200" height="130" rx="12" fill="#cffafe"/>
+  <rect x="60" y="420" width="200" height="120" rx="12" fill="#fce7f3"/>
+
+  <!-- column 2 -->
+  <rect x="300" y="60" width="200" height="120" rx="12" fill="#e9d5ff"/>
+  <g filter="url(#efShadow)"><rect x="300" y="200" width="200" height="210" rx="12" fill="url(#efImg2)"/></g>
+  <g clip-path="url(#efT2)">
+    <circle cx="344" cy="252" r="14" fill="#fff" opacity=".85"/>
+    <path d="m300 410 60-52 48 36 38-26 54 30v12h-200z" fill="#fff" opacity=".5"/>
+  </g>
+  <rect x="300" y="200" width="200" height="210" rx="12" fill="none" stroke="#2563eb" stroke-width="3"/>
+  <g filter="url(#efShadow)"><rect x="320" y="380" width="160" height="46" rx="10" fill="#fff"/></g>
+  <rect x="336" y="392" width="94" height="9" rx="4.5" fill="#2a2a2a"/>
+  <rect x="336" y="408" width="60" height="7" rx="3.5" fill="#c3c9d4"/>
+  <rect x="300" y="430" width="200" height="110" rx="12" fill="#dbeafe"/>
+
+  <!-- column 3 -->
+  <rect x="540" y="60" width="200" height="160" rx="12" fill="#fef08a" opacity=".8"/>
+  <g filter="url(#efShadow)"><rect x="540" y="240" width="200" height="200" rx="12" fill="url(#efImg)"/></g>
+  <g clip-path="url(#efT3)">
+    <circle cx="582" cy="290" r="13" fill="#fff" opacity=".85"/>
+    <path d="m540 440 52-42 42 30 40-26 66 34v4h-200z" fill="#fff" opacity=".5"/>
+  </g>
+  <rect x="540" y="460" width="200" height="80" rx="12" fill="#cffafe"/>
+</svg>

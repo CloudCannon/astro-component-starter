@@ -1,13 +1,15 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
 import GridItem from "./GridItem.astro";
 
 type ItemProps = Record<string, unknown>;
 
 const {
-  layout = "center",
+  columns = "auto",
   minItemWidth = 200,
-  maxItemWidth = 320,
+  maxItemWidth,
+  spaceBefore = "default",
   class: className,
   style: userStyle,
   items = [],
@@ -23,9 +25,11 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
+const columnCount = columns === "auto" ? null : Number(columns);
+
 const gridStyles = [
-  `--min-item-width: ${minItemWidth}px`,
-  `--max-item-width: ${maxItemWidth}px`,
+  columnCount ? `--grid-columns: ${columnCount}` : `--min-item-width: ${minItemWidth}px`,
+  !columnCount && maxItemWidth ? `--max-item-width: ${maxItemWidth}px` : null,
   `--grid-spacing: ${gap === "none" ? "0px" : `var(--spacing-${gap})`}`,
   userStyle,
 ]
@@ -44,12 +48,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["grid", className]}
+  class:list={["grid", "stackable", className]}
   {...htmlAttributes}
 >
   <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
-    class:list={["grid-inner", `layout-${layout}`]}
+    class:list={["grid-inner", columnCount ? "columns-fixed" : "columns-auto"]}
     style={gridStyles}
   >
     <slot>
@@ -58,7 +63,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
           <GridItem
             data-id="building-blocks/wrappers/grid/grid-item"
             data-editable="array-item"
-            class:list={`layout-${layout}`}
             useDefaultEditableBinding={!!effectiveChildrenProp}
             {...item}
           />
@@ -71,32 +75,37 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .grid {
-      margin-top: var(--spacing-lg);
+      --space-before: var(--space-before-loose);
+      container-type: inline-size;
       width: 100%;
 
       > .grid-inner {
-        &.layout-start {
-          align-items: stretch;
-          display: grid;
-          gap: var(--grid-spacing, var(--spacing-md));
-          grid-template-columns: repeat(auto-fill, minmax(min(var(--min-item-width), 100%), 1fr));
-          justify-content: start;
-          width: 100%;
+        display: grid;
+        gap: var(--grid-spacing, var(--spacing-md));
+        width: 100%;
+
+        &.columns-auto {
+          grid-template-columns: repeat(
+            auto-fill,
+            minmax(min(var(--min-item-width, 200px), 100%), var(--max-item-width, 1fr))
+          );
+          /* Only visible when --max-item-width caps the tracks: a few capped
+             items sit centered (the old layout=center look), not left-hugged. */
+          justify-content: center;
         }
 
-        &.layout-center {
-          align-items: stretch;
-          display: flex;
-          flex-wrap: wrap;
-          gap: var(--grid-spacing, var(--spacing-md));
-          justify-content: center;
-          width: 100%;
+        /* Container-queried, so a Grid in a narrow pane on a wide screen
+           still collapses to one column. */
+        &.columns-fixed {
+          grid-template-columns: minmax(0, 1fr);
 
-          > .grid-item {
-            flex: 1 1 var(--min-item-width, 200px);
-            max-width: var(--max-item-width, 320px);
-            min-width: min(var(--min-item-width, 200px), 100%);
+          @container (width >= 640px) {
+            grid-template-columns: repeat(var(--grid-columns, 3), minmax(0, 1fr));
           }
+        }
+
+        > * {
+          min-width: 0;
         }
       }
     }

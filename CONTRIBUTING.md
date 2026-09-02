@@ -22,7 +22,7 @@ Run `npm run check` before claiming any work done. It chains:
 - `format` — Prettier check across the repo (`format:fix` / `check:fix` to auto-fix).
 - `typecheck` — `astro check` (TypeScript across `.astro` files).
 - `previews:check` — fails if a component is missing its `*.preview.mjs` recipe or built SVG (or an SVG is orphaned / `image:` unwired / a committed SVG is stale vs. its recipe); browser-free.
-- `skills:check` — fails if `.claude/skills/` drifts from canonical `.agents/skills/`.
+- `agents:check` — fails if `.claude/skills/` or `.cursor/rules/` drift from canonical `.agents/`.
 - `lint:cms` — validates the CloudCannon layer against the components: prop drift, orphaned/missing YAML, `_component` resolution.
 
 ## Dependencies: never bare `npm install`
@@ -31,8 +31,8 @@ After editing `package.json`, run `npm run deps:sync` — never plain `npm insta
 
 ## Changelog
 
-User-facing changes (features, fixes, behavior changes) get an entry in the `[Unreleased]` section of `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Append to an existing `### Added`/`### Changed`/etc. heading — never duplicate one. Skip internal-only refactors. Full rule: [`.cursor/rules/changelog.mdc`](.cursor/rules/changelog.mdc).
+User-facing changes (features, fixes, behavior changes) get an entry in the `[Unreleased]` section of `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Append to an existing `### Added`/`### Changed`/etc. heading — never duplicate one. Skip internal-only refactors. Full rule: [`.agents/rules/changelog.md`](.agents/rules/changelog.md).
 
 ## Skills layout
 
-Agent skills live canonically in `.agents/skills/` (one directory per skill, each with a `SKILL.md`). Cursor reads that folder directly. `.claude/skills/` is a generated, byte-identical copy for Claude Code — never hand-edit it. Edit the canonical skill, then run `npm run skills:sync`; `skills:check` fails CI on drift.
+Agent skills and rules live canonically in `.agents/` (`skills/<skill>/SKILL.md`, `rules/<name>.md`). `.claude/skills/` and `.cursor/rules/` are generated copies — never hand-edit them. Edit under `.agents/`, then run `npm run agents:sync`; `agents:check` fails CI on drift.

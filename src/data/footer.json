@@ -12,6 +12,14 @@
       "path": "/why/"
     },
     {
+      "name": "Get started",
+      "path": "/start/"
+    },
+    {
+      "name": "Examples",
+      "path": "/examples/"
+    },
+    {
       "name": "Components",
       "path": "/component-docs/"
     },
@@ -23,15 +31,7 @@
   "socials": [
     {
       "icon": "social/github",
-      "link": "https://github.com"
-    },
-    {
-      "icon": "social/x",
-      "link": "https://x.com"
-    },
-    {
-      "icon": "social/linkedin",
-      "link": "https://linkedin.com"
+      "link": "https://github.com/CloudCannon/astro-component-starter"
     }
   ],
   "footerText": "© 2026 All rights reserved."

@@ -91,3 +91,83 @@ navData:
                                     hide_link_to_file: true
                                     hide_link_to_email_address: true
                                     hide_link_to_telephone: true
+    - label: Mega Menu Item
+      icon: menu_open
+      description: A top-level item that opens a full-width panel of grouped links.
+      value:
+        name: ""
+        path: ""
+        megaMenu:
+          feature:
+            image: ""
+            imageAlt: ""
+            heading: ""
+            link: ""
+          columns: []
+      preview:
+        text:
+          - key: name
+          - Mega Menu Item
+        subtext:
+          - key: path
+          - Full-width panel of grouped links
+      picker_preview:
+        text: Mega Menu Item
+        subtext: A top-level item that opens a full-width panel of grouped links.
+        icon: menu_open
+      _inputs:
+        name:
+          type: text
+          comment: Display text for the navigation item.
+        path:
+          type: url
+          comment: Optional destination for the item itself. Leave empty so the whole row toggles the panel.
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        megaMenu:
+          type: object
+          label: Mega Menu
+          comment: Full-width panel content. Only rendered by the bar and mobile navigation components.
+          options:
+            preview:
+              text:
+                - Mega menu panel
+        feature:
+          type: object
+          label: Feature Card
+          comment: Optional promotional card shown beside the link columns. Leave the heading and image empty to hide it.
+          options:
+            preview:
+              text:
+                - key: heading
+                - Feature card
+        image:
+          type: image
+          comment: Feature card image.
+          options:
+            paths:
+              uploads: src/assets/images
+            resize_style: contain
+            width: 1920
+            height: 1280
+        imageAlt:
+          type: text
+          comment: Alt text for the feature card image.
+        heading:
+          type: text
+          comment: Feature card heading.
+        link:
+          type: url
+          comment: Destination for the feature card.
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        columns:
+          type: array
+          label: Columns
+          comment: Columns of grouped links in the panel.
+          options:
+            structures: _structures.megaMenuColumns

@@ -6,12 +6,13 @@ Copy the template for your tier, rename, and strip what you don't use. Verify pr
 
 **MUST:** destructure these on every component, even if unused.
 
-| Prop                        | Purpose                                                                                                                 |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `_component`                | The kebab dir path CloudCannon writes. Its presence means "placed in the editor" — render.                              |
-| `class: className`          | Author-supplied classes. Merge with `class:list`.                                                                       |
-| `useDefaultEditableBinding` | Toggles the component's default inline-edit binding. `renderBlock` passes it down.                                      |
-| `...htmlAttributes`         | Pass-through. **MUST** spread on the root element so `renderBlock` can inject `data-editable="array-item"` + `data-id`. |
+| Prop                        | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `_component`                | The kebab dir path CloudCannon writes. Its presence means "placed in the editor" — render.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `class: className`          | Author-supplied classes. Merge with `class:list`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `useDefaultEditableBinding` | Toggles the component's default inline-edit binding. `renderBlock` passes it down.                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `...htmlAttributes`         | Pass-through. **MUST** spread on the root element so `renderBlock` can inject `data-editable="array-item"` + `data-id`.                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `spaceBefore`               | Flow override (`none`/`tight`/`default`/`loose`). Stackable blocks only — emit via `data-space-before={spaceBeforeAttr(spaceBefore)}` on a DIRECT CHILD of the root, never the root itself (CloudCannon's editable-regions re-render keeps the root element, so a prop-driven attribute there goes stale in the visual editor; flow's `:has()` hoists it — see `_flow.css`) and never the `style` attribute (it must stay free for consumers). Mark the root `stackable`, add the shared `/.cloudcannon/inputs/space-before.yml` glob entry. |
 
 Editable-binding props (`data-prop`, `data-children-prop`, `data-prop-src`/`-alt`) and the attributes they translate to are owned by the [editable-regions skill](../editable-regions/SKILL.md). Do not restate the attribute tables here.
 
@@ -37,10 +38,13 @@ Model on `src/components/building-blocks/core-elements/text/Text.astro`.
 
 ```astro
 ---
+import { spaceBeforeAttr } from '@component-utils/spaceBefore.mjs';
+
 const {
   text = '',
   size,
   alignmentHorizontal = 'start',
+  spaceBefore = 'default',
   class: className,
   useDefaultEditableBinding = false,
   'data-prop': customDataProp,
@@ -58,9 +62,10 @@ const hasSlotContent = Astro.slots.has('default');
 if (!_component && !hasText && !hasSlotContent) return;
 ---
 
-<div class:list={['my-element', className]} {...htmlAttributes}>
+<div class:list={['my-element', 'stackable', className]} {...htmlAttributes}>
   <div
     class:list={['my-element-inner', size && `size-${size}`, `align-${alignmentHorizontal}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...textDataAttributes}
   >
     <slot>{text}</slot>
@@ -69,9 +74,10 @@ if (!_component && !hasText && !hasSlotContent) return;
 
 <style is:global>
   @layer components {
+    /* No root margin — sibling spacing comes from the flow system. Declare a
+       `--space-before` type default only if the block shouldn't fall back to
+       `--space-before-default` (Heading: loose, Text: tight, Grid: loose). */
     .my-element {
-      margin-top: var(--spacing-lg);
-
       > .my-element-inner {
         color: var(--color-text);
       }
@@ -88,12 +94,15 @@ Model on `src/components/building-blocks/wrappers/accordion/Accordion.astro`.
 
 ```astro
 ---
+import { spaceBeforeAttr } from '@component-utils/spaceBefore.mjs';
+
 import ChildItem from './MyWrapperItem.astro';
 
 type ItemProps = Record<string, unknown>;
 
 const {
   items,
+  spaceBefore = 'default',
   class: className,
   useDefaultEditableBinding = false,
   'data-children-prop': childrenDataProp,
@@ -111,8 +120,8 @@ const hasSlotContent = Astro.slots.has('default');
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-<div class:list={['my-wrapper', className]} {...htmlAttributes}>
-  <div {...arrayDataAttributes}>
+<div class:list={['my-wrapper', 'stackable', className]} {...htmlAttributes}>
+  <div data-space-before={spaceBeforeAttr(spaceBefore)} {...arrayDataAttributes}>
     <slot>
       {
         items?.map((item: ItemProps) => (

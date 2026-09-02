@@ -35,7 +35,7 @@ const arrayDataAttributes = effectiveChildrenProp
     />
   </summary>
   <div
-    class="accordion-item-detail"
+    class="accordion-item-detail flow"
     {...arrayDataAttributes}
   >
     <slot>
@@ -89,10 +89,6 @@ const arrayDataAttributes = effectiveChildrenProp
       > .accordion-item-detail {
         padding-inline: var(--spacing-md);
         padding-bottom: var(--spacing-md);
-
-        > *:first-child {
-          margin-top: 0 !important;
-        }
       }
     }
 

@@ -1,6 +1,6 @@
 label: Alert
 icon: campaign
-description: 'Status message: info, success, warning, danger, or a note.'
+description: "Status message: info, success, warning, danger, or a note."
 value:
   _component: building-blocks/core-elements/alert
   variant: info
@@ -26,3 +26,4 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/alert/alert.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

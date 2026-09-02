@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { renderMarkdownInline } from "@component-utils/markdown";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
@@ -6,6 +7,7 @@ const {
   text,
   size = "md",
   alignmentHorizontal = "start",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -29,10 +31,13 @@ if (!_component && !hasText && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["simple-text", className]}
+  class:list={["simple-text", "stackable", className]}
   {...htmlAttributes}
 >
-  <p class:list={["simple-text-content", size && `size-${size}`, `align-${alignmentHorizontal}`]}>
+  <p
+    class:list={["simple-text-content", size && `size-${size}`, `align-${alignmentHorizontal}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     <span
       class="simple-text-inner"
       {...textDataAttributes}
@@ -47,7 +52,7 @@ if (!_component && !hasText && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .simple-text {
-      margin-top: var(--spacing-lg);
+      --space-before: var(--space-before-tight);
 
       > .simple-text-content {
         margin: 0;

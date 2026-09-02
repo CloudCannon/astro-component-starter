@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Mega menu support in the main navigation: a top-level `navData` item can carry a `megaMenu` object — columns of icon + description links plus an optional feature card — rendered as a full-width panel on desktop and flattened into grouped links in the mobile menu. Editable in CloudCannon via the new "Mega Menu Item" structure, offered on `mainNav.json` and on the Main Nav and Bar components. The Side and Mobile components don't offer it, because neither opens a panel of its own.
+- Stack wrapper (`building-blocks/wrappers/stack`): a row or column of mixed blocks with one even gap, with direction, gap, distribution, alignment, wrap, and stack-on-mobile controls.
+- A `spaceBefore` input (`none`/`tight`/`default`/`loose`) on every stackable building block, backed by four new `--space-before-*` tokens, for overriding the space above a block without Spacers or custom CSS.
+
+### Changed
+
+- Component docs collapse a property's child properties behind a disclosure showing how many there are, so a prop tree several levels deep (a nav item's `megaMenu`, its columns, their links) no longer buries the component's own props. Arrays offering more than one item type list each type as its own disclosure.
+- Stack and Grid describe themselves in contrast, so the choice between them is clear at the point you make it: Stack is "a few different blocks in a row or column, one even gap", Grid is "many items of the same kind, in as many columns as fit". Both docs pages now point at the other, and the component catalog gains a short guide to choosing between Grid, Stack, Card Grid, Bento Box, and Masonry.
+- **Heads-up:** Grid now takes `columns` (`auto`, or `2`–`6` — same lattice and mobile collapse as Card Grid) instead of `layout`; `minItemWidth`/`maxItemWidth` apply to auto columns only, and `maxItemWidth` now actually caps item width. Centered content-sized rows — the old `layout: center` — are Stack's job now.
+- Grid's numbered columns and Stack's stack-on-mobile respond to their container's width, not the viewport, so both collapse correctly inside a narrow pane on a wide screen.
+- Spacing between blocks is now the flow system: each block type carries a default space-before (headings loose, text tight, collection wrappers loose) and first children sit flush automatically. Building blocks no longer carry a hidden top margin, and the per-wrapper first-child margin strips are gone.
+- A Spacer now _replaces_ the gap between its neighbours — its size is the whole gap — instead of adding to a hidden margin, so existing Spacer gaps render tighter than before.
+- Components embedded in blog post bodies space themselves against the surrounding prose instead of relying on a fixed top margin.
+- Demo content is a small product site for the starter — home, why, and get started — plus labeled example pages under `/examples/` (pricing, about, services, portfolio, contact) and a demo blog. The homepage leads with the developer/editor split, uses the 2.0 sections (stats, steps) instead of stacking four feature-splits, and drops the fake-company logo cloud (it lives on the services example instead); every page section now appears in use on a real page.
+- Homepage stats and principles sections use a fine dot-lattice background pattern (`pattern-dot-grid.svg`) that fades behind the content. The closing CTA sits on a blueprint-style grid with plus marks at the intersections (`pattern-grid.svg`) instead of the hero's scattered plusses, which read as noise on the dark background.
+- Example pages (index, pricing, about, services, portfolio) open on their real first section instead of an “Example / copy this as a starting point” page header.
+- Feature-grid cards put the icon on the same line as the title, instead of stacked above it.
+- Contact is an example page (`/examples/contact/`) instead of a product page in the footer, so the footer links stay on one line.
+- The sticky main nav casts a subtle shadow once it pins, so it separates from the content sliding under it. Works in every browser, including the CloudCannon editor; without JavaScript the nav simply has no shadow.
+- Section backgrounds take a `mask` option — a fade named by which part of the media fades out (top, bottom, left, right, the middle, the edges, or top and bottom together). The faded part reveals the background color token, so a directional fade on a photo or video acts as a theme-correct scrim with no hardcoded gradient. Patterns default to fading the middle, so texture never sits behind the content; images and video default to no fade.
+- Secondary buttons use the lighter surface fill instead of muted gray, so they sit closer to the page background. Hover still steps to muted.
+- Inline code in markdown text renders as a subtle rounded pill that darkens the surrounding background in light mode and lightens it in dark mode, so it stays visible on accent, highlight, and surface sections as well as the page background. Snippets that wrap keep the pill on every line, and table cells get the same treatment.
+
+### Fixed
+
+- Counters with a target of 0 count down instead of sitting still (the homepage “0 KB” runtime stat was the visible case).
+- Headings no longer crash the CloudCannon Visual Editor (`Astro.locals.headingIds` is missing when a component is re-rendered there).
+- Nested page files at `src/content/pages/<section>/index.md` resolve to `/<section>/`.
+- Blog posts with an "On this page" sidebar keep the extra-wide images, code blocks, and CTAs in the article. The sidebar has its own column, starts below the post image, and sticks as you scroll; the page grows a step wider so those components still have room to break out of the text measure.
+
 ## [2.0.0] - 2026-08-19
 
 A big release: a browsable reference site for every component, site-wide

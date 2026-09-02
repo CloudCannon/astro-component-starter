@@ -1,5 +1,6 @@
 ---
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { renderMarkdownInline } from "@component-utils/markdown";
 import { slugifyLabel } from "@component-utils/slugify";
 import Icon from "@core-elements/icon/Icon.astro";
@@ -12,6 +13,7 @@ const {
   iconName,
   iconColor = "default",
   iconPosition = "before",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -35,7 +37,11 @@ function plainTextFromHtml(html: string): string {
     .trim();
 }
 
-const usedHeadingIds: Set<string> = (Astro.locals.headingIds ??= new Set());
+// CloudCannon's editable-regions re-render has no Astro.locals — use a
+// one-shot Set so this heading still gets an id, without sharing de-dupe.
+const usedHeadingIds: Set<string> = Astro.locals
+  ? (Astro.locals.headingIds ??= new Set())
+  : new Set();
 
 if (htmlAttributes.id) {
   usedHeadingIds.add(String(htmlAttributes.id));
@@ -78,10 +84,13 @@ if (!_component && !hasText && !hasSlotContent) return;
 ---
 
 <Tag
-  class:list={["heading", className]}
+  class:list={["heading", "stackable", className]}
   {...htmlAttributes}
 >
-  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}>
+  <span
+    class:list={["heading-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     {
       iconPosition == "before" && (
         <Icon
@@ -120,7 +129,9 @@ if (!_component && !hasText && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .heading {
-      margin-top: var(--spacing-lg);
+      --space-before: var(--space-before-loose);
+
+      margin-block: 0;
 
       > .heading-inner {
         display: block;

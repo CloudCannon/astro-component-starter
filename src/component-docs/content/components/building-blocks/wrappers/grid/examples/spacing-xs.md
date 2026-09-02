@@ -3,7 +3,6 @@ title: Extra Small Spacing
 spacing:
 blocks:
   _component: 'building-blocks/wrappers/grid'
-  layout: center
   gap: xs
   minItemWidth: 200
   maxItemWidth: 300

@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Image from "@core-elements/image/Image.astro";
 import Button from "@core-elements/button/Button.astro";
 import { slugifyLabel } from "@components/utils/slugify";
@@ -20,6 +21,7 @@ const {
   label,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
+  spaceBefore = "default",
   class: className,
   _component,
   ...htmlAttributes
@@ -40,7 +42,7 @@ if (!_component && !hasImages) return;
 ---
 
 <section
-  class:list={["image-carousel", className]}
+  class:list={["image-carousel", "stackable", className]}
   role="region"
   aria-label={label || "Image carousel"}
   data-loop={String(loop)}
@@ -62,7 +64,10 @@ if (!_component && !hasImages) return;
     )
   }
 
-  <div class="carousel-content">
+  <div
+    class="carousel-content"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     <div class="main-viewport">
       <div
         class="main-track"
@@ -147,7 +152,6 @@ if (!_component && !hasImages) return;
       align-items: center;
       display: flex;
       gap: var(--spacing-xs);
-      margin-top: var(--spacing-lg);
       width: 100%;
 
       > .arrow {

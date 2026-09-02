@@ -1,8 +1,12 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
   page,
+  // No stable child to carry data-space-before, so it rides the root: live
+  // edits to spaceBefore need a reload (see _flow.css).
+  spaceBefore = "default",
   class: className,
   showArrows = false,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -62,7 +66,8 @@ const getPageUrl = (pageNum: number) => {
 ---
 
 <nav
-  class:list={["pagination", className]}
+  class:list={["pagination", "stackable", className]}
+  data-space-before={spaceBeforeAttr(spaceBefore)}
   aria-label="Pagination Navigation"
   {...htmlAttributes}
 >
@@ -141,7 +146,6 @@ const getPageUrl = (pageNum: number) => {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      margin-top: var(--spacing-lg);
 
       > a,
       > span {

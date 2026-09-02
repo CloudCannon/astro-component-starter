@@ -1,7 +1,8 @@
 /**
  * Strip the demo content and make a fresh clone your own site.
  *
- * The starter ships a working demo — 14 blog posts, a "Why" page, CloudCannon's
+ * The starter ships a working demo — 14 blog posts, product pages (Why, Get
+ * started, Contact), labeled example pages under /examples/, CloudCannon's
  * logos and a homepage that sells the starter itself. That content is deliberate:
  * astro-component-starter.cc builds from it, and it's what makes a clone look like
  * a real site on first `npm run dev`. But every one of those files is something a
@@ -46,8 +47,8 @@ function writeJson(relativePath, value) {
   writeText(relativePath, `${JSON.stringify(value, null, 2)}\n`);
 }
 
-function remove(relativePath) {
-  if (!dryRun) rmSync(abs(relativePath), { force: true });
+function remove(relativePath, recursive = false) {
+  if (!dryRun) rmSync(abs(relativePath), { force: true, recursive });
 }
 
 /** YAML double-quoted scalar. JSON's string escaping is a valid subset. */
@@ -231,19 +232,31 @@ if (removeBlog) {
 }
 
 if (removePages) {
-  const demoPages = ["src/content/pages/why.md"].filter((page) => existsSync(abs(page)));
+  const demoPages = ["src/content/pages/why.md", "src/content/pages/start.md"].filter((page) =>
+    existsSync(abs(page))
+  );
 
   for (const page of demoPages) remove(page);
+
+  const examplesDir = "src/content/pages/examples";
+  let examplesRemoved = 0;
+
+  if (existsSync(abs(examplesDir))) {
+    examplesRemoved = readdirSync(abs(examplesDir)).filter((file) => file.endsWith(".md")).length;
+    remove(examplesDir, true);
+  }
+
   writeText("src/content/pages/index.md", homepage(siteName));
   record("reset the homepage to a blank hero");
-  if (demoPages.length) {
-    record(`removed ${demoPages.length} demo page${demoPages.length === 1 ? "" : "s"}`);
+
+  const removedCount = demoPages.length + examplesRemoved;
+
+  if (removedCount) {
+    record(`removed ${removedCount} demo page${removedCount === 1 ? "" : "s"}`);
   }
 }
 
-// Navigation, footer. Both drop /why/ (deleted above) and /component-docs/,
-// which `npm run build` excludes from production — a nav link to it 404s on a
-// real site.
+// `npm run build` excludes component-docs — a nav link to it 404s on a real site.
 if (resetBranding) {
   const nav = readJson("src/data/mainNav.json");
 
@@ -270,6 +283,13 @@ if (resetBranding) {
   footer.footerText = `© ${new Date().getFullYear()} ${siteName}. All rights reserved.`;
   writeJson("src/data/footer.json", footer);
   record("src/data/footer.json  logo cleared, socials emptied, copyright set");
+
+  const announcement = readJson("src/data/announcementBar.json");
+
+  announcement.enabled = false;
+  announcement.text = "";
+  writeJson("src/data/announcementBar.json", announcement);
+  record("src/data/announcementBar.json  disabled and cleared");
 }
 
 rl.close();

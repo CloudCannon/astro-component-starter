@@ -45,7 +45,7 @@ value:
               level: h3
               size: xs
             - _component: building-blocks/core-elements/text
-              text: Editors compose pages from the component library in CloudCannon.
+              text: Editors build pages from the component library in CloudCannon.
     - contentSections:
         - _component: building-blocks/wrappers/card
           border: true
@@ -104,6 +104,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/masonry/masonry.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   masonryItems:
     values:

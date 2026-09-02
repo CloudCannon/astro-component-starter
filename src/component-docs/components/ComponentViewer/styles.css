@@ -158,6 +158,7 @@
             padding-left: 16px;
             text-align: right;
             user-select: none;
+
             /* Fixed width so 9 → 10 doesn't grow the gutter and shift that
                line's YAML one space right of its siblings. */
             width: 2em;

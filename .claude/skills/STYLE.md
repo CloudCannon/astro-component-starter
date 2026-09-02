@@ -28,7 +28,7 @@ description: Use when adding a new page-section or building-block component — 
 ```
 
 **MUST NOT:** add `version`, `author`, `tags`, or any other frontmatter key.
-**Why:** skill matching uses only `name` + `description`; extra keys are dead weight. Note nothing validates frontmatter automatically — `npm run skills:check` only verifies the generated `.claude/skills/` copy is byte-identical to `.agents/skills/`, so a bad key would sync silently.
+**Why:** skill matching uses only `name` + `description`; extra keys are dead weight. Note nothing validates frontmatter automatically — `npm run agents:check` only verifies the generated `.claude/skills/` copy is byte-identical to `.agents/skills/`, so a bad key would sync silently.
 
 ## SKILL.md entrypoint shape
 
@@ -105,13 +105,13 @@ One canonical owner per topic. Everyone else links — never restates. When a ru
 
 The vendored references in `references/` carry the generic CloudCannon API. Where generic docs and this starter disagree, **the starter wins** — and the reference files carry `**In this starter:**` callouts at each divergence. The load-bearing overrides:
 
-| Generic CloudCannon / upstream                                         | This starter                                                                                                                                                                                                        |
-| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| snake_case frontmatter props (`primary_label`)                         | **camelCase** props (`primaryLabel`). Match the component's `.astro` destructure exactly.                                                                                                                           |
-| `_type` discriminator on array items                                   | **`_component`** — a kebab-case component directory path (e.g. `navigation/footer`), resolved by `renderBlock.astro`.                                                                                               |
-| Editable web components (`<editable-text>`, etc.) offered as an option | **Banned.** Always standard HTML elements with `data-*` attributes.                                                                                                                                                 |
+| Generic CloudCannon / upstream                                         | This starter                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| snake_case frontmatter props (`primary_label`)                         | **camelCase** props (`primaryLabel`). Match the component's `.astro` destructure exactly.                                                                                                                                                                                                                                                                                                                              |
+| `_type` discriminator on array items                                   | **`_component`** — a kebab-case component directory path (e.g. `navigation/footer`), resolved by `renderBlock.astro`.                                                                                                                                                                                                                                                                                                  |
+| Editable web components (`<editable-text>`, etc.) offered as an option | **Banned.** Always standard HTML elements with `data-*` attributes.                                                                                                                                                                                                                                                                                                                                                    |
 | `data-prop` / `data-editable` written directly on containers           | Building blocks expose **`data-children-prop`** (and plain `data-prop`); the building block translates it to `data-editable="array" data-prop=…` internally. Page sections compose those wrappers. Exception: a plain object array mapped to custom markup — then the page section writes `data-editable="array"` / `array-item` itself ([editable-regions](editable-regions/SKILL.md#array-repeating-items) shape C). |
-| CLI-generated `cloudcannon.config.yml` with inline `_structures`       | Structures live in `.cloudcannon/structures/*.cloudcannon.structures.yml` + per-component co-located `*.cloudcannon.inputs.yml` / `*.cloudcannon.structure-value.yml`, collected by glob.                           |
+| CLI-generated `cloudcannon.config.yml` with inline `_structures`       | Structures live in `.cloudcannon/structures/*.cloudcannon.structures.yml` + per-component co-located `*.cloudcannon.inputs.yml` / `*.cloudcannon.structure-value.yml`, collected by glob.                                                                                                                                                                                                                              |
 
 ## Length budget
 
@@ -122,9 +122,9 @@ If SKILL.md is over budget, the fix is almost always "move a section to a suppor
 
 ## Canonical location
 
-**MUST:** edit skills in `.agents/skills/` only. Then run `npm run skills:sync` to copy them to `.claude/skills/` (Claude Code still reads that path; Cursor reads `.agents/skills/` directly).
+**MUST:** edit skills in `.agents/skills/` only. Then run `npm run agents:sync` to copy them to `.claude/skills/` (Claude Code still reads that path; Cursor reads `.agents/skills/` directly).
 
-**MUST NOT:** hand-edit `.claude/skills/` — it is a generated copy. `npm run skills:check` (part of `npm run check`) fails on drift between source and copy.
+**MUST NOT:** hand-edit `.claude/skills/` — it is a generated copy. `npm run agents:check` (part of `npm run check`) fails on drift between source and copy.
 
 ## Gotcha skeleton
 

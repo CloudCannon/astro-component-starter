@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { Picture } from "astro:assets";
 import { prepareImageData } from "../../../utils/image";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
@@ -19,6 +20,7 @@ const {
   positionHorizontal = "center",
   background = false,
   useDefaultEditableBinding = false,
+  spaceBefore = "default",
   class: className,
   "data-prop-src": customDataPropSrc,
   "data-prop-alt": customDataPropAlt,
@@ -95,10 +97,11 @@ if (hasAlternate) {
 ---
 
 <div
-  class:list={["image", className]}
+  class:list={["image", !background && "stackable", className]}
   {...htmlAttributes}
 >
   <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     class:list={[
       "image-inner",
       effectiveAspectRatio && "ratio",
@@ -151,7 +154,6 @@ if (hasAlternate) {
   @layer components {
     .image {
       display: block;
-      margin-top: var(--spacing-lg);
       overflow: hidden;
 
       &:has(> .image-inner.background) {

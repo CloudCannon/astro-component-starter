@@ -93,7 +93,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
     set:html={JSON.stringify(breadcrumbJsonLd)}
   />
   <CustomSection
-    maxContentWidth="xl"
+    maxContentWidth={showToc ? "2xl" : "xl"}
     paddingHorizontal="lg"
     paddingVertical="4xl"
     colorScheme="inherit"
@@ -101,105 +101,105 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
     class="post-container"
     data-pagefind-filter="Type:Article"
   >
-    <header class="post-header">
-      <a
-        class="post-back"
-        href="/blog/"
-      >
-        ← {blogListingLabel}
-      </a>
+    <div class:list={[showToc && "post-with-toc"]}>
+      <header class="post-header">
+        <a
+          class="post-back"
+          href="/blog/"
+        >
+          ← {blogListingLabel}
+        </a>
 
-      <Heading
-        data-prop="title"
-        data-pagefind-meta="title"
-        level="h1"
-        size="2xl"
-        class="post-title"
-      >
-        {post.data.title}
-      </Heading>
+        <Heading
+          data-prop="title"
+          data-pagefind-meta="title"
+          level="h1"
+          size="2xl"
+          class="post-title"
+        >
+          {post.data.title}
+        </Heading>
+
+        {
+          post.data.description && (
+            <SimpleText
+              data-prop="description"
+              data-pagefind-meta="description"
+              data-pagefind-weight="3"
+              size="lg"
+              class="post-description"
+            >
+              {post.data.description}
+            </SimpleText>
+          )
+        }
+
+        <SimpleText
+          size="sm"
+          class="post-meta"
+        >
+          {
+            category && (
+              <>
+                <a
+                  class="post-meta-category"
+                  href={categoryHref}
+                >
+                  {category}
+                </a>
+                <span
+                  class="post-meta-separator"
+                  aria-hidden="true"
+                >
+                  ·
+                </span>
+              </>
+            )
+          }
+          <time
+            datetime={dateIso}
+            data-pagefind-meta={`published:${dateIso}`}
+            data-pagefind-sort={`date:${dateIso}`}
+          >
+            {date}
+          </time>
+          <span
+            class="post-meta-separator"
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-prop="author"
+            data-pagefind-filter="Author"
+            data-pagefind-meta="author"
+          >
+            {post.data.author}
+          </span>
+        </SimpleText>
+      </header>
 
       {
-        post.data.description && (
-          <SimpleText
-            data-prop="description"
-            data-pagefind-meta="description"
-            data-pagefind-weight="3"
-            size="lg"
-            class="post-description"
-          >
-            {post.data.description}
-          </SimpleText>
+        post.data.image && (
+          <Image
+            source={post.data.image}
+            alt={post.data.title}
+            rounded={true}
+            data-prop-src="image"
+            data-prop-alt="title"
+            class="post-image"
+            aspectRatio="widescreen"
+            positionVertical="center"
+            imageElementAttributes={{
+              "data-pagefind-meta": "image[src], image_alt[alt]",
+            }}
+          />
         )
       }
 
-      <SimpleText
-        size="sm"
-        class="post-meta"
-      >
-        {
-          category && (
-            <>
-              <a
-                class="post-meta-category"
-                href={categoryHref}
-              >
-                {category}
-              </a>
-              <span
-                class="post-meta-separator"
-                aria-hidden="true"
-              >
-                ·
-              </span>
-            </>
-          )
-        }
-        <time
-          datetime={dateIso}
-          data-pagefind-meta={`published:${dateIso}`}
-          data-pagefind-sort={`date:${dateIso}`}
-        >
-          {date}
-        </time>
-        <span
-          class="post-meta-separator"
-          aria-hidden="true"
-        >
-          ·
-        </span>
-        <span
-          data-prop="author"
-          data-pagefind-filter="Author"
-          data-pagefind-meta="author"
-        >
-          {post.data.author}
-        </span>
-      </SimpleText>
-    </header>
-
-    {
-      post.data.image && (
-        <Image
-          source={post.data.image}
-          alt={post.data.title}
-          rounded={true}
-          data-prop-src="image"
-          data-prop-alt="title"
-          class="post-image"
-          aspectRatio="widescreen"
-          positionVertical="center"
-          imageElementAttributes={{
-            "data-pagefind-meta": "image[src], image_alt[alt]",
-          }}
-        />
-      )
-    }
-
-    <div class:list={[showToc && "post-with-toc"]}>
       {showToc && <Toc headings={tocHeadings} />}
       <div
-        class="post"
+        class="post prose"
         data-editable="text"
         data-prop="@content"
       >
@@ -306,35 +306,48 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
     margin-top: var(--spacing-xl);
   }
 
-  /* 1024px: enough room for the sidebar column beside the 70ch article. */
+  /* Four explicit rows so `grid-row: 3 / -1` resolves against a known last
+     line — an implicit-only grid treats -1 as line 1. */
   @media (width >= 1024px) {
     .post-with-toc {
+      column-gap: var(--spacing-2xl);
       display: grid;
-      gap: var(--spacing-2xl);
       grid-template-columns: 16rem minmax(0, 1fr);
+      grid-template-rows: auto auto auto auto;
     }
 
-    .post-with-toc > .toc {
-      align-self: start;
-      position: sticky;
-      /* 5rem matches .main-nav's bar height so "On this page" stays
-         visible below the sticky header instead of sliding under it. */
-      top: calc(5rem + var(--spacing-lg));
+    .post-with-toc > .post-header,
+    .post-with-toc > .post-image,
+    .post-with-toc > .post,
+    .post-with-toc > .post-tags {
+      grid-column: 2;
+      min-width: 0;
+    }
+
+    .post-with-toc > .post-header {
+      grid-row: 1;
+    }
+
+    .post-with-toc > .post-image {
+      grid-row: 2;
     }
 
     .post-with-toc > .post {
-      /* Children are placed with `grid-column: 2`, so keep three tracks but
-         collapse the left rail — the sidebar occupies that space instead. */
-      grid-template-columns:
-        0
-        minmax(0, 70ch)
-        minmax(0, 1fr);
+      grid-row: 3;
       margin-inline: 0;
     }
 
     .post-with-toc > .post-tags {
-      grid-column: 2;
-      margin-inline: 0;
+      grid-row: 4;
+    }
+
+    .post-with-toc > .toc {
+      align-self: start;
+      grid-column: 1;
+      grid-row: 3 / -1;
+      position: sticky;
+      /* 5rem matches .main-nav's bar height. */
+      top: calc(5rem + var(--spacing-lg));
     }
   }
 

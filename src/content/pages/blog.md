@@ -2,17 +2,17 @@
 _schema: default
 title: Blog
 description: >-
-  Read our latest articles and insights on web development, design, and
-  technology.
+  Articles on web development, design, and shipping sites — demo posts for the
+  example studio.
 pageSections:
-  - _component: page-sections/heroes/hero-center
-    eyebrow: ''
-    heading: All posts
+  - _component: page-sections/heroes/page-header
+    eyebrow: Example
+    heading: Blog
     subtext: >-
-      This paginated blog index displays a grid of article cards, each waiting
-      to be populated with genuine posts once your content strategy moves beyond
-      placeholder text.
-    buttonSections: []
+      Example listing page. Copy it as a starting point. The posts themselves are
+      demo content.
+    showBreadcrumbs: true
+    alignmentHorizontal: start
     colorScheme: inherit
     backgroundColor: base
 ---

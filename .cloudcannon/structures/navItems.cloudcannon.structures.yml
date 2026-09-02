@@ -6,9 +6,19 @@
 # `path` is a `url` input with the file/email/telephone options suppressed, since
 # nav items point at site pages. Levels 1 and 2 nest via `children`; level 3 has
 # none.
+#
+# Two level-1 structures: `navItemLevel1` (plain items only) and
+# `navItemLevel1MegaMenu` (plain + mega). Only `bar` and `main-nav` render a mega
+# panel (`mobile` flattens one into a nested list when handed the same data), so
+# only they offer the variant — `side` would drop the authored panel silently. `structures:` takes a single reference, so the mega
+# variant re-includes the plain item via the `*plain-nav-item-l1` alias below.
+# (`navData.cloudcannon.structures.yml` carries an editor-flavored sibling of
+# the mega item for `mainNav.json` — previews and inline nesting — which
+# anchors can't reach across files; keep its inputs in step with this one.)
 navItemLevel1:
   values:
-    - label: Navigation Item (Level 1)
+    - &plain-nav-item-l1
+      label: Navigation Item (Level 1)
       icon: link
       value:
         name: ""
@@ -30,6 +40,68 @@ navItemLevel1:
           comment: "Child navigation items for dropdown menus."
           options:
             structures: _structures.navItemLevel2
+navItemLevel1MegaMenu:
+  values:
+    - *plain-nav-item-l1
+    - label: Mega Menu Item
+      icon: menu_open
+      value:
+        name: ""
+        path: ""
+        megaMenu:
+          feature:
+            image: ""
+            imageAlt: ""
+            heading: ""
+            link: ""
+          columns: []
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the navigation item."
+        path:
+          type: url
+          comment: "Optional destination for the item itself. Leave empty so the whole row toggles the panel."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        megaMenu:
+          type: object
+          label: Mega Menu
+          comment: "Full-width panel content. Only rendered by the bar and mobile navigation components."
+        feature:
+          type: object
+          label: Feature Card
+          comment: "Optional promotional card shown beside the link columns. Leave the heading and image empty to hide it."
+        image:
+          type: image
+          comment: "Feature card image."
+          options:
+            paths:
+              uploads: src/assets/images
+            resize_style: contain
+            width: 1920
+            height: 1280
+        imageAlt:
+          type: text
+          comment: "Alt text for the feature card image."
+        heading:
+          type: text
+          comment: "Feature card heading."
+        link:
+          type: url
+          comment: "Destination for the feature card."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        columns:
+          type: array
+          label: Columns
+          comment: "Columns of grouped links in the panel."
+          options:
+            structures: _structures.megaMenuColumns
 navItemLevel2:
   values:
     - label: Navigation Item (Level 2)

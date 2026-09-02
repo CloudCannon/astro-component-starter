@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-stack">
+  <title id="t-stack">Stack component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 206)">
+    <rect x="260" y="0" width="320" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="260" y="74" width="760" height="150" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="260" y="272" width="760" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="296" width="452" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+  </g>
+</svg>

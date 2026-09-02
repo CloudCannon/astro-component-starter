@@ -57,6 +57,7 @@ function hasCurrentChild(item: NavItem): boolean {
                 name={`side-nav-top-${navInstanceId}`}
                 id={dropdownId}
                 class="nav-item-toggle visually-hidden"
+                role="button"
                 aria-label={`Toggle ${item.name} submenu`}
                 aria-expanded={hasCurrent ? "true" : "false"}
                 aria-controls={contentId}
@@ -104,9 +105,6 @@ function hasCurrentChild(item: NavItem): boolean {
               <div
                 id={contentId}
                 class:list={["nav-item-content", hasCurrent && "nav-item-content-initial"]}
-                role="region"
-                aria-label={`${item.name} submenu`}
-                aria-hidden={!hasCurrent ? "true" : "false"}
               >
                 <ul class="nav-list">
                   {item.children!.map((child) => {
@@ -125,6 +123,7 @@ function hasCurrentChild(item: NavItem): boolean {
                             name={`side-nav-${parentGroupId}`}
                             id={childDropdownId}
                             class="nav-item-toggle visually-hidden"
+                            role="button"
                             aria-label={`Toggle ${child.name} submenu`}
                             aria-expanded={childHasCurrent ? "true" : "false"}
                             aria-controls={childContentId}
@@ -175,9 +174,6 @@ function hasCurrentChild(item: NavItem): boolean {
                               "nav-item-content",
                               childHasCurrent && "nav-item-content-initial",
                             ]}
-                            role="region"
-                            aria-label={`${child.name} submenu`}
-                            aria-hidden={!childHasCurrent ? "true" : "false"}
                           >
                             <ul class="nav-list">
                               {child.children && child.children.length > 0
@@ -234,6 +230,7 @@ function hasCurrentChild(item: NavItem): boolean {
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { syncExpanded } from "@components/navigation/bar/toggleState";
 
   function setupSideNavigation() {
     const sideNavs = document.querySelectorAll(".side");
@@ -244,22 +241,7 @@ function hasCurrentChild(item: NavItem): boolean {
       if (navElement.dataset.sideInitialized === "true") return;
       navElement.dataset.sideInitialized = "true";
 
-      sideNav.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {
-        toggle.addEventListener("change", (e) => {
-          const target = e.target;
-          if (!(target instanceof HTMLInputElement)) return;
-
-          const content = document.getElementById(target.getAttribute("aria-controls") || "");
-
-          if (content) {
-            const isOpen = target.checked;
-
-            // On the input only — a `<label>` exposes no role to carry the state.
-            target.setAttribute("aria-expanded", isOpen.toString());
-            content.setAttribute("aria-hidden", (!isOpen).toString());
-          }
-        });
-      });
+      sideNav.addEventListener("change", () => syncExpanded(sideNav));
 
       function bindTriggerHandlers(trigger: Element) {
         trigger.addEventListener("click", (e) => {
@@ -272,7 +254,7 @@ function hasCurrentChild(item: NavItem): boolean {
           if (toggleEl instanceof HTMLInputElement && toggleEl.checked) {
             e.preventDefault();
             toggleEl.checked = false;
-            toggleEl.dispatchEvent(new Event("change"));
+            toggleEl.dispatchEvent(new Event("change", { bubbles: true }));
           }
         });
 
@@ -292,7 +274,7 @@ function hasCurrentChild(item: NavItem): boolean {
               } else {
                 toggleEl.checked = true;
               }
-              toggleEl.dispatchEvent(new Event("change"));
+              toggleEl.dispatchEvent(new Event("change", { bubbles: true }));
             }
           }
         });

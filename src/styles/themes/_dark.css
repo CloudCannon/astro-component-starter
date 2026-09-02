@@ -24,6 +24,8 @@
   --color-bg-brand-muted: var(--color-brand-muted);
   --color-bg-inverse: var(--gray-50);
 
+  --color-bg-code: color-mix(in srgb, var(--white) 8%, transparent);
+
   --color-border: var(--gray-700);
   --color-border-inputs: var(--gray-500);
   --color-border-strong: var(--gray-300);

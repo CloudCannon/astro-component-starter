@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Icon from "@core-elements/icon/Icon.astro";
 
 type SocialLink = { icon?: string; link?: string; label?: string };
@@ -8,6 +9,7 @@ const {
   variant = "ghost",
   size = "md",
   alignmentHorizontal = "none",
+  spaceBefore = "default",
   class: className,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
@@ -26,6 +28,7 @@ const arrayDataAttributes = effectiveChildrenProp
 <nav
   class:list={[
     "social-links",
+    "stackable",
     `variant-${variant}`,
     `size-${size}`,
     alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
@@ -36,6 +39,7 @@ const arrayDataAttributes = effectiveChildrenProp
 >
   <ul
     class="social-links-list"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
     {

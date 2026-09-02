@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { resolveVideoPosterSource } from "@component-utils/image";
 import type { VideoSource } from "@component-utils/discoverVideoSources";
 
@@ -13,6 +14,9 @@ const {
   // loop; passing autoplay/loop explicitly still wins.
   autoplay = background,
   loop = background,
+  // The media elements are the roots, so data-space-before rides them: live
+  // edits to spaceBefore need a reload (see _flow.css).
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -46,7 +50,8 @@ const youtubeParams =
 {
   type === "vimeo" ? (
     <lite-vimeo
-      class:list={["video", className]}
+      class:list={["video", "stackable", className]}
+      data-space-before={spaceBeforeAttr(spaceBefore)}
       videotitle={`${title}`}
       videoid={`${videoId}`}
       autoload={autoplay}
@@ -63,7 +68,8 @@ const youtubeParams =
     </lite-vimeo>
   ) : type === "youtube" && autoplay ? (
     <iframe
-      class:list={["video", "video-embed", className]}
+      class:list={["video", "stackable", "video-embed", className]}
+      data-space-before={spaceBeforeAttr(spaceBefore)}
       src={`https://www.youtube.com/embed/${videoId}?${youtubeParams}`}
       title={`${title}`}
       loading="lazy"
@@ -74,7 +80,8 @@ const youtubeParams =
     />
   ) : type === "youtube" ? (
     <lite-youtube
-      class:list={["video", className]}
+      class:list={["video", "stackable", className]}
+      data-space-before={spaceBeforeAttr(spaceBefore)}
       videotitle={`${title}`}
       videoid={`${videoId}`}
       params={youtubeParams}
@@ -118,7 +125,8 @@ const youtubeParams =
       playsinline={autoplay}
       loop={loop}
       poster={posterUrl}
-      class:list={["video", className]}
+      class:list={["video", "stackable", className]}
+      data-space-before={spaceBeforeAttr(spaceBefore)}
       {...htmlAttributes}
     >
       {localVideoSources.map(({ src, type: sourceType }) => (
@@ -143,7 +151,6 @@ const youtubeParams =
   @layer components {
     .video {
       display: block;
-      margin-top: var(--spacing-lg);
 
       &.video-embed {
         aspect-ratio: 16 / 9;

@@ -1,0 +1,59 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="eaBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf4ff"/>
+      <stop offset="1" stop-color="#fafcff"/>
+    </linearGradient>
+    <linearGradient id="eaImg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#e9d5ff"/>
+    </linearGradient>
+    <pattern id="eaDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#bfdbfe" opacity=".3"/>
+    </pattern>
+    <filter id="eaShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#1e3a8a" flood-opacity=".14"/>
+    </filter>
+    <clipPath id="eaImgClip"><rect x="460" y="60" width="280" height="150" rx="14"/></clipPath>
+  </defs>
+  <rect width="800" height="600" fill="url(#eaBg)"/>
+  <rect width="800" height="600" fill="url(#eaDots)"/>
+
+  <!-- hero split -->
+  <rect x="60" y="70" width="90" height="14" rx="7" fill="#dbeafe"/>
+  <rect x="60" y="102" width="300" height="20" rx="6" fill="#2a2a2a"/>
+  <rect x="60" y="140" width="300" height="10" rx="5" fill="#c9cfd9"/>
+  <g filter="url(#eaShadow)"><rect x="460" y="60" width="280" height="150" rx="14" fill="url(#eaImg)"/></g>
+  <g clip-path="url(#eaImgClip)">
+    <circle cx="510" cy="102" r="14" fill="#fff" opacity=".85"/>
+    <path d="m460 210 66-52 52 38 44-30 118 40v12h-280z" fill="#fff" opacity=".5"/>
+  </g>
+
+  <!-- timeline -->
+  <path d="m110 280v240" stroke="#d4d8e0" stroke-width="3"/>
+  <circle cx="110" cy="300" r="10" fill="#fff" stroke="#2563eb" stroke-width="3"/>
+  <rect x="140" y="290" width="58" height="20" rx="10" fill="#dbeafe"/>
+  <rect x="212" y="292" width="120" height="10" rx="5" fill="#2a2a2a"/>
+  <circle cx="110" cy="400" r="10" fill="#fff" stroke="#2563eb" stroke-width="3"/>
+  <rect x="140" y="390" width="58" height="20" rx="10" fill="#dbeafe"/>
+  <rect x="212" y="392" width="104" height="10" rx="5" fill="#2a2a2a"/>
+  <circle cx="110" cy="500" r="10" fill="#2563eb"/>
+  <rect x="140" y="490" width="58" height="20" rx="10" fill="#dbeafe"/>
+  <rect x="212" y="492" width="130" height="10" rx="5" fill="#2a2a2a"/>
+
+  <!-- team -->
+  <g filter="url(#eaShadow)"><rect x="440" y="290" width="320" height="250" rx="16" fill="#fff"/></g>
+  <rect x="470" y="318" width="120" height="12" rx="6" fill="#2a2a2a"/>
+  <circle cx="510" cy="400" r="32" fill="#bfdbfe"/>
+  <circle cx="510" cy="391" r="11" fill="#fff" opacity=".9"/>
+  <path d="m488 419a22 13 0 0 1 44 0z" fill="#fff" opacity=".9"/>
+  <circle cx="600" cy="400" r="32" fill="#e9d5ff"/>
+  <circle cx="600" cy="391" r="11" fill="#fff" opacity=".9"/>
+  <path d="m578 419a22 13 0 0 1 44 0z" fill="#fff" opacity=".9"/>
+  <circle cx="690" cy="400" r="32" fill="#cffafe"/>
+  <circle cx="690" cy="391" r="11" fill="#fff" opacity=".9"/>
+  <path d="m668 419a22 13 0 0 1 44 0z" fill="#fff" opacity=".9"/>
+  <rect x="478" y="452" width="64" height="8" rx="4" fill="#555"/>
+  <rect x="568" y="452" width="64" height="8" rx="4" fill="#555"/>
+  <rect x="658" y="452" width="64" height="8" rx="4" fill="#555"/>
+</svg>

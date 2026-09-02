@@ -1,0 +1,23 @@
+# Shared by every page section with a background via a second _inputs_from_glob entry.
+background.mask:
+  type: select
+  label: Background fade
+  comment: Which part of the background fades out — the faded part reveals the background color. Patterns default to Fade the middle; images and video default to No fade.
+  options:
+    values:
+      - id: none
+        name: No fade
+      - id: frame
+        name: Fade the middle
+      - id: vignette
+        name: Fade the edges
+      - id: top
+        name: Fade the top
+      - id: bottom
+        name: Fade the bottom
+      - id: left
+        name: Fade the left
+      - id: right
+        name: Fade the right
+      - id: blend
+        name: Fade top and bottom

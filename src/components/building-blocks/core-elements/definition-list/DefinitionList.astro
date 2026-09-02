@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import DefinitionListItem from "./DefinitionListItem.astro";
 
 type ItemProps = Record<string, unknown>;
@@ -6,6 +7,7 @@ type ItemProps = Record<string, unknown>;
 const {
   items,
   alignmentHorizontal = "start",
+  spaceBefore = "default",
   class: className,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
@@ -24,11 +26,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["definition-list", className]}
+  class:list={["definition-list", "stackable", className]}
   {...htmlAttributes}
 >
   <dl
     class:list={[`alignment-${alignmentHorizontal}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
     <slot>
@@ -49,8 +52,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .definition-list {
-      margin-top: var(--spacing-lg);
-
       > dl {
         display: grid;
         gap: var(--spacing-em-sm) var(--spacing-em-md);

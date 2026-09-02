@@ -20,8 +20,8 @@ pageSections:
       and simple to maintain.
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
-        link: /component-docs/
+        text: Get started
+        link: /start/
         variant: primary
         size: md
 ```
@@ -51,6 +51,12 @@ The `_component` path maps directly to a component in `src/components/`. When As
 This means you can look at any `_component` value and immediately find its source file. `page-sections/explainers/feature-split` lives at `src/components/page-sections/explainers/feature-split/FeatureSplit.astro`.
 
 Every other key in a section block is a prop passed directly to that component. The props available for each component are documented right here in the component docs. Browse the sidebar to find any component.
+
+## How blocks space themselves
+
+You never manage margins between blocks. Each block type carries its own default space above: a heading leaves room before a new topic, text sits close under its heading, and collection layouts like grids give themselves extra breathing room. The first block inside a section or wrapper always sits flush, so there's nothing to trim at the top.
+
+When a gap isn't right, adjust the block _below_ it: every block has a **Space above** field (None, Tight, Default, or Loose) — in code, the `spaceBefore` prop. And when you need an exact gap, add a [Spacer](/component-docs/components/building-blocks/core-elements/spacer/) between two blocks: its size becomes the whole gap, replacing the automatic spacing rather than adding to it.
 
 ## Editing in CloudCannon
 

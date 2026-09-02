@@ -13,12 +13,12 @@ export async function getStaticPaths() {
 
   return pages
     .filter((page) => {
-      const slug = page.id.replace(/index$/, "");
+      const slug = page.id.replace(/\/?index$/, "");
 
       return slug !== "blog";
     })
     .map((page) => {
-      const slug = page.id.replace(/index$/, "");
+      const slug = page.id.replace(/\/?index$/, "");
 
       if (slug.length === 0) return { params: { slug: undefined }, props: { page } };
       return { params: { slug }, props: { page } };

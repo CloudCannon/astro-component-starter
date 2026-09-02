@@ -1,0 +1,74 @@
+---
+import Icon from "@core-elements/icon/Icon.astro";
+import type { NavItemData } from "./navState";
+
+/**
+ * Private helper: one nav item's hidden toggle input plus its visible trigger
+ * (a plain label, or a split row of link + chevron button when the item has a
+ * real destination of its own). Shared by Dropdown, MegaPanel, and Mobile —
+ * the toggle is CSS-only (hidden checkbox/radio + label) so it works in the
+ * CloudCannon editor; `role="button"` because checkbox/radio roles do not
+ * permit `aria-expanded`. Not a CloudCannon component — no YAML siblings.
+ */
+interface Props {
+  item: NavItemData;
+  inputType?: "checkbox" | "radio";
+  /** Server-rendered open state (Mobile pre-opens the current page's group). */
+  expanded?: boolean;
+}
+
+const { item, inputType = "checkbox", expanded = false } = Astro.props;
+---
+
+<input
+  type={inputType}
+  name={item.groupName}
+  id={item.dropdownId}
+  class="nav-item-toggle visually-hidden"
+  role="button"
+  aria-label={`Toggle ${item.name} submenu`}
+  aria-expanded={expanded}
+  aria-controls={item.contentId}
+  autocomplete="off"
+  checked={expanded}
+/>
+{
+  item.hasSplitLink ? (
+    <div class="nav-item-split">
+      <a
+        href={item.path}
+        class="nav-item-link"
+        aria-current={item.isCurrent ? "page" : undefined}
+      >
+        {item.name}
+      </a>
+      <label
+        for={item.dropdownId}
+        class="nav-item-trigger nav-item-toggle-btn"
+      >
+        <span class="nav-item-icon">
+          <Icon
+            name="chevron-right"
+            size="none"
+            aria-hidden="true"
+          />
+        </span>
+      </label>
+    </div>
+  ) : (
+    <label
+      for={item.dropdownId}
+      class="nav-item-trigger"
+      aria-current={item.isCurrent ? "page" : undefined}
+    >
+      {item.name}
+      <span class="nav-item-icon">
+        <Icon
+          name="chevron-right"
+          size="none"
+          aria-hidden="true"
+        />
+      </span>
+    </label>
+  )
+}

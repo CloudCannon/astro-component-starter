@@ -16,26 +16,26 @@
     }
   </style>
   <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
-  <g transform="translate(0 199)">
+  <g transform="translate(0 214)">
     <rect x="585" y="0" width="110" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
     <rect x="329" y="32" width="622" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
     <rect x="279" y="88" width="723" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="453" y="112" width="373" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="177" y="180" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <rect x="110" y="244" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="80" y="286" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="110" y="310" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="471" y="180" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <rect x="403" y="244" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="373" y="286" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="403" y="310" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="764" y="180" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <rect x="696" y="244" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="666" y="286" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="696" y="310" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="1057" y="180" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
-    <rect x="989" y="244" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="959" y="286" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="989" y="310" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="80" y="190" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="142" y="200" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="80" y="256" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="142" y="280" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="373" y="190" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="435" y="200" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="373" y="256" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="435" y="280" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="666" y="190" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="728" y="200" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="666" y="256" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="728" y="280" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="959" y="190" width="46" height="46" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="1019" y="200" width="181" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="959" y="256" width="241" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="1019" y="280" width="181" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
   </g>
 </svg>

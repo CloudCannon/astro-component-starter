@@ -22,6 +22,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/definition-list/definition-list.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   definitionListItems:
     values:

@@ -66,14 +66,14 @@ if (items.length === 0) return;
       </ul>
     </div>
   </details>
+
+  <script>
+    import { onPageLoad } from "@component-utils/onPageLoad";
+    import { setupAllTocs } from "./setup";
+
+    onPageLoad(setupAllTocs);
+  </script>
 </div>
-
-<script>
-  import { onPageLoad } from "@component-utils/onPageLoad";
-  import { setupAllTocs } from "./setup";
-
-  onPageLoad(setupAllTocs);
-</script>
 
 <style is:global>
   @layer components {

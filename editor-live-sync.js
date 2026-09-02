@@ -30,6 +30,7 @@ import {
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
 import { setupAllVideos } from "./src/components/building-blocks/core-elements/video/setup";
+import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
 import { setupAllTocs, setupToc } from "./src/components/navigation/toc/setup";
 import {
@@ -314,6 +315,7 @@ observer.observe(document.body, {
 
 setupAllCarousels();
 setupAllImageCarousels();
+setupAllMainNavs();
 setupAllModals();
 setupAllSearch();
 setupAllTocs();

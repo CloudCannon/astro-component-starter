@@ -249,6 +249,56 @@ const tests = [
     },
   },
   {
+    name: "bar mega menu opens full-width, Escape closes it and restores focus",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      const item = page.locator(".preview.active .bar .nav-item.has-mega").first();
+      const toggle = item.locator("> .nav-item-toggle");
+      const panel = item.locator("> .nav-item-content");
+
+      await item.waitFor({ state: "attached" });
+      await item.locator("> .nav-item-trigger").click();
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === true
+      );
+
+      const spansBar = await page.evaluate(() => {
+        const bar = document.querySelector(".preview.active .bar").getBoundingClientRect();
+        const panel = document
+          .querySelector(".preview.active .has-mega > .nav-item-content")
+          .getBoundingClientRect();
+
+        return Math.abs(panel.left - bar.left) < 1 && Math.abs(panel.width - bar.width) < 1;
+      });
+
+      assert(spansBar, "mega panel does not span the full bar width");
+
+      await panel.locator("a").first().focus();
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === false
+      );
+      assert(
+        await toggle.evaluate((el) => el === document.activeElement),
+        "focus did not return to the mega menu toggle after Escape"
+      );
+
+      await item.locator("> .nav-item-trigger").click();
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === true
+      );
+      await page.mouse.click(5, 5);
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === false
+      );
+    },
+  },
+  {
     name: "announcement bar dismisses and stays dismissed across pages",
     path: "/",
     viewport: DESKTOP,
@@ -448,7 +498,7 @@ const tests = [
           photos.every(
             (photo, i) => (i === 1) === (photo.getAttribute("data-active") === "true")
           ) &&
-          caption?.textContent.trim() === "Tunnel Beach cliffs" &&
+          caption?.textContent.trim() === "Grazing above the break" &&
           popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "2 / 5" &&
           inside(close) &&
           inside(prev) &&

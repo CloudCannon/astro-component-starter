@@ -1,0 +1,14 @@
+# Shared by every stackable building block via a second _inputs_from_glob entry.
+spaceBefore:
+  comment: Space above this block. Default follows the block's type; a Spacer replaces the gap entirely.
+  type: select
+  options:
+    values:
+      - id: default
+        name: Default
+      - id: none
+        name: None
+      - id: tight
+        name: Tight
+      - id: loose
+        name: Loose

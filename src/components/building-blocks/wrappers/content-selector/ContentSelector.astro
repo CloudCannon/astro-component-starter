@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import ContentSelectorPanel from "./ContentSelectorPanel.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import type { ContentSelectorItem } from "../../../../types";
@@ -6,6 +7,7 @@ import type { ContentSelectorItem } from "../../../../types";
 const {
   items = [] as ContentSelectorItem[],
   navigationPosition = "start",
+  spaceBefore = "default",
   class: className,
   label,
   useDefaultEditableBinding = false,
@@ -33,11 +35,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <section
-  class:list={["content-selector", className]}
+  class:list={["content-selector", "stackable", className]}
   {...htmlAttributes}
 >
   <div
     class:list={["content-selector-items", `nav-${navigationPosition}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     data-uid={uniqueId}
     role="group"
     {...arrayDataAttributes}
@@ -155,7 +158,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
     .content-selector {
       --content-selector-border-width: 1px;
       container: content-selector / inline-size;
-      margin-top: var(--spacing-lg);
 
       > .content-selector-items {
         border: 0 solid var(--color-bg-muted);

@@ -1,8 +1,8 @@
-import { existsSync, readdirSync, readFileSync } from "fs";
+import { readFileSync } from "fs";
 import * as yaml from "js-yaml";
 import { join } from "path";
 
-import { findStructureValueFiles } from "../../../../shared/structureFiles";
+import { findStructureValueFiles, loadGlobalStructures } from "../../../../shared/structureFiles";
 import type { NestingRules, StructureValue } from "../../types";
 
 /** Parse global and inline CloudCannon structures into nesting rules. */
@@ -60,22 +60,8 @@ export function parseNestingRules(): NestingRules {
     }
   }
 
-  if (existsSync(structuresDir)) {
-    try {
-      const files = readdirSync(structuresDir).filter((f) => f.endsWith(".yml"));
-
-      for (const file of files) {
-        const filePath = join(structuresDir, file);
-        const content = readFileSync(filePath, "utf8");
-        const parsed = yaml.load(content) as Record<string, Record<string, unknown>>;
-
-        for (const [structureName, structureDef] of Object.entries(parsed)) {
-          processStructureDefinition(structureName, structureDef);
-        }
-      }
-    } catch (error) {
-      console.warn("Error parsing global nesting rules:", error);
-    }
+  for (const [structureName, structureDef] of Object.entries(loadGlobalStructures(structuresDir))) {
+    processStructureDefinition(structureName, structureDef as Record<string, unknown>);
   }
 
   const componentsDir = join(process.cwd(), "src/components");

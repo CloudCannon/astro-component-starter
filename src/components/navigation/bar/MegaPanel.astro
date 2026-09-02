@@ -1,0 +1,268 @@
+---
+import Icon from "@core-elements/icon/Icon.astro";
+import Image from "@core-elements/image/Image.astro";
+import NavItemTrigger from "./NavItemTrigger.astro";
+import { createNavItemData, isCurrentPage, type MegaMenuColumn, type NavItem } from "./navState";
+
+interface Props {
+  item: NavItem;
+  groupName: string;
+}
+
+const { item, groupName } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const itemData = createNavItemData(pathname, item, groupName);
+
+const feature = item.megaMenu?.feature;
+const hasFeature = Boolean(feature?.heading || feature?.image);
+const FeatureTag = feature?.link ? "a" : "div";
+const columns: MegaMenuColumn[] = item.megaMenu?.columns ?? [];
+---
+
+<li class="nav-item has-children has-mega">
+  <NavItemTrigger
+    item={itemData}
+    inputType="checkbox"
+  />
+  <div
+    id={itemData.contentId}
+    class="nav-item-content mega-panel"
+  >
+    <div class="mega-panel-layout">
+      {
+        hasFeature && (
+          <FeatureTag
+            href={feature!.link || undefined}
+            class="mega-feature"
+          >
+            {feature!.image && (
+              <Image
+                source={feature!.image}
+                alt={feature!.imageAlt ?? ""}
+                aspectRatio="widescreen"
+                rounded={true}
+                sizes="20rem"
+                widths={[320, 640]}
+                width={640}
+                class="mega-feature-image"
+              />
+            )}
+            {feature!.heading && (
+              <span class="mega-feature-heading">
+                {feature!.heading}
+                <span class="mega-feature-arrow">
+                  <Icon
+                    name="arrow-right"
+                    size="none"
+                    aria-hidden="true"
+                  />
+                </span>
+              </span>
+            )}
+          </FeatureTag>
+        )
+      }
+      <ul class="mega-columns">
+        {
+          columns.map((column) => (
+            <li class="mega-column">
+              {column.heading && <p class="mega-column-heading">{column.heading}</p>}
+              <ul class="mega-links">
+                {(column.items ?? []).map((link) => (
+                  <li>
+                    <a
+                      href={link.path}
+                      class:list={["mega-link", link.highlight && "is-highlighted"]}
+                      aria-current={isCurrentPage(pathname, link) ? "page" : undefined}
+                    >
+                      {link.icon && (
+                        <span class="mega-link-icon">
+                          <Icon
+                            name={link.icon}
+                            size="none"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      )}
+                      <span class="mega-link-text">
+                        <span class="mega-link-name">{link.name}</span>
+                        {link.description && (
+                          <span class="mega-link-description">{link.description}</span>
+                        )}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</li>
+
+<style is:global>
+  @layer components {
+    /* A standalone bar anchors the panel itself; inside main-nav the panel
+       must escape to `.content` (its container-type makes it the containing
+       block) so the panel spans the full header, not just the link row. */
+    .bar {
+      position: relative;
+    }
+
+    .main-nav .bar {
+      position: static;
+    }
+
+    .bar .nav-item.has-mega {
+      /* The panel must escape the item to the containing block above. */
+      position: static;
+    }
+
+    .bar .nav-item.has-mega > .nav-item-content {
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      left: 0;
+      min-width: 0;
+      padding: var(--spacing-lg);
+      right: 0;
+      transform: none;
+      width: auto;
+    }
+
+    /* The centered animation would re-apply translateX(-50%). */
+    .bar .has-mega > .nav-item-toggle:checked ~ .nav-item-content {
+      animation-name: grow-out;
+    }
+
+    .bar .mega-panel-layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-xl);
+    }
+
+    .bar .mega-feature {
+      border-radius: var(--radius-md);
+      color: var(--color-text-strong);
+      display: flex;
+      flex: 1 1 14rem;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+      max-width: 20rem;
+      text-decoration: none;
+    }
+
+    .bar .mega-feature-heading {
+      align-items: center;
+      display: inline-flex;
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+      gap: var(--spacing-xs);
+    }
+
+    .bar .mega-feature-arrow {
+      color: var(--color-text-muted);
+      display: inline-flex;
+      font-size: var(--font-size-md);
+      transition: transform var(--animation-normal) var(--ease-in-out);
+    }
+
+    .bar .mega-feature:hover .mega-feature-arrow {
+      transform: translateX(4px);
+    }
+
+    .bar .mega-columns {
+      display: flex;
+      flex: 999 1 24rem;
+      flex-wrap: wrap;
+      gap: var(--spacing-xl);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .bar .mega-column {
+      flex: 1 1 10rem;
+      min-width: 0;
+    }
+
+    .bar .mega-column-heading {
+      border-bottom: 1px solid var(--color-border-subtle);
+      color: var(--color-text-muted);
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.08em;
+      margin: 0 0 var(--spacing-sm);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      text-transform: uppercase;
+    }
+
+    .bar .mega-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .bar .mega-link {
+      align-items: flex-start;
+      border-radius: var(--radius-sm);
+      color: var(--color-text-strong);
+      display: flex;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm);
+      text-decoration: none;
+      transition: background var(--animation-normal) var(--ease-in-out);
+
+      &:hover {
+        background: var(--color-state-hover);
+      }
+
+      &.is-highlighted {
+        background: var(--color-bg-surface);
+
+        &:hover {
+          background: var(--color-state-hover);
+        }
+      }
+
+      &[aria-current="page"] .mega-link-name {
+        text-decoration: underline dotted;
+        text-decoration-color: var(--color-text-muted);
+        text-underline-offset: 3px;
+      }
+    }
+
+    .bar .mega-link-icon {
+      align-items: center;
+      background: var(--color-bg-muted);
+      border-radius: var(--radius-sm);
+      color: var(--color-text-strong);
+      display: flex;
+      flex-shrink: 0;
+      font-size: var(--font-size-lg);
+      height: 2.25rem;
+      justify-content: center;
+      width: 2.25rem;
+    }
+
+    .bar .mega-link-name {
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      line-height: var(--line-height-normal);
+    }
+
+    .bar .mega-link-description {
+      color: var(--color-text-muted);
+      display: block;
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-normal);
+      line-height: var(--line-height-tight);
+    }
+  }
+</style>

@@ -23,7 +23,7 @@ const arrayDataAttributes = effectiveChildrenProp
   {...htmlAttributes}
 >
   <div
-    class="slide__content"
+    class="slide__content flow"
     {...arrayDataAttributes}
   >
     <slot>
@@ -52,10 +52,6 @@ const arrayDataAttributes = effectiveChildrenProp
 
       > .slide__content > *:only-child {
         height: 100%;
-      }
-
-      > .slide__content > *:first-child {
-        margin-top: 0 !important;
       }
     }
   }

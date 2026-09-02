@@ -93,7 +93,7 @@ showToc: true
 
 **Prop syntax:** strings as `prop="value"`, booleans as `prop={true}` (or bare `prop`), numbers as `prop={42}`, arrays/objects as JSX expressions (`prop={[{ key: "value" }]}`) — arrays need `_component` on every nested block item exactly like page-section YAML. For the actual prop list of a given page section (`CtaCenter`, `FeatureGrid`, `TestimonialSection`, etc.), read its entry in the [page-content-authoring catalog](../page-content-authoring/SKILL.md) — this skill does not duplicate those tables.
 
-**Full width:** post body content sits in a centered `70ch` grid column (see `.post` in `src/pages/blog/[...slug].astro`). Add `class="wide"` to any component to span the full content width; `<pre>` (code blocks), `.image`, and `.video` elements get it automatically.
+**Full width:** post body content sits in a centered `70ch` grid column (see `.post` in `src/pages/blog/[...slug].astro`). Add `class="wide"` to any component to span the article's side rails; `<pre>` (code blocks), `.image`, and `.video` elements get it automatically. The "On this page" sidebar sits in its own column beside that article, so wide components grow to the article edge rather than under the sidebar.
 
 **Common miss:** page sections accept arbitrary extra attributes (e.g. `rounded`, `class`, `style`) beyond their declared props because most spread `...htmlAttributes` down to `CustomSection` — real posts rely on this (`rounded={true}`, `style="margin-top: var(--spacing-xl);"`). Don't assume every attribute you see in an existing post is a documented prop; check the component's `.astro` destructure if unsure.
 

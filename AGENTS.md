@@ -2,17 +2,22 @@
 
 Astro component starter: brandable base components for informational websites, visually editable in CloudCannon.
 
-## Agent skills
+## Agent docs
 
-Agent skills live canonically in `.agents/skills/` — one directory per skill, each containing a `SKILL.md`. Cursor reads that folder directly. `.claude/skills/` is a generated, byte-identical copy for Claude Code, which still requires its own path.
+Everything agent-facing is canonical under `.agents/`; each tool's own directory is generated from it:
 
-**Never hand-edit `.claude/skills/`.** Edit the canonical skill under `.agents/skills/`, then run:
+| Canonical                 | Generated for                       | Read directly by                            |
+| ------------------------- | ----------------------------------- | ------------------------------------------- |
+| `.agents/skills/<skill>/` | `.claude/skills/` (Claude Code)     | Cursor                                      |
+| `.agents/rules/<name>.md` | `.cursor/rules/<name>.mdc` (Cursor) | Claude Code, via `@` imports in `CLAUDE.md` |
+
+**Never hand-edit a generated directory.** Edit under `.agents/`, then run:
 
 ```
-npm run skills:sync
+npm run agents:sync
 ```
 
-`npm run skills:check` (part of `npm run check`) fails CI if the Claude copy drifts from the canonical tree.
+`npm run agents:check` (part of `npm run check`) fails CI on drift.
 
 ### Available skills
 

@@ -114,7 +114,7 @@ Two optional extras when you want more:
 
 ## Build it with Component Builder
 
-Prefer visual composition over hand-writing files? Use the [Component Builder](/component-docs/component-builder/) to scaffold this faster:
+Prefer building visually over hand-writing files? Use the [Component Builder](/component-docs/component-builder/) to scaffold this faster:
 
 1. Open the Component Builder. Under the Custom Section, press the "Add to Content Sections" button. Select Heading, then repeat and select Text.
 2. Both Heading and Text expose a prop called `text`, which causes a validation error at the same level. To fix this, click the Heading component to open the props sidebar and change the Exposed Name from `text` to `heading`. Do the same for Text, changing it to `subtext`. You can also expose other props if you want editors to be able to configure them.
@@ -127,7 +127,7 @@ This is a good way to scaffold a new component. From there, you can add your own
 
 ## Choosing how much control editors get
 
-The SectionIntro above is a **structured component** — it has a fixed layout with specific props. That's one end of a spectrum. At the other end is giving editors complete freedom to compose their own layouts. Most real projects use a mix of both, and there's a useful middle ground too.
+The SectionIntro above is a **structured component** — it has a fixed layout with specific props. That's one end of a spectrum. At the other end is giving editors complete freedom to build their own layouts. Most real projects use a mix of both, and there's a useful middle ground too.
 
 ### Structured components: developer controls the layout
 
@@ -169,9 +169,9 @@ At the other end of the spectrum is `CustomSection` used directly as a page sect
   backgroundColor: base
 ```
 
-There's no predefined structure. Editors have full access to all available building blocks and compose them freely. This is powerful for one-off layouts, landing pages, or teams with design-savvy editors who want maximum flexibility.
+There's no predefined structure. Editors have full access to all available building blocks and combine them freely. This is powerful for one-off layouts, landing pages, or teams with design-savvy editors who want maximum flexibility.
 
-The trade-off is less consistency. Every instance of a Custom Section can look completely different, and editors need to understand the building blocks well enough to compose them effectively.
+The trade-off is less consistency. Every instance of a Custom Section can look completely different, and editors need to understand the building blocks well enough to combine them effectively.
 
 ### The middle ground: structure with flexible content areas
 
@@ -206,7 +206,9 @@ You can push this much further, allowing editors to control any prop or setting 
 - **[CTA Center](/component-docs/components/page-sections/conversion/cta-center/)** adds buttons, color schemes, and background options
 - **[FAQ Section](/component-docs/components/page-sections/explainers/faq-section/)** uses accordion items with expand/collapse behavior
 
-Each follows the same three-file pattern, just with more props and building blocks composed together.
+Each follows the same three-file pattern, just with more props and building blocks combined.
+
+If you add your own _building block_ (rather than a page section), make it join the flow spacing system — that's how blocks space themselves against their siblings without hand-managed margins. Mark the root `stackable`, emit `data-space-before` on a direct child of the root (never on the root itself — the visual editor's re-render keeps root attributes, so the control would go stale), and pull in the shared `space-before.yml` input. `npm run new:component` scaffolds all of this; skip it and your block gets no space in flowing content and no **Space above** field in the editor.
 
 ## Next up
 

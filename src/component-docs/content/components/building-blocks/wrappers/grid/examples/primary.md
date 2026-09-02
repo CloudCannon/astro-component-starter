@@ -4,7 +4,6 @@ spacing: null
 blocks:
   _component: building-blocks/wrappers/grid
   minItemWidth: 250
-  layout: start
   items:
     - contentSections:
         - _component: building-blocks/core-elements/heading
@@ -25,6 +24,6 @@ blocks:
         - _component: building-blocks/core-elements/text
           text: This is the third grid item. The layout is responsive and adapts to different screen sizes.
   label: ''
-  maxItemWidth: 400
+  maxItemWidth: 300
   gap: md
 ---

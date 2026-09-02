@@ -2,11 +2,8 @@ import { preview, band, bar, tile, glyph } from "../../../../../scripts/previews
 
 const B = band(1120);
 
-// Centred eyebrow / heading / copy over four icon-and-text columns — four, not
-// three, because this is the widest band and three would look loose.
-// Explicit per-column x values keep the built SVG diff-clean against the reference.
-const TILE_X = [177, 471, 764, 1057];
-const HEAD_X = [110, 403, 696, 989];
+const TILE_X = [80, 373, 666, 959];
+const HEAD_X = [142, 435, 728, 1019];
 const COPY_X = [80, 373, 666, 959];
 
 export default preview({
@@ -18,10 +15,10 @@ export default preview({
     bar(453, 112, 373, "body"),
 
     TILE_X.map((x, i) => [
-      tile(x, 180, 46),
-      bar(HEAD_X[i], 244, 181, "heading"),
-      bar(COPY_X[i], 286, 241, "body"),
-      bar(HEAD_X[i], 310, 181, "body"),
+      tile(x, 190, 46),
+      bar(HEAD_X[i], 200, 181, "heading"),
+      bar(COPY_X[i], 256, 241, "body"),
+      bar(HEAD_X[i], 280, 181, "body"),
     ]),
   ],
 });

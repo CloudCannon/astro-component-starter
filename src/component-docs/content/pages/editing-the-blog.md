@@ -173,7 +173,7 @@ The component name matches the `.astro` filename: `TestimonialSection.astro` bec
 
 ### Full-width components
 
-Blog content is centered in a `70ch` column. To make a component span the full width of the page, add `class="wide"`:
+Blog content is centered in a `70ch` column. To make a component span the full width of the article (the area beside the table of contents, when it's showing), add `class="wide"`:
 
 ```mdx
 <Image source="/src/assets/images/banner.jpg" alt="Banner" class="wide" />

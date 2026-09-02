@@ -1,0 +1,77 @@
+---
+import NavItemTrigger from "./NavItemTrigger.astro";
+import { createNavItemData, isCurrentPage, type NavItem } from "./navState";
+
+/**
+ * Private helper for Bar.astro: one top-level nav item with a dropdown panel.
+ * Not a CloudCannon component — no YAML siblings. Bar.astro owns the shared
+ * script and class vocabulary.
+ */
+interface Props {
+  item: NavItem;
+  groupName: string;
+}
+
+const { item, groupName } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const itemData = createNavItemData(pathname, item, groupName);
+---
+
+<li class="nav-item has-children">
+  <NavItemTrigger
+    item={itemData}
+    inputType="checkbox"
+  />
+  <div
+    id={itemData.contentId}
+    class="nav-item-content"
+  >
+    <ul class="nav-list">
+      {
+        itemData.children!.map((child) => {
+          const childData = createNavItemData(pathname, child, `bar-nav-${itemData.parentGroupId}`);
+
+          if (!childData.hasChildren) {
+            return (
+              <li class="nav-item">
+                <a
+                  href={childData.path}
+                  aria-current={childData.isCurrent ? "page" : undefined}
+                >
+                  {childData.name}
+                </a>
+              </li>
+            );
+          }
+
+          return (
+            <li class="nav-item has-children">
+              <NavItemTrigger
+                item={childData}
+                inputType="radio"
+              />
+              <div
+                id={childData.contentId}
+                class="nav-item-nested"
+              >
+                <ul class="nav-list">
+                  {childData.children!.map((grandChild) => (
+                    <li class="nav-item">
+                      <a
+                        href={grandChild.path}
+                        aria-current={isCurrentPage(pathname, grandChild) ? "page" : undefined}
+                      >
+                        {grandChild.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</li>

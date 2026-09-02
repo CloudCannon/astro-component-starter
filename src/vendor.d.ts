@@ -23,6 +23,9 @@ declare module "markdown-it" {
   export default MarkdownIt;
 }
 
+// Ships untyped: registers the <lite-vimeo> custom element as a side effect.
+declare module "@choctawnationofoklahoma/lite-vimeo";
+
 declare module "js-beautify" {
   interface BeautifyOptions {
     indent_size?: number;

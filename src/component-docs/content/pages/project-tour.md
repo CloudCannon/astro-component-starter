@@ -94,13 +94,13 @@ The three files also power these docs: every component's documentation page (tit
 
 Components live in `src/components/` and are grouped by purpose:
 
-- **Building Blocks** (`building-blocks/`): Foundational UI pieces (buttons, headings, text, images, form elements, layout wrappers like grids and splits). These are the atoms you compose into larger structures.
+- **Building Blocks** (`building-blocks/`): Foundational UI pieces (buttons, headings, text, images, form elements, layout wrappers like grids and splits). These are the atoms you combine into larger structures.
 
 - **Page Sections** (`page-sections/`): Full-width sections that make up a page (heroes, feature showcases, CTAs, FAQ sections, team grids). Each one is built from building blocks internally, but presents editors with a simple, flat interface.
 
 - **Navigation** (`navigation/`): Header, footer, mobile nav, sidebar nav.
 
-The key relationship: **building blocks** are composed into **page sections**. A `FeatureSplit` page section, for example, internally uses `CustomSection`, `Split`, `Heading`, `Text`, and `Image` building blocks, but editors just see inputs for heading, text, and image.
+The key relationship: **building blocks** combine into **page sections**. A `FeatureSplit` page section, for example, internally uses `CustomSection`, `Split`, `Heading`, `Text`, and `Image` building blocks, but editors just see inputs for heading, text, and image.
 
 ### What is `customSection`?
 

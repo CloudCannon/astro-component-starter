@@ -4,12 +4,8 @@ import { listComponentKeys } from "./componentConfig";
 import { findStructureValueFiles } from "./structureFiles";
 import { deriveSlotsForComponent, type DerivedSlot } from "./slotDerivation";
 
-// `componentIndex.ts` imports `astro:content`, which only resolves inside
-// Astro's own Vite pipeline. `mergeSlotMetadata` below is pure and unit
-// tested directly (see tests/unit/metadataParity.test.ts), so the
-// astro-coupled `getComponentIndex` is loaded lazily here — a static
-// top-level import would drag `astro:content` into vitest even when a test
-// never calls the two async functions that actually need it.
+// Lazy: a static import would drag `astro:content` into vitest, where it
+// cannot resolve outside Astro's Vite pipeline.
 async function loadComponentIndex() {
   const { getComponentIndex } = await import("./componentIndex");
 

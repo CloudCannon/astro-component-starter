@@ -22,7 +22,7 @@ const arrayDataAttributes = effectiveChildrenProp
   {...htmlAttributes}
 >
   <div
-    class="grid-item-content"
+    class="grid-item-content flow"
     {...arrayDataAttributes}
   >
     <slot>
@@ -48,10 +48,6 @@ const arrayDataAttributes = effectiveChildrenProp
 
       > .grid-item-content > *:only-child {
         height: 100%;
-      }
-
-      > .grid-item-content > *:first-child {
-        margin-top: 0 !important;
       }
     }
   }

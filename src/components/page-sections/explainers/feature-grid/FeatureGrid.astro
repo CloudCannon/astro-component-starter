@@ -65,8 +65,7 @@ const {
   />
   <Grid
     gap="lg"
-    minItemWidth="360"
-    maxItemWidth="400"
+    columns={3}
     class="feature-grid-grid"
     data-children-prop="features"
   >
@@ -85,7 +84,7 @@ const {
 <style is:global>
   @layer page-sections {
     .feature-grid-grid {
-      margin-top: var(--spacing-2xl);
+      margin-top: var(--space-before-loose);
     }
   }
 </style>

@@ -75,7 +75,8 @@ in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages
 - `npm run build && npm run preview` — production build with search indexed.
 - Confirm `src/data/seo.json` has your name, description, and logo, and that
   `src/data/mainNav.json` and `footer.json` don't still link to `/component-docs/`.
-- Edit `public/llms.txt` so it lists _your_ pages, not the starter's Home / Why / Blog.
+- Edit `public/llms.txt` so it lists _your_ pages, not the starter's Home / Why / Get started /
+  Examples / Blog.
 
 `npm run build` strips the component documentation from the output: the per-component pages
 aren't generated at all, and `/component-docs/`, `/gallery/` and `/component-builder/` render

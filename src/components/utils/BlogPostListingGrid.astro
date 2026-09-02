@@ -32,7 +32,7 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
     <>
       {tagBreadcrumb && (
         <Breadcrumbs
-          style="margin-top: var(--spacing-2xl);"
+          style="margin-top: var(--space-before-loose);"
           items={[
             { label: tagBreadcrumb.allPostsLabel ?? "Blog", url: tagBreadcrumb.allPostsHref },
             { label: tagBreadcrumb.currentLabel },
@@ -41,7 +41,6 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
       )}
       <Grid
         gap="lg"
-        layout="start"
         minItemWidth="320"
         maxItemWidth="400"
         style={`margin-top: ${gridTop}`}
@@ -102,13 +101,13 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
       <Pagination
         page={page}
         showArrows={true}
-        style="margin-top: var(--spacing-2xl);"
+        style="margin-top: var(--space-before-loose);"
       />
     </>
   ) : (
     <SimpleText
       alignmentHorizontal="center"
-      style="margin-top: var(--spacing-2xl);"
+      style="margin-top: var(--space-before-loose);"
     >
       {emptyMessage}
     </SimpleText>

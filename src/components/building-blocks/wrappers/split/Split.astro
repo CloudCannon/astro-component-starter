@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 
@@ -13,6 +14,7 @@ const {
   minSplitWidth = 700,
   gap = "lg",
   useDefaultEditableBinding = false,
+  spaceBefore = "default",
   class: className,
   label,
   "data-first-prop": customFirstDataProp,
@@ -71,10 +73,11 @@ const splitId = `split-${crypto.randomUUID()}`;
 ---
 
 <section
-  class:list={["split", className]}
+  class:list={["split", "stackable", className]}
   {...htmlAttributes}
 >
   <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     class:list={[
       "split-inner",
       "uses-spacing-utils",
@@ -87,7 +90,7 @@ const splitId = `split-${crypto.randomUUID()}`;
     style={fixedWidth ? `--split-fixed-width: ${fixedWidth}px;` : ""}
   >
     <div
-      class="pane first"
+      class="pane first flow"
       {...arrayDataAttributesFirst}
     >
       {
@@ -113,7 +116,7 @@ const splitId = `split-${crypto.randomUUID()}`;
       }
     </div>
     <div
-      class="pane second"
+      class="pane second flow"
       {...arrayDataAttributesSecond}
     >
       {
@@ -171,8 +174,6 @@ const splitId = `split-${crypto.randomUUID()}`;
 <style is:global>
   @layer components {
     .split {
-      margin-top: var(--spacing-lg);
-
       > .split-inner {
         --split-columns-mobile: 1fr;
         --split-columns-desktop: 1fr 1fr;
@@ -206,10 +207,6 @@ const splitId = `split-${crypto.randomUUID()}`;
           container-type: inline-size;
           min-width: 0;
           overflow-wrap: break-word;
-
-          > *:first-child {
-            margin-top: 0 !important;
-          }
         }
 
         &.half {

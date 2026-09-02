@@ -19,7 +19,7 @@ function parseConfigProperties(configData: any): PropertyMeta[] {
         enumValues: getEnumValues(inputConfig),
         description: inputConfig?.comment || "",
         nestedProperties: getNestedProperties(inputConfig, configData, key),
-        arrayItemProperties: getArrayItemProperties(inputConfig, configData),
+        arrayItemVariants: getArrayItemVariants(inputConfig, configData),
       });
     });
   }
@@ -112,7 +112,7 @@ function getNestedProperties(
         enumValues: getEnumValues(nestedInput),
         description: nestedInput?.comment || "",
         nestedProperties: getNestedProperties(nestedInput, configData, key),
-        arrayItemProperties: getArrayItemProperties(nestedInput, configData),
+        arrayItemVariants: getArrayItemVariants(nestedInput, configData),
       });
     });
 
@@ -143,7 +143,7 @@ function getNestedProperties(
               configData,
               `${parentKey}.${nestedKey}`
             ),
-            arrayItemProperties: getArrayItemProperties(nestedInput, configData),
+            arrayItemVariants: getArrayItemVariants(nestedInput, configData),
           });
         }
       }
@@ -155,71 +155,70 @@ function getNestedProperties(
   return undefined;
 }
 
-function getArrayItemProperties(inputConfig: any, configData: any): PropertyMeta[] | undefined {
-  if (inputConfig?.type === "array" && inputConfig.options?.structures) {
-    const structures = inputConfig.options.structures;
+type ArrayItemVariant = {
+  label?: string;
+  description?: string;
+  properties: PropertyMeta[];
+};
 
-    // `_structures.<name>` string reference format
-    if (typeof structures === "string" && structures.startsWith("_structures.")) {
-      const structureName = structures.replace("_structures.", "");
-      const structure = configData._structures?.[structureName];
+/** Input configs are matched by short key name at any depth — CloudCannon's
+ *  own matching rule. */
+function propsFromValueShape(
+  valueObj: Record<string, unknown>,
+  itemInputs: Record<string, any>,
+  configData: any
+): PropertyMeta[] {
+  return Object.entries(valueObj).map(([key, value]) => {
+    const itemInputConfig = itemInputs[key];
+    const isPlainObject = value !== null && typeof value === "object" && !Array.isArray(value);
 
-      if (structure?.values && structure.values.length > 0) {
-        // Only item 0 is inspected as the template
-        const itemTemplate = structure.values[0];
-        const itemValue = itemTemplate.value;
-        const itemInputs = itemTemplate._inputs;
+    return {
+      name: key,
+      type: itemInputConfig ? getPropertyType(itemInputConfig) : isPlainObject ? "object" : "",
+      optional: false,
+      default: formatDefaultValue(value, itemInputConfig),
+      enumValues: getEnumValues(itemInputConfig),
+      description: itemInputConfig?.comment || "",
+      nestedProperties: isPlainObject
+        ? propsFromValueShape(value as Record<string, unknown>, itemInputs, configData)
+        : getNestedProperties(itemInputConfig, configData),
+      arrayItemVariants: getArrayItemVariants(itemInputConfig, configData),
+    };
+  });
+}
 
-        if (itemValue && itemInputs) {
-          const arrayItemProperties: PropertyMeta[] = [];
+function variantFromTemplate(itemTemplate: any, configData: any): ArrayItemVariant | null {
+  const itemValue = itemTemplate?.value;
+  const itemInputs = itemTemplate?._inputs;
 
-          Object.entries(itemValue).forEach(([key, value]) => {
-            const itemInputConfig = itemInputs[key];
+  if (!itemValue || !itemInputs) return null;
 
-            arrayItemProperties.push({
-              name: key,
-              type: getPropertyType(itemInputConfig),
-              optional: false,
-              default: formatDefaultValue(value, itemInputConfig),
-              enumValues: getEnumValues(itemInputConfig),
-              description: itemInputConfig?.comment || "",
-              nestedProperties: getNestedProperties(itemInputConfig, configData),
-              arrayItemProperties: getArrayItemProperties(itemInputConfig, configData),
-            });
-          });
+  return {
+    label: itemTemplate.label,
+    description: itemTemplate.description,
+    properties: propsFromValueShape(itemValue, itemInputs, configData),
+  };
+}
 
-          return arrayItemProperties;
-        }
-      }
-    } else if (Array.isArray(structures) && structures.length > 0) {
-      const itemTemplate = structures[0];
-      const itemValue = itemTemplate.value;
-      const itemInputs = itemTemplate._inputs;
+function getArrayItemVariants(inputConfig: any, configData: any): ArrayItemVariant[] | undefined {
+  if (inputConfig?.type !== "array" || !inputConfig.options?.structures) return undefined;
 
-      if (itemValue && itemInputs) {
-        const arrayItemProperties: PropertyMeta[] = [];
+  const structures = inputConfig.options.structures;
+  let templates: any[] = [];
 
-        Object.entries(itemValue).forEach(([key, value]) => {
-          const itemInputConfig = itemInputs[key];
+  if (typeof structures === "string" && structures.startsWith("_structures.")) {
+    const structureName = structures.replace("_structures.", "");
 
-          arrayItemProperties.push({
-            name: key,
-            type: getPropertyType(itemInputConfig),
-            optional: false,
-            default: formatDefaultValue(value, itemInputConfig),
-            enumValues: getEnumValues(itemInputConfig),
-            description: itemInputConfig?.comment || "",
-            nestedProperties: getNestedProperties(itemInputConfig, configData),
-            arrayItemProperties: getArrayItemProperties(itemInputConfig, configData),
-          });
-        });
-
-        return arrayItemProperties;
-      }
-    }
+    templates = configData._structures?.[structureName]?.values ?? [];
+  } else if (Array.isArray(structures)) {
+    templates = structures;
   }
 
-  return undefined;
+  const variants = templates
+    .map((template) => variantFromTemplate(template, configData))
+    .filter((variant): variant is ArrayItemVariant => variant !== null);
+
+  return variants.length > 0 ? variants : undefined;
 }
 
 type PropertyMeta = {
@@ -230,7 +229,7 @@ type PropertyMeta = {
   enumValues?: string[];
   description: string;
   nestedProperties?: PropertyMeta[];
-  arrayItemProperties?: PropertyMeta[];
+  arrayItemVariants?: ArrayItemVariant[];
 };
 
 type InputGroup = {
@@ -311,6 +310,39 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
 <div class="properties">
   {
     (() => {
+      function chevron() {
+        return (
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m19.5 8.25-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        );
+      }
+
+      function childDisclosure(label: string, comment: string | undefined, body: any) {
+        return (
+          <details class="property-children">
+            <summary>
+              <span class="property-children-text">
+                <span class="property-children-label">{label}</span>
+                {comment && <span class="property-children-comment">{comment}</span>}
+              </span>
+              {chevron()}
+            </summary>
+            <div class="property-children-body">{body}</div>
+          </details>
+        );
+      }
+
       function renderProperty(prop: PropertyMeta) {
         return (
           <div class="property">
@@ -336,25 +368,36 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
               </div>
             )}
 
-            {prop.nestedProperties && prop.nestedProperties.length > 0 && (
-              <div class="nested-properties">
-                <strong>Properties:</strong>
-                <div class="nested-property-list">
-                  {prop.nestedProperties.map((nestedProp: PropertyMeta) =>
-                    renderProperty(nestedProp)
-                  )}
-                </div>
-              </div>
-            )}
+            {prop.nestedProperties &&
+              prop.nestedProperties.length > 0 &&
+              childDisclosure(
+                `Properties (${prop.nestedProperties.length})`,
+                undefined,
+                prop.nestedProperties.map((nestedProp: PropertyMeta) => renderProperty(nestedProp))
+              )}
 
-            {prop.arrayItemProperties && prop.arrayItemProperties.length > 0 && (
-              <div class="nested-properties">
-                <strong>Item Properties:</strong>
-                <div class="nested-property-list">
-                  {prop.arrayItemProperties.map((itemProp: PropertyMeta) =>
-                    renderProperty(itemProp)
-                  )}
-                </div>
+            {prop.arrayItemVariants &&
+              prop.arrayItemVariants.length === 1 &&
+              childDisclosure(
+                `Item properties (${prop.arrayItemVariants[0].properties.length})`,
+                undefined,
+                prop.arrayItemVariants[0].properties.map((itemProp: PropertyMeta) =>
+                  renderProperty(itemProp)
+                )
+              )}
+
+            {prop.arrayItemVariants && prop.arrayItemVariants.length > 1 && (
+              <div class="item-variants">
+                <strong>
+                  Item types ({prop.arrayItemVariants.length}) — each array entry is one of:
+                </strong>
+                {prop.arrayItemVariants.map((variant: ArrayItemVariant, index: number) =>
+                  childDisclosure(
+                    variant.label ?? `Variant ${index + 1}`,
+                    variant.description,
+                    variant.properties.map((itemProp: PropertyMeta) => renderProperty(itemProp))
+                  )
+                )}
               </div>
             )}
           </div>
@@ -385,19 +428,7 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
                   <span class="property-group-heading">{group.heading || "More settings"}</span>
                   {group.comment && <span class="property-group-comment">{group.comment}</span>}
                 </span>
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
+                {chevron()}
               </summary>
               <div class="property-group-body">{list}</div>
             </details>
@@ -546,14 +577,81 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
     }
   }
 
-  .nested-property-list {
+  .property-children {
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-xs);
     margin-top: var(--spacing-md);
-    padding-inline: var(--spacing-md);
+    overflow: hidden;
 
-    .property:first-child {
-      border-top: none;
+    > summary {
+      align-items: center;
+      cursor: pointer;
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: space-between;
+      list-style: none;
+      padding: var(--spacing-sm) var(--spacing-md);
+      user-select: none;
+
+      &:hover {
+        background-color: var(--color-bg-surface);
+      }
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      svg {
+        flex-shrink: 0;
+        height: 12px;
+        transition: transform var(--animation-fast) var(--ease-in-out);
+        width: 12px;
+      }
+    }
+
+    &[open] > summary {
+      border-bottom: 1px solid var(--color-border-subtle);
+
+      svg {
+        transform: rotate(180deg);
+      }
+    }
+
+    .property-children-text {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+      min-width: 0;
+    }
+
+    .property-children-label {
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .property-children-comment {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .property-children-body {
+      padding-inline: var(--spacing-md);
+      padding-bottom: var(--spacing-sm);
+
+      > .property:first-child {
+        border-top: none;
+      }
+    }
+  }
+
+  .item-variants {
+    > strong {
+      display: block;
+      margin-top: var(--spacing-md);
+    }
+
+    > .property-children:first-of-type {
+      margin-top: var(--spacing-sm);
     }
   }
 </style>

@@ -44,22 +44,20 @@ Real excerpt (`src/data/mainNav.json`):
   "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
   "logoAlt": "Astro Component Starter",
   "themeToggle": true,
+  "search": true,
   "navData": [
     { "name": "Home", "path": "/", "children": [] },
-    { "name": "Why", "path": "/why/", "children": [] }
-  ],
-  "buttonSections": [
+    { "name": "Why", "path": "/why/", "children": [] },
     {
-      "_component": "building-blocks/core-elements/button",
-      "text": "Search",
-      "hideText": true,
-      "link": "/search/",
-      "iconName": "magnifying-glass",
-      "iconPosition": "before",
-      "variant": "ghost",
-      "size": "lg"
+      "name": "Examples",
+      "path": "/examples/",
+      "children": [
+        { "name": "Overview", "path": "/examples/", "children": [] },
+        { "name": "Pricing", "path": "/examples/pricing/", "children": [] }
+      ]
     }
-  ]
+  ],
+  "buttonSections": []
 }
 ```
 
@@ -69,16 +67,56 @@ Real excerpt (`src/data/mainNav.json`):
 | `logoAlternateSource` | string  | Optional — swapped in on theme toggle. Omit the key if there's no dark variant.                    |
 | `logoAlt`             | string  | Alt text for the logo image.                                                                       |
 | `themeToggle`         | boolean | Shows/hides the light/dark toggle in the nav bar.                                                  |
-| `navData`             | array   | Nav item tree, up to 3 levels — see below.                                                         |
+| `navData`             | array   | Nav item tree, up to 3 levels — see below. A top-level item can instead carry a `megaMenu` object. |
 | `buttonSections`      | array   | Full component blocks (each needs `_component`), rendered via `ButtonGroup` next to the nav links. |
 
 ### Nav item shape (`navData`)
 
 Each item: `{ "name": string, "path": string, "children": [] }`. `children` nests the same shape.
 
-**MUST NOT** nest more than 3 levels deep (top → child → grandchild). **Why:** all three nav renderers (`src/components/navigation/{bar,mobile,side}/*.astro`) hardcode exactly 3 levels — `Bar.astro` and `Mobile.astro` via nested `createNavItemData` calls, `Side.astro` via inline `children`/`grandChild` maps — and none reads a grandchild's own `children`, so a 4th level is silently dropped, not an error.
+**MUST NOT** nest more than 3 levels deep (top → child → grandchild). **Why:** all three nav renderers (`src/components/navigation/{bar,mobile,side}/*.astro`) hardcode exactly 3 levels — `Bar.astro` (via its private `Dropdown.astro` helper) and `Mobile.astro` via nested `createNavItemData` calls, `Side.astro` via inline `children`/`grandChild` maps — and none reads a grandchild's own `children`, so a 4th level is silently dropped, not an error.
 
 **Internal vs external links:** `path` is a plain string, not a special union — write `/services/` for internal routes (leading slash) or `https://example.com` for external. **Why it matters here specifically:** `itemHasSplitNavLink()` (`src/components/utils/navSplitLink.ts`) treats a parent nav item as having a _real_ link only when `path` starts with `/`, `http://`, `https://`, `mailto:`, or `tel:`. A parent with `path: "#"` or `path: ""` renders as a dropdown-only toggle (whole row opens the submenu); a parent with a real `path` renders a **split row** — the text is a clickable link and a separate small chevron button opens the submenu. Decide which behavior you want before picking a placeholder vs. a real path for a parent item.
+
+### Mega menu items
+
+A top-level `navData` item can open a full-width panel instead of a dropdown by carrying a `megaMenu` object:
+
+```json
+{
+  "name": "Solutions",
+  "path": "",
+  "megaMenu": {
+    "feature": {
+      "image": "/src/assets/images/...",
+      "imageAlt": "",
+      "heading": "Who is this for?",
+      "link": "/who/"
+    },
+    "columns": [
+      {
+        "heading": "Client sites",
+        "items": [
+          {
+            "name": "Agencies & freelancers",
+            "description": "Quick launches & happy clients",
+            "icon": "user-group",
+            "path": "/agencies/",
+            "highlight": true
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+- A `megaMenu` object **wins over `children`** — the two are exclusive; a mega item's `children` are ignored. An empty `megaMenu` (no columns, no feature) still opens an empty panel, so a freshly added "Mega Menu Item" is visible in the editor before its first column.
+- `feature` is optional (omit it, or leave `heading` and `image` empty, to render columns only). Each column's `heading` is an optional eyebrow label; the link array is named `items`, not `links` — `links` is a global structure key (footer) that CloudCannon matches by field name.
+- `icon` is a kebab-case Heroicons id from `_select_data.icons` (same picker as list items); `highlight: true` gives a link a surface background.
+- `path` on the mega item itself keeps the split-row semantics above: a real path renders link + separate chevron toggle, `""`/`#` makes the whole row the toggle.
+- Rendering: `Bar.astro` dispatches mega items to `MegaPanel.astro` (a private helper next to `Dropdown.astro`, neither is a CloudCannon component). The panel is absolutely positioned against main-nav's `.content` (its `container-type` makes it the containing block) so it spans the full header width. `Mobile.astro` flattens the panel into the accordion: column headings become group labels, links render as icon + name, the feature card is dropped. `Side.astro` ignores `megaMenu` entirely.
+- The toggle is the same CSS-only hidden checkbox as regular dropdowns, so the panel opens in the CloudCannon Visual Editor where inline scripts don't run.
 
 ### How it renders
 
@@ -106,13 +144,13 @@ Real excerpt (`src/data/footer.json`):
   "links": [
     { "name": "Home", "path": "/" },
     { "name": "Why", "path": "/why/" },
+    { "name": "Get started", "path": "/start/" },
+    { "name": "Examples", "path": "/examples/" },
     { "name": "Components", "path": "/component-docs/" },
     { "name": "Blog", "path": "/blog/" }
   ],
   "socials": [
-    { "icon": "social/github", "link": "https://github.com" },
-    { "icon": "social/x", "link": "https://x.com" },
-    { "icon": "social/linkedin", "link": "https://linkedin.com" }
+    { "icon": "social/github", "link": "https://github.com/CloudCannon/astro-component-starter" }
   ],
   "footerText": "© 2026 All rights reserved."
 }
@@ -157,7 +195,7 @@ Real content of `src/data/seo.json`:
 | `name`        | string | `og:site_name` meta tag; `Organization` JSON-LD `name`.                                                                                                                                         |
 | `url`         | string | Fallback base for resolving `logoSource` into an absolute URL (`new URL(site.logoSource, site.url)` in `StructuredData.astro`); also the fallback if `Astro.site` isn't set in `SeoHead.astro`. |
 | `description` | string | Fallback `<meta name="description">` / `og:description` when a page doesn't set its own.                                                                                                        |
-| `logoSource`  | string | Fallback `og:image` (with width/height/alt; local photos are cropped to 1200×630); also the JSON-LD `Organization.logo`.                                                                          |
+| `logoSource`  | string | Fallback `og:image` (with width/height/alt; local photos are cropped to 1200×630); also the JSON-LD `Organization.logo`.                                                                        |
 | `titleFormat` | string | `<title>` template — literal substring `{title}` is replaced with the page's title.                                                                                                             |
 
 **MUST:** keep `_schema: seo` in the file. **Why:** it's what makes CloudCannon apply the `seo` schema (`cloudcannon.config.yml` → `collections_config.data.schemas.seo`, backed by `.cloudcannon/schemas/seo.json`) instead of the generic data-file editor.
@@ -176,6 +214,12 @@ Per-page overrides (`description`, `image`, `canonical`, `noindex`, `article`) c
 - Reorder: move array entries; no separate "order" field exists.
 - Remove: delete the array entry (and any nested `children` under it).
 - If the item should trigger a dropdown but also be clickable itself, give it a real `path` (not `#`/empty) so `itemHasSplitNavLink` renders the split row.
+
+### Add a mega menu
+
+- Replace a top-level `navData` item's `children` with a `megaMenu` object (shape above) — or in CloudCannon, add a "Mega Menu Item" from the array picker in Data → mainNav.
+- Fill `columns[]` (each: optional `heading`, `items[]` of `{ name, description, icon, path, highlight }`); optionally fill `feature`.
+- Working example: `src/component-docs/content/components/navigation/main-nav/examples/mega-menu.md`.
 
 ### Add a footer link
 
@@ -200,9 +244,10 @@ Verified against `cloudcannon.config.yml`:
 - The `data` collection (`collections_config.data`) globs `src/data/**/*.json`, `disable_url: true`, `icon: database`, `_enabled_editors: [data]` — grouped under the "Data" heading in `collection_groups`.
 - Only `seo.json` has an explicit schema (`schemas.seo`, backed by `.cloudcannon/schemas/seo.json`), matched by its `_schema: seo` key; it also gets field-level comments from `collections_config.data.schemas.seo._inputs`.
 - `mainNav.json` and `footer.json` have no dedicated schema — CloudCannon renders them with the collection's generic `_inputs` (`logoSource`/`logoAlternateSource`/`image` typed as `image` fields with upload path `src/assets/images`) plus **global structures matched by field name**: `.cloudcannon/structures/navData.cloudcannon.structures.yml`, `links.cloudcannon.structures.yml`, and `socials.cloudcannon.structures.yml`, all loaded via the root `_structures_from_glob: [/.cloudcannon/structures/*.cloudcannon.structures.yml]`. CloudCannon applies a structure automatically to any array field named `navData`, `links`, or `socials` in any collection — this is why the data file needs no per-field YAML of its own.
+- Both `navData` and `navItemLevel1MegaMenu` offer two structure values: plain "Navigation Item" and "Mega Menu Item". The mega item's column/link sub-shapes live once in `.cloudcannon/structures/megaMenu.cloudcannon.structures.yml` (`megaMenuColumns` / `megaMenuLinks`) and are referenced from both — edit them there. `navItemLevel1` is the plain-only twin, used by `side` and `mobile`: `side` ignores `megaMenu` and `mobile` only flattens one it is handed, so neither offers the variant. `structures:` takes one reference, so the plain variant is duplicated between the two — change one, change both.
 - These three structure files are the single source of truth for the nav-item / footer-link / social-link input shapes (name/path text+url fields, icon `select` sourced from `_select_data.icons`). If you rename a field in `mainNav.json`/`footer.json`, update the matching structure file or the editor UI will show the old field name.
 
-**Separate and easy to confuse:** `MainNav.astro`, `Bar.astro`, `Mobile.astro`, `Footer.astro`, and `Side.astro` are each _also_ directories with their own `<kebab>.cloudcannon.inputs.yml` (e.g. `main-nav.cloudcannon.inputs.yml`), whose array inputs reference `_structures.navItemLevel1/2/3` — defined once in `.cloudcannon/structures/navItems.cloudcannon.structures.yml` and shared by all four nav components (`footer` uses `linkItems`/`socialItems` from `footerItems.cloudcannon.structures.yml`). These previously sat in an `_structures:` block inside each component's `inputs.yml`; that is not a valid key there, and since all four declared the _same three names_, only one definition could ever win — by glob load order. Edit the shared file, not a component, and remember a change hits all four. Those register the components for use as standalone page-section blocks (`_component: navigation/main-nav`, `_component: navigation/bar`, ...) — unrelated to how `mainNav.json`/`footer.json` are edited as data. No page content in `src/content/` currently inserts them this way. `Side.astro` in particular is not wired to `src/data/*.json` at all — it's used only by `src/component-docs/layouts/SidebarNavLayout.astro` with its own `src/component-docs/data/nav.json`.
+**Separate and easy to confuse:** `MainNav.astro`, `Bar.astro`, `Mobile.astro`, `Footer.astro`, and `Side.astro` are each _also_ directories with their own `<kebab>.cloudcannon.inputs.yml` (e.g. `main-nav.cloudcannon.inputs.yml`), whose array inputs reference `_structures.navItemLevel1[MegaMenu]/2/3` — defined once in `.cloudcannon/structures/navItems.cloudcannon.structures.yml` and shared by all four nav components (`footer` uses `linkItems`/`socialItems` from `footerItems.cloudcannon.structures.yml`). These previously sat in an `_structures:` block inside each component's `inputs.yml`; that is not a valid key there, and since all four declared the _same three names_, only one definition could ever win — by glob load order. Edit the shared file, not a component, and remember a change hits all four. Those register the components for use as standalone page-section blocks (`_component: navigation/main-nav`, `_component: navigation/bar`, ...) — unrelated to how `mainNav.json`/`footer.json` are edited as data. No page content in `src/content/` currently inserts them this way. `Side.astro` in particular is not wired to `src/data/*.json` at all — it's used only by `src/component-docs/layouts/SidebarNavLayout.astro` with its own `src/component-docs/data/nav.json`.
 
 ## Verify your work
 

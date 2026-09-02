@@ -87,7 +87,7 @@ Use the **Preview copies** control to specify how many items appear in the live 
 
 Some slots have an **Open for page building** toggle. When this is on, the slot is left open for editors to fill with whatever components they choose when building pages in CloudCannon. The children you've placed in the builder are ignored in the export.
 
-This is useful when you want a section layout (padding, background, width) but don't want to lock down what goes inside. For example, a Custom Section with "Open for page building" turned on gives editors full freedom to compose their own content using any available building blocks.
+This is useful when you want a section layout (padding, background, width) but don't want to lock down what goes inside. For example, a Custom Section with "Open for page building" turned on gives editors full freedom to build their own content using any available building blocks.
 
 When it's off, the children you've placed in the builder are baked into the exported component.
 
@@ -98,7 +98,7 @@ When it's off, the children you've placed in the builder are baked into the expo
 
 ## Exporting your component
 
-When you're happy with your composition, click the **Export** button. A modal appears where you configure:
+When you're happy with what you've built, click the **Export** button. A modal appears where you configure:
 
 1. **Component type**: Page Section or Building Block
 2. **Category**: Where it lives in the component hierarchy. For page sections, you can choose from existing categories (heroes, explainers, conversion, etc.) or enter a custom one. For building blocks, choose from core-elements, wrappers, or forms.

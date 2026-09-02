@@ -16,9 +16,50 @@
       "children": []
     },
     {
-      "name": "Blog",
-      "path": "/blog/",
+      "name": "Get started",
+      "path": "/start/",
       "children": []
+    },
+    {
+      "name": "Examples",
+      "path": "",
+      "children": [
+        {
+          "name": "Overview",
+          "path": "/examples/",
+          "children": []
+        },
+        {
+          "name": "Pricing",
+          "path": "/examples/pricing/",
+          "children": []
+        },
+        {
+          "name": "About",
+          "path": "/examples/about/",
+          "children": []
+        },
+        {
+          "name": "Services",
+          "path": "/examples/services/",
+          "children": []
+        },
+        {
+          "name": "Portfolio",
+          "path": "/examples/portfolio/",
+          "children": []
+        },
+        {
+          "name": "Contact",
+          "path": "/examples/contact/",
+          "children": []
+        },
+        {
+          "name": "Blog",
+          "path": "/blog/",
+          "children": []
+        }
+      ]
     },
     {
       "name": "Components",

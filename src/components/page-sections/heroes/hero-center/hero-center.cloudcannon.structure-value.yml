@@ -31,6 +31,7 @@ value:
     imageSource: ""
     imageAlt: ""
     patternSize: natural
+    mask: none
     videoSource: null
     overlay: 0
 preview:
@@ -53,6 +54,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/heroes/hero-center/hero-center.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background-mask.yml
 groups:
   - heading: Content
     inputs:

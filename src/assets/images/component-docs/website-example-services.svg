@@ -1,0 +1,57 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="esBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf4ff"/>
+      <stop offset="1" stop-color="#fafcff"/>
+    </linearGradient>
+    <pattern id="esDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#bfdbfe" opacity=".3"/>
+    </pattern>
+    <filter id="esShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#1e3a8a" flood-opacity=".14"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#esBg)"/>
+  <rect width="800" height="600" fill="url(#esDots)"/>
+
+  <!-- service cards -->
+  <g filter="url(#esShadow)"><rect x="55" y="60" width="210" height="170" rx="14" fill="#fff"/></g>
+  <rect x="79" y="84" width="44" height="44" rx="11" fill="#dbeafe"/>
+  <path d="m104 96-10 14h7l-4 12 11-15h-7z" fill="#2563eb"/>
+  <rect x="79" y="150" width="120" height="11" rx="5.5" fill="#2a2a2a"/>
+  <rect x="79" y="176" width="140" height="8" rx="4" fill="#c9cfd9"/>
+  <g filter="url(#esShadow)"><rect x="295" y="60" width="210" height="170" rx="14" fill="#fff"/></g>
+  <rect x="319" y="84" width="44" height="44" rx="11" fill="#dcfce7"/>
+  <circle cx="341" cy="106" r="11" fill="none" stroke="#16a34a" stroke-width="3.5"/>
+  <circle cx="341" cy="106" r="3.5" fill="#16a34a"/>
+  <rect x="319" y="150" width="104" height="11" rx="5.5" fill="#2a2a2a"/>
+  <rect x="319" y="176" width="140" height="8" rx="4" fill="#c9cfd9"/>
+  <g filter="url(#esShadow)"><rect x="535" y="60" width="210" height="170" rx="14" fill="#fff"/></g>
+  <rect x="559" y="84" width="44" height="44" rx="11" fill="#f3e8ff"/>
+  <rect x="569" y="98" width="10" height="20" rx="3" fill="#9333ea"/>
+  <rect x="583" y="92" width="10" height="26" rx="3" fill="#9333ea" opacity=".3"/>
+  <rect x="559" y="150" width="128" height="11" rx="5.5" fill="#2a2a2a"/>
+  <rect x="559" y="176" width="140" height="8" rx="4" fill="#c9cfd9"/>
+
+  <!-- process steps -->
+  <path d="m140 320h520" stroke="#d4d8e0" stroke-width="3"/>
+  <circle cx="140" cy="320" r="20" fill="#2563eb"/>
+  <rect x="133" y="316" width="14" height="8" rx="4" fill="#fff" opacity=".9"/>
+  <rect x="90" y="360" width="100" height="9" rx="4.5" fill="#555"/>
+  <circle cx="400" cy="320" r="20" fill="#dbeafe"/>
+  <rect x="393" y="316" width="14" height="8" rx="4" fill="#2563eb" opacity=".7"/>
+  <rect x="350" y="360" width="100" height="9" rx="4.5" fill="#555"/>
+  <circle cx="660" cy="320" r="20" fill="#dbeafe"/>
+  <rect x="653" y="316" width="14" height="8" rx="4" fill="#2563eb" opacity=".7"/>
+  <rect x="610" y="360" width="100" height="9" rx="4.5" fill="#555"/>
+
+  <!-- testimonial -->
+  <g filter="url(#esShadow)"><rect x="170" y="424" width="460" height="132" rx="14" fill="#fff"/></g>
+  <path d="m204 448a16 16 0 0 0 -10 15h10v14h-16v-14a24 24 0 0 1 14-22zm26 0a16 16 0 0 0 -10 15h10v14h-16v-14a24 24 0 0 1 14-22z" fill="#bfdbfe"/>
+  <rect x="200" y="490" width="300" height="9" rx="4.5" fill="#c9cfd9"/>
+  <rect x="200" y="508" width="240" height="9" rx="4.5" fill="#c9cfd9"/>
+  <circle cx="214" cy="538" r="13" fill="#e9d5ff"/>
+  <circle cx="214" cy="534" r="4.5" fill="#fff" opacity=".9"/>
+  <path d="m205 545a9 5.5 0 0 1 18 0z" fill="#fff" opacity=".9"/>
+  <rect x="238" y="533" width="90" height="8" rx="4" fill="#555"/>
+</svg>

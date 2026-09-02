@@ -21,4 +21,11 @@
   --spacing-em-4xl: 5em;
   --spacing-em-5xl: 6em;
   --spacing-em-6xl: 7em;
+
+  /* The only vocabulary for space between document siblings — content never
+     references the raw scale for rhythm (see styles/utils/_flow.css). */
+  --space-before-none: 0;
+  --space-before-tight: var(--spacing-sm);
+  --space-before-default: var(--spacing-lg);
+  --space-before-loose: var(--spacing-2xl);
 }

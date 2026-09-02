@@ -98,15 +98,16 @@ The picker is driven by `.cloudcannon/structures/*Sections.cloudcannon.structure
 
 The attribute reference (`data-prop`, `data-children-prop`, `data-prop-src`/`-alt`, `data-editable`, `useDefaultEditableBinding`) is owned by [editable-regions](../editable-regions/SKILL.md). Diagnose the symptom here, then repair there.
 
-| Likely cause                                                      | Fix                                                                                                                              |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| No binding on the element                                         | Add `data-prop` (text), `data-prop-src`/`data-prop-alt` (image), or `data-children-prop` (array) on the building block.          |
-| `data-prop` value doesn't match the frontmatter/prop key          | Make it identical to the camelCase prop name — same string in the `.astro` destructure, `inputs.yml`, and `structure-value.yml`. |
-| Image uses `data-prop` instead of `data-prop-src`/`data-prop-alt` | Images bind via the src/alt pair, not `data-prop`.                                                                               |
-| `data-children-prop` on the wrong element                         | It goes on the array **wrapper** (`Grid`, `ButtonGroup`, …), not on an item or a text node.                                      |
-| Component rendered outside `renderBlock` without the binding flag | `renderBlock` sets `useDefaultEditableBinding={true}`; render another way and you must pass it (or explicit bindings).           |
-| `data-editable` set on the component's **root**                   | Remove it. `renderBlock` injects `data-editable="array-item"` on the root; a second one collides. Only mark inner elements.      |
-| `display: contents` on the root of an array item                  | Replace with `display: flex`/`grid`. CloudCannon needs a real DOM box to attach the array-item region.                           |
+| Likely cause                                                      | Fix                                                                                                                                                                                                                                                   |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No binding on the element                                         | Add `data-prop` (text), `data-prop-src`/`data-prop-alt` (image), or `data-children-prop` (array) on the building block.                                                                                                                               |
+| `data-prop` value doesn't match the frontmatter/prop key          | Make it identical to the camelCase prop name — same string in the `.astro` destructure, `inputs.yml`, and `structure-value.yml`.                                                                                                                      |
+| Image uses `data-prop` instead of `data-prop-src`/`data-prop-alt` | Images bind via the src/alt pair, not `data-prop`.                                                                                                                                                                                                    |
+| `data-children-prop` on the wrong element                         | It goes on the array **wrapper** (`Grid`, `ButtonGroup`, …), not on an item or a text node.                                                                                                                                                           |
+| Component rendered outside `renderBlock` without the binding flag | `renderBlock` sets `useDefaultEditableBinding={true}`; render another way and you must pass it (or explicit bindings).                                                                                                                                |
+| `data-editable` set on the component's **root**                   | Remove it. `renderBlock` injects `data-editable="array-item"` on the root; a second one collides. Only mark inner elements.                                                                                                                           |
+| `display: contents` on the root of an array item                  | Replace with `display: flex`/`grid`. CloudCannon needs a real DOM box to attach the array-item region.                                                                                                                                                |
+| A prop edit renders stale until reload (layout/spacing/data-attr) | The prop drives an attribute on the component's **root**. The re-render keeps the root element, so move the attribute to a direct child and hoist with CSS (`data-space-before` + `:has()` in `_flow.css`) or JS (`editor-live-sync.js` bento spans). |
 
 ## Config build errors
 
@@ -131,9 +132,9 @@ The invalid-key list, the quote-numeric-values rule, select-vs-text field config
 
 **Symptom:** `npm run check` fails with `DRIFT .claude/skills` and `changed:`/`missing:`/`extra:` lines.
 
-`.claude/skills/` is a generated byte-for-byte copy of `.agents/skills/` for Claude Code. `skills:check` compares the trees — you edited the copy directly, or edited the source without re-syncing.
+`.claude/skills/` is a generated byte-for-byte copy of `.agents/skills/` for Claude Code. `agents:check` compares the trees — you edited the copy directly, or edited the source without re-syncing.
 
-**MUST:** edit skills only in `.agents/skills/`, then run `npm run skills:sync`.
+**MUST:** edit skills only in `.agents/skills/`, then run `npm run agents:sync`.
 **Why:** the copies are regenerated from the source; an edit to a copy is drift that fails the check and is lost on the next sync.
 
 ## Snippet missing

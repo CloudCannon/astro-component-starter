@@ -1,6 +1,6 @@
 label: Counter
 icon: speed
-description: Number that counts up to a target value.
+description: Number that counts to a target value.
 value:
   _component: building-blocks/core-elements/counter
   number: 100
@@ -27,3 +27,4 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/counter/counter.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

@@ -1,6 +1,8 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 const {
   paddingVertical = "md",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -9,11 +11,14 @@ const {
 ---
 
 <div
-  class:list={["divider", className]}
+  class:list={["divider", "stackable", className]}
   {...htmlAttributes}
   aria-hidden="true"
 >
-  <div class:list={["divider-inner", `padding-y-${paddingVertical}`]}>
+  <div
+    class:list={["divider-inner", `padding-y-${paddingVertical}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     <hr class="rule" />
   </div>
 </div>

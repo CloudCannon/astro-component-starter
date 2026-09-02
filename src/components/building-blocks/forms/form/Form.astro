@@ -1,9 +1,11 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import RenderBlock from "@components/utils/renderBlock.astro";
 
 const {
   action,
   formBlocks = [],
+  spaceBefore = "default",
   class: className,
   _component,
   useDefaultEditableBinding = false,
@@ -24,13 +26,16 @@ if (!_component && !hasFormBlocks && !usesFormBlocks) return;
 ---
 
 <form
-  class:list={["form", className]}
+  class:list={["form", "stackable", className]}
   action={action}
   method="post"
   enctype="multipart/form-data"
   {...htmlAttributes}
 >
-  <div {...arrayDataAttributes}>
+  <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...arrayDataAttributes}
+  >
     <slot>
       {
         formBlocks && (
@@ -47,7 +52,6 @@ if (!_component && !hasFormBlocks && !usesFormBlocks) return;
 <style is:global>
   @layer components {
     .form {
-      margin-top: var(--spacing-lg);
       width: 100%;
     }
   }

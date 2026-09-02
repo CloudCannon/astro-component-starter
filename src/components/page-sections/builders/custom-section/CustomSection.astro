@@ -35,6 +35,7 @@ const {
   overlay = 0,
   fixed = false,
   patternSize = "natural",
+  mask = bgType === "pattern" ? "frame" : "none",
 } = background || {};
 
 const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
@@ -59,7 +60,12 @@ const arrayDataAttributes =
   {...htmlAttributes}
 >
   <div
-    class:list={["outer-content", rounded && "rounded", usesFixedBackground && "background-fixed"]}
+    class:list={[
+      "outer-content",
+      rounded && "rounded",
+      usesFixedBackground && "background-fixed",
+      mask !== "none" && `background-mask-${mask}`,
+    ]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
     data-theme-lock={lockColorScheme || undefined}
   >
@@ -117,6 +123,7 @@ const arrayDataAttributes =
     <div
       class:list={[
         "content",
+        "flow",
         "uses-spacing-utils",
         paddingHorizontal && `pad-x-${paddingHorizontal}`,
         paddingVertical && `pad-y-${paddingVertical}`,
@@ -141,6 +148,10 @@ const arrayDataAttributes =
 <style is:global>
   @layer components {
     .custom-section {
+      /* Re-declared per section so a nested section never inherits an
+         ancestor's mask. */
+      --bg-mask: none;
+
       > .outer-content {
         height: 100%;
         position: relative;
@@ -168,17 +179,6 @@ const arrayDataAttributes =
           margin-inline: auto;
           position: relative;
           z-index: var(--layer-1);
-
-          /* Strip content edge margins — but never from a popover: it lays out
-             in the top layer, where forcing an edge margin breaks its
-             `margin: auto` centering (e.g. GalleryGrid's lightbox). */
-          > *:first-child:not([popover]) {
-            margin-top: 0 !important;
-          }
-
-          > *:last-child:not([popover]) {
-            margin-bottom: 0 !important;
-          }
 
           &.max-width-none {
             max-width: none;
@@ -254,6 +254,41 @@ const arrayDataAttributes =
 
         > .video.background {
           z-index: var(--layer-1);
+        }
+
+        /* Each variant below only sets --bg-mask; this is the one rule that
+           applies it to the media layers. */
+        > :is(.background-image, .background-pattern, .background-overlay, .video.background) {
+          -webkit-mask-image: var(--bg-mask, none);
+          mask-image: var(--bg-mask, none);
+        }
+
+        &.background-mask-frame {
+          --bg-mask: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 30%, #000 80%);
+        }
+
+        &.background-mask-vignette {
+          --bg-mask: radial-gradient(ellipse 90% 90% at 50% 50%, #000 40%, transparent 88%);
+        }
+
+        &.background-mask-top {
+          --bg-mask: linear-gradient(to top, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-bottom {
+          --bg-mask: linear-gradient(to bottom, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-left {
+          --bg-mask: linear-gradient(to left, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-right {
+          --bg-mask: linear-gradient(to right, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-blend {
+          --bg-mask: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
         }
 
         > .bg-base {

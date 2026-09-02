@@ -1,6 +1,6 @@
 label: Spacer
 icon: space_bar
-description: Adds space between content.
+description: Sets the exact gap between two blocks, replacing the automatic spacing.
 value:
   _component: building-blocks/core-elements/spacer
   size: md
@@ -16,7 +16,7 @@ preview:
     fit: cover
 picker_preview:
   text: Spacer
-  subtext: Adds adjustable spacing between content sections.
+  subtext: Sets the exact gap between two blocks, replacing the automatic spacing.
   image: public/component-previews/building-blocks/core-elements/spacer.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/spacer.svg

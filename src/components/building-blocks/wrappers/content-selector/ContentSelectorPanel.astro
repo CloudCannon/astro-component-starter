@@ -87,7 +87,7 @@ const arrayDataAttributes = effectiveChildrenProp
     aria-hidden={checked ? "false" : "true"}
   >
     <div
-      class="content-selector-panel-content"
+      class="content-selector-panel-content flow"
       {...arrayDataAttributes}
     >
       <slot>
@@ -175,10 +175,6 @@ const arrayDataAttributes = effectiveChildrenProp
       animation: fade-in var(--animation-slow) var(--ease-in-out) forwards;
       container-type: inline-size;
       display: none;
-    }
-
-    .content-selector-panel-content > *:first-child {
-      margin-top: 0 !important;
     }
   }
 </style>

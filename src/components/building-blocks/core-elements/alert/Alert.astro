@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import { renderMarkdown } from "@component-utils/markdown";
 import Icon from "@core-elements/icon/Icon.astro";
@@ -8,6 +9,7 @@ const {
   title = "",
   text = "",
   iconName = "",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -47,7 +49,7 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
 ---
 
 <div
-  class:list={["alert", `variant-${variant}`, className]}
+  class:list={["alert", "stackable", `variant-${variant}`, className]}
   role={role}
   {...htmlAttributes}
 >
@@ -55,7 +57,10 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
     name={effectiveIcon}
     size="none"
   />
-  <div class="alert-content">
+  <div
+    class="alert-content"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     {
       title && (
         <p

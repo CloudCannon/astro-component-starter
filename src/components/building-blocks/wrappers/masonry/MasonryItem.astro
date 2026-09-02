@@ -22,7 +22,7 @@ const arrayDataAttributes = effectiveChildrenProp
   {...htmlAttributes}
 >
   <div
-    class="masonry-item-content"
+    class="masonry-item-content flow"
     {...arrayDataAttributes}
   >
     <slot>
@@ -46,13 +46,6 @@ const arrayDataAttributes = effectiveChildrenProp
       /* The content div is the measurement probe for the JS enhancement —
          its height must stay content-driven (never 100%), or measuring it
          would feed back into the span it produces. */
-      > .masonry-item-content > *:first-child {
-        margin-top: 0 !important;
-      }
-
-      > .masonry-item-content > *:last-child {
-        margin-bottom: 0 !important;
-      }
     }
   }
 </style>

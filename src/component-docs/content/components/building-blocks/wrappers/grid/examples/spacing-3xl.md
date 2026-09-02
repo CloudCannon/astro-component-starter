@@ -3,7 +3,6 @@ title: 3xl Spacing
 spacing:
 blocks:
   _component: 'building-blocks/wrappers/grid'
-  layout: center
   gap: 3xl
   minItemWidth: 200
   maxItemWidth: 300

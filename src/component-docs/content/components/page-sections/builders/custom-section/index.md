@@ -30,6 +30,17 @@ examples:
       - bg-pattern-sm
       - bg-pattern-md
       - bg-pattern-lg
+  - title: Background fade
+    slugs:
+      - bg-mask-frame
+      - bg-mask-none
+      - bg-mask-vignette
+      - bg-mask-fade-top
+      - bg-mask-fade-bottom
+      - bg-mask-fade-left
+      - bg-mask-fade-right
+      - bg-mask-video-bottom
+      - bg-mask-video-blend
   - title: Background overlay
     slugs:
       - bg-overlay-darken

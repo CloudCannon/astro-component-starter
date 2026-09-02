@@ -37,6 +37,7 @@ Pages are Markdown files under `src/content/pages/`. The file's path becomes the
 | ------------------------------------------ | ----------------------- |
 | `src/content/pages/index.md`               | `/`                     |
 | `src/content/pages/about.md`               | `/about/`               |
+| `src/content/pages/examples/index.md`      | `/examples/`            |
 | `src/content/pages/services/consulting.md` | `/services/consulting/` |
 
 `blog` is excluded from this catch-all route — it has its own route (`src/pages/[...slug].astro` filters it out).
@@ -73,12 +74,22 @@ pageSections:
       Supporting paragraph. Use a >- block scalar for multi-line text.
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
-        link: /component-docs/
+        text: Get started
+        link: /start/
         variant: primary
         size: md
     colorScheme: inherit
     backgroundColor: base
+  - _component: page-sections/explainers/stats
+    heading: Numbers that hold up
+    stats:
+      - number: 0
+        suffix: KB
+        label: Runtime JS
+        sublabel: On most sections
+    dividers: true
+    colorScheme: inherit
+    backgroundColor: surface
   - _component: page-sections/explainers/feature-grid
     eyebrow: Principles
     heading: Built for real-world web projects
@@ -95,7 +106,7 @@ pageSections:
     subtext: Browse the complete component library.
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
+        text: Browse components
         link: /component-docs/
         variant: primary
         size: md
@@ -126,6 +137,17 @@ In short: `colorScheme` sets the section's theme; `backgroundColor` paints its b
 | Anything else — free composition      | `page-sections/builders/custom-section`              |
 
 See [component-catalog.md](component-catalog.md) for each section's props and the full building-block list.
+
+## Spacing
+
+Four layers, one job each:
+
+- **Band** — space inside a section: `paddingVertical` / `paddingHorizontal` on the section. Never use it to fix a gap _between_ blocks.
+- **Flow** — space between sibling blocks is automatic: each block type carries a default (`heading` loose, `text`/`simple-text` tight, `grid`/`card-grid`/`masonry` loose, everything else default). Do not add a Spacer by default.
+- **Stack** — `building-blocks/wrappers/stack`: a CLUSTER — content decides the shape (badge rows, toolbars, `distribution: equal` for equal-width mixed columns). The discriminator: _should items line up in columns across rows?_ Yes → Grid (pick a column count, or `auto`); no → Stack. Split is exactly two columns, ButtonGroup is buttons only. For vertical rhythm use flow/`spaceBefore`, not a column Stack.
+- **Spacer** — REPLACES the flow gap: its `size` is the whole gap. Never use it to pad a first child (first children get no flow space).
+
+Per-block override: `spaceBefore: none | tight | default | loose` — the four roles, never raw `--spacing-*` values. Overlaps are a component's design, never a `spaceBefore` value.
 
 ## Placeholder images
 

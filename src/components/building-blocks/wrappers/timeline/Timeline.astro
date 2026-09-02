@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import TimelineItem from "./TimelineItem.astro";
@@ -14,6 +15,7 @@ const {
   entries = [],
   layout = "vertical",
   label,
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
@@ -61,12 +63,15 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["timeline", `layout-${layout}`, isGrouped && "is-grouped", className]}
+  class:list={["timeline", "stackable", `layout-${layout}`, isGrouped && "is-grouped", className]}
   {...htmlAttributes}
 >
   {
     isHorizontal ? (
-      <div class="timeline-scroller">
+      <div
+        class="timeline-scroller"
+        data-space-before={spaceBeforeAttr(spaceBefore)}
+      >
         <ol
           class="timeline-list"
           {...arrayDataAttributes}
@@ -87,6 +92,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
     ) : isGrouped ? (
       <ol
         class="timeline-list"
+        data-space-before={spaceBeforeAttr(spaceBefore)}
         {...arrayDataAttributes}
       >
         <slot>
@@ -112,6 +118,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
     ) : (
       <ol
         class="timeline-list"
+        data-space-before={spaceBeforeAttr(spaceBefore)}
         {...arrayDataAttributes}
       >
         <slot>
@@ -138,7 +145,6 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       --timeline-date-col: 5.5rem;
       --timeline-phase-width: 15rem;
 
-      margin-top: var(--spacing-lg);
       min-width: 0;
 
       .timeline-list,
@@ -202,6 +208,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           color: var(--color-text-muted);
           font-family: var(--font-headings);
           font-size: var(--font-size-lg);
+          font-variant-numeric: lining-nums;
           font-weight: var(--font-weight-bold);
           line-height: calc(var(--font-size-heading-xs) * var(--line-height-heading-xs));
         }
@@ -257,6 +264,8 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       /* Year-grouped: same continuous rail as ungrouped. Groups abut; each
          group's padding-block-end carries the space so the line does not break. */
       &.is-grouped {
+        --timeline-year-line: calc(var(--font-size-lg) * var(--line-height-heading-sm));
+
         .timeline-list {
           display: grid;
           gap: 0;
@@ -272,8 +281,9 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           color: var(--color-text-muted);
           font-family: var(--font-headings);
           font-size: var(--font-size-lg);
+          font-variant-numeric: lining-nums;
           font-weight: var(--font-weight-bold);
-          line-height: var(--line-height-heading-sm);
+          line-height: var(--timeline-year-line);
           margin: 0;
         }
 
@@ -293,8 +303,11 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           position: relative;
         }
 
+        /* Nudged off the line box's centre to the glyphs' optical centre. */
         .timeline-dot {
-          inset-block-start: 0.35rem;
+          inset-block-start: calc(
+            (var(--timeline-year-line) - var(--timeline-dot-size)) / 2 + 0.1 * var(--font-size-lg)
+          );
           inset-inline-start: calc(-1 * var(--spacing-xl) - 0.3125rem - var(--border-width-sm) / 2);
           position: absolute;
         }
@@ -303,7 +316,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           background-color: var(--color-bg);
           content: "";
           inset-block-end: 0;
-          inset-block-start: calc(0.35rem + var(--timeline-dot-size) / 2);
+          inset-block-start: calc(var(--timeline-year-line) / 2 + 0.1 * var(--font-size-lg));
           inset-inline-start: calc(-1 * var(--spacing-xl) - var(--border-width-sm));
           position: absolute;
           width: var(--border-width-sm);
@@ -319,6 +332,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           font-family: var(--font-mono);
           font-size: var(--font-size-xs);
           letter-spacing: 0.08em;
+          line-height: var(--timeline-year-line);
           text-transform: uppercase;
         }
 

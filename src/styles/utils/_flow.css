@@ -1,0 +1,78 @@
+/*
+ * Flow + prose: space BETWEEN document siblings, read from the child's
+ * `--space-before` (component type defaults / inline `spaceBefore` prop),
+ * falling back to `--space-before-default`. First children get no margin,
+ * so flow parents need no first-child strips.
+ *
+ * `.flow` — on the element that directly holds authored children
+ * (a `contentSections` parent). Never on a prose container: this layer
+ * would override prose em margins wholesale.
+ * `.prose` — on markdown bodies (blog `.post`). Only components
+ * (`.stackable` roots) space themselves; prose keeps its em margins.
+ *
+ * A container uses `gap` OR `.flow`, never both. Children must generate
+ * boxes — a `display: contents` root silently loses its margin.
+ */
+@layer utils {
+  /* Custom properties inherit: without this a Grid's `loose` or a Card's
+     `none` leaks into nested children that have no default of their own. */
+  .flow,
+  .prose {
+    --space-before: initial;
+  }
+
+  .flow > * + *:not([popover]) {
+    margin-block-start: var(--space-before, var(--space-before-default));
+  }
+
+  /* Spacer replaces the gap — its `size` is the whole gap. */
+  .flow > .spacer,
+  .flow > .spacer + * {
+    margin-block-start: 0;
+  }
+
+  .prose > .stackable {
+    margin-block-start: var(--space-before, var(--space-before-default));
+  }
+
+  .prose > .stackable:first-child,
+  .prose > .spacer + .stackable {
+    margin-block-start: 0;
+  }
+
+  /* :where keeps these at zero specificity so an explicit spaceBefore wins. */
+  :where(.eyebrow, .simple-text) + :where(.heading) {
+    --space-before: var(--space-before-tight);
+  }
+
+  :where(.text, .simple-text) + :where(.text, .simple-text) {
+    --space-before: var(--space-before-default);
+  }
+
+  /* The spaceBefore prop, carried as a data attribute so the `style`
+     attribute stays free for consumers (a spread `style` would clobber an
+     inline custom property). The attribute goes on a DIRECT CHILD of the
+     stackable root — never the root itself: CloudCannon's editable-regions
+     re-render preserves the region's root element, so a prop-driven attribute
+     there goes stale in the visual editor (see editor-live-sync.js). :has()
+     hoists it back to the root. The bare-attribute selectors stay as the
+     fallback for roots with no child to carry it (Video's media-element
+     roots, Pagination, Card Grid's grid mode) — those render correctly but
+     don't live-update when spaceBefore itself is edited. Beats
+     component-layer type defaults (utils layers over components) and the
+     zero-specificity kicker above. */
+  [data-space-before="none"],
+  .stackable:has(> [data-space-before="none"]) {
+    --space-before: var(--space-before-none);
+  }
+
+  [data-space-before="tight"],
+  .stackable:has(> [data-space-before="tight"]) {
+    --space-before: var(--space-before-tight);
+  }
+
+  [data-space-before="loose"],
+  .stackable:has(> [data-space-before="loose"]) {
+    --space-before: var(--space-before-loose);
+  }
+}

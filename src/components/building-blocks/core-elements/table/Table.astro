@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { columnCount, normalizeRow } from "@component-utils/tableCells";
 
 type RowProps = { cells?: string[] };
@@ -10,6 +11,7 @@ const {
   firstColumnHeader = true,
   striped = false,
   compact = false,
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -26,6 +28,7 @@ if (!_component && width === 0) return;
 <div
   class:list={[
     "table",
+    "stackable",
     striped && "striped",
     compact && "compact",
     firstColumnHeader && "first-col-header",
@@ -41,6 +44,7 @@ if (!_component && width === 0) return;
   </p>
   <div
     class="table-scroller"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     role="region"
     tabindex="0"
     aria-label={caption || "Table"}

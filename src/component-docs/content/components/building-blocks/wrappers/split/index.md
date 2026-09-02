@@ -34,4 +34,15 @@ examples:
     slugs:
       - reverse
       - reverse-false
+  - title: Gap
+    size: lg
+    slugs:
+      - gap-none
+      - gap-xs
+      - gap-sm
+      - gap-md
+      - gap-lg
+      - gap-xl
+      - gap-2xl
+      - gap-3xl
 ---

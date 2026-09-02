@@ -32,6 +32,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/image-carousel/image-carousel.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   imageCarouselImages:
     values:

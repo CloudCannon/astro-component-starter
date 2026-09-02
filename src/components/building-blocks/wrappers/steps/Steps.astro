@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import StepsItem from "./StepsItem.astro";
@@ -10,6 +11,7 @@ const {
   orientation = "vertical",
   imageAspectRatio = "landscape",
   label,
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
@@ -40,10 +42,17 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["steps", `orientation-${orientation}`, hasImages && "has-images", className]}
+  class:list={[
+    "steps",
+    "stackable",
+    `orientation-${orientation}`,
+    hasImages && "has-images",
+    className,
+  ]}
   {...htmlAttributes}
 >
   <ol
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     class:list={["steps-list", `orientation-${orientation}`]}
     {...arrayDataAttributes}
   >
@@ -68,7 +77,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
     .steps {
       --step-marker-size: 1.75rem;
 
-      margin-top: var(--spacing-lg);
       min-width: 0;
 
       .steps-list {
@@ -115,13 +123,16 @@ if (!_component && !hasItems && !hasSlotContent) return;
         flex: none;
         font-family: var(--font-headings);
         font-size: var(--font-size-xs);
+        /* Old-style figures (Raleway) drop 3/4/5/7/9 below the baseline. */
+        font-variant-numeric: lining-nums;
         font-weight: var(--font-weight-bold);
         height: var(--step-marker-size);
         inset-inline-start: calc(var(--step-marker-size) / -2 - var(--border-width-sm) / 2);
         justify-content: center;
         line-height: 1;
         position: absolute;
-        top: 0;
+        /* Glyphs sit ~0.1em below the line-box centre; top: 0 reads high. */
+        top: calc(0.1 * var(--font-size-heading-xs));
         width: var(--step-marker-size);
         z-index: var(--layer-1);
 
@@ -136,10 +147,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
         .image-inner.rounded {
           border-radius: var(--radius-md);
         }
-      }
-
-      .step-content > *:first-child {
-        margin-top: 0 !important;
       }
 
       .step-content .heading {
@@ -206,6 +213,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           );
         }
 
+        /* !important beats the flow margins in the utils layer. */
         .step-content > * {
           margin-top: 0 !important;
         }

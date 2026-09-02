@@ -1,0 +1,84 @@
+# Column / link structures for the mega menu variant of a top-level nav item.
+# Referenced by the "Mega Menu Item" values in `navData` (data-file editing)
+# and `navItemLevel1MegaMenu` (bar and main-nav as page-section blocks) — edit
+# here, not in either caller. The link array is named `items`, not `links`: `links`
+# is a global structure key (footer) that CloudCannon matches by field name.
+megaMenuColumns:
+  style: modal
+  values:
+    - label: Mega Menu Column
+      icon: view_column
+      description: A column of grouped links with an optional heading.
+      value:
+        heading: ""
+        items: []
+      preview:
+        text:
+          - key: heading
+          - Mega Menu Column
+        subtext:
+          - Grouped links with an optional heading
+      picker_preview:
+        text: Mega Menu Column
+        subtext: A column of grouped links with an optional heading.
+        icon: view_column
+      _inputs:
+        heading:
+          type: text
+          comment: Optional eyebrow heading shown above the column's links.
+        items:
+          type: array
+          label: Links
+          comment: Links in this column.
+          options:
+            structures: _structures.megaMenuLinks
+megaMenuLinks:
+  style: modal
+  values:
+    - label: Mega Menu Link
+      icon: link
+      description: A rich link with an icon, title, and description.
+      value:
+        name: ""
+        description: ""
+        icon: ""
+        path: ""
+        highlight: false
+      preview:
+        text:
+          - key: name
+          - Mega Menu Link
+        subtext:
+          - key: description
+          - Add description
+      picker_preview:
+        text: Mega Menu Link
+        subtext: A rich link with an icon, title, and description.
+        icon: link
+      _inputs:
+        name:
+          type: text
+          comment: Display text for the link.
+        description:
+          type: text
+          comment: Optional short description shown under the link name.
+        icon:
+          type: select
+          comment: Optional icon shown beside the link. Sourced from [Heroicons](https://heroicons.com/).
+          options:
+            values: _select_data.icons
+            preview:
+              text:
+                - key: name
+              image:
+                - template: src/icons/{id}.svg
+        path:
+          type: url
+          comment: URL path for the link.
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        highlight:
+          type: switch
+          comment: Visually emphasize this link in the panel.

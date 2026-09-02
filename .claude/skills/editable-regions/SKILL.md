@@ -38,6 +38,9 @@ This skill owns the starter's editable-binding attribute tables (per `.agents/sk
 **MUST NOT:** use `display: contents` on a component root.
 **Why:** it removes the root box the array-item region binds to, so the item drops out of the editor.
 
+**MUST NOT:** put any **prop-driven attribute** (a class, `style`, or `data-*` whose value changes with a prop) on a component's **root** element.
+**Why:** when a prop changes, CloudCannon's editable-regions re-render keeps the region's root element and swaps only its contents — a prop-driven attribute on the root goes stale in the Visual Editor until a full reload (the header of `editor-live-sync.js` records this). Put it on a direct child instead and hoist with CSS where needed: `spaceBefore` rides as `data-space-before` on a direct child and `_flow.css` lifts it to the root with `:has()`; bento-box carries its spans as `data-*` on an inner node and `editor-live-sync.js` syncs them up. Static attributes (a fixed class like `stackable`) are fine on the root.
+
 Editable web components (`<editable-text>`, `<editable-image>`, …) are **banned** — always standard HTML elements with `data-*` attributes. See the banned-elements callout in [../references/editable-regions-api.md](../references/editable-regions-api.md#custom-element-equivalents--banned-in-this-starter).
 
 ## What you pass → what the DOM gets
@@ -144,12 +147,7 @@ Three shapes, depending on how children are rendered. Prefer A, then B; C is the
   {
     images.map((item) => (
       <li data-editable="array-item">
-        <Image
-          source={item.image}
-          alt={item.alt}
-          data-prop-src="image"
-          data-prop-alt="alt"
-        />
+        <Image source={item.image} alt={item.alt} data-prop-src="image" data-prop-alt="alt" />
       </li>
     ))
   }
@@ -160,11 +158,11 @@ Three shapes, depending on how children are rendered. Prefer A, then B; C is the
 
 ## Array-item wiring rules
 
-| Attribute                           | Goes on             | Value                                                                                                                                                                                                 |
-| ----------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` (shapes A/B). **Written by hand** for shape C.                                                                                                       |
-| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for shapes B and C.                                                                                                                  |
-| `data-id`                           | each **item** root  | Shape B: the child's kebab component path (`.astro` PascalCase collapsed to kebab), e.g. `.../accordion/accordion-item`. Shape A: `renderBlock` sets it to `block._component`. Shape C: omit.         |
+| Attribute                           | Goes on             | Value                                                                                                                                                                                         |
+| ----------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` (shapes A/B). **Written by hand** for shape C.                                                                                               |
+| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for shapes B and C.                                                                                                          |
+| `data-id`                           | each **item** root  | Shape B: the child's kebab component path (`.astro` PascalCase collapsed to kebab), e.g. `.../accordion/accordion-item`. Shape A: `renderBlock` sets it to `block._component`. Shape C: omit. |
 
 **MUST NOT:** put `data-editable="array-item"` on the array container, or `data-editable="array"` on an item — the editor needs the container/item split to CRUD rows.
 
@@ -174,13 +172,13 @@ For mixed-type arrays (items of different components in one list), the container
 
 Follow the [debug-cloudcannon playbook](../debug-cloudcannon/SKILL.md) for the full pipeline. Binding-specific first checks:
 
-| Symptom                                      | Likely cause                                                                                         |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| Element not editable at all                  | No `data-prop` and `useDefaultEditableBinding` is false — nothing bound.                             |
-| Edit does nothing / writes nowhere           | `data-prop` value does not match a real frontmatter key (typo, wrong case — it is camelCase).        |
-| Image edits src but not alt (or vice versa)  | Only one of `data-prop-src` / `data-prop-alt` passed; the other fell back to a wrong default.        |
-| Whole item vanishes from the array editor    | `data-editable` or `display: contents` on the component root, colliding with the array-item region.  |
-| Item edits but reorder/add/remove misbehaves | Missing or wrong `data-id` on the mapped child, or `data-editable="array"` and `array-item` swapped. |
+| Symptom                                          | Likely cause                                                                                         |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Element not editable at all                      | No `data-prop` and `useDefaultEditableBinding` is false — nothing bound.                             |
+| Edit does nothing / writes nowhere               | `data-prop` value does not match a real frontmatter key (typo, wrong case — it is camelCase).        |
+| Image edits src but not alt (or vice versa)      | Only one of `data-prop-src` / `data-prop-alt` passed; the other fell back to a wrong default.        |
+| Whole item vanishes from the array editor        | `data-editable` or `display: contents` on the component root, colliding with the array-item region.  |
+| Item edits but reorder/add/remove misbehaves     | Missing or wrong `data-id` on the mapped child, or `data-editable="array"` and `array-item` swapped. |
 | Tiles render but clicking one has no card chrome | Shape C (or B) missing `data-editable="array-item"` on each row — only the section heading is bound. |
 
 ## Verify your work

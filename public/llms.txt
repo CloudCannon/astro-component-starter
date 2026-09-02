@@ -6,7 +6,9 @@
 
 - [Home](/): Fast, visually editable components for Astro and CloudCannon.
 - [Why](/why/): Why this starter was built and how it helps teams ship static sites.
-- [Blog](/blog/): Articles on development, design, and the component library.
+- [Get started](/start/): Clone, rebrand, and follow the component-docs guides.
+- [Examples](/examples/): Template pages (pricing, about, services, portfolio, contact) you can copy.
+- [Blog](/blog/): Demo posts for the example studio.
 
 ## Blog
 

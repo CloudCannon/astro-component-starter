@@ -20,6 +20,7 @@ const {
   posterAlt = "",
   posterAspectRatio = "widescreen",
   size = "xl",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -92,7 +93,8 @@ const embedSrc =
   triggerSize={triggerSize}
   triggerIconName={usePoster ? undefined : triggerIconName}
   size={size}
-  class:list={["video-modal", className]}
+  class:list={["video-modal", "stackable", className]}
+  spaceBefore={spaceBefore}
   _component={_component}
   data-video-embed-src={embedSrc}
   data-video-title={title}

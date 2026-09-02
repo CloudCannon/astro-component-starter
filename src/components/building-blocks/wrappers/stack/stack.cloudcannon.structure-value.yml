@@ -1,0 +1,34 @@
+label: Stack
+icon: view_agenda
+description: A few different blocks in a row or column, one even gap.
+value:
+  _component: building-blocks/wrappers/stack
+  label: ""
+  contentSections: []
+  direction: column
+  distribution: content
+  gap: md
+  alignmentHorizontal: start
+  alignmentVertical: start
+  wrap: true
+  stackOnMobile: true
+preview:
+  text:
+    - Stack
+  subtext:
+    - key: label
+  image: public/component-previews/building-blocks/wrappers/stack.svg
+  icon: view_agenda
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/stack.svg
+    fit: cover
+picker_preview:
+  text: Stack
+  subtext: A few different blocks in a row or column, one even gap.
+  image: public/component-previews/building-blocks/wrappers/stack.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/stack.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/stack/stack.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

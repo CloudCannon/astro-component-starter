@@ -43,6 +43,7 @@ value:
     imageSource: ""
     imageAlt: ""
     patternSize: natural
+    mask: none
     videoSource: null
     overlay: 0
 preview:
@@ -65,6 +66,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/proof/testimonial-wall/testimonial-wall.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background-mask.yml
 _structures:
   testimonialWallItems:
     values:

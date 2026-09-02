@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 import Button from "@core-elements/button/Button.astro";
@@ -17,6 +18,7 @@ const {
   size = "md",
   contentSections,
   useDefaultEditableBinding = false,
+  spaceBefore = "default",
   class: className,
   "data-children-prop": childrenDataProp,
   _component,
@@ -44,7 +46,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["modal", className]}
+  class:list={["modal", "stackable", className]}
   {...htmlAttributes}
 >
   {
@@ -61,6 +63,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
   }
 
   <ModalShell
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     popoverId={popoverId}
     size={size}
     label={hasHeading ? undefined : label}
@@ -90,7 +93,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       />
     </div>
     <div
-      class="modal-body"
+      class="modal-body flow"
       {...arrayDataAttributes}
     >
       <slot>
@@ -118,7 +121,6 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
   @layer components {
     .modal {
       display: inline-flex;
-      margin-top: var(--spacing-lg);
     }
 
     .modal-header {
@@ -160,14 +162,6 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     .modal-body {
       flex: 1;
       overflow-y: auto;
-
-      > *:first-child {
-        margin-top: 0 !important;
-      }
-
-      > *:last-child {
-        margin-bottom: 0 !important;
-      }
     }
   }
 </style>

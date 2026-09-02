@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Component from "@components/utils/renderBlock.astro";
 import { slugifyLabel } from "@components/utils/slugify";
 
@@ -8,6 +9,7 @@ const {
   buttonSections,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
+  spaceBefore = "default",
   class: className,
   label,
   _component,
@@ -39,11 +41,12 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["button-group", className]}
+  class:list={["button-group", "stackable", className]}
   {...htmlAttributes}
 >
   <div
     class:list={["button-group__items", direction === "column" ? "column" : "row", alignClass]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
     <slot>
@@ -63,7 +66,6 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
   @layer components {
     .button-group {
       container-type: inline-size;
-      margin-top: var(--spacing-lg);
       position: relative;
       width: 100%;
 

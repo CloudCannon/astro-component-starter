@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
 import BentoBoxItem from "./BentoBoxItem.astro";
 
@@ -10,6 +11,7 @@ const {
   gap = "md",
   label,
   items = [],
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -35,10 +37,11 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["bento-box", className]}
+  class:list={["bento-box", "stackable", className]}
   {...htmlAttributes}
 >
   <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
     class:list={["bento-box-inner", `columns-${columns}`, `gap-${gap}`]}
     style={bentoStyles}
@@ -62,7 +65,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
   @layer components {
     .bento-box {
       container-type: inline-size;
-      margin-top: var(--spacing-lg);
       width: 100%;
 
       > .bento-box-inner {

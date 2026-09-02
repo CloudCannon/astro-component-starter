@@ -40,23 +40,23 @@ Aggregation and load order (`src/styles/style.css`): `_variables.css` `@import`s
 
 Read the file for the exact names and values — do not rely on memory or a copy.
 
-| File (`src/styles/…`)           | Scope selector         | Holds                                                                                                                                                               |
-| ------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variables/_colors.css`         | `:where(:root)`        | Primitive `--white`/`--black`, a `--gray-50…950` neutral ramp, plus a complete `--{hue}-50…900` ramp per hue (blue, red, green, yellow, orange, purple, pink, cyan) |
-| `variables/_spacing.css`        | `:where(:root)`        | `--spacing-*` (rem) and `--spacing-em-*` (em) scales                                                                                                                |
-| `variables/_radius.css`         | `:where(:root)`        | `--radius-*` corner scale                                                                                                                                           |
-| `variables/_shadows.css`        | `:where(:root)`        | `--shadow-sm/-md/-lg` elevations                                                                                                                                    |
-| `variables/_focus.css`          | `:where(:root)`        | `--focus-ring-width` / `--focus-ring-style` (ring **color** is per-theme `--color-focus-ring`)                                                                      |
-| `variables/_breakpoints.css`    | (comment only)         | Documentation of the canonical breakpoints (640px mobile, 768px nav) — literal px in `@media`/`@container`; custom props can't work there                           |
-| `variables/_fonts.css`          | `:where(:root)`        | `--font-size-*` + `--font-size-heading-*` (scale down under 640px), `--font-weight-*`, `--font-mono`                                                                |
-| `variables/_line-heights.css`   | `:where(:root)`        | `--line-height-none/-tight/-normal/-relaxed` + `--line-height-heading-*` ramp (unitless)                                                                            |
-| `variables/_animations.css`     | `:where(:root)`        | `--animation-fast/-normal/-slow` durations + `--ease-out/-in-out/-smooth` easings                                                                                   |
-| `variables/_aspects.css`        | `:where(:root)`        | `--ratio-*` aspect ratios                                                                                                                                           |
-| `variables/_borders.css`        | `:where(:root)`        | `--border-width-sm/-md` hairline and emphasis strokes                                                                                                               |
-| `variables/_layers.css`         | `:where(:root)`        | `--layer-*` z-index scale                                                                                                                                           |
-| `variables/_content-widths.css` | `:where(:root)`        | `--content-width-*` max-width steps                                                                                                                                 |
-| `themes/_light.css`             | `[data-theme="light"]` | Semantic `--color-*` for light — brand, text, bg, border, state, status                                                                                             |
-| `themes/_dark.css`              | `[data-theme="dark"]`  | Semantic `--color-*` for dark — same names, dark values                                                                                                             |
+| File (`src/styles/…`)           | Scope selector         | Holds                                                                                                                                                                   |
+| ------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variables/_colors.css`         | `:where(:root)`        | Primitive `--white`/`--black`, a `--gray-50…950` neutral ramp, plus a complete `--{hue}-50…900` ramp per hue (blue, red, green, yellow, orange, purple, pink, cyan)     |
+| `variables/_spacing.css`        | `:where(:root)`        | `--spacing-*` (rem) and `--spacing-em-*` (em) scales, plus the four `--space-before-{none,tight,default,loose}` flow roles — retune these to retune all document rhythm |
+| `variables/_radius.css`         | `:where(:root)`        | `--radius-*` corner scale                                                                                                                                               |
+| `variables/_shadows.css`        | `:where(:root)`        | `--shadow-sm/-md/-lg` elevations                                                                                                                                        |
+| `variables/_focus.css`          | `:where(:root)`        | `--focus-ring-width` / `--focus-ring-style` (ring **color** is per-theme `--color-focus-ring`)                                                                          |
+| `variables/_breakpoints.css`    | (comment only)         | Documentation of the canonical breakpoints (640px mobile, 768px nav) — literal px in `@media`/`@container`; custom props can't work there                               |
+| `variables/_fonts.css`          | `:where(:root)`        | `--font-size-*` + `--font-size-heading-*` (scale down under 640px), `--font-weight-*`, `--font-mono`                                                                    |
+| `variables/_line-heights.css`   | `:where(:root)`        | `--line-height-none/-tight/-normal/-relaxed` + `--line-height-heading-*` ramp (unitless)                                                                                |
+| `variables/_animations.css`     | `:where(:root)`        | `--animation-fast/-normal/-slow` durations + `--ease-out/-in-out/-smooth` easings                                                                                       |
+| `variables/_aspects.css`        | `:where(:root)`        | `--ratio-*` aspect ratios                                                                                                                                               |
+| `variables/_borders.css`        | `:where(:root)`        | `--border-width-sm/-md` hairline and emphasis strokes                                                                                                                   |
+| `variables/_layers.css`         | `:where(:root)`        | `--layer-*` z-index scale                                                                                                                                               |
+| `variables/_content-widths.css` | `:where(:root)`        | `--content-width-*` max-width steps                                                                                                                                     |
+| `themes/_light.css`             | `[data-theme="light"]` | Semantic `--color-*` for light — brand, text, bg, border, state, status                                                                                                 |
+| `themes/_dark.css`              | `[data-theme="dark"]`  | Semantic `--color-*` for dark — same names, dark values                                                                                                                 |
 
 Font **families** (`--font-body`, `--font-headings`) are not in `_fonts.css` — Astro's `<Font />` injects them from `site-fonts.mjs`. See [adding-fonts](../adding-fonts/SKILL.md).
 

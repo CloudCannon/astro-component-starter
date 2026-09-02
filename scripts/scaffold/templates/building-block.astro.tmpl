@@ -1,6 +1,9 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+
 const {
   text = "__LABEL__",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -9,10 +12,18 @@ const {
 ---
 
 <div
-  class:list={["__SLUG__", className]}
+  class:list={["__SLUG__", "stackable", className]}
   {...htmlAttributes}
 >
-  <span class="__SLUG__-text">{text}</span>
+  {/* On a direct child, never the root: CloudCannon's editable-regions
+      re-render keeps the root element, so a prop-driven attribute there goes
+      stale in the visual editor. Flow's :has() hoists it (see _flow.css). */}
+  <span
+    class="__SLUG__-text"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    {text}
+  </span>
 </div>
 
 <style is:global>
@@ -20,6 +31,9 @@ const {
     /* Consume design tokens only — never hardcode colors/spacing/shadows/breakpoints.
        Primitive tokens: src/styles/variables/*  Semantic tokens: src/styles/themes/* */
     .__SLUG__ {
+      /* No root margin — sibling spacing comes from the flow system. Declare a
+         `--space-before` type default only if this block shouldn't fall back
+         to `--space-before-default` (Heading: loose, Text: tight). */
       /* TODO: replace with real styles for __PASCAL__. */
       color: var(--color-text);
     }
