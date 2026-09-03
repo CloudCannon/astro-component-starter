@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: How it works
   heading: One idea, shown beside it
+  headingLevel: h2
   subtext: A short paragraph that explains the idea in the image next to it.
   buttonSections: []
   imageSource: /src/assets/images/component-docs/quiet-street.jpg
@@ -68,6 +69,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

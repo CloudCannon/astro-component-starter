@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Pricing
   heading: Compare plans feature by feature
+  headingLevel: h2
   subtext: ""
   plans:
     - name: Starter
@@ -167,6 +168,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

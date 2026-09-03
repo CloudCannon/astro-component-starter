@@ -13,6 +13,7 @@ type DetailProps = { icon?: string; label?: string; value?: string; url?: string
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   details = [],
   formAction = "./",
@@ -63,7 +64,7 @@ const {
             text={eyebrow}
           />
           <Heading
-            level="h2"
+            level={headingLevel}
             size="md"
             data-prop="heading"
           >
@@ -146,7 +147,7 @@ const {
   @layer page-sections {
     .contact-split {
       .contact-split-card {
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-md);
         overflow: hidden;
       }
@@ -181,7 +182,7 @@ const {
 
       .contact-split-map {
         background-color: var(--color-bg-surface);
-        border-top: 1px solid var(--color-border);
+        border-top: var(--border-width-sm) solid var(--color-border);
 
         .embed-wrapper {
           margin-top: 0;

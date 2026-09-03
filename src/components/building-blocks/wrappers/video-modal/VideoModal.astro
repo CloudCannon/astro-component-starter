@@ -38,8 +38,9 @@ if (!_component && !hasVideo) return;
 // The poster trigger is rendered here (into Modal's `trigger` slot), so it has
 // to know the popover id up front rather than leaving Modal to derive one.
 const usePoster = triggerStyle === "poster" && !!posterImage;
+const posterLabel = label || title;
 const posterPopoverId = usePoster
-  ? `video-${slugifyLabel(label || title || crypto.randomUUID())}`
+  ? `video-${posterLabel ? slugifyLabel(posterLabel) : crypto.randomUUID()}`
   : undefined;
 
 // Modal videos autoplay with sound on open (allowed because opening is a user
@@ -210,7 +211,7 @@ const embedSrc =
         align-items: center;
         background: var(--color-overlay);
         border-radius: var(--radius-full);
-        color: #fff;
+        color: var(--color-text-on-media);
         display: flex;
         height: 4rem;
         inset-block-start: 50%;
@@ -302,23 +303,21 @@ const embedSrc =
       position: static;
     }
 
-    /* Ghost tile, matching .gallery-lightbox-tile. Translucent whites and
-       #fff are the sanctioned exception — theme text/border would flip
-       under the overlay. */
+    /* Ghost tile, matching .gallery-lightbox-tile. */
     .video-modal .modal-close .button-inner.variant-ghost {
       background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      border: var(--border-width-sm) solid var(--color-border-on-media);
       border-radius: var(--radius-sm);
-      color: #fff;
+      color: var(--color-text-on-media);
       height: 2.75rem;
       padding: 0;
       width: 2.75rem;
 
       &:hover,
       &:focus {
-        background: rgba(255, 255, 255, 0.12);
-        border-color: rgba(255, 255, 255, 0.4);
-        color: #fff;
+        background: var(--color-state-hover-on-media);
+        border-color: var(--color-border-on-media);
+        color: var(--color-text-on-media);
       }
     }
 

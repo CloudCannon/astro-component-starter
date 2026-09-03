@@ -335,6 +335,65 @@ const tests = [
     },
   },
   {
+    name: "side nav serves the current group open, then opens on Enter and closes on Space",
+    path: "/component-docs/components/navigation/side/",
+    viewport: DESKTOP,
+    async run(page) {
+      const nav = page.locator(".library-sidebar .side");
+
+      await nav.waitFor({ state: "attached" });
+      await page.waitForFunction(
+        () => document.querySelector(".library-sidebar .side")?.dataset.sideInitialized === "true"
+      );
+
+      // The group holding the current page is served expanded; expanding
+      // something the visitor never asked for is not a transition.
+      const served = await page.evaluate(() => {
+        const panel = document.querySelector(
+          ".library-sidebar .side .nav-item-content[data-open-on-load]"
+        );
+
+        if (!panel) return null;
+        const styles = getComputedStyle(panel);
+
+        return { display: styles.display, animationName: styles.animationName };
+      });
+
+      assert(served !== null, "no side nav group was served open for the current page");
+      assert(served.display === "block", `served group was ${served.display}, not block`);
+      assert(
+        served.animationName === "none",
+        `served group animated on first paint (${served.animationName})`
+      );
+
+      const closedId = await page.evaluate(() => {
+        const toggle = [
+          ...document.querySelectorAll(".library-sidebar .side .nav-item-toggle"),
+        ].find((input) => !input.checked);
+
+        toggle.focus();
+        return toggle.id;
+      });
+
+      await page.keyboard.press("Enter");
+      await page.waitForFunction((id) => document.getElementById(id).checked === true, closedId);
+
+      // Checking one radio silently unchecks its sibling, so the group that
+      // was served open must have given its no-animation flag back.
+      const stale = await page.evaluate(
+        () =>
+          [...document.querySelectorAll(".library-sidebar .side [data-open-on-load]")].filter(
+            (panel) => !panel.parentElement.querySelector(":scope > .nav-item-toggle").checked
+          ).length
+      );
+
+      assert(stale === 0, "a closed group kept its no-animation flag and will never animate open");
+
+      await page.keyboard.press(" ");
+      await page.waitForFunction((id) => document.getElementById(id).checked === false, closedId);
+    },
+  },
+  {
     name: "bar dropdown closes when focus leaves the nav",
     path: "/component-docs/components/navigation/bar/",
     viewport: DESKTOP,
@@ -868,6 +927,54 @@ const tests = [
           getComputedStyle(annual).display === "flex"
         );
       }, sectionSel);
+    },
+  },
+  {
+    name: "form submit shows an inline error per invalid field and clears it on input",
+    path: "/examples/contact/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForSelector("form.form");
+
+      // Native validation is only handed over once the script has run; without
+      // it the browser blocks the submit and this test would pass on a bubble.
+      await page.waitForFunction(() => document.querySelector("form.form")?.noValidate === true);
+
+      await page.click("form.form .submit button");
+
+      await page.waitForFunction(
+        () => document.querySelectorAll("form.form .form-field-error:not([hidden])").length === 3
+      );
+
+      const state = await page.evaluate(() => {
+        const field = document.querySelector("form.form .form-field.input");
+        const control = field.querySelector(".field");
+        const error = field.querySelector(".form-field-error");
+
+        return {
+          message: error?.textContent.trim(),
+          invalid: control.getAttribute("aria-invalid"),
+          describedBy: control.getAttribute("aria-describedby"),
+          errorId: error?.id,
+          focused: document.activeElement === control,
+        };
+      });
+
+      assert(state.message, "expected the browser's validation message to be shown inline");
+      assert(state.invalid === "true", "expected the invalid control to be marked aria-invalid");
+      assert(
+        state.describedBy?.split(/\s+/).includes(state.errorId),
+        `expected aria-describedby to name ${state.errorId}, got ${state.describedBy}`
+      );
+      assert(state.focused, "expected focus to move to the first invalid control");
+
+      await page.fill("form.form .form-field.input .field", "Ada");
+
+      await page.waitForFunction(() => {
+        const control = document.querySelector("form.form .form-field.input .field");
+
+        return !control.hasAttribute("aria-invalid") && !control.hasAttribute("aria-describedby");
+      });
     },
   },
 ];

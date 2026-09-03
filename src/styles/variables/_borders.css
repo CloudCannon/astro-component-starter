@@ -1,4 +1,5 @@
 :where(:root) {
   --border-width-sm: 1px;
   --border-width-md: 2px;
+  --border-width-lg: 3px;
 }

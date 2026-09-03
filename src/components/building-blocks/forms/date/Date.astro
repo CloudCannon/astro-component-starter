@@ -1,7 +1,6 @@
 ---
-import FormLabel from "@component-utils/FormLabel.astro";
-import { generateFieldId, toDateInputValue } from "@component-utils/formField";
-import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts, toDateInputValue } from "@component-utils/formField";
 
 const {
   label,
@@ -12,6 +11,7 @@ const {
   max,
   hint,
   error,
+  autocomplete,
   id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -19,90 +19,30 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("date", customId);
-const dateValue = toDateInputValue(value);
-const dateMin = toDateInputValue(min);
-const dateMax = toDateInputValue(max);
-const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
-const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
-const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "date",
+  id: customId,
+  name,
+  label,
+  autocomplete,
+  required,
+  hint,
+  error,
+});
 ---
 
-<div
+<FormField
   class:list={["date", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  <FormLabel
-    for={fieldId}
-    label={label}
-    required={required}
-    requiredClass="date-required"
-  />
-  {
-    hintId && (
-      <p
-        class="date-hint"
-        id={hintId}
-      >
-        {hint}
-      </p>
-    )
-  }
   <input
     type="date"
     name={name}
-    id={fieldId}
-    required={required}
-    aria-required={required}
-    aria-invalid={errorId ? "true" : undefined}
-    aria-describedby={describedBy}
-    value={dateValue}
-    min={dateMin}
-    max={dateMax}
+    value={toDateInputValue(value)}
+    min={toDateInputValue(min)}
+    max={toDateInputValue(max)}
     class="field"
+    {...controlAttributes}
   />
-  {
-    errorId && (
-      <p
-        class="date-error"
-        id={errorId}
-      >
-        {error}
-      </p>
-    )
-  }
-</div>
-
-<style is:global>
-  @layer components {
-    .date {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-
-      .date-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
-      }
-
-      .date-hint {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      .date-error {
-        color: var(--color-error);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      > .field[aria-invalid="true"] {
-        border-color: var(--color-error);
-      }
-    }
-  }
-</style>
+</FormField>

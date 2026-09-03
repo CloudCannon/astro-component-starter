@@ -1,6 +1,21 @@
 action:
   type: url
   comment: Where to send the form-data when the form is submitted. The URL that processes the form submission.
+method:
+  type: select
+  comment: How the form-data is sent. Use POST unless the endpoint is a search or filter that should be linkable.
+  options:
+    values:
+      - id: post
+        name: POST
+      - id: get
+        name: GET
+honeypotName:
+  type: text
+  comment: Name of a decoy field, hidden from visitors, that spam bots tend to fill in. Only works if your form endpoint rejects submissions that carry it. Leave blank for none.
+successMessage:
+  type: text
+  comment: Message shown when the visitor is sent back to this page with `?success` in the URL after submitting. Set your form endpoint's redirect to that URL. Leave blank for none.
 formBlocks:
   type: array
   comment: The form blocks to render inside the form.

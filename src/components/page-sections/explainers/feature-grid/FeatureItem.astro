@@ -7,6 +7,7 @@ import GridItem from "@wrappers/grid/GridItem.astro";
 
 const {
   title = "",
+  headingLevel = "h3",
   description = "",
   iconName = "",
   iconColor = "default",
@@ -41,7 +42,7 @@ const {
       />
       <Heading
         class="feature-title"
-        level="h3"
+        level={headingLevel}
         size="md"
         alignmentHorizontal="start"
         data-prop="title"

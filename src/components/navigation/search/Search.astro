@@ -175,7 +175,7 @@ const placeholderTemplate = `
 
     .search-header {
       align-items: center;
-      border-bottom: 1px solid var(--color-border-subtle);
+      border-bottom: var(--border-width-sm) solid var(--color-border-subtle);
       display: flex;
       flex-shrink: 0;
       gap: var(--spacing-sm);
@@ -206,7 +206,7 @@ const placeholderTemplate = `
     }
 
     .search-tabs .button.search-tab .button-inner {
-      border: 1px solid var(--color-border);
+      border: var(--border-width-sm) solid var(--color-border);
       border-radius: var(--radius-full);
       color: var(--color-text-muted);
       font-size: var(--font-size-sm);
@@ -256,7 +256,7 @@ const placeholderTemplate = `
 
       .search-unavailable {
         background-color: var(--color-bg-surface);
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-xs);
         color: var(--color-text-muted);
         display: none;
@@ -312,7 +312,7 @@ const placeholderTemplate = `
 
     .search-result-media {
       background-color: var(--color-bg-surface);
-      border: 1px solid var(--color-border);
+      border: var(--border-width-sm) solid var(--color-border);
       border-radius: var(--radius-xs);
       height: 5rem;
       overflow: hidden;
@@ -391,7 +391,11 @@ const placeholderTemplate = `
     }
 
     .search-skeleton {
-      animation: search-skeleton-pulse 1.4s var(--ease-in-out) infinite;
+      /* An ambient loop, not a UI transition — off the --animation-* scale on
+         purpose, which tops out at half a second. */
+      --search-skeleton-duration: 1.4s;
+
+      animation: search-skeleton-pulse var(--search-skeleton-duration) var(--ease-in-out) infinite;
       background-color: var(--color-bg-muted);
       border-radius: var(--radius-xs);
     }
@@ -424,7 +428,7 @@ const placeholderTemplate = `
     .search-footer {
       align-items: center;
       background-color: var(--color-bg-surface);
-      border-top: 1px solid var(--color-border);
+      border-top: var(--border-width-sm) solid var(--color-border);
       color: var(--color-text-muted);
       display: flex;
       flex-shrink: 0;
@@ -434,7 +438,7 @@ const placeholderTemplate = `
 
       kbd {
         background-color: var(--color-bg);
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-xs);
         color: var(--color-text);
         font-family: var(--font-body);

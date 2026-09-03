@@ -120,8 +120,8 @@ export function setupCarousel(carousel: CarouselElement): void {
   const prevButton = inner.querySelector<HTMLButtonElement>(".prev > .button-inner");
   const nextButton = inner.querySelector<HTMLButtonElement>(".next > .button-inner");
 
-  if (prevButton) prevButton.style.borderRadius = "9999px";
-  if (nextButton) nextButton.style.borderRadius = "9999px";
+  if (prevButton) prevButton.style.borderRadius = "var(--radius-full)";
+  if (nextButton) nextButton.style.borderRadius = "var(--radius-full)";
 
   const updateButtons = () => {
     if (prevButton) prevButton.disabled = !embla.canScrollPrev();

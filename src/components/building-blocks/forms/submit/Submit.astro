@@ -35,11 +35,3 @@ const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" 
   class:list={["submit", className]}
   {...htmlAttributes}
 />
-
-<style is:global>
-  @layer components {
-    form .submit {
-      margin-top: var(--spacing-md);
-    }
-  }
-</style>

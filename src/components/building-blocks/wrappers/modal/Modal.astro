@@ -27,8 +27,12 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || heading || `Modal-${crypto.randomUUID()}`;
-const popoverId = providedPopoverId || `modal-${slugifyLabel(generatedLabel)}`;
+// The trigger's `popovertarget` points here, so the id has to exist and be
+// unique on the page — a modal with nothing to name it falls back to a
+// generated suffix rather than colliding with the next one.
+const derivedLabel = label || heading || triggerText;
+const popoverId =
+  providedPopoverId || `modal-${derivedLabel ? slugifyLabel(derivedLabel) : crypto.randomUUID()}`;
 
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);

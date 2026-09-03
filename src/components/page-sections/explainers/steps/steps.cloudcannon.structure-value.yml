@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: How it works
   heading: Live in three steps
+  headingLevel: h2
   subtext: ""
   items:
     - image: ""
@@ -135,6 +136,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

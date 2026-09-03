@@ -5,6 +5,7 @@ import CardGridItem from "@wrappers/card-grid/CardGridItem.astro";
 
 const {
   name = "",
+  headingLevel = "h3",
   role = "",
   bio = "",
   imageSource = "",
@@ -27,7 +28,7 @@ const {
 >
   <Heading
     class="team-name"
-    level="h3"
+    level={headingLevel}
     size="md"
     alignmentHorizontal="start"
     data-prop="name"

@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: What you get
   heading: Three things worth knowing
+  headingLevel: h2
   subtext: One line that frames the points below.
   alignmentHorizontal: center
   features:
@@ -104,7 +105,7 @@ _structures:
             type: select
             comment: Icon displayed with the feature. Sourced from [Heroicons](https://heroicons.com/).
             options:
-              values: _select_data.icons
+              values: data.icons
               preview:
                 text:
                   - key: name
@@ -149,6 +150,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

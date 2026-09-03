@@ -35,40 +35,54 @@ export interface ComponentDiscoveryResult {
   pageSectionCategories: string[];
 }
 
-/** Load `_select_data` from cloudcannon.config.yml so select inputs that
- *  reference e.g. `_select_data.icons` can be resolved at discovery time. */
-function loadSelectData(): Record<string, Array<string | { id: string; name: string }>> {
+type SelectDataValues = Array<string | { id: string; name: string }>;
+
+/** Load the datasets named in `data_config` so select inputs that reference
+ *  e.g. `data.icons` can be resolved at discovery time. */
+function loadSelectData(): Record<string, SelectDataValues> {
   const configPath = join(process.cwd(), "cloudcannon.config.yml");
 
   if (!existsSync(configPath)) return {};
 
   try {
-    const raw = readFileSync(configPath, "utf8");
-    const config = yaml.load(raw) as Record<string, unknown> | null;
+    const config = yaml.load(readFileSync(configPath, "utf8")) as Record<string, unknown> | null;
+    const dataConfig = config?.data_config as Record<string, { path?: string }> | undefined;
 
-    if (config?._select_data && typeof config._select_data === "object") {
-      return config._select_data as Record<string, Array<string | { id: string; name: string }>>;
+    if (!dataConfig) return {};
+
+    const datasets: Record<string, SelectDataValues> = {};
+
+    for (const [key, entry] of Object.entries(dataConfig)) {
+      const dataPath = entry?.path ? join(process.cwd(), entry.path) : "";
+
+      if (!dataPath || !existsSync(dataPath)) continue;
+
+      const values = yaml.load(readFileSync(dataPath, "utf8"));
+
+      if (Array.isArray(values)) datasets[key] = values as SelectDataValues;
     }
+
+    return datasets;
   } catch (error) {
-    console.warn("Error reading cloudcannon.config.yml for _select_data:", error);
+    console.warn("Error reading CloudCannon datasets for select inputs:", error);
   }
 
   return {};
 }
 
-/** Replace string references like `_select_data.icons` with actual values. */
+/** Replace string references like `data.icons` with actual values. */
 function resolveSelectDataRefs(
   inputs: Record<string, InputConfig>,
-  selectData: Record<string, Array<string | { id: string; name: string }>>
+  selectData: Record<string, SelectDataValues>
 ): void {
   for (const inputConfig of Object.values(inputs)) {
     const values = inputConfig.options?.values;
 
-    if (typeof values === "string" && values.startsWith("_select_data.")) {
-      const key = values.replace("_select_data.", "");
+    if (typeof values === "string" && values.startsWith("data.")) {
+      const key = values.slice("data.".length);
 
       if (selectData[key]) {
-        // Keep original reference so export can emit `_select_data.*`
+        // Keep original reference so export can emit `data.*`
         // while the builder UI can still render concrete select options.
         inputConfig.options!.selectDataRef = values;
         inputConfig.options!.values = selectData[key];

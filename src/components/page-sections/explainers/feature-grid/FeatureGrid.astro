@@ -5,12 +5,14 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
 import FeatureItem from "@explainers/feature-grid/FeatureItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
+import { nextHeadingLevel } from "@component-utils/headingLevel";
 
 type FeatureProps = Record<string, unknown>;
 
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   features = [],
   sectionLabel,
@@ -27,6 +29,8 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const itemHeadingLevel = nextHeadingLevel(headingLevel);
 ---
 
 <CustomSection
@@ -50,7 +54,7 @@ const {
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal={alignmentHorizontal}
     data-prop="heading"
@@ -75,6 +79,7 @@ const {
           data-id="page-sections/explainers/feature-grid/feature-item"
           data-editable="array-item"
           {...feature}
+          headingLevel={itemHeadingLevel}
         />
       ))
     }

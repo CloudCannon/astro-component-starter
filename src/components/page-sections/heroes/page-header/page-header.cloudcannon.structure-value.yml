@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: ""
   heading: About us
+  headingLevel: h1
   subtext: A short introduction to the page, one or two lines long.
   showBreadcrumbs: true
   alignmentHorizontal: start
@@ -61,6 +62,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

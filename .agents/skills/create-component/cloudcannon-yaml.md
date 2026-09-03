@@ -91,10 +91,10 @@ iconName:
   type: select
   comment: Icon to display.
   options:
-    values: _select_data.icons # shared vocabulary, defined once in cloudcannon.config.yml
+    values: data.icons # shared vocabulary, a dataset under .cloudcannon/data/
 ```
 
-Field types in use: `text`, `textarea`, `markdown`, `select`, `switch`, `array`, `object`, `image`, `file`, `url`, `range`, `number`. Visibility: `hidden: true` (always) or `hidden: "!someField"` / `hidden: "field !== 'x'"` (conditional). For shared enums (colorScheme, spacing, icons) reference `_select_data.*` rather than copy-pasting option lists.
+Field types in use: `text`, `textarea`, `markdown`, `select`, `switch`, `array`, `object`, `image`, `file`, `url`, `range`, `number`. Visibility: `hidden: true` (always) or `hidden: "!someField"` / `hidden: "field !== 'x'"` (conditional). For shared enums (colorScheme, spacing, icons) reference `data.*` rather than copy-pasting option lists.
 
 ## Page sections: the section-wrapper `_inputs` block
 

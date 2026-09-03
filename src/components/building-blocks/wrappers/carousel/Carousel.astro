@@ -179,6 +179,11 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .carousel {
+      --carousel-arrow-icon-size: 18px;
+      --carousel-dot-size: 8px;
+      --carousel-thumb-width: 4rem;
+      --carousel-thumb-height: 3rem;
+
       width: 100%;
 
       > .carousel-inner {
@@ -232,15 +237,15 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           margin-top: var(--spacing-sm);
 
           svg {
-            width: 18px;
-            height: 18px;
+            width: var(--carousel-arrow-icon-size);
+            height: var(--carousel-arrow-icon-size);
           }
         }
 
         > .controls-wrapper > .prev > .button-inner,
         > .controls-wrapper > .next > .button-inner {
           background-color: var(--color-bg);
-          border-radius: 9999px;
+          border-radius: var(--radius-full);
           flex-shrink: 0;
           pointer-events: auto;
 
@@ -281,9 +286,9 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           min-width: 0;
           padding: 0;
           transition:
-            transform var(--animation-normal) ease,
-            background-color var(--animation-normal) ease;
-          width: 8px;
+            transform var(--animation-normal) var(--ease-default),
+            background-color var(--animation-normal) var(--ease-default);
+          width: var(--carousel-dot-size);
 
           &:focus-visible {
             outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
@@ -314,19 +319,19 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 
           > .carousel-thumbnail {
             background: none;
-            border: 1px solid var(--color-border);
+            border: var(--border-width-sm) solid var(--color-border);
             border-radius: var(--radius-xs);
             color: var(--color-text-muted);
             cursor: pointer;
             flex: none;
             font-size: var(--font-size-xs);
-            height: 3rem;
+            height: var(--carousel-thumb-height);
             overflow: hidden;
             padding: 0;
             transition:
               border-color var(--animation-fast) var(--ease-out),
               opacity var(--animation-fast) var(--ease-out);
-            width: 4rem;
+            width: var(--carousel-thumb-width);
 
             > img {
               display: block;

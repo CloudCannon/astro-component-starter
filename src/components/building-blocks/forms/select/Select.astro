@@ -1,8 +1,8 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
 import SelectOption from "./SelectOption.astro";
-import FormLabel from "@component-utils/FormLabel.astro";
-import { generateFieldId } from "@component-utils/formField";
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts } from "@component-utils/formField";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import type { SegmentOption } from "../../../../types";
 
@@ -17,6 +17,7 @@ const {
   error,
   iconName,
   iconColor = "default",
+  autocomplete,
   id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -24,37 +25,29 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("select", customId);
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "select",
+  id: customId,
+  name,
+  label,
+  placeholder,
+  autocomplete,
+  required,
+  hint,
+  error,
+});
 const hasLeadingIcon = isNonEmptyString(iconName);
-const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
-const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
-const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 
 // A disabled placeholder that isn't `selected` never shows — the browser falls
 // through to the first enabled option, and `required` is satisfied on load.
 const placeholderSelected = !options?.some((option: SegmentOption) => option.value === value);
 ---
 
-<div
+<FormField
   class:list={["select", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  <FormLabel
-    for={fieldId}
-    label={label}
-    required={required}
-    requiredClass="select-required"
-  />
-  {
-    hintId && (
-      <p
-        class="select-hint"
-        id={hintId}
-      >
-        {hint}
-      </p>
-    )
-  }
   <div class:list={["field-shell", { "has-leading-icon": hasLeadingIcon }]}>
     {
       hasLeadingIcon && (
@@ -70,12 +63,8 @@ const placeholderSelected = !options?.some((option: SegmentOption) => option.val
     }
     <select
       name={name}
-      id={fieldId}
-      required={required}
-      aria-required={required}
-      aria-invalid={errorId ? "true" : undefined}
-      aria-describedby={describedBy}
       class="field"
+      {...controlAttributes}
     >
       {
         placeholder && (
@@ -110,49 +99,13 @@ const placeholderSelected = !options?.some((option: SegmentOption) => option.val
       role="presentation"
     />
   </div>
-  {
-    errorId && (
-      <p
-        class="select-error"
-        id={errorId}
-      >
-        {error}
-      </p>
-    )
-  }
-</div>
+</FormField>
 
 <style is:global>
   @layer components {
-    .select {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-
-      .select-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
-      }
-
-      .select-hint {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      .select-error {
-        color: var(--color-error);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-    }
-
     .select .field-shell {
       background-color: var(--color-bg);
-      border: 1px solid var(--color-border-inputs);
+      border: var(--border-width-sm) solid var(--color-border-inputs);
       border-radius: var(--radius-xs);
       display: block;
       position: relative;

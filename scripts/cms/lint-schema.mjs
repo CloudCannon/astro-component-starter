@@ -30,7 +30,7 @@ const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 // so this mapping stays auditable against the loader.
 const TARGETS = [
   // The root config itself. Easy to forget because it isn't glob-collected, but
-  // it holds the `_select_data` vocabularies and collection `_inputs` that every
+  // it holds the `data_config` datasets and collection `_inputs` that every
   // component leans on — and a stray key here fails the same silent way.
   {
     schema: "global",

@@ -4,6 +4,14 @@ eyebrow:
 heading:
   type: text
   comment: The page title. Renders as the page's h1.
+headingLevel:
+  type: select
+  comment: Heading level for this section's title. A page needs exactly one h1; drop this to h2 when another section above already carries it.
+  options:
+    values:
+      - h1
+      - h2
+      - h3
 subtext:
   type: markdown
   comment: One or two lines introducing the page. Leave empty to hide.

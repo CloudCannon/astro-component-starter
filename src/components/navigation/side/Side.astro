@@ -1,6 +1,11 @@
 ---
-import Icon from "@core-elements/icon/Icon.astro";
-import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
+import NavItemTrigger from "@components/navigation/bar/NavItemTrigger.astro";
+import {
+  createNavItemData,
+  isCurrentPage,
+  type NavItem,
+} from "@components/navigation/bar/navState";
+import { slugifyLabel } from "@component-utils/slugify";
 
 const {
   navData = [],
@@ -11,26 +16,11 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// Scopes radio buttons per navigation instance.
-const navInstanceId = crypto.randomUUID();
+const pathname = Astro.url.pathname;
 
-interface NavItem {
-  name?: string;
-  path?: string;
-  children?: NavItem[];
-}
-
-function isCurrentPage(item: NavItem) {
-  return item.path && Astro.url.pathname === item.path;
-}
-
-function hasCurrentChild(item: NavItem): boolean {
-  if (isCurrentPage(item)) return true;
-  if (item.children && item.children.length > 0) {
-    return item.children.some((child) => hasCurrentChild(child));
-  }
-  return false;
-}
+// Scopes radio buttons per navigation instance. Two navs on one page need
+// distinct `aria-label`s anyway, so the label is the stable scope.
+const navInstanceId = slugifyLabel(ariaLabel || "side");
 ---
 
 <nav
@@ -41,188 +31,100 @@ function hasCurrentChild(item: NavItem): boolean {
   <ul class="side-list">
     {
       navData?.map((item: NavItem) => {
-        const hasChildren = item.children && item.children.length > 0;
-        const dropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
-        const contentId = `dropdown-content-${crypto.randomUUID()}`;
-        const parentGroupId = `parent-${crypto.randomUUID()}`;
-        const isCurrent = isCurrentPage(item);
-        const hasCurrent = hasCurrentChild(item);
-        const splitLink = itemHasSplitNavLink(item);
+        const itemData = createNavItemData(pathname, item, `side-nav-top-${navInstanceId}`);
 
-        if (hasChildren) {
-          return (
-            <li class="nav-item has-children">
-              <input
-                type="radio"
-                name={`side-nav-top-${navInstanceId}`}
-                id={dropdownId}
-                class="nav-item-toggle visually-hidden"
-                role="button"
-                aria-label={`Toggle ${item.name} submenu`}
-                aria-expanded={hasCurrent ? "true" : "false"}
-                aria-controls={contentId}
-                autocomplete="off"
-                checked={hasCurrent}
-              />
-              {splitLink ? (
-                <div class="nav-item-split">
-                  <a
-                    href={item.path}
-                    class="nav-item-link"
-                    aria-current={isCurrent ? "page" : undefined}
-                  >
-                    <span class="nav-item-label">{item.name}</span>
-                  </a>
-                  <label
-                    for={dropdownId}
-                    class="nav-item-trigger nav-item-toggle-btn"
-                  >
-                    <span class="nav-item-icon">
-                      <Icon
-                        name="chevron-right"
-                        size="none"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </label>
-                </div>
-              ) : (
-                <label
-                  for={dropdownId}
-                  class="nav-item-trigger"
-                  aria-current={isCurrent ? "page" : undefined}
-                >
-                  <span class="nav-item-label">{item.name}</span>
-                  <span class="nav-item-icon">
-                    <Icon
-                      name="chevron-right"
-                      size="none"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </label>
-              )}
-              <div
-                id={contentId}
-                class:list={["nav-item-content", hasCurrent && "nav-item-content-initial"]}
-              >
-                <ul class="nav-list">
-                  {item.children!.map((child) => {
-                    const childHasChildren = child.children && child.children.length > 0;
-                    const childDropdownId = `dropdown-toggle-${crypto.randomUUID()}`;
-                    const childContentId = `dropdown-content-${crypto.randomUUID()}`;
-                    const childIsCurrent = isCurrentPage(child);
-                    const childHasCurrent = hasCurrentChild(child);
-                    const childSplitLink = itemHasSplitNavLink(child);
-
-                    if (childHasChildren) {
-                      return (
-                        <li class="nav-item has-children">
-                          <input
-                            type="radio"
-                            name={`side-nav-${parentGroupId}`}
-                            id={childDropdownId}
-                            class="nav-item-toggle visually-hidden"
-                            role="button"
-                            aria-label={`Toggle ${child.name} submenu`}
-                            aria-expanded={childHasCurrent ? "true" : "false"}
-                            aria-controls={childContentId}
-                            autocomplete="off"
-                            checked={childHasCurrent}
-                          />
-                          {childSplitLink ? (
-                            <div class="nav-item-split">
-                              <a
-                                href={child.path}
-                                class="nav-item-link"
-                                aria-current={childIsCurrent ? "page" : undefined}
-                              >
-                                <span class="nav-item-label">{child.name}</span>
-                              </a>
-                              <label
-                                for={childDropdownId}
-                                class="nav-item-trigger nav-item-toggle-btn"
-                              >
-                                <span class="nav-item-icon">
-                                  <Icon
-                                    name="chevron-right"
-                                    size="none"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              </label>
-                            </div>
-                          ) : (
-                            <label
-                              for={childDropdownId}
-                              class="nav-item-trigger"
-                              aria-current={childIsCurrent ? "page" : undefined}
-                            >
-                              <span class="nav-item-label">{child.name}</span>
-                              <span class="nav-item-icon">
-                                <Icon
-                                  name="chevron-right"
-                                  size="none"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </label>
-                          )}
-                          <div
-                            id={childContentId}
-                            class:list={[
-                              "nav-item-content",
-                              childHasCurrent && "nav-item-content-initial",
-                            ]}
-                          >
-                            <ul class="nav-list">
-                              {child.children && child.children.length > 0
-                                ? child.children.map((grandChild) => (
-                                    <li class="nav-item">
-                                      <a
-                                        href={grandChild.path}
-                                        aria-current={
-                                          isCurrentPage(grandChild) ? "page" : undefined
-                                        }
-                                      >
-                                        <span class="nav-item-label">{grandChild.name}</span>
-                                      </a>
-                                    </li>
-                                  ))
-                                : null}
-                            </ul>
-                          </div>
-                        </li>
-                      );
-                    } else {
-                      return (
-                        <li class="nav-item">
-                          <a
-                            href={child.path || "#"}
-                            aria-current={childIsCurrent ? "page" : undefined}
-                          >
-                            <span class="nav-item-label">{child.name}</span>
-                          </a>
-                        </li>
-                      );
-                    }
-                  })}
-                </ul>
-              </div>
-            </li>
-          );
-        } else {
+        if (!itemData.hasChildren) {
           return (
             <li class="nav-item">
-              <a
-                href={item.path || "#"}
-                aria-current={isCurrent ? "page" : undefined}
-              >
-                <span class="nav-item-label">{item.name}</span>
-              </a>
+              {itemData.path ? (
+                <a
+                  href={itemData.path}
+                  aria-current={itemData.isCurrent ? "page" : undefined}
+                >
+                  {itemData.name}
+                </a>
+              ) : (
+                <span class="nav-item-static">{itemData.name}</span>
+              )}
             </li>
           );
         }
+
+        return (
+          <li class="nav-item has-children">
+            <NavItemTrigger
+              item={itemData}
+              inputType="radio"
+              expanded={itemData.hasCurrent}
+            />
+            <div
+              id={itemData.contentId}
+              class="nav-item-content"
+              data-open-on-load={itemData.hasCurrent ? "" : undefined}
+            >
+              <ul class="nav-list">
+                {itemData.children!.map((child) => {
+                  const childData = createNavItemData(
+                    pathname,
+                    child,
+                    `side-nav-${itemData.parentGroupId}`
+                  );
+
+                  if (!childData.hasChildren) {
+                    return (
+                      <li class="nav-item">
+                        {childData.path ? (
+                          <a
+                            href={childData.path}
+                            aria-current={childData.isCurrent ? "page" : undefined}
+                          >
+                            {childData.name}
+                          </a>
+                        ) : (
+                          <span class="nav-item-static">{childData.name}</span>
+                        )}
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li class="nav-item has-children">
+                      <NavItemTrigger
+                        item={childData}
+                        inputType="radio"
+                        expanded={childData.hasCurrent}
+                      />
+                      <div
+                        id={childData.contentId}
+                        class="nav-item-content"
+                        data-open-on-load={childData.hasCurrent ? "" : undefined}
+                      >
+                        <ul class="nav-list">
+                          {childData.children!.map((grandChild) => (
+                            <li class="nav-item">
+                              {grandChild.path ? (
+                                <a
+                                  href={grandChild.path}
+                                  aria-current={
+                                    isCurrentPage(pathname, grandChild) ? "page" : undefined
+                                  }
+                                >
+                                  {grandChild.name}
+                                </a>
+                              ) : (
+                                <span class="nav-item-static">{grandChild.name}</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </li>
+        );
       })
     }
   </ul>
@@ -230,58 +132,52 @@ function hasCurrentChild(item: NavItem): boolean {
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
-  import { bindToggleKeys, syncExpanded } from "@components/navigation/bar/toggleState";
+  import { bindToggleKeys } from "@components/navigation/bar/toggleState";
 
   function setupSideNavigation() {
-    const sideNavs = document.querySelectorAll(".side");
-    if (!sideNavs.length) return;
+    document.querySelectorAll<HTMLElement>(".side").forEach((sideNav) => {
+      if (sideNav.dataset.sideInitialized === "true") return;
+      sideNav.dataset.sideInitialized = "true";
 
-    sideNavs.forEach((sideNav) => {
-      const navElement = sideNav as HTMLElement;
-      if (navElement.dataset.sideInitialized === "true") return;
-      navElement.dataset.sideInitialized = "true";
-
-      sideNav.addEventListener("change", () => syncExpanded(sideNav));
       bindToggleKeys(sideNav);
 
-      function bindTriggerHandlers(trigger: Element) {
-        trigger.addEventListener("click", (e) => {
-          const label = e.currentTarget;
-          if (!(label instanceof Element)) return;
-
-          const toggleId = label.getAttribute("for");
-          const toggleEl = document.getElementById(toggleId || "");
-
-          if (toggleEl instanceof HTMLInputElement && toggleEl.checked) {
-            e.preventDefault();
-            toggleEl.checked = false;
-            toggleEl.dispatchEvent(new Event("change", { bubbles: true }));
+      // Retire the no-animation flag only on panels that are currently closed.
+      // Clearing it on an open one hands it a live `grow-out` and it replays
+      // its expand under the pointer.
+      sideNav.addEventListener("change", () => {
+        sideNav.querySelectorAll(".nav-item-content[data-open-on-load]").forEach((panel) => {
+          const toggle = panel.parentElement?.querySelector(":scope > .nav-item-toggle");
+          if (!(toggle instanceof HTMLInputElement) || !toggle.checked) {
+            panel.removeAttribute("data-open-on-load");
           }
         });
-      }
+      });
 
-      sideNav.querySelectorAll(".nav-item-toggle-btn").forEach(bindTriggerHandlers);
-
+      // A label re-checks an already-checked radio, which is a no-op; collapse
+      // it by hand so a second click closes the panel.
       sideNav
-        .querySelectorAll(".nav-item.has-children > .nav-item-trigger:not(.nav-item-toggle-btn)")
-        .forEach(bindTriggerHandlers);
+        .querySelectorAll(".nav-item-toggle-btn, .nav-item.has-children > .nav-item-trigger")
+        .forEach((trigger) => {
+          trigger.addEventListener("click", (event) => {
+            const label = event.currentTarget;
+            if (!(label instanceof Element)) return;
+
+            const toggle = document.getElementById(label.getAttribute("for") || "");
+            if (toggle instanceof HTMLInputElement && toggle.checked) {
+              event.preventDefault();
+              toggle.checked = false;
+              toggle.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+          });
+        });
     });
   }
   onPageLoad(setupSideNavigation);
-
-  setTimeout(() => {
-    const initialNavItems = document.querySelectorAll(".nav-item-content-initial");
-    initialNavItems.forEach((item) => {
-      item.classList.remove("nav-item-content-initial");
-    });
-  }, 1000);
 </script>
 
 <style is:global>
   @layer components {
     .side {
-      margin-top: var(--spacing-lg);
-
       .side-list,
       .nav-list {
         list-style: none;
@@ -295,12 +191,13 @@ function hasCurrentChild(item: NavItem): boolean {
       }
 
       /*
-       * Row shell shared by direct links and full-row label triggers.
-       * Split rows (link + chevron toggle) use `.nav-item-split` below.
-       * `min-height` + `padding-block` establish a consistent row height
-       * across plain links, triggers, and split rows.
+       * Row shell shared by direct links, static leaves and full-row label
+       * triggers. Split rows (link + chevron toggle) use `.nav-item-split`
+       * below. `min-height` + `padding-block` establish a consistent row
+       * height across all of them.
        */
       .nav-item > a,
+      .nav-item > .nav-item-static,
       .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
         align-items: center;
         border-radius: var(--radius-xs);
@@ -309,10 +206,10 @@ function hasCurrentChild(item: NavItem): boolean {
         min-height: 1.75rem;
         padding: var(--spacing-sm) var(--spacing-md);
         text-decoration: none;
-        transition: background-color var(--animation-normal) ease;
+        transition: background-color var(--animation-normal) var(--ease-default);
 
-        &:hover,
-        &:focus-visible {
+        &:not(.nav-item-static):hover,
+        &:not(.nav-item-static):focus-visible {
           background-color: var(--color-state-hover);
           color: var(--color-text-strong);
 
@@ -322,8 +219,13 @@ function hasCurrentChild(item: NavItem): boolean {
         }
       }
 
-      .nav-item > a {
+      .nav-item > a,
+      .nav-item > .nav-item-static {
         font-weight: var(--font-weight-semibold);
+      }
+
+      .nav-item > .nav-item-static {
+        color: var(--color-text-muted);
       }
 
       .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
@@ -359,7 +261,7 @@ function hasCurrentChild(item: NavItem): boolean {
         flex-wrap: nowrap;
         gap: var(--spacing-xs);
         min-width: 0;
-        transition: background-color var(--animation-normal) ease;
+        transition: background-color var(--animation-normal) var(--ease-default);
         width: 100%;
 
         &:hover {
@@ -386,7 +288,7 @@ function hasCurrentChild(item: NavItem): boolean {
           min-width: 0;
           padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-md);
           text-decoration: none;
-          transition: color var(--animation-normal) ease;
+          transition: color var(--animation-normal) var(--ease-default);
 
           &:hover,
           &:focus-visible {
@@ -399,7 +301,7 @@ function hasCurrentChild(item: NavItem): boolean {
           align-self: stretch;
           background: transparent;
           border: none;
-          border-left: 1px solid transparent;
+          border-left: var(--border-width-sm) solid transparent;
           border-radius: var(--radius-xs);
           cursor: pointer;
           display: inline-flex;
@@ -409,8 +311,8 @@ function hasCurrentChild(item: NavItem): boolean {
           min-width: 2.25rem;
           padding: 0 var(--spacing-xs);
           transition:
-            background-color var(--animation-normal) ease,
-            border-color var(--animation-normal) ease;
+            background-color var(--animation-normal) var(--ease-default),
+            border-color var(--animation-normal) var(--ease-default);
 
           &:hover {
             background-color: color-mix(in srgb, var(--color-state-hover), var(--color-text) 8%);
@@ -431,9 +333,9 @@ function hasCurrentChild(item: NavItem): boolean {
         }
       }
 
-      .nav-item a[aria-current="page"] .nav-item-label,
-      .nav-item .nav-item-trigger[aria-current="page"] .nav-item-label,
-      .nav-item-split .nav-item-link[aria-current="page"] .nav-item-label {
+      .nav-item > a[aria-current="page"],
+      .nav-item > .nav-item-trigger[aria-current="page"],
+      .nav-item-split .nav-item-link[aria-current="page"] {
         text-decoration: underline dotted;
         text-decoration-color: var(--color-text-muted);
         text-underline-offset: 3px;
@@ -457,15 +359,17 @@ function hasCurrentChild(item: NavItem): boolean {
         display: block;
       }
 
-      .nav-item-toggle:checked ~ .nav-item-content-initial {
-        animation-duration: 1ms;
-        display: block;
+      /* Groups holding the current page are served open; expanding something
+         the visitor never asked for is not a transition. The flag is cleared
+         once the panel closes, so every later open animates. */
+      .nav-item-toggle:checked ~ .nav-item-content[data-open-on-load] {
+        animation: none;
       }
 
       .nav-item-icon {
         color: var(--color-text-muted);
         display: inline-block;
-        transition: transform var(--animation-normal) ease;
+        transition: transform var(--animation-normal) var(--ease-default);
       }
 
       .nav-item-toggle:checked ~ .nav-item-trigger .nav-item-icon,
@@ -475,6 +379,7 @@ function hasCurrentChild(item: NavItem): boolean {
 
       .nav-list {
         & > .nav-item > a,
+        & > .nav-item > .nav-item-static,
         & > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
           font-weight: var(--font-weight-normal);
           padding-inline-start: var(--spacing-xl);
@@ -497,6 +402,7 @@ function hasCurrentChild(item: NavItem): boolean {
         }
 
         & .nav-list > .nav-item > a,
+        & .nav-list > .nav-item > .nav-item-static,
         & .nav-list > .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
           padding-inline-start: var(--spacing-2xl);
         }

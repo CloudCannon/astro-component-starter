@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Introducing
   heading: A clear promise in one line
+  headingLevel: h1
   subtext: One or two sentences on who this is for and what they get.
   buttonSections:
     - _component: building-blocks/core-elements/button
@@ -68,6 +69,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

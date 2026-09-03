@@ -1,7 +1,7 @@
 ---
 /**
  * Internal headshot util — deliberately not an editor-facing block (no
- * CloudCannon YAML, not in any picker; FormLabel is the precedent). Renders a
+ * CloudCannon YAML, not in any picker; FormField is the precedent). Renders a
  * round (or radius-md) image at a fixed size, falling back to initials on a
  * muted background when there is no image. Consumers may override the exact
  * size with `--avatar-size` (e.g. Testimonial's 80px headshot). Pass
@@ -113,7 +113,7 @@ const initials = String(alt || "")
 
       /* An edge so a light-background headshot still reads on --color-bg. */
       &.bordered {
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
       }
 
       /* Image.astro adds a content-block top margin and `height: auto` on

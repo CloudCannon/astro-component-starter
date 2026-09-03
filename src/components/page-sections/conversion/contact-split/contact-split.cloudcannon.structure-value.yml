@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Contact
   heading: Talk to a human
+  headingLevel: h2
   subtext: We answer within one business day.
   details:
     - icon: map-pin
@@ -105,7 +106,7 @@ _structures:
             type: select
             comment: Small icon beside the detail. Sourced from [Heroicons](https://heroicons.com/).
             options:
-              values: _select_data.icons
+              values: data.icons
               preview:
                 text:
                   - key: name
@@ -135,6 +136,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

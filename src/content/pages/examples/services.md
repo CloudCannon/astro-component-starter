@@ -4,6 +4,7 @@ title: Services
 description: Example services page with cards, a process, client logos, testimonials, and a form.
 pageSections:
   - _component: page-sections/collections/card-collection
+    headingLevel: h1
     eyebrow: What we do
     heading: Services built for the long run
     subtext: ''
@@ -19,7 +20,7 @@ pageSections:
             showArrow: false
           - _component: building-blocks/core-elements/heading
             text: Discovery and planning
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: >-
@@ -37,7 +38,7 @@ pageSections:
             showArrow: false
           - _component: building-blocks/core-elements/heading
             text: Design systems
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: >-
@@ -55,7 +56,7 @@ pageSections:
             showArrow: false
           - _component: building-blocks/core-elements/heading
             text: Site build and migration
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: >-

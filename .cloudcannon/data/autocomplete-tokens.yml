@@ -1,0 +1,52 @@
+# HTML `autocomplete` tokens (WCAG 1.3.5), offered by the form components'
+# Autocomplete input via `data_config` in cloudcannon.config.yml.
+#
+# Not the full set and not meant to be: the attribute takes compound values
+# (`shipping street-address`), so those inputs keep `allow_create: true` for
+# anything not named here.
+- id: "off"
+  name: Off (no autofill)
+- id: "on"
+  name: On (browser default)
+- id: name
+  name: Full name
+- id: given-name
+  name: First name
+- id: family-name
+  name: Last name
+- id: nickname
+  name: Nickname
+- id: email
+  name: Email address
+- id: tel
+  name: Phone number
+- id: url
+  name: Website
+- id: organization
+  name: Company
+- id: organization-title
+  name: Job title
+- id: street-address
+  name: Street address (full)
+- id: address-line1
+  name: Address line 1
+- id: address-line2
+  name: Address line 2
+- id: address-level2
+  name: City or suburb
+- id: address-level1
+  name: State or region
+- id: postal-code
+  name: Postal code
+- id: country-name
+  name: Country
+- id: bday
+  name: Date of birth
+- id: username
+  name: Username
+- id: current-password
+  name: Current password
+- id: new-password
+  name: New password
+- id: one-time-code
+  name: One-time code

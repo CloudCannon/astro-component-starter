@@ -2,9 +2,12 @@
  * Mirror every nav toggle's `checked` state onto `aria-expanded`. Called after
  * any change rather than per input: checking one radio never fires `change` on
  * the radio it unchecked.
+ *
+ * Checkboxes only — ARIA does not support `aria-expanded` on `radio`, so
+ * setting it here would put back the attribute the markup deliberately omits.
  */
 export function syncExpanded(root: ParentNode): void {
-  root.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {
+  root.querySelectorAll<HTMLInputElement>(".nav-item-toggle[type='checkbox']").forEach((toggle) => {
     toggle.setAttribute("aria-expanded", String(toggle.checked));
   });
 }

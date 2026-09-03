@@ -1,7 +1,7 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
-import FormLabel from "@component-utils/FormLabel.astro";
-import { generateFieldId } from "@component-utils/formField";
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts } from "@component-utils/formField";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
@@ -16,6 +16,7 @@ const {
   iconName,
   iconColor = "default",
   iconPosition = "before",
+  autocomplete,
   id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -23,33 +24,26 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("input", customId);
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "input",
+  id: customId,
+  name,
+  label,
+  placeholder,
+  type,
+  autocomplete,
+  required,
+  hint,
+  error,
+});
 const hasIcon = isNonEmptyString(iconName);
-const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
-const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
-const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 ---
 
-<div
+<FormField
   class:list={["input", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  <FormLabel
-    for={fieldId}
-    label={label}
-    required={required}
-    requiredClass="input-required"
-  />
-  {
-    hintId && (
-      <p
-        class="input-hint"
-        id={hintId}
-      >
-        {hint}
-      </p>
-    )
-  }
   {
     hasIcon ? (
       <span class:list={["field-shell", iconPosition === "after" && "icon-after"]}>
@@ -64,71 +58,28 @@ const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
         <input
           type={type}
           name={name}
-          id={fieldId}
           placeholder={placeholder}
-          required={required}
-          aria-required={required}
-          aria-invalid={errorId ? "true" : undefined}
-          aria-describedby={describedBy}
           value={value}
           class="field"
+          {...controlAttributes}
         />
       </span>
     ) : (
       <input
         type={type}
         name={name}
-        id={fieldId}
         placeholder={placeholder}
-        required={required}
-        aria-required={required}
-        aria-invalid={errorId ? "true" : undefined}
-        aria-describedby={describedBy}
         value={value}
         class="field"
+        {...controlAttributes}
       />
     )
   }
-  {
-    errorId && (
-      <p
-        class="input-error"
-        id={errorId}
-      >
-        {error}
-      </p>
-    )
-  }
-</div>
+</FormField>
 
 <style is:global>
   @layer components {
     .input {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-
-      .input-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
-      }
-
-      .input-hint {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      .input-error {
-        color: var(--color-error);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      > .field[aria-invalid="true"],
       .field-shell:has(> .field[aria-invalid="true"]) {
         border-color: var(--color-error);
       }
@@ -136,7 +87,7 @@ const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
       .field-shell {
         align-items: center;
         background-color: var(--color-bg);
-        border: 1px solid var(--color-border-inputs);
+        border: var(--border-width-sm) solid var(--color-border-inputs);
         border-radius: var(--radius-xs);
         display: flex;
         gap: var(--spacing-em-sm);

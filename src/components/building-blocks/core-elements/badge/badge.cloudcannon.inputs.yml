@@ -5,7 +5,7 @@ iconName:
   type: select
   comment: Optional leading icon. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name

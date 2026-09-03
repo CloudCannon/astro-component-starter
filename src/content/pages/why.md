@@ -16,6 +16,7 @@ pageSections:
     colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/heroes/hero-split
+    headingLevel: h2
     eyebrow: Built at CloudCannon
     heading: For teams who ship real client sites
     subtext: >-

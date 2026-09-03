@@ -1,23 +1,18 @@
 /**
- * Masonry layout + lightbox for GalleryGrid (`.gallery-grid`). Used by
+ * Lightbox for GalleryGrid (`.gallery-grid`). Used by
  * `GalleryGrid.astro`'s inline script and by `editor-live-sync.js`, where
- * inline scripts don't run. Masonry comes from the shared `masonryEnhance`
- * util; the lightbox is a `.modal-popover`, so focus trapping and scroll
+ * inline scripts don't run. The masonry layout belongs to the `<Masonry>`
+ * wrapper; the lightbox is a `.modal-popover`, so focus trapping and scroll
  * locking come from the shared modal setup.
  */
 
 import { setupModalShell } from "../../../building-blocks/wrappers/modal/setup";
-import { enhanceMasonryLayout } from "../../../utils/masonryEnhance";
 
 const SWIPE_THRESHOLD_PX = 40;
 
 export function setupGallery(root: HTMLElement): void {
   if (root.hasAttribute("data-gallery-initialized")) return;
   root.setAttribute("data-gallery-initialized", "");
-
-  const masonryList = root.querySelector<HTMLElement>(".gallery-items.masonry");
-
-  if (masonryList) enhanceMasonryLayout(masonryList, masonryList);
 
   const popover = root.querySelector<HTMLElement>(".gallery-lightbox");
 

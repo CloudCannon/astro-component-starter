@@ -14,7 +14,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("toggle", customId);
+const fieldId = generateFieldId("toggle", customId, name || label);
 ---
 
 <div
@@ -62,7 +62,6 @@ const fieldId = generateFieldId("toggle", customId);
     .toggle {
       display: flex;
       margin: 0;
-      margin-bottom: var(--spacing-md);
       width: 100%;
 
       .toggle-container {

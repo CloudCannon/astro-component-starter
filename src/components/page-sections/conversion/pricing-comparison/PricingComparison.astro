@@ -18,6 +18,7 @@ type Row = { feature?: string; values?: (string | null)[] };
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   plans = [],
   rows = [],
@@ -82,7 +83,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -260,7 +261,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
       thead th {
         background: none;
         border: 0;
-        border-bottom: 2px solid var(--color-border-strong);
+        border-bottom: var(--border-width-md) solid var(--color-border-strong);
         padding: var(--spacing-md);
         text-align: center;
         vertical-align: bottom;
@@ -290,7 +291,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
 
       tbody th,
       tbody td {
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: var(--border-width-sm) solid var(--color-border);
       }
 
       tbody th[scope="row"] {
@@ -337,7 +338,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
 
         tbody th[scope="row"] {
           background-color: var(--color-bg);
-          border-inline-end: 1px solid var(--color-border);
+          border-inline-end: var(--border-width-sm) solid var(--color-border);
           inset-inline-start: 0;
           position: sticky;
         }

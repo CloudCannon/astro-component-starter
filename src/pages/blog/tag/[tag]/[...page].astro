@@ -7,6 +7,7 @@ import {
   getBlogPostsSortedByDate,
   loadBlogPageContext,
   withListingHeading,
+  withoutHeroBreadcrumbs,
 } from "../../../../utils/blog";
 
 type Paginate = (_data: any[], _opts: { pageSize: number; params: Record<string, string> }) => any;
@@ -64,7 +65,7 @@ const listingHeading =
   frontmatter={{
     title: pageTitle,
     description: pageDescription,
-    pageSections: withListingHeading(heroSections, listingHeading),
+    pageSections: withoutHeroBreadcrumbs(withListingHeading(heroSections, listingHeading)),
   }}
   disablePagefind
 >

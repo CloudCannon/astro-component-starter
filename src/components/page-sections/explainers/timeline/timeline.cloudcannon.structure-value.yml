@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Our story
   heading: How we got here
+  headingLevel: h2
   subtext: ""
   layout: vertical
   entries:
@@ -98,6 +99,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

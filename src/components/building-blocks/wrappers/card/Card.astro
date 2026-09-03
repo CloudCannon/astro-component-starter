@@ -271,15 +271,15 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
           background-color: var(--color-bg);
         }
         transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
+          transform var(--animation-normal) var(--ease-default),
+          box-shadow var(--animation-normal) var(--ease-default);
 
         &.rounded {
           border-radius: var(--radius-md);
         }
 
         &.border {
-          border: 1px solid var(--color-border);
+          border: var(--border-width-sm) solid var(--color-border);
         }
 
         /* Parallax: the background image is pinned to the viewport and the card

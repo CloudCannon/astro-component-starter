@@ -2,6 +2,7 @@
 import Dropdown from "./Dropdown.astro";
 import MegaPanel from "./MegaPanel.astro";
 import { isCurrentPage, itemHasMegaMenu, type NavItem } from "./navState";
+import { slugifyLabel } from "@component-utils/slugify";
 
 const {
   navData = [],
@@ -12,7 +13,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const navInstanceId = crypto.randomUUID();
+const navInstanceId = slugifyLabel(ariaLabel || "navigation");
 const pathname = Astro.url.pathname;
 ---
 
@@ -167,6 +168,10 @@ const pathname = Astro.url.pathname;
 <style is:global>
   @layer components {
     .bar {
+      --bar-icon-size: 1.75em;
+      --bar-chevron-size: 0.8rem;
+      --bar-dropdown-min-width: 200px;
+
       font-weight: var(--font-weight-semibold);
       .bar-list {
         align-items: center;
@@ -227,17 +232,17 @@ const pathname = Astro.url.pathname;
         .nav-item-toggle-btn {
           align-items: center;
           aspect-ratio: 1;
-          border-left: 1px solid transparent;
+          border-left: var(--border-width-sm) solid transparent;
           border-radius: var(--radius-xs);
           box-sizing: border-box;
           cursor: pointer;
           display: flex;
           flex: 0 0 auto;
-          height: 1.75em;
+          height: var(--bar-icon-size);
           justify-content: center;
-          margin-inline-end: 4px;
+          margin-inline-end: var(--spacing-xs);
           padding: 0;
-          width: 1.75em;
+          width: var(--bar-icon-size);
           transition:
             background var(--animation-normal) var(--ease-in-out),
             border-color var(--animation-normal) var(--ease-in-out);
@@ -285,7 +290,7 @@ const pathname = Astro.url.pathname;
         transition:
           color var(--animation-normal) var(--ease-in-out),
           transform var(--animation-normal) var(--ease-in-out);
-        width: 0.8rem;
+        width: var(--bar-chevron-size);
         position: relative;
         top: 0.2rem;
       }
@@ -325,11 +330,11 @@ const pathname = Astro.url.pathname;
 
       .nav-item > .nav-item-content {
         background: var(--color-bg);
-        border: 1px solid var(--color-border-subtle);
+        border: var(--border-width-sm) solid var(--color-border-subtle);
         border-radius: var(--radius-xs);
         left: 50%;
         margin-top: var(--spacing-xs);
-        min-width: 200px;
+        min-width: var(--bar-dropdown-min-width);
         position: absolute;
         top: 100%;
         transform: translateX(-50%);
@@ -358,7 +363,7 @@ const pathname = Astro.url.pathname;
         border-radius: 0;
         font-size: var(--font-size-sm);
         font-weight: var(--font-weight-normal);
-        padding-inline-end: 4px;
+        padding-inline-end: var(--spacing-xs);
         padding-left: var(--spacing-xl);
       }
 

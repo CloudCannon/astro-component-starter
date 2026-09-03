@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: ""
   heading: Numbers that hold up
+  headingLevel: h2
   subtext: ""
   stats:
     - number: 12
@@ -113,6 +114,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

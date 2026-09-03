@@ -1,7 +1,7 @@
 @layer base {
   :where(:root) {
     fieldset {
-      border: 1px solid var(--color-border-subtle);
+      border: var(--border-width-sm) solid var(--color-border-subtle);
       border-radius: var(--radius-sm);
       margin-bottom: 1rem;
     }
@@ -17,7 +17,7 @@
 
     input {
       background-color: var(--color-bg);
-      border: 1px solid var(--color-border-inputs);
+      border: var(--border-width-sm) solid var(--color-border-inputs);
       border-radius: var(--radius-xs);
       color: var(--color-text-strong);
       font-size: var(--font-size-md);
@@ -42,7 +42,7 @@
 
       &::file-selector-button {
         background-color: var(--color-bg-surface);
-        border: 1px solid var(--color-border-inputs);
+        border: var(--border-width-sm) solid var(--color-border-inputs);
         border-radius: var(--radius-xs);
         color: var(--color-text-strong);
         cursor: pointer;
@@ -59,7 +59,7 @@
 
     textarea {
       background-color: var(--color-bg);
-      border: 1px solid var(--color-border-inputs);
+      border: var(--border-width-sm) solid var(--color-border-inputs);
       border-radius: var(--radius-xs);
       color: var(--color-text-strong);
       font-size: var(--font-size-md);
@@ -87,7 +87,7 @@
 
     select {
       background-color: var(--color-bg);
-      border: 1px solid var(--color-border-inputs);
+      border: var(--border-width-sm) solid var(--color-border-inputs);
       border-radius: var(--radius-xs);
       color: var(--color-text-strong);
       cursor: pointer;

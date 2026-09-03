@@ -18,10 +18,8 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || `Steps-${crypto.randomUUID()}`;
-
-if (!htmlAttributes.id) {
-  htmlAttributes.id = slugifyLabel(generatedLabel);
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
 }
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);

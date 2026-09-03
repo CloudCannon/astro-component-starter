@@ -1,5 +1,6 @@
 ---
 import Button from "@core-elements/button/Button.astro";
+import { slugifyLabel } from "@component-utils/slugify";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
 import NavItemTrigger from "@components/navigation/bar/NavItemTrigger.astro";
@@ -22,8 +23,8 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const toggleId = `mobile-toggle-${crypto.randomUUID()}`;
-const navInstanceId = crypto.randomUUID();
+const navInstanceId = slugifyLabel(ariaLabel || "mobile");
+const toggleId = `mobile-toggle-${navInstanceId}`;
 const pathname = Astro.url.pathname;
 ---
 
@@ -411,7 +412,7 @@ const pathname = Astro.url.pathname;
 
       .mobile-header {
         align-items: center;
-        border-bottom: 1px solid var(--color-border-subtle);
+        border-bottom: var(--border-width-sm) solid var(--color-border-subtle);
         display: flex;
         flex-shrink: 0;
         height: 5rem;
@@ -450,7 +451,7 @@ const pathname = Astro.url.pathname;
       }
 
       .nav-item {
-        border-bottom: 1px solid var(--color-border-subtle);
+        border-bottom: var(--border-width-sm) solid var(--color-border-subtle);
         position: relative;
       }
 
@@ -570,7 +571,7 @@ const pathname = Astro.url.pathname;
           aspect-ratio: 1;
           background: transparent;
           border: none;
-          border-left: 1px solid transparent;
+          border-left: var(--border-width-sm) solid transparent;
           border-radius: var(--radius-xs);
           box-sizing: border-box;
           color: var(--color-text-muted);
@@ -636,7 +637,7 @@ const pathname = Astro.url.pathname;
       }
 
       .mobile-mega .nav-list:not(:last-child) > .nav-item:last-child {
-        border-bottom: 1px solid var(--color-border-subtle);
+        border-bottom: var(--border-width-sm) solid var(--color-border-subtle);
       }
 
       .mobile-mega-icon {

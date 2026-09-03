@@ -9,6 +9,7 @@ value:
   placeholder: null
   value: null
   hint: null
+  autocomplete: null
 preview:
   text:
     - Textarea

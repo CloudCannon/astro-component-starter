@@ -8,6 +8,7 @@ import Timeline from "@wrappers/timeline/Timeline.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   entries = [],
   layout = "vertical",
@@ -50,7 +51,7 @@ const gutter =
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"

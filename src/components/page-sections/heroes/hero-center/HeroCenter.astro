@@ -8,6 +8,7 @@ import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h1",
   subtext = "",
   buttonSections = [],
   sectionLabel,
@@ -46,7 +47,7 @@ const {
     size="sm"
   />
   <Heading
-    level="h1"
+    level={headingLevel}
     size="2xl"
     alignmentHorizontal="center"
     data-prop="heading"

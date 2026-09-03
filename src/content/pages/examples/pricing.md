@@ -4,6 +4,7 @@ title: Pricing
 description: Example pricing page with plan cards, a comparison table, and billing FAQ.
 pageSections:
   - _component: page-sections/conversion/pricing-tiers
+    headingLevel: h1
     eyebrow: Plans
     heading: Simple pricing that scales with you
     subtext: Every plan includes hosting, SSL, and visual editing for your team.

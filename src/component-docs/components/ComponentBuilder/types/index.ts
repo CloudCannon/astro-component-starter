@@ -61,7 +61,7 @@ export interface InputConfig {
   default?: unknown;
   options?: {
     values?: string | Array<string | { id: string; name: string }>;
-    /** Original `_select_data.*` reference used for export output. */
+    /** Original `data.*` reference used for export output. */
     selectDataRef?: string;
     structures?: string;
     allow_as_prop?: boolean;

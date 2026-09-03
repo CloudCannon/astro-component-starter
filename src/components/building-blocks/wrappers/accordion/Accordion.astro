@@ -17,13 +17,18 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || `Accordion-${crypto.randomUUID()}`;
-
-if (!htmlAttributes.id) {
-  htmlAttributes.id = slugifyLabel(generatedLabel);
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
 }
 
-const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefined;
+// The exclusive-group name must be unique per accordion on the page.
+// Unlabelled accordions fall back to their first item's title — two on one
+// page opening on the same title would share a group — and slot-only ones to
+// a generated id.
+const firstTitle = (items as ItemProps[])?.[0]?.title;
+const accordionName = singleOpen
+  ? `accordion-${htmlAttributes.id || (firstTitle && slugifyLabel(String(firstTitle))) || crypto.randomUUID()}`
+  : undefined;
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp

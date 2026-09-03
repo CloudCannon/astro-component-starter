@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Gallery
   heading: Field notes from the coast
+  headingLevel: h2
   subtext: ""
   images:
     - image: /src/assets/images/component-docs/dunedin-cliff.jpg
@@ -115,6 +116,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

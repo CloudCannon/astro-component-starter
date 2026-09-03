@@ -224,7 +224,7 @@ if (!_component && !hasImages) return;
             appearance: none;
             aspect-ratio: var(--thumb-ratio, var(--ratio-landscape));
             background: none;
-            border: 2px solid transparent;
+            border: var(--border-width-md) solid transparent;
             border-radius: var(--radius-xs);
             box-sizing: content-box;
             cursor: pointer;
@@ -233,8 +233,8 @@ if (!_component && !hasImages) return;
             overflow: hidden;
             padding: 0;
             transition:
-              border-color var(--animation-fast) ease,
-              opacity var(--animation-fast) ease;
+              border-color var(--animation-fast) var(--ease-default),
+              opacity var(--animation-fast) var(--ease-default);
 
             &[data-selected="true"] {
               border-color: var(--color-brand);

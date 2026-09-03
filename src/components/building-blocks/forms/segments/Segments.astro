@@ -17,7 +17,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const groupId = generateFieldId("segments", htmlAttributes.id);
+const groupId = generateFieldId("segments", htmlAttributes.id, name || title);
 const inputType = multiple ? "checkbox" : "radio";
 
 // Native `required` on one checkbox of a group means "tick this box", not
@@ -132,7 +132,7 @@ const requireEachInput = required && !multiple;
         .segment {
           align-items: center;
           background-color: var(--color-bg-surface);
-          border: 1px solid var(--color-border);
+          border: var(--border-width-sm) solid var(--color-border);
           color: var(--color-text-muted);
           cursor: pointer;
           display: inline-flex;
@@ -141,7 +141,7 @@ const requireEachInput = required && !multiple;
           justify-content: center;
           padding: var(--spacing-xs) var(--spacing-sm);
           position: relative;
-          transition: background-color var(--animation-normal) ease;
+          transition: background-color var(--animation-normal) var(--ease-default);
           vertical-align: middle;
 
           &:hover {
@@ -172,7 +172,7 @@ const requireEachInput = required && !multiple;
           &,
           &:hover {
             background-color: var(--color-bg);
-            border: 1px solid var(--color-brand);
+            border: var(--border-width-sm) solid var(--color-brand);
             color: var(--color-text-strong);
             z-index: 1;
           }

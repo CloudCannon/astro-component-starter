@@ -129,7 +129,7 @@ if (!_component && width === 0) return;
       thead th {
         background: none;
         border: 0;
-        border-bottom: 2px solid var(--color-border-strong);
+        border-bottom: var(--border-width-md) solid var(--color-border-strong);
         font-size: var(--font-size-sm);
         font-weight: var(--font-weight-semibold);
         letter-spacing: 0.06em;
@@ -140,7 +140,7 @@ if (!_component && width === 0) return;
       tbody th,
       tbody td {
         border: 0;
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: var(--border-width-sm) solid var(--color-border);
         font-size: var(--font-size-md);
         padding: var(--spacing-md);
       }
@@ -196,7 +196,7 @@ if (!_component && width === 0) return;
           thead th:first-child,
           tbody th[scope="row"] {
             background-color: var(--color-bg);
-            border-inline-end: 1px solid var(--color-border);
+            border-inline-end: var(--border-width-sm) solid var(--color-border);
             inset-inline-start: 0;
             position: sticky;
           }

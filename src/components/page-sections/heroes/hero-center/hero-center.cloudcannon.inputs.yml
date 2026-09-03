@@ -4,6 +4,14 @@ eyebrow:
 heading:
   type: text
   comment: Main heading text for the hero.
+headingLevel:
+  type: select
+  comment: Heading level for this section's title. A page needs exactly one h1; drop this to h2 when another section above already carries it.
+  options:
+    values:
+      - h1
+      - h2
+      - h3
 subtext:
   type: markdown
   comment: Supporting subtext displayed beneath the heading.

@@ -19,3 +19,15 @@ value:
 hint:
   type: text
   comment: Optional help text shown between the label and the field, announced to assistive technology.
+autocomplete:
+  type: select
+  options:
+    values: data.autocomplete_tokens
+    value_key: id
+    allow_create: true
+    preview:
+      text:
+        - key: name
+      subtext:
+        - key: id
+  comment: Autofill hint for browsers and password managers (WCAG 1.3.5). Leave blank to derive one from the field's type and name. Compound tokens such as `shipping street-address` can be typed in.

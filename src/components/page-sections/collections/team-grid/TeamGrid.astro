@@ -4,12 +4,14 @@ import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import TeamItem from "@page-sections/collections/team-grid/TeamItem.astro";
 import CardGrid from "@wrappers/card-grid/CardGrid.astro";
+import { nextHeadingLevel } from "@component-utils/headingLevel";
 
 type MemberProps = Record<string, unknown>;
 
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   teamMembers = [],
   sectionLabel,
@@ -25,6 +27,8 @@ const {
   class: className,
   ...htmlAttributes
 } = Astro.props;
+
+const itemHeadingLevel = nextHeadingLevel(headingLevel);
 ---
 
 <CustomSection
@@ -49,7 +53,7 @@ const {
   />
   <Heading
     class="team-grid-heading"
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -76,6 +80,7 @@ const {
           data-id="page-sections/collections/team-grid/team-item"
           data-editable="array-item"
           {...member}
+          headingLevel={itemHeadingLevel}
           class="team-grid-item"
         />
       ))

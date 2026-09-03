@@ -18,6 +18,7 @@ value:
   iconName: null
   iconColor: default
   hint: null
+  autocomplete: null
 preview:
   text:
     - Select

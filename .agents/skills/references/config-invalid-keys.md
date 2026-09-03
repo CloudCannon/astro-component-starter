@@ -104,7 +104,7 @@ Identify these fields:
 - Anything the component uses inside a switch/ternary/`class:list` against literal values (`variant === 'primary'`).
 - Component prop types declared as `'a' | 'b' | 'c'` unions in TypeScript.
 
-Shared option sets go in `_select_data` once and are referenced; local ones inline the values:
+Shared option sets go in a dataset under `.cloudcannon/data/` once, are registered in `data_config`, and are referenced as `values: data.<name>`; local ones inline the values:
 
 ```yaml
 _inputs:
@@ -124,7 +124,7 @@ _inputs:
           id: 4
 ```
 
-Leave `allow_create: false` (default) for component-API enums — typing an unrecognized value is always a bug. `allow_create: true` is appropriate only for icon fields, where developers may want a custom name.
+Leave `allow_create: false` (default) for component-API enums — typing an unrecognized value is always a bug. `allow_create: true` is for the two fields where it isn't: icon names, and the form components' `autocomplete` (an HTML attribute whose grammar is compound, so `data.autocomplete_tokens` can list the common tokens but never all legal values).
 
 ## Array item previews — `[*]` vs structure value
 

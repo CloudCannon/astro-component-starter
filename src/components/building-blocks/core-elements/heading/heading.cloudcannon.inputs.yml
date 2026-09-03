@@ -50,7 +50,7 @@ iconName:
   comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
   type: select
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name

@@ -8,6 +8,7 @@ import Split from "@wrappers/split/Split.astro";
 
 const {
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   formAction = "./",
   formBlocks = [],
@@ -52,7 +53,7 @@ const {
   >
     <Fragment slot="first">
       <Heading
-        level="h2"
+        level={headingLevel}
         size="lg"
         data-prop="heading"
       >

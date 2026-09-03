@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Our team
   heading: Meet the team
+  headingLevel: h2
   subtext: Get to know the people behind our work.
   teamMembers:
     - name: Michael Chen
@@ -116,6 +117,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

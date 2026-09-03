@@ -1,5 +1,6 @@
 ---
 import RenderBlock from "@components/utils/renderBlock.astro";
+import { slugifyLabel } from "@components/utils/slugify";
 import Heading from "@core-elements/heading/Heading.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 
@@ -20,7 +21,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const uniqueId = crypto.randomUUID();
+const uniqueId = title ? `${groupName}-${slugifyLabel(title)}` : crypto.randomUUID();
 const tabId = `tab-${uniqueId}`;
 const panelId = `panel-${uniqueId}`;
 const tabLabelId = `tablabel-${uniqueId}`;

@@ -1,5 +1,6 @@
 ---
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { slugifyLabel } from "@components/utils/slugify";
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
@@ -8,12 +9,14 @@ import Text from "@core-elements/text/Text.astro";
 import Segments from "@forms/segments/Segments.astro";
 import PricingTiersItem from "@page-sections/conversion/pricing-tiers/PricingTiersItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
+import { nextHeadingLevel } from "@component-utils/headingLevel";
 
 type TierProps = Record<string, unknown>;
 
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   showAnnualPricing = false,
   monthlyLabel = "Monthly",
@@ -35,7 +38,12 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const billingName = `pricing-billing-${crypto.randomUUID()}`;
+const itemHeadingLevel = nextHeadingLevel(headingLevel);
+
+// A radio group's name must be unique per section on the page, so a section
+// with nothing to name it still needs a generated suffix.
+const billingLabel = sectionLabel || heading;
+const billingName = `pricing-billing-${billingLabel ? slugifyLabel(billingLabel) : crypto.randomUUID()}`;
 const annualSelected = defaultInterval === "annual";
 ---
 
@@ -60,7 +68,7 @@ const annualSelected = defaultInterval === "annual";
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -120,6 +128,7 @@ const annualSelected = defaultInterval === "annual";
           data-id="page-sections/conversion/pricing-tiers/pricing-tiers-item"
           data-editable="array-item"
           {...tier}
+          headingLevel={itemHeadingLevel}
           showAnnualPricing={showAnnualPricing}
         />
       ))

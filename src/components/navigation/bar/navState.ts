@@ -1,4 +1,5 @@
 import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
+import { slugifyLabel } from "@component-utils/slugify";
 
 export interface MegaMenuLink {
   name?: string;
@@ -71,6 +72,11 @@ export interface NavItemData extends NavItem {
   contentId?: string;
 }
 
+/** Stable per-item id fragment. Siblings sharing a name would collide. */
+function navItemKey(item: NavItem): string {
+  return slugifyLabel(item.name || item.path || "") || "item";
+}
+
 export function createNavItemData(pathname: string, item: NavItem, groupName: string): NavItemData {
   const hasChildren = Boolean(item.children?.length);
   const hasToggle = hasChildren || itemHasMegaMenu(item);
@@ -82,8 +88,8 @@ export function createNavItemData(pathname: string, item: NavItem, groupName: st
     isCurrent: isCurrentPage(pathname, item),
     hasCurrent: navItemContainsCurrent(pathname, item),
     groupName,
-    parentGroupId: crypto.randomUUID(),
-    dropdownId: hasToggle ? `dropdown-toggle-${crypto.randomUUID()}` : undefined,
-    contentId: hasToggle ? `dropdown-content-${crypto.randomUUID()}` : undefined,
+    parentGroupId: `${groupName}-${navItemKey(item)}`,
+    dropdownId: hasToggle ? `dropdown-toggle-${groupName}-${navItemKey(item)}` : undefined,
+    contentId: hasToggle ? `dropdown-content-${groupName}-${navItemKey(item)}` : undefined,
   };
 }

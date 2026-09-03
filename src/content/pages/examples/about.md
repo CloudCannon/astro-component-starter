@@ -120,7 +120,6 @@ pageSections:
     authorName: Priya Raman
     authorDescription: Head of Marketing
     authorImage: /src/assets/images/component-docs/profile.jpg
-    alignmentHorizontal: center
     maxContentWidth: xl
     colorScheme: inherit
     backgroundColor: base

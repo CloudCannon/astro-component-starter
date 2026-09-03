@@ -11,6 +11,7 @@ type TierFeature = { text?: string; included?: boolean };
 
 const {
   name = "",
+  headingLevel = "h3",
   price = "",
   priceSuffix = "",
   annualPrice = "",
@@ -65,7 +66,7 @@ const priceRows = [
     }
     <Heading
       class="pricing-tier-name"
-      level="h3"
+      level={headingLevel}
       size="xs"
       data-prop="name"
     >
@@ -146,7 +147,7 @@ const priceRows = [
   @layer page-sections {
     .pricing-tier {
       background-color: var(--color-bg);
-      border: 1px solid var(--color-border);
+      border: var(--border-width-sm) solid var(--color-border);
       border-radius: var(--radius-md);
       display: flex;
       flex-direction: column;
@@ -204,7 +205,7 @@ const priceRows = [
       }
 
       .pricing-tier-features {
-        border-top: 1px solid var(--color-border);
+        border-top: var(--border-width-sm) solid var(--color-border);
         display: flex;
         flex-direction: column;
         gap: var(--spacing-sm);

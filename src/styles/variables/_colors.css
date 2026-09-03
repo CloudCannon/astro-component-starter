@@ -100,4 +100,17 @@
   --cyan-700: #0e7490;
   --cyan-800: #155e75;
   --cyan-900: #164e63;
+
+  /* Chrome that sits on a photograph or video. Fixed, not themed: the media
+     underneath does not change when the visitor flips the site theme, so
+     these must not follow --color-text / --color-overlay, which do. */
+  --color-media-scrim: #0c0c0c;
+  --color-text-on-media: var(--white);
+  --color-text-on-media-muted: color-mix(in srgb, var(--white) 80%, transparent);
+  --color-focus-ring-on-media: var(--white);
+  --color-border-on-media: color-mix(in srgb, var(--white) 40%, transparent);
+  --color-state-hover-on-media: color-mix(in srgb, var(--white) 18%, transparent);
+  --color-overlay-media: color-mix(in srgb, var(--color-media-scrim) 50%, transparent);
+  --color-overlay-media-strong: color-mix(in srgb, var(--color-media-scrim) 80%, transparent);
+  --color-overlay-media-opaque: color-mix(in srgb, var(--color-media-scrim) 95%, transparent);
 }

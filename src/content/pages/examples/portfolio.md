@@ -4,6 +4,7 @@ title: Portfolio
 description: Example portfolio page with a gallery, featured projects, and a contact split.
 pageSections:
   - _component: page-sections/collections/gallery-grid
+    headingLevel: h1
     eyebrow: Selected work
     heading: Recent projects
     subtext: A handful of sites from the last two years.
@@ -63,7 +64,6 @@ pageSections:
     authorName: Jordan Hale
     authorDescription: Digital Lead, Harbor & Co
     authorImage: /src/assets/images/component-docs/profile5.jpg
-    alignmentHorizontal: center
     maxContentWidth: xl
     colorScheme: inherit
     backgroundColor: base

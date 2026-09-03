@@ -116,12 +116,12 @@ buttonSections:
 
 This repo uses **two unrelated icon vocabularies**, and confusing them is silent:
 
-| Key                                                                   | Vocabulary                                                              | Where                                    |
-| --------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------- |
-| `icon:` on a structure value, `preview`, or `picker_preview`          | **Material Symbols**, a fixed 3,584-name enum in the CloudCannon schema | Editor chrome — Add menu, cards, pickers |
-| an `iconName` / `icon` **input value** (`values: _select_data.icons`) | **Heroicons**, SVGs in `src/icons/`                                     | Rendered on the page by the component    |
+| Key                                                           | Vocabulary                                                              | Where                                    |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------- |
+| `icon:` on a structure value, `preview`, or `picker_preview`  | **Material Symbols**, a fixed 3,584-name enum in the CloudCannon schema | Editor chrome — Add menu, cards, pickers |
+| an `iconName` / `icon` **input value** (`values: data.icons`) | **Heroicons**, SVGs in `src/icons/`                                     | Rendered on the page by the component    |
 
-`_select_data.icons` is **generated** — add or remove an SVG under `src/icons/` and run `npm run icons:sync` rather than editing the list by hand; `npm run icons:check` fails the build on drift.
+The `icons` dataset (`.cloudcannon/data/icons.yml`) is **generated** — add or remove an SVG under `src/icons/` and run `npm run icons:sync` rather than editing the list by hand; `npm run icons:check` fails the build on drift.
 
 An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Heroicons names are kebab-case (`eye-slash`, `device-phone-mobile`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` now catches these.
 
@@ -198,7 +198,7 @@ A structure's `preview` applies wherever the structure is used — a shared `lin
 
 ### Duplicated select values across structure-value files
 
-If two structure-value files define the same color palette or icon enum, a third will drift. Move shared enums to `_select_data.<name>` and reference with `values: _select_data.<name>`.
+If two structure-value files define the same color palette or icon enum, a third will drift. Move shared enums to a dataset under `.cloudcannon/data/`, register it in `data_config`, and reference it with `values: data.<name>`.
 
 Shared sub-structures need `preview` blocks like any other structure. Every structure-value file that contains an array field (`links: []`, `socials: []`, etc.) must include an `_inputs` entry linking that array to the shared sub-structure:
 

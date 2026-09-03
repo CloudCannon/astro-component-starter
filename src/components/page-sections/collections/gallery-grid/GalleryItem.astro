@@ -1,0 +1,73 @@
+---
+import Image from "@core-elements/image/Image.astro";
+
+/**
+ * Private helper for GalleryGrid: one tile and its caption. Not a CloudCannon
+ * component — no YAML siblings; GalleryGrid owns the `images` array binding.
+ * The figure is masonryEnhance's measurement probe, so it must stay the
+ * item's only child.
+ */
+const {
+  image,
+  alt,
+  caption,
+  index = 0,
+  aspectRatio = "square",
+  lightbox = false,
+  class: className,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<div
+  class:list={["gallery-item", className]}
+  {...htmlAttributes}
+>
+  <figure class="gallery-figure">
+    {
+      lightbox ? (
+        <button
+          type="button"
+          class="gallery-tile"
+          aria-haspopup="dialog"
+          aria-label={`View image: ${alt || `image ${index + 1}`}`}
+        >
+          <Image
+            source={image}
+            alt={alt}
+            aspectRatio={aspectRatio}
+            sizes="(max-width: 640px) 50vw, 400px"
+            widths={[320, 400, 640, 800]}
+            width={800}
+            data-prop-src="image"
+            data-prop-alt="alt"
+          />
+        </button>
+      ) : (
+        <div class="gallery-tile static">
+          <Image
+            source={image}
+            alt={alt}
+            aspectRatio={aspectRatio}
+            sizes="(max-width: 640px) 50vw, 400px"
+            widths={[320, 400, 640, 800]}
+            width={800}
+            data-prop-src="image"
+            data-prop-alt="alt"
+          />
+        </div>
+      )
+    }
+    {
+      caption && (
+        <figcaption
+          class="gallery-caption"
+          data-editable="text"
+          data-prop="caption"
+        >
+          {caption}
+        </figcaption>
+      )
+    }
+  </figure>
+</div>

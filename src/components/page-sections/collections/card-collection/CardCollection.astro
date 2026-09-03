@@ -8,6 +8,7 @@ import CardGrid from "@wrappers/card-grid/CardGrid.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   items = [],
   layout = "grid",
@@ -50,7 +51,7 @@ const {
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"

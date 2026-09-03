@@ -35,7 +35,7 @@ iconName:
   type: select
   comment: Overrides the variant's default icon. Sourced from [Heroicons](https://heroicons.com/).
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name

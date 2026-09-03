@@ -8,6 +8,7 @@ import Steps from "@wrappers/steps/Steps.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   items = [],
   orientation = "horizontal",
@@ -48,7 +49,7 @@ const {
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"

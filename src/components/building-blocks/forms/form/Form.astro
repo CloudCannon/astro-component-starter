@@ -2,8 +2,13 @@
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import RenderBlock from "@components/utils/renderBlock.astro";
 
+type FormBlock = { _component?: string };
+
 const {
   action,
+  method = "post",
+  honeypotName,
+  successMessage,
   formBlocks = [],
   spaceBefore = "default",
   class: className,
@@ -22,16 +27,36 @@ const hasFormBlocks = formBlocks?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 
 if (!_component && !hasFormBlocks && !hasSlotContent) return;
+
+// `multipart/form-data` only when a file field needs it — endpoints and audits
+// both treat a multipart form with nothing to upload as a mistake. A slot-built
+// form can't be inspected, so set `enctype` on the component to override.
+const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
+  String(block?._component ?? "").endsWith("/file-upload")
+);
 ---
 
 <form
   class:list={["form", "stackable", className]}
   action={action}
-  method="post"
-  enctype="multipart/form-data"
+  method={method}
+  enctype={hasFileUpload ? "multipart/form-data" : undefined}
   {...htmlAttributes}
 >
+  {
+    successMessage && (
+      <p
+        class="form-success"
+        role="status"
+        tabindex="-1"
+        hidden
+      >
+        {successMessage}
+      </p>
+    )
+  }
   <div
+    class="form-fields"
     data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
@@ -46,12 +71,58 @@ if (!_component && !hasFormBlocks && !hasSlotContent) return;
       }
     </slot>
   </div>
+  {
+    honeypotName && (
+      <div class="form-honeypot">
+        <label for={`${honeypotName}-field`}>Leave this field empty</label>
+        <input
+          type="text"
+          id={`${honeypotName}-field`}
+          name={honeypotName}
+          tabindex="-1"
+          autocomplete="off"
+        />
+      </div>
+    )
+  }
 </form>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllForms } from "./setup";
+
+  onPageLoad(() => setupAllForms());
+</script>
 
 <style is:global>
   @layer components {
     .form {
       width: 100%;
+
+      > .form-fields {
+        /* The form owns the space between its blocks. A margin on each field
+           would also sit below the last one, between the form and whatever
+           follows it. */
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+
+      /* Not `hidden`: the value still has to be submitted, and `display: none`
+         keeps it out of the tab order and the accessibility tree. */
+      > .form-honeypot {
+        display: none;
+      }
+
+      > .form-success {
+        background-color: var(--color-bg-surface);
+        border-inline-start: var(--border-width-md) solid var(--color-success);
+        border-radius: var(--radius-xs);
+        color: var(--color-text-strong);
+        margin: 0 0 var(--spacing-md);
+        padding: var(--spacing-sm) var(--spacing-md);
+      }
     }
   }
 </style>

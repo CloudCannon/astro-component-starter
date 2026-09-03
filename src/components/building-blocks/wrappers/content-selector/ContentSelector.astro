@@ -20,8 +20,13 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-const uniqueId = crypto.randomUUID();
-const groupName = `tabs-${uniqueId}`;
+// A radio group's name must be unique per selector on the page. Unlabelled
+// selectors fall back to their first tab's title — two on one page opening on
+// the same title would share a group — and slot-only ones to a generated id.
+const firstTitle = (items as ContentSelectorItem[])?.[0]?.title;
+const groupKey =
+  htmlAttributes.id || (firstTitle && slugifyLabel(firstTitle)) || crypto.randomUUID();
+const groupName = `tabs-${groupKey}`;
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
@@ -41,7 +46,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <div
     class:list={["content-selector-items", `nav-${navigationPosition}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
-    data-uid={uniqueId}
     role="group"
     {...arrayDataAttributes}
   >

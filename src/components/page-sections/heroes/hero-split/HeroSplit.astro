@@ -10,6 +10,7 @@ import Split from "@wrappers/split/Split.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h1",
   subtext = "",
   imageSource = "",
   imageAlt = "",
@@ -61,7 +62,7 @@ const {
         size="sm"
       />
       <Heading
-        level="h1"
+        level={headingLevel}
         size="2xl"
         data-prop="heading"
         >{heading}</Heading

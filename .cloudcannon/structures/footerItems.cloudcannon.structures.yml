@@ -37,7 +37,7 @@ socialItems:
           type: select
           comment: "Icon for the social media platform. Sourced from [Heroicons](https://heroicons.com/)."
           options:
-            values: _select_data.icons
+            values: data.icons
             preview:
               text:
                 - key: name

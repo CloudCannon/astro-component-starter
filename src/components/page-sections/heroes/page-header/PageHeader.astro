@@ -9,6 +9,7 @@ import { trailFromPathname } from "@components/utils/breadcrumbTrail";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h1",
   subtext = "",
   showBreadcrumbs = true,
   alignmentHorizontal = "start",
@@ -61,7 +62,7 @@ const trail = showBreadcrumbs ? trailFromPathname(Astro.url.pathname, heading) :
   />
   <Heading
     class="page-header-heading"
-    level="h1"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal={alignmentHorizontal}
     data-prop="heading"

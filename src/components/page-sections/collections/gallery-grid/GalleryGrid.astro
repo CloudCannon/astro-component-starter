@@ -5,10 +5,13 @@ import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
+import Masonry from "@wrappers/masonry/Masonry.astro";
+import GalleryItem from "./GalleryItem.astro";
 
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   images = [],
   layout = "grid",
@@ -34,15 +37,16 @@ const {
 const items = (images || []).filter((item: any) => item?.image);
 const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
 
-// Masonry keeps each image's own ratio and packs source order into the
-// shortest column (setup.ts upgrades the CSS-columns baseline via the shared
-// masonryEnhance util). `aspectRatio: natural` is the pre-`layout` spelling
-// of the same thing — honored so old content keeps rendering.
+// Masonry keeps each image's own ratio; the <Masonry> wrapper owns the
+// layout. `aspectRatio: natural` is the pre-`layout` spelling of the same
+// thing — honored so old content keeps rendering.
 const masonry = layout === "masonry" || aspectRatio === "natural";
 const tileRatio = masonry ? "none" : aspectRatio;
 
-const generatedLabel = sectionLabel || heading || `Gallery-${crypto.randomUUID()}`;
-const popoverId = `gallery-${slugifyLabel(generatedLabel)}`;
+// Lightbox popover target: unique per gallery on the page, so an unnamed
+// gallery keeps a generated suffix.
+const derivedLabel = sectionLabel || heading;
+const popoverId = `gallery-${derivedLabel ? slugifyLabel(derivedLabel) : crypto.randomUUID()}`;
 const hasLightbox = lightbox && items.length > 0;
 ---
 
@@ -67,7 +71,7 @@ const hasLightbox = lightbox && items.length > 0;
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -81,66 +85,48 @@ const hasLightbox = lightbox && items.length > 0;
     text={subtext}
   />
 
-  <ul
-    class:list={["gallery-items", masonry ? "masonry" : "grid"]}
-    style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
-    data-editable="array"
-    data-prop="images"
-    data-direction="row"
-  >
-    {
-      items.map((item: any, index: number) => (
-        <li
-          class="gallery-item"
-          data-editable="array-item"
-        >
-          <figure class="gallery-figure">
-            {hasLightbox ? (
-              <button
-                type="button"
-                class="gallery-tile"
-                aria-haspopup="dialog"
-                aria-label={`View image: ${item.alt || `image ${index + 1}`}`}
-              >
-                <Image
-                  source={item.image}
-                  alt={item.alt}
-                  aspectRatio={tileRatio}
-                  sizes="(max-width: 640px) 50vw, 400px"
-                  widths={[320, 400, 640, 800]}
-                  width={800}
-                  data-prop-src="image"
-                  data-prop-alt="alt"
-                />
-              </button>
-            ) : (
-              <div class="gallery-tile static">
-                <Image
-                  source={item.image}
-                  alt={item.alt}
-                  aspectRatio={tileRatio}
-                  sizes="(max-width: 640px) 50vw, 400px"
-                  widths={[320, 400, 640, 800]}
-                  width={800}
-                  data-prop-src="image"
-                  data-prop-alt="alt"
-                />
-              </div>
-            )}
-            {item.caption && (
-              <figcaption
-                class="gallery-caption"
-                data-editable="text"
-                data-prop="caption"
-              >
-                {item.caption}
-              </figcaption>
-            )}
-          </figure>
-        </li>
-      ))
-    }
-  </ul>
+  {
+    masonry ? (
+      <Masonry
+        class="gallery-items"
+        columns={columnCount}
+        gap={gap}
+        data-children-prop="images"
+      >
+        {items.map((item: any, index: number) => (
+          <GalleryItem
+            data-editable="array-item"
+            image={item.image}
+            alt={item.alt}
+            caption={item.caption}
+            index={index}
+            aspectRatio={tileRatio}
+            lightbox={hasLightbox}
+          />
+        ))}
+      </Masonry>
+    ) : (
+      <div
+        class="gallery-items grid"
+        style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
+        data-editable="array"
+        data-prop="images"
+        data-direction="row"
+      >
+        {items.map((item: any, index: number) => (
+          <GalleryItem
+            data-editable="array-item"
+            image={item.image}
+            alt={item.alt}
+            caption={item.caption}
+            index={index}
+            aspectRatio={tileRatio}
+            lightbox={hasLightbox}
+          />
+        ))}
+      </div>
+    )
+  }
 
   {
     hasLightbox && (
@@ -286,75 +272,17 @@ const hasLightbox = lightbox && items.length > 0;
 <style is:global>
   @layer page-sections {
     .gallery-grid {
-      .gallery-items {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+      .gallery-items.grid {
+        --space-before: var(--space-before-loose);
 
-        &.grid {
-          align-items: start;
-          display: grid;
-          gap: var(--gallery-gap, var(--spacing-md));
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        display: grid;
+        gap: var(--gallery-gap, var(--spacing-md));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
 
-          /* 640px: canonical mobile breakpoint — the columns knob applies from here up. */
-          @media (width >= 640px) {
-            grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
-          }
-        }
-
-        /* Masonry layer 1 — no-JS baseline; see the Masonry wrapper for the
-           three-layer technique. */
-        &.masonry {
-          column-gap: var(--gallery-gap, var(--spacing-md));
-          columns: 2;
-
-          .gallery-item {
-            break-inside: avoid;
-            margin-bottom: var(--gallery-gap, var(--spacing-md));
-          }
-
-          @media (width >= 640px) {
-            columns: var(--gallery-columns, 3);
-          }
-        }
-
-        /* Masonry layer 2 — JS enhancement; `grid-auto-rows` must match
-           ROW_UNIT in masonryEnhance.ts. */
-        &.masonry[data-masonry-enhanced] {
-          column-gap: var(--gallery-gap, var(--spacing-md));
-          columns: auto;
-          display: grid;
-          grid-auto-rows: 8px;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-
-          .gallery-item {
-            break-inside: auto;
-            margin-bottom: 0;
-          }
-
-          @media (width >= 640px) {
-            grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
-          }
-        }
-
-        /* Masonry layer 3 — native handoff. */
-        @supports (display: masonry) {
-          &.masonry,
-          &.masonry[data-masonry-enhanced] {
-            columns: auto;
-            display: masonry;
-            gap: var(--gallery-gap, var(--spacing-md));
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-
-            .gallery-item {
-              margin-bottom: 0;
-            }
-
-            @media (width >= 640px) {
-              grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
-            }
-          }
+        /* 640px: canonical mobile breakpoint — the columns knob applies from here up. */
+        @media (width >= 640px) {
+          grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
         }
       }
 
@@ -364,7 +292,7 @@ const hasLightbox = lightbox && items.length > 0;
 
       .gallery-tile {
         background: none;
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-sm);
         display: block;
         overflow: hidden;
@@ -392,6 +320,9 @@ const hasLightbox = lightbox && items.length > 0;
       .gallery-caption {
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
+        /* Body line-height, stated: it used to arrive from the base `ul` rule
+           through the list markup this section no longer uses. */
+        line-height: var(--line-height-relaxed);
         margin: var(--spacing-sm) 0 0;
       }
 
@@ -402,14 +333,7 @@ const hasLightbox = lightbox && items.length > 0;
          modal/setup.ts; every sheet style it brings is neutralized here
          (page-sections layer wins). */
       .gallery-lightbox {
-        /* Translucent darks and whites on this overlay are the sanctioned
-           exception to the token rule — chrome sits on a photograph and
-           cannot use --color-border / --color-text (or --color-overlay,
-           which stays at modal-dim strength). Swap for
-           --color-border-inverse / --color-text-inverse if those tokens
-           land as photo-safe values. --color-text-inverse already exists
-           but flips to black in the dark theme. */
-        background: rgba(12, 12, 12, 0.95);
+        background: var(--color-overlay-media-opaque);
         border: 0;
         border-radius: 0;
         box-shadow: none;
@@ -455,7 +379,7 @@ const hasLightbox = lightbox && items.length > 0;
 
         aspect-ratio: var(--gallery-photo-aspect);
         margin: 0;
-        max-height: calc(100vh - var(--spacing-xl) * 2);
+        max-height: calc(100dvh - var(--spacing-xl) * 2);
         overflow: hidden;
         position: relative;
         touch-action: none;
@@ -463,7 +387,7 @@ const hasLightbox = lightbox && items.length > 0;
         width: min(
           var(--content-width-xl),
           calc(100vw - var(--spacing-xl) * 2),
-          calc((100vh - var(--spacing-xl) * 2) * var(--gallery-photo-aspect))
+          calc((100dvh - var(--spacing-xl) * 2) * var(--gallery-photo-aspect))
         );
 
         &.is-instant {
@@ -503,11 +427,11 @@ const hasLightbox = lightbox && items.length > 0;
       .gallery-lightbox-scrim {
         background: linear-gradient(
           to top,
-          rgba(12, 12, 12, 0.78) 0%,
-          rgba(12, 12, 12, 0.22) 26%,
-          rgba(12, 12, 12, 0) 46%,
-          rgba(12, 12, 12, 0) 82%,
-          rgba(12, 12, 12, 0.5) 100%
+          color-mix(in srgb, var(--color-media-scrim) 78%, transparent) 0%,
+          color-mix(in srgb, var(--color-media-scrim) 22%, transparent) 26%,
+          transparent 46%,
+          transparent 82%,
+          var(--color-overlay-media) 100%
         );
         inset: 0;
         pointer-events: none;
@@ -529,7 +453,7 @@ const hasLightbox = lightbox && items.length > 0;
       }
 
       .gallery-lightbox-counter {
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--color-text-on-media-muted);
         font-family: var(--font-mono);
         font-size: var(--font-size-xs);
         letter-spacing: 0.16em;
@@ -551,7 +475,7 @@ const hasLightbox = lightbox && items.length > 0;
         width: 2.75rem;
 
         &:focus-visible {
-          outline: var(--focus-ring-width) var(--focus-ring-style) #fff;
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring-on-media);
           outline-offset: var(--spacing-xs);
         }
       }
@@ -559,25 +483,25 @@ const hasLightbox = lightbox && items.length > 0;
       .gallery-lightbox-close {
         background: transparent;
         border-radius: var(--radius-sm);
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--color-text-on-media-muted);
 
         &:hover {
-          background: rgba(255, 255, 255, 0.18);
-          color: #fff;
+          background: var(--color-state-hover-on-media);
+          color: var(--color-text-on-media);
         }
       }
 
       .gallery-lightbox-prev,
       .gallery-lightbox-next {
-        background: rgba(12, 12, 12, 0.5);
+        background: var(--color-overlay-media);
         border-radius: var(--radius-full);
-        color: #fff;
+        color: var(--color-text-on-media);
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
 
         &:hover {
-          background: rgba(12, 12, 12, 0.8);
+          background: var(--color-overlay-media-strong);
         }
       }
 
@@ -591,7 +515,7 @@ const hasLightbox = lightbox && items.length > 0;
 
       .gallery-lightbox-caption {
         bottom: var(--spacing-md);
-        color: #fff;
+        color: var(--color-text-on-media);
         font-size: var(--font-size-md);
         inset-inline: var(--spacing-md);
         line-height: var(--line-height-tight);
@@ -616,7 +540,7 @@ const hasLightbox = lightbox && items.length > 0;
 
       .gallery-lightbox-thumb {
         background: none;
-        border: var(--border-width-sm) solid rgba(255, 255, 255, 0.4);
+        border: var(--border-width-sm) solid var(--color-border-on-media);
         border-radius: var(--radius-xs);
         cursor: pointer;
         flex: none;
@@ -643,11 +567,11 @@ const hasLightbox = lightbox && items.length > 0;
         }
 
         &[data-selected="true"] {
-          border-color: #fff;
+          border-color: var(--color-text-on-media);
         }
 
         &:focus-visible {
-          outline: var(--focus-ring-width) var(--focus-ring-style) #fff;
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring-on-media);
           outline-offset: var(--spacing-xs);
         }
       }

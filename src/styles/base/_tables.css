@@ -7,7 +7,7 @@
 
       thead th {
         background: var(--color-bg-muted);
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-bottom-width: 0;
         border-right-width: 0;
         padding: 0.5rem;
@@ -18,27 +18,27 @@
         }
 
         &:last-child {
-          border-right-width: 1px;
+          border-right-width: var(--border-width-sm);
           border-top-right-radius: var(--radius-sm);
         }
       }
 
       tbody tr {
         td {
-          border: 1px solid var(--color-border);
+          border: var(--border-width-sm) solid var(--color-border);
           border-bottom-width: 0;
           border-right-width: 0;
           padding: 0.5rem;
           vertical-align: top;
 
           &:last-child {
-            border-right-width: 1px;
+            border-right-width: var(--border-width-sm);
           }
         }
 
         &:last-child {
           td {
-            border-bottom-width: 1px;
+            border-bottom-width: var(--border-width-sm);
           }
 
           td:first-child {

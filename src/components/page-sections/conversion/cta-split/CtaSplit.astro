@@ -8,6 +8,7 @@ import Split from "@wrappers/split/Split.astro";
 
 const {
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   buttonSections = [],
   imageSource = "",
@@ -51,7 +52,7 @@ const {
   >
     <Fragment slot="first">
       <Heading
-        level="h2"
+        level={headingLevel}
         size="xl"
         data-prop="heading"
       >

@@ -4,6 +4,9 @@ description: Groups form fields into one submission.
 value:
   _component: building-blocks/forms/form
   action: ./
+  method: post
+  honeypotName: null
+  successMessage: null
   formBlocks: []
 preview:
   text:

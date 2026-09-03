@@ -4,6 +4,14 @@ eyebrow:
 heading:
   type: text
   comment: Headline for the gallery section.
+headingLevel:
+  type: select
+  comment: Heading level for this section's title. Use h1 only on the section that opens the page, and only once per page.
+  options:
+    values:
+      - h1
+      - h2
+      - h3
 subtext:
   type: markdown
   comment: Muted supporting line under the heading. Leave empty to hide.

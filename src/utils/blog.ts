@@ -23,6 +23,17 @@ export function withListingHeading(heroSections: any[], heading: string) {
   });
 }
 
+/**
+ * Drop the hero's breadcrumb trail. Tag archives render their own
+ * Blog > Tag trail in the listing grid, so leaving the hero's on would put two
+ * `<nav aria-label="Breadcrumb">` landmarks on the page.
+ */
+export function withoutHeroBreadcrumbs(heroSections: any[]) {
+  return heroSections.map((section) =>
+    section?.showBreadcrumbs ? { ...section, showBreadcrumbs: false } : section
+  );
+}
+
 /** CMS `pages` entry with id `blog` and its hero `pageSections`. */
 export async function loadBlogPageContext() {
   let blogPage: any;

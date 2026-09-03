@@ -57,7 +57,7 @@
     }
 
     blockquote {
-      border-left: 3px solid var(--color-border);
+      border-left: var(--border-width-lg) solid var(--color-border);
       padding-left: var(--spacing-sm);
     }
 

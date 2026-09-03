@@ -8,6 +8,7 @@
      migrating to these tokens is appearance-preserving. --ease-smooth is the
      Material "standard" curve used by the Toggle knob (smoother than the
      CSS ease-in-out keyword). */
+  --ease-default: ease;
   --ease-out: ease-out;
   --ease-in-out: ease-in-out;
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);

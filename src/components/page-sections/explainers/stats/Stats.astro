@@ -16,6 +16,7 @@ type StatProps = {
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h2",
   subtext = "",
   stats = [],
   dividers = true,
@@ -55,7 +56,7 @@ const {
     size="sm"
   />
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -164,7 +165,7 @@ const {
       }
 
       .stats-grid.dividers > .stat {
-        border-inline-start: 1px solid var(--color-border);
+        border-inline-start: var(--border-width-sm) solid var(--color-border);
 
         &:first-child {
           border-inline-start: none;
@@ -175,7 +176,7 @@ const {
       @media (width < 640px) {
         .stats-grid.dividers > .stat {
           border-inline-start: none;
-          border-top: 1px solid var(--color-border);
+          border-top: var(--border-width-sm) solid var(--color-border);
           padding-top: var(--spacing-xl);
 
           &:first-child {

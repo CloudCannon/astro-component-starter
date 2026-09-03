@@ -4,6 +4,7 @@ title: Contact
 description: Example contact page with details beside a form.
 pageSections:
   - _component: page-sections/conversion/contact-split
+    headingLevel: h1
     eyebrow: Start a project
     heading: Tell us about the work
     subtext: A few lines on the site, the timeline, and who will edit it.

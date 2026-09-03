@@ -6,6 +6,7 @@ description: >-
   and a demo blog. Labeled examples, not the starter's own product pages.
 pageSections:
   - _component: page-sections/collections/card-collection
+    headingLevel: h1
     eyebrow: ''
     heading: The set
     subtext: Each page hangs together as one design, not a gallery of widgets.
@@ -16,7 +17,7 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/heading
             text: Pricing
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: Plan cards, a comparison table, and billing FAQ.
@@ -27,7 +28,7 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/heading
             text: About
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: Story, timeline, team, and a quote, plus latest posts from the demo blog.
@@ -38,7 +39,7 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/heading
             text: Services
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: Service cards, a process, client marks, and a wall of quotes.
@@ -49,7 +50,7 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/heading
             text: Portfolio
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: Image gallery, featured-project slider, and a contact split.
@@ -60,7 +61,7 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/heading
             text: Contact
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: Details beside a form, a typical contact page.
@@ -71,7 +72,7 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/heading
             text: Blog
-            level: h3
+            level: h2
             size: xs
           - _component: building-blocks/core-elements/simple-text
             text: Listing page and demo posts. Bodies stay placeholder Latin on purpose.

@@ -1,0 +1,121 @@
+---
+/*
+ * The shell every labelled form control shares: root, label, hint, the control
+ * itself (default slot), error. Not a placeable component — no CloudCannon
+ * YAML, not in any picker (Avatar is the precedent).
+ *
+ * `hintId`/`errorId` come from the caller rather than being derived here: the
+ * control needs them for `aria-describedby`, and it renders in the slot.
+ * `formFieldIds()` in `formField.ts` produces both plus the control's ARIA.
+ */
+import { isNonEmptyString } from "./isNonEmptyString";
+
+const {
+  fieldId,
+  label,
+  required = false,
+  hint,
+  hintId,
+  error,
+  errorId,
+  class: className,
+  ...htmlAttributes
+} = Astro.props;
+
+const hasLabel = isNonEmptyString(label);
+const hasHeaderEnd = Astro.slots.has("header-end");
+---
+
+<div
+  class:list={["form-field", className]}
+  {...htmlAttributes}
+>
+  {
+    (hasLabel || hasHeaderEnd) && (
+      <div class="form-field-header">
+        {hasLabel && (
+          <label
+            for={fieldId}
+            class="label"
+          >
+            {label}
+            {required && (
+              <span
+                class="form-field-required"
+                aria-hidden="true"
+              >
+                *
+              </span>
+            )}
+          </label>
+        )}
+        <slot name="header-end" />
+      </div>
+    )
+  }
+  {
+    hintId && (
+      <p
+        class="form-field-hint"
+        id={hintId}
+      >
+        {hint}
+      </p>
+    )
+  }
+  <slot />
+  {
+    errorId && (
+      <p
+        class="form-field-error"
+        id={errorId}
+      >
+        {error}
+      </p>
+    )
+  }
+</div>
+
+<style is:global>
+  @layer components {
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+      margin: 0;
+      width: 100%;
+
+      > .field[aria-invalid="true"] {
+        border-color: var(--color-error);
+      }
+    }
+
+    .form-field-header {
+      align-items: baseline;
+      display: flex;
+      gap: var(--spacing-lg);
+      justify-content: space-between;
+
+      > .label {
+        flex: 1;
+      }
+    }
+
+    .form-field-required {
+      color: var(--color-error);
+      margin-inline-start: var(--spacing-em-xs);
+    }
+
+    .form-field-hint {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .form-field-error {
+      color: var(--color-error);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+  }
+</style>

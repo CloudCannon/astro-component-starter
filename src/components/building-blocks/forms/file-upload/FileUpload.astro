@@ -1,7 +1,6 @@
 ---
-import FormLabel from "@component-utils/FormLabel.astro";
-import { generateFieldId } from "@component-utils/formField";
-import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts } from "@component-utils/formField";
 
 const {
   label,
@@ -18,86 +17,28 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = generateFieldId("file-upload", customId);
-const hintId = isNonEmptyString(hint) ? `${fieldId}-hint` : undefined;
-const errorId = isNonEmptyString(error) ? `${fieldId}-error` : undefined;
-const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "file-upload",
+  id: customId,
+  name,
+  label,
+  required,
+  hint,
+  error,
+});
 ---
 
-<div
+<FormField
   class:list={["file-upload", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  <FormLabel
-    for={fieldId}
-    label={label}
-    required={required}
-    requiredClass="file-upload-required"
-  />
-  {
-    hintId && (
-      <p
-        class="file-upload-hint"
-        id={hintId}
-      >
-        {hint}
-      </p>
-    )
-  }
   <input
     type="file"
     name={name}
-    id={fieldId}
-    required={required}
-    aria-required={required}
-    aria-invalid={errorId ? "true" : undefined}
-    aria-describedby={describedBy}
     accept={accept}
     multiple={multiple}
     class="field"
+    {...controlAttributes}
   />
-  {
-    errorId && (
-      <p
-        class="file-upload-error"
-        id={errorId}
-      >
-        {error}
-      </p>
-    )
-  }
-</div>
-
-<style is:global>
-  @layer components {
-    .file-upload {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-
-      .file-upload-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
-      }
-
-      .file-upload-hint {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      .file-upload-error {
-        color: var(--color-error);
-        font-size: var(--font-size-sm);
-        margin: 0;
-      }
-
-      > .field[aria-invalid="true"] {
-        border-color: var(--color-error);
-      }
-    }
-  }
-</style>
+</FormField>

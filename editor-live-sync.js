@@ -33,6 +33,7 @@ import {
   setupAllModals,
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
+import { setupAllForms, setupForm } from "./src/components/building-blocks/forms/form/setup";
 import { setupAllVideos } from "./src/components/building-blocks/core-elements/video/setup";
 import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
@@ -245,6 +246,21 @@ function initNewComponents(root) {
     setupMasonry(el);
   }
 
+  const newForms = [];
+
+  if (root.classList?.contains("form") && !root.hasAttribute("data-form-initialized")) {
+    newForms.push(root);
+  }
+
+  root
+    .querySelectorAll("form.form:not([data-form-initialized])")
+    .forEach((el) => newForms.push(el));
+
+  for (const el of newForms) {
+    log("initialising new form", el);
+    setupForm(el);
+  }
+
   const newContentSelectors = [];
 
   if (root.classList?.contains("content-selector-items")) {
@@ -340,6 +356,7 @@ setupAllGalleries();
 setupAllMasonry();
 setupAllContentSelectors();
 setupAllVideos();
+setupAllForms();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,

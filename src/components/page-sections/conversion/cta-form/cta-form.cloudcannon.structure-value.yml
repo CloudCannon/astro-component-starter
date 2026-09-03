@@ -5,6 +5,7 @@ value:
   _component: page-sections/conversion/cta-form
   sectionLabel: ""
   heading: Get in touch
+  headingLevel: h2
   subtext: Fill out the form below and we'll get back to you as soon as possible.
   formAction: ./
   formBlocks:
@@ -81,6 +82,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

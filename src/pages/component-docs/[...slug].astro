@@ -5,16 +5,19 @@ import { getCollection, render } from "astro:content";
 import { isComponentLibraryDisabled } from "@component-docs/shared/componentLibraryFlag";
 
 export async function getStaticPaths() {
-  if (isComponentLibraryDisabled()) {
-    return [
-      {
-        params: { slug: undefined },
-        props: { isDisabled: true },
-      },
-    ];
-  }
-
   const pages = (await getCollection("docs-pages")) as any[];
+
+  // Production content links to these guides, so every slug still needs a
+  // route when the library is off — it renders the noindex stub instead.
+  if (isComponentLibraryDisabled()) {
+    return pages.map((page: any) => ({
+      params: { slug: page.id === "index" ? undefined : page.id },
+      props: {
+        isDisabled: true,
+        disabledTitle: page.id === "index" ? "Component Docs" : page.data.title,
+      },
+    }));
+  }
 
   const paths: Array<{ params: { slug?: string }; props: { page: any } }> = [];
 
@@ -35,7 +38,7 @@ export async function getStaticPaths() {
   return paths;
 }
 
-const { page, isDisabled = false } = Astro.props;
+const { page, isDisabled = false, disabledTitle } = Astro.props;
 const { Content } = isDisabled ? { Content: null } : await render(page);
 ---
 
@@ -43,14 +46,13 @@ const { Content } = isDisabled ? { Content: null } : await render(page);
   isDisabled ? (
     <Page
       frontmatter={{
-        title: "Component Docs",
-        description:
-          "The component library and interactive docs are available in local development or when you build with the component library enabled (npm run build:with-library).",
+        title: disabledTitle ? `${disabledTitle} (local development only)` : "Component Docs",
+        description: `${disabledTitle ?? "The component docs"} is available in local development, or in a build made with npm run build:with-library.`,
         noindex: true,
       }}
     >
       <section class="component-docs-disabled">
-        <h1>Component Docs Available in Local Development</h1>
+        <h1>{disabledTitle ?? "Component Docs"}: Available in Local Development</h1>
         <p>
           The component docs are disabled in this production build to keep the generated site lean
           and to avoid shipping the interactive Component Builder and full example gallery when you

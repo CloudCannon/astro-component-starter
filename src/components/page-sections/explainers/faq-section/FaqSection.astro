@@ -5,6 +5,7 @@ import Accordion from "@wrappers/accordion/Accordion.astro";
 
 const {
   heading = "Frequently Asked Questions",
+  headingLevel = "h2",
   items = [],
   label = "About FAQ",
   sectionLabel,
@@ -36,7 +37,7 @@ const {
   useDefaultEditableBinding={useDefaultEditableBinding}
 >
   <Heading
-    level="h2"
+    level={headingLevel}
     size="lg"
     alignmentHorizontal="center"
     text={heading}

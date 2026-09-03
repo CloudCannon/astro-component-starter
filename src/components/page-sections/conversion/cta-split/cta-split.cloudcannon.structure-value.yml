@@ -5,6 +5,7 @@ value:
   _component: page-sections/conversion/cta-split
   sectionLabel: ""
   heading: Ready to get started?
+  headingLevel: h2
   subtext: One line that makes the next step obvious.
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: Sea cliffs above a bay
@@ -71,6 +72,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

@@ -69,7 +69,10 @@ const finalDistributionMode = reverse
   ? getReversedDistributionMode(distributionMode)
   : distributionMode;
 
-const splitId = `split-${crypto.randomUUID()}`;
+// Keyed by what the emitted rule actually varies on, not by instance: two
+// splits with the same breakpoint share it, and the selector survives an
+// editor re-render that a per-instance id would not.
+const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
 ---
 
 <section
@@ -142,34 +145,33 @@ const splitId = `split-${crypto.randomUUID()}`;
       }
     </div>
   </div>
+  {
+    minSplitWidth > 0 && (
+      <style
+        is:inline
+        set:html={`
+      @container (max-width: ${minSplitWidth}px) {
+        .split-inner[data-split-id="${splitId}"] {
+          grid-template-columns: var(--split-columns-mobile);
+        }
+        ${
+          reverseOrderOnMobile
+            ? `
+        .split-inner.reversed[data-split-id="${splitId}"] .pane.first {
+          order: 2;
+        }
+        .split-inner.reversed[data-split-id="${splitId}"] .pane.second {
+          order: 1;
+        }
+        `
+            : ""
+        }
+      }
+    `}
+      />
+    )
+  }
 </section>
-
-{
-  minSplitWidth > 0 && (
-    <style
-      is:inline
-      set:html={`
-    @container (max-width: ${minSplitWidth}px) {
-      .split-inner[data-split-id="${splitId}"] {
-        grid-template-columns: var(--split-columns-mobile);
-      }
-      ${
-        reverseOrderOnMobile
-          ? `
-      .split-inner.reversed[data-split-id="${splitId}"] .pane.first {
-        order: 2;
-      }
-      .split-inner.reversed[data-split-id="${splitId}"] .pane.second {
-        order: 1;
-      }
-      `
-          : ""
-      }
-    }
-  `}
-    />
-  )
-}
 
 <style is:global>
   @layer components {

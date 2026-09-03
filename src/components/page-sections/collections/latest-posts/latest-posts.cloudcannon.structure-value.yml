@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Writing
   heading: From the blog
+  headingLevel: h2
   subtext: ""
   count: 3
   tag: ""
@@ -64,6 +65,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical

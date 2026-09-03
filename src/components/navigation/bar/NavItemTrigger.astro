@@ -7,8 +7,9 @@ import type { NavItemData } from "./navState";
  * (a plain label, or a split row of link + chevron button when the item has a
  * real destination of its own). Shared by Dropdown, MegaPanel, and Mobile —
  * the toggle is CSS-only (hidden checkbox/radio + label) so it works in the
- * CloudCannon editor; `role="button"` because checkbox/radio roles do not
- * permit `aria-expanded`. Not a CloudCannon component — no YAML siblings.
+ * CloudCannon editor. `aria-expanded` is emitted only for the checkbox: ARIA
+ * supports it on `checkbox` but not on `radio`, where the checked state
+ * carries the same meaning. Not a CloudCannon component — no YAML siblings.
  */
 interface Props {
   item: NavItemData;
@@ -25,9 +26,8 @@ const { item, inputType = "checkbox", expanded = false } = Astro.props;
   name={item.groupName}
   id={item.dropdownId}
   class="nav-item-toggle visually-hidden"
-  role="button"
   aria-label={`Toggle ${item.name} submenu`}
-  aria-expanded={expanded}
+  aria-expanded={inputType === "checkbox" ? expanded : undefined}
   aria-controls={item.contentId}
   autocomplete="off"
   checked={expanded}

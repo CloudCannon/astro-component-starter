@@ -6,6 +6,7 @@ value:
   sectionLabel: ""
   eyebrow: Plans
   heading: Simple pricing that scales with you
+  headingLevel: h2
   subtext: Every plan includes global CDN hosting and automatic SSL.
   showAnnualPricing: false
   monthlyLabel: Monthly
@@ -211,6 +212,7 @@ groups:
     collapsed: true
     inputs:
       - sectionLabel
+      - headingLevel
       - maxContentWidth
       - paddingHorizontal
       - paddingVertical
