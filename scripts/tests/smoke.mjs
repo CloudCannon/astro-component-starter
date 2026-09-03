@@ -645,6 +645,56 @@ const tests = [
     },
   },
   {
+    name: "feature split image bleed reaches the section edge without overflowing",
+    path: "/component-docs/components/page-sections/explainers/feature-split/",
+    viewport: DESKTOP,
+    async run(page) {
+      const previewSel = '.component-viewer[data-viewer-id="image-bleed"] .preview.active';
+      const paneSel = `${previewSel} .split[data-bleed="inline-end"] > .split-inner > .pane.second`;
+
+      await page.waitForSelector(paneSel);
+
+      const measured = await page.evaluate((sel) => {
+        const pane = document.querySelector(sel);
+        const section = pane.closest(".custom-section");
+        const outer = section.querySelector(":scope > .outer-content");
+        const content = outer.querySelector(":scope > .content");
+        const textPane = pane.parentElement.querySelector(":scope > .pane.first");
+
+        return {
+          stacked: getComputedStyle(pane.parentElement).gridTemplateColumns.split(" ").length < 2,
+          paneRight: pane.getBoundingClientRect().right,
+          outerRight: outer.getBoundingClientRect().right,
+          textPaneLeft: textPane.getBoundingClientRect().left,
+          contentPaddingLeft:
+            content.getBoundingClientRect().left +
+            parseFloat(getComputedStyle(content).paddingLeft),
+          sectionOverflows: section.scrollWidth > section.clientWidth,
+          documentOverflows:
+            document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        };
+      }, paneSel);
+
+      assert(!measured.stacked, "expected the split to be side by side at the desktop viewport");
+      assert(
+        Math.abs(measured.paneRight - measured.outerRight) <= 1,
+        `image pane right (${measured.paneRight}) is not flush with the section edge (${measured.outerRight})`
+      );
+      assert(
+        Math.abs(measured.textPaneLeft - measured.contentPaddingLeft) <= 1,
+        `text pane moved: left ${measured.textPaneLeft}, expected ${measured.contentPaddingLeft}`
+      );
+      assert(!measured.sectionOverflows, "the bleeding section scrolls horizontally");
+      assert(!measured.documentOverflows, "the page scrolls horizontally");
+
+      await page.setViewportSize(MOBILE);
+      await page.waitForFunction(
+        (sel) => getComputedStyle(document.querySelector(sel)).marginInlineEnd === "0px",
+        paneSel
+      );
+    },
+  },
+  {
     name: "gallery lightbox opens on the clicked image, arrows advance, focus restores",
     path: "/component-docs/components/page-sections/collections/gallery-grid/",
     viewport: DESKTOP,

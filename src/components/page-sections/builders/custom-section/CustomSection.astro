@@ -147,14 +147,27 @@ const arrayDataAttributes =
 
 <style is:global>
   @layer components {
+    @property --section-inline-size {
+      syntax: "<length>";
+      inherits: true;
+      initial-value: 0px;
+    }
+
     .custom-section {
       /* Re-declared per section so a nested section never inherits an
          ancestor's mask. */
       --bg-mask: none;
 
       > .outer-content {
+        container-type: inline-size;
         height: 100%;
         position: relative;
+
+        /* clip, not hidden — hidden makes a scroll container and kills sticky
+           descendants. */
+        &:has([data-bleed]) {
+          overflow-x: clip;
+        }
 
         &.rounded {
           border-radius: var(--radius-xl);
@@ -174,6 +187,18 @@ const arrayDataAttributes =
         }
 
         > .content {
+          --section-inline-size: 100cqi;
+          --section-bleed: calc(
+            (
+                var(--section-inline-size) -
+                  min(
+                    var(--section-max-width, var(--section-inline-size)),
+                    var(--section-inline-size)
+                  )
+              ) /
+              2 + var(--section-pad-x, 0px)
+          );
+
           container-type: inline-size;
           height: 100%;
           margin-inline: auto;
@@ -185,31 +210,85 @@ const arrayDataAttributes =
           }
 
           &.max-width-xs {
+            --section-max-width: var(--content-width-xs);
+
             max-width: var(--content-width-xs);
           }
 
           &.max-width-sm {
+            --section-max-width: var(--content-width-sm);
+
             max-width: var(--content-width-sm);
           }
 
           &.max-width-md {
+            --section-max-width: var(--content-width-md);
+
             max-width: var(--content-width-md);
           }
 
           &.max-width-lg {
+            --section-max-width: var(--content-width-lg);
+
             max-width: var(--content-width-lg);
           }
 
           &.max-width-xl {
+            --section-max-width: var(--content-width-xl);
+
             max-width: var(--content-width-xl);
           }
 
           &.max-width-2xl {
+            --section-max-width: var(--content-width-2xl);
+
             max-width: var(--content-width-2xl);
           }
 
           &.max-width-3xl {
+            --section-max-width: var(--content-width-3xl);
+
             max-width: var(--content-width-3xl);
+          }
+
+          &.pad-x-xs {
+            --section-pad-x: var(--spacing-xs);
+          }
+
+          &.pad-x-sm {
+            --section-pad-x: var(--spacing-sm);
+          }
+
+          &.pad-x-md {
+            --section-pad-x: var(--spacing-md);
+          }
+
+          &.pad-x-lg {
+            --section-pad-x: var(--spacing-lg);
+          }
+
+          &.pad-x-xl {
+            --section-pad-x: var(--spacing-xl);
+          }
+
+          &.pad-x-2xl {
+            --section-pad-x: var(--spacing-2xl);
+          }
+
+          &.pad-x-3xl {
+            --section-pad-x: var(--spacing-3xl);
+          }
+
+          &.pad-x-4xl {
+            --section-pad-x: var(--spacing-4xl);
+          }
+
+          &.pad-x-5xl {
+            --section-pad-x: var(--spacing-5xl);
+          }
+
+          &.pad-x-6xl {
+            --section-pad-x: var(--spacing-6xl);
           }
         }
 

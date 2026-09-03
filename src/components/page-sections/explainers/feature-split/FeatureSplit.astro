@@ -17,6 +17,7 @@ const {
   imageAlt = "",
   imageAspectRatio = "portrait",
   imageRounded = true,
+  imageBleed = false,
   reverse = false,
   sectionLabel,
   maxContentWidth = "xl",
@@ -33,6 +34,9 @@ const {
 } = Astro.props;
 
 const minSplitWidth = 800;
+const bleedSide = imageBleed ? (reverse ? "inline-start" : "inline-end") : undefined;
+const imagePositionHorizontal = imageBleed ? (reverse ? "right" : "left") : "center";
+const imagePositionVertical = imageBleed ? "top" : "center";
 ---
 
 <CustomSection
@@ -50,8 +54,9 @@ const minSplitWidth = 800;
 >
   <Split
     class="feature-split-layout"
-    distributionMode="flexible-fixed"
+    distributionMode={imageBleed ? "half" : "flexible-fixed"}
     fixedWidth="400"
+    data-bleed={bleedSide}
     minSplitWidth={minSplitWidth}
     reverse={reverse}
     alignmentVertical="center"
@@ -92,6 +97,10 @@ const minSplitWidth = 800;
       alt={imageAlt}
       rounded={imageRounded}
       aspectRatio={imageAspectRatio}
+      positionHorizontal={imagePositionHorizontal}
+      positionVertical={imagePositionVertical}
+      sizes={imageBleed ? "(max-width: 800px) 100vw, 60vw" : undefined}
+      widths={imageBleed ? [640, 1280, 1920, 2560] : undefined}
       data-prop-src="imageSource"
       data-prop-alt="imageAlt"
     />

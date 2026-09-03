@@ -60,6 +60,9 @@ featureSplit:
       - editor_key: imageRounded
         type: boolean
         optional: true
+      - editor_key: imageBleed
+        type: boolean
+        optional: true
       - editor_key: reverse
         type: boolean
         optional: true

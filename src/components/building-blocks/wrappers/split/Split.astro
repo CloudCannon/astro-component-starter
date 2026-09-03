@@ -154,6 +154,9 @@ const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
         .split-inner[data-split-id="${splitId}"] {
           grid-template-columns: var(--split-columns-mobile);
         }
+        .split[data-bleed] > .split-inner[data-split-id="${splitId}"] > .pane {
+          margin-inline: 0;
+        }
         ${
           reverseOrderOnMobile
             ? `
@@ -239,6 +242,24 @@ const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
           --split-columns-desktop: 1fr var(--split-fixed-width);
         }
       }
+    }
+
+    .split[data-bleed="inline-end"] > .split-inner > .pane.second {
+      margin-inline-end: calc(-1 * var(--section-bleed, 0px));
+    }
+
+    .split[data-bleed="inline-start"] > .split-inner > .pane.first {
+      margin-inline-start: calc(-1 * var(--section-bleed, 0px));
+    }
+
+    .split[data-bleed="inline-end"] > .split-inner > .pane.second .image > .image-inner.rounded {
+      border-end-end-radius: 0;
+      border-start-end-radius: 0;
+    }
+
+    .split[data-bleed="inline-start"] > .split-inner > .pane.first .image > .image-inner.rounded {
+      border-end-start-radius: 0;
+      border-start-start-radius: 0;
     }
   }
 </style>

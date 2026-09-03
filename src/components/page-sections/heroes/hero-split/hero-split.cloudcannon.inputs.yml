@@ -55,6 +55,9 @@ imageAspectRatio:
         name: Portrait (3:4)
       - id: widescreen
         name: Widescreen (16:9)
+imageBleed:
+  type: switch
+  comment: Runs the image to the edge of the page instead of stopping at the content width. The image column widens to half; Aspect ratio sets how much is cropped at the edge and bottom (Landscape or Square work best; None shows the whole image). Overlays such as floating badges should be baked into the image.
 buttonSections:
   type: array
   comment: Array of button components for call-to-action buttons. See the Button component documentation for more information.

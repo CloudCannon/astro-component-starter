@@ -11,6 +11,7 @@ value:
   imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
   imageAlt: Sea cliffs above a bay
   imageAspectRatio: none
+  imageBleed: false
   buttonSections:
     - _component: building-blocks/core-elements/button
       text: Get started
@@ -69,6 +70,7 @@ groups:
       - imageSource
       - imageAlt
       - imageAspectRatio
+      - imageBleed
       - buttonSections
       - reverse
   - heading: Section settings

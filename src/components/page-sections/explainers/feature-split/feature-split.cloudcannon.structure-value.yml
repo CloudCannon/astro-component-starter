@@ -13,6 +13,7 @@ value:
   imageAlt: A quiet residential street
   imageAspectRatio: portrait
   imageRounded: true
+  imageBleed: false
   reverse: false
   maxContentWidth: xl
   paddingHorizontal: lg
@@ -63,6 +64,7 @@ groups:
       - imageAlt
       - imageAspectRatio
       - imageRounded
+      - imageBleed
       - reverse
   - heading: Section settings
     comment: Width, spacing, color scheme, and background for this section.
