@@ -2,7 +2,7 @@
 title: 'Year grouped'
 spacing: null
 blocks:
-  _component: page-sections/explainers/timeline
+  _component: page-sections/explainers/timeline-section
   eyebrow: Our story
   heading: A few years in
   layout: vertical

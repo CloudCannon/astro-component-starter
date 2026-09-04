@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-steps">
-  <title id="t-steps">Steps component preview</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-steps-section">
+  <title id="t-steps-section">Steps section component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
       svg {

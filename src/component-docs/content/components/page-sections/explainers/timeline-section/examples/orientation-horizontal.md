@@ -2,7 +2,7 @@
 title: 'Horizontal'
 spacing: null
 blocks:
-  _component: page-sections/explainers/timeline
+  _component: page-sections/explainers/timeline-section
   eyebrow: What's next
   heading: The plan
   layout: horizontal

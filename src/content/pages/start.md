@@ -15,7 +15,7 @@ pageSections:
     alignmentHorizontal: start
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/explainers/steps
+  - _component: page-sections/explainers/steps-section
     eyebrow: First hour
     heading: From clone to a site you own
     subtext: ''

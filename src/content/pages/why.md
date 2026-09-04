@@ -35,7 +35,7 @@ pageSections:
     reverse: true
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/explainers/timeline
+  - _component: page-sections/explainers/timeline-section
     eyebrow: History
     heading: How the starter grew
     subtext: The public releases, not a fictional company story.

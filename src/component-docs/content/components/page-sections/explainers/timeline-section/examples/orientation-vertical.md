@@ -2,7 +2,7 @@
 title: 'Vertical'
 spacing: null
 blocks:
-  _component: page-sections/explainers/timeline
+  _component: page-sections/explainers/timeline-section
   eyebrow: Our story
   heading: How we got here
   layout: vertical

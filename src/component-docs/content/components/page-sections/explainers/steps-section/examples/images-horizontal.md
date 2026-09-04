@@ -1,11 +1,11 @@
 ---
-title: 'Vertical'
+title: 'Horizontal'
 spacing: null
 blocks:
-  _component: 'page-sections/explainers/steps'
+  _component: 'page-sections/explainers/steps-section'
   eyebrow: 'Unboxing'
   heading: 'Same steps, same crop'
-  orientation: vertical
+  orientation: horizontal
   imageAspectRatio: landscape
   items:
     - image: /src/assets/images/component-docs/castle.jpg
@@ -16,7 +16,7 @@ blocks:
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Unbox the hardware and set it on a clear surface.
+          text: A landscape crop — every column is the same height, so the connector lines up.
           size: sm
     - image: /src/assets/images/component-docs/video-placeholder.jpg
       imageAlt: 'The setup plugged in.'
@@ -26,7 +26,7 @@ blocks:
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Connect power and the network — the status light turns solid.
+          text: Widescreen source photos still crop to 4:3 with the rest of the set.
           size: sm
     - image: /src/assets/images/component-docs/castle.jpg
       imageAlt: 'The finished setup.'

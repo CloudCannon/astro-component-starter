@@ -54,7 +54,7 @@ pageSections:
     dividers: true
     colorScheme: inherit
     backgroundColor: surface
-  - _component: page-sections/explainers/timeline
+  - _component: page-sections/explainers/timeline-section
     eyebrow: History
     heading: How we got here
     subtext: ''

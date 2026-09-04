@@ -1,8 +1,8 @@
-label: Steps
+label: Steps Section
 icon: format_list_numbered
 description: Numbered how-it-works sequence with optional images.
 value:
-  _component: page-sections/explainers/steps
+  _component: page-sections/explainers/steps-section
   sectionLabel: ""
   eyebrow: How it works
   heading: Live in three steps
@@ -61,23 +61,23 @@ value:
     overlay: 0
 preview:
   text:
-    - Steps
+    - Steps Section
   subtext:
     - key: heading
-  image: public/component-previews/page-sections/explainers/steps.svg
+  image: public/component-previews/page-sections/explainers/steps-section.svg
   icon: format_list_numbered
   gallery:
-    image: public/component-previews/page-sections/explainers/steps.svg
+    image: public/component-previews/page-sections/explainers/steps-section.svg
     fit: cover
 picker_preview:
-  text: Steps
+  text: Steps Section
   subtext: A numbered "how it works" sequence with connected step markers.
-  image: public/component-previews/page-sections/explainers/steps.svg
+  image: public/component-previews/page-sections/explainers/steps-section.svg
   gallery:
-    image: public/component-previews/page-sections/explainers/steps.svg
+    image: public/component-previews/page-sections/explainers/steps-section.svg
     fit: cover
 _inputs_from_glob:
-  - /src/components/page-sections/explainers/steps/steps.cloudcannon.inputs.yml
+  - /src/components/page-sections/explainers/steps-section/steps-section.cloudcannon.inputs.yml
   - /.cloudcannon/inputs/background-mask.yml
 _structures:
   explainerStepsItems:

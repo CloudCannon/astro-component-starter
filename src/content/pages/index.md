@@ -231,7 +231,7 @@ pageSections:
       mask: frame
       overlay: 0
     alignmentHorizontal: center
-  - _component: page-sections/explainers/steps
+  - _component: page-sections/explainers/steps-section
     eyebrow: How it works
     heading: Clone, rebrand, assemble, ship
     subtext: Four steps from a blank folder to a live site.

@@ -98,7 +98,7 @@ pageSections:
     reverse: true
     colorScheme: inherit
     backgroundColor: surface
-  - _component: page-sections/explainers/steps
+  - _component: page-sections/explainers/steps-section
     eyebrow: How we work
     heading: An engagement in four moves
     subtext: ''

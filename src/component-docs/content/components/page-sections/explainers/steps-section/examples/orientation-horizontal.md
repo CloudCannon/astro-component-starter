@@ -1,11 +1,11 @@
 ---
-title: 'Vertical'
+title: 'Horizontal'
 spacing: null
 blocks:
-  _component: 'page-sections/explainers/steps'
+  _component: 'page-sections/explainers/steps-section'
   eyebrow: 'Onboarding'
   heading: 'Your first week'
-  orientation: vertical
+  orientation: horizontal
   items:
     - contentSections:
         - _component: building-blocks/core-elements/heading

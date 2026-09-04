@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-timeline">
-  <title id="t-timeline">Timeline component preview</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-timeline-section">
+  <title id="t-timeline-section">Timeline section component preview</title>
   <style>
     @media (prefers-color-scheme: dark) {
       svg {

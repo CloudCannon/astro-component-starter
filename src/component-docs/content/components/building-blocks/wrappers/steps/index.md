@@ -1,6 +1,6 @@
 ---
 title: Steps
-overview: 'A numbered how-it-works sequence with optional images. Horizontal or vertical layout. For a dated sequence, use [Timeline](/component-docs/components/building-blocks/wrappers/timeline/). For a full-width block with a heading, use the [Steps section](/component-docs/components/page-sections/explainers/steps/).'
+overview: 'A numbered how-it-works sequence with optional images. Horizontal or vertical layout. For a dated sequence, use [Timeline](/component-docs/components/building-blocks/wrappers/timeline/). For a full-width block with a heading, use the [Steps section](/component-docs/components/page-sections/explainers/steps-section/).'
 slots:
   - title: default
     description: The steps in the sequence.
