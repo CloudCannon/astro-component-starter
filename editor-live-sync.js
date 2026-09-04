@@ -33,6 +33,10 @@ import {
   setupAllModals,
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
+import {
+  setupAllVideoModals,
+  setupVideoModal,
+} from "./src/components/building-blocks/wrappers/video-modal/setup";
 import { setupAllForms, setupForm } from "./src/components/building-blocks/forms/form/setup";
 import { setupAllVideos } from "./src/components/building-blocks/core-elements/video/setup";
 import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
@@ -186,6 +190,11 @@ function initNewComponents(root) {
   for (const el of newModals) {
     log("initialising new modal", el);
     setupModalShell(el);
+
+    if (el.closest(".video-modal")) {
+      log("initialising new video modal", el);
+      setupVideoModal(el);
+    }
   }
 
   const newSearch = [];
@@ -350,6 +359,7 @@ setupAllCarousels();
 setupAllImageCarousels();
 setupAllMainNavs();
 setupAllModals();
+setupAllVideoModals();
 setupAllSearch();
 setupAllTocs();
 setupAllGalleries();

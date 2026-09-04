@@ -90,10 +90,19 @@ const primaryHeading = sections.find(
   noindex={noindex}
 >
   {mainNav.themeToggle && <ThemeToggleScript slot="head" />}
+  <a
+    class="skip-link"
+    href="#main-content"
+  >
+    Skip to main content
+  </a>
   <AnnouncementBar {...announcementBar} />
   <MainNavigation {...mainNav} />
 
-  <main {...disablePagefind ? { "data-pagefind-ignore": "all" } : {}}>
+  <main
+    id="main-content"
+    {...disablePagefind ? { "data-pagefind-ignore": "all" } : {}}
+  >
     {sections.length > 0 && <MainComponent sections={sections} />}
     <div {...disablePagefind ? {} : { "data-pagefind-body": true }}>
       <slot />

@@ -14,7 +14,7 @@ import {
 const {
   logoSource,
   logoAlternateSource,
-  logoAlt,
+  logoAlt = "Logo",
   navData = [],
   class: className,
   "aria-label": ariaLabel = "Mobile",
@@ -65,7 +65,7 @@ const pathname = Astro.url.pathname;
         <Image
           source={logoSource}
           alternateSource={logoAlternateSource}
-          alt={logoAlt || "Astro Component Starter"}
+          alt={logoAlt}
           class="mobile-logo-image"
           useDefaultEditableBinding={false}
         />
@@ -226,13 +226,15 @@ const pathname = Astro.url.pathname;
   import { trapFocus } from "@component-utils/focusTrap";
   import { bindToggleKeys, syncExpanded } from "@components/navigation/bar/toggleState";
 
+  let mobileEscapeBound = false;
+
   // Overlays live in one container so z-index stacking is predictable.
   function getOrCreateOverlaysContainer() {
     let container = document.getElementById("overlays-container");
     if (!container) {
       container = document.createElement("div");
       container.id = "overlays-container";
-      container.style.cssText = "position: relative; z-index: 9999;";
+      container.className = "overlays-container";
       document.body.insertBefore(container, document.body.firstChild);
     }
     return container;
@@ -245,8 +247,6 @@ const pathname = Astro.url.pathname;
     allMobileNavs.forEach((nav) => {
       if (nav.dataset.mobileInitialized === "true") return;
       nav.dataset.mobileInitialized = "true";
-
-      nav.classList.add("js-enabled");
 
       overlaysContainer.appendChild(nav);
 
@@ -345,13 +345,26 @@ const pathname = Astro.url.pathname;
       // behind it. `aria-hidden` is the open flag `handleNavToggle` maintains.
       trapFocus(nav, () => nav.getAttribute("aria-hidden") === "false");
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && toggle?.checked) {
-          toggle.checked = false;
-          handleNavToggle(false);
-        }
+      nav.addEventListener("mobile:close", () => {
+        if (!toggle?.checked) return;
+
+        toggle.checked = false;
+        handleNavToggle(false);
       });
     });
+
+    // One document listener for every mobile nav, bound once: the per-nav
+    // version added another on every re-init after a view transition.
+    if (!mobileEscapeBound) {
+      mobileEscapeBound = true;
+      document.addEventListener("keydown", (e) => {
+        if (e.key !== "Escape") return;
+
+        document
+          .querySelectorAll<HTMLElement>(".mobile")
+          .forEach((nav) => nav.dispatchEvent(new Event("mobile:close")));
+      });
+    }
   }
 
   onPageLoad(initMobileNavigation);
@@ -359,6 +372,13 @@ const pathname = Astro.url.pathname;
 
 <style is:global>
   @layer components {
+    /* Created by the script below, which relocates the panel out of MainNav's
+       container-type box so it can cover the page. */
+    .overlays-container {
+      position: relative;
+      z-index: var(--layer-8);
+    }
+
     /* `.nav-toggle:checked ~` covers the pre-JS/editor DOM; `[aria-hidden]`
        covers the live site, where the panel is relocated into
        #overlays-container and is no longer the checkbox's sibling. */
@@ -397,7 +417,7 @@ const pathname = Astro.url.pathname;
       background: var(--color-bg);
       display: flex;
       flex-direction: column;
-      height: 100vh;
+      height: 100dvh;
       inset: 0;
       position: fixed;
       transform: translateX(-100%);
@@ -723,22 +743,6 @@ const pathname = Astro.url.pathname;
       height: 2rem;
       max-width: 100%;
       width: auto;
-    }
-
-    .mobile-overlay {
-      background: var(--color-bg);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      inset: 0;
-      position: fixed;
-      transform: translateX(-100%);
-      transition: transform var(--animation-normal) var(--ease-in-out);
-      z-index: var(--layer-6);
-
-      &.open {
-        transform: translateX(0);
-      }
     }
   }
 </style>

@@ -27,6 +27,9 @@ const { class: className, ...htmlAttributes } = Astro.props;
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
 
+  const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+  let systemThemeBound = false;
+
   const themedSelector =
     '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])';
 
@@ -58,10 +61,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
   }
 
   function getPreferredTheme(): string {
-    return (
-      localStorage.getItem("theme") ||
-      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-    );
+    return localStorage.getItem("theme") || (darkQuery.matches ? "dark" : "light");
   }
 
   function initThemeToggle() {
@@ -95,11 +95,16 @@ const { class: className, ...htmlAttributes } = Astro.props;
       });
     });
 
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-      if (!localStorage.getItem("theme")) {
-        setTheme(e.matches ? "dark" : "light");
-      }
-    });
+    // Bound once: `initThemeToggle` runs again after every view transition,
+    // and the listener outlives the buttons it was registered alongside.
+    if (!systemThemeBound) {
+      systemThemeBound = true;
+      darkQuery.addEventListener("change", (e) => {
+        if (localStorage.getItem("theme")) return;
+
+        applyTheme(document, e.matches ? "dark" : "light");
+      });
+    }
   }
 
   onPageLoad(initThemeToggle);
@@ -151,11 +156,13 @@ const { class: className, ...htmlAttributes } = Astro.props;
       line-height: var(--line-height-none);
     }
 
-    [data-theme="light"] .theme-toggle-moon {
+    /* Scoped to the root: a toggle inside a section with its own `data-theme`
+       would otherwise show that section's icon, not the site's. */
+    html[data-theme="light"] .theme-toggle-moon {
       display: block;
     }
 
-    [data-theme="dark"] .theme-toggle-sun {
+    html[data-theme="dark"] .theme-toggle-sun {
       display: block;
     }
   }

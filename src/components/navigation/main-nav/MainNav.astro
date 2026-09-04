@@ -48,18 +48,24 @@ const mobileNavData = [
   {...htmlAttributes}
   useDefaultEditableBinding={false}
 >
-  <a
-    href="/"
-    class="main-nav-logo-link"
-  >
-    <Image
-      source={logoSource}
-      alternateSource={logoAlternateSource}
-      class="main-nav-logo"
-      alt={logoAlt}
-      useDefaultEditableBinding={false}
-    />
-  </a>
+  {
+    /* No logo means no link: an <a> wrapping nothing is an unnamed link, and
+       Image early-returns on an empty source. */
+    logoSource && (
+      <a
+        href="/"
+        class="main-nav-logo-link"
+      >
+        <Image
+          source={logoSource}
+          alternateSource={logoAlternateSource}
+          class="main-nav-logo"
+          alt={logoAlt}
+          useDefaultEditableBinding={false}
+        />
+      </a>
+    )
+  }
   <div class="nav-end">
     <Bar
       navData={navData}
@@ -104,7 +110,6 @@ const mobileNavData = [
       &.is-stuck {
         box-shadow: var(--shadow-sm);
       }
-      background-color: var(--color-bg);
       padding-block: 0;
       position: sticky;
       top: 0;

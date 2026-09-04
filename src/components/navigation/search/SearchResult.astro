@@ -24,9 +24,14 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
   </div>
   <div class="search-result-content">
     <a class="search-result-link">
+      {
+        /* Not a heading: a result list inside a modal is not part of the page's
+          outline, and the h3s would land under whatever heading precedes the
+          nav. The link itself is the accessible name. */
+      }
       <Heading
         text="Result title"
-        level="h3"
+        level="span"
         size="xs"
         class="search-result-title"
       />

@@ -31,3 +31,6 @@ search:
 searchPlaceholder:
   type: text
   comment: "Placeholder text for the search input. Leave empty for the default."
+themeToggle:
+  type: switch
+  comment: "Show the light/dark theme toggle in the navigation bar. Sections with a locked color scheme keep theirs."
