@@ -21,6 +21,9 @@
     --space-before: initial;
   }
 
+  /* A popover is a DOM sibling but lives in the top layer, where a real margin
+     replaces one of the `margin: auto` halves that centre it (ARCHITECTURE.md
+     § Popovers and the top layer). */
   .flow > * + *:not([popover]) {
     margin-block-start: var(--space-before, var(--space-before-default));
   }

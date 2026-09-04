@@ -42,6 +42,9 @@ const {
       border-radius: var(--radius-xs);
       box-shadow: var(--shadow-lg);
       color: var(--color-text);
+      /* Centring: the top layer's containing block is the viewport, so the auto
+         margins split the leftover space. A real margin here breaks it
+         (ARCHITECTURE.md § Popovers and the top layer). */
       inset: 0;
       margin: auto;
       max-height: 85vh;

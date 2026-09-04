@@ -87,6 +87,22 @@ Adding a `.astro` file auto-registers it in the render registry (`renderBlock.as
 
 Full context list and how to add a new nested content area: [cloudcannon-yaml.md](cloudcannon-yaml.md#structures-registration-cloudcannonstructurescloudcannonstructuresyml).
 
+## Data-driven sections
+
+A section that reads a content collection must gate the read on `import.meta.env.SSR`, because `live-editing.js` bundles every component for the browser and `astro:content` does not exist there — an ungated `getCollection` breaks the whole Visual Editor bundle, not just this section.
+
+```ts
+let posts: any[] = [];
+
+if (import.meta.env.SSR) {
+  const { getCollection } = await import('astro:content');
+
+  posts = (await getCollection('blog')).slice(0, count);
+}
+```
+
+Import inside the branch (a top-level `import` is not dead-code eliminated), and render a placeholder for the empty case — in the editor `posts` is always empty, so whatever the `else` shows is what an author sees on the canvas. `LatestPosts.astro` is the reference: gated read plus placeholder cards.
+
 ## Styling rules
 
 **MUST:** wrap styles in `<style is:global>` inside `@layer components` (building blocks) or `@layer page-sections` (page sections).

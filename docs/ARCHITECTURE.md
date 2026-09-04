@@ -48,6 +48,16 @@ Two co-operating systems:
 - Space **between sibling blocks** is the flow system (`src/styles/utils/_flow.css`): a `.flow` parent margins each child by the child's `--space-before`, first children sit flush, and a Spacer _replaces_ the adjacent gap (its size is the whole gap). Every stackable building block declares a type default in its component CSS (heading loose, text tight, collection wrappers loose); the four role tokens live in `variables/_spacing.css` (`--space-before-{none,tight,default,loose}`) — retune those four lines to retune all page rhythm. Blocks carry no root margins of their own.
 - The per-block `spaceBefore` prop rides as `data-space-before` on a **direct child** of the block's root, hoisted to the root by `_flow.css`'s `:has()` rules. Never on the root: CloudCannon's editable-regions re-render keeps the region's root element, so a prop-driven attribute there goes stale in the Visual Editor (the same constraint behind `editor-live-sync.js`'s bento-box span sync). Roots with no child to carry it (Video's media elements, Pagination, Card Grid's grid mode) keep root placement as a documented fallback.
 
+## Popovers and the top layer
+
+Modals, the search overlay and nav dropdowns are the native Popover API (`popover="auto"`), so an open panel renders in the browser's **top layer**: outside normal flow and stacking, unclipped by an ancestor's `overflow` and unaffected by its `z-index`. Three consequences are load-bearing.
+
+- **Centering is `inset: 0` + `margin: auto`** on the popover itself (`ModalShell.astro`), not a flex wrapper — the top layer sizes the containing block to the viewport, so auto margins split the leftover space. Any real margin on that element therefore _replaces_ one of those autos and pushes the panel off centre: a `.flow` gap of 2rem moves a centred 640px modal from 80px down to 32px. That is why `_flow.css` spaces `.flow > * + *:not([popover])` — a popover is a DOM sibling of the blocks around it, but it is not laid out with them.
+- **Scroll lock is counted, not toggled.** `modal/setup.ts` sets `data-modal-scroll-lock` on `<body>` from the number of currently open `.modal-popover`s, so closing one modal while another is open does not unlock the page.
+- **Focus is moved and restored by hand.** The Popover API leaves focus on the invoker, so `setupModalShell` moves it to the first focusable element inside on `toggle`, and returns it to the element that actually opened the panel — several triggers can target one modal, and Search opens on Ctrl+K with no invoker at all.
+
+For the editor, a popover is also a **nesting boundary**: `lint:nesting` computes reachability with modal as a cut, because a block placed inside a modal is not visually inside whatever holds the trigger.
+
 ## Component library docs (`/component-docs`)
 
 `src/component-docs/` is a self-documenting library UI (pure Astro, no React) with its own content collections and a component viewer. It is excluded from production builds: `npm run build` sets `DISABLE_COMPONENT_LIBRARY=true`, which the component-docs routes check in `getStaticPaths`; `npm run build:with-library` includes it. The sitemap excludes it either way.
