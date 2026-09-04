@@ -8,6 +8,7 @@ const {
   placeholder,
   required = false,
   value,
+  rows = 4,
   hint,
   error,
   autocomplete,
@@ -39,6 +40,7 @@ const { controlAttributes, shellAttributes } = formFieldParts({
   <textarea
     name={name}
     placeholder={placeholder}
+    rows={rows}
     class="field"
     {...controlAttributes}
     >{value}</textarea

@@ -140,6 +140,9 @@ function bindResultTemplate(search: HTMLElement): void {
 
     if (excerpt && result.excerpt) {
       // Excerpts carry <mark> highlight markup from our own index.
+      // `innerHTML`, not `textContent`: Pagefind wraps the query terms in
+      // <mark>. Trusted because the index is built from this site's own pages
+      // at build time — never point Pagefind at third-party content.
       (excerpt.querySelector(".simple-text-inner") ?? excerpt).innerHTML = result.excerpt;
     } else {
       excerpt?.remove();

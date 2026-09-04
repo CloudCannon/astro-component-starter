@@ -38,6 +38,12 @@ if (!_component && !hasValidSrc) {
 // Decorative images are explicitly hidden from assistive technology with an
 // empty alt (the standard mechanism — no aria-hidden needed on <img alt="">).
 const normalizedAlt = decorative ? "" : alt || "";
+
+if (import.meta.env.DEV && hasValidSrc && !decorative && !isNonEmptyString(alt)) {
+  console.warn(
+    `[image] "${source}" has no alt text and is not marked decorative, so it renders an unnamed image.`
+  );
+}
 const isEditable =
   useDefaultEditableBinding || customDataPropSrc != null || customDataPropAlt != null;
 const dataAttributes = isEditable
@@ -275,11 +281,13 @@ if (hasAlternate) {
       }
     }
 
-    html[data-theme-toggled] .image .image-primary {
+    /* A `data-theme-lock` section keeps its colours when the site theme is
+       toggled, so its images must not swap with the rest of the page. */
+    html[data-theme-toggled] .image:not([data-theme-lock] *) .image-primary {
       display: none;
     }
 
-    html[data-theme-toggled] .image .image-alternate {
+    html[data-theme-toggled] .image:not([data-theme-lock] *) .image-alternate {
       display: block;
     }
   }

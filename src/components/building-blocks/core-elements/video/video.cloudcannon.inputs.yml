@@ -32,9 +32,20 @@ autoplay:
 loop:
   type: switch
   comment: Restart the video from the beginning when it ends.
+captions:
+  type: file
+  label: Captions
+  comment: Used for locally hosted videos - A WebVTT (.vtt) track shown by default. YouTube and Vimeo carry their own captions.
+  options:
+    paths:
+      uploads: public/videos
+      static: public
+captionsLanguage:
+  type: text
+  comment: BCP 47 tag for the captions track (e.g. en, mi, fr-CA). The track's menu label is derived from it.
 thumbnail:
   type: image
-  comment: Poster image before the video plays. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
+  comment: Used for locally hosted videos - Poster image before the video plays. YouTube and Vimeo draw their own poster from the video, so this does not apply to them. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
   options:
     accepts_mime_types:
       - image/jpeg

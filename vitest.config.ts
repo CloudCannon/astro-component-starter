@@ -9,6 +9,10 @@ export default defineConfig({
       // module, which only exists inside Astro's Vite pipeline. Stub it so the
       // pure parts of that util can be unit-tested.
       "astro:assets": new URL("./tests/unit/stubs/astro-assets.ts", import.meta.url).pathname,
+      // Mirrors tsconfig `paths` — a util that imports a sibling by alias is
+      // otherwise unresolvable outside Astro's Vite pipeline.
+      "@component-utils": new URL("./src/components/utils", import.meta.url).pathname,
+      "@components": new URL("./src/components", import.meta.url).pathname,
     },
   },
 });

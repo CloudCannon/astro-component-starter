@@ -87,6 +87,9 @@ _structures:
           alt:
             type: text
             comment: Accessible name for the logo (the company name).
+            options:
+              required: true
+              required_message: A linked logo with no alt text is a link with no name.
           url:
             type: url
             comment: Optional link to the company's site. Linked logos show a hover affordance — color restore in grayscale, a slight scale in full color.

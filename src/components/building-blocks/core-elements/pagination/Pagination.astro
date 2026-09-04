@@ -1,5 +1,6 @@
 ---
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { paginationWindow } from "@component-utils/paginationWindow";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
@@ -9,11 +10,11 @@ const {
   spaceBefore = "default",
   class: className,
   showArrows = false,
+  basePath = "/blog",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
-const maxVisiblePages = 5;
 
 if (!page || page.lastPage <= 1) {
   return null;
@@ -21,32 +22,11 @@ if (!page || page.lastPage <= 1) {
 
 const currentPage = page.currentPage;
 const totalPages = page.lastPage;
-const lastPage = totalPages - 1;
-
-const maxVisible = maxVisiblePages - 1;
-let startPage = Math.max(0, currentPage - 2);
-let endPage = Math.min(lastPage, startPage + maxVisible);
-
-if (endPage === lastPage && startPage > 0) {
-  startPage = Math.max(0, lastPage - maxVisible);
-}
-
-const showFirst = startPage > 0;
-const showLast = endPage < lastPage;
-const visibleRange = endPage - startPage + 1;
-const totalVisible = visibleRange + (showFirst ? 1 : 0) + (showLast ? 1 : 0);
-
-if (totalVisible > maxVisiblePages) {
-  const excess = totalVisible - maxVisiblePages;
-
-  if (showFirst || showLast) {
-    endPage = Math.max(startPage, endPage - excess);
-  }
-}
+const { pages, showFirst, showLast, gapBefore } = paginationWindow(currentPage, totalPages);
 
 const getPageUrl = (pageNum: number) => {
   if (pageNum === 1) {
-    return page.url.first || page.url.current?.replace(/\/\d+\/?$/, "") || "/blog";
+    return page.url.first || page.url.current?.replace(/\/\d+\/?$/, "") || basePath;
   }
 
   if (page.url && page.url.first) {
@@ -61,7 +41,7 @@ const getPageUrl = (pageNum: number) => {
     return `${baseUrl}/${pageNum}`;
   }
 
-  return pageNum === 1 ? "/blog" : `/blog/${pageNum}`;
+  return pageNum === 1 ? basePath : `${basePath.replace(/\/$/, "")}/${pageNum}`;
 };
 ---
 
@@ -86,14 +66,12 @@ const getPageUrl = (pageNum: number) => {
     )
   }
 
-  {startPage > 0 && <a href={getPageUrl(1)}>1</a>}
+  {showFirst && <a href={getPageUrl(1)}>1</a>}
 
-  {startPage > 1 && <span aria-hidden="true">…</span>}
+  {gapBefore && <span aria-hidden="true">…</span>}
 
   {
-    Array.from({ length: endPage - startPage + 1 }, (_, i) => {
-      const pageNum = startPage + i + 1;
-
+    pages.map((pageNum) => {
       // A bare `<span>` exposes no role that can carry an `aria-label`, so the
       // context is given as visually hidden text instead.
       return pageNum === currentPage ? (
@@ -116,7 +94,7 @@ const getPageUrl = (pageNum: number) => {
   }
 
   {
-    endPage < lastPage && (
+    showLast && (
       <>
         <span aria-hidden="true">…</span>
         <a href={getPageUrl(totalPages)}>{totalPages}</a>
@@ -164,14 +142,14 @@ const getPageUrl = (pageNum: number) => {
         }
 
         &:first-child {
-          border-bottom-left-radius: var(--radius-sm);
+          border-end-start-radius: var(--radius-sm);
           border-inline-start: var(--border-width-sm) solid var(--color-border);
-          border-top-left-radius: var(--radius-sm);
+          border-start-start-radius: var(--radius-sm);
         }
 
         &:last-child {
-          border-bottom-right-radius: var(--radius-sm);
-          border-top-right-radius: var(--radius-sm);
+          border-end-end-radius: var(--radius-sm);
+          border-start-end-radius: var(--radius-sm);
         }
 
         &[aria-hidden="true"] {

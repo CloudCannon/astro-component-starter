@@ -1,6 +1,6 @@
 label: CTA Split
 icon: call_to_action
-description: Call to action with text on one side and buttons on the other.
+description: Call to action with copy and buttons beside an image.
 value:
   _component: page-sections/conversion/cta-split
   sectionLabel: ""

@@ -7,13 +7,14 @@ import Breadcrumbs from "@navigation/breadcrumbs/Breadcrumbs.astro";
 import Card from "@wrappers/card/Card.astro";
 import Grid from "@wrappers/grid/Grid.astro";
 import GridItem from "@wrappers/grid/GridItem.astro";
+import { formatPostDate } from "@component-utils/formatPostDate";
 
 /** Paginated page object from `paginate()` (includes `data`, `url`, etc.). */
 interface Props {
   page: any;
   emptyMessage: string;
-  /** Top margin for the grid when no tag breadcrumb is shown. */
-  gridMarginTop?: string;
+  /** BCP 47 tag for the post dates. */
+  locale?: string;
   /** Renders a Home › Blog › tag breadcrumb trail above the grid; grid uses a tighter top margin. */
   tagBreadcrumb?: {
     allPostsHref: string;
@@ -22,10 +23,14 @@ interface Props {
   };
 }
 
-const { page, emptyMessage, gridMarginTop = "var(--spacing-2xl)", tagBreadcrumb } = Astro.props;
-
-const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
+const { page, emptyMessage, locale = "en-US", tagBreadcrumb } = Astro.props;
 ---
+
+{
+  /* The leading gap stays an inline margin: whichever element comes first here
+    is the section's first flow child, and `.flow > * + *` never gives that one
+    a margin. Sibling gaps below do use `spaceBefore`. */
+}
 
 {
   page.data.length > 0 ? (
@@ -43,14 +48,11 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
         gap="lg"
         minItemWidth="320"
         maxItemWidth="400"
-        style={`margin-top: ${gridTop}`}
+        spaceBefore="default"
+        style={tagBreadcrumb ? undefined : "margin-top: var(--space-before-loose);"}
       >
         {page.data.map((post: any) => {
-          const pubDate = post.data.date.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
+          const pubDate = formatPostDate(post.data.date, locale);
 
           const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
 
@@ -67,7 +69,7 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
                   <Image
                     slot="before"
                     source={post.data.image}
-                    alt={post.data.title}
+                    decorative={true}
                     aspectRatio="landscape"
                     sizes="(max-width: 400px) 100vw, 400px"
                     widths={[320, 400, 640, 800]}
@@ -101,7 +103,7 @@ const gridTop = tagBreadcrumb ? "var(--spacing-lg)" : gridMarginTop;
       <Pagination
         page={page}
         showArrows={true}
-        style="margin-top: var(--space-before-loose);"
+        spaceBefore="loose"
       />
     </>
   ) : (

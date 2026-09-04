@@ -8,6 +8,7 @@ value:
   required: false
   placeholder: null
   value: null
+  rows: 4
   hint: null
   autocomplete: null
 preview:

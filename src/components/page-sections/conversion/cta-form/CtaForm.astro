@@ -44,7 +44,6 @@ const {
   {...htmlAttributes}
 >
   <Split
-    class="split"
     distributionMode="fixed-flexible"
     fixedWidth="400"
     alignmentVertical="center"
@@ -52,6 +51,10 @@ const {
     minSplitWidth={640}
   >
     <Fragment slot="first">
+      {
+        /* `lg`, not the `xl` the other CTAs use: this one shares its row with a
+          form, so the heading has half the width to fill. */
+      }
       <Heading
         level={headingLevel}
         size="lg"

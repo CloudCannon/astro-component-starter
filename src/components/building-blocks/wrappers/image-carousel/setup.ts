@@ -50,13 +50,28 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
 
   let isInitialUpdate = true;
 
+  const status = carousel.querySelector<HTMLElement>(".carousel-status");
+
   const updateSelectedThumb = () => {
     const selected = mainEmbla.selectedScrollSnap();
+
+    if (status) {
+      status.textContent = `Image ${selected + 1} of ${thumbButtons.length}`;
+    }
 
     thumbButtons.forEach((btn, i) => {
       const isSelected = i === selected;
 
       btn.setAttribute("data-selected", isSelected.toString());
+
+      // `data-selected` drives the styling; `aria-current` is what tells a
+      // screen-reader user which thumbnail is showing. Removed rather than set
+      // to "false" so only one thumb is ever current.
+      if (isSelected) {
+        btn.setAttribute("aria-current", "true");
+      } else {
+        btn.removeAttribute("aria-current");
+      }
 
       if (isSelected && !isInitialUpdate) {
         // `scroll-behavior: auto !important` in the reduced-motion reset does

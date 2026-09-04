@@ -6,9 +6,13 @@ import type { VideoSource } from "@component-utils/discoverVideoSources";
 const {
   type,
   videoId,
-  title,
+  // Interpolated into `videotitle`/`title` attributes, so an undefined value
+  // would render the literal string "undefined" as the frame's accessible name.
+  title = "",
   source,
   thumbnail,
+  captions = "",
+  captionsLanguage = "en",
   background = false,
   // Background videos are decorative, so they default to an autoplaying
   // loop; passing autoplay/loop explicitly still wins.
@@ -22,6 +26,36 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const VIDEO_TYPES = ["youtube", "vimeo", "local-source"];
+const isHosted = type === "youtube" || type === "vimeo";
+
+if (import.meta.env.DEV) {
+  if (!VIDEO_TYPES.includes(type)) {
+    console.warn(`[video] Unknown type "${type}". Expected one of: ${VIDEO_TYPES.join(", ")}.`);
+  } else if (isHosted && !title) {
+    console.warn(
+      `[video] ${type} video "${videoId}" has no title, so the player frame has no accessible name.`
+    );
+  }
+}
+
+// An unknown type used to fall through to a <video> with no sources: a black
+// box with controls that can never play.
+if (!_component && !VIDEO_TYPES.includes(type)) return;
+
+const captionsSrc = typeof captions === "string" ? captions.trim() : "";
+const captionsLabel = (() => {
+  if (!captionsSrc) return undefined;
+
+  try {
+    return (
+      new Intl.DisplayNames(["en"], { type: "language" }).of(captionsLanguage) ?? captionsLanguage
+    );
+  } catch {
+    return captionsLanguage;
+  }
+})();
 
 const trimmedThumbnail =
   typeof thumbnail === "string" && thumbnail.trim() !== "" ? thumbnail.trim() : "";
@@ -135,6 +169,15 @@ const youtubeParams =
           type={sourceType}
         />
       ))}
+      {captionsSrc && (
+        <track
+          kind="captions"
+          src={captionsSrc}
+          srclang={captionsLanguage}
+          label={captionsLabel}
+          default
+        />
+      )}
       Your browser does not support the HTML5 video element.
     </video>
   )

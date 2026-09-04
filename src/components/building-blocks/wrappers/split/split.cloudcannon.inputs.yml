@@ -31,6 +31,7 @@ distributionMode:
       - id: flexible-fixed
         name: Flexible-Fixed
 fixedWidth:
+  hidden: "distributionMode !== 'fixed-flexible' && distributionMode !== 'flexible-fixed'"
   comment: Fixed width in pixels for the fixed column (used when distribution mode includes 'fixed').
   type: number
 minSplitWidth:
@@ -53,6 +54,7 @@ reverse:
   comment: Swaps the order of the columns.
   type: switch
 reverseOrderOnMobile:
+  hidden: "!reverse"
   comment: When true, reversed splits will have their order flipped on mobile (text-image pattern). When false, reversed splits keep their desktop order on mobile.
   type: switch
 gap:

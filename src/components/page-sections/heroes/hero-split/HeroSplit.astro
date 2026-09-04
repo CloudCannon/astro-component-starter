@@ -18,6 +18,7 @@ const {
   imageBleed = false,
   buttonSections = [],
   reverse = false,
+  imageRounded = true,
   sectionLabel,
   maxContentWidth = "xl",
   paddingHorizontal = "lg",
@@ -46,7 +47,7 @@ const imagePositionVertical = imageBleed ? "top" : "center";
   lockColorScheme={lockColorScheme}
   backgroundColor={backgroundColor}
   background={background}
-  class:list={["hero", className]}
+  class:list={["hero-split", className]}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
@@ -58,7 +59,7 @@ const imagePositionVertical = imageBleed ? "top" : "center";
     reverse={reverse}
     minSplitWidth={800}
     gap="2xl"
-    class="hero-split"
+    class="hero-split-layout"
   >
     <Fragment slot="first">
       <SimpleText
@@ -88,7 +89,7 @@ const imagePositionVertical = imageBleed ? "top" : "center";
       <Image
         source={imageSource}
         alt={imageAlt}
-        rounded={true}
+        rounded={imageRounded}
         aspectRatio={imageAspectRatio}
         positionHorizontal={imagePositionHorizontal}
         positionVertical={imagePositionVertical}

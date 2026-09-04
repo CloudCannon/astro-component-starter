@@ -43,7 +43,7 @@ triggerStyle:
         name: Poster image
 posterImage:
   type: image
-  comment: The still frame shown before the video plays. Required for the poster trigger.
+  comment: The still frame shown before the video plays. Without one the poster trigger falls back to the button trigger, so set it whenever you pick Poster image.
   hidden: "triggerStyle !== 'poster'"
   options:
     paths:

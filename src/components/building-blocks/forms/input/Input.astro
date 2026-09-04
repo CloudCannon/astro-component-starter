@@ -45,36 +45,30 @@ const hasIcon = isNonEmptyString(iconName);
   {...htmlAttributes}
 >
   {
-    hasIcon ? (
-      <span class:list={["field-shell", iconPosition === "after" && "icon-after"]}>
+    /* The shell renders with or without an icon: it reproduces the base input's
+      box exactly, so one branch is enough. */
+  }
+  <span class:list={["field-shell", hasIcon && iconPosition === "after" && "icon-after"]}>
+    {
+      hasIcon && (
         <Icon
           name={iconName}
           color={iconColor}
           size="none"
           class="input-icon"
           aria-hidden="true"
-          role="presentation"
         />
-        <input
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          value={value}
-          class="field"
-          {...controlAttributes}
-        />
-      </span>
-    ) : (
-      <input
-        type={type}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        class="field"
-        {...controlAttributes}
-      />
-    )
-  }
+      )
+    }
+    <input
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      class="field"
+      {...controlAttributes}
+    />
+  </span>
 </FormField>
 
 <style is:global>
@@ -82,6 +76,11 @@ const hasIcon = isNonEmptyString(iconName);
     .input {
       .field-shell:has(> .field[aria-invalid="true"]) {
         border-color: var(--color-error);
+      }
+
+      .field-shell:has(> .field:disabled) {
+        background-color: var(--color-bg-muted);
+        cursor: not-allowed;
       }
 
       .field-shell {

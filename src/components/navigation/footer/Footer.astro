@@ -14,6 +14,7 @@ const {
   logoSource,
   logoAlternateSource,
   logoAlt,
+  class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -21,7 +22,7 @@ const {
 ---
 
 <footer
-  class="footer"
+  class:list={["footer", className]}
   {...htmlAttributes}
 >
   <CustomSection
@@ -32,13 +33,22 @@ const {
   >
     <div class="footer-content">
       <div class="content-container">
-        <Image
-          source={logoSource}
-          alternateSource={logoAlternateSource}
-          alt={logoAlt}
-          class="footer-logo"
-          useDefaultEditableBinding={false}
-        />
+        {
+          logoSource && (
+            <a
+              href="/"
+              class="footer-logo-link"
+            >
+              <Image
+                source={logoSource}
+                alternateSource={logoAlternateSource}
+                alt={logoAlt}
+                class="footer-logo"
+                useDefaultEditableBinding={false}
+              />
+            </a>
+          )
+        }
       </div>
       <div class="content-container">
         <Bar
@@ -56,7 +66,6 @@ const {
         <Text
           class="footer-legal-text"
           text={footerText || ""}
-          data-prop=""
           useDefaultEditableBinding={false}
         />
       </div>
@@ -112,6 +121,15 @@ const {
         text-align: center;
         @container (min-width: 640px) {
           text-align: start;
+        }
+      }
+
+      .footer-logo-link {
+        display: inline-block;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
       }
 

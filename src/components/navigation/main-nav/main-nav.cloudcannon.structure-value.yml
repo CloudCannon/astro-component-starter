@@ -10,6 +10,7 @@ value:
   logoAlternateSource: ""
   search: true
   searchPlaceholder: ""
+  themeToggle: true
 preview:
   text:
     - Main Nav

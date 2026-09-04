@@ -45,7 +45,7 @@ preview:
     fit: cover
 picker_preview:
   text: Feature Split
-  subtext: Split view with story content and supporting feature list.
+  subtext: Copy and buttons beside a supporting image.
   image: public/component-previews/page-sections/explainers/feature-split.svg
   gallery:
     image: public/component-previews/page-sections/explainers/feature-split.svg

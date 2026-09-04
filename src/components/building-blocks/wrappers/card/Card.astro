@@ -75,7 +75,14 @@ const arrayDataAttributesAfter = effectiveAfterProp
   : {};
 
 const isPopoverLink = link?.startsWith("^");
-const Tag = link ? (isPopoverLink ? "button" : "a") : "div";
+// A stretched overlay, not a wrapping <a>: `cardSections` admits buttons,
+// forms and modal triggers, and an anchor may not contain interactive content.
+const hasHit = Boolean(link);
+const HitTag = isPopoverLink ? "button" : "a";
+const hitHeading = (Array.isArray(contentSections) ? contentSections : []).find(
+  (block: { _component?: string }) => block?._component === "building-blocks/core-elements/heading"
+)?.text;
+const hitLabel = typeof hitHeading === "string" && hitHeading.trim() ? hitHeading : "View";
 const hasBeforeSlot = Astro.slots.has("before");
 const hasAfterSlot = Astro.slots.has("after");
 const usesBeforeContentSections = !hasBeforeSlot && beforeContentSections;
@@ -86,11 +93,8 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
   class:list={["card", "stackable", className]}
   {...htmlAttributes}
 >
-  <Tag
+  <div
     data-space-before={spaceBeforeAttr(spaceBefore)}
-    {...isPopoverLink
-      ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
-      : link && { href: link }}
     class:list={[
       "card-inner",
       rounded && "rounded",
@@ -213,7 +217,19 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         </div>
       )
     }
-  </Tag>
+    {
+      hasHit && (
+        <HitTag
+          class="card-hit"
+          {...(isPopoverLink
+            ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+            : { href: link })}
+        >
+          <span class="visually-hidden">{hitLabel}</span>
+        </HitTag>
+      )
+    }
+  </div>
 </div>
 
 <style is:global>
@@ -221,36 +237,45 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
     .card {
       display: block;
 
-      > a.card-inner:hover,
-      > button.card-inner:hover {
+      > .card-inner:has(> .card-hit):hover {
         transform: scale(1.05);
       }
 
       /* A transformed ancestor becomes the containing block for its
          fixed-position children, which would cancel the parallax background
          mid-hover — so linked cards with one skip the hover scale. */
-      > a.card-inner.background-fixed:hover,
-      > button.card-inner.background-fixed:hover {
+      > .card-inner.background-fixed:has(> .card-hit):hover {
         transform: none;
       }
 
       /* The global reset only kills the transition, leaving the scale as an
          instant jump — the movement itself has to go. */
       @media (prefers-reduced-motion: reduce) {
-        > a.card-inner:hover,
-        > button.card-inner:hover {
+        > .card-inner:has(> .card-hit):hover {
           transform: none;
         }
       }
 
-      > button.card-inner {
+      .card-hit {
         appearance: none;
         background: none;
+        border: 0;
         cursor: pointer;
         font: inherit;
+        inset: 0;
         padding: 0;
-        text-align: inherit;
-        width: 100%;
+        position: absolute;
+        text-decoration: none;
+        z-index: var(--layer-0);
+      }
+
+      /* Interactive content sits above the stretched hit, so a button, link or
+         form control inside a linked card is still reachable. Scoped to those
+         elements: lifting the whole body would swallow the card's own click. */
+      .card-inner:has(> .card-hit)
+        :is(a, button, input, select, textarea, label, summary):not(.card-hit) {
+        position: relative;
+        z-index: var(--layer-1);
       }
 
       > .card-inner {

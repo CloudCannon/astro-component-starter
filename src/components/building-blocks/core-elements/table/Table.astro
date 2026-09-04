@@ -1,5 +1,6 @@
 ---
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
 import { columnCount, normalizeRow } from "@component-utils/tableCells";
 
 type RowProps = { cells?: string[] };
@@ -29,6 +30,12 @@ const captionDataAttributes = effectiveCaptionProp
   ? { "data-editable": "text", "data-prop": effectiveCaptionProp }
   : {};
 
+// The caption names the table natively; the scroll region borrows it rather
+// than repeating the text, which a screen reader would otherwise read twice.
+const captionId = caption
+  ? `table-caption-${slugifyLabel(caption) || crypto.randomUUID()}`
+  : undefined;
+
 if (!_component && width === 0) return;
 ---
 
@@ -52,10 +59,21 @@ if (!_component && width === 0) return;
     data-space-before={spaceBeforeAttr(spaceBefore)}
     role="region"
     tabindex="0"
-    aria-label={caption || "Table"}
+    aria-labelledby={captionId}
+    aria-label={captionId ? undefined : "Table"}
+    style={`--table-columns: ${width};`}
   >
     <table>
-      {caption && <caption {...captionDataAttributes}>{caption}</caption>}
+      {
+        caption && (
+          <caption
+            id={captionId}
+            {...captionDataAttributes}
+          >
+            {caption}
+          </caption>
+        )
+      }
       {
         headerCells?.length > 0 && (
           <thead>
@@ -85,6 +103,8 @@ if (!_component && width === 0) return;
 <style is:global>
   @layer components {
     .table {
+      --table-column-min: 8rem;
+
       .table-scroll-hint {
         color: var(--color-text-muted);
         display: none;
@@ -105,9 +125,11 @@ if (!_component && width === 0) return;
       }
 
       table {
+        /* Scales with the column count, and capped at 100% so a narrow table
+           never forces a pan: a two-column table wants far less room than a
+           ten-column one, which a blanket floor cannot express. */
         border-collapse: collapse;
-        /* A cap, not a floor: a two-column table must not force a pan. */
-        min-width: min(34rem, 100%);
+        min-width: min(calc(var(--table-columns, 3) * var(--table-column-min)), 100%);
         width: 100%;
       }
 

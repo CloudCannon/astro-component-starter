@@ -1,7 +1,11 @@
 logoSource:
-  type: text
+  type: image
   label: Logo Source
   comment: Path to the logo image.
+  options:
+    resize_style: contain
+    width: 1920
+    height: 1280
 logoAlt:
   type: text
   label: Logo Alt Text

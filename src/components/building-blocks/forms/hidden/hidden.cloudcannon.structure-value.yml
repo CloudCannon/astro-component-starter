@@ -9,7 +9,7 @@ preview:
   text:
     - Hidden
   subtext:
-    - key: text
+    - key: name
     - ""
   image: public/component-previews/building-blocks/forms/hidden.svg
   icon: visibility_off

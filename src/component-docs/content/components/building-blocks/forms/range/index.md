@@ -12,7 +12,4 @@ examples:
       - step
       - min-max
     size: sm
-  - slugs:
-      - required
-    size: sm
 ---

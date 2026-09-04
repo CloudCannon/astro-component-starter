@@ -22,6 +22,13 @@ export interface SegmentOption {
   icon?: string;
 }
 
+/** A native `<option>`. No `icon` — a `<select>` cannot render one. */
+export interface SelectOptionData {
+  value: string;
+  label?: string;
+  checked?: boolean;
+}
+
 /** One crumb in a breadcrumb trail, after the leading Home crumb. */
 export interface BreadcrumbItem {
   label: string;

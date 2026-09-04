@@ -23,6 +23,7 @@ value:
       variant: primary
       size: md
   reverse: false
+  imageRounded: true
   maxContentWidth: xl
   paddingHorizontal: lg
   paddingVertical: 4xl
@@ -70,6 +71,7 @@ groups:
       - imageSource
       - imageAlt
       - imageAspectRatio
+      - imageRounded
       - imageBleed
       - buttonSections
       - reverse

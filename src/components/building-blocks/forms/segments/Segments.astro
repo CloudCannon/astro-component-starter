@@ -28,7 +28,6 @@ const requireEachInput = required && !multiple;
 <fieldset
   class:list={["segments", className]}
   aria-required={required ? "true" : undefined}
-  aria-labelledby={title ? `${groupId}-legend` : undefined}
   {...htmlAttributes}
 >
   {
@@ -41,7 +40,7 @@ const requireEachInput = required && !multiple;
         {required && (
           <span
             class="segments-required"
-            aria-label="required"
+            aria-hidden="true"
           >
             *
           </span>
@@ -49,11 +48,10 @@ const requireEachInput = required && !multiple;
       </legend>
     )
   }
-  <div
-    class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}
-    role="presentation"
-  >
+  <div class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}>
     {
+      /* `aria-label` on the input for icon-only segments: they render no label
+         text and the icon is aria-hidden, so the control is otherwise unnamed. */
       options.map((option: SegmentOption, index: number) => (
         <label class="segments-option">
           <input
@@ -61,15 +59,13 @@ const requireEachInput = required && !multiple;
             name={multiple ? `${name}[]` : name}
             value={option.value}
             checked={option.checked ? "checked" : undefined}
-            data-checked={option.checked}
             required={requireEachInput && index === 0}
             autocomplete={keepStateOnRefresh ? "on" : "off"}
             class="segments-field"
+            aria-label={iconOnly ? option.label || undefined : undefined}
           />
           <span
             class="segment"
-            role="button"
-            tabindex="-1"
             title={iconOnly && option.label ? option.label : undefined}
           >
             {option.icon && (
@@ -108,7 +104,16 @@ const requireEachInput = required && !multiple;
       }
 
       .segments-options {
+        /* A long set scrolls rather than overflowing the form: the joined-pill
+           look depends on the options staying on one row. The padding/negative
+           margin pair keeps the scroll box from clipping a segment's focus
+           ring, which sits outside the segment's own box. */
+        --segments-focus-room: calc(var(--focus-ring-width) + 2px);
+
         display: flex;
+        margin: calc(var(--segments-focus-room) * -1);
+        overflow-x: auto;
+        padding: var(--segments-focus-room);
       }
 
       .segments-option {

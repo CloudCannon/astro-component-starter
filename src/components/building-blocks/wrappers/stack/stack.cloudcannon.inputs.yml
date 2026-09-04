@@ -16,6 +16,7 @@ direction:
       - id: row
         name: Row
 distribution:
+  hidden: "direction !== 'row'"
   comment: How a row shares its width. Content sizes children to their content; Equal gives every child the same width (needed for cards or mixed blocks, which have no width of their own in a row). For many uniform items, use Grid instead — Equal is for a few different blocks.
   type: select
   options:
@@ -70,8 +71,10 @@ alignmentVertical:
       - id: stretch
         name: Stretch
 wrap:
+  hidden: "direction !== 'row'"
   comment: Allow a row to wrap onto new lines when it runs out of space.
   type: switch
 stackOnMobile:
+  hidden: "direction !== 'row'"
   comment: Stack a row vertically on small screens.
   type: switch

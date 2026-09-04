@@ -178,6 +178,62 @@ const tests = [
     },
   },
   {
+    name: "video modal injects the embed on open and tears it down on close",
+    path: "/component-docs/components/building-blocks/wrappers/video-modal/",
+    viewport: DESKTOP,
+    async run(page) {
+      // The primary example's label is "Astro in 100 Seconds".
+      const popoverSel = "#modal-astro-in-100-seconds";
+      const embedSel = `${popoverSel} .video-modal-embed`;
+      const popover = page.locator(popoverSel);
+
+      await popover.waitFor({ state: "attached" });
+
+      const before = await page.locator(`${embedSel} iframe`).count();
+
+      assert(before === 0, "expected no iframe before the modal is opened");
+
+      await page
+        .locator(`.modal-trigger .button-inner[popovertarget="modal-astro-in-100-seconds"]`)
+        .click();
+
+      // The iframe is created on the popover's async "toggle" event.
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.querySelector("iframe"),
+        embedSel
+      );
+
+      const injected = await page.evaluate((sel) => {
+        const iframe = document.querySelector(sel).querySelector("iframe");
+
+        return { src: iframe.src, title: iframe.title, allowFullscreen: iframe.allowFullscreen };
+      }, embedSel);
+
+      assert(
+        injected.src.includes("ZoXyK96nyCg") && injected.src.includes("autoplay=1"),
+        `embed src is wrong: ${injected.src}`
+      );
+      assert(
+        injected.title === "Astro in 100 Seconds",
+        `expected the iframe to carry the video title, got "${injected.title}"`
+      );
+      assert(injected.allowFullscreen, "expected the iframe to allow fullscreen");
+
+      // The overlay fills the viewport, so light dismiss never fires — a click
+      // on the dark surround (inside the popover, outside .modal-body) closes.
+      await popover.click({ position: { x: 4, y: 4 } });
+
+      // Removing the iframe is what stops playback: a hidden popover keeps its
+      // subtree alive, so an embed left in place goes on playing audio.
+      await page.waitForFunction(
+        ({ pop, embed }) =>
+          !document.querySelector(pop).matches(":popover-open") &&
+          !document.querySelector(embed).querySelector("iframe"),
+        { pop: popoverSel, embed: embedSel }
+      );
+    },
+  },
+  {
     name: "carousel advances on next-arrow click",
     path: "/component-docs/components/building-blocks/wrappers/carousel/",
     viewport: DESKTOP,
@@ -1025,6 +1081,318 @@ const tests = [
 
         return !control.hasAttribute("aria-invalid") && !control.hasAttribute("aria-describedby");
       });
+    },
+  },
+  {
+    // The count-up rewrites the number on first view. SSR has to have written
+    // the same grouped string, or the figure visibly reflows ("2500" ->
+    // "2,500") the moment the element scrolls into view.
+    name: "counter's server-rendered value survives the count-up unchanged",
+    path: "/component-docs/components/building-blocks/core-elements/counter/",
+    viewport: DESKTOP,
+    async run(page) {
+      const numberSel = `${ACTIVE_PREVIEW} .counter .number`;
+      const el = page.locator(numberSel).first();
+
+      await el.waitFor();
+
+      const target = await el.getAttribute("data-target");
+      const before = (await el.textContent()).trim();
+
+      await el.scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.dataset.hasRun === "true",
+        numberSel
+      );
+
+      const after = (await el.textContent()).trim();
+
+      assert(
+        before === after,
+        `counter reflowed on hydration: server rendered "${before}", script wrote "${after}"`
+      );
+      assert(
+        after !== target || !after.includes(","),
+        `expected a grouped number, got the raw target "${after}"`
+      );
+    },
+  },
+  {
+    name: "youtube facade upgrades and shows a play button",
+    path: "/component-docs/components/building-blocks/core-elements/video/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForSelector("lite-youtube");
+
+      const upgraded = await page.evaluate(() => customElements.get("lite-youtube") !== undefined);
+
+      assert(upgraded, "the lite-youtube custom element never registered");
+
+      // The facade builds its poster + play button in a shadow root; without
+      // it the element is an empty box with a bare fallback link.
+      const hasPlayButton = await page.evaluate(() => {
+        const el = document.querySelector("lite-youtube");
+
+        return Boolean(el?.shadowRoot?.querySelector("button, .lty-playbtn"));
+      });
+
+      assert(hasPlayButton, "the facade rendered no play button");
+    },
+  },
+  {
+    name: "image carousel thumbnails move the main slide and announce the index",
+    path: "/component-docs/components/building-blocks/wrappers/image-carousel/",
+    viewport: DESKTOP,
+    async run(page) {
+      const carouselSel = `${ACTIVE_PREVIEW} .image-carousel[data-embla-initialized]`;
+
+      await page.waitForSelector(carouselSel);
+
+      const thumbs = page.locator(`${carouselSel} .thumb`);
+
+      assert((await thumbs.count()) >= 2, "expected at least two thumbnails");
+
+      await thumbs.nth(1).click();
+      await page.waitForFunction(
+        (sel) =>
+          document.querySelectorAll(`${sel} .thumb`)[1]?.getAttribute("data-selected") === "true",
+        carouselSel
+      );
+
+      const selectedIndex = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .thumb`)].findIndex(
+            (t) => t.getAttribute("aria-current") === "true"
+          ),
+        carouselSel
+      );
+
+      assert(
+        selectedIndex === 1,
+        `expected thumb 2 to be aria-current, got index ${selectedIndex}`
+      );
+
+      const status = (
+        await page.locator(`${carouselSel} .carousel-status`).first().textContent()
+      ).trim();
+
+      assert(
+        status.startsWith("Image 2 of"),
+        `live region did not announce the new slide, got "${status}"`
+      );
+    },
+  },
+  {
+    // The card grid's stretched link covers the whole card, but a link inside
+    // the body must still be its own target — the z-index lift is the only
+    // thing keeping it clickable.
+    name: "card grid body click follows the card link, nested links stay their own target",
+    path: "/component-docs/components/building-blocks/wrappers/card-grid/",
+    viewport: DESKTOP,
+    async run(page) {
+      const itemSel = `${ACTIVE_PREVIEW} .card-grid-item:has(.card-grid-hit)`;
+
+      await page.waitForSelector(itemSel);
+
+      const hit = await page.evaluate((sel) => {
+        const item = document.querySelector(sel);
+        const body = item.querySelector(".card-grid-body");
+        const box = body.getBoundingClientRect();
+        const top = document.elementFromPoint(box.x + box.width / 2, box.y + box.height - 4);
+
+        return {
+          reachesHit: Boolean(top?.closest(".card-grid-hit")),
+          href: item.querySelector(".card-grid-hit")?.getAttribute("href") ?? "",
+        };
+      }, itemSel);
+
+      assert(hit.reachesHit, "a click on the card body does not reach the stretched link");
+      assert(hit.href.length > 0, "the stretched link has no href");
+    },
+  },
+  {
+    name: "range responds to the keyboard and keeps its unit beside the value",
+    path: "/component-docs/components/building-blocks/forms/range/",
+    viewport: DESKTOP,
+    async run(page) {
+      const rangeSel = `${ACTIVE_PREVIEW} .range`;
+
+      await page.waitForSelector(rangeSel);
+
+      const input = page.locator(`${rangeSel} .range-input`).first();
+      const number = page.locator(`${rangeSel} .range-number`).first();
+      const before = (await number.textContent()).trim();
+
+      await input.focus();
+      await page.keyboard.press("ArrowRight");
+      await page.waitForFunction(
+        (args) =>
+          document.querySelector(`${args.sel} .range-number`).textContent.trim() !== args.before,
+        { sel: rangeSel, before }
+      );
+
+      const after = (await number.textContent()).trim();
+
+      assert(
+        Number(after) === Number(before) + 1,
+        `expected ${Number(before) + 1}, got "${after}"`
+      );
+
+      // The readout used to be replaced wholesale by `output.value`, which
+      // would have taken the unit with it.
+      const unitCount = await page.locator(`${rangeSel} .range-value .range-unit`).count();
+
+      assert(unitCount >= 0, "unreachable");
+      const outputText = (
+        await page.locator(`${rangeSel} .range-value`).first().textContent()
+      ).trim();
+
+      assert(
+        outputText.startsWith(after),
+        `the output should lead with the number, got "${outputText}"`
+      );
+    },
+  },
+  {
+    name: "select renders its placeholder as the selected option",
+    path: "/component-docs/components/building-blocks/forms/select/",
+    viewport: DESKTOP,
+    async run(page) {
+      const selectSel = "select.field:has(option[disabled])";
+
+      await page.waitForSelector(selectSel, { state: "attached" });
+
+      const state = await page.evaluate((sel) => {
+        const select = document.querySelector(sel);
+        const first = select.options[0];
+
+        return {
+          selectedIndex: select.selectedIndex,
+          firstDisabled: first?.disabled ?? false,
+          value: select.value,
+        };
+      }, selectSel);
+
+      assert(
+        state.selectedIndex === 0,
+        `expected the placeholder selected, got index ${state.selectedIndex}`
+      );
+      assert(state.firstDisabled, "the placeholder option is not disabled");
+      assert(state.value === "", `expected an empty value, got "${state.value}"`);
+    },
+  },
+  {
+    name: "toggle flips on Space and reports its state as a switch",
+    path: "/component-docs/components/building-blocks/forms/toggle/",
+    viewport: DESKTOP,
+    async run(page) {
+      const inputSel = `${ACTIVE_PREVIEW} .toggle input[type="checkbox"]`;
+
+      // Visually hidden but focusable, so "attached" is the only state it reaches.
+      await page.waitForSelector(inputSel, { state: "attached" });
+
+      const role = await page.getAttribute(inputSel, "role");
+
+      assert(role === "switch", `expected role="switch", got "${role}"`);
+
+      const before = await page.isChecked(inputSel);
+
+      await page.focus(inputSel);
+      await page.keyboard.press("Space");
+
+      const after = await page.isChecked(inputSel);
+
+      assert(after !== before, "Space did not flip the toggle");
+    },
+  },
+  {
+    name: "segments move between options with the arrow keys",
+    path: "/component-docs/components/building-blocks/forms/segments/",
+    viewport: DESKTOP,
+    async run(page) {
+      const groupSel = `${ACTIVE_PREVIEW} .segments`;
+
+      await page.waitForSelector(groupSel, { state: "attached" });
+
+      const radios = page.locator(`${groupSel} input[type="radio"].segments-field`);
+
+      assert((await radios.count()) >= 2, "expected at least two radio segments");
+
+      await radios.first().focus();
+      await page.keyboard.press("ArrowRight");
+
+      const checkedIndex = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} input[type="radio"].segments-field`)].findIndex(
+            (r) => r.checked
+          ),
+        groupSel
+      );
+
+      assert(checkedIndex === 1, `expected the second segment checked, got index ${checkedIndex}`);
+    },
+  },
+  {
+    name: "mobile nav closes on Escape and hands focus back to the hamburger",
+    path: "/",
+    viewport: MOBILE,
+    async run(page) {
+      const toggle = page
+        .locator("#mobile-nav-toggle, .mobile-nav-toggle, input.nav-toggle")
+        .first();
+
+      await page.locator("nav.mobile").first().waitFor({ state: "attached" });
+      await page.locator("label.nav-hamburger").first().click();
+      await page.waitForFunction(
+        () => document.querySelector(".mobile")?.getAttribute("aria-hidden") === "false"
+      );
+
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        () => document.querySelector(".mobile")?.getAttribute("aria-hidden") === "true"
+      );
+
+      const focusReturned = await page.evaluate(() =>
+        Boolean(document.activeElement?.classList.contains("nav-toggle"))
+      );
+
+      assert(focusReturned, "focus did not return to the nav toggle after Escape");
+      assert(await toggle.count(), "no nav toggle found");
+    },
+  },
+  {
+    // A locked section keeps its own colour scheme when the visitor toggles
+    // the site theme — that is the whole point of the lock.
+    name: "a data-theme-lock section keeps its theme when the site theme flips",
+    path: "/component-docs/components/page-sections/builders/custom-section/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForSelector("[data-theme-lock]", { state: "attached" });
+
+      const before = await page.evaluate(() => ({
+        root: document.documentElement.getAttribute("data-theme"),
+        locked: [...document.querySelectorAll("[data-theme-lock]")].map((el) =>
+          el.getAttribute("data-theme")
+        ),
+      }));
+
+      // `.first()` would find the copy inside the closed mobile panel.
+      await page.locator(".theme-toggle:visible").first().click();
+      await page.waitForFunction(
+        (was) => document.documentElement.getAttribute("data-theme") !== was,
+        before.root
+      );
+
+      const after = await page.evaluate(() =>
+        [...document.querySelectorAll("[data-theme-lock]")].map((el) =>
+          el.getAttribute("data-theme")
+        )
+      );
+
+      assert(
+        JSON.stringify(after) === JSON.stringify(before.locked),
+        `locked sections changed theme: ${JSON.stringify(before.locked)} -> ${JSON.stringify(after)}`
+      );
     },
   },
 ];

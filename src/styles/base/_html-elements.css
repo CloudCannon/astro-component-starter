@@ -61,7 +61,8 @@
       padding-left: var(--spacing-sm);
     }
 
-    main > :first-child.hero,
+    main > :first-child.hero-center,
+    main > :first-child.hero-split,
     main > :first-child.blog-block,
     main > :first-child.container,
     main > :first-child.carousel,

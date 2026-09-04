@@ -30,7 +30,7 @@ const hasLink = isNonEmptyString(link);
 const Inner = hasLink ? "a" : "span";
 const innerAttributes = hasLink ? { href: link } : {};
 
-if (!_component && !hasText && !hasIcon) return;
+if (!_component && !hasText && !hasIcon && !Astro.slots.has("default")) return;
 ---
 
 <div
@@ -79,6 +79,8 @@ if (!_component && !hasText && !hasIcon) return;
 <style is:global>
   @layer components {
     .badge {
+      --badge-min-height-lg: 2.25rem;
+
       display: inline-block;
       max-width: 100%;
       vertical-align: middle;
@@ -150,7 +152,7 @@ if (!_component && !hasText && !hasIcon) return;
 
         &.size-lg {
           font-size: var(--font-size-sm);
-          min-height: 2.25rem;
+          min-height: var(--badge-min-height-lg);
           padding: var(--spacing-xs) var(--spacing-md);
         }
       }
@@ -161,6 +163,11 @@ if (!_component && !hasText && !hasIcon) return;
 
         &:hover {
           border-color: var(--color-border-strong);
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
       }
 

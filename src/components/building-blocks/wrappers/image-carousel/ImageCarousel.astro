@@ -43,7 +43,7 @@ if (!_component && !hasImages) return;
 
 <section
   class:list={["image-carousel", "stackable", className]}
-  role="region"
+  aria-roledescription="carousel"
   aria-label={label || "Image carousel"}
   {...htmlAttributes}
 >
@@ -77,6 +77,9 @@ if (!_component && !hasImages) return;
           images?.map((img: ImageItem, index: number) => (
             <div
               class="main-slide"
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Image ${index + 1} of ${images.length}`}
               data-editable="array-item"
               data-id="building-blocks/wrappers/image-carousel/image-carousel-item"
             >
@@ -97,6 +100,15 @@ if (!_component && !hasImages) return;
       </div>
     </div>
 
+    {/* Slide changes are scroll-driven, so nothing else announces them. */}
+    <p
+      class="visually-hidden carousel-status"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      Image 1 of {images?.length ?? 0}
+    </p>
+
     <div class:list={["thumbs-strip", aspectRatio && `thumbs-ratio-${aspectRatio}`]}>
       {
         images?.map((img: ImageItem, index: number) => (
@@ -109,7 +121,7 @@ if (!_component && !hasImages) return;
           >
             <Image
               source={img.source}
-              alt={img.alt || ""}
+              decorative={true}
               aspectRatio={aspectRatio}
               positionVertical={img.positionVertical}
               positionHorizontal={img.positionHorizontal}
@@ -214,6 +226,9 @@ if (!_component && !hasImages) return;
           }
           &.thumbs-ratio-horizontal-strip {
             --thumb-ratio: var(--ratio-horizontal-strip);
+          }
+          &.thumbs-ratio-none {
+            --thumb-ratio: auto;
           }
 
           &::-webkit-scrollbar {

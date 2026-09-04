@@ -1,7 +1,6 @@
 text:
   type: text
-  comment: The text that goes inside the button.
-  hidden: hideText
+  comment: The text that goes inside the button. Still required when "Hide text" is on, where it becomes the icon-only button's accessible name.
 link:
   type: url
   comment: The URL to which the button should link.

@@ -10,7 +10,6 @@ value:
   iconColor: default
   iconPosition: before
   hideText: false
-  disabled: false
 preview:
   text:
     - Submit

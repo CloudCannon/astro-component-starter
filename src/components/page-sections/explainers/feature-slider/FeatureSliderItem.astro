@@ -13,6 +13,8 @@ const {
   description = "",
   imageSource = "",
   imageAlt = "",
+  /* Only the first slide is above the fold; the rest lazy-load. */
+  index = 0,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -41,7 +43,7 @@ const {
         <Heading
           level="h2"
           size="lg"
-          style="margin-top: 0;"
+          spaceBefore="none"
           data-prop="title"
         >
           {title}
@@ -57,7 +59,7 @@ const {
         alt={imageAlt || title}
         rounded={true}
         aspectRatio="portrait"
-        priority={true}
+        priority={index === 0}
         data-prop-src="imageSource"
         data-prop-alt="imageAlt"
       />

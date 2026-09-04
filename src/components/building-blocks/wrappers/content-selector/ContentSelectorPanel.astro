@@ -61,9 +61,13 @@ const subtextDataAttributes = effectiveSubtextProp
     aria-expanded={checked ? "true" : "false"}
     tabindex="0"
   >
+    {
+      /* `level="span"`, not a real heading: a tab label is not a section title,
+        and an h3 per tab injects the whole tab strip into the page outline. */
+    }
     <Heading
       text={title}
-      level="h3"
+      level="span"
       size="sm"
       iconName={iconName}
       iconColor={iconColor}

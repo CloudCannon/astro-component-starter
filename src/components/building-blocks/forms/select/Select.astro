@@ -4,7 +4,7 @@ import SelectOption from "./SelectOption.astro";
 import FormField from "@component-utils/FormField.astro";
 import { formFieldParts } from "@component-utils/formField";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
-import type { SegmentOption } from "../../../../types";
+import type { SelectOptionData } from "../../../../types";
 
 const {
   label,
@@ -40,7 +40,7 @@ const hasLeadingIcon = isNonEmptyString(iconName);
 
 // A disabled placeholder that isn't `selected` never shows — the browser falls
 // through to the first enabled option, and `required` is satisfied on load.
-const placeholderSelected = !options?.some((option: SegmentOption) => option.value === value);
+const placeholderSelected = !options?.some((option: SelectOptionData) => option.value === value);
 ---
 
 <FormField
@@ -57,7 +57,6 @@ const placeholderSelected = !options?.some((option: SegmentOption) => option.val
           size="none"
           class="select-icon select-leading-icon"
           aria-hidden="true"
-          role="presentation"
         />
       )
     }
@@ -79,7 +78,7 @@ const placeholderSelected = !options?.some((option: SegmentOption) => option.val
       }
       {
         options?.length > 0 ? (
-          options?.map((option: SegmentOption) => (
+          options?.map((option: SelectOptionData) => (
             <SelectOption
               value={option.value}
               label={option.label}
@@ -96,7 +95,6 @@ const placeholderSelected = !options?.some((option: SegmentOption) => option.val
       size="none"
       class="select-icon select-chevron"
       aria-hidden="true"
-      role="presentation"
     />
   </div>
 </FormField>

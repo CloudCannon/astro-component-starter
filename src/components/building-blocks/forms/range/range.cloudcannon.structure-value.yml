@@ -10,7 +10,6 @@ value:
   step: 1
   value: 50
   unit: ""
-  required: false
   showValue: true
   hint: null
   tickStyle: uniform

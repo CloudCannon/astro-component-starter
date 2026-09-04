@@ -58,7 +58,17 @@ if (!enabled || !message) return;
 
     // Dismissal stores the message itself, so publishing a different
     // announcement makes the bar reappear for everyone.
-    if (localStorage.getItem(KEY) === message) {
+    // Reading storage throws outright in private mode and with site data
+    // blocked, which would leave the close button unwired.
+    var dismissed = null;
+
+    try {
+      dismissed = localStorage.getItem(KEY);
+    } catch (e) {
+      dismissed = null;
+    }
+
+    if (dismissed === message) {
       bar.remove();
 
       return;
@@ -68,7 +78,12 @@ if (!enabled || !message) return;
 
     if (close) {
       close.addEventListener("click", function () {
-        localStorage.setItem(KEY, message);
+        try {
+          localStorage.setItem(KEY, message);
+        } catch (e) {
+          // Dismissal just won't persist; closing still works.
+        }
+
         bar.remove();
       });
     }

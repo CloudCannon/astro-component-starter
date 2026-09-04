@@ -87,6 +87,30 @@ const pathname = Astro.url.pathname;
         });
     }
     syncExpanded(barNav);
+    clampOpenDropdowns(barNav);
+  }
+
+  /**
+   * Nudge a centred dropdown back inside the viewport. A dropdown on the
+   * right-most nav item is centred on its trigger, so half of it hangs off the
+   * page; CSS alone cannot express "centred, but not past the edge".
+   */
+  function clampOpenDropdowns(barNav: Element) {
+    barNav
+      .querySelectorAll<HTMLElement>(".nav-item-toggle:checked ~ .nav-item-content")
+      .forEach((panel) => {
+        panel.style.removeProperty("--bar-dropdown-shift");
+
+        const gutter = 8;
+        const box = panel.getBoundingClientRect();
+        const overflowEnd = box.right - (window.innerWidth - gutter);
+        const overflowStart = gutter - box.left;
+        const shift = overflowEnd > 0 ? -overflowEnd : overflowStart > 0 ? overflowStart : 0;
+
+        if (shift !== 0) {
+          panel.style.setProperty("--bar-dropdown-shift", `${Math.round(shift)}px`);
+        }
+      });
   }
 
   function handleTriggerClick(e: Event) {
@@ -334,10 +358,11 @@ const pathname = Astro.url.pathname;
         border-radius: var(--radius-xs);
         left: 50%;
         margin-top: var(--spacing-xs);
+        max-width: calc(100vw - var(--spacing-md) * 2);
         min-width: var(--bar-dropdown-min-width);
         position: absolute;
         top: 100%;
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% + var(--bar-dropdown-shift, 0px)));
         width: max-content;
         z-index: var(--layer-3);
       }

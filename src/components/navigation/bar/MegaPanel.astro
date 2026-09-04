@@ -17,6 +17,9 @@ const itemData = createNavItemData(pathname, item, groupName);
 const feature = item.megaMenu?.feature;
 const hasFeature = Boolean(feature?.heading || feature?.image);
 const FeatureTag = feature?.link ? "a" : "div";
+// An image-only feature card is a link wrapping one image; with no alt it has
+// no accessible name at all, so fall back to the nav item it sits under.
+const featureLinkLabel = feature?.imageAlt || item.name || "Featured";
 const columns: MegaMenuColumn[] = item.megaMenu?.columns ?? [];
 ---
 
@@ -34,6 +37,7 @@ const columns: MegaMenuColumn[] = item.megaMenu?.columns ?? [];
         hasFeature && (
           <FeatureTag
             href={feature!.link || undefined}
+            aria-label={feature!.link && !feature!.heading ? featureLinkLabel : undefined}
             class="mega-feature"
           >
             {feature!.image && (

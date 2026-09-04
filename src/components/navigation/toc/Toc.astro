@@ -8,6 +8,8 @@
  * the article from 1024px up, and a collapsed `<details>` disclosure above it
  * below that (not sticky — a pinned bar eats too much of a small viewport).
  */
+import Icon from "@core-elements/icon/Icon.astro";
+
 type TocHeading = { depth: number; slug: string; text: string };
 
 const { headings = [], class: className, ...htmlAttributes } = Astro.props;
@@ -40,18 +42,12 @@ if (items.length === 0) return;
   <details class="toc-disclosure">
     <summary>
       <span>On this page · {sectionCount} section{sectionCount === 1 ? "" : "s"}</span>
-      <svg
+      <Icon
+        name="chevron-down"
+        size="none"
+        class="toc-chevron"
         aria-hidden="true"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        ><path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="m19.5 8.25-7.5 7.5-7.5-7.5"
-        ></path></svg
-      >
+      />
     </summary>
     <!-- Sidebar is the one "On this page" landmark; the summary names this control. -->
     <div>
@@ -146,14 +142,13 @@ if (items.length === 0) return;
             display: none;
           }
 
-          svg {
-            height: 14px;
+          .toc-chevron {
+            font-size: var(--font-size-sm);
             transition: transform var(--animation-fast) var(--ease-in-out);
-            width: 14px;
           }
         }
 
-        &[open] > summary svg {
+        &[open] > summary .toc-chevron {
           transform: rotate(180deg);
         }
 
@@ -162,6 +157,9 @@ if (items.length === 0) return;
         }
       }
 
+      /* 1024px, off the canonical 640/768 scale on purpose: the sidebar only
+         fits once the article column plus a 16rem rail clear the viewport,
+         which happens above the widest canonical breakpoint. */
       @media (width >= 1024px) {
         .toc-sidebar {
           display: block;

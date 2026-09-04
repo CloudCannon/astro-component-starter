@@ -6,6 +6,7 @@ type SocialLink = { icon?: string; link?: string; label?: string };
 
 const {
   links = [],
+  ariaLabel = "Social",
   variant = "ghost",
   size = "md",
   alignmentHorizontal = "none",
@@ -19,6 +20,11 @@ const {
 
 if (!_component && !links?.length) return;
 
+// Every link opens in a new tab, so the announcement belongs on all of them,
+// author-supplied labels included.
+const linkLabel = (social: SocialLink) =>
+  `${social.label || `Visit our ${social.icon?.replace(/^.*\//, "")} page`} (opens in a new tab)`;
+
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "links" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
@@ -27,7 +33,7 @@ const arrayDataAttributes = effectiveChildrenProp
 
 <nav
   class:list={["social-links", "stackable", className]}
-  aria-label="Social"
+  aria-label={ariaLabel}
   {...htmlAttributes}
 >
   <ul
@@ -46,7 +52,7 @@ const arrayDataAttributes = effectiveChildrenProp
           <a
             class="social-link"
             href={social.link}
-            aria-label={social.label || `Visit our ${social.icon?.replace(/^.*\//, "")} page`}
+            aria-label={linkLabel(social)}
             target="_blank"
             rel="noopener noreferrer"
           >

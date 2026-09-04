@@ -44,8 +44,8 @@ const posterPopoverId = usePoster
   : undefined;
 
 // Modal videos autoplay with sound on open (allowed because opening is a user
-// gesture), so the embed URL is injected by the script below rather than using
-// the Video component's muted page-load autoplay.
+// gesture), so `setup.ts` injects the embed on open rather than using the
+// Video component's muted page-load autoplay.
 const embedSrc =
   type === "youtube"
     ? `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`
@@ -124,59 +124,9 @@ const embedSrc =
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllVideoModals } from "./setup";
 
-  function setupVideoModals() {
-    document.querySelectorAll<HTMLElement>(".video-modal").forEach((modal) => {
-      if (modal.hasAttribute("data-video-modal-initialized")) return;
-      modal.setAttribute("data-video-modal-initialized", "");
-
-      const popover = modal.querySelector<HTMLElement>(".modal-popover");
-      if (!popover) return;
-
-      const body = popover.querySelector<HTMLElement>(".video-modal-body");
-      const embedSrc = body?.dataset.videoEmbedSrc;
-      const videoTitle = body?.dataset.videoTitle;
-      const embedContainer = popover.querySelector<HTMLElement>(".video-modal-embed");
-      const localVideo = popover.querySelector<HTMLVideoElement>(".video-modal-player");
-
-      popover.addEventListener("toggle", (e) => {
-        const { newState } = e as ToggleEvent;
-
-        if (newState === "open") {
-          if (localVideo) {
-            localVideo.play().catch(() => {});
-          } else if (embedContainer && embedSrc) {
-            const iframe = document.createElement("iframe");
-            iframe.src = embedSrc;
-            iframe.title = videoTitle || "";
-            iframe.allow = "autoplay; fullscreen; picture-in-picture";
-            iframe.allowFullscreen = true;
-            embedContainer.replaceChildren(iframe);
-          }
-        } else {
-          if (localVideo) {
-            localVideo.pause();
-            localVideo.currentTime = 0;
-          } else if (embedContainer) {
-            embedContainer.replaceChildren();
-          }
-        }
-      });
-
-      // The overlay fills the viewport, so the popover API's light dismiss
-      // never fires — a click on the dark surround closes instead. Clicks on
-      // the player or the close control stay inside the chrome.
-      popover.addEventListener("click", (e) => {
-        const target = e.target as HTMLElement;
-
-        if (target.closest(".modal-body") || target.closest(".modal-close")) return;
-
-        popover.hidePopover();
-      });
-    });
-  }
-
-  onPageLoad(setupVideoModals);
+  onPageLoad(() => setupAllVideoModals());
 </script>
 
 <style is:global>
@@ -235,7 +185,9 @@ const embedSrc =
     .video-modal .modal-popover {
       --video-modal-column: min(
         90vw,
-        calc((100dvh - var(--spacing-xl) * 2 - 2.75rem - var(--spacing-md)) * 16 / 9)
+        calc(
+          (100dvh - var(--spacing-xl) * 2 - 2.75rem - var(--spacing-md)) * var(--ratio-widescreen)
+        )
       );
 
       background: var(--color-overlay);
@@ -327,7 +279,7 @@ const embedSrc =
     }
 
     .video-modal-body {
-      aspect-ratio: 16 / 9;
+      aspect-ratio: var(--ratio-widescreen);
       border-radius: var(--radius-xs);
       line-height: var(--line-height-none);
       overflow: hidden;

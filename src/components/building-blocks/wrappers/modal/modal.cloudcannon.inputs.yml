@@ -4,6 +4,16 @@ label:
 heading:
   type: text
   comment: Optional heading displayed at the top of the modal.
+headingLevel:
+  type: select
+  comment: The heading level for the modal title. Pick the level that follows the heading above the trigger.
+  options:
+    values:
+      - h2
+      - h3
+      - h4
+      - h5
+      - h6
 triggerText:
   type: text
   comment: Text displayed on the button that opens the modal.
