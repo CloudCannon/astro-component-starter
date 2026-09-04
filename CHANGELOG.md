@@ -26,7 +26,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Social Links takes a **Landmark name**, so two sets of social links on one page are distinguishable.
 - Main Nav exposes the **Theme toggle** switch. The prop was read but had no input, so it could only be set by editing `mainNav.json`.
 - Feature Grid's snippet offers the alignment control the component already had.
-- `npm run lint:cms` validates the props in page content, not just the props in the CloudCannon YAML. Every key sitting beside a `_component` in `src/content/` must be a prop that component destructures, so a renamed prop no longer leaves a stale value behind in content where nothing reports it — a stray key lands in the component's rest spread and renders as a bare HTML attribute. Item objects whose shape comes from a parent's `_structures` block are not covered yet.
+- `npm run lint:cms` validates the props in page content, not just the props in the CloudCannon YAML. Every key sitting beside a `_component` in `src/content/` must be a prop that component destructures, so a renamed prop no longer leaves a stale value behind in content where nothing reports it — a stray key lands in the component's rest spread and renders as a bare HTML attribute. The items of a structured array (a logo cloud's logos, a pricing tier's features) are checked too, against the `_structures` block that declares them, one nesting level at a time.
+- `npm run lint:cms` fails on a component whose behaviour would be dead in the CloudCannon editor. CloudCannon renders components with `renderToStaticMarkup`, which strips inline `<script>` tags, so a scripted component must either register a `setup.ts` in `editor-live-sync.js` or be listed in the linter's `EDITOR_INERT` map with the reason inert is acceptable — the nine that are inert today all degrade rather than break, and each now says how.
+- `npm run lint:roots` fails on a literal `data-editable` on a component's root element, which collides with the region attribute CloudCannon stamps there and drops the item from the array editor, and on a classed root that spreads a rest without destructuring `class`, where a caller's `class` replaces the hook class the component's own CSS and setup script key on.
 
 ### Changed
 
@@ -113,6 +115,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- A content selector panel merges a caller's `class` instead of letting it replace `content-selector-item`, which would have taken the panel's own layout and tab wiring with it.
 - A Video Modal set to the button trigger rendered nothing to click. Only the poster variant worked, so a video modal added from the editor with default settings was an invisible block on the page. Modal now chooses its trigger from the trigger settings rather than from whether a consumer supplied one, because a trigger passed conditionally still counted as supplied even when it rendered nothing.
 - A Video Modal plays in the CloudCannon editor. Its video wiring was an inline script, which the editor strips, so opening one on the canvas showed an empty frame; it is now a setup module registered with the rest. Changing the video in the editor also takes effect on the next open instead of replaying the video the page loaded with.
 - A Pricing Comparison cell left empty renders empty, instead of the "Not included" cross. A row an editor had not filled in yet was telling customers the feature was absent. Say "no" or "-" to mark something excluded, as the input has always described.

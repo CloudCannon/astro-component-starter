@@ -14,6 +14,7 @@ const {
   checked = false,
   groupName = "content-selector-tabs",
   navigationPosition = "start",
+  class: className,
   _component,
   "data-children-prop": childrenDataProp,
   "data-prop-title": customDataPropTitle,
@@ -41,7 +42,7 @@ const subtextDataAttributes = effectiveSubtextProp
 ---
 
 <div
-  class="content-selector-item"
+  class:list={["content-selector-item", className]}
   {...htmlAttributes}
 >
   <input

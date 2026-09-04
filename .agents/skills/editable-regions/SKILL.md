@@ -33,7 +33,7 @@ This skill owns the starter's editable-binding attribute tables (per `.agents/sk
 ## The core rule: pass props, not raw attributes
 
 **MUST NOT:** put `data-editable` on a component's **root** element.
-**Why:** `renderBlock.astro` injects `data-editable="array-item"` on the root of every placed block — a hand-written `data-editable` collides with it. Building blocks always emit their region attribute on an **inner** node (`.heading-text`, `.text-inner`, the `<img>`), never the root.
+**Why:** `renderBlock.astro` injects `data-editable="array-item"` on the root of every placed block — a hand-written `data-editable` collides with it. Building blocks always emit their region attribute on an **inner** node (`.heading-text`, `.text-inner`, the `<img>`), never the root. `npm run lint:roots` fails on a literal `data-editable` there.
 
 **MUST NOT:** use `display: contents` on a component root.
 **Why:** it removes the root box the array-item region binds to, so the item drops out of the editor.

@@ -12,6 +12,11 @@
  * prop. Region wiring (`data-editable` and friends), `aria-*`, and the
  * exceptions listed in ALLOWED below are skipped.
  *
+ * It also flags two things on that first element regardless of prop values: a
+ * *literal* `data-editable`, which collides with the region attribute
+ * CloudCannon stamps there, and a spread rest over a classed root in a component
+ * that never destructures `class`, which lets a caller replace the hook class.
+ *
  * Only components CloudCannon can make a region root are checked — those with
  * CloudCannon YAML, i.e. a placeable block, an array item, or a form field.
  * Everything else is composed inside one of those and re-rendered with it, so
@@ -22,6 +27,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { glob } from "glob";
+import { parseDestructure } from "../lib/componentModel.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 
@@ -332,6 +338,70 @@ function isRegionRoot(file) {
     existsSync(join(dir, `${kebab}.cloudcannon.structure-value.yml`))
   );
 }
+
+// A hand-written `data-editable` on the root collides with the one CloudCannon
+// stamps there when it makes the component a region — the item disappears from
+// the array editor. Arriving through `{...htmlAttributes}` is how it is *meant*
+// to get there, so only a literal value is a finding.
+const rootRegions = [];
+const clobberable = [];
+
+for (const file of files) {
+  const source = readFileSync(join(root, file), "utf8");
+  const element = firstElement(source);
+
+  if (!element) continue;
+
+  const attrs = parseAttrs(element.attrs);
+
+  if (isRegionRoot(file)) {
+    for (const { name, value } of attrs) {
+      if (name !== "data-editable" || value.startsWith("{")) continue;
+
+      rootRegions.push({ file: relative(".", file), tag: element.tag, value });
+    }
+  }
+
+  // A spread `class` beats both `class` and `class:list`, so a component that
+  // spreads a rest onto a classed root without destructuring `class` lets a
+  // caller replace the hook class its own CSS and setup.ts key on.
+  const parsed = parseDestructure(source);
+  const spreadsRest = /\{\s*\.\.\.[A-Za-z_$]/.test(element.attrs);
+  const hasRootClass = attrs.some(({ name }) => name === "class" || name === "class:list");
+
+  if (parsed?.hasRest && spreadsRest && hasRootClass && !parsed.props.has("class")) {
+    clobberable.push({ file: relative(".", file), tag: element.tag });
+  }
+}
+
+if (rootRegions.length) {
+  console.error(
+    `lint:roots: ${rootRegions.length} literal data-editable on a component root.\n` +
+      "CloudCannon stamps its own there, and the collision drops the item from the\n" +
+      "array editor — move the region to an inner node\n" +
+      "(see .agents/skills/editable-regions/SKILL.md).\n"
+  );
+
+  for (const finding of rootRegions) {
+    console.error(`  ${finding.file}`);
+    console.error(`    <${finding.tag} data-editable=${finding.value}>\n`);
+  }
+}
+
+if (clobberable.length) {
+  console.error(
+    `lint:roots: ${clobberable.length} component(s) whose root class a caller can replace.\n` +
+      "Destructure `class: className` and merge it —\n" +
+      '`class:list={["the-hook", className]}` (see component-templates.md).\n'
+  );
+
+  for (const finding of clobberable) {
+    console.error(`  ${finding.file}`);
+    console.error(`    <${finding.tag}> has a class and spreads a rest, but no class prop\n`);
+  }
+}
+
+if (rootRegions.length || clobberable.length) process.exit(1);
 
 for (const file of files) {
   if (!isRegionRoot(file)) continue;

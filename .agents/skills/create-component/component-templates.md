@@ -90,7 +90,7 @@ if (!_component && !hasText && !hasSlotContent) return;
 
 Model on `src/components/building-blocks/wrappers/accordion/Accordion.astro`.
 
-**Common miss:** forgetting `class: className`. A wrapper that does not destructure it lets a caller's `class` replace the component's own root class outright.
+**Common miss:** forgetting `class: className`. A wrapper that does not destructure it lets a caller's `class` replace the component's own root class outright — a spread `class` beats both `class` and `class:list`, so the hook class its CSS and `setup.ts` key on simply vanishes. Always merge: `class:list={["my-wrapper", className]}`. `lint:roots` fails on a classed root that spreads a rest without a `class` prop.
 
 ```astro
 ---

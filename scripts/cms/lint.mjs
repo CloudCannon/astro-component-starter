@@ -516,14 +516,110 @@ for (const [abs, maps] of arraySources) {
 // attribute, so a renamed prop leaves the old value in content doing nothing and
 // nothing else reports it.
 //
-// Only objects that carry `_component` are checked. Item objects whose shape is
-// declared by a parent's `_structures` block (gridItems, steps items) are NOT
-// validated — resolving those needs the structure graph, so drift inside them
-// still passes.
+// Item objects with no `_component` of their own are checked against the
+// `_structures` block that declares them (logo-cloud logos, pricing tiers), one
+// hop at a time: an input's `options.structures` names the structure, and the
+// union of its values' `value:`/`_inputs` keys is what an item may carry. A key
+// no value declares is one CloudCannon will not render a field for.
 
 /** HTML attributes an author may legitimately set on a component that spreads a rest. */
 const PASS_THROUGH_ATTR = (key) =>
   key === "id" || key.startsWith("data-") || key.startsWith("aria-");
+
+/** Every `_structures` definition, component-local and shared, by name. */
+const structuresByName = {};
+
+for (const abs of [...yamlPaths.map((p) => join(componentsDir, p)), ...structureFiles]) {
+  const doc = loadYaml(abs);
+  const walk = (node) => {
+    if (Array.isArray(node)) node.forEach(walk);
+    else if (node && typeof node === "object") {
+      for (const [key, value] of Object.entries(node)) {
+        if (key === "_structures" && value && typeof value === "object")
+          Object.assign(structuresByName, value);
+        else walk(value);
+      }
+    }
+  };
+
+  walk(doc);
+
+  // `.cloudcannon/structures/*.yml` declare their structures at the document root.
+  if (structureFiles.includes(abs) && doc && typeof doc === "object")
+    Object.assign(structuresByName, doc);
+}
+
+/** An input name as content spells it: `background.type` and `logos[*]` both key `logos`. */
+const inputRootKey = (name) => name.split(".")[0].replace(/\[\*\]$/, "");
+
+/** The keys a structure's items may carry, and the structures nested under them. */
+function structureShape(ref) {
+  const structure = structuresByName[String(ref).replace(/^_structures\./, "")];
+
+  if (!structure?.values) return null;
+
+  const keys = new Set();
+  const nested = new Map();
+
+  for (const option of structure.values) {
+    for (const key of Object.keys(option?.value ?? {})) keys.add(key);
+
+    for (const [name, cfg] of Object.entries(option?._inputs ?? {})) {
+      keys.add(inputRootKey(name));
+
+      if (typeof cfg?.options?.structures === "string")
+        nested.set(inputRootKey(name), cfg.options.structures);
+    }
+  }
+
+  return { keys, nested };
+}
+
+/** prop name -> structure ref, from a component's own inputs.yml. */
+function structureRefsFor(componentKey) {
+  const astroAbs = byKey.get(componentKey)?.astroAbs;
+
+  if (!astroAbs) return new Map();
+
+  const dir = dirname(astroAbs);
+  const inputsAbs = join(dir, `${dir.split("/").pop()}.cloudcannon.inputs.yml`);
+  const refs = new Map();
+
+  for (const [name, cfg] of Object.entries(loadYaml(inputsAbs) || {})) {
+    if (typeof cfg?.options?.structures === "string")
+      refs.set(inputRootKey(name), cfg.options.structures);
+  }
+
+  return refs;
+}
+
+/** Check the items of a structured array against the shape its structure declares. */
+function checkStructuredItems(items, ref, path, strays) {
+  const shape = structureShape(ref);
+
+  if (!shape || !Array.isArray(items)) return;
+
+  items.forEach((item, index) => {
+    if (!item || typeof item !== "object" || Array.isArray(item)) return;
+    // A block carries its own component; Check 8 proper validates it.
+    if (typeof item._component === "string") return;
+
+    const itemPath = `${path}[${index}]`;
+
+    for (const [key, value] of Object.entries(item)) {
+      if (NON_PROP_KEY(key)) continue;
+
+      if (!shape.keys.has(key)) {
+        strays.push(`${itemPath}: ${ref} declares no "${key}"`);
+        continue;
+      }
+
+      const nestedRef = shape.nested.get(key);
+
+      if (nestedRef) checkStructuredItems(value, nestedRef, `${itemPath}.${key}`, strays);
+    }
+  });
+}
 
 function checkContentProps(node, path, abs, strays) {
   if (Array.isArray(node)) {
@@ -536,8 +632,14 @@ function checkContentProps(node, path, abs, strays) {
     const entry = byKey.get(node._component);
 
     if (entry?.parsed) {
+      const refs = structureRefsFor(node._component);
+
       for (const key of Object.keys(node)) {
         if (key === "_component" || NON_PROP_KEY(key)) continue;
+
+        if (refs.has(key))
+          checkStructuredItems(node[key], refs.get(key), `${path || "."}.${key}`, strays);
+
         if (entry.parsed.props.has(key)) continue;
         if (entry.parsed.hasRest && PASS_THROUGH_ATTR(key)) continue;
         strays.push(`${path || "."}: ${node._component} has no prop "${key}"`);
@@ -560,6 +662,72 @@ for (const abs of contentFiles) {
 
   if (strays.length) fail(rel(abs), `unknown prop(s) in content:\n   ${strays.join("\n   ")}`);
   else ok(`content     ${rel(abs)}`);
+}
+
+// Check 9 — Editor script registration (FAIL): CloudCannon's editable-regions
+// renders components with `renderToStaticMarkup`, which strips inline `<script>`
+// tags. A component whose behaviour lives in one therefore never initialises on
+// the canvas, with no error anywhere — so every scripted component must either
+// register a setup module in `editor-live-sync.js` or be listed below with the
+// reason its editor behaviour is acceptable.
+//
+// Non-JavaScript `<script>` types (JSON-LD) are not behaviour and are skipped.
+
+const liveSyncSource = readFileSync(join(root, "editor-live-sync.js"), "utf8");
+
+// Scripted components deliberately left inert in the editor, and why. An entry
+// is a promise that the component degrades rather than breaks on the canvas —
+// verify that before adding one.
+const EDITOR_INERT = {
+  "navigation/bar/Bar.astro": "dropdowns keep their CSS-only `:checked` disclosure",
+  "navigation/side/Side.astro": "panels keep their CSS-only `:checked` disclosure",
+  "navigation/mobile/Mobile.astro": "the drawer keeps its CSS-only `:checked` disclosure",
+  "navigation/announcement-bar/AnnouncementBar.astro":
+    "intentional — the editor must always see the bar it is editing, so dismissal stays off",
+  "navigation/theme-toggle/ThemeToggle.astro":
+    "the toggle is inert but the canvas renders in the site's default theme",
+  "navigation/theme-toggle/ThemeToggleScript.astro":
+    "sets the pre-paint theme on a real page load; the editor supplies its own frame",
+  "building-blocks/core-elements/counter/Counter.astro":
+    "the count-up does not animate; the SSR value is the final number",
+  "building-blocks/forms/range/Range.astro":
+    "the slider still drags, only the live number readout stops tracking",
+  "utils/VideoElements.astro": "calls core-elements/video/setup, which is registered",
+};
+
+/** `<script>` tags outside the frontmatter fence that actually run JavaScript. */
+function hasExecutableScript(source) {
+  const body = source.replace(/^---[\s\S]*?\n---/, "");
+
+  return [...body.matchAll(/<script\b([^>]*)>/g)].some(([, attrs]) => {
+    const type = attrs.match(/type\s*=\s*["']([^"']+)["']/)?.[1];
+
+    return !type || /javascript|module/i.test(type);
+  });
+}
+
+for (const relToComponents of astroPaths) {
+  const astroAbs = join(componentsDir, relToComponents);
+  const dir = dirname(astroAbs);
+  const hasSetup = ["setup.ts", "setup.js"].some((name) => existsSync(join(dir, name)));
+
+  if (!hasSetup && !hasExecutableScript(readFileSync(astroAbs, "utf8"))) continue;
+
+  const setupRef = `src/components/${relative(componentsDir, dir)}/setup`;
+
+  if (liveSyncSource.includes(setupRef)) {
+    ok(`editor-sync ${rel(astroAbs)}`);
+  } else if (EDITOR_INERT[relToComponents]) {
+    ok(`editor-inert ${rel(astroAbs)} (${EDITOR_INERT[relToComponents]})`);
+  } else {
+    fail(
+      rel(astroAbs),
+      "client `<script>` that never runs in the CloudCannon editor — extract it to a " +
+        "co-located setup.ts and register it in editor-live-sync.js (see " +
+        "building-blocks/wrappers/carousel/setup.ts), or add an EDITOR_INERT entry in " +
+        "scripts/cms/lint.mjs saying why inert is acceptable."
+    );
+  }
 }
 
 for (const label of oks) console.log(`ok     ${label}`);
