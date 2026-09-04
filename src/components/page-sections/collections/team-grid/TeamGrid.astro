@@ -2,6 +2,7 @@
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
 import TeamItem from "@page-sections/collections/team-grid/TeamItem.astro";
 import CardGrid from "@wrappers/card-grid/CardGrid.astro";
 import { nextHeadingLevel } from "@component-utils/headingLevel";
@@ -60,15 +61,13 @@ const itemHeadingLevel = nextHeadingLevel(headingLevel);
   >
     {heading}
   </Heading>
-  <SimpleText
-    class="team-grid-subtext"
-    size="md"
+  <Text
+    class="section-subtext"
     alignmentHorizontal="center"
     data-prop="subtext"
     text={subtext}
   />
   <CardGrid
-    class="team-grid-grid"
     columns={3}
     gap="md"
     aspectRatio="square"
@@ -92,12 +91,6 @@ const itemHeadingLevel = nextHeadingLevel(headingLevel);
   @layer page-sections {
     .team-grid-heading {
       margin-bottom: var(--spacing-sm);
-    }
-
-    .team-grid-subtext {
-    }
-
-    .team-grid-grid {
     }
   }
 </style>

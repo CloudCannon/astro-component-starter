@@ -7,6 +7,7 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 import CardGrid from "@wrappers/card-grid/CardGrid.astro";
+import { formatPostDate } from "@component-utils/formatPostDate";
 
 const {
   eyebrow = "",
@@ -49,9 +50,6 @@ if (import.meta.env.SSR) {
     .sort((a: any, b: any) => b.data.date.valueOf() - a.data.date.valueOf())
     .slice(0, postCount);
 }
-
-const formatDate = (date: Date) =>
-  date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 
 const slugFor = (post: any) => post.id?.replace(/\.mdx?$/, "") || post.slug;
 
@@ -110,7 +108,7 @@ const postCards = posts.map((post: any) =>
     href: `/blog/${slugFor(post)}`,
     tag: post.data.tags?.[0],
     tagHref: post.data.tags?.[0] ? `/blog/tag/${slugifyLabel(post.data.tags[0].trim())}/` : "",
-    meta: `${formatDate(post.data.date)} · ${post.data.author || "Anonymous"}`,
+    meta: `${formatPostDate(post.data.date)} · ${post.data.author || "Anonymous"}`,
     excerpt: post.data.description,
   })
 );

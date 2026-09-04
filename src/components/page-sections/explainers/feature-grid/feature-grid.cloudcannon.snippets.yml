@@ -42,6 +42,10 @@ featureGrid:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: alignmentHorizontal
+        type: string
+        optional: true
+        remove_empty: true
       - editor_key: features
         type: array
       - editor_key: colorScheme

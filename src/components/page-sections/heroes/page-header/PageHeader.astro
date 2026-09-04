@@ -28,8 +28,11 @@ const {
 } = Astro.props;
 
 // The trail comes from the page's own URL — nested paths become linked
-// ancestors, and the heading names the current page.
-const trail = showBreadcrumbs ? trailFromPathname(Astro.url.pathname, heading) : [];
+// ancestors, and the heading names the current page. `Astro.url` is absent in
+// CloudCannon's editable-regions re-render, where a crash would blank the
+// whole section rather than just its breadcrumbs.
+const pathname = Astro.url?.pathname ?? "";
+const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading) : [];
 ---
 
 <CustomSection

@@ -1,7 +1,7 @@
 ---
 title: Feature Split
 description: One feature explained beside an image.
-overview: Tells a story on one side and lists capabilities on the other. Reverse the columns if needed.
+overview: Explains one feature in a column of copy and buttons, with a supporting image beside it. Reverse the columns, or run the image to the page edge with Image bleed.
 examples:
   - title: Image bleed
     size: lg

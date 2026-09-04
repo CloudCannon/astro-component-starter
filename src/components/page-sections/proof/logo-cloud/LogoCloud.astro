@@ -41,7 +41,7 @@ const {
   {...htmlAttributes}
 >
   <SimpleText
-    class="logo-cloud-heading"
+    class="eyebrow"
     size="sm"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -55,7 +55,7 @@ const {
            prefers-reduced-motion (the strip then sits still, fully readable). */
         <Carousel
           class:list={["logo-cloud-marquee", grayscale && "grayscale"]}
-          label="Client logos"
+          label={sectionLabel || heading || "Client logos"}
           autoScroll={true}
           loop={true}
           slideWidthPercent={20}
@@ -129,13 +129,6 @@ const {
 <style is:global>
   @layer page-sections {
     .logo-cloud {
-      .logo-cloud-heading .simple-text-content {
-        color: var(--color-text-muted);
-        font-weight: var(--font-weight-semibold);
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
       .logo-cloud-grid {
         align-items: center;
         display: grid;

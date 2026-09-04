@@ -27,6 +27,7 @@ const {
     authorDescription={authorDescription}
     authorImage={authorImage}
     alignmentHorizontal="start"
+    avatarSize={48}
     data-prop="text"
     data-prop-author-name="authorName"
     data-prop-author-description="authorDescription"
@@ -37,14 +38,9 @@ const {
 <style is:global>
   @layer page-sections {
     .testimonial-wall-item {
+      /* Card height stays content-driven on purpose — it feeds the masonry
+         span measurement. */
       margin-top: 0;
-
-      /* Wall quotes are shorter than the single-quote section's, so the avatar
-         reads better small. Card height stays content-driven on purpose — it
-         feeds the masonry span measurement. */
-      > .testimonial-inner > .author > .author-image {
-        --avatar-size: 48px;
-      }
     }
   }
 </style>

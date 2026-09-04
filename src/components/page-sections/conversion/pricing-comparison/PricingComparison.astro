@@ -51,11 +51,15 @@ const cellFor = (row: Row, index: number) => {
 
 // "yes"/"no" are the two marks; anything else is shown as text (e.g. "5 seats",
 // "Unlimited"). Case-insensitive so editors can type Yes or YES.
+//
+// An empty value is NOT "excluded": a row an editor has not filled in yet
+// would otherwise tell customers the feature is absent. Blank renders blank;
+// "no" or "-" is how you say excluded.
 const markFor = (value: string) => {
   const token = value.toLowerCase();
 
   if (token === "yes" || token === "true" || token === "✓") return "included";
-  if (token === "no" || token === "false" || token === "-" || token === "") return "excluded";
+  if (token === "no" || token === "false" || token === "-") return "excluded";
   return "text";
 };
 
@@ -91,7 +95,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
     {heading}
   </Heading>
   <Text
-    class="pricing-comparison-subtext"
+    class="section-subtext pricing-comparison-subtext"
     alignmentHorizontal="center"
     data-prop="subtext"
     text={subtext}
@@ -223,12 +227,6 @@ const hasTable = planList.length > 0 && rows?.length > 0;
          stays opaque when the table pans underneath. */
       --pricing-stripe: color-mix(in srgb, var(--gray-500) 10%, transparent);
       --pricing-stripe-solid: color-mix(in srgb, var(--gray-500) 10%, var(--color-bg));
-
-      .pricing-comparison-subtext {
-        margin-inline: auto;
-        max-width: 42rem;
-      }
-
       .pricing-comparison-frame {
         --space-before: var(--space-before-loose);
       }

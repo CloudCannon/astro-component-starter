@@ -59,7 +59,7 @@ const {
     {heading}
   </Heading>
   <Text
-    class="card-collection-subtext"
+    class="section-subtext card-collection-subtext"
     alignmentHorizontal="center"
     data-prop="subtext"
     text={subtext}
@@ -75,14 +75,3 @@ const {
     data-children-prop="items"
   />
 </CustomSection>
-
-<style is:global>
-  @layer page-sections {
-    .card-collection {
-      .card-collection-subtext {
-        margin-inline: auto;
-        max-width: 42rem;
-      }
-    }
-  }
-</style>

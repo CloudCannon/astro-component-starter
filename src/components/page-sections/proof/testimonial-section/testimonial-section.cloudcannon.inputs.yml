@@ -26,9 +26,9 @@ authorImage:
     paths:
       uploads: src/assets/images
       static: ""
-    resize_style: contain
-    width: 1920
-    height: 1280
+    resize_style: cover
+    width: 480
+    height: 480
 
 # --- section wrapper inputs (CustomSection) ---
 # Configures the CustomSection wrapper, not this section's own content. Inline
@@ -193,7 +193,7 @@ background.priority:
 background.imageSource:
   comment: URL or path to the background or pattern image. Used by the Image and Pattern types.
   type: image
-  hidden: "background.type !== 'image'"
+  hidden: "background.type !== 'image' && background.type !== 'pattern'"
   options:
     paths:
       uploads: src/assets/images

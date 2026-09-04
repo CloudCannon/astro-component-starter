@@ -36,7 +36,7 @@ const {
   {...htmlAttributes}
 >
   <Carousel
-    label="Feature slider"
+    label={sectionLabel || "Feature slider"}
     slideWidthPercent={100}
     minSlideWidth={0}
     autoPlay={false}
@@ -46,6 +46,7 @@ const {
     {
       slides?.map((slide: SlideProps, index: number) => (
         <FeatureSliderItem
+          index={index}
           aria-label={`Slide ${index + 1} of ${slides.length}`}
           data-editable="array-item"
           data-id="page-sections/explainers/feature-slider/feature-slider-item"

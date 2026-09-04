@@ -122,7 +122,7 @@ _structures:
             comment: Price line under the name (e.g. "$49/mo" or "Custom"). Leave empty to hide.
           highlight:
             type: switch
-            comment: Tint this plan's column to mark it as the recommended one.
+            comment: Marks this plan as the recommended one, giving its call-to-action the primary button style.
           buttonText:
             type: text
             comment: Call to action under the column. Leave empty for no button.

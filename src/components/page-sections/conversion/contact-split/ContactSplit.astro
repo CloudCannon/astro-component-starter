@@ -32,6 +32,13 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+// Every instance shipped the literal "Map", which names four different maps
+// identically for a screen reader moving between pages.
+const addressDetail = details?.find((detail: DetailProps) =>
+  /address|location|map/i.test(`${detail.label ?? ""} ${detail.icon ?? ""}`)
+);
+const mapTitle = addressDetail?.value ? `Map of ${addressDetail.value}` : "Map";
 ---
 
 <CustomSection
@@ -132,7 +139,7 @@ const {
           <Embed aspectRatio="none">
             <iframe
               src={mapEmbedUrl}
-              title="Map"
+              title={mapTitle}
               loading="lazy"
               referrerpolicy="no-referrer-when-downgrade"
             />
@@ -181,6 +188,8 @@ const {
       }
 
       .contact-split-map {
+        --contact-map-height: 12rem;
+
         background-color: var(--color-bg-surface);
         border-top: var(--border-width-sm) solid var(--color-border);
 
@@ -191,7 +200,7 @@ const {
         iframe {
           border: none;
           display: block;
-          height: 12rem;
+          height: var(--contact-map-height);
           width: 100%;
         }
       }
