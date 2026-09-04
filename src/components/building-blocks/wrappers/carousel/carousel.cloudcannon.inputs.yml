@@ -13,7 +13,7 @@ pauseOnHover:
   comment: Pause auto-play while the cursor is over the carousel. Only applies when auto-play is enabled.
   type: switch
 autoScroll:
-  comment: Enable auto-scroll functionality.
+  comment: Scroll the slides continuously, like a marquee. This replaces manual navigation - indicators and arrows are hidden while it is on, and it stops for visitors who prefer reduced motion.
   type: switch
 loop:
   comment: Loop the carousel back to the beginning when reaching the end.
@@ -54,7 +54,7 @@ slideWidthPercent:
   comment: Width of each slide as a percentage of the carousel (e.g., 33, 50, 100).
   type: range
   options:
-    min: 0
+    min: 10
     max: 100
     step: 1
 minSlideWidth:

@@ -53,4 +53,4 @@ _structures:
           text: Carousel Slide
           subtext:
             - template: Contains {contentSections|array_length} content {"block"|pluralize=contentSections}
-            - Add one or more content blocks to the grid item
+            - Add one or more content blocks to the slide

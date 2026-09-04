@@ -75,7 +75,11 @@ const finalDistributionMode = reverse
 const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
 ---
 
-<section
+{
+  /* A <div>, not a <section>: this is a layout wrapper with no accessible
+    name, which maps to a generic container anyway. */
+}
+<div
   class:list={["split", "stackable", className]}
   {...htmlAttributes}
 >
@@ -174,7 +178,7 @@ const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
       />
     )
   }
-</section>
+</div>
 
 <style is:global>
   @layer components {

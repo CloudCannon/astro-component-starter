@@ -41,7 +41,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
   class:list={["steps", "stackable", className]}
   {...htmlAttributes}
 >
+  {
+    /* `role="list"` is load-bearing: `.steps-list` sets `list-style: none`,
+      which drops the list role in Safari's a11y tree. Remove one and remove
+      both. */
+  }
   <ol
+    role="list"
     data-space-before={spaceBeforeAttr(spaceBefore)}
     class:list={["steps-list", `orientation-${orientation}`]}
     {...arrayDataAttributes}
@@ -205,9 +211,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
           );
         }
 
-        /* !important beats the flow margins in the utils layer. */
+        /* `gap`, not `.flow` — a container uses one or the other (see
+           _flow.css). This only clears the base element margins. */
         .step-content > * {
-          margin-top: 0 !important;
+          margin-block: 0;
         }
 
         .step-content .heading {
@@ -215,8 +222,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
       }
 
-      /* 500px: content-driven — image and text stack; the rail stays. */
-      @media (width < 500px) {
+      /* 640px: canonical mobile breakpoint — image and text stack; rail stays. */
+      @media (width < 640px) {
         &:has(.step-image) .step-image {
           flex-basis: 100%;
           min-width: 0;

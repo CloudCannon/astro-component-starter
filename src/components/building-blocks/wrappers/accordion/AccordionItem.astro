@@ -8,6 +8,7 @@ const {
   useDefaultEditableBinding = false,
   isOpen = false,
   accordionName,
+  class: className,
   _component,
   "data-children-prop": childrenDataProp,
   "data-prop-title": customDataPropTitle,
@@ -27,7 +28,7 @@ const titleDataAttributes = effectiveTitleProp
 ---
 
 <details
-  class="accordion-item"
+  class:list={["accordion-item", className]}
   open={isOpen}
   name={accordionName}
   {...htmlAttributes}
@@ -81,7 +82,6 @@ const titleDataAttributes = effectiveTitleProp
         padding: var(--spacing-md);
         transition: background-color var(--animation-normal) var(--ease-out);
         -webkit-user-select: none;
-        -ms-user-select: none;
         user-select: none;
 
         &:hover {
@@ -114,7 +114,10 @@ const titleDataAttributes = effectiveTitleProp
     }
 
     @supports (interpolate-size: allow-keywords) and selector(::details-content) {
-      :root {
+      /* Scoped here, not on :root — `interpolate-size` is inherited, and
+         `::details-content` inherits from its originating element, so this is
+         all the height-to-auto transition below needs. */
+      .accordion-item {
         interpolate-size: allow-keywords;
       }
 

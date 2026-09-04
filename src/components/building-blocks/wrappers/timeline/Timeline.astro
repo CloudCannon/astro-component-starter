@@ -1,4 +1,5 @@
 ---
+import { nextHeadingLevel } from "@component-utils/headingLevel";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@components/utils/slugify";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
@@ -39,6 +40,10 @@ const arrayDataAttributes = effectiveChildrenProp
 const hasEntries = entries?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const isHorizontal = layout === "horizontal";
+// Grouped entries sit under the year heading, so they take the level below it.
+const YearTag = "h3";
+const entryHeadingLevel = nextHeadingLevel(YearTag);
+
 const isGrouped =
   !isHorizontal && entries?.some((entry: EntryProps) => isNonEmptyString(entry.year));
 
@@ -74,6 +79,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         aria-label={label || "Timeline"}
       >
         <ol
+          role="list"
           class="timeline-list"
           {...arrayDataAttributes}
         >
@@ -92,6 +98,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       </div>
     ) : isGrouped ? (
       <ol
+        role="list"
         class="timeline-list"
         data-space-before={spaceBeforeAttr(spaceBefore)}
         {...arrayDataAttributes}
@@ -99,12 +106,16 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         <slot>
           {groups.map((group) => (
             <li class="timeline-group">
-              <h3 class="timeline-year">{group.year}</h3>
-              <ol class="timeline-group-list">
+              <YearTag class="timeline-year">{group.year}</YearTag>
+              <ol
+                role="list"
+                class="timeline-group-list"
+              >
                 {group.entries.map((entry) => (
                   <TimelineItem
                     layout={layout}
                     grouped={true}
+                    headingLevel={entryHeadingLevel}
                     useDefaultEditableBinding={!!effectiveChildrenProp}
                     data-editable="array-item"
                     data-id="building-blocks/wrappers/timeline/timeline-item"
@@ -118,6 +129,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       </ol>
     ) : (
       <ol
+        role="list"
         class="timeline-list"
         data-space-before={spaceBeforeAttr(spaceBefore)}
         {...arrayDataAttributes}
@@ -148,6 +160,8 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
       min-width: 0;
 
+      /* Every `<ol>` carrying these classes also carries `role="list"`:
+         `list-style: none` drops the list role in Safari's a11y tree. */
       .timeline-list,
       .timeline-group-list {
         list-style: none;
@@ -255,8 +269,9 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           z-index: var(--layer-2);
         }
 
-        /* 560px: content-driven — date moves above the title; the rail stays. */
-        @media (width < 560px) {
+        /* 640px: canonical mobile breakpoint — the date moves above the title;
+           the rail stays. */
+        @media (width < 640px) {
           .timeline-entry {
             grid-template-columns: 1fr;
           }
@@ -338,7 +353,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           text-transform: uppercase;
         }
 
-        @media (width < 560px) {
+        @media (width < 640px) {
           .timeline-group {
             grid-template-columns: 1fr;
           }

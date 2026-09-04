@@ -10,6 +10,7 @@ const {
   body = "",
   layout = "vertical",
   grouped = false,
+  headingLevel = "h3",
   useDefaultEditableBinding = false,
   class: className,
   _component,
@@ -81,7 +82,7 @@ const dateBinding =
           {hasTitle && (
             <Heading
               class="timeline-title"
-              level="h3"
+              level={headingLevel}
               size="xs"
               data-prop={useDefaultEditableBinding ? "title" : undefined}
             >
@@ -104,7 +105,7 @@ const dateBinding =
     (isHorizontal || grouped) && hasTitle && (
       <Heading
         class="timeline-title"
-        level="h3"
+        level={headingLevel}
         size="xs"
         data-prop={useDefaultEditableBinding ? "title" : undefined}
       >

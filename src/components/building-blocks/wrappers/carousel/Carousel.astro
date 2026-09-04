@@ -87,7 +87,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 
 <section
   class:list={["carousel", "stackable", className]}
-  role="region"
+  aria-roledescription="carousel"
   aria-label={label || "Carousel"}
   {...htmlAttributes}
 >
@@ -220,9 +220,9 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           flex-wrap: nowrap;
           margin-inline-start: calc(var(--slide-gap) * -1);
 
+          /* Sizing lives in CarouselSlide, which owns the element; the track
+             only contributes the gap. */
           > .slide {
-            flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
-            flex-shrink: 0;
             padding-inline-start: var(--slide-gap);
             width: 100%;
           }

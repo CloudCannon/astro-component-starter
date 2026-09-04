@@ -79,6 +79,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
   @layer components {
     .masonry {
       --space-before: var(--space-before-loose);
+
+      /* Named container, not the viewport: a masonry in a narrow pane on a wide
+         screen was still reading the window and laying out three columns. */
+      container: masonry / inline-size;
       width: 100%;
 
       /* Layer 1 — no-JS baseline: multi-column, reading order down each column. */
@@ -92,7 +96,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
 
         /* 640px: canonical mobile breakpoint — phones always get two columns. */
-        @media (width >= 640px) {
+        @container masonry (width >= 640px) {
           columns: var(--masonry-columns, 3);
         }
       }
@@ -112,7 +116,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           margin-bottom: 0;
         }
 
-        @media (width >= 640px) {
+        @container masonry (width >= 640px) {
           grid-template-columns: repeat(var(--masonry-columns, 3), minmax(0, 1fr));
         }
       }
@@ -131,7 +135,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
             margin-bottom: 0;
           }
 
-          @media (width >= 640px) {
+          @container masonry (width >= 640px) {
             grid-template-columns: repeat(var(--masonry-columns, 3), minmax(0, 1fr));
           }
         }

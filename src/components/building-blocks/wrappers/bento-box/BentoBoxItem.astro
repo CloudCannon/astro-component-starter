@@ -4,6 +4,7 @@ import RenderBlock from "@components/utils/renderBlock.astro";
 const {
   colSpan = 1,
   rowSpan = 1,
+  columns = 3,
   contentSections,
   useDefaultEditableBinding = false,
   class: className,
@@ -18,8 +19,13 @@ const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
 
+// A span wider than the grid is not an error the editor can see: the cell just
+// silently takes the whole row. Clamping keeps the authored number honest.
+const columnCount = Math.max(1, Math.round(Number(columns) || 3));
+const span = Math.min(Math.max(1, Math.round(Number(colSpan) || 1)), columnCount);
+
 const cellStyles = [
-  Number(colSpan) > 1 && `grid-column: span ${colSpan}`,
+  span > 1 && `grid-column: span ${span}`,
   Number(rowSpan) > 1 && `grid-row: span ${rowSpan}`,
 ]
   .filter(Boolean)
@@ -33,7 +39,7 @@ const cellStyles = [
 >
   <div
     class="bento-box-item-content flow"
-    data-col-span={colSpan}
+    data-col-span={span}
     data-row-span={rowSpan}
     {...arrayDataAttributes}
   >

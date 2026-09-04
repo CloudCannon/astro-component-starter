@@ -11,6 +11,7 @@ const {
   singleOpen = false,
   label,
   spaceBefore = "default",
+  class: className,
   useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
   _component,
@@ -42,7 +43,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["accordion", "stackable"]}
+  class:list={["accordion", "stackable", className]}
   {...htmlAttributes}
 >
   <div
@@ -69,10 +70,3 @@ if (!_component && !hasItems && !hasSlotContent) return;
     </slot>
   </div>
 </div>
-
-<style is:global>
-  @layer components {
-    .accordion {
-    }
-  }
-</style>
