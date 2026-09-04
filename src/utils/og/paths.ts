@@ -43,15 +43,25 @@ const slugFor = (kind: CardKind, id: string) =>
   kind === "site" ? SITE_CARD_SLUG : `${kind}/${id.replace(/\.mdx?$/, "")}`;
 
 /**
- * The card URL for an entry, or `null` when it should not have one — generation
- * is off for its kind, or it already carries its own `image`, which always wins.
+ * PNG for the flat plain card, JPEG for a photo one: PNG stores a photograph at
+ * roughly seven times the size, and JPEG rings around the crisp text of a flat
+ * card. The URL's extension decides what the endpoint encodes, so the bytes can
+ * never disagree with what was advertised, even if the photo fails to load.
+ */
+export const cardFormat = (entry?: CardEntry): "png" | "jpg" => (entry?.data.image ? "jpg" : "png");
+
+/**
+ * The card URL for an entry, or `null` when generation is off for its kind.
+ *
+ * An entry's own `image` no longer opts it out: it becomes the card's
+ * background, drawn under the text plates, so a shared link always carries the
+ * title. Turn cards off with `shareImageGeneration` to share raw images again.
  */
 export function ogCardPath(kind: CardKind, entry?: CardEntry): string | null {
   if (!isGenerationEnabled(kind)) return null;
   if (kind !== "site" && !entry) return null;
-  if (entry?.data.image) return null;
 
-  return `${OG_BASE}/${slugFor(kind, entry?.id ?? SITE_CARD_SLUG)}.png`;
+  return `${OG_BASE}/${slugFor(kind, entry?.id ?? SITE_CARD_SLUG)}.${cardFormat(entry)}`;
 }
 
 export interface CardDefinition {
@@ -59,19 +69,17 @@ export interface CardDefinition {
   slug: string;
   title: string;
   description?: string;
+  /** The entry's own image, drawn full-bleed under the text plates. */
+  featuredImage?: string | null;
 }
 
-/**
- * Every card to build: the site card, plus each page and post with no `image`
- * of its own. Cost is proportional to the pages that need a card, not to the
- * size of the site.
- */
+/** Every card to build: the site card, plus one per page and per post. */
 export function listCards(pages: CardEntry[], posts: CardEntry[]): CardDefinition[] {
   const cards: CardDefinition[] = [];
 
   if (isGenerationEnabled("site")) {
     cards.push({
-      slug: SITE_CARD_SLUG,
+      slug: `${SITE_CARD_SLUG}.png`,
       title: seoData.name,
       description: seoData.description,
     });
@@ -87,9 +95,10 @@ export function listCards(pages: CardEntry[], posts: CardEntry[]): CardDefinitio
       if (!url) continue;
 
       cards.push({
-        slug: url.slice(`${OG_BASE}/`.length, -".png".length),
+        slug: url.slice(`${OG_BASE}/`.length),
         title: entry.data.title ?? seoData.name,
         description: entry.data.description,
+        featuredImage: entry.data.image,
       });
     }
   }

@@ -64,10 +64,10 @@ if (import.meta.env.DEV && title.length > TITLE_LENGTH_BUDGET) {
   );
 }
 const pageDescription = description || site.description;
-const shareSource = image || generatedImage || site.shareImage || site.logoSource;
+const shareSource = generatedImage || image || site.shareImage || site.logoSource;
 // A generated card is already a 1200x630 PNG under `/og/`, so it needs neither
 // asset resolution nor the SVG warning below, and its dimensions are known.
-const isGeneratedCard = !image && Boolean(generatedImage) && shareSource === generatedImage;
+const isGeneratedCard = Boolean(generatedImage) && shareSource === generatedImage;
 
 if (import.meta.env.DEV && !isGeneratedCard && shareSource?.toLowerCase().endsWith(".svg")) {
   console.warn(

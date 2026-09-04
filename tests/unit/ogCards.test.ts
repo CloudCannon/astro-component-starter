@@ -29,20 +29,36 @@ describe("ogCardPath", () => {
     expect(ogCardPath("blog", entry("2025-01-01-post.mdx"))).toBe("/og/blog/2025-01-01-post.png");
   });
 
-  it("returns null when the entry brings its own image, which always wins", () => {
-    expect(ogCardPath("page", entry("about", { image: "/src/assets/images/x.png" }))).toBeNull();
-    expect(ogCardPath("blog", entry("post", { image: "/src/assets/images/x.png" }))).toBeNull();
+  it("gives an entry with an image a jpg card, since the photo goes under the text", () => {
+    expect(ogCardPath("page", entry("about", { image: "/src/assets/images/x.jpg" }))).toBe(
+      "/og/page/about.jpg"
+    );
+    expect(ogCardPath("blog", entry("post", { image: "/src/assets/images/x.jpg" }))).toBe(
+      "/og/blog/post.jpg"
+    );
   });
 });
 
 describe("listCards", () => {
-  it("builds the site card plus every entry without an image", () => {
+  it("builds a card for the site and for every entry, photo or not", () => {
     const cards = listCards(
-      [entry("index"), entry("about", { image: "/src/assets/images/x.png" })],
-      [entry("post-a"), entry("post-b", { image: "/src/assets/images/x.png" })]
+      [entry("index"), entry("about", { image: "/src/assets/images/x.jpg" })],
+      [entry("post-a"), entry("post-b", { image: "/src/assets/images/x.jpg" })]
     );
 
-    expect(cards.map((card) => card.slug)).toEqual(["site", "page/index", "blog/post-a"]);
+    expect(cards.map((card) => card.slug)).toEqual([
+      "site.png",
+      "page/index.png",
+      "page/about.jpg",
+      "blog/post-a.png",
+      "blog/post-b.jpg",
+    ]);
+  });
+
+  it("carries the featured image so the endpoint can draw it under the text", () => {
+    const [, , withPhoto] = listCards([entry("a"), entry("b", { image: "/src/x.jpg" })], []);
+
+    expect(withPhoto.featuredImage).toBe("/src/x.jpg");
   });
 
   it("carries the title and description the endpoint renders", () => {
@@ -52,13 +68,14 @@ describe("listCards", () => {
   });
 
   it("never emits a slug for an entry ogCardPath excludes", () => {
-    const pages = [entry("index"), entry("about", { image: "/x.png" })];
+    const pages = [entry("index"), entry("about", { image: "/src/x.jpg" })];
     const slugs = new Set(listCards(pages, []).map((card) => card.slug));
 
     for (const page of pages) {
       const url = ogCardPath("page", page);
 
-      expect(url === null).toBe(!slugs.has(`page/${page.id}`));
+      expect(url).not.toBeNull();
+      expect(slugs.has(url!.replace("/og/", ""))).toBe(true);
     }
   });
 });

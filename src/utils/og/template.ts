@@ -23,6 +23,84 @@ export interface CardInput {
   logoDataUri?: string | null;
   colors: CardColors;
   fontStacks: { heading: string; body: string };
+  /** Cover-cropped featured image. Switches the card to the photo layout. */
+  backgroundDataUri?: string | null;
+  /** Pre-wrapped title lines, measured by `render.ts`. Photo layout only. */
+  titleLines?: string[];
+}
+
+/** Text and its backing plate on a photo card, whatever the photo is doing. */
+const PHOTO_INK = "#ffffff";
+const PHOTO_PLATE = "#000000";
+
+export const PHOTO_TITLE_MAX_LINES = 3;
+export const PHOTO_CARD_PADDING = 64;
+export const PHOTO_PLATE_PADDING_X = 16;
+
+/** Width a title line may occupy before it wraps, inside plate and card padding. */
+export const photoTitleWidth = () =>
+  CARD_WIDTH - PHOTO_CARD_PADDING * 2 - PHOTO_PLATE_PADDING_X * 2;
+
+export const photoTitleFontSize = (title: string) =>
+  title.length > 90 ? 48 : title.length > 55 ? 54 : 62;
+
+/**
+ * The photo layout: the featured image full-bleed, with every run of text on
+ * its own solid plate. The plate is the point — it keeps the text legible over
+ * any photo, so a card never depends on the image being dark, calm, or cropped
+ * a particular way. Each line gets its own plate rather than one block behind
+ * all of them, which is why `render.ts` measures the wrap first.
+ */
+function photoCardHtml({
+  titleLines,
+  siteName,
+  siteUrl,
+  backgroundDataUri,
+  fontStacks,
+  fontSize,
+}: {
+  titleLines: string[];
+  siteName: string;
+  siteUrl: string;
+  backgroundDataUri: string;
+  fontStacks: { heading: string; body: string };
+  fontSize: number;
+}): string {
+  const line = (text: string) => `<p class="card-title-line">${escapeHtml(text)}</p>`;
+
+  return `<div class="card">
+  <style>
+    .card { width: ${CARD_WIDTH}px; height: ${CARD_HEIGHT}px; position: relative; background: ${PHOTO_PLATE}; }
+    .card-photo { position: absolute; top: 0; left: 0; width: ${CARD_WIDTH}px; height: ${CARD_HEIGHT}px; }
+    .card-layer {
+      position: absolute; top: 0; left: 0;
+      width: ${CARD_WIDTH}px; height: ${CARD_HEIGHT}px;
+      box-sizing: border-box; padding: ${PHOTO_CARD_PADDING}px;
+      display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+    }
+    .card-title {
+      display: flex; flex-direction: column; align-items: flex-start;
+    }
+    .card-title-line {
+      margin: 0;
+      font-family: ${fontStacks.heading}; font-weight: 700;
+      font-size: ${fontSize}px; line-height: 1.3;
+      color: ${PHOTO_INK}; background: ${PHOTO_PLATE};
+      padding: 4px ${PHOTO_PLATE_PADDING_X}px;
+    }
+    .card-chip {
+      font-family: ${fontStacks.body}; font-weight: 600; font-size: 24px;
+      color: ${PHOTO_INK}; background: ${PHOTO_PLATE};
+      padding: 6px ${PHOTO_PLATE_PADDING_X}px;
+    }
+  </style>
+  <img class="card-photo" src="${backgroundDataUri}" />
+  <div class="card-layer">
+    <span class="card-chip">${escapeHtml(siteName)}</span>
+    <div class="card-title">${titleLines.map(line).join("")}</div>
+    <span class="card-chip">${escapeHtml(siteUrl)}</span>
+  </div>
+</div>`;
 }
 
 const escapeHtml = (value: string) =>
@@ -58,7 +136,20 @@ export function cardHtml({
   logoDataUri,
   colors,
   fontStacks,
+  backgroundDataUri,
+  titleLines,
 }: CardInput): string {
+  if (backgroundDataUri && titleLines?.length) {
+    return photoCardHtml({
+      titleLines,
+      siteName,
+      siteUrl,
+      backgroundDataUri,
+      fontStacks,
+      fontSize: photoTitleFontSize(title),
+    });
+  }
+
   const titleSize = titleFontSize(title);
   const trimmedDescription = description ? truncate(description) : "";
 

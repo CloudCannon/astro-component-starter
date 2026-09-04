@@ -207,9 +207,9 @@ Real content of `src/data/seo.json`:
 
 ### Generated share cards
 
-`og:image` resolves in this order: the page's own `image`, then a **generated card**, then `shareImage`, then `logoSource`.
+`og:image` resolves in this order: a **generated card**, then the page's own `image`, then `shareImage`, then `logoSource`.
 
-A card is drawn at build time for every page and blog post with **no `image` of its own**, plus one `/og/site.png` for routes with no collection entry (listings, tag archives, 404, docs). Give an entry an `image` and it shares that instead — that is the per-entry opt-out, so there is no extra frontmatter field.
+A card is drawn at build time for every page and blog post, plus one `/og/site.png` for routes with no collection entry (listings, tag archives, 404, docs). An entry's own **Image** becomes the card's background, drawn full-bleed under the text, and every line of text sits on a solid plate so it reads over any photo. Those cards are JPEG (`/og/blog/my-post.jpg`); text-only ones are PNG.
 
 `shareImageGeneration` scopes it: `all` (default), `blog` (posts only; pages fall back to `shareImage`), `none` (off).
 

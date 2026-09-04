@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import path from "node:path";
+import sharp from "sharp";
 import { cacheKey, readCache, writeCache } from "./cache.mjs";
 import { coverageWarning, fontsourceCoverage, uncoveredCharacters } from "./coverage.js";
 import {
@@ -13,7 +14,15 @@ import {
   cardFontStacks,
   cardFonts,
 } from "./fonts.js";
-import { CARD_HEIGHT, CARD_WIDTH, TEMPLATE_SOURCE_PATH, cardHtml } from "./template.js";
+import {
+  CARD_HEIGHT,
+  CARD_WIDTH,
+  PHOTO_TITLE_MAX_LINES,
+  TEMPLATE_SOURCE_PATH,
+  cardHtml,
+  photoTitleFontSize,
+  photoTitleWidth,
+} from "./template.js";
 import { type CardTheme, resolveCardColors } from "./theme.js";
 
 /**
@@ -38,6 +47,10 @@ export interface CardRequest {
   siteUrl: string;
   logoSource?: string | null;
   theme?: CardTheme;
+  /** The entry's own image, drawn full-bleed under the text plates. */
+  featuredImage?: string | null;
+  /** Encoding, chosen by the URL's extension so the bytes match what it claims. */
+  format?: "png" | "jpeg";
 }
 
 interface Prepared {
@@ -52,6 +65,15 @@ const prepared = new Map<CardTheme, Promise<Prepared>>();
 
 const digest = (data: Buffer | string) =>
   createHash("sha256").update(data).digest("hex").slice(0, 16);
+
+/** Content digest of a source file, or null when it cannot be read. */
+function sourceDigest(root: string, source: string): string | null {
+  try {
+    return digest(readFileSync(path.join(root, source.slice(1))));
+  } catch {
+    return null;
+  }
+}
 
 function takumiVersion(): string {
   try {
@@ -81,6 +103,65 @@ function logoDataUri(root: string, source?: string | null): string | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * Cover-crop the featured image to the card's exact size before Takumi sees it.
+ * sharp is already a dependency, and handing the renderer a 1200x630 buffer
+ * avoids decoding a multi-megapixel original for every card.
+ */
+async function backgroundDataUri(root: string, source?: string | null): Promise<string | null> {
+  if (!source || !source.startsWith("/src/")) return null;
+
+  try {
+    const cropped = await sharp(path.join(root, source.slice(1)))
+      .resize(CARD_WIDTH, CARD_HEIGHT, { fit: "cover" })
+      .jpeg({ quality: 82 })
+      .toBuffer();
+
+    return `data:image/jpeg;base64,${cropped.toString("base64")}`;
+  } catch {
+    // An unreadable or non-raster source falls back to the plain card.
+    return null;
+  }
+}
+
+/**
+ * Ask Takumi where the title wraps, so each line can be drawn on its own plate.
+ * Measuring the real layout beats guessing from character counts, which cannot
+ * know the font's metrics.
+ */
+async function wrapTitle(
+  renderer: Renderer,
+  title: string,
+  fontStacks: { heading: string },
+  css: string[]
+): Promise<string[]> {
+  const width = photoTitleWidth();
+  const size = photoTitleFontSize(title);
+  const html =
+    `<div style="width:${width}px">` +
+    `<p style="font-family:${fontStacks.heading};font-weight:700;font-size:${size}px;` +
+    `line-height:1.3;margin:0;width:${width}px">${title.replace(/[&<>]/g, " ")}</p></div>`;
+
+  const measured = await renderer.measure(fromHtml(html).node, { width, height: CARD_HEIGHT, css });
+  const lines: string[] = [];
+
+  const collect = (node: { runs?: { text: string }[]; children?: unknown[] }) => {
+    for (const run of node.runs ?? []) lines.push(run.text.trim());
+    for (const child of (node.children ?? []) as (typeof node)[]) collect(child);
+  };
+
+  collect(measured);
+
+  if (lines.length === 0) return [title];
+  if (lines.length <= PHOTO_TITLE_MAX_LINES) return lines;
+
+  const kept = lines.slice(0, PHOTO_TITLE_MAX_LINES);
+
+  kept[kept.length - 1] = `${kept[kept.length - 1].replace(/[,;:.\-—]$/, "")}…`;
+
+  return kept;
 }
 
 function prepare(root: string, theme: CardTheme): Promise<Prepared> {
@@ -143,6 +224,12 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
   );
   const logo = logoDataUri(root, request.logoSource);
 
+  // The image's own bytes, so re-cropping the same photo reuses the card but
+  // replacing it does not. Cheap next to the render it guards.
+  const featured = request.featuredImage?.startsWith("/src/")
+    ? sourceDigest(root, request.featuredImage)
+    : null;
+
   const key = cacheKey([
     fingerprint,
     request.title,
@@ -150,6 +237,8 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     request.siteName,
     request.siteUrl,
     logo ? digest(logo) : "",
+    featured ?? "",
+    request.format ?? "png",
   ]);
 
   const cached = readCache(root, key);
@@ -169,6 +258,11 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     }
   }
 
+  const background = featured ? await backgroundDataUri(root, request.featuredImage) : null;
+  const titleLines = background
+    ? await wrapTitle(renderer, request.title, fontStacks, [])
+    : undefined;
+
   const { node, css } = fromHtml(
     cardHtml({
       title: request.title,
@@ -178,13 +272,17 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
       logoDataUri: logo,
       colors,
       fontStacks,
+      backgroundDataUri: background,
+      titleLines,
     })
   );
 
+  const format = request.format ?? "png";
   const png = await renderer.render(node, {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    format: "png",
+    format,
+    ...(format === "jpeg" ? { quality: 82 } : {}),
     css,
   });
 
