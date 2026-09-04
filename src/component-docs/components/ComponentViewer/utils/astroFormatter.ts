@@ -1,4 +1,4 @@
-import { pascalToKebab } from "@components/utils/componentKey.mjs";
+import { pascalToKebab } from "@component-utils/componentKey.mjs";
 import { removeStyleField } from "../../../shared/blockDataUtils";
 import { getComponentMetadataMap, getNestedBlockProperties } from "../../../shared/metadata";
 import { formatComponentWithSlots } from "./componentFormatter";
@@ -18,7 +18,6 @@ function getImportAliasPath(componentPath: string): string {
     { prefix: "page-sections/explainers/", alias: "@explainers/" },
     { prefix: "page-sections/", alias: "@page-sections/" },
     { prefix: "navigation/", alias: "@navigation/" },
-    { prefix: "sections/", alias: "@sections/" },
   ];
 
   for (const { prefix, alias } of aliasMappings) {

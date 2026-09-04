@@ -1,7 +1,7 @@
 ---
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import ContentSelectorPanel from "./ContentSelectorPanel.astro";
-import { slugifyLabel } from "@components/utils/slugify";
+import { slugifyLabel } from "@component-utils/slugify";
 import type { ContentSelectorItem } from "../../../../types";
 
 const {
@@ -73,7 +73,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
 </section>
 
 <script>
-  import { onPageLoad } from "@components/utils/onPageLoad";
+  import { onPageLoad } from "@component-utils/onPageLoad";
   import { setupAllContentSelectors } from "./setup";
 
   onPageLoad(() => setupAllContentSelectors());

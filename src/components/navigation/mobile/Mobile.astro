@@ -3,13 +3,13 @@ import Button from "@core-elements/button/Button.astro";
 import { slugifyLabel } from "@component-utils/slugify";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
-import NavItemTrigger from "@components/navigation/bar/NavItemTrigger.astro";
+import NavItemTrigger from "@navigation/bar/NavItemTrigger.astro";
 import {
   createNavItemData,
   isCurrentPage,
   itemHasMegaMenu,
   type NavItem,
-} from "@components/navigation/bar/navState";
+} from "@navigation/bar/navState";
 
 const {
   logoSource,
@@ -224,7 +224,7 @@ const pathname = Astro.url.pathname;
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
   import { trapFocus } from "@component-utils/focusTrap";
-  import { bindToggleKeys, syncExpanded } from "@components/navigation/bar/toggleState";
+  import { bindToggleKeys, syncExpanded } from "@navigation/bar/toggleState";
 
   let mobileEscapeBound = false;
 

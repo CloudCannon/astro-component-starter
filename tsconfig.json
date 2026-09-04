@@ -20,7 +20,6 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@building-blocks/*": ["src/components/building-blocks/*"],
       "@core-elements/*": ["src/components/building-blocks/core-elements/*"],
       "@forms/*": ["src/components/building-blocks/forms/*"],
       "@wrappers/*": ["src/components/building-blocks/wrappers/*"],

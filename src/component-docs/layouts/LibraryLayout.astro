@@ -1,6 +1,6 @@
 ---
 import "@component-docs/styles/component-docs.css";
-import VideoElements from "@components/utils/VideoElements.astro";
+import VideoElements from "@component-utils/VideoElements.astro";
 import SiteFonts from "@layouts/SiteFonts.astro";
 import "@styles/style.css";
 import { ClientRouter, fade } from "astro:transitions";
@@ -19,8 +19,8 @@ const libraryLayoutSchema = z.object({
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import MobileNavLayout from "@component-docs/layouts/MobileNavLayout.astro";
 import SidebarNavLayout from "@component-docs/layouts/SidebarNavLayout.astro";
-import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
-import RenderBlock from "@components/utils/renderBlock.astro";
+import ThemeToggleScript from "@navigation/theme-toggle/ThemeToggleScript.astro";
+import RenderBlock from "@component-utils/renderBlock.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
 const pageDescription = props.frontmatter?.description;

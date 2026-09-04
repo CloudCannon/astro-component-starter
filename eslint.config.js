@@ -23,6 +23,18 @@ export default [
           varsIgnorePattern: "^(_|editable)",
         },
       ],
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@components/utils/*", "@components/navigation/*"],
+              message:
+                "Use @component-utils/ or @navigation/ — @components/ is the fallback for subtrees without their own alias.",
+            },
+          ],
+        },
+      ],
       "no-console": "off",
       "prefer-const": "error",
       "no-var": "error",

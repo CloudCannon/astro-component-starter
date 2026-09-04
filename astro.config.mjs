@@ -90,7 +90,6 @@ export default defineConfig({
     resolve: {
       alias: {
         "@components": path.resolve(__dirname, "src/components"),
-        "@building-blocks": path.resolve(__dirname, "src/components/building-blocks"),
         "@core-elements": path.resolve(__dirname, "src/components/building-blocks/core-elements"),
         "@forms": path.resolve(__dirname, "src/components/building-blocks/forms"),
         "@wrappers": path.resolve(__dirname, "src/components/building-blocks/wrappers"),

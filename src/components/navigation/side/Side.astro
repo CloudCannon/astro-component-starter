@@ -1,10 +1,6 @@
 ---
-import NavItemTrigger from "@components/navigation/bar/NavItemTrigger.astro";
-import {
-  createNavItemData,
-  isCurrentPage,
-  type NavItem,
-} from "@components/navigation/bar/navState";
+import NavItemTrigger from "@navigation/bar/NavItemTrigger.astro";
+import { createNavItemData, isCurrentPage, type NavItem } from "@navigation/bar/navState";
 import { slugifyLabel } from "@component-utils/slugify";
 
 const {
@@ -132,7 +128,7 @@ const navInstanceId = slugifyLabel(ariaLabel || "side");
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
-  import { bindToggleKeys } from "@components/navigation/bar/toggleState";
+  import { bindToggleKeys } from "@navigation/bar/toggleState";
 
   function setupSideNavigation() {
     document.querySelectorAll<HTMLElement>(".side").forEach((sideNav) => {
