@@ -19,9 +19,6 @@ const clampedValue = Math.min(Math.max(Number(value) || 0, 0), starCount);
 const fullStars = Math.floor(clampedValue);
 const partialStar = clampedValue - fullStars;
 
-// Overlay width in em: each star is 1em wide with a 0.25em gap after it.
-const overlayWidth = `${(fullStars * 1.25 + partialStar).toFixed(3)}em`;
-
 const star = getIcon("star");
 const stars = Array.from({ length: starCount });
 ---
@@ -59,7 +56,7 @@ const stars = Array.from({ length: starCount });
       </span>
       <span
         class="rating-row rating-overlay"
-        style={`width: ${overlayWidth}`}
+        style={`--rating-full: ${fullStars}; --rating-partial: ${partialStar.toFixed(3)};`}
       >
         {
           stars.map(
@@ -81,6 +78,8 @@ const stars = Array.from({ length: starCount });
 <style is:global>
   @layer components {
     .rating {
+      --rating-gap: var(--spacing-em-xs);
+
       display: inline-block;
       vertical-align: middle;
 
@@ -138,7 +137,7 @@ const stars = Array.from({ length: starCount });
       .rating-row {
         display: flex;
         flex: none;
-        gap: var(--spacing-em-xs);
+        gap: var(--rating-gap);
         width: max-content;
 
         svg {
@@ -158,11 +157,14 @@ const stars = Array.from({ length: starCount });
       }
 
       .rating-overlay {
+        /* Reads the same gap the stars are laid out with, so the fill cannot
+           drift from the row it covers. */
         color: var(--rating-accent, var(--color-text));
         inset-block: 0;
         inset-inline-start: 0;
         overflow: hidden;
         position: absolute;
+        width: calc(var(--rating-full) * (1em + var(--rating-gap)) + var(--rating-partial) * 1em);
       }
 
       .rating-value {

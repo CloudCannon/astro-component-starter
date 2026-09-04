@@ -16,3 +16,5 @@ aspectRatio:
         name: Portrait (3:4)
       - id: widescreen
         name: Widescreen (16:9)
+      - id: none
+        name: None (the embed sets its own height)

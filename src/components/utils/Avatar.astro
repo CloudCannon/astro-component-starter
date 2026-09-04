@@ -70,10 +70,14 @@ const initials = String(alt || "")
         data-prop-alt={dataPropAlt}
       />
     ) : (
+      /* With no alt the initials are decorative — the person's name is
+         rendered beside them. `role="img"` without a name is announced as an
+         unlabelled image, so drop the role rather than leave it nameless. */
       <span
         class="avatar-initials"
-        role="img"
+        role={alt ? "img" : undefined}
         aria-label={alt || undefined}
+        aria-hidden={alt ? undefined : "true"}
       >
         {initials}
       </span>

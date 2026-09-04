@@ -24,6 +24,12 @@ const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
+if (import.meta.env.DEV && _component && !link && !element && !htmlAttributes.popovertarget) {
+  console.warn(
+    `[button] "${text ?? ""}" has no link, element or popover target, so it renders a button that does nothing when clicked.`
+  );
+}
+
 const isPopoverLink = link?.startsWith("^");
 const Tag = (element ?? (isPopoverLink || !link ? "button" : "a")) as any;
 
@@ -125,6 +131,8 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
 <style is:global>
   @layer components {
     .button {
+      --button-icon-gap: 0.15em;
+
       display: inline-flex;
       max-width: 100%;
       vertical-align: middle;
@@ -138,10 +146,8 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
         display: inline-flex;
         flex-shrink: 0;
         font-weight: var(--font-weight-semibold);
-        gap: var(--button-icon-gap, 0.15em);
+        gap: var(--button-icon-gap);
         justify-content: center;
-        min-height: 10px;
-        min-width: 10px;
         padding-block: var(--spacing-em-sm);
         padding-inline: var(--spacing-em-sm);
         text-align: center;

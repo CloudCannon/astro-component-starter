@@ -8,6 +8,7 @@ const {
   authorDescription,
   alignmentHorizontal = "center",
   authorImage = "",
+  avatarSize = 80,
   spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
@@ -18,6 +19,13 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const hasQuote = Boolean(text) || Astro.slots.has("default");
+const hasAuthor = Boolean(authorName || authorDescription || authorImage);
+
+if (!_component && !hasQuote) return;
+
+const avatarPx = Math.max(1, Math.round(Number(avatarSize) || 80));
 
 const MarkdownText = renderMarkdown(text);
 
@@ -49,67 +57,69 @@ const authorImageDataAttributes = effectiveAuthorImageProp
   : {};
 ---
 
-<blockquote
+<div
   class:list={["testimonial", "stackable", className]}
   {...htmlAttributes}
 >
-  <div
+  {
+    /* The <figure> is the inner box, not the root: <figcaption> has to be a
+      direct child of its <figure>, and the root has to stay a plain wrapper the
+      alignment class can be hoisted off. */
+  }
+  <figure
     class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
-    <div
+    <blockquote
       class="quote"
       {...textDataAttributes}
     >
       <slot>
         {text && <Fragment set:html={MarkdownText} />}
       </slot>
-    </div>
-    <div class="author">
-      {
-        authorImage && (
-          <Avatar
-            image={authorImage}
-            alt={authorName}
-            border={false}
-            class="author-image"
-            displaySize={80}
-            {...authorImageDataAttributes}
-          />
-        )
-      }
-      <cite class="author-content">
-        <strong
-          class="name"
-          {...authorNameDataAttributes}
-        >
-          {authorName}
-        </strong>
-        {
-          authorDescription && (
-            <>
-              <br />
-              <span
-                class="description"
-                {...authorDescriptionDataAttributes}
-              >
-                {authorDescription}
-              </span>
-            </>
-          )
-        }
-      </cite>
-    </div>
-  </div>
-</blockquote>
+    </blockquote>
+    {
+      hasAuthor && (
+        <figcaption class="author">
+          {authorImage && (
+            <Avatar
+              image={authorImage}
+              alt={authorName}
+              border={false}
+              class="author-image"
+              displaySize={avatarPx}
+              style={`--avatar-size: ${avatarPx}px;`}
+              {...authorImageDataAttributes}
+            />
+          )}
+          <div class="author-content">
+            <strong
+              class="name"
+              {...authorNameDataAttributes}
+            >
+              {authorName}
+            </strong>
+            {authorDescription && (
+              <>
+                <br />
+                <span
+                  class="description"
+                  {...authorDescriptionDataAttributes}
+                >
+                  {authorDescription}
+                </span>
+              </>
+            )}
+          </div>
+        </figcaption>
+      )
+    }
+  </figure>
+</div>
 
 <style is:global>
   @layer components {
     .testimonial {
-      border-inline-start: 0;
-      margin: 0;
-      padding-inline-start: 0;
-
       > .testimonial-inner {
         background: var(--color-bg);
         border: var(--border-width-sm) solid var(--color-border);
@@ -117,6 +127,7 @@ const authorImageDataAttributes = effectiveAuthorImageProp
         display: flex;
         flex-direction: column;
         gap: var(--spacing-em-sm);
+        margin: 0;
         padding: var(--spacing-lg);
 
         &.alignment-center {
@@ -126,7 +137,9 @@ const authorImageDataAttributes = effectiveAuthorImageProp
         }
 
         > .quote {
+          border-inline-start: 0;
           margin: 0;
+          padding-inline-start: 0;
 
           /* Direct children only: a descendant selector puts a quote mark on
              every nested leaf, so a quote starting with bold renders ““Bold”. */
@@ -157,12 +170,7 @@ const authorImageDataAttributes = effectiveAuthorImageProp
           gap: var(--spacing-md);
           margin-top: var(--spacing-md);
 
-          > .author-image {
-            --avatar-size: 80px;
-          }
-
           > .author-content {
-            font-style: normal;
             text-align: start;
           }
         }

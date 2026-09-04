@@ -10,6 +10,8 @@ value:
   autoplay: false
   loop: false
   thumbnail: ""
+  captions: ""
+  captionsLanguage: en
 preview:
   text:
     - template: Video - {type}

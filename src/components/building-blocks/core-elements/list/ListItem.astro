@@ -39,20 +39,29 @@ const hasIcon = showIcon && iconName;
     )
   }
   {
+    /* The text is a <span>, not a <p>: the non-link branch wraps it in a
+       <span>, and a <p> inside phrasing content is invalid. It was styled
+       back to `display: inline` anyway. */
     link ? (
       <a
         href={link}
         class="item-inner"
       >
-        <p {...textDataAttributes}>
+        <span
+          class="item-text"
+          {...textDataAttributes}
+        >
           {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
-        </p>
+        </span>
       </a>
     ) : (
       <span class="item-inner">
-        <p {...textDataAttributes}>
+        <span
+          class="item-text"
+          {...textDataAttributes}
+        >
           {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
-        </p>
+        </span>
       </span>
     )
   }
@@ -83,15 +92,9 @@ const hasIcon = showIcon && iconName;
 
       > .item-inner {
         min-width: 0;
-
-        > p {
-          display: inline;
-          font-size: inherit;
-          margin: 0;
-        }
       }
 
-      > a.item-inner:any-link > p {
+      > a.item-inner:any-link > .item-text {
         color: inherit;
       }
 

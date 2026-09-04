@@ -1,4 +1,6 @@
 ---
+import { renderMarkdownInline } from "@component-utils/markdown";
+
 const {
   title,
   text,
@@ -41,9 +43,7 @@ if (!_component && ((!hasTitle && !hasTitleSlotContent) || (!hasText && !hasSlot
   </dt>
   <dd class="content">
     <span {...contentDataAttributes}>
-      <slot>
-        {text}
-      </slot>
+      {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
     </span>
   </dd>
 </div>

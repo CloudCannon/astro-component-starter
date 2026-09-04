@@ -1,10 +1,10 @@
 value:
   type: number
-  comment: The rating shown, 0 to the maximum. Halves work (e.g. 4.5).
+  comment: The rating shown, 0 to the maximum. Halves work (e.g. 4.5). Anything above the maximum is clamped to it.
   options:
     step: 0.5
     min: 0
-    max: 5
+    max: 10
 max:
   type: number
   comment: How many stars the scale has.

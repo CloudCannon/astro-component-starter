@@ -44,7 +44,7 @@ _structures:
       - label: List Item
         value:
           text: "List item"
-          iconName: ""
+          iconName: check
           iconColor: default
           link:
         preview:

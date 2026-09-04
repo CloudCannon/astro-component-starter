@@ -4,7 +4,7 @@ text:
   options:
     blockquote: false
     bold: true
-    format: p h1 h2 h3 h4 h5 h6 pre
+    format: p h2 h3 h4 h5 h6 pre
     italic: true
     link: true
     strike: false

@@ -48,5 +48,15 @@ _structures:
             type: text
             comment: A bolded title for the list item.
           text:
-            type: textarea
+            type: markdown
             comment: The text content of the list item.
+            options:
+              blockquote: false
+              bold: true
+              format:
+              italic: true
+              link: true
+              strike: false
+              subscript: true
+              superscript: true
+              underline: false

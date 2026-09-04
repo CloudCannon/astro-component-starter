@@ -8,7 +8,6 @@ slots:
       props:
         - iconName
         - iconColor
-        - showIcon
         - link
         - text/slot
 examples:

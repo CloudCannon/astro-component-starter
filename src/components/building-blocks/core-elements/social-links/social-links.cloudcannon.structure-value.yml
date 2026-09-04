@@ -16,6 +16,7 @@ value:
     - icon: social/youtube
       link: https://youtube.com
       label: Visit us on YouTube
+  ariaLabel: Social
   variant: ghost
   size: md
   alignmentHorizontal: none

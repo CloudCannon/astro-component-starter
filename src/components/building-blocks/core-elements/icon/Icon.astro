@@ -65,14 +65,6 @@ if (!icon) {
         line-height: var(--line-height-none);
         vertical-align: middle;
 
-        &.flip-rtl {
-          transform: scaleX(-1);
-        }
-
-        &.background-subtle {
-          padding: 0.15em;
-        }
-
         &.background {
           background-color: var(--icon-accent-bg, var(--color-bg-surface));
           padding: var(--spacing-em-xs);
@@ -117,6 +109,12 @@ if (!icon) {
         &.color-cyan {
           --icon-accent: var(--cyan-500);
           --icon-accent-bg: var(--cyan-100);
+        }
+
+        /* Explicit so the picker's "None" is a real choice, not a class that
+           happens to match no rule. */
+        &.size-none {
+          font-size: inherit;
         }
 
         &.size-sm {

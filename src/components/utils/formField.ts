@@ -122,7 +122,9 @@ export function formFieldParts({
         ? (autocomplete as string)
         : inferAutocomplete(type, name),
       "aria-label": fallbackName,
-      "aria-required": required ? "true" : "false",
+      // Omitted rather than "false": that is already the default, and every
+      // field here also carries the native `required` attribute.
+      "aria-required": required ? "true" : undefined,
       "aria-invalid": errorId ? "true" : undefined,
       "aria-describedby": [hintId, errorId].filter(Boolean).join(" ") || undefined,
     },

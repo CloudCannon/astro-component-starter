@@ -14,7 +14,7 @@ size:
   options:
     values:
       - id: none
-        name: None
+        name: None (inherit the surrounding text size)
       - id: sm
         name: Small
       - id: md
