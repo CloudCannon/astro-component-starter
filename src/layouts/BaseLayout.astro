@@ -4,6 +4,7 @@ import { fade } from "astro:transitions";
 import SeoHead from "@component-utils/SeoHead.astro";
 import StructuredData from "@component-utils/StructuredData.astro";
 import seoData from "@data/seo.json";
+import { ogCardPath } from "../utils/og/paths";
 import "@styles/style.css";
 import SiteFonts from "@layouts/SiteFonts.astro";
 
@@ -13,6 +14,8 @@ export interface Props {
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
+  /** Generated card for this page. Defaults to the site-wide card. */
+  generatedImage?: string | null;
   canonical?: string | null;
   type?: "website" | "article";
   article?: {
@@ -25,6 +28,9 @@ export interface Props {
 }
 
 const props = Astro.props;
+// Every route without an entry of its own — listings, tag archives, 404, docs —
+// lands on the site card rather than enumerating a card per paginated URL.
+const generatedImage = props.generatedImage ?? ogCardPath("site");
 ---
 
 <!doctype html>
@@ -78,6 +84,7 @@ const props = Astro.props;
       description={props.description}
       keywords={props.keywords}
       image={props.image}
+      generatedImage={generatedImage}
       canonical={props.canonical}
       type={props.type}
       article={props.article}

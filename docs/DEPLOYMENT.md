@@ -69,6 +69,14 @@ Pagefind ships platform binaries as optional dependencies, so `@pagefind/linux-x
 in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages. Keep using
 `npm run deps:sync` rather than bare `npm install` when changing dependencies — see the README.
 
+## Share cards (optional speed-up)
+
+Every page and blog post without an image of its own gets a generated 1200x630 share card at build time, at roughly 9ms each. Nothing to configure.
+
+Rendered cards are cached under `node_modules/.astro/og-cache/`. To keep that cache between builds, add it to **Site Settings -> Builds -> Caching Options -> Preserved Paths**. It is optional: the cache is best-effort (CloudCannon notes a path "may not be retrieved from cache if your build is allocated to a different server, or if the server has been restarted"), and a cold build re-renders every card in about a second per hundred pages.
+
+For a very large site, `shareImageGeneration` in `src/data/seo.json` (**Share card generation** in the editor) can scope cards to blog posts only, or turn them off in favour of the single **Default social sharing image**.
+
 ## Before you go live
 
 - `npm run check` — the full gate, including the placeholder warning.

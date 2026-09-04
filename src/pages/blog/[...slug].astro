@@ -4,6 +4,7 @@ import { slugifyLabel } from "@component-utils/slugify";
 import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
+import { ogCardPath } from "../../utils/og/paths";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import breadcrumbsData from "@data/breadcrumbs.json";
 import Page from "@layouts/Page.astro";
@@ -82,6 +83,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
   description={post.data.description}
   keywords={post.data.keywords}
   image={post.data.image}
+  generatedImage={ogCardPath("blog", post)}
   type="article"
   article={article}
 >

@@ -186,17 +186,36 @@ Real content of `src/data/seo.json`:
   "url": "https://example.com",
   "description": "Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.",
   "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
+  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "shareImage": "",
+  "shareImageGeneration": "all",
+  "shareImageTheme": "light",
   "titleFormat": "{title} | Astro Component Starter"
 }
 ```
 
-| Field         | Type   | Consumed for                                                                                                                                                                                    |
-| ------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`        | string | `og:site_name` meta tag; `Organization` JSON-LD `name`.                                                                                                                                         |
-| `url`         | string | Fallback base for resolving `logoSource` into an absolute URL (`new URL(site.logoSource, site.url)` in `StructuredData.astro`); also the fallback if `Astro.site` isn't set in `SeoHead.astro`. |
-| `description` | string | Fallback `<meta name="description">` / `og:description` when a page doesn't set its own.                                                                                                        |
-| `logoSource`  | string | Fallback `og:image` (with width/height/alt; local photos are cropped to 1200×630); also the JSON-LD `Organization.logo`.                                                                        |
-| `titleFormat` | string | `<title>` template — literal substring `{title}` is replaced with the page's title.                                                                                                             |
+| Field                  | Type   | Consumed for                                                                                                                                                                                    |
+| ---------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`                 | string | `og:site_name` meta tag; `Organization` JSON-LD `name`.                                                                                                                                         |
+| `url`                  | string | Fallback base for resolving `logoSource` into an absolute URL (`new URL(site.logoSource, site.url)` in `StructuredData.astro`); also the fallback if `Astro.site` isn't set in `SeoHead.astro`. |
+| `description`          | string | Fallback `<meta name="description">` / `og:description` when a page doesn't set its own.                                                                                                        |
+| `logoSource`           | string | Fallback `og:image` (with width/height/alt; local photos are cropped to 1200×630); also the JSON-LD `Organization.logo`.                                                                        |
+| `shareImage`           | string | `og:image` when a page has no image and generated cards are off or out of scope. 1200×630 raster; social crawlers cannot render an SVG.                                                         |
+| `shareImageGeneration` | string | `all` / `blog` / `none`. Which entries get a build-time generated share card. See below.                                                                                                        |
+| `shareImageTheme`      | string | `light` / `dark`. Which theme's colours a generated card uses. Dark cards use `logoAlternateSource`                                                                                             |
+| `titleFormat`          | string | `<title>` template — literal substring `{title}` is replaced with the page's title.                                                                                                             |
+
+### Generated share cards
+
+`og:image` resolves in this order: the page's own `image`, then a **generated card**, then `shareImage`, then `logoSource`.
+
+A card is drawn at build time for every page and blog post with **no `image` of its own**, plus one `/og/site.png` for routes with no collection entry (listings, tag archives, 404, docs). Give an entry an `image` and it shares that instead — that is the per-entry opt-out, so there is no extra frontmatter field.
+
+`shareImageGeneration` scopes it: `all` (default), `blog` (posts only; pages fall back to `shareImage`), `none` (off).
+
+`shareImageTheme` picks `light` (default) or `dark`. One theme is baked into the image, because no social platform renders a card per-viewer. A dark card draws `logoAlternateSource` so the mark does not disappear into the background, and substitutes `--color-text` for the description because the dark theme sets `--color-text-muted` to the same white as headings.
+
+The card uses the site's own fonts and theme colours, so a rebrand needs no second edit. To change the layout, edit `src/utils/og/template.ts`; its source is hashed into the cache key, so cached cards regenerate on their own. Non-Latin scripts need a font with that coverage: the build warns and names the fix. See `docs/ARCHITECTURE.md` and `src/utils/og/fonts/README.md`.
 
 **MUST:** keep `_schema: seo` in the file. **Why:** it's what makes CloudCannon apply the `seo` schema (`cloudcannon.config.yml` → `collections_config.data.schemas.seo`, backed by `.cloudcannon/schemas/seo.json`) instead of the generic data-file editor.
 

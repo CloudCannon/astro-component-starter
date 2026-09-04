@@ -157,7 +157,15 @@ collections_config:
           description:
             comment: Default meta description used when a page or blog post does not provide its own description.
           logoSource:
-            comment: Default image used for social sharing metadata when a page or blog post does not provide its own image.
+            comment: Site logo. Also the last-resort social sharing image, though social networks cannot render an SVG one.
+          shareImage:
+            comment: Default social sharing image, 1200x630. Used when a page or blog post does not provide its own, and when generated cards are turned off below.
+          logoAlternateSource:
+            comment: Logo for dark backgrounds. Used on a generated share card when the card theme is Dark.
+          shareImageGeneration:
+            comment: Draw a share card automatically for pages and blog posts that have no image of their own.
+          shareImageTheme:
+            comment: Whether generated share cards use the site's light or dark colours.
           titleFormat:
             comment: Browser title template. Include {title} where the page title should appear.
           twitterSite:
@@ -171,6 +179,32 @@ collections_config:
           resize_style: contain
           width: 1920
           height: 1280
+      shareImage:
+        type: image
+        options:
+          paths:
+            uploads: src/assets/images
+          resize_style: cover
+          width: 1200
+          height: 630
+      shareImageGeneration:
+        type: select
+        options:
+          values:
+            - value: all
+              label: Pages and blog posts
+            - value: blog
+              label: Blog posts only
+            - value: none
+              label: "Off: use the sharing image above"
+      shareImageTheme:
+        type: select
+        options:
+          values:
+            - value: light
+              label: Light
+            - value: dark
+              label: Dark
       logoAlternateSource:
         type: image
         options:

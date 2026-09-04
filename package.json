@@ -69,6 +69,8 @@
     "@fontsource/raleway": "^5.3.0",
     "@justinribeiro/lite-youtube": "^1.9.0",
     "@pagefind/component-ui": "^1.5.2",
+    "@takumi-rs/core": "2.13.5",
+    "@takumi-rs/helpers": "2.13.5",
     "astro": "^7.2.0",
     "embla-carousel": "^8.6.0",
     "embla-carousel-auto-scroll": "^8.6.0",

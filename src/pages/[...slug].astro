@@ -2,6 +2,7 @@
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
 import Page from "@layouts/Page.astro";
+import { ogCardPath } from "../utils/og/paths";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
 export interface Props {
@@ -31,6 +32,7 @@ const { Content } = await render(page);
 
 <Page
   frontmatter={page.data}
+  generatedImage={ogCardPath("page", page)}
   mainNav={mainNavData}
   footer={footerData}
 >

@@ -35,6 +35,14 @@ Two co-operating systems:
 - Components opt into inline editing via data attributes: `data-editable="text" data-prop="heading"` (single field), `data-editable="array" data-prop="contentSections"` on a container + `data-editable="array-item"` on children (managed by renderBlock), `data-editable="component"` for whole-component bindings. The `useDefaultEditableBinding` prop toggles a component's default binding; `renderBlock` passes it down.
 - `editor-live-sync.js` handles presentation-only re-initialization inside the CloudCannon editor (Embla carousels, bento-box grid spans) because the editor's renderer doesn't execute inline scripts — component setup logic that must also run in the editor lives in importable modules (see `carousel/setup.ts` for the pattern).
 
+## Share cards (`og:image`)
+
+- `src/pages/og/[...slug].png.ts` renders a 1200x630 PNG per page and per blog post at build time, via Takumi (Rust, no browser, no network). One `/og/site.png` covers every route with no collection entry of its own: listings, tag archives, 404, docs.
+- **Only entries without their own `image` get a card**, so the cost tracks the pages that need one. The `og:image` chain in `SeoHead.astro` is page `image` → generated card → `seo.json` `shareImage` → `logoSource`.
+- `src/utils/og/paths.ts` is the single source of truth for _which_ entries get a card and at _what_ URL. The endpoint's `getStaticPaths` and the layouts both call `ogCardPath`, because a route that emits a URL the endpoint never built is a 404 nothing reports.
+- Colours come from `_light.css` or `_dark.css` at build time (`theme.ts`, per `shareImageTheme`), so a rebrand reaches the cards. A dark card uses `logoAlternateSource`, and substitutes `--color-text` for the description because the dark theme sets `--color-text-muted` to the same white as headings. Fonts come from `site-fonts.mjs` (`fonts.ts`), plus a vendored COLR emoji font — Takumi silently draws **nothing** for a bitmap emoji font, and a coverage subset needs a unique `name` with a shared `subsetOf` or the subsets overwrite each other. `src/utils/og/fonts/README.md` has the detail.
+- Rendered cards are cached by content hash under `node_modules/.astro/og-cache/`, pruned by the `prune-og-cache` integration. The key includes `template.ts`'s own source, so a layout edit invalidates every card with nothing to remember to bump. A host cache is opt-in and best-effort (CloudCannon "Preserved Paths"), so cold-build cost is the design target: about 9ms per card.
+
 ## Theming
 
 - **Tiers**: `src/styles/variables/*` (primitive tokens: palette, spacing, radius, shadows, fonts, z-layers, animation durations) → `src/styles/themes/_light.css` / `_dark.css` (semantic tokens like `--color-text`, `--color-bg-brand`) → components consume only semantic/primitive tokens in their `<style is:global>` blocks.

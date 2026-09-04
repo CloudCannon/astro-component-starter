@@ -5,6 +5,8 @@ interface SiteSeoData {
   name: string;
   url: string;
   logoSource: string;
+  /** 1200×630 raster for social cards. Falls back to the logo when unset. */
+  shareImage?: string | null;
   description: string;
   titleFormat: string;
   twitterSite?: string | null;
@@ -23,6 +25,8 @@ export interface Props {
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
+  /** Path to a build-time generated card, used when the page has no `image`. */
+  generatedImage?: string | null;
   imageAlt?: string | null;
   canonical?: string | null;
   type?: "website" | "article";
@@ -36,20 +40,49 @@ const {
   description,
   keywords,
   image,
+  generatedImage,
   imageAlt,
   canonical,
   type: pageType = "website",
   article,
   noindex = false,
 } = Astro.props;
-const formattedTitle = site.titleFormat.replace("{title}", title);
+// Search engines truncate titles around 60 characters and count `titleFormat`'s
+// suffix too, so a long site name silently pushes every page over on its own.
+// The page's own title is the half that has to survive: drop the suffix rather
+// than let it crowd the title out.
+const TITLE_LENGTH_BUDGET = 60;
+const decoratedTitle = site.titleFormat.replace("{title}", title);
+const formattedTitle =
+  decoratedTitle.length > TITLE_LENGTH_BUDGET && title.length <= TITLE_LENGTH_BUDGET
+    ? title
+    : decoratedTitle;
+
+if (import.meta.env.DEV && title.length > TITLE_LENGTH_BUDGET) {
+  console.warn(
+    `[seo] "${title}" is ${title.length} characters; search engines truncate around ${TITLE_LENGTH_BUDGET}.`
+  );
+}
 const pageDescription = description || site.description;
-const shareSource = image || site.logoSource;
-const share = shareSource ? await resolveOpenGraphImage(shareSource) : undefined;
+const shareSource = image || generatedImage || site.shareImage || site.logoSource;
+// A generated card is already a 1200x630 PNG under `/og/`, so it needs neither
+// asset resolution nor the SVG warning below, and its dimensions are known.
+const isGeneratedCard = !image && Boolean(generatedImage) && shareSource === generatedImage;
+
+if (import.meta.env.DEV && !isGeneratedCard && shareSource?.toLowerCase().endsWith(".svg")) {
+  console.warn(
+    `[seo] og:image resolves to "${shareSource}". Social crawlers do not render SVG — set "shareImage" in src/data/seo.json to a 1200×630 raster.`
+  );
+}
+const share = isGeneratedCard
+  ? { src: shareSource!, width: 1200, height: 630 }
+  : shareSource
+    ? await resolveOpenGraphImage(shareSource)
+    : undefined;
 const canonicalUrl = canonical || Astro.url.href;
 const siteUrl = Astro.site || new URL(site.url);
 const pageImageUrl = share ? new URL(share.src, siteUrl).href : undefined;
-const pageImageAlt = imageAlt || (image ? title : site.name);
+const pageImageAlt = imageAlt || (image || isGeneratedCard ? title : site.name);
 const keywordContent = keywords?.filter(Boolean).join(", ");
 const articleAuthors = Array.isArray(article?.author)
   ? article.author.filter(Boolean)

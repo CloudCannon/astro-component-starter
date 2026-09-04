@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Share cards are drawn automatically for every page and blog post that has no image of its own, so a site shares properly without anyone uploading a 1200x630 image. The card carries the site logo and name, the page title, a brand-coloured rule and the description, using the site's own fonts and theme colours, so it follows a rebrand with no extra edit. Pages that do set an **Image** keep sharing that image, and the new **Share card generation** setting in `seo.json` scopes generation to blog posts only, or turns it off in favour of the site-wide sharing image, and **Share card theme** draws them with the site's light or dark colours. Cards render at build time with no browser and no network, and are cached between builds.
 - `imageBleed` on Feature Split and Hero Split: the image column runs to the viewport edge, cropped by aspect ratio.
 - Form fields carry an `autocomplete` value so browsers and password managers can fill them (WCAG 1.3.5). Input, Textarea, Select and Date take an explicit **Autocomplete** input, a picker of the common tokens labelled in plain language ("Last name", "City or suburb") with the token itself shown underneath, so a hint can't be lost to a typo the browser ignores in silence; anything the list doesn't cover, including compound values like `shipping street-address`, can still be typed in. Leave it blank and one is derived from the field's own type and name — `email`, `tel`, `given-name`, `organization`, `postal-code` and the rest of the common set. Anything ambiguous is left alone rather than guessed, because a wrong token autofills the wrong value.
 - An invalid form says why under the field it belongs to, instead of leaving it to the browser's transient bubble. The message is wired to the control with `aria-describedby`, the control is marked `aria-invalid`, focus moves to the first problem, and the message clears as soon as the field becomes valid. With JavaScript off, the browser's own validation still blocks the submit.
@@ -32,6 +33,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `npm run check:quick` runs the three checks that catch real mistakes in seconds (`lint:cms`, `lint:css-vars`, `astro check`), for use while working; `npm run check` is still what a finished change has to pass.
 - `npm run editor` builds the site and serves the real CloudCannon editor against `dist/`, printing the build time on start — the editor reads `dist/`, so a stale build is otherwise invisible.
 - A bare `npm install` is refused with a pointer to `npm run deps:sync`, because a macOS install prunes the Linux optional dependencies CI needs and the resulting tree builds locally while failing in CI. `ALLOW_NPM_INSTALL=1` overrides; `npm ci` and CI are unaffected.
+- A **Share image** field on the SEO data file, a 1200x630 raster used for social cards. Social networks cannot render an SVG, so a site whose logo is one had no usable share image; leave it blank to keep falling back to the logo, and `npm run dev` now warns when that fallback is an SVG.
+- `llms.txt` is generated from the content collections rather than hand-maintained in `public/`, so it lists every indexable page instead of falling behind as pages are added. It skips `noindex` pages, matching the sitemap.
 
 ### Changed
 
@@ -111,6 +114,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Steps and Timeline collapse at the canonical 640px breakpoint instead of 500px and 560px.
 - **Heads-up:** the Steps and Timeline _page sections_ are now Steps Section and Timeline Section (`page-sections/explainers/steps-section` and `.../timeline-section`), matching FAQ Section and Testimonial Section. Each shared a name with the building block it wraps, which made them indistinguishable in the editor's section picker and impossible to tell apart in a blog post, where MDX addresses a component by its bare filename and the page section silently won. Existing content and MDX need the new `_component` key and the `<StepsSection>` / `<TimelineSection>` tag; the building blocks keep their names. A build now fails with both file paths if two components are ever given the same filename again.
 - Imports use one alias per tree. `@components/utils/` is `@component-utils/` and `@components/navigation/` is `@navigation/` — both spellings resolved to the same file, and 26 files used both, in one case on adjacent lines. An ESLint rule holds the line. `@components/` stays as the fallback for a subtree with no alias of its own; the unused `@building-blocks/` alias is gone, since each of its three subtrees has one.
+- Images are served as AVIF with a WebP fallback, not WebP alone. The generated AVIF set is 3.7MB against WebP's 9.0MB for the same images, and browsers without AVIF are unaffected.
+- A page title drops the site-name suffix rather than overrunning the length search engines display. `titleFormat` adds its suffix to every title, so a long site name silently pushed whole sections of a site over the limit; the page's own title is now what survives.
+
+- The search panel's stylesheet loads when the panel is first reached for, not on every page. Pagefind's Component UI CSS is 32KB and the panel sits behind a button, so it was 18% of every page's render-blocking CSS to style something most visitors never open. Hovering or focusing the search button warms it, so the panel is styled by the time it opens.
 
 ### Removed
 

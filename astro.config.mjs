@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import mdx from "@astrojs/mdx";
 
+import pruneOgCache from "./scripts/build/pruneOgCache.mjs";
 import { siteFonts } from "./site-fonts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,6 +16,11 @@ export default defineConfig({
   site: "https://example.com", // TODO: Update to your production URL
   fonts: siteFonts,
   build: {
+    // Kept "always" on measured evidence: serving the CSS as one shared,
+    // cacheable stylesheet cost ~190ms FCP and ~240ms LCP on a cold Slow-4G
+    // load, because a render-blocking request adds a round trip that inlined
+    // bytes do not. The per-page waste is real, but the fix is a smaller
+    // critical stylesheet, not a linked copy of the same 174KB.
     inlineStylesheets: "always",
   },
   devToolbar: {
@@ -28,6 +34,7 @@ export default defineConfig({
   },
   integrations: [
     editableRegions(),
+    pruneOgCache(),
     sitemap({
       filter: (page) => {
         if (page.endsWith("/404") || page.endsWith("/404.html")) {
