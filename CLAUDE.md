@@ -6,7 +6,9 @@ Astro component starter: brandable base components for informational websites, v
 
 - `npm run dev` / `npm run build` (prod, excludes component-docs) / `npm run build:with-library`
 - `npm run check` — lint (incl. `lint:css-vars`, `lint:css-literals`) + format + `astro check` + previews & skills drift checks + `lint:cms` + `lint:roots` + `lint:nesting` + `lint:schema`. Run before claiming work done.
+- `npm run check:quick` — `lint:cms` + `lint:css-vars` + `astro check`, the three that catch real mistakes in seconds. Not a substitute for `check` before claiming done.
 - `npm run check:fix` — auto-fix lint/format.
+- `npm run editor` — build, then serve the real CloudCannon editor against `dist/` (`--with-library`, `--no-build`, `--port=`). It prints the dist build time on start, because the editor reads `dist/`, never the dev server.
 - `npm run lint:css-vars` — every `var(--x)` in `src/` must resolve to a declared custom property. Guessing a token name is the most common CSS mistake here (spacing starts at `xs`, weights are normal/semibold/bold with no `medium`, z-index is `--layer-N`) and it fails **silently** — an unresolved `var()` makes the declaration invalid at computed-value time, so the property just inherits. `var(--x, fallback)` and dynamically-built names (`var(--spacing-${gap})`) are skipped by design; `--list` prints every declared token. Part of `npm run lint`. Editor-side equivalent: the `cssVariables.lookupFiles` setting in `.vscode/settings.json`.
 - `npm run lint:css-literals` — the other half of the token rule: no raw value in component CSS where a token already covers it (border widths, colours, the `ease` keyword, `9999px`, off-scale durations). Scans only the `<style>` blocks of `src/components` and `src/layouts` plus `src/styles/base`; `src/component-docs` is the dev-only docs UI and is excluded. **Naming a value is the escape hatch** — a declaration whose property is itself a custom property (`--carousel-dot-size: 8px`) is never flagged, so a component-specific number no global token should own goes on the component root. Masks (`#000` is opacity, not colour) and instant durations (`0s linear`, `1ms`) are exempt. It **parses** the CSS with PostCSS rather than pattern-matching it — a text scan flags literals inside comments, `content` strings and `url()`s, and misses anything in a multi-line declaration. PostCSS was already in the tree as stylelint's engine; this adds no build-time PostCSS. Part of `npm run lint`.
 - `npm run lint:cms` — validate the CloudCannon layer against the **components**: prop drift (inputs/structure-value keys vs the `.astro` destructure), default drift (a `value:` seed for a knob must equal the `.astro` destructure default — prose inputs and expression defaults are skipped), orphaned/missing YAML, `_component` resolution, editor-script registration (a client `<script>` is dead in the editor unless a co-located `setup.ts` is registered in `editor-live-sync.js`), and content prop drift (keys beside a `_component` in `src/content/` vs that component's destructure, plus the items of a structured array against the `_structures` block that declares them). Part of `npm run check`; run after any prop rename.
@@ -17,7 +19,24 @@ Astro component starter: brandable base components for informational websites, v
 - `npm run icons:sync` — regenerate `_select_data.icons` in `cloudcannon.config.yml` from the SVGs in `src/icons/` (recursive; subdirectories become part of the id, e.g. `social/github`). Run after adding or removing an icon. `npm run icons:check` (part of `check`) fails on drift either way — an id with no SVG shows a broken thumbnail in the picker, an SVG with no id can't be selected, and neither is an error anywhere else. Only the `icons:` block is rewritten; option labels are derived from the filename, so rename the file to rename the label.
 - `npm run new:component <tier/path/kebab-name>` — scaffold a new component (`.astro` + both CloudCannon YAML files) with correct layer, key, and preview wiring; prints the remaining manual steps.
 - Tests: `npm run test:render` (every structure default builds — note it rebuilds `dist/` **without** the component library, so re-run `build:with-library` before the browser tests), `npm run test:unit` (Vitest, shared utils), `npm run test:smoke` (headless Chrome against `dist/`), `npm run test:flow-margins` (walks the built site's CSSOM for `@layer page-sections` top margins that the `_flow.css` utils layer already overrides — a static lint can't tell a flow child from a flex child, so this one needs the real DOM).
-- After editing `package.json`: `npm run deps:sync` (never bare `npm install` — it breaks the lockfile for Linux CI).
+- After editing `package.json`: `npm run deps:sync` (never bare `npm install` — it breaks the lockfile for Linux CI; a `preinstall` guard refuses one, `ALLOW_NPM_INSTALL=1` overrides).
+
+### Which check for which change
+
+| Changed               | Run                                                |
+| --------------------- | -------------------------------------------------- |
+| A component prop      | `npm run lint:cms`                                 |
+| Component CSS         | `npm run lint:css-vars` (then `lint:css-literals`) |
+| CloudCannon YAML      | `npm run lint:schema --only <substring>`           |
+| A preview recipe      | `npm run previews:check`                           |
+| Anything, before done | `npm run check`                                    |
+
+### Nothing is updating
+
+Two staleness traps, both silent:
+
+- **A CSS edit isn't showing.** The Astro dev daemon can serve stale `is:global` styles: `npx astro dev stop`, then restart.
+- **The editor is showing old content.** `npm run editor` serves `dist/`, not the dev server — rebuild and restart it after every change.
 
 ## Detailed workflow guides
 
