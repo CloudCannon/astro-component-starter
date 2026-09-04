@@ -4,7 +4,7 @@ import * as yaml from "js-yaml";
 
 /**
  * The single reader for `.cloudcannon/structures` — componentConfig and the
- * Component Builder's nesting rules must see the same set of files.
+ * preview-renders routes must see the same set of files.
  */
 export function loadGlobalStructures(dir = ".cloudcannon/structures"): Record<string, unknown> {
   const merged: Record<string, unknown> = {};

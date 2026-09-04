@@ -73,10 +73,8 @@
     "glob": "^13.0.6",
     "js-beautify": "^2.0.3",
     "js-yaml": "^5.2.3",
-    "jszip": "^3.10.1",
     "markdown-it": "^15.0.0",
     "sharp": "^0.35.3",
-    "shiki": "^4.4.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {

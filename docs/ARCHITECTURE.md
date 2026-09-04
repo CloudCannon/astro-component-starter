@@ -50,7 +50,7 @@ Two co-operating systems:
 
 ## Component library docs (`/component-docs`)
 
-`src/component-docs/` is a self-documenting library UI (pure Astro, no React) with its own content collections, a component viewer, and a builder. It is excluded from production builds: `npm run build` sets `DISABLE_COMPONENT_LIBRARY=true`, which the component-docs routes check in `getStaticPaths`; `npm run build:with-library` includes it. The sitemap excludes it either way.
+`src/component-docs/` is a self-documenting library UI (pure Astro, no React) with its own content collections and a component viewer. It is excluded from production builds: `npm run build` sets `DISABLE_COMPONENT_LIBRARY=true`, which the component-docs routes check in `getStaticPaths`; `npm run build:with-library` includes it. The sitemap excludes it either way.
 
 ## Protected patterns (don't "refactor" these)
 

@@ -25,7 +25,7 @@ blocks:
             items:
               - name: 'Project tour'
                 path: '#'
-              - name: 'Component builder'
+              - name: 'Editing a page'
                 path: '#'
               - name: 'Theming guide'
                 path: '#'

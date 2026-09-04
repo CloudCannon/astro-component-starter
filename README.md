@@ -5,8 +5,7 @@ A starter template with 55 Astro components, each built for visual editing in
 source code to modify, extend, or delete.
 
 **[Live demo](https://astro-component-starter.cc/)** ·
-**[Component docs](https://astro-component-starter.cc/component-docs/)** ·
-**[Component builder](https://astro-component-starter.cc/component-docs/component-builder/)**
+**[Component docs](https://astro-component-starter.cc/component-docs/)**
 
 [![The starter's demo homepage](docs/images/homepage.png)](https://astro-component-starter.cc/)
 
@@ -48,8 +47,7 @@ errors. `npm run check` warns until it's set.
 - **Your site** at [localhost:4321](http://localhost:4321), a working product demo with
   pages, labeled example templates, blog, search, and navigation
 - **Component docs** at [localhost:4321/component-docs/](http://localhost:4321/component-docs/) —
-  eight guides, a live example and prop table for every component, a gallery, and a drag-and-drop
-  component builder that exports a complete component package
+  guides, a live example and prop table for every component, and a gallery
 
 ## Why This Starter
 
@@ -166,8 +164,8 @@ npm run deps:check
 
 ## Learn More
 
-- **[Component docs](https://astro-component-starter.cc/component-docs/)** — guides, every
-  component's props, and the component builder. Also at `/component-docs/` in your dev server.
+- **[Component docs](https://astro-component-starter.cc/component-docs/)** — guides and every
+  component's props. Also at `/component-docs/` in your dev server.
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — how content becomes HTML, the component
   registry, and the patterns not to refactor.
 - **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — deploying to CloudCannon.

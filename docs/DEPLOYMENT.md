@@ -79,7 +79,7 @@ in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages
   Examples / Blog.
 
 `npm run build` strips the component documentation from the output: the per-component pages
-aren't generated at all, and `/component-docs/`, `/gallery/` and `/component-builder/` render
+aren't generated at all, and `/component-docs/` and `/gallery/` render
 a short "available in local development" placeholder rather than 404. That's fine to leave in
 place, but it isn't a page you want in a real site's navigation — `npm run reset:starter`
 removes the link. Use `npm run build:with-library` to publish the docs alongside your site.

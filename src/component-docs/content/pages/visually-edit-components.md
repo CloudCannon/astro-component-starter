@@ -92,8 +92,6 @@ Three `data-*` attributes at the page section level, and the building blocks han
 
 Browse any page section in the component docs to see more working examples.
 
-If you'd rather not wire these up by hand, the [Component Builder](/component-docs/component-builder/) handles all the editable regions for you. It generates the right `data-*` attributes on every building block it includes, so the exported component is fully editable out of the box.
-
 ## Next up
 
-You've completed the Getting Started guide. You can build components, brand them, and make them visually editable. From here, explore the full set of components in the sidebar — each one documents its props, examples, and CloudCannon configuration. Or head to the [Component Builder](/component-docs/component-builder/) to prototype new sections visually.
+You've completed the Getting Started guide. You can build components, brand them, and make them visually editable. From here, explore the full set of components in the sidebar — each one documents its props, examples, and CloudCannon configuration.

@@ -1,8 +1,13 @@
+import { pascalToKebab } from "@components/utils/componentKey.mjs";
 import { removeStyleField } from "../../../shared/blockDataUtils";
-import { getChildComponentPath } from "../../../shared/componentPath";
 import { getComponentMetadataMap, getNestedBlockProperties } from "../../../shared/metadata";
 import { formatComponentWithSlots } from "./componentFormatter";
 import { getComponentDisplayName } from "./componentUtils";
+
+/** "typography/list" + "ListItem" -> "typography/list/list-item" */
+function getChildComponentPath(parentPath: string, childName: string): string {
+  return `${parentPath}/${pascalToKebab(childName)}`;
+}
 
 function getImportAliasPath(componentPath: string): string {
   const aliasMappings: Array<{ prefix: string; alias: string }> = [

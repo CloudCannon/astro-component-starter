@@ -27,32 +27,6 @@ export default defineConfig({
     domains: [],
   },
   integrations: [
-    {
-      name: "builder-preview-dev-only",
-      hooks: {
-        "astro:config:setup": ({ command, injectRoute, updateConfig }) => {
-          if (command === "dev") {
-            injectRoute({
-              pattern: "/component-docs/builder-preview",
-              entrypoint: "./src/component-docs/pages/builder-preview.astro",
-              prerender: false,
-            });
-            updateConfig({
-              adapter: {
-                name: "dev-only-server-preview",
-                serverEntrypoint: "",
-                supportedAstroFeatures: {
-                  serverOutput: "stable",
-                  staticOutput: "stable",
-                  hybridOutput: "stable",
-                  sharpImageService: "stable",
-                },
-              },
-            });
-          }
-        },
-      },
-    },
     editableRegions(),
     sitemap({
       filter: (page) => {

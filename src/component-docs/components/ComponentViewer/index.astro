@@ -5,7 +5,7 @@ import Button from "@core-elements/button/Button.astro";
 import Segments from "@forms/segments/Segments.astro";
 import { Code } from "astro:components";
 import "./styles.css";
-import { pascalToKebab } from "../../shared/caseUtils";
+import { componentKeyFromPath } from "@components/utils/componentKey.mjs";
 import { formatBlocksAstro } from "./utils/astroFormatter";
 import { getBodyPadding } from "./utils/spacing";
 import { formatBlocksYaml } from "./utils/yamlFormatter";
@@ -16,24 +16,9 @@ const componentImports = import.meta.glob("../../../components/**/*.astro", {
 });
 
 Object.entries(componentImports).forEach(([path, obj]) => {
-  const relativePath = path.replace("../../../components/", "").replace(/\.astro$/, "");
-  const parts = relativePath.split("/");
-  const filename = parts[parts.length - 1];
+  const componentName = componentKeyFromPath(path.replace("../../../components/", ""));
 
-  const kebabFilename = pascalToKebab(filename);
-
-  // Collapse e.g. `card/Card.astro` to `card`
-  if (parts.length > 1 && kebabFilename === parts[parts.length - 2]) {
-    parts.pop();
-    parts[parts.length - 1] = kebabFilename;
-  } else {
-    parts[parts.length - 1] = kebabFilename;
-  }
-
-  const componentName = parts.join("/");
-  const component = (obj as any).default;
-
-  components[componentName] = component;
+  components[componentName] = (obj as any).default;
 });
 
 const viewerId = title

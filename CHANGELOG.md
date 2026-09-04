@@ -57,6 +57,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Generated ids are derived from whatever names the thing they belong to — `input-email`, `modal-book-a-demo`, `dropdown-toggle-navigation-products` — instead of a fresh UUID each render. Two builds of the same content now produce byte-identical HTML, and an id referenced by a `for`, `aria-controls` or `popovertarget` survives a re-render in the Visual Editor. Where nothing names a component and the id still has to be unique on the page (an unlabelled single-open Accordion, an unnamed Modal), a generated suffix remains as a last resort.
 - **Heads-up:** Input, Textarea, Select, Date, File Upload and Range share one field shell, so their label, hint and error markup carries `form-field`, `form-field-header`, `form-field-hint`, `form-field-error` and `form-field-required` instead of per-component classes like `input-hint` or `range-required`. Each field keeps its own root class (`.input`, `.range`, and so on) alongside `.form-field`. The required asterisk now has a space before it rather than after.
 
+### Removed
+
+- The Component Builder, the drag-and-drop page at `/component-docs/component-builder/` that composed building blocks in a sandbox and exported a component package. Prototyping a new section is better served by `npm run new:component`, which scaffolds the same three files with the correct keys and wiring, and by editing them directly. Its dev-only server-rendered preview route goes with it, so `astro.config.mjs` no longer registers a placeholder adapter to keep one route out of the static build, and the `jszip` and `shiki` dependencies are gone.
+
 ### Fixed
 
 - The component catalog no longer lists a parent's layout settings as if they were per-item content props: `aspectRatio` on a card grid item and `lightbox` on a gallery image are wiring the parent passes down, not fields an author fills in.
