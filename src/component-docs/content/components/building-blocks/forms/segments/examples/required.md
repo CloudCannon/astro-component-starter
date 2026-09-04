@@ -10,19 +10,13 @@ blocks:
     - value: 'active'
       label: 'Active'
       icon: 'check-circle'
-      iconSize: 'sm'
-      iconBackground: 'none'
       checked: true
     - value: 'inactive'
       label: 'Inactive'
       icon: 'x-circle'
-      iconSize: 'sm'
-      iconBackground: 'none'
       checked: false
     - value: 'pending'
       label: 'Pending'
       icon: 'clock'
-      iconSize: 'sm'
-      iconBackground: 'none'
       checked: false
 ---

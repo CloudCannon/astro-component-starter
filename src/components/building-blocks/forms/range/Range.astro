@@ -12,7 +12,6 @@ const {
   unit = "",
   tickStyle = "uniform",
   tickCount = 11,
-  required = false,
   showValue = true,
   hint,
   error,
@@ -28,7 +27,6 @@ const { fieldId, controlAttributes, shellAttributes } = formFieldParts({
   id: customId,
   name,
   label,
-  required,
   hint,
   error,
 });
@@ -66,9 +64,9 @@ const ticks = showTicks
           class="range-value"
           for={fieldId}
         >
-          {displayValue}
+          <span class="range-number">{displayValue}</span>
+          {unit && <span class="range-unit">{unit}</span>}
         </output>
-        {unit && <span class="range-unit">{unit}</span>}
       </div>
     )
   }
@@ -114,7 +112,9 @@ const ticks = showTicks
 
     ranges.forEach((wrapper) => {
       const input = wrapper.querySelector<HTMLInputElement>(".range-input");
-      const output = wrapper.querySelector<HTMLOutputElement>(".range-value");
+      // The number is its own node: `output.value` would replace the whole
+      // output, taking the unit with it.
+      const output = wrapper.querySelector<HTMLElement>(".range-number");
       const ticks = wrapper.querySelectorAll<HTMLSpanElement>(".range-tick");
       if (!input) return;
 
@@ -132,7 +132,7 @@ const ticks = showTicks
         input.style.setProperty("--range-pct", `${pct}%`);
 
         if (output) {
-          output.value = String(Number.isInteger(step) ? Math.round(val) : val);
+          output.textContent = String(Number.isInteger(step) ? Math.round(val) : val);
         }
 
         if (ticks.length > 1) {
@@ -215,11 +215,17 @@ const ticks = showTicks
       }
 
       .range-value {
+        align-items: baseline;
+        display: inline-flex;
         font-size: var(--font-size-md);
         font-variant-numeric: tabular-nums;
         font-weight: var(--font-weight-normal);
-        min-width: 2ch;
+        gap: var(--spacing-em-xs);
         text-align: end;
+      }
+
+      .range-number {
+        min-width: 2ch;
       }
 
       .range-unit {

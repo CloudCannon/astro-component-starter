@@ -7,6 +7,12 @@ name:
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.
+hint:
+  type: text
+  comment: Optional help text shown between the title and the options, announced to assistive technology.
+error:
+  type: text
+  comment: Optional validation message shown below the options. Setting it also marks the group invalid.
 required:
   type: switch
   comment: Whether the field is required.

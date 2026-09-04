@@ -16,6 +16,13 @@ placeholder:
 value:
   type: text
   comment: The default value for the textarea field.
+rows:
+  type: number
+  comment: How many lines of text the field shows before it scrolls.
+  options:
+    step: 1
+    min: 1
+    max: 20
 hint:
   type: text
   comment: Optional help text shown between the label and the field, announced to assistive technology.

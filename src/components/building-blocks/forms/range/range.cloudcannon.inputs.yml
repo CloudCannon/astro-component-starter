@@ -19,9 +19,6 @@ value:
 unit:
   type: text
   comment: Optional unit suffix shown next to the value (e.g. "%", "px").
-required:
-  type: switch
-  comment: Whether the field is required.
 showValue:
   type: switch
   comment: Whether to display the current value next to the label.

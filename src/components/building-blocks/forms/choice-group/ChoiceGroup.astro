@@ -1,13 +1,18 @@
 ---
 import type { SegmentOption } from "../../../../types";
+import { generateFieldId } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   name,
   options = [],
   title,
+  hint,
+  error,
   orientation = "vertical",
   required = false,
   multiple = false,
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -20,16 +25,29 @@ const inputName = multiple ? `${name}[]` : name;
 // Native `required` on one checkbox of a group means "tick this box", not
 // "pick at least one" — only radio groups can express the group constraint.
 const requireEachInput = required && !multiple;
+
+const groupId = generateFieldId("choice-group", customId, name || title);
+const hintId = isNonEmptyString(hint) ? `${groupId}-hint` : undefined;
+const errorId = isNonEmptyString(error) ? `${groupId}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 ---
 
 <div
   class:list={["choice-group", className]}
   {...htmlAttributes}
 >
+  {
+    /* A <fieldset> already maps to `group`, so only the radio case needs a role
+      — and a `radiogroup` with no legend has no name, hence the fallback. */
+  }
   <fieldset
+    id={groupId}
     class="choice-group-fieldset"
-    role={multiple ? "group" : "radiogroup"}
+    role={multiple ? undefined : "radiogroup"}
+    aria-label={title ? undefined : name || undefined}
     aria-required={required ? "true" : undefined}
+    aria-describedby={describedBy}
+    aria-invalid={errorId ? "true" : undefined}
   >
     {
       title && (
@@ -38,12 +56,22 @@ const requireEachInput = required && !multiple;
           {required && (
             <span
               class="choice-group-required"
-              aria-label="required"
+              aria-hidden="true"
             >
               *
             </span>
           )}
         </legend>
+      )
+    }
+    {
+      hintId && (
+        <p
+          class="choice-group-hint"
+          id={hintId}
+        >
+          {hint}
+        </p>
       )
     }
     <div
@@ -65,6 +93,16 @@ const requireEachInput = required && !multiple;
         ))
       }
     </div>
+    {
+      errorId && (
+        <p
+          class="choice-group-error"
+          id={errorId}
+        >
+          {error}
+        </p>
+      )
+    }
   </fieldset>
 </div>
 
@@ -85,6 +123,18 @@ const requireEachInput = required && !multiple;
       .choice-group-required {
         color: var(--color-error);
         margin-inline-end: var(--spacing-em-xs);
+      }
+
+      .choice-group-hint {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .choice-group-error {
+        color: var(--color-error);
+        font-size: var(--font-size-sm);
+        margin: 0;
       }
 
       .choice-group-options {

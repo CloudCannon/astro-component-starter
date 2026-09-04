@@ -76,6 +76,3 @@ hideText:
   type: switch
   comment: Whether to hide the button text and show only the icon.
   hidden: "!iconName"
-disabled:
-  type: switch
-  comment: Whether the submit button is disabled.
