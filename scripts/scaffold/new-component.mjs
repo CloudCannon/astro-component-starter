@@ -14,6 +14,7 @@
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { glob } from "glob";
 import { componentKeyFromPath, pascalToKebab } from "../../src/components/utils/componentKey.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
@@ -109,6 +110,16 @@ if (pascalToKebab(pascal) !== slug)
   die(
     `"${slug}" is not derivable from a PascalCase filename ` +
       `("${pascal}.astro" would register as "${pascalToKebab(pascal)}"). Pick another name.`
+  );
+
+// MDX addresses components by bare filename, so a duplicate would shadow the
+// existing one. Blog builds fail on this; refuse it here instead.
+const clash = (await glob(`**/${pascal}.astro`, { cwd: componentsDir }))[0];
+
+if (clash)
+  die(
+    `${pascal}.astro already exists at src/components/${clash}. ` +
+      `Filenames must be unique across the library — suffix this one (e.g. "${slug}-section").`
   );
 
 const componentKey = componentKeyFromPath(`${requested}/${pascal}.astro`);

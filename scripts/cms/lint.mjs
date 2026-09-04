@@ -51,15 +51,17 @@ const astroPaths = (await glob("**/*.astro", { cwd: componentsDir })).sort();
 const componentKeys = new Set();
 /** dir (abs) -> { astroAbs, props, hasRest } for the *main* component in that dir. */
 const mainByDir = new Map();
+/** `_component` key -> { astroAbs, parsed } for every component, child ones included. */
+const byKey = new Map();
 
 for (const relToComponents of astroPaths) {
   const astroAbs = join(componentsDir, relToComponents);
+  const parsed = parseDestructure(readFileSync(astroAbs, "utf8"));
 
   componentKeys.add(componentKeyFromPath(relToComponents));
+  byKey.set(componentKeyFromPath(relToComponents), { astroAbs, parsed });
 
   if (isMainComponentFile(astroAbs)) {
-    const parsed = parseDestructure(readFileSync(astroAbs, "utf8"));
-
     mainByDir.set(dirname(astroAbs), { astroAbs, parsed });
   }
 }
@@ -506,6 +508,58 @@ for (const [abs, maps] of arraySources) {
   } else if (arrayInputs) {
     ok(`array items ${rel(abs)}`);
   }
+}
+
+// Check 8 — Content prop drift (FAIL): every key sitting beside a `_component`
+// in content frontmatter must be a prop that component destructures. A stray key
+// lands in the component's `...htmlAttributes` rest and renders as a bare HTML
+// attribute, so a renamed prop leaves the old value in content doing nothing and
+// nothing else reports it.
+//
+// Only objects that carry `_component` are checked. Item objects whose shape is
+// declared by a parent's `_structures` block (gridItems, steps items) are NOT
+// validated — resolving those needs the structure graph, so drift inside them
+// still passes.
+
+/** HTML attributes an author may legitimately set on a component that spreads a rest. */
+const PASS_THROUGH_ATTR = (key) =>
+  key === "id" || key.startsWith("data-") || key.startsWith("aria-");
+
+function checkContentProps(node, path, abs, strays) {
+  if (Array.isArray(node)) {
+    node.forEach((item, i) => checkContentProps(item, `${path}[${i}]`, abs, strays));
+    return;
+  }
+  if (!node || typeof node !== "object") return;
+
+  if (typeof node._component === "string") {
+    const entry = byKey.get(node._component);
+
+    if (entry?.parsed) {
+      for (const key of Object.keys(node)) {
+        if (key === "_component" || NON_PROP_KEY(key)) continue;
+        if (entry.parsed.props.has(key)) continue;
+        if (entry.parsed.hasRest && PASS_THROUGH_ATTR(key)) continue;
+        strays.push(`${path || "."}: ${node._component} has no prop "${key}"`);
+      }
+    }
+  }
+
+  for (const [key, value] of Object.entries(node))
+    checkContentProps(value, path ? `${path}.${key}` : key, abs, strays);
+}
+
+for (const abs of contentFiles) {
+  const fm = frontmatter(readFileSync(abs, "utf8"));
+
+  if (!fm) continue;
+
+  const strays = [];
+
+  checkContentProps(fm, "", abs, strays);
+
+  if (strays.length) fail(rel(abs), `unknown prop(s) in content:\n   ${strays.join("\n   ")}`);
+  else ok(`content     ${rel(abs)}`);
 }
 
 for (const label of oks) console.log(`ok     ${label}`);

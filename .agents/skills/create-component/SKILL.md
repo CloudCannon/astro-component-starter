@@ -53,6 +53,8 @@ Page-section categories: `builders`, `collections`, `conversion`, `explainers`, 
 | Child component   | `{Parent}{Role}.astro`          | `AccordionItem.astro` → key `.../accordion-item` |
 | CloudCannon files | `{slug}.cloudcannon.{type}.yml` | `hero-center.cloudcannon.inputs.yml`             |
 
+**Filenames are globally unique.** A blog post addresses a component by bare filename, so a page section may not share a `.astro` filename with a building block anywhere in the tree — suffix it (`StepsSection.astro`, `FaqSection.astro`, `TestimonialSection.astro`) and give the directory the matching `-section` slug. A blog build fails on a collision, naming both files.
+
 **Why the key collapse:** `pascalToKebab` drops the filename when it matches its parent directory (`hero-center/HeroCenter.astro` → `.../hero-center`); a child whose name differs keeps it (`.../accordion/accordion-item`). This logic lives in one shared module, `src/components/utils/componentKey.mjs`, which `renderBlock.astro` and `live-editing.js` both import.
 
 ## Steps

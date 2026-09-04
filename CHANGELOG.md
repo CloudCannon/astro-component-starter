@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Social Links takes a **Landmark name**, so two sets of social links on one page are distinguishable.
 - Main Nav exposes the **Theme toggle** switch. The prop was read but had no input, so it could only be set by editing `mainNav.json`.
 - Feature Grid's snippet offers the alignment control the component already had.
+- `npm run lint:cms` validates the props in page content, not just the props in the CloudCannon YAML. Every key sitting beside a `_component` in `src/content/` must be a prop that component destructures, so a renamed prop no longer leaves a stale value behind in content where nothing reports it — a stray key lands in the component's rest spread and renders as a bare HTML attribute. Item objects whose shape comes from a parent's `_structures` block are not covered yet.
 
 ### Changed
 
@@ -103,6 +104,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - The theme toggle's sun/moon icons key off the site theme rather than the nearest themed ancestor, so the toggle inside a dark section shows the right icon.
 - The table of contents disclosure uses the shared Icon component instead of an inline SVG.
 - Steps and Timeline collapse at the canonical 640px breakpoint instead of 500px and 560px.
+- **Heads-up:** the Steps and Timeline _page sections_ are now Steps Section and Timeline Section (`page-sections/explainers/steps-section` and `.../timeline-section`), matching FAQ Section and Testimonial Section. Each shared a name with the building block it wraps, which made them indistinguishable in the editor's section picker and impossible to tell apart in a blog post, where MDX addresses a component by its bare filename and the page section silently won. Existing content and MDX need the new `_component` key and the `<StepsSection>` / `<TimelineSection>` tag; the building blocks keep their names. A build now fails with both file paths if two components are ever given the same filename again.
+- Imports use one alias per tree. `@components/utils/` is `@component-utils/` and `@components/navigation/` is `@navigation/` — both spellings resolved to the same file, and 26 files used both, in one case on adjacent lines. An ESLint rule holds the line. `@components/` stays as the fallback for a subtree with no alias of its own; the unused `@building-blocks/` alias is gone, since each of its three subtrees has one.
 
 ### Removed
 

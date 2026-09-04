@@ -13,28 +13,28 @@ import { getCollection, render, type CollectionEntry } from "astro:content";
 import { loadBlogPageContext } from "../../utils/blog";
 import { formatPostDate } from "@component-utils/formatPostDate";
 
-// Automatically import all components from building-blocks and page-sections for MDX
-const buildingBlocksImports = import.meta.glob("../../components/building-blocks/**/*.astro", {
-  eager: true,
-});
+const componentImports = {
+  ...import.meta.glob("../../components/building-blocks/**/*.astro", { eager: true }),
+  ...import.meta.glob("../../components/page-sections/**/*.astro", { eager: true }),
+};
 
-const pageSectionsImports = import.meta.glob("../../components/page-sections/**/*.astro", {
-  eager: true,
-});
-
-// Merge both import objects
-const componentImports = { ...buildingBlocksImports, ...pageSectionsImports };
-
-// Build components object with PascalCase names from file paths
+// MDX addresses components by bare filename, so two files sharing one name
+// would silently shadow each other. Page sections carry a `Section` suffix.
 const mdxComponents: Record<string, any> = {};
+const sourceByName: Record<string, string> = {};
 
 Object.entries(componentImports).forEach(([path, module]) => {
-  const pathParts = path.split("/");
-  const fileName = pathParts[pathParts.length - 1].replace(".astro", "");
+  const componentName = path.split("/").pop()!.replace(".astro", "");
 
-  // Component name is already PascalCase from filename
-  const componentName = fileName;
+  if (sourceByName[componentName]) {
+    throw new Error(
+      `Two components are named ${componentName}.astro, so MDX cannot address both:\n` +
+        `  ${sourceByName[componentName]}\n  ${path}\n` +
+        `Rename the page-section one to ${componentName}Section.astro.`
+    );
+  }
 
+  sourceByName[componentName] = path;
   mdxComponents[componentName] = (module as any).default;
 });
 

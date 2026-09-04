@@ -304,5 +304,4 @@ pageSections:
       imageSource: /src/assets/images/component-docs/pattern-grid.svg
       mask: frame
       overlay: 0
-    rounded: false
 ---

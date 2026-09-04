@@ -185,5 +185,4 @@ pageSections:
         size: md
     colorScheme: dark
     backgroundColor: surface
-    rounded: false
 ---
