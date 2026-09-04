@@ -90,7 +90,7 @@ if (!_component && !hasText && !hasSlotContent) return;
 
 Model on `src/components/building-blocks/wrappers/accordion/Accordion.astro`.
 
-**Common miss:** `Accordion.astro` itself omits `class: className` — a known inconsistency, not the pattern. Every other wrapper (`Grid`, `Split`, `ButtonGroup`) destructures it; follow the template below, not Accordion, on this point.
+**Common miss:** forgetting `class: className`. A wrapper that does not destructure it lets a caller's `class` replace the component's own root class outright.
 
 ```astro
 ---

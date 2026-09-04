@@ -16,6 +16,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Stack wrapper (`building-blocks/wrappers/stack`): a row or column of mixed blocks with one even gap, with direction, gap, distribution, alignment, wrap, and stack-on-mobile controls.
 - A `spaceBefore` input (`none`/`tight`/`default`/`loose`) on every stackable building block, backed by four new `--space-before-*` tokens, for overriding the space above a block without Spacers or custom CSS.
 - Every page section with a heading takes a **Heading level** control (`headingLevel`, under Section settings). Heroes and Page Header default to `h1`; every other section defaults to `h2`, so a page that opens on a normal section can promote that section's heading to the page's `h1` without adding a header band. Sections that render their own item headings (Feature Grid, Team Grid, Pricing Tiers) derive theirs one level down, so the outline never skips a level.
+- Every page carries a "Skip to main content" link, revealed on the first Tab, so a keyboard user can jump past the navigation.
+- Video takes a **Captions** file (WebVTT) and a **Captions language**, rendered as a default `<track kind="captions">` on locally hosted video. The track's menu label is derived from the language tag.
+- Textarea takes a **Rows** control for how many lines it shows before it scrolls.
+- Testimonial takes an **Avatar size** in pixels. The photo is requested at that size, so a dense layout gets a smaller file rather than a large one scaled down in CSS; Testimonial Wall uses it instead of overriding the avatar's size from outside.
+- Hero Split takes the **Rounded image** toggle Feature Split already had.
+- Modal takes a **Heading level**, so its title fits the outline of the page it opens from.
+- Choice Group takes **Hint** and **Error** text, wired to the group with `aria-describedby`, matching the other form fields.
+- Social Links takes a **Landmark name**, so two sets of social links on one page are distinguishable.
+- Main Nav exposes the **Theme toggle** switch. The prop was read but had no input, so it could only be set by editing `mainNav.json`.
+- Feature Grid's snippet offers the alignment control the component already had.
 
 ### Changed
 
@@ -57,8 +67,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Generated ids are derived from whatever names the thing they belong to — `input-email`, `modal-book-a-demo`, `dropdown-toggle-navigation-products` — instead of a fresh UUID each render. Two builds of the same content now produce byte-identical HTML, and an id referenced by a `for`, `aria-controls` or `popovertarget` survives a re-render in the Visual Editor. Where nothing names a component and the id still has to be unique on the page (an unlabelled single-open Accordion, an unnamed Modal), a generated suffix remains as a last resort.
 - **Heads-up:** Input, Textarea, Select, Date, File Upload and Range share one field shell, so their label, hint and error markup carries `form-field`, `form-field-header`, `form-field-hint`, `form-field-error` and `form-field-required` instead of per-component classes like `input-hint` or `range-required`. Each field keeps its own root class (`.input`, `.range`, and so on) alongside `.form-field`. The required asterisk now has a space before it rather than after.
 
+- Screen readers describe the collection components properly. Carousels and image carousels announce themselves as carousels and their panels as slides, an image carousel's thumbnail strip marks the one being shown, Steps and Timeline keep their list semantics in Safari (which drops them from any list styled without markers), and a Toggle is announced as a switch rather than a checkbox. An icon-only Segments option takes its name from the option label, where before it had none at all, and an avatar showing initials with no alt text is treated as decorative instead of as an unlabelled image.
+- Definition List definitions accept markdown, as the documentation already said they did: bold, italic, links, sub- and superscript.
+- A Logo Cloud logo's alt text is required, because a linked logo without one is a link with no name.
+- The Text block's markdown toolbar no longer offers `h1`. A body-text block sits inside a section that already owns the page's heading, so an `h1` there produced a second top-level heading; use the section's own Heading level control instead.
+- **Heads-up:** Range no longer takes `required`. It never did anything — a slider always has a value — and it rendered a required marker next to a field that could not be incomplete. Remove it from any content that sets it.
+- **Heads-up:** a List item's text is now a `<span class="item-text">` rather than a `<p>`. A `<p>` inside the item's `<span>` wrapper was invalid HTML, and it was being styled back to `display: inline` anyway, so nothing renders differently.
+- Form fields no longer emit `aria-required="false"`. That is already the default, and every field also carries the native `required` attribute.
+- A Testimonial is a `<figure>` holding a `<blockquote>` and a `<figcaption>`, which is how a quote with an attribution is marked up. The author's name is no longer wrapped in `<cite>` — that element is for the title of a work, not a person. A testimonial with no author renders no author row instead of an empty one, and a testimonial with no quote renders nothing at all.
+- A linked Card covers itself with a stretched link rather than wrapping its whole contents in one. `cardSections` admits buttons, forms and modal triggers, none of which are allowed inside an anchor, and all of which are now clickable in their own right inside a linked card.
+- A table's scroll region borrows its name from the caption instead of repeating the text, so a screen reader reads the caption once. Its minimum width scales with the column count rather than a flat 34rem, so a two-column table never pans and a ten-column one is not squeezed.
+- Content Selector tab labels and search result titles are no longer headings. Neither is a section title, and both were injecting a run of `h3`s into the page outline.
+- Pagination keeps the current page inside the visible window. On the last page the window trimmed it out, so the page you were on rendered as a plain link to itself with no `aria-current`.
+- A Segments group with more options than fit scrolls instead of overflowing the form.
+- Range puts its unit inside the value readout, so a screen reader announces "60 kg" rather than "60".
+- Card Grid cover images with no alt text of their own are decorative rather than repeating the card's heading, which was read out twice.
+- An Image Carousel announces the slide you moved to in a live region, and its thumbnails are decorative — the thumbnail button already names itself.
+- Masonry columns respond to the container's width, not the viewport, so a masonry in a narrow pane on a wide screen no longer lays out three columns.
+- A Bento Box cell's column span is clamped to the grid's column count.
+- Blog post dates come from one shared formatter with a configurable locale, rather than three copies of the same `en-US` call.
+- Hero Split's root class is `hero-split` (was `hero`), matching Hero Center's `hero-center`. The shared first-child rule in the base stylesheet lists both.
+- A Split's root is a `<div>` rather than a nameless `<section>`, which mapped to a generic container anyway.
+- The `backgroundColor`, `imageRounded` and `headingLevel` defaults a component uses when composed match the values the editor seeds, so a programmatic use renders like an authored one.
+- Section lead paragraphs share one measure, defined once as `.section-subtext`, instead of six sections each carrying their own copy.
+- The Logo Cloud heading uses the shared `.eyebrow` treatment instead of re-implementing it, and both carousels derive their accessible name from the section label rather than a fixed string.
+- Contact Split names its map iframe after the address it shows, instead of the literal "Map" on every instance.
+- The Table, Embed, Icon and Rating pickers offer what the component actually accepts: Embed gains a "None" aspect ratio (already used by Contact Split), Icon's "None" size is a real rule rather than a class matching nothing, and Rating's value can reach the maximum the scale allows.
+- A Button's text stays visible in the editor when "Hide text" is on, because that text is the icon-only button's accessible name.
+- Submit no longer offers a "Disabled" switch. A permanently disabled submit button is not an authoring choice.
+- A Team Grid's supporting copy accepts markdown, matching every sibling section. Footer legal text does too.
+- The mobile menu's logo is an image picker rather than a path field.
+- Nav dropdowns are clamped to the viewport, so one on the right-most item no longer hangs off the page.
+- A mega menu feature card with only an image takes its accessible name from the nav item it sits under.
+- The main navigation and footer link their logo home, and render no link at all when there is no logo.
+- The theme toggle's sun/moon icons key off the site theme rather than the nearest themed ancestor, so the toggle inside a dark section shows the right icon.
+- The table of contents disclosure uses the shared Icon component instead of an inline SVG.
+- Steps and Timeline collapse at the canonical 640px breakpoint instead of 500px and 560px.
+
 ### Fixed
 
+- A Video Modal set to the button trigger rendered nothing to click. Only the poster variant worked, so a video modal added from the editor with default settings was an invisible block on the page. Modal now chooses its trigger from the trigger settings rather than from whether a consumer supplied one, because a trigger passed conditionally still counted as supplied even when it rendered nothing.
+- A Video Modal plays in the CloudCannon editor. Its video wiring was an inline script, which the editor strips, so opening one on the canvas showed an empty frame; it is now a setup module registered with the rest. Changing the video in the editor also takes effect on the next open instead of replaying the video the page loaded with.
+- A Pricing Comparison cell left empty renders empty, instead of the "Not included" cross. A row an editor had not filled in yet was telling customers the feature was absent. Say "no" or "-" to mark something excluded, as the input has always described.
+- An Accordion and an Accordion Item keep their own classes when a `class` is passed to them. Previously a caller's class replaced `accordion` / `accordion-item` outright, which dropped the component's styling.
+- Dismissing the announcement bar no longer depends on storage being readable. In a private window, or with site data blocked, reading it throws, and that left the close button wired to nothing. Closing now always works; only the "stay dismissed" part is skipped.
+- The mobile menu's logo falls back to "Logo" rather than the starter's own name, so an unnamed logo is not announced as "Astro Component Starter" on a site that is not this one.
+- Pricing Tiers no longer emits a stray `layout="center"` attribute into the page. It was a leftover from Grid's old layout prop and had no effect.
+- A Footer keeps its own class when a `class` is passed to it, instead of the caller's class replacing `footer`.
+- A hosted video with no title no longer renders the literal word "undefined" as the player frame's accessible name.
 - The component catalog no longer lists a parent's layout settings as if they were per-item content props: `aspectRatio` on a card grid item and `lightbox` on a gallery image are wiring the parent passes down, not fields an author fills in.
 - A side nav group holding the current page is served open without playing its expand animation, and it animates normally every time after that. The previous version suppressed the animation with a page-wide one-second timer, which also caught navs added later and never re-ran inside the CloudCannon editor.
 - A side nav entry with no link renders as plain text instead of a link to `#` that scrolls the page to the top.
@@ -108,6 +164,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Masonry re-measures an item after the editor re-renders it. The measurement watched the item's contents, which the re-render replaces, so editing a card in a masonry Card Grid left the row height it had before the edit.
 - The editable-regions docs described a page-level component region that the layout no longer renders, and named the wrong prop for the page-sections array (`sections`, where the code emits `pageSections`).
 - Every page has exactly one `<h1>`. The five `/examples/` pages that opened on a normal section had none, and `/why/` had two because a hero followed a page header; both are set with the new **Heading level** control.
+- Images inside a section with a locked colour scheme no longer swap to their alternate when a visitor toggles the site theme. A locked section keeps its colours, so its imagery has to as well.
+- A Video with an unrecognised type renders nothing instead of a black player with controls that can never play, and warns while authoring.
+- An Image with no alt text that is not marked decorative warns while authoring, as does a hosted video with no title and a placed Button that has no link, element or popover target.
+- Structured data escapes `<` in its JSON-LD payload, so page content containing a closing script tag can't break out of it.
+- A List item added from the picker no longer previews a broken icon.
+- A Hidden field's picker preview shows its name rather than an empty value, and the name is required.
+- Search results' excerpt highlighting is documented as trusted-index-only at the point it is written to the DOM.
+- The mobile menu's Escape handler is bound once for the page rather than once per menu per initialisation, and its overlay container's stacking uses the layer scale rather than a hardcoded `z-index: 9999`.
+- The theme toggle listens to the system colour-scheme preference once rather than adding a listener on every view transition.
+- Page Header survives a re-render in the Visual Editor where `Astro.url` is unavailable, rendering without breadcrumbs instead of failing the whole section.
+- A background image is still offered for Pattern backgrounds, which use the same field. The condition that hides it named only the Image type. (The condition is inert until CloudCannon evaluates these expressions; this makes it correct for when it does.)
+- Stack's row-only controls and Split's fixed-width and mobile-order controls declare the conditions that should gate them.
+- An input inside a disabled Input field is styled as disabled. The icon variant's shell hid the state.
+- `utils/` helpers no longer appear as placeable component keys in the "component not found" warning.
 
 ## [2.0.0] - 2026-08-19
 
