@@ -96,13 +96,13 @@ function photoCardHtml({
       color: ${PHOTO_INK}; background: ${PHOTO_PLATE};
       padding: 6px ${PHOTO_PLATE_PADDING_X}px;
     }
-    .card-chip-logo { height: 26px; }
+    .card-chip-logo { height: 32px; }
   </style>
   <img class="card-photo" src="${backgroundDataUri}" />
   <div class="card-layer">
     <span class="card-chip">${
-      logoDataUri ? `<img class="card-chip-logo" src="${logoDataUri}" />` : ""
-    }${escapeHtml(siteName)}</span>
+      logoDataUri ? `<img class="card-chip-logo" src="${logoDataUri}" />` : escapeHtml(siteName)
+    }</span>
     <div class="card-title">${titleLines.map(line).join("")}</div>
     <span class="card-chip">${escapeHtml(siteUrl)}</span>
   </div>
@@ -173,7 +173,7 @@ export function cardHtml({
       justify-content: space-between;
     }
     .card-head { display: flex; align-items: center; gap: 18px; }
-    .card-logo { height: 34px; }
+    .card-logo { height: 40px; }
     .card-site {
       font-family: ${fontStacks.body};
       font-weight: 600;
@@ -218,8 +218,10 @@ export function cardHtml({
     }
   </style>
   <div class="card-head">${
-    logoDataUri ? `<img class="card-logo" src="${logoDataUri}" />` : ""
-  }<span class="card-site">${escapeHtml(siteName)}</span></div>
+    logoDataUri
+      ? `<img class="card-logo" src="${logoDataUri}" />`
+      : `<span class="card-site">${escapeHtml(siteName)}</span>`
+  }</div>
   <div>
     <p class="card-title">${escapeHtml(title)}</p>
     <div class="card-rule"></div>${
