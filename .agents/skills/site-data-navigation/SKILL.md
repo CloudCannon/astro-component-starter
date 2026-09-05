@@ -209,7 +209,7 @@ Real content of `src/data/seo.json`:
 
 `og:image` resolves in this order: a **generated card**, then the page's own `image`, then `shareImage`, then `logoSource`.
 
-A card is drawn at build time for every page and blog post, plus one `/og/site.png` for routes with no collection entry (listings, tag archives, 404, docs). An entry's own **Image** becomes the card's background, drawn full-bleed under the text, and every line of text sits on a solid plate so it reads over any photo. Those cards are JPEG (`/og/blog/my-post.jpg`); text-only ones are PNG.
+A card is drawn at build time for every page and blog post, plus one `/og/site.png` for routes with no collection entry (listings, tag archives, 404, docs). An entry's own **Image** becomes the card's background, drawn full-bleed under the text, and every line of text sits on a solid plate so it reads over any photo. Those cards are JPEG (`/og/blog/my-post.jpg`); text-only ones are PNG. This applies to pages as well as posts — any entry with an **Image** gets the photo treatment. The site logo sits top-left on the plate, and because the plate is always black a photo card uses `logoAlternateSource`.
 
 `shareImageGeneration` scopes it: `all` (default), `blog` (posts only; pages fall back to `shareImage`), `none` (off).
 

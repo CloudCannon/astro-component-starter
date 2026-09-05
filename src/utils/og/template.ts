@@ -56,6 +56,7 @@ function photoCardHtml({
   siteName,
   siteUrl,
   backgroundDataUri,
+  logoDataUri,
   fontStacks,
   fontSize,
 }: {
@@ -63,6 +64,7 @@ function photoCardHtml({
   siteName: string;
   siteUrl: string;
   backgroundDataUri: string;
+  logoDataUri?: string | null;
   fontStacks: { heading: string; body: string };
   fontSize: number;
 }): string {
@@ -89,14 +91,18 @@ function photoCardHtml({
       padding: 4px ${PHOTO_PLATE_PADDING_X}px;
     }
     .card-chip {
+      display: flex; align-items: center; gap: 14px;
       font-family: ${fontStacks.body}; font-weight: 600; font-size: 24px;
       color: ${PHOTO_INK}; background: ${PHOTO_PLATE};
       padding: 6px ${PHOTO_PLATE_PADDING_X}px;
     }
+    .card-chip-logo { height: 26px; }
   </style>
   <img class="card-photo" src="${backgroundDataUri}" />
   <div class="card-layer">
-    <span class="card-chip">${escapeHtml(siteName)}</span>
+    <span class="card-chip">${
+      logoDataUri ? `<img class="card-chip-logo" src="${logoDataUri}" />` : ""
+    }${escapeHtml(siteName)}</span>
     <div class="card-title">${titleLines.map(line).join("")}</div>
     <span class="card-chip">${escapeHtml(siteUrl)}</span>
   </div>
@@ -145,6 +151,7 @@ export function cardHtml({
       siteName,
       siteUrl,
       backgroundDataUri,
+      logoDataUri,
       fontStacks,
       fontSize: photoTitleFontSize(title),
     });

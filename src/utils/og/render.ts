@@ -46,6 +46,11 @@ export interface CardRequest {
   siteName: string;
   siteUrl: string;
   logoSource?: string | null;
+  /**
+   * Light-on-dark logo. A photo card's plate is always black whatever the card
+   * theme, so it needs this one or the mark disappears into the plate.
+   */
+  logoOnDarkSource?: string | null;
   theme?: CardTheme;
   /** The entry's own image, drawn full-bleed under the text plates. */
   featuredImage?: string | null;
@@ -223,6 +228,7 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     request.theme ?? "light"
   );
   const logo = logoDataUri(root, request.logoSource);
+  const logoOnDark = logoDataUri(root, request.logoOnDarkSource ?? request.logoSource);
 
   // The image's own bytes, so re-cropping the same photo reuses the card but
   // replacing it does not. Cheap next to the render it guards.
@@ -237,6 +243,7 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     request.siteName,
     request.siteUrl,
     logo ? digest(logo) : "",
+    logoOnDark ? digest(logoOnDark) : "",
     featured ?? "",
     request.format ?? "png",
   ]);
@@ -269,7 +276,7 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
       description: request.description,
       siteName: request.siteName,
       siteUrl: request.siteUrl,
-      logoDataUri: logo,
+      logoDataUri: background ? logoOnDark : logo,
       colors,
       fontStacks,
       backgroundDataUri: background,
