@@ -12,6 +12,30 @@ import { siteFonts } from "./site-fonts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// The dev server watches the whole project root, and Vite's defaults only skip
+// `.git`, `node_modules`, `test-results` and the cache dir. Everything below is
+// generated, rewritten wholesale by a build or test script, or a separate
+// checkout — `.claude/worktrees/` alone is another four copies of `src/` and
+// `dist/`, roughly eight times the file count of the real `src/`.
+//
+// Every entry is anchored to __dirname. A bare `**/.claude/**` matches every
+// file in an agent worktree, because the worktree's own path contains
+// `.claude/` — which silently switches HMR off for the whole checkout.
+const watchIgnored = [
+  ...[
+    ".claude",
+    "dist",
+    ".astro",
+    ".local",
+    ".preview-screenshots",
+    "public/pagefind",
+    "public/_astro",
+  ].map((dir) => path.join(__dirname, dir, "**")),
+  ...[".preview-montage.png", ".siteready-*.json", "siteready-report.*"].map((file) =>
+    path.join(__dirname, file)
+  ),
+];
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://example.com", // TODO: Update to your production URL
@@ -62,6 +86,11 @@ export default defineConfig({
     build: {
       minify: "esbuild",
       chunkSizeWarningLimit: 1024,
+    },
+    server: {
+      watch: {
+        ignored: watchIgnored,
+      },
     },
     plugins: [
       {
