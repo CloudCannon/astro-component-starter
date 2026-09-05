@@ -14,12 +14,29 @@
  */
 
 import { getInstanceManager } from "@pagefind/component-ui";
+import pagefindStylesUrl from "@pagefind/component-ui/css/pagefind-component-ui.css?url";
 
 import { setupModalShell } from "../../building-blocks/wrappers/modal/setup";
 
+let stylesRequested = false;
 let keyboardShortcutBound = false;
 let errorHookBound = false;
 let countsHookBound = false;
+
+/** Pull in Pagefind's stylesheet the first time search is reached for. Injected
+ * as an `@import ... layer(pagefind)` rather than a plain <link>: a <link> is
+ * unlayered, which outranks every layer and would beat the overrides in
+ * `Search.astro`. The layer order is declared up front in `BaseLayout.astro`,
+ * so arriving late does not change where it sits. */
+function loadPagefindStyles(): void {
+  if (stylesRequested) return;
+  stylesRequested = true;
+
+  const style = document.createElement("style");
+
+  style.textContent = `@import url("${pagefindStylesUrl}") layer(pagefind);`;
+  document.head.appendChild(style);
+}
 
 function currentSearchPopover(): HTMLElement | null {
   return document.querySelector<HTMLElement>(".search .modal-popover");
@@ -35,6 +52,8 @@ function bindKeyboardShortcut(): void {
   document.addEventListener("keydown", (e) => {
     if (!(e.metaKey || e.ctrlKey) || e.altKey || e.shiftKey) return;
     if (e.key.toLowerCase() !== "k") return;
+
+    loadPagefindStyles();
 
     const popover = currentSearchPopover();
 
@@ -221,9 +240,17 @@ export function setupSearch(search: HTMLElement): void {
   // notice before the user types.
   popover.addEventListener("toggle", (e) => {
     if ((e as ToggleEvent).newState === "open") {
+      loadPagefindStyles();
       instance.triggerLoad().catch(() => {});
     }
   });
+
+  // Warm the stylesheet before the click lands, so the panel is styled when it
+  // opens rather than a frame later.
+  const trigger = search.querySelector<HTMLElement>(".search-trigger");
+
+  trigger?.addEventListener("pointerenter", loadPagefindStyles, { once: true });
+  trigger?.addEventListener("focusin", loadPagefindStyles, { once: true });
 
   // Tabs are Button components: `data-search-tab` sits on the outer
   // `.button` span (clicks bubble up from the inner <button>), while

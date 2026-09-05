@@ -136,7 +136,10 @@ const placeholderTemplate = `
 </script>
 
 <style is:global>
-  @import "@pagefind/component-ui/css/pagefind-component-ui.css" layer(pagefind);
+  /* Pagefind's Component UI stylesheet is 32KB and the panel is behind a
+     button, so `setup.ts` injects it on first open rather than importing it
+     here, where it would land in every page's critical CSS. It still goes into
+     the `pagefind` layer — unlayered rules would outrank the overrides below. */
 
   @layer components {
     .search {
