@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { fontsourceCoverage, uncoveredCharacters } from "../../src/utils/og/coverage";
 import { BODY_WEIGHT, cardFontStacks, cardFonts } from "../../src/utils/og/fonts";
 import { listCards, ogCardPath } from "../../src/utils/og/paths";
-import { TEMPLATE_SOURCE_PATH, cardHtml, truncate } from "../../src/utils/og/template";
+import { TEMPLATE_SOURCE_PATH, cardHtml, platePaint, truncate } from "../../src/utils/og/template";
 import { resolveCardColors } from "../../src/utils/og/theme";
 import { existsSync } from "node:fs";
 import path from "node:path";
@@ -211,5 +211,28 @@ describe("cache invalidation", () => {
     // A wrong path would silently stop invalidating cards on a template edit.
     expect(existsSync(path.join(ROOT, TEMPLATE_SOURCE_PATH))).toBe(true);
     expect(TEMPLATE_SOURCE_PATH.endsWith("template.ts")).toBe(true);
+  });
+});
+
+describe("platePaint", () => {
+  it("inverts the theme, so the plate always contrasts with the site's ground", () => {
+    const light = resolveCardColors(ROOT, "light").colors;
+    const dark = resolveCardColors(ROOT, "dark").colors;
+
+    // Light theme -> dark plate with light text; dark theme -> the reverse.
+    expect(platePaint(light)).toEqual({
+      ground: light["--color-text-strong"],
+      ink: light["--color-bg"],
+    });
+    expect(platePaint(dark).ground).toBe(light["--color-bg"]);
+    expect(platePaint(light).ground).toBe(dark["--color-bg"]);
+  });
+
+  it("never paints the plate the same colour as its own text", () => {
+    for (const theme of ["light", "dark"] as const) {
+      const { ground, ink } = platePaint(resolveCardColors(ROOT, theme).colors);
+
+      expect(ground).not.toBe(ink);
+    }
   });
 });

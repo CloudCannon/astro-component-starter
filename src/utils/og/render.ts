@@ -45,12 +45,10 @@ export interface CardRequest {
   description?: string | null;
   siteName: string;
   siteUrl: string;
+  /** Primary logo, drawn on a light ground. */
   logoSource?: string | null;
-  /**
-   * Light-on-dark logo. A photo card's plate is always black whatever the card
-   * theme, so it needs this one or the mark disappears into the plate.
-   */
-  logoOnDarkSource?: string | null;
+  /** Light-on-dark logo, drawn on a dark ground. */
+  logoAlternateSource?: string | null;
   theme?: CardTheme;
   /** The entry's own image, drawn full-bleed under the text plates. */
   featuredImage?: string | null;
@@ -227,8 +225,13 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     root,
     request.theme ?? "light"
   );
-  const logo = logoDataUri(root, request.logoSource);
-  const logoOnDark = logoDataUri(root, request.logoOnDarkSource ?? request.logoSource);
+  // The plain card sits on the theme's ground; the photo card's plate inverts
+  // it. So the two layouts want opposite logos in the same theme.
+  const onDark = logoDataUri(root, request.logoAlternateSource ?? request.logoSource);
+  const onLight = logoDataUri(root, request.logoSource);
+  const dark = (request.theme ?? "light") === "dark";
+  const plainLogo = dark ? onDark : onLight;
+  const plateLogo = dark ? onLight : onDark;
 
   // The image's own bytes, so re-cropping the same photo reuses the card but
   // replacing it does not. Cheap next to the render it guards.
@@ -242,8 +245,8 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     request.description ?? "",
     request.siteName,
     request.siteUrl,
-    logo ? digest(logo) : "",
-    logoOnDark ? digest(logoOnDark) : "",
+    plainLogo ? digest(plainLogo) : "",
+    plateLogo ? digest(plateLogo) : "",
     featured ?? "",
     request.format ?? "png",
   ]);
@@ -276,7 +279,7 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
       description: request.description,
       siteName: request.siteName,
       siteUrl: request.siteUrl,
-      logoDataUri: background ? logoOnDark : logo,
+      logoDataUri: background ? plateLogo : plainLogo,
       colors,
       fontStacks,
       backgroundDataUri: background,

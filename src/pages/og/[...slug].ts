@@ -28,10 +28,8 @@ export const GET: APIRoute = async ({ params, props }) => {
     description,
     siteName: seoData.name,
     siteUrl: new URL(seoData.url).host,
-    // A dark card needs the light-on-dark logo, or the mark disappears into it.
-    logoSource:
-      theme === "dark" ? seoData.logoAlternateSource || seoData.logoSource : seoData.logoSource,
-    logoOnDarkSource: seoData.logoAlternateSource || seoData.logoSource,
+    logoSource: seoData.logoSource,
+    logoAlternateSource: seoData.logoAlternateSource,
     theme,
     featuredImage,
     format,

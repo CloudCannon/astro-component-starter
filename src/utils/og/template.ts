@@ -29,9 +29,17 @@ export interface CardInput {
   titleLines?: string[];
 }
 
-/** Text and its backing plate on a photo card, whatever the photo is doing. */
-const PHOTO_INK = "#ffffff";
-const PHOTO_PLATE = "#000000";
+/**
+ * A photo card's plate inverts the card theme, so it always contrasts with the
+ * site's own ground: light gives a black plate with white text, dark gives a
+ * white plate with black text. Both values are theme tokens, so a rebrand
+ * carries. The logo has to follow the plate rather than the theme — `render.ts`
+ * picks it.
+ */
+export const platePaint = (colors: CardColors) => ({
+  ground: colors["--color-text-strong"],
+  ink: colors["--color-bg"],
+});
 
 export const PHOTO_TITLE_MAX_LINES = 3;
 export const PHOTO_CARD_PADDING = 64;
@@ -59,6 +67,7 @@ function photoCardHtml({
   logoDataUri,
   fontStacks,
   fontSize,
+  plate,
 }: {
   titleLines: string[];
   siteName: string;
@@ -67,12 +76,13 @@ function photoCardHtml({
   logoDataUri?: string | null;
   fontStacks: { heading: string; body: string };
   fontSize: number;
+  plate: { ground: string; ink: string };
 }): string {
   const line = (text: string) => `<p class="card-title-line">${escapeHtml(text)}</p>`;
 
   return `<div class="card">
   <style>
-    .card { width: ${CARD_WIDTH}px; height: ${CARD_HEIGHT}px; position: relative; background: ${PHOTO_PLATE}; }
+    .card { width: ${CARD_WIDTH}px; height: ${CARD_HEIGHT}px; position: relative; background: ${plate.ground}; }
     .card-photo { position: absolute; top: 0; left: 0; width: ${CARD_WIDTH}px; height: ${CARD_HEIGHT}px; }
     .card-layer {
       position: absolute; top: 0; left: 0;
@@ -87,13 +97,13 @@ function photoCardHtml({
       margin: 0;
       font-family: ${fontStacks.heading}; font-weight: 700;
       font-size: ${fontSize}px; line-height: 1.3;
-      color: ${PHOTO_INK}; background: ${PHOTO_PLATE};
+      color: ${plate.ink}; background: ${plate.ground};
       padding: 4px ${PHOTO_PLATE_PADDING_X}px;
     }
     .card-chip {
       display: flex; align-items: center; gap: 14px;
       font-family: ${fontStacks.body}; font-weight: 600; font-size: 24px;
-      color: ${PHOTO_INK}; background: ${PHOTO_PLATE};
+      color: ${plate.ink}; background: ${plate.ground};
       padding: 6px ${PHOTO_PLATE_PADDING_X}px;
     }
     .card-chip-logo { height: 32px; }
@@ -154,6 +164,7 @@ export function cardHtml({
       logoDataUri,
       fontStacks,
       fontSize: photoTitleFontSize(title),
+      plate: platePaint(colors),
     });
   }
 
