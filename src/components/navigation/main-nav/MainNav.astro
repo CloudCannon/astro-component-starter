@@ -103,6 +103,10 @@ const mobileNavData = [
 
 <style is:global>
   @layer page-sections {
+    :root {
+      --main-nav-height: 5rem;
+    }
+
     .main-nav {
       /* is-stuck is toggled by setup.ts once the bar pins. */
       transition: box-shadow var(--animation-normal) var(--ease-in-out);
@@ -134,7 +138,7 @@ const mobileNavData = [
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-md);
-        height: 5rem;
+        height: var(--main-nav-height);
 
         > .main-nav-logo-link {
           align-items: center;

@@ -345,8 +345,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
       grid-column: 1;
       grid-row: 3 / -1;
       position: sticky;
-      /* 5rem matches .main-nav's bar height. */
-      top: calc(5rem + var(--spacing-lg));
+      top: calc(var(--main-nav-height, 0px) + var(--spacing-lg));
     }
   }
 
