@@ -202,6 +202,8 @@ export default [
     ignores: [
       "node_modules/**",
       "dist/**",
+      // Unpruned comparison build for `npm run test:css-parity` (gitignored).
+      ".css-baseline/**",
       ".local/**",
       ".astro/**",
       "**/*.min.js",

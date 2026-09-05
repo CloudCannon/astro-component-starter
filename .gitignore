@@ -55,3 +55,6 @@ yarn-error.log*
 .siteready-baseline.json
 .siteready-history.json
 siteready-report.*
+
+# CSS parity comparison build
+.css-baseline/

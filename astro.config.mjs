@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import mdx from "@astrojs/mdx";
 
+import pruneCss from "./scripts/build/pruneCss.mjs";
 import pruneOgCache from "./scripts/build/pruneOgCache.mjs";
 import { siteFonts } from "./site-fonts.mjs";
 
@@ -19,8 +20,8 @@ export default defineConfig({
     // Kept "always" on measured evidence: serving the CSS as one shared,
     // cacheable stylesheet cost ~190ms FCP and ~240ms LCP on a cold Slow-4G
     // load, because a render-blocking request adds a round trip that inlined
-    // bytes do not. The per-page waste is real, but the fix is a smaller
-    // critical stylesheet, not a linked copy of the same 174KB.
+    // bytes do not. `pruneCss` shrinks what gets inlined instead, so the
+    // per-page waste goes away without adding a render-blocking request.
     inlineStylesheets: "always",
   },
   devToolbar: {
@@ -35,6 +36,11 @@ export default defineConfig({
   integrations: [
     editableRegions(),
     pruneOgCache(),
+    // Drops each page's unused component CSS. Add a class name to `alwaysKeep`
+    // if a component's markup is built at runtime from an assembled class name
+    // or injected by a third-party script — this reads the built HTML, so it
+    // cannot see those. Verify with `npm run test:css-parity`.
+    pruneCss({ alwaysKeep: [] }),
     sitemap({
       filter: (page) => {
         if (page.endsWith("/404") || page.endsWith("/404.html")) {

@@ -35,6 +35,8 @@
     "test:render": "node scripts/tests/render-all-sections.mjs",
     "test:unit": "vitest run",
     "test:smoke": "node scripts/tests/smoke.mjs",
+    "test:css-parity": "npm run build:css-baseline && npm run build && node scripts/tests/css-parity.mjs .css-baseline",
+    "build:css-baseline": "DISABLE_COMPONENT_LIBRARY=true PRUNE_CSS=0 astro build --outDir .css-baseline",
     "test:flow-margins": "node scripts/tests/flow-margins.mjs",
     "new:component": "node scripts/scaffold/new-component.mjs",
     "previews:build": "node scripts/previews/build.mjs",

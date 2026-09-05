@@ -73,6 +73,13 @@ const generatedImage = props.generatedImage ?? ogCardPath("site");
 
     <script>
       if (window.inEditorMode) {
+        // Pages ship only the component CSS their own markup uses (see
+        // `scripts/build/pruneCss.mjs`). The editor renders components that
+        // were never in the HTML, so it needs the whole sheet.
+        const full = document.createElement("style");
+        full.textContent = '@import url("/_astro/components-full.css");';
+        document.head.append(full);
+
         import("../../live-editing");
         import("../../editor-live-sync");
       }
