@@ -78,6 +78,10 @@ const EDITORIAL_NOTES = {
     "No section-level heading — each slide carries its own text.",
   "page-sections/builders/custom-section":
     "The escape hatch for arbitrary layouts; `rounded` is unique to this section (page-section wrappers do not forward it).",
+  "page-sections/builders/scroll-deck":
+    "One screen of content per card — anything longer scrolls inside the card. Nothing pins below 768px.",
+  "page-sections/explainers/scroll-stepper":
+    "No section-level heading — each step carries its own. Below 768px the pinned column is dropped and each step shows its image inline.",
 };
 
 function titleize(slug) {
@@ -115,7 +119,8 @@ const isInfraProp = (key) => INFRA_PROPS.has(key) || key.startsWith("data-");
 // (StepsItem), `showAnnualPricing` (PricingTiersItem), `aspectRatio`/
 // `lightbox` (CardGridItem, GalleryItem). These names collide
 // with genuine content props elsewhere
-// (`toggle`'s own `checked`, the parent Steps wrapper's own `imageAspectRatio`),
+// (`toggle`'s own `checked`, the parent Steps wrapper's own `imageAspectRatio`,
+// the Card wrapper's own `colorScheme`),
 // so — unlike INFRA_PROPS — this set is scoped to exactly one call site:
 // filtering a sibling `.astro`'s own destructure for a child-item footnote.
 // Never apply it to a main component's props column or to structure-derived
@@ -132,6 +137,7 @@ const CHILD_WIRING_PROPS = new Set([
   "layout",
   "grouped",
   "showAnnualPricing",
+  "cardColorScheme",
 ]);
 
 /**

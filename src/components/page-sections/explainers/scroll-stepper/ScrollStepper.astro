@@ -1,0 +1,262 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Image from "@core-elements/image/Image.astro";
+import ScrollStepperStep from "@explainers/scroll-stepper/ScrollStepperStep.astro";
+
+type StepProps = Record<string, unknown>;
+
+const {
+  steps = [],
+  mediaPosition = "start",
+  mediaWidth = "half",
+  imageAspectRatio = "landscape",
+  progressStyle = "bar",
+  stepHeight = "screen",
+  headingLevel = "h3",
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const stepList: StepProps[] = Array.isArray(steps) ? steps : [];
+const initialProgress = stepList.length ? 1 / stepList.length : 0;
+---
+
+<CustomSection
+  class:list={["scroll-stepper", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <div
+    class:list={[
+      "scroll-stepper-layout",
+      `media-${mediaWidth}`,
+      mediaPosition === "end" && "media-end",
+    ]}
+  >
+    <div
+      class="scroll-stepper-media"
+      style={{ "--stepper-progress": initialProgress }}
+    >
+      <div class="scroll-stepper-media-stack">
+        {
+          stepList.map((step: StepProps, index: number) => (
+            <div
+              class="scroll-stepper-media-panel"
+              data-active={index === 0 ? "" : undefined}
+            >
+              <Image
+                source={step.imageSource as string}
+                alt={(step.imageAlt as string) || (step.title as string) || ""}
+                rounded={true}
+                aspectRatio={imageAspectRatio}
+                priority={index === 0}
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          ))
+        }
+      </div>
+      {
+        progressStyle === "bar" && (
+          <div class="scroll-stepper-progress">
+            <span class="scroll-stepper-progress-fill" />
+          </div>
+        )
+      }
+      {
+        progressStyle === "dots" && (
+          <div
+            class="scroll-stepper-progress-dots"
+            aria-hidden="true"
+          >
+            {stepList.map(() => (
+              <span class="scroll-stepper-progress-dot" />
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <div
+      class:list={["scroll-stepper-steps", `height-${stepHeight}`]}
+      data-editable="array"
+      data-prop="steps"
+    >
+      {
+        stepList.map((step: StepProps, index: number) => (
+          <ScrollStepperStep
+            headingLevel={headingLevel}
+            imageAspectRatio={imageAspectRatio}
+            aria-label={`Step ${index + 1} of ${stepList.length}`}
+            data-editable="array-item"
+            data-id="page-sections/explainers/scroll-stepper/scroll-stepper-step"
+            {...step}
+          />
+        ))
+      }
+    </div>
+  </div>
+</CustomSection>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllScrollSteppers } from "@explainers/scroll-stepper/setup";
+
+  onPageLoad(setupAllScrollSteppers);
+</script>
+
+<style is:global>
+  @layer page-sections {
+    .scroll-stepper {
+      --stepper-columns: 1fr 1fr;
+      --stepper-progress: 0;
+      --stepper-progress-height: var(--border-width-lg);
+      --stepper-dot-size: 8px;
+
+      .scroll-stepper-layout {
+        display: grid;
+        gap: var(--spacing-2xl);
+      }
+
+      .scroll-stepper-media {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .scroll-stepper-layout {
+          grid-template-columns: var(--stepper-columns);
+
+          &.media-half {
+            --stepper-columns: 1fr 1fr;
+          }
+
+          &.media-wide {
+            --stepper-columns: 3fr 2fr;
+          }
+
+          &.media-narrow {
+            --stepper-columns: 2fr 3fr;
+          }
+
+          &.media-end > .scroll-stepper-media {
+            order: 2;
+          }
+        }
+
+        /* Sticky needs the grid itself as containing block, so the pinned pane
+           must be the grid item — never a child of a stretched one. `top` is a
+           percentage of the SCROLLPORT, so this centres the pane in the band
+           below the nav and keeps working inside a nested scroller (the docs
+           viewer). A panel taller than that band slides under the nav. */
+        .scroll-stepper-media {
+          align-self: start;
+          display: grid;
+          gap: var(--spacing-lg);
+          position: sticky;
+          top: calc(50% + var(--main-nav-height, 0px) / 2);
+          translate: 0 -50%;
+        }
+
+        .scroll-stepper-step-image {
+          display: none;
+        }
+      }
+
+      .scroll-stepper-media-stack {
+        display: grid;
+
+        > .scroll-stepper-media-panel {
+          grid-area: 1 / 1;
+          opacity: 0;
+          transition:
+            opacity var(--animation-normal) var(--ease-in-out),
+            visibility var(--animation-normal) var(--ease-in-out);
+          visibility: hidden;
+        }
+
+        /* The first panel is marked server-side, so it shows with JS off and
+           survives a CloudCannon re-render, which replaces the subtree and
+           would otherwise wipe an attribute only setup.ts had set. */
+        > .scroll-stepper-media-panel[data-active] {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+
+      .scroll-stepper-progress {
+        background-color: var(--color-border);
+        border-radius: var(--radius-full);
+        height: var(--stepper-progress-height);
+        overflow: hidden;
+      }
+
+      .scroll-stepper-progress-fill {
+        background-color: var(--color-brand);
+        display: block;
+        height: 100%;
+        scale: var(--stepper-progress) 1;
+        transform-origin: left;
+        transition: scale var(--animation-normal) var(--ease-in-out);
+      }
+
+      .scroll-stepper-progress-dots {
+        display: flex;
+        gap: var(--spacing-xs);
+        justify-content: center;
+      }
+
+      .scroll-stepper-progress-dot {
+        background-color: var(--color-border);
+        border-radius: var(--radius-full);
+        height: var(--stepper-dot-size);
+        transition: background-color var(--animation-normal) var(--ease-in-out);
+        width: var(--stepper-dot-size);
+
+        &[data-active] {
+          background-color: var(--color-brand);
+        }
+      }
+
+      .scroll-stepper-steps > .scroll-stepper-step {
+        align-content: center;
+        display: grid;
+
+        @media (min-width: 768px) {
+          min-height: var(--stepper-step-height);
+        }
+      }
+
+      .scroll-stepper-steps.height-screen {
+        --stepper-step-height: calc(100dvh - var(--main-nav-height, 0px));
+      }
+
+      .scroll-stepper-steps.height-content {
+        --stepper-step-height: 60dvh;
+      }
+
+      @media (max-width: 767px) {
+        .scroll-stepper-steps > .scroll-stepper-step + .scroll-stepper-step {
+          margin-block-start: var(--spacing-4xl);
+        }
+      }
+    }
+  }
+</style>

@@ -48,6 +48,7 @@ const WIDE = [
   "stackSections",
   "carouselSections",
   "contentSelectorSections",
+  "deckCardSections",
 ];
 const NARROW = [
   "cardSections",

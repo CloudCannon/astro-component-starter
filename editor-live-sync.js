@@ -50,6 +50,14 @@ import {
   setupAllMasonry,
   setupMasonry,
 } from "./src/components/building-blocks/wrappers/masonry/setup";
+import {
+  setupAllScrollDecks,
+  setupScrollDeck,
+} from "./src/components/page-sections/builders/scroll-deck/setup";
+import {
+  setupAllScrollSteppers,
+  setupScrollStepper,
+} from "./src/components/page-sections/explainers/scroll-stepper/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -283,6 +291,42 @@ function initNewComponents(root) {
     setupContentSelector(el);
   }
 
+  const newScrollSteppers = [];
+
+  if (
+    root.classList?.contains("scroll-stepper") &&
+    !root.hasAttribute("data-scroll-stepper-initialized")
+  ) {
+    newScrollSteppers.push(root);
+  }
+
+  root
+    .querySelectorAll(".scroll-stepper:not([data-scroll-stepper-initialized])")
+    .forEach((el) => newScrollSteppers.push(el));
+
+  for (const el of newScrollSteppers) {
+    log("initialising new scroll stepper", el);
+    setupScrollStepper(el);
+  }
+
+  const newScrollDecks = [];
+
+  if (
+    root.classList?.contains("scroll-deck") &&
+    !root.hasAttribute("data-scroll-deck-initialized")
+  ) {
+    newScrollDecks.push(root);
+  }
+
+  root
+    .querySelectorAll(".scroll-deck:not([data-scroll-deck-initialized])")
+    .forEach((el) => newScrollDecks.push(el));
+
+  for (const el of newScrollDecks) {
+    log("initialising new scroll deck", el);
+    setupScrollDeck(el);
+  }
+
   setupAllVideos(root);
 }
 
@@ -365,6 +409,8 @@ setupAllTocs();
 setupAllGalleries();
 setupAllMasonry();
 setupAllContentSelectors();
+setupAllScrollDecks();
+setupAllScrollSteppers();
 setupAllVideos();
 setupAllForms();
 

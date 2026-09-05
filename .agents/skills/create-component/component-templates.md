@@ -208,6 +208,19 @@ The template above is array shape A (`data-children-prop` on a composed wrapper)
 
 Page section wrappers expose `label` to authors as `sectionLabel` and forward it. Common props: `maxContentWidth` (`none`/`xs`..`3xl`), `paddingHorizontal`/`paddingVertical` (`none`/`xs`..`6xl`; only `paddingVertical` has a default, `4xl`), `colorScheme` (`inherit`/`light`/`dark`), `lockColorScheme` (bool — pins the scheme when the visitor toggles site theme), `backgroundColor` (`none`/`base`/`surface`/`accent`/`highlight`), `background` (object: `type` image/video/pattern, positioning, `overlay` -1..1, image/video fields, `patternSize` natural/sm/md/lg for tiled patterns — pattern reuses `imageSource` and repeats it). Read `@builders/custom-section/CustomSection.astro` for the authoritative list. `rounded` is only on `CustomSection` directly, not forwarded by page section wrappers.
 
+## Scroll-pinned sections
+
+`ScrollDeck` and `ScrollStepper` are the two worked examples. Four constraints, each of which fails silently:
+
+- **Sticky elements must be direct children of the element they scroll within.** A sticky box cannot leave its parent's box, so wrapping each card in its own full-height block pins nothing. `ScrollDeck` puts the cards straight into one track.
+- **A sticky pane in a grid must be the grid item itself**, with `align-self: start` — put `position: sticky` on a child of a stretched item and it has nothing to travel through.
+- **Clear the nav with `var(--main-nav-height, 0px)`**, never a measured value or a repeated `5rem`. `MainNav.astro` declares the token; the fallback keeps a site that drops the nav working.
+- **`top` percentages resolve against the SCROLLPORT**, not the viewport — which is the preview pane in the component docs and the iframe in the editor, not the window. `top: 50%` centres correctly in all three; `100dvh` does not. Any JS comparing `getBoundingClientRect()` against a computed `top` has to subtract the scrollport's own offset (see `scroll-deck/setup.ts`).
+
+`animation-timeline: view()` is **not** an option for a cue on the pinned element: a view progress timeline measures the subject's stuck position, so a pinned element never enters its own `exit` range and the timeline sits at negative progress. Drive that kind of cue from the IntersectionObserver you already need for the rail.
+
+An ancestor with `overflow: hidden` kills sticky (it makes a scroll container); `overflow: clip` does not. `CustomSection`'s `rounded` sets `overflow: hidden`, so a scroll-pinned section must never pass it.
+
 ## Composition and CSS-first rules
 
 - **Compose existing building blocks** (Button, Heading, Text, Icon, Image, Card, Grid, ButtonGroup) rather than hand-writing HTML + styling. The [page-content-authoring skill](../page-content-authoring/SKILL.md) owns the catalog of what exists.

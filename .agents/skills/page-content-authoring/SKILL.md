@@ -129,6 +129,8 @@ In short: `colorScheme` sets the section's theme; `backgroundColor` paints its b
 | Grid of features with icons           | `page-sections/explainers/feature-grid`              |
 | One feature explained beside an image | `page-sections/explainers/feature-split`             |
 | Swipeable feature highlights          | `page-sections/explainers/feature-slider`            |
+| A walkthrough beside a pinned image   | `page-sections/explainers/scroll-stepper`            |
+| Big claims, one screen at a time      | `page-sections/builders/scroll-deck`                 |
 | Closing call to action                | `page-sections/conversion/cta-center` or `cta-split` |
 | Contact / lead-capture form           | `page-sections/conversion/cta-form`                  |
 | Questions and answers                 | `page-sections/explainers/faq-section`               |

@@ -1395,6 +1395,334 @@ const tests = [
       );
     },
   },
+  {
+    name: "scroll stepper swaps the pinned panel as steps cross the centre line",
+    path: "/component-docs/components/page-sections/explainers/scroll-stepper/",
+    viewport: DESKTOP,
+    async run(page) {
+      const stepperSel = `${ACTIVE_PREVIEW} .scroll-stepper[data-scroll-stepper-initialized]`;
+
+      await page.waitForSelector(stepperSel);
+
+      const before = await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
+
+        return {
+          panelCount: panels.length,
+          opacity: panels.map((panel) => getComputedStyle(panel).opacity),
+          sticky: getComputedStyle(stepper.querySelector(".scroll-stepper-media")).position,
+        };
+      }, stepperSel);
+
+      assert(before.panelCount === 3, `expected 3 media panels, found ${before.panelCount}`);
+      assert(before.sticky === "sticky", `media pane is ${before.sticky}, expected sticky`);
+      assert(
+        before.opacity[0] === "1" && before.opacity.slice(1).every((o) => o === "0"),
+        `expected only the first panel visible, got ${before.opacity.join(", ")}`
+      );
+
+      // The docs viewer's preview pane is its own scroll container, so the
+      // component scrolls in there, not in the window.
+      const centreOfPane = await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const step = stepper.querySelectorAll(".scroll-stepper-step")[1];
+        const rect = step.getBoundingClientRect();
+        const paneRect = pane.getBoundingClientRect();
+
+        pane.scrollTop += rect.top - paneRect.top + rect.height / 2 - paneRect.height / 2;
+        return Math.round(paneRect.height / 2);
+      }, stepperSel);
+
+      // rAF-driven polling is throttled in headless Chrome and can pass a
+      // broken build, so poll on a timer.
+      await page.waitForFunction(
+        (sel) =>
+          document
+            .querySelectorAll(`${sel} .scroll-stepper-media-panel`)[1]
+            ?.hasAttribute("data-active"),
+        stepperSel,
+        { polling: 100 }
+      );
+
+      const after = await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const media = stepper.querySelector(".scroll-stepper-media");
+        const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
+        const steps = [...stepper.querySelectorAll(".scroll-stepper-step")];
+        const mediaRect = media.getBoundingClientRect();
+
+        return {
+          opacity: panels.map((panel) => getComputedStyle(panel).opacity),
+          current: steps.map((step) => step.getAttribute("aria-current")),
+          progress: Number(getComputedStyle(media).getPropertyValue("--stepper-progress")),
+          mediaCentre: Math.round(
+            mediaRect.top + mediaRect.height / 2 - pane.getBoundingClientRect().top
+          ),
+          overflows: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        };
+      }, stepperSel);
+
+      assert(
+        after.opacity[1] === "1" && after.opacity[0] === "0",
+        `expected the second panel to replace the first, got ${after.opacity.join(", ")}`
+      );
+      assert(
+        after.current.join(",") === ",step,",
+        `aria-current did not move to step 2: ${after.current.join(",")}`
+      );
+      assert(
+        Math.abs(after.progress - 2 / 3) < 0.01,
+        `--stepper-progress is ${after.progress}, expected ~0.667`
+      );
+      // Half the nav height, because the pane centres in the band below a nav
+      // that does not overlap this nested scrollport.
+      assert(
+        Math.abs(after.mediaCentre - centreOfPane) <= 48,
+        `media pane is not pinned near the scrollport centre (${after.mediaCentre} vs ${centreOfPane})`
+      );
+      assert(!after.overflows, "the page scrolls horizontally");
+
+      await page.setViewportSize(MOBILE);
+      await page.waitForFunction(
+        (sel) =>
+          getComputedStyle(document.querySelector(`${sel} .scroll-stepper-media`)).display ===
+            "none" &&
+          document.querySelector(`${sel} .scroll-stepper-step .scroll-stepper-step-image`)
+            ?.clientHeight > 0,
+        stepperSel,
+        { polling: 100 }
+      );
+    },
+  },
+  {
+    name: "scroll deck pins each card under the last and follows with the rail",
+    path: "/component-docs/components/page-sections/builders/scroll-deck/",
+    viewport: DESKTOP,
+    async run(page) {
+      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck[data-scroll-deck-initialized]`;
+
+      await page.waitForSelector(deckSel);
+
+      // The docs viewer's preview pane is its own scroll container, so the
+      // deck scrolls in there, not in the window.
+      await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const second = deck.querySelectorAll(".scroll-deck-card")[1];
+
+        pane.scrollTop += second.getBoundingClientRect().top - pane.getBoundingClientRect().top;
+      }, deckSel);
+
+      // rAF-driven polling is throttled in headless Chrome and can pass a
+      // broken build, so poll on a timer.
+      await page.waitForFunction(
+        (sel) =>
+          document
+            .querySelectorAll(`${sel} .scroll-deck-rail-link`)[1]
+            ?.hasAttribute("aria-current"),
+        deckSel,
+        { polling: 100 }
+      );
+
+      const measured = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const cards = [...deck.querySelectorAll(".scroll-deck-card")];
+        const paneTop = pane.getBoundingClientRect().top;
+        const peek =
+          parseFloat(getComputedStyle(cards[1]).top) - parseFloat(getComputedStyle(cards[0]).top);
+
+        return {
+          position: cards.map((card) => getComputedStyle(card).position),
+          topInPane: cards.map((card) => card.getBoundingClientRect().top - paneTop),
+          stickyTop: cards.map((card) => parseFloat(getComputedStyle(card).top)),
+          peek,
+          covered: cards.map((card) =>
+            Number(
+              getComputedStyle(card.querySelector(".scroll-deck-card-inner")).getPropertyValue(
+                "--deck-covered"
+              )
+            )
+          ),
+          current: [...deck.querySelectorAll(".scroll-deck-rail-link")].map((link) =>
+            link.hasAttribute("aria-current")
+          ),
+          overflows: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        };
+      }, deckSel);
+
+      assert(
+        measured.position.every((p) => p === "sticky"),
+        `expected every card sticky at the desktop viewport, got ${measured.position.join(", ")}`
+      );
+      assert(
+        measured.peek > 0,
+        `expected each card to pin lower than the last, peek was ${measured.peek}`
+      );
+      for (const index of [0, 1]) {
+        assert(
+          Math.abs(measured.topInPane[index] - measured.stickyTop[index]) <= 1,
+          `card ${index + 1} is not pinned: top ${measured.topInPane[index]}, sticky top ${measured.stickyTop[index]}`
+        );
+      }
+      assert(
+        measured.covered[0] === 1 && measured.covered[1] === 0,
+        `depth cue is wrong: ${measured.covered.join(", ")}`
+      );
+      assert(
+        measured.current.join(",") === "false,true,false",
+        `rail did not follow the pinned card: ${measured.current.join(",")}`
+      );
+      assert(!measured.overflows, "the page scrolls horizontally");
+
+      await page.setViewportSize(MOBILE);
+      await page.waitForFunction(
+        (sel) =>
+          getComputedStyle(document.querySelector(`${sel} .scroll-deck-card`)).position ===
+            "static" &&
+          getComputedStyle(document.querySelector(`${sel} .scroll-deck-rail`)).display === "none",
+        deckSel,
+        { polling: 100 }
+      );
+    },
+  },
+  {
+    // Second environment: the deck scrolling with the window rather than
+    // inside the docs preview pane.
+    //
+    // NOT a regression test for the scrollport bug this was written for — the
+    // component-docs layout cannot reproduce it (its `body` is
+    // `overflow-y: visible`, and the injected rule below still is not enough).
+    // Catching that needs a real page in `dist/`, which the library does not
+    // currently have. Verified by hand against `/examples/*`-style markup.
+    name: "scroll deck rail follows window scroll when no ancestor scrolls",
+    path: "/component-docs/components/page-sections/builders/scroll-deck/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.addInitScript(() => {
+        const apply = () => {
+          const style = document.createElement("style");
+
+          // EVERY scroll container between the deck and the document has to
+          // go, not just the scrolling one: `.component-viewer` is
+          // `overflow: hidden` and `.component-docs` is `overflow-y: auto`
+          // without being scrollable, and either one left in place traps the
+          // sticky cards in a box that never scrolls, so they never pin. The
+          // precondition assertions below catch that rather than letting it
+          // surface as a timeout.
+          // `body { overflow-x: hidden }` is the site-wide rule from
+          // `_html-elements.css`, which the component-docs layout does not
+          // carry. It is load-bearing here: it computes `overflow-y: auto`, so
+          // a scrollport lookup that trusts the computed value picks body on
+          // every real page. Without it this test cannot tell the bug from the
+          // fix.
+          style.textContent =
+            "body { overflow-x: hidden !important; }" +
+            ".component-viewer, .component-viewer > .previews," +
+            " .component-viewer > .previews > .preview, .component-docs" +
+            " { max-height: none !important; height: auto !important; overflow: visible !important; }";
+          document.head.append(style);
+        };
+
+        if (document.head) apply();
+        else document.addEventListener("DOMContentLoaded", apply, { once: true });
+      });
+      await page.reload({ waitUntil: "load" });
+
+      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck[data-scroll-deck-initialized]`;
+
+      await page.waitForSelector(deckSel);
+
+      const env = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const scrollingAncestors = [];
+        let el = deck.parentElement;
+
+        while (el && el !== document.documentElement) {
+          const overflowY = getComputedStyle(el).overflowY;
+
+          if (
+            (overflowY === "auto" || overflowY === "scroll") &&
+            el.scrollHeight > el.clientHeight
+          ) {
+            scrollingAncestors.push(el.className || el.tagName);
+          }
+          el = el.parentElement;
+        }
+        return {
+          scrollingAncestors,
+          railCurrent: [...deck.querySelectorAll(".scroll-deck-rail-link")].map((link) =>
+            link.hasAttribute("aria-current")
+          ),
+        };
+      }, deckSel);
+
+      assert(
+        env.scrollingAncestors.length === 0,
+        `expected no scrolling ancestor for this case, found ${env.scrollingAncestors.join(", ")}`
+      );
+      assert(
+        env.railCurrent[0] === true,
+        "the first rail link should be marked before any scrolling"
+      );
+
+      await page.evaluate((sel) => {
+        const second = document.querySelectorAll(`${sel} .scroll-deck-card`)[1];
+
+        window.scrollTo(0, window.scrollY + second.getBoundingClientRect().top - 40);
+      }, deckSel);
+
+      // Precondition, not the assertion under test: if any scroll container
+      // survived the override above, the cards never pin and everything after
+      // this measures a broken page rather than a broken component.
+      const pinned = await page.evaluate((sel) => {
+        const first = document.querySelector(`${sel} .scroll-deck-card`);
+
+        return {
+          top: Math.round(first.getBoundingClientRect().top),
+          stickyTop: parseFloat(getComputedStyle(first).top),
+          scrollY: Math.round(window.scrollY),
+        };
+      }, deckSel);
+
+      assert(pinned.scrollY > 0, "the window did not scroll; something else owns the scroll");
+      assert(
+        Math.abs(pinned.top - pinned.stickyTop) <= 1,
+        `sticky is not working in this test environment: card 1 top ${pinned.top}, sticky top ${pinned.stickyTop}`
+      );
+
+      // rAF-driven polling is throttled in headless Chrome and can pass a
+      // broken build, so poll on a timer.
+      await page.waitForFunction(
+        (sel) =>
+          document
+            .querySelectorAll(`${sel} .scroll-deck-rail-link`)[1]
+            ?.hasAttribute("aria-current"),
+        deckSel,
+        { polling: 100 }
+      );
+
+      const covered = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .scroll-deck-card`)].map((card) =>
+            Number(
+              getComputedStyle(card.querySelector(".scroll-deck-card-inner")).getPropertyValue(
+                "--deck-covered"
+              )
+            )
+          ),
+        deckSel
+      );
+
+      assert(
+        covered[0] === 1,
+        `the covered card should have receded a step, --deck-covered was ${covered[0]}`
+      );
+    },
+  },
 ];
 
 const marker = join(

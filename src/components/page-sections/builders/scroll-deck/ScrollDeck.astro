@@ -1,0 +1,227 @@
+---
+import { slugifyLabel } from "@component-utils/slugify";
+import ScrollDeckCard from "@builders/scroll-deck/ScrollDeckCard.astro";
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+
+type CardProps = Record<string, unknown>;
+
+const {
+  cards = [],
+  stickyOffset = "md",
+  cardColorScheme = "light",
+  showRail = true,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "dark",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const cardList: CardProps[] = Array.isArray(cards) ? cards : [];
+const deckSlug = slugifyLabel(sectionLabel || "deck") || "deck";
+const cardId = (index: number) => `${deckSlug}-card-${index + 1}`;
+---
+
+<CustomSection
+  class:list={["scroll-deck", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <div class:list={["scroll-deck-layout", `offset-${stickyOffset}`]}>
+    <div
+      class="scroll-deck-track"
+      data-editable="array"
+      data-prop="cards"
+    >
+      {
+        cardList.map((card: CardProps, index: number) => (
+          <ScrollDeckCard
+            id={cardId(index)}
+            cardColorScheme={cardColorScheme}
+            aria-label={`Card ${index + 1} of ${cardList.length}`}
+            data-editable="array-item"
+            data-id="page-sections/builders/scroll-deck/scroll-deck-card"
+            {...card}
+          />
+        ))
+      }
+    </div>
+
+    {
+      showRail && cardList.length > 1 && (
+        <nav
+          class="scroll-deck-rail"
+          aria-label={sectionLabel ? `${sectionLabel} cards` : "Cards"}
+        >
+          {cardList.map((_card: CardProps, index: number) => (
+            <a
+              class="scroll-deck-rail-link"
+              href={`#${cardId(index)}`}
+              aria-current={index === 0 ? "true" : undefined}
+            >
+              <span class="scroll-deck-rail-dot" />
+              <span class="visually-hidden">Card {index + 1}</span>
+            </a>
+          ))}
+        </nav>
+      )
+    }
+  </div>
+</CustomSection>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllScrollDecks } from "@builders/scroll-deck/setup";
+
+  onPageLoad(setupAllScrollDecks);
+</script>
+
+<style is:global>
+  @layer page-sections {
+    .scroll-deck {
+      --deck-offset: var(--spacing-md);
+      --deck-peek: var(--spacing-sm);
+      --deck-index: 0;
+      --deck-top: calc(var(--main-nav-height, 0px) + var(--deck-offset));
+      --deck-rail-hit: 24px;
+      --deck-rail-dot: 8px;
+      --deck-covered: 0;
+      --deck-cover-scale: 0.04;
+      --deck-cover-dim: 0.12;
+
+      .scroll-deck-layout {
+        display: grid;
+        gap: var(--spacing-lg);
+        grid-template-columns: minmax(0, 1fr);
+
+        &.offset-none {
+          --deck-offset: var(--spacing-none);
+        }
+
+        &.offset-sm {
+          --deck-offset: var(--spacing-sm);
+        }
+
+        &.offset-lg {
+          --deck-offset: var(--spacing-lg);
+        }
+      }
+
+      /* setup.ts sets --deck-covered here, on a CHILD of the card: the card is
+         the region root CloudCannon re-renders, and scaling it would also make
+         it the containing block for its own fixed-position backgrounds. */
+      .scroll-deck-card > .scroll-deck-card-inner {
+        box-shadow: var(--shadow-lg);
+        filter: brightness(calc(1 - var(--deck-covered) * var(--deck-cover-dim)));
+        height: 100%;
+        scale: calc(1 - var(--deck-covered) * var(--deck-cover-scale));
+        transform-origin: top center;
+        transition:
+          filter var(--animation-normal) var(--ease-in-out),
+          scale var(--animation-normal) var(--ease-in-out);
+      }
+
+      .scroll-deck-rail {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        .scroll-deck-layout {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        /* Cards must be DIRECT children of the track: a sticky element cannot
+           leave its parent's box, so any wrapper would pin nothing. */
+        .scroll-deck-track > .scroll-deck-card {
+          /* Grid so the card stretches to the article: a percentage height
+             against a parent that only has min-height resolves to auto. */
+          display: grid;
+          min-height: calc(100dvh - var(--deck-top) - var(--deck-index) * var(--deck-peek));
+          position: sticky;
+          top: calc(var(--deck-top) + var(--deck-index) * var(--deck-peek));
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(2) {
+          --deck-index: 1;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(3) {
+          --deck-index: 2;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(4) {
+          --deck-index: 3;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(5) {
+          --deck-index: 4;
+        }
+
+        /* Past the fifth the peek stops accumulating, so a long deck keeps
+           pinning instead of walking off the bottom of the viewport. */
+        .scroll-deck-track > .scroll-deck-card:nth-child(n + 6) {
+          --deck-index: 5;
+        }
+
+        /* One screen of content per card is the budget; anything longer
+           scrolls inside the card rather than pushing the deck apart. */
+        .scroll-deck-card > .scroll-deck-card-inner > .card-inner > .card-outer-content {
+          overflow-y: auto;
+        }
+
+        .scroll-deck-rail {
+          align-self: start;
+          display: grid;
+          gap: var(--spacing-xs);
+          justify-items: center;
+          position: sticky;
+          top: calc(50% + var(--main-nav-height, 0px) / 2);
+          translate: 0 -50%;
+        }
+      }
+
+      .scroll-deck-rail-link {
+        display: grid;
+        height: var(--deck-rail-hit);
+        place-items: center;
+        width: var(--deck-rail-hit);
+
+        > .scroll-deck-rail-dot {
+          background-color: var(--color-border);
+          border-radius: var(--radius-full);
+          height: var(--deck-rail-dot);
+          transition:
+            background-color var(--animation-normal) var(--ease-in-out),
+            scale var(--animation-normal) var(--ease-in-out);
+          width: var(--deck-rail-dot);
+        }
+
+        &[aria-current] > .scroll-deck-rail-dot {
+          background-color: var(--color-brand);
+          scale: 1.5;
+        }
+      }
+
+      @media (max-width: 767px) {
+        .scroll-deck-track > .scroll-deck-card + .scroll-deck-card {
+          margin-block-start: var(--spacing-lg);
+        }
+      }
+    }
+  }
+</style>
