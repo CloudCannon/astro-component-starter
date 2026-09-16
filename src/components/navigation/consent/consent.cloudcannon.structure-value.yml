@@ -1,0 +1,41 @@
+label: Consent
+icon: privacy_tip
+description: Site-wide privacy choices for analytics and third-party media.
+value:
+  _component: navigation/consent
+  privacy:
+    _schema: privacy
+    enabled: true
+    policyRevision: 1
+    expiryDays: 180
+    policyUrl: /privacy/
+    bannerHeading: Your privacy, your choice
+    bannerText: We use optional services to understand site usage and show external media. You can change your choices at any time.
+    settingsLabel: Privacy settings
+    analyticsLabel: Analytics
+    analyticsDescription: Helps us understand which pages are useful. It does not use advertising or marketing pixels.
+    externalMediaLabel: External media
+    externalMediaDescription: Lets us load videos, maps, and other content hosted by third parties.
+    honorGlobalPrivacyControl: true
+  analytics:
+    _schema: analytics
+    provider: plausible-hosted
+    scriptUrl: https://plausible.io/js/pa-component-docs.js
+preview:
+  text:
+    - Consent
+  image: public/component-previews/navigation/consent.svg
+  icon: privacy_tip
+  gallery:
+    image: public/component-previews/navigation/consent.svg
+    fit: cover
+picker_preview:
+  text: Consent
+  subtext: Site-wide privacy choices for analytics and external media.
+  image: public/component-previews/navigation/consent.svg
+  icon: privacy_tip
+  gallery:
+    image: public/component-previews/navigation/consent.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/navigation/consent/consent.cloudcannon.inputs.yml

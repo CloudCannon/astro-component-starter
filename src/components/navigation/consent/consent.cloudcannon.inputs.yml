@@ -1,0 +1,61 @@
+privacy:
+  type: object
+  comment: Site-wide consent wording and decision lifetime. In normal use this comes from src/data/privacy.json.
+privacy._schema:
+  type: text
+  comment: Internal schema discriminator. Keep this set to privacy.
+privacy.enabled:
+  type: switch
+  comment: Enable the privacy controls. Optional services remain blocked when this is off.
+privacy.policyRevision:
+  type: number
+  comment: Increase after a material change so visitors are asked to choose again.
+privacy.expiryDays:
+  type: number
+  comment: Days before a saved choice expires.
+privacy.policyUrl:
+  type: url
+  comment: Site-relative URL for the published privacy policy.
+privacy.bannerHeading:
+  type: text
+  comment: Heading shown in the first-visit banner.
+privacy.bannerText:
+  type: textarea
+  comment: Plain-language explanation shown in the first-visit banner.
+privacy.settingsLabel:
+  type: text
+  comment: Label for the persistent settings button and dialog.
+privacy.analyticsLabel:
+  type: text
+  comment: Visitor-facing name for the analytics category.
+privacy.analyticsDescription:
+  type: textarea
+  comment: Explain what analytics does in language visitors can understand.
+privacy.externalMediaLabel:
+  type: text
+  comment: Visitor-facing name for the external-media category.
+privacy.externalMediaDescription:
+  type: textarea
+  comment: Explain that third-party videos, maps, and embeds may load after consent.
+privacy.honorGlobalPrivacyControl:
+  type: switch
+  comment: Deny unset optional categories when the browser sends Global Privacy Control.
+analytics:
+  type: object
+  comment: Optional analytics integration. In normal use this comes from src/data/analytics.json.
+analytics._schema:
+  type: text
+  comment: Internal schema discriminator. Keep this set to analytics.
+analytics.provider:
+  type: select
+  comment: Analytics provider. Scripts load only after the visitor grants analytics consent.
+  options:
+    values:
+      - value: none
+        label: Off
+      - value: plausible-hosted
+        label: Plausible (hosted)
+analytics.scriptUrl:
+  type: url
+  label: Plausible script URL
+  comment: Site-specific https://plausible.io/js/pa-….js URL from Plausible.

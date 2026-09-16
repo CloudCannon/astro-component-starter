@@ -235,6 +235,61 @@ const tests = [
     },
   },
   {
+    name: "consent docs preview demonstrates choices without persisting or loading analytics",
+    path: "/component-docs/components/navigation/consent/",
+    viewport: DESKTOP,
+    async run(page) {
+      const root = page.locator(`${ACTIVE_PREVIEW} .consent`);
+      const banner = root.locator("[data-consent-banner]");
+      const popoverSel = "#privacy-settings";
+
+      await banner.waitFor({ state: "visible" });
+
+      const initialState = await page.evaluate(() => ({
+        hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
+        hasLiveManager: Boolean(window.siteConsent),
+        storedChoice: localStorage.getItem("site-consent"),
+      }));
+
+      assert(!initialState.hasAnalyticsScript, "docs preview loaded the example analytics script");
+      assert(!initialState.hasLiveManager, "docs preview created the live consent singleton");
+      assert(initialState.storedChoice === null, "docs preview started with a persisted choice");
+
+      await root.locator('[data-consent-action="manage"] .button-inner').click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.matches(":popover-open"),
+        popoverSel
+      );
+      assert(
+        (await page.locator(`${popoverSel} [data-consent-category]`).count()) === 2,
+        "settings dialog did not show both optional categories"
+      );
+
+      await page.locator(`${popoverSel} .button-inner[aria-label="Close"]`).click();
+      await root.locator('[data-consent-action="reject"] .button-inner').click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.hasAttribute("data-consent-decided"),
+        `${ACTIVE_PREVIEW} .consent`
+      );
+
+      assert(!(await banner.isVisible()), "banner stayed visible after making a demo choice");
+      assert(
+        await root.locator("[data-consent-settings-trigger]").isVisible(),
+        "settings trigger did not replace the banner"
+      );
+
+      const finalState = await page.evaluate(() => ({
+        hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
+        hasLiveManager: Boolean(window.siteConsent),
+        storedChoice: localStorage.getItem("site-consent"),
+      }));
+
+      assert(!finalState.hasAnalyticsScript, "demo choice loaded the example analytics script");
+      assert(!finalState.hasLiveManager, "demo choice created the live consent singleton");
+      assert(finalState.storedChoice === null, "demo choice was written to browser storage");
+    },
+  },
+  {
     name: "video modal keeps its provider frame inert until external-media permission",
     path: "/component-docs/components/building-blocks/wrappers/video-modal/",
     viewport: DESKTOP,
@@ -2257,6 +2312,7 @@ try {
     } catch (error) {
       failures.push(test.name);
       console.error(`  ✗ ${test.name} (${test.path}): ${error.message.split("\n")[0]}`);
+      if (only && error.stack) console.error(error.stack);
     } finally {
       await context.close();
     }

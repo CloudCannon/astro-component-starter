@@ -1,0 +1,24 @@
+---
+title: 'Consent banner and settings'
+spacing: null
+blocks:
+  _component: navigation/consent
+  privacy:
+    _schema: privacy
+    enabled: true
+    policyRevision: 1
+    expiryDays: 180
+    policyUrl: /privacy/
+    bannerHeading: Your privacy, your choice
+    bannerText: We use optional services to understand site usage and show external media. You can change your choices at any time.
+    settingsLabel: Privacy settings
+    analyticsLabel: Analytics
+    analyticsDescription: Helps us understand which pages are useful. It does not use advertising or marketing pixels.
+    externalMediaLabel: External media
+    externalMediaDescription: Lets us load videos, maps, and other content hosted by third parties.
+    honorGlobalPrivacyControl: true
+  analytics:
+    _schema: analytics
+    provider: plausible-hosted
+    scriptUrl: https://plausible.io/js/pa-component-docs.js
+---

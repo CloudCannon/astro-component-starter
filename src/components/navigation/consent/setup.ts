@@ -12,13 +12,47 @@ import { getConsentManager, type ConsentCategory } from "../../../integrations/c
 let initialized = false;
 let controlsBound = false;
 
+/**
+ * Keep the component-docs example interactive without sharing the live site's
+ * consent singleton, browser storage, or analytics loader. The example always
+ * starts at the banner and resets on a page reload.
+ */
+function setupPreview(root: HTMLElement): void {
+  if (root.hasAttribute("data-consent-preview-initialized")) return;
+
+  root.setAttribute("data-consent-preview-initialized", "");
+  root.hidden = false;
+  setupAllModals();
+
+  const finishChoice = (): void => {
+    root.setAttribute("data-consent-decided", "");
+    const banner = root.querySelector<HTMLElement>("[data-consent-banner]");
+
+    if (banner) banner.hidden = true;
+  };
+
+  root.querySelectorAll<HTMLElement>("[data-consent-action]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const action = control.dataset.consentAction;
+
+      if (action === "accept-analytics" || action === "reject") finishChoice();
+      if (action === "save") {
+        finishChoice();
+        root.querySelector<HTMLElement>(".consent-popover")?.hidePopover();
+      }
+    });
+  });
+}
+
 function parseConfig(
   root: HTMLElement
 ): { privacy: PrivacyConfig; analytics: AnalyticsConfig } | null {
   try {
+    const config = root.querySelector<HTMLElement>("[data-consent-config]");
+
     return {
-      privacy: privacyConfigSchema.parse(JSON.parse(root.dataset.consentConfig || "{}")),
-      analytics: analyticsConfigSchema.parse(JSON.parse(root.dataset.analyticsConfig || "{}")),
+      privacy: privacyConfigSchema.parse(JSON.parse(config?.dataset.consentConfig || "{}")),
+      analytics: analyticsConfigSchema.parse(JSON.parse(config?.dataset.analyticsConfig || "{}")),
     };
   } catch {
     return null;
@@ -27,7 +61,8 @@ function parseConfig(
 
 function refresh(root: HTMLElement, privacy: PrivacyConfig): void {
   const manager = getConsentManager(privacy);
-  const hasAnalytics = root.dataset.hasAnalytics === "true";
+  const hasAnalytics =
+    root.querySelector<HTMLElement>("[data-has-analytics]")?.dataset.hasAnalytics === "true";
   const banner = root.querySelector<HTMLElement>("[data-consent-banner]");
 
   root.toggleAttribute("data-consent-decided", manager.hasDecision);
@@ -197,6 +232,11 @@ export function setupAllConsent(): void {
     const config = parseConfig(root);
 
     if (!config) return;
+
+    if (root.closest(".component-viewer")) {
+      setupPreview(root);
+      return;
+    }
 
     root.hidden = !config.privacy.enabled;
     bind(root, config.privacy);

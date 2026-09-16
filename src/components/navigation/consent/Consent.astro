@@ -12,11 +12,14 @@ const popoverId = "privacy-settings";
 <aside
   class="consent"
   hidden
-  data-consent-config={JSON.stringify(privacy)}
-  data-analytics-config={JSON.stringify(analytics)}
-  data-has-analytics={hasAnalytics}
   aria-label="Privacy choices"
 >
+  <span
+    hidden
+    data-consent-config={JSON.stringify(privacy)}
+    data-analytics-config={JSON.stringify(analytics)}
+    data-has-analytics={hasAnalytics}
+  ></span>
   {
     hasAnalytics && (
       <div
@@ -154,6 +157,10 @@ const popoverId = "privacy-settings";
       }
     }
 
+    .consent-banner[hidden] {
+      display: none;
+    }
+
     .consent-copy {
       display: grid;
       gap: var(--spacing-xs);
@@ -191,6 +198,13 @@ const popoverId = "privacy-settings";
 
     .consent[data-consent-decided] .consent-settings-trigger {
       display: inline-flex;
+    }
+
+    /* Component docs are a contained, non-persistent demonstration. Pin the
+       chrome to the preview frame instead of the browser viewport. */
+    .component-viewer .consent-banner,
+    .component-viewer .consent-settings-trigger {
+      position: absolute;
     }
 
     .modal-popover.consent-popover {
