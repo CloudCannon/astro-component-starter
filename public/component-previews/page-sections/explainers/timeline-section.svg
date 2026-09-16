@@ -17,19 +17,16 @@
   </style>
   <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
   <g transform="translate(0 178)">
-    <rect x="400" y="0" width="480" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="408" y="86" width="2" height="268" rx="1" fill="var(--pv-line, #E4E1DA)"/>
-    <rect x="260" y="76" width="100" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="402" y="80" width="14" height="14" rx="7" fill="var(--pv-ink, #151515)"/>
-    <rect x="444" y="72" width="280" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="444" y="108" width="576" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
-    <rect x="260" y="200" width="100" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="402" y="204" width="14" height="14" rx="7" fill="var(--pv-ink, #151515)"/>
-    <rect x="444" y="196" width="280" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="444" y="232" width="576" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
-    <rect x="260" y="324" width="100" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="402" y="328" width="14" height="14" rx="7" fill="var(--pv-ink, #151515)"/>
-    <rect x="444" y="320" width="280" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
-    <rect x="444" y="356" width="576" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="260" y="0" width="760" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="639" y="86" width="2" height="268" rx="1" fill="var(--pv-line, #E4E1DA)"/>
+    <rect x="631" y="76" width="18" height="18" rx="9" fill="var(--pv-ink, #151515)"/>
+    <rect x="260" y="72" width="260" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="410" y="108" width="110" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="631" y="200" width="18" height="18" rx="9" fill="var(--pv-ink, #151515)"/>
+    <rect x="694" y="196" width="326" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="694" y="232" width="110" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="631" y="324" width="18" height="18" rx="9" fill="var(--pv-ink, #151515)"/>
+    <rect x="260" y="320" width="260" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="410" y="356" width="110" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
   </g>
 </svg>

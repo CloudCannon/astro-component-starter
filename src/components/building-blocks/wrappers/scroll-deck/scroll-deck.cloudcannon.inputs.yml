@@ -1,0 +1,39 @@
+label:
+  type: text
+  comment: Optional label for the scroll deck to help identify it in the editor.
+cards:
+  type: array
+  label: Cards
+  comment: Cards stacked in a deck. Each one pins under the last as the wrapper scrolls.
+  options:
+    structures: _structures.scrollDeckCards
+stickyOffset:
+  type: select
+  label: Sticky offset
+  comment: Extra gap between the site header and the pinned card.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+cardColorScheme:
+  type: select
+  label: Card color scheme
+  comment: Color scheme for the cards themselves.
+  options:
+    values:
+      - id: inherit
+        name: Inherit
+      - id: light
+        name: Light
+      - id: dark
+        name: Dark
+showRail:
+  type: switch
+  label: Show card rail
+  comment: A column of anchor links marking which card is on top. Hidden below 768px, where the deck stacks flat.

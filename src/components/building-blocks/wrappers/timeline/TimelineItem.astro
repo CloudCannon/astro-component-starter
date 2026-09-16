@@ -1,5 +1,6 @@
 ---
 import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
@@ -8,6 +9,7 @@ const {
   date = "",
   title = "",
   body = "",
+  iconName = "",
   layout = "vertical",
   grouped = false,
   headingLevel = "h3",
@@ -21,6 +23,7 @@ const hasTitle = isNonEmptyString(title);
 const hasBody = isNonEmptyString(body);
 const hasDate = isNonEmptyString(date);
 const isHorizontal = layout === "horizontal";
+const isSplit = layout === "split";
 
 const dateBinding =
   useDefaultEditableBinding && hasDate ? { "data-editable": "text", "data-prop": "date" } : {};
@@ -31,7 +34,51 @@ const dateBinding =
   {...htmlAttributes}
 >
   {
-    isHorizontal ? (
+    isSplit ? (
+      <>
+        <div class="timeline-split-content">
+          {hasDate && (
+            <span
+              class="timeline-date"
+              {...dateBinding}
+            >
+              {date}
+            </span>
+          )}
+          {hasTitle && (
+            <Heading
+              class="timeline-title"
+              level={headingLevel}
+              size="xs"
+              data-prop={useDefaultEditableBinding ? "title" : undefined}
+            >
+              {title}
+            </Heading>
+          )}
+          {hasBody && (
+            <SimpleText
+              class="timeline-body"
+              size="sm"
+              data-prop={useDefaultEditableBinding ? "body" : undefined}
+              text={body}
+            />
+          )}
+        </div>
+        <span
+          class="timeline-split-marker"
+          aria-hidden="true"
+        >
+          {isNonEmptyString(iconName) ? (
+            <Icon
+              name={iconName}
+              size="sm"
+            />
+          ) : (
+            <span class="timeline-dot" />
+          )}
+        </span>
+      </>
+    ) : isHorizontal ? (
       hasDate && (
         <div
           class="timeline-label"
@@ -65,7 +112,7 @@ const dateBinding =
     )
   }
   {
-    isHorizontal ? (
+    !isSplit && isHorizontal ? (
       <div
         class="timeline-band"
         aria-hidden="true"
@@ -102,7 +149,7 @@ const dateBinding =
     )
   }
   {
-    (isHorizontal || grouped) && hasTitle && (
+    !isSplit && (isHorizontal || grouped) && hasTitle && (
       <Heading
         class="timeline-title"
         level={headingLevel}
@@ -114,7 +161,7 @@ const dateBinding =
     )
   }
   {
-    (isHorizontal || grouped) && hasBody && (
+    !isSplit && (isHorizontal || grouped) && hasBody && (
       <SimpleText
         class="timeline-body"
         size="sm"

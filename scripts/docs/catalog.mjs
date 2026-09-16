@@ -78,10 +78,10 @@ const EDITORIAL_NOTES = {
     "No section-level heading — each slide carries its own text.",
   "page-sections/builders/custom-section":
     "The escape hatch for arbitrary layouts; `rounded` is unique to this section (page-section wrappers do not forward it).",
-  "page-sections/builders/scroll-deck":
-    "One screen of content per card — anything longer scrolls inside the card. Nothing pins below 768px.",
-  "page-sections/explainers/scroll-stepper":
-    "No section-level heading — each step carries its own. Below 768px the pinned column is dropped and each step shows its image inline.",
+  "building-blocks/wrappers/scroll-deck":
+    "Every card matches the tallest card in the deck. Nothing pins below 768px.",
+  "building-blocks/wrappers/scroll-stepper":
+    "Each scene pairs arbitrary sticky media with arbitrary content. On mobile, media stays before its paired content.",
 };
 
 function titleize(slug) {

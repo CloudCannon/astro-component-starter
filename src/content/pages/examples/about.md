@@ -58,24 +58,28 @@ pageSections:
     eyebrow: History
     heading: How we got here
     subtext: ''
-    layout: vertical
+    layout: split
     entries:
       - year: ''
         date: '2014'
         title: Opened the studio
         body: Two of us, a spare room, and a handful of brochure sites.
+        iconName: rocket-launch
       - year: ''
         date: '2018'
         title: First component library
         body: We stopped rebuilding the same hero for every client.
+        iconName: cube
       - year: ''
         date: '2022'
         title: Visual editing as the handoff
         body: Editors started assembling pages without a ticket queue.
+        iconName: pencil-square
       - year: ''
         date: '2026'
         title: Still shipping
         body: Same craft, more of the system reused, fewer late nights on launch week.
+        iconName: sparkles
     colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/collections/team-grid

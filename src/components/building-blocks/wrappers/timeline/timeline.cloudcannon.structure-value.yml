@@ -1,6 +1,6 @@
 label: Timeline
 icon: timeline
-description: Dated timeline. Vertical is a continuous list. Horizontal scrolls.
+description: Dated timeline. Vertical is a continuous list, split alternates events, and horizontal scrolls.
 value:
   _component: building-blocks/wrappers/timeline
   label: ""
@@ -27,7 +27,7 @@ preview:
     fit: cover
 picker_preview:
   text: Timeline
-  subtext: A dated sequence on a rail. Vertical or horizontal.
+  subtext: A dated sequence on a rail. Vertical, split, or horizontal.
   image: public/component-previews/building-blocks/wrappers/timeline.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/timeline.svg
@@ -45,6 +45,7 @@ _structures:
           date: "2024"
           title: Entry title
           body: ""
+          iconName: ""
 
         preview:
           text:
@@ -65,3 +66,14 @@ _structures:
           body:
             type: textarea
             comment: Optional supporting copy. Title-only entries are valid.
+          iconName:
+            type: select
+            label: Split icon
+            comment: Optional icon shown in Split layout. Leave blank for a dot.
+            options:
+              values: data.icons
+              preview:
+                text:
+                  - key: iconName
+                image:
+                  - template: src/icons/{iconName}.svg

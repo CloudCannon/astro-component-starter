@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-newsletter-signup">
+  <title id="t-newsletter-signup">Newsletter signup component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 135)">
+    <rect x="160" y="168" width="112" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="160" y="196" width="302" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="160" y="236" width="350" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="260" width="262" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="686" y="186" width="274" height="52" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="3"/>
+    <rect x="976" y="186" width="144" height="52" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="1017" y="208" width="62" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="686" y="258" width="348" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="686" y="274" width="274" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+  </g>
+</svg>

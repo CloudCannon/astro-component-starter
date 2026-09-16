@@ -67,6 +67,63 @@ const tests = [
     },
   },
   {
+    name: "code block copies its rendered code",
+    path: "/component-docs/components/building-blocks/core-elements/code-block/",
+    viewport: DESKTOP,
+    async run(page) {
+      const block = page.locator(`${ACTIVE_PREVIEW} .code-block`).first();
+
+      await block.waitFor();
+      const response = await page.request.get(page.url());
+
+      assert(
+        !(await response.text()).includes('class="button code-block-copy"'),
+        "the copy button should not render before JavaScript runs"
+      );
+      const expected = await block.locator("code").textContent();
+      const origin = new URL(page.url()).origin;
+
+      await page.context().grantPermissions(["clipboard-read", "clipboard-write"], { origin });
+      await block.locator(".code-block-copy").click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.textContent === "Code copied to clipboard.",
+        `${ACTIVE_PREVIEW} .code-block .code-block-status`
+      );
+
+      const copied = await page.evaluate(() => navigator.clipboard.readText());
+
+      assert(copied === expected, "copy button did not copy the rendered code");
+    },
+  },
+  {
+    name: "code block tabs switch code panels with arrow keys",
+    path: "/component-docs/components/building-blocks/core-elements/code-block/",
+    viewport: DESKTOP,
+    async run(page) {
+      const block = page.locator(
+        '.component-viewer[data-viewer-id="tabbed-representations"] .code-block'
+      );
+      const tabs = block.locator('[role="tab"]');
+
+      await tabs.nth(0).focus();
+      await page.keyboard.press("ArrowRight");
+
+      await page.waitForFunction(() => {
+        const block = document.querySelector(
+          '.component-viewer[data-viewer-id="tabbed-representations"] .code-block'
+        );
+        const tabs = block?.querySelectorAll('[role="tab"]');
+        const panels = block?.querySelectorAll('[role="tabpanel"]');
+
+        return (
+          tabs?.[1]?.getAttribute("aria-selected") === "true" &&
+          panels?.[0]?.hasAttribute("hidden") === true &&
+          panels?.[1]?.hasAttribute("hidden") === false
+        );
+      });
+    },
+  },
+  {
     name: "modal opens, traps focus, and restores focus on close",
     path: "/component-docs/components/building-blocks/wrappers/modal/",
     viewport: DESKTOP,
@@ -483,7 +540,7 @@ const tests = [
     },
   },
   {
-    name: "content selector tab switches panels on Enter",
+    name: "content selector tab switches panels with arrow keys",
     path: "/component-docs/components/building-blocks/wrappers/content-selector/",
     viewport: DESKTOP,
     async run(page) {
@@ -494,18 +551,20 @@ const tests = [
 
       const second = items.nth(1);
 
-      await second.locator(".content-selector-tab").focus();
-      await page.keyboard.press("Enter");
+      await items.first().locator(".content-selector-tab").focus();
+      await page.keyboard.press("ArrowDown");
       await page.waitForFunction(() => {
         const item = document.querySelectorAll(
           ".component-viewer .preview.active .content-selector-item"
         )[1];
 
-        return item?.querySelector(".content-selector-input")?.checked === true;
+        return (
+          item?.querySelector(".content-selector-tab")?.getAttribute("aria-selected") === "true"
+        );
       });
       assert(
-        (await second.locator(".content-selector-tab").getAttribute("aria-expanded")) === "true",
-        "the activated tab did not report aria-expanded=true"
+        (await second.locator(".content-selector-tab").getAttribute("aria-selected")) === "true",
+        "the activated tab did not report aria-selected=true"
       );
       assert(
         (await second.locator(".content-selector-panel").getAttribute("aria-hidden")) === "false",
@@ -1118,25 +1177,19 @@ const tests = [
     },
   },
   {
-    name: "youtube facade upgrades and shows a play button",
+    name: "youtube waits for external-media consent before creating a player",
     path: "/component-docs/components/building-blocks/core-elements/video/",
     viewport: DESKTOP,
     async run(page) {
-      await page.waitForSelector("lite-youtube");
-
-      const upgraded = await page.evaluate(() => customElements.get("lite-youtube") !== undefined);
-
-      assert(upgraded, "the lite-youtube custom element never registered");
-
-      // The facade builds its poster + play button in a shadow root; without
-      // it the element is an empty box with a bare fallback link.
-      const hasPlayButton = await page.evaluate(() => {
-        const el = document.querySelector("lite-youtube");
-
-        return Boolean(el?.shadowRoot?.querySelector("button, .lty-playbtn"));
-      });
-
-      assert(hasPlayButton, "the facade rendered no play button");
+      await page.waitForSelector("[data-hosted-video]");
+      assert(
+        (await page.locator("[data-hosted-video] iframe").count()) === 0,
+        "hosted video created an iframe before external-media consent"
+      );
+      assert(
+        (await page.locator("[data-hosted-video] [data-external-media-enable]").count()) > 0,
+        "hosted video did not offer an external-media action"
+      );
     },
   },
   {
@@ -1396,115 +1449,292 @@ const tests = [
     },
   },
   {
-    name: "scroll stepper swaps the pinned panel as steps cross the centre line",
-    path: "/component-docs/components/page-sections/explainers/scroll-stepper/",
+    name: "scroll stepper scrolls step messages while media states swap",
+    path: "/component-docs/components/building-blocks/wrappers/scroll-stepper/",
     viewport: DESKTOP,
     async run(page) {
-      const stepperSel = `${ACTIVE_PREVIEW} .scroll-stepper[data-scroll-stepper-initialized]`;
+      const stepperSel = `${ACTIVE_PREVIEW} .scroll-stepper`;
 
       await page.waitForSelector(stepperSel);
+      await page.waitForTimeout(100);
 
-      const before = await page.evaluate((sel) => {
+      const desktop = await page.evaluate((sel) => {
         const stepper = document.querySelector(sel);
-        const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
+        const scenes = [
+          ...stepper.querySelectorAll(".scroll-stepper-steps > .scroll-stepper-step"),
+        ];
 
         return {
-          panelCount: panels.length,
-          opacity: panels.map((panel) => getComputedStyle(panel).opacity),
+          sceneCount: scenes.length,
+          panelCount: stepper.querySelectorAll(".scroll-stepper-media-panel").length,
+          contentCount: stepper.querySelectorAll(
+            ".scroll-stepper-steps > .scroll-stepper-step .scroll-stepper-step-content"
+          ).length,
+          activePanels: stepper.querySelectorAll(".scroll-stepper-media-panel[data-active]").length,
+          activeSteps: stepper.querySelectorAll(
+            ".scroll-stepper-steps > .scroll-stepper-step[data-active]"
+          ).length,
+          visibleMessages: scenes.filter((scene) => getComputedStyle(scene).opacity === "1").length,
           sticky: getComputedStyle(stepper.querySelector(".scroll-stepper-media")).position,
-        };
-      }, stepperSel);
-
-      assert(before.panelCount === 3, `expected 3 media panels, found ${before.panelCount}`);
-      assert(before.sticky === "sticky", `media pane is ${before.sticky}, expected sticky`);
-      assert(
-        before.opacity[0] === "1" && before.opacity.slice(1).every((o) => o === "0"),
-        `expected only the first panel visible, got ${before.opacity.join(", ")}`
-      );
-
-      // The docs viewer's preview pane is its own scroll container, so the
-      // component scrolls in there, not in the window.
-      const centreOfPane = await page.evaluate((sel) => {
-        const stepper = document.querySelector(sel);
-        const pane = stepper.closest(".preview");
-        const step = stepper.querySelectorAll(".scroll-stepper-step")[1];
-        const rect = step.getBoundingClientRect();
-        const paneRect = pane.getBoundingClientRect();
-
-        pane.scrollTop += rect.top - paneRect.top + rect.height / 2 - paneRect.height / 2;
-        return Math.round(paneRect.height / 2);
-      }, stepperSel);
-
-      // rAF-driven polling is throttled in headless Chrome and can pass a
-      // broken build, so poll on a timer.
-      await page.waitForFunction(
-        (sel) =>
-          document
-            .querySelectorAll(`${sel} .scroll-stepper-media-panel`)[1]
-            ?.hasAttribute("data-active"),
-        stepperSel,
-        { polling: 100 }
-      );
-
-      const after = await page.evaluate((sel) => {
-        const stepper = document.querySelector(sel);
-        const pane = stepper.closest(".preview");
-        const media = stepper.querySelector(".scroll-stepper-media");
-        const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
-        const steps = [...stepper.querySelectorAll(".scroll-stepper-step")];
-        const mediaRect = media.getBoundingClientRect();
-
-        return {
-          opacity: panels.map((panel) => getComputedStyle(panel).opacity),
-          current: steps.map((step) => step.getAttribute("aria-current")),
-          progress: Number(getComputedStyle(media).getPropertyValue("--stepper-progress")),
-          mediaCentre: Math.round(
-            mediaRect.top + mediaRect.height / 2 - pane.getBoundingClientRect().top
-          ),
+          heights: scenes.map((scene) => getComputedStyle(scene).minHeight),
+          progress: Number(getComputedStyle(stepper).getPropertyValue("--scroll-stepper-progress")),
+          activeMessageCenter:
+            scenes[0].querySelector(".scroll-stepper-step-content").getBoundingClientRect().y +
+            scenes[0].querySelector(".scroll-stepper-step-content").getBoundingClientRect().height /
+              2,
+          mediaCenter:
+            stepper.querySelector(".scroll-stepper-media").getBoundingClientRect().y +
+            stepper.querySelector(".scroll-stepper-media").getBoundingClientRect().height / 2,
           overflows: document.documentElement.scrollWidth > document.documentElement.clientWidth,
         };
       }, stepperSel);
 
+      assert(desktop.sceneCount === 3, `expected 3 scenes, found ${desktop.sceneCount}`);
       assert(
-        after.opacity[1] === "1" && after.opacity[0] === "0",
-        `expected the second panel to replace the first, got ${after.opacity.join(", ")}`
+        desktop.panelCount === desktop.sceneCount && desktop.contentCount === desktop.sceneCount,
+        `expected ${desktop.sceneCount} media panels and content trees, got ${desktop.panelCount} panels and ${desktop.contentCount} content trees`
+      );
+      assert(desktop.sticky === "sticky", `the media pane is not sticky: ${desktop.sticky}`);
+      assert(
+        desktop.activePanels === 1,
+        `expected one active media panel, found ${desktop.activePanels}`
       );
       assert(
-        after.current.join(",") === ",step,",
-        `aria-current did not move to step 2: ${after.current.join(",")}`
+        desktop.activeSteps === 1,
+        `expected one active message, found ${desktop.activeSteps}`
       );
       assert(
-        Math.abs(after.progress - 2 / 3) < 0.01,
-        `--stepper-progress is ${after.progress}, expected ~0.667`
+        desktop.visibleMessages === 1,
+        `expected one visible bar-progress message, found ${desktop.visibleMessages}`
       );
-      // Half the nav height, because the pane centres in the band below a nav
-      // that does not overlap this nested scrollport.
       assert(
-        Math.abs(after.mediaCentre - centreOfPane) <= 48,
-        `media pane is not pinned near the scrollport centre (${after.mediaCentre} vs ${centreOfPane})`
+        desktop.heights.every((height) => height !== "0px"),
+        `screen scenes have no minimum height: ${desktop.heights.join(", ")}`
       );
-      assert(!after.overflows, "the page scrolls horizontally");
+      assert(desktop.progress === 0, `the progress bar should start empty: ${desktop.progress}`);
+      assert(
+        Math.abs(desktop.activeMessageCenter - desktop.mediaCenter) <= 1,
+        `the active message is not centered with its media: ${desktop.activeMessageCenter} vs ${desktop.mediaCenter}`
+      );
+      assert(!desktop.overflows, "the page scrolls horizontally");
+
+      await page.evaluate((sel) => {
+        document.querySelector(sel).style.maxWidth = "600px";
+      }, stepperSel);
+      await page.waitForFunction((sel) => {
+        const stepper = document.querySelector(sel);
+        const layout = stepper.querySelector(".scroll-stepper-layout");
+
+        return (
+          getComputedStyle(layout).gridTemplateColumns.split(" ").length === 1 &&
+          !stepper.hasAttribute("data-scroll-stepper-initialized")
+        );
+      }, stepperSel);
+      const narrowPairs = await page.evaluate(
+        (sel) =>
+          [...document.querySelector(sel).querySelectorAll(".scroll-stepper-mobile-step")].map(
+            (pair) => ({
+              contentTop: pair.querySelector(".scroll-stepper-step").getBoundingClientRect().top,
+              mediaTop: pair.querySelector(".scroll-stepper-mobile-media").getBoundingClientRect()
+                .top,
+            })
+          ),
+        stepperSel
+      );
+
+      assert(
+        narrowPairs.length === desktop.sceneCount &&
+          narrowPairs.every((pair) => pair.mediaTop < pair.contentTop),
+        `narrow steps do not pair each image with its message: ${JSON.stringify(narrowPairs)}`
+      );
+
+      await page.evaluate((sel) => {
+        document.querySelector(sel).style.removeProperty("max-width");
+      }, stepperSel);
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel).hasAttribute("data-scroll-stepper-initialized"),
+        stepperSel
+      );
+      await page.waitForTimeout(100);
+
+      await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const step = stepper.querySelectorAll(".scroll-stepper-steps > .scroll-stepper-step")[1];
+        const content = step.querySelector(".scroll-stepper-step-content");
+        const media = stepper.querySelector(".scroll-stepper-media");
+        const contentBounds = content.getBoundingClientRect();
+        const mediaBounds = media.getBoundingClientRect();
+        const stepBounds = step.getBoundingClientRect();
+
+        pane.scrollTop +=
+          contentBounds.top +
+          contentBounds.height / 2 -
+          (mediaBounds.top + mediaBounds.height / 2 + stepBounds.height / 2) +
+          2;
+      }, stepperSel);
+      await page.waitForFunction(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .scroll-stepper-media-panel`)].findIndex((panel) =>
+            panel.hasAttribute("data-active")
+          ) === 1 &&
+          [
+            ...document.querySelectorAll(`${sel} .scroll-stepper-steps > .scroll-stepper-step`),
+          ].findIndex((step) => step.hasAttribute("data-active")) === 1 &&
+          Number(
+            getComputedStyle(document.querySelector(sel)).getPropertyValue(
+              "--scroll-stepper-progress"
+            )
+          ) > 0,
+        stepperSel
+      );
+      await page.waitForTimeout(100);
+
+      const progressed = await page.evaluate(
+        (sel) =>
+          Number(
+            getComputedStyle(document.querySelector(sel)).getPropertyValue(
+              "--scroll-stepper-progress"
+            )
+          ),
+        stepperSel
+      );
+
+      assert(
+        progressed > desktop.progress,
+        `the progress bar did not advance: ${desktop.progress} -> ${progressed}`
+      );
+
+      await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const scenes = stepper.querySelectorAll(".scroll-stepper-steps > .scroll-stepper-step");
+        const last = scenes[scenes.length - 1];
+        const content = last.querySelector(".scroll-stepper-step-content");
+        const media = stepper.querySelector(".scroll-stepper-media");
+        const contentBounds = content.getBoundingClientRect();
+        const mediaBounds = media.getBoundingClientRect();
+        const stepBounds = last.getBoundingClientRect();
+
+        pane.scrollTop +=
+          contentBounds.top +
+          contentBounds.height / 2 -
+          (mediaBounds.top + mediaBounds.height / 2 + stepBounds.height / 2) +
+          2;
+      }, stepperSel);
+      await page.waitForFunction(
+        (sel) =>
+          Number(
+            getComputedStyle(document.querySelector(sel)).getPropertyValue(
+              "--scroll-stepper-progress"
+            )
+          ) >= 0.99,
+        stepperSel
+      );
 
       await page.setViewportSize(MOBILE);
       await page.waitForFunction(
-        (sel) =>
-          getComputedStyle(document.querySelector(`${sel} .scroll-stepper-media`)).display ===
-            "none" &&
-          document.querySelector(`${sel} .scroll-stepper-step .scroll-stepper-step-image`)
-            ?.clientHeight > 0,
+        (sel) => {
+          const stepper = document.querySelector(sel);
+          const pairs = [...stepper.querySelectorAll(".scroll-stepper-mobile-step")];
+
+          return (
+            pairs.length === 3 &&
+            pairs.every((pair) => {
+              const media = pair.querySelector(".scroll-stepper-mobile-media");
+              const content = pair.querySelector(".scroll-stepper-step");
+
+              return media.getBoundingClientRect().top < content.getBoundingClientRect().top;
+            }) &&
+            !stepper.hasAttribute("data-scroll-stepper-initialized") &&
+            stepper.querySelectorAll(".scroll-stepper-media-panel[data-active]").length === 0
+          );
+        },
         stepperSel,
         { polling: 100 }
+      );
+
+      const screenStepper = await page.evaluate(() =>
+        [...document.querySelectorAll(".scroll-stepper")].find((stepper) =>
+          stepper.classList.contains("progress-dots")
+        )
+      );
+
+      assert(screenStepper, "expected a dot-progress Scroll Stepper example");
+
+      await page.setViewportSize(DESKTOP);
+      await page.waitForFunction(() =>
+        [...document.querySelectorAll(".scroll-stepper")].some(
+          (stepper) =>
+            stepper.classList.contains("progress-dots") &&
+            stepper.hasAttribute("data-scroll-stepper-initialized")
+        )
+      );
+      await page.evaluate(() => {
+        const stepper = [...document.querySelectorAll(".scroll-stepper")].find((item) =>
+          item.classList.contains("progress-dots")
+        );
+        const pane = stepper.closest(".preview");
+        const secondContent = stepper.querySelectorAll(".scroll-stepper-step-content")[1];
+        const paneBounds = pane.getBoundingClientRect();
+        const contentBounds = secondContent.getBoundingClientRect();
+
+        pane.scrollTop += contentBounds.top - paneBounds.bottom + 1;
+      });
+      await page.waitForFunction(() => {
+        const stepper = [...document.querySelectorAll(".scroll-stepper")].find((item) =>
+          item.classList.contains("progress-dots")
+        );
+        const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
+        const message = stepper.querySelectorAll(".scroll-stepper-step")[1];
+
+        return (
+          panels.findIndex((panel) => panel.hasAttribute("data-active")) === 1 &&
+          getComputedStyle(message).visibility === "visible"
+        );
+      });
+      const screenEntry = await page.evaluate(() => {
+        const stepper = [...document.querySelectorAll(".scroll-stepper")].find((item) =>
+          item.classList.contains("progress-dots")
+        );
+        const pane = stepper.closest(".preview").getBoundingClientRect();
+        const content = stepper
+          .querySelectorAll(".scroll-stepper-step-content")[1]
+          .getBoundingClientRect();
+
+        return { distanceFromBottom: Math.abs(content.top - pane.bottom) };
+      });
+
+      assert(
+        screenEntry.distanceFromBottom <= 2,
+        `screen-height message did not enter from the bottom: ${screenEntry.distanceFromBottom}px away`
       );
     },
   },
   {
-    name: "scroll deck pins each card under the last and follows with the rail",
-    path: "/component-docs/components/page-sections/builders/scroll-deck/",
+    name: "scroll deck stacks each card and releases when the last reaches centre",
+    path: "/component-docs/components/building-blocks/wrappers/scroll-deck/",
     viewport: DESKTOP,
     async run(page) {
       const deckSel = `${ACTIVE_PREVIEW} .scroll-deck[data-scroll-deck-initialized]`;
 
       await page.waitForSelector(deckSel);
+
+      const initialSpacing = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const second = deck.querySelectorAll(".scroll-deck-card")[1];
+
+        return {
+          paneBottom: pane.getBoundingClientRect().bottom,
+          secondTop: second.getBoundingClientRect().top,
+        };
+      }, deckSel);
+
+      assert(
+        initialSpacing.secondTop >= initialSpacing.paneBottom,
+        `the next card is visible before the first one has been scrolled: ${initialSpacing.secondTop} < ${initialSpacing.paneBottom}`
+      );
 
       // The docs viewer's preview pane is its own scroll container, so the
       // deck scrolls in there, not in the window.
@@ -1537,6 +1767,7 @@ const tests = [
 
         return {
           position: cards.map((card) => getComputedStyle(card).position),
+          heights: cards.map((card) => card.getBoundingClientRect().height),
           topInPane: cards.map((card) => card.getBoundingClientRect().top - paneTop),
           stickyTop: cards.map((card) => parseFloat(getComputedStyle(card).top)),
           peek,
@@ -1562,6 +1793,10 @@ const tests = [
         measured.peek > 0,
         `expected each card to pin lower than the last, peek was ${measured.peek}`
       );
+      assert(
+        measured.heights.every((height) => Math.abs(height - measured.heights[0]) <= 1),
+        `expected cards to match the tallest card, got ${measured.heights.join(", ")}`
+      );
       for (const index of [0, 1]) {
         assert(
           Math.abs(measured.topInPane[index] - measured.stickyTop[index]) <= 1,
@@ -1577,6 +1812,79 @@ const tests = [
         `rail did not follow the pinned card: ${measured.current.join(",")}`
       );
       assert(!measured.overflows, "the page scrolls horizontally");
+
+      await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const cards = deck.querySelectorAll(".scroll-deck-card");
+        const last = cards[cards.length - 1];
+
+        pane.scrollTop +=
+          last.getBoundingClientRect().top -
+          pane.getBoundingClientRect().top +
+          last.getBoundingClientRect().height / 2 -
+          pane.clientHeight / 2;
+      }, deckSel);
+      await page.waitForTimeout(100);
+      const finalCard = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const cards = deck.querySelectorAll(".scroll-deck-card");
+        const last = cards[cards.length - 1];
+        const paneTop = pane.getBoundingClientRect().top;
+
+        return {
+          centreInPane:
+            last.getBoundingClientRect().top - paneTop + last.getBoundingClientRect().height / 2,
+          paneCentre: pane.clientHeight / 2,
+          tops: [...cards].map((card) => card.getBoundingClientRect().top - paneTop),
+          height: last.getBoundingClientRect().height,
+          railTop: deck.querySelector(".scroll-deck-rail").getBoundingClientRect().top - paneTop,
+        };
+      }, deckSel);
+
+      assert(
+        Math.abs(finalCard.centreInPane - finalCard.paneCentre) <= 1,
+        `last card did not reach the vertical centre: ${finalCard.centreInPane} vs ${finalCard.paneCentre}`
+      );
+
+      // As soon as the last card reaches centre, the complete deck must release
+      // as one stepped stack rather than locking the last card in place.
+      await page.evaluate(
+        ({ sel, height }) => {
+          const deck = document.querySelector(sel);
+          const pane = deck.closest(".preview");
+
+          pane.scrollTop += height;
+        },
+        { sel: deckSel, height: finalCard.height }
+      );
+      await page.waitForTimeout(100);
+      const released = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const paneTop = pane.getBoundingClientRect().top;
+
+        return {
+          railTop: deck.querySelector(".scroll-deck-rail").getBoundingClientRect().top - paneTop,
+          tops: [...deck.querySelectorAll(".scroll-deck-card")].map(
+            (card) => card.getBoundingClientRect().top - paneTop
+          ),
+        };
+      }, deckSel);
+      const releaseDistance = released.tops[0] - finalCard.tops[0];
+
+      assert(releaseDistance < -1, "the stacked cards did not release at the end of the track");
+      assert(
+        released.tops.every(
+          (top, index) => Math.abs(top - released.tops[0] - index * measured.peek) <= 1
+        ),
+        `the deck did not release as a stepped stack: ${released.tops.join(", ")}`
+      );
+      assert(
+        Math.abs(released.railTop - finalCard.railTop - releaseDistance) <= 1,
+        `the rail did not release with the cards: ${finalCard.railTop} -> ${released.railTop}`
+      );
 
       await page.setViewportSize(MOBILE);
       await page.waitForFunction(
@@ -1599,7 +1907,7 @@ const tests = [
     // Catching that needs a real page in `dist/`, which the library does not
     // currently have. Verified by hand against `/examples/*`-style markup.
     name: "scroll deck rail follows window scroll when no ancestor scrolls",
-    path: "/component-docs/components/page-sections/builders/scroll-deck/",
+    path: "/component-docs/components/building-blocks/wrappers/scroll-deck/",
     viewport: DESKTOP,
     async run(page) {
       await page.addInitScript(() => {

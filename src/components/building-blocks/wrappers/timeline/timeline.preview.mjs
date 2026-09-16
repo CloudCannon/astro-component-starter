@@ -2,20 +2,20 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(560);
 
-// Dates in a left column, small dots on one continuous rail — not numbered
-// circles, so it does not read as Steps.
+// Alternating milestones and a centre rail make this read as a timeline,
+// rather than the one-sided numbered Steps component.
 export default preview({
   width: B.w,
   draw: [
-    box(B.left + 132, 18, 2, 268, { fill: line }),
+    box(B.cx - 1, 18, 2, 268, { fill: line }),
     [0, 1, 2].map((i) => {
       const y = i * 124;
 
       return [
-        bar(B.left, y + 8, 88, "label"),
-        box(B.left + 126, y + 12, 14, 14, { r: 7, fill: ink }),
-        bar(B.left + 168, y + 4, 200, "heading"),
-        bar(B.left + 168, y + 40, B.w - 168, "micro"),
+        box(B.cx - 9, y + 8, 18, 18, { r: 9, fill: ink }),
+        i % 2 === 0
+          ? [bar(B.left, y + 4, 180, "heading"), bar(B.left + 76, y + 40, 104, "micro")]
+          : [bar(B.cx + 54, y + 4, 226, "heading"), bar(B.cx + 54, y + 40, 104, "micro")],
       ];
     }),
   ],

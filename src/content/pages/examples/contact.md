@@ -51,4 +51,20 @@ pageSections:
     mapEmbedUrl: ''
     colorScheme: inherit
     backgroundColor: base
+  - _component: page-sections/conversion/newsletter-signup
+    eyebrow: Keep in touch
+    heading: A short note when we publish something useful
+    headingLevel: h2
+    subtext: Studio news, practical site advice, and nothing daily.
+    formAction: ''
+    formMethod: post
+    formName: newsletter
+    emailName: email
+    emailLabel: Email address
+    emailPlaceholder: you@example.com
+    buttonText: Subscribe
+    disclaimer: 'By subscribing, you agree to our [privacy policy](/privacy/).'
+    layout: card
+    colorScheme: inherit
+    backgroundColor: surface
 ---

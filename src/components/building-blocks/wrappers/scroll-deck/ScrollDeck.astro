@@ -1,0 +1,243 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import ScrollDeckCard from "./ScrollDeckCard.astro";
+
+type CardProps = Record<string, unknown>;
+
+const {
+  cards = [],
+  stickyOffset = "md",
+  cardColorScheme = "light",
+  showRail = true,
+  spaceBefore = "default",
+  label,
+  class: className,
+  "data-children-prop": childrenDataProp,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const cardList: CardProps[] = Array.isArray(cards) ? cards : [];
+const deckSlug = slugifyLabel(label || "deck") || "deck";
+const cardId = (index: number) => `${deckSlug}-card-${index + 1}`;
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "cards" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+const hasCards = cardList.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasCards && !hasSlotContent) return;
+---
+
+<div
+  class:list={["scroll-deck", "stackable", className]}
+  {...htmlAttributes}
+>
+  <div
+    class:list={["scroll-deck-layout", `offset-${stickyOffset}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    <div
+      class="scroll-deck-track"
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {
+          cardList.map((card: CardProps, index: number) => (
+            <ScrollDeckCard
+              id={cardId(index)}
+              cardColorScheme={cardColorScheme}
+              aria-label={`Card ${index + 1} of ${cardList.length}`}
+              data-editable="array-item"
+              data-id="building-blocks/wrappers/scroll-deck/scroll-deck-card"
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              {...card}
+            />
+          ))
+        }
+      </slot>
+    </div>
+
+    {
+      showRail && cardList.length > 1 && (
+        <nav
+          class="scroll-deck-rail"
+          aria-label={label ? `${label} cards` : "Cards"}
+        >
+          {cardList.map((_card: CardProps, index: number) => (
+            <a
+              class="scroll-deck-rail-link"
+              href={`#${cardId(index)}`}
+              aria-current={index === 0 ? "true" : undefined}
+            >
+              <span class="scroll-deck-rail-dot" />
+              <span class="visually-hidden">Card {index + 1}</span>
+            </a>
+          ))}
+        </nav>
+      )
+    }
+  </div>
+</div>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllScrollDecks } from "./setup";
+
+  onPageLoad(setupAllScrollDecks);
+</script>
+
+<style is:global>
+  @layer components {
+    .scroll-deck {
+      --deck-offset: var(--spacing-md);
+      --deck-peek: var(--spacing-xl);
+      --deck-entry-gap: var(--spacing-sm);
+      --deck-index: 0;
+      --deck-top: calc(var(--main-nav-height, 0px) + var(--deck-offset));
+      --deck-rail-hit: 24px;
+      --deck-rail-dot: 8px;
+      --deck-covered: 0;
+      --deck-cover-scale: 0.04;
+      --deck-cover-dim: 0.12;
+      --deck-exit-runway: var(--spacing-none);
+
+      position: relative;
+      > .scroll-deck-layout {
+        display: grid;
+        gap: var(--spacing-lg);
+        grid-template-columns: minmax(0, 1fr);
+
+        &.offset-none {
+          --deck-offset: var(--spacing-none);
+        }
+
+        &.offset-sm {
+          --deck-offset: var(--spacing-sm);
+        }
+
+        &.offset-lg {
+          --deck-offset: var(--spacing-lg);
+        }
+      }
+
+      .scroll-deck-track {
+        display: block;
+        padding-block-end: calc((var(--deck-last-index, 0) + 1) * var(--deck-peek));
+      }
+
+      .scroll-deck-track > .scroll-deck-card {
+        display: grid;
+        margin-block-end: calc(
+          var(--spacing-sm) + (var(--deck-last-index, 0) - var(--deck-index)) * var(--deck-peek)
+        );
+        min-block-size: var(--deck-card-height, 0px);
+      }
+
+      .scroll-deck-card > .scroll-deck-card-inner {
+        filter: brightness(calc(1 - var(--deck-covered) * var(--deck-cover-dim)));
+        height: 100%;
+        scale: calc(1 - var(--deck-covered) * var(--deck-cover-scale));
+        transform-origin: top center;
+        transition:
+          filter var(--animation-normal) var(--ease-in-out),
+          scale var(--animation-normal) var(--ease-in-out);
+      }
+
+      .scroll-deck-rail {
+        display: none;
+      }
+
+      @media (min-width: 768px) {
+        --deck-entry-gap: max(
+          var(--spacing-4xl),
+          calc(100dvh - var(--deck-card-height, 0px) - var(--deck-top))
+        );
+        --deck-exit-runway: calc(
+          var(--deck-entry-gap) + (var(--deck-last-index, 0) + 1) * var(--deck-peek)
+        );
+
+        margin-block-end: calc(-1 * var(--deck-exit-runway));
+        z-index: var(--layer-1);
+
+        > .scroll-deck-layout {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .scroll-deck-track > .scroll-deck-card {
+          margin-block-end: calc(
+            var(--deck-entry-gap) + (var(--deck-last-index, 0) - var(--deck-index)) *
+              var(--deck-peek)
+          );
+          position: sticky;
+          top: calc(var(--deck-top) + var(--deck-index) * var(--deck-peek));
+          z-index: var(--deck-index);
+        }
+
+        .scroll-deck-track > .scroll-deck-card:last-child {
+          margin-block-end: var(--deck-entry-gap);
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(2) {
+          --deck-index: 1;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(3) {
+          --deck-index: 2;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(4) {
+          --deck-index: 3;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(5) {
+          --deck-index: 4;
+        }
+
+        .scroll-deck-track > .scroll-deck-card:nth-child(n + 6) {
+          --deck-index: 5;
+        }
+
+        .scroll-deck-rail {
+          align-self: start;
+          display: grid;
+          gap: var(--spacing-xs);
+          justify-items: center;
+          position: sticky;
+          top: calc(50% + var(--main-nav-height, 0px) / 2);
+          transform: translateY(var(--deck-rail-release, 0px));
+          translate: 0 -50%;
+        }
+      }
+
+      .scroll-deck-rail-link {
+        display: grid;
+        height: var(--deck-rail-hit);
+        place-items: center;
+        width: var(--deck-rail-hit);
+
+        > .scroll-deck-rail-dot {
+          background-color: var(--color-border);
+          border-radius: var(--radius-full);
+          height: var(--deck-rail-dot);
+          transition:
+            background-color var(--animation-normal) var(--ease-in-out),
+            scale var(--animation-normal) var(--ease-in-out);
+          width: var(--deck-rail-dot);
+        }
+
+        &[aria-current] > .scroll-deck-rail-dot {
+          background-color: var(--color-brand);
+          scale: 1.5;
+        }
+      }
+    }
+  }
+</style>

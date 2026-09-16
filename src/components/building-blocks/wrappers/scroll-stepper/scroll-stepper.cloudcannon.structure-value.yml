@@ -1,0 +1,112 @@
+label: Scroll Stepper
+icon: view_day
+description: Scrolling messages with media that changes for each step.
+value:
+  _component: building-blocks/wrappers/scroll-stepper
+  label: ""
+  steps:
+    - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+      mediaSections:
+        - _component: building-blocks/core-elements/image
+          source: /src/assets/images/component-docs/sunset.jpg
+          alt: Sun setting over a headland
+          rounded: true
+          aspectRatio: landscape
+      contentSections:
+        - _component: building-blocks/core-elements/simple-text
+          text: Step one
+          size: sm
+        - _component: building-blocks/core-elements/heading
+          text: Build visually
+          level: h3
+          size: lg
+        - _component: building-blocks/core-elements/text
+          text: Start with the pieces of the page and shape the first draft in the editor.
+    - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+      mediaSections:
+        - _component: building-blocks/core-elements/image
+          source: /src/assets/images/component-docs/dunedin-cliff.jpg
+          alt: Sea cliffs above a bay
+          rounded: true
+          aspectRatio: landscape
+      contentSections:
+        - _component: building-blocks/core-elements/simple-text
+          text: Step two
+          size: sm
+        - _component: building-blocks/core-elements/heading
+          text: Make it yours
+          level: h3
+          size: lg
+        - _component: building-blocks/core-elements/text
+          text: Set the brand, arrange the content, and share a preview with the people reviewing it.
+    - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+      mediaSections:
+        - _component: building-blocks/core-elements/image
+          source: /src/assets/images/component-docs/quiet-street.jpg
+          alt: A quiet residential street
+          rounded: true
+          aspectRatio: landscape
+      contentSections:
+        - _component: building-blocks/core-elements/simple-text
+          text: Step three
+          size: sm
+        - _component: building-blocks/core-elements/heading
+          text: Publish with confidence
+          level: h3
+          size: lg
+        - _component: building-blocks/core-elements/text
+          text: Finish the page and ship the same polished experience your reviewers approved.
+  mediaWidth: half
+  reverse: false
+  mediaAspectRatio: none
+  progressStyle: bar
+  stepHeight: content
+  gap: 2xl
+  spaceBefore: default
+preview:
+  text:
+    - Scroll Stepper
+  subtext:
+    - key: label
+  image: public/component-previews/building-blocks/wrappers/scroll-stepper.svg
+  icon: view_day
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/scroll-stepper.svg
+    fit: cover
+picker_preview:
+  text: Scroll Stepper
+  subtext: Scrolling messages with sticky media that changes for each step.
+  image: public/component-previews/building-blocks/wrappers/scroll-stepper.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/scroll-stepper.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/scroll-stepper/scroll-stepper.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
+_structures:
+  scrollStepperSteps:
+    values:
+      - label: Step
+        icon: view_day
+        value:
+          _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+          mediaSections: []
+          contentSections: []
+        preview:
+          text:
+            - Step
+          subtext:
+            - Add content and media
+        _inputs:
+          mediaSections:
+            type: array
+            label: Media
+            comment: Content shown for this scroll state. Narrow layouts place it directly before its matching message.
+            options:
+              structures: _structures.scrollStepperSections
+          contentSections:
+            type: array
+            label: Content
+            comment: The message for this step. It scrolls beside the pinned media on desktop.
+            options:
+              structures: _structures.scrollStepperSections

@@ -1,0 +1,85 @@
+label: Newsletter Signup
+icon: mark_email_read
+description: Email signup form with consent copy and band or card layout.
+value:
+  _component: page-sections/conversion/newsletter-signup
+  sectionLabel: ""
+  eyebrow: Stay in the loop
+  heading: Get useful updates in your inbox
+  headingLevel: h2
+  subtext: Occasional notes, practical ideas, and no clutter.
+  formAction: ""
+  formMethod: post
+  formName: newsletter
+  emailName: email
+  emailLabel: Email address
+  emailPlaceholder: you@example.com
+  buttonText: Subscribe
+  disclaimer: "By subscribing, you agree to our [privacy policy](/privacy/)."
+  layout: band
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 3xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: surface
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    mask: none
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Newsletter Signup
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/conversion/newsletter-signup.svg
+  icon: mark_email_read
+  gallery:
+    image: public/component-previews/page-sections/conversion/newsletter-signup.svg
+    fit: cover
+picker_preview:
+  text: Newsletter Signup
+  subtext: Email signup form with consent copy and band or card layout.
+  image: public/component-previews/page-sections/conversion/newsletter-signup.svg
+  gallery:
+    image: public/component-previews/page-sections/conversion/newsletter-signup.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/newsletter-signup/newsletter-signup.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background-mask.yml
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - formAction
+      - formMethod
+      - formName
+      - emailName
+      - emailLabel
+      - emailPlaceholder
+      - buttonText
+      - disclaimer
+      - layout
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

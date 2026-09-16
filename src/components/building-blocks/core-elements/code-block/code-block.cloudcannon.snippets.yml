@@ -1,0 +1,26 @@
+codeBlock:
+  template: mdx_component
+  inline: false
+  preview:
+    text:
+      - Code Block
+    subtext:
+      - Code tabs
+    image: public/component-previews/building-blocks/core-elements/code-block.svg
+    icon: code
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/code-block.svg
+      fit: cover
+  definitions:
+    component_name: CodeBlock
+    named_args:
+      - editor_key: tabs
+        type: array
+      - editor_key: wrap
+        type: boolean
+        optional: true
+      - editor_key: copyButton
+        type: boolean
+        optional: true
+  _inputs_from_glob:
+    - /src/components/building-blocks/core-elements/code-block/code-block.cloudcannon.inputs.yml

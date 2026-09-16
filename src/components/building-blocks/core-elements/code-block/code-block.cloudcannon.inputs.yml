@@ -1,0 +1,18 @@
+tabs:
+  type: array
+  label: Code tabs
+  comment: One or more code representations. Each tab supplies its own label, code, syntax language, and optional footer context.
+  options:
+    structures: _structures.codeBlockTabs
+wrap:
+  type: switch
+  label: Wrap long lines
+  comment: Wrap long lines instead of scrolling horizontally. Enabled by default.
+copyButton:
+  type: switch
+  label: Show copy button
+  comment: Adds a button with JavaScript that copies the rendered code. Enabled by default.
+lineNumbers:
+  type: switch
+  label: Show line numbers
+  comment: Adds a non-selectable gutter that numbers each code line.

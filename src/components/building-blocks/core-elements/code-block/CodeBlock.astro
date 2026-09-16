@@ -1,0 +1,362 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import Tab from "@component-utils/tabs/Tab.astro";
+import TabPanel from "@component-utils/tabs/TabPanel.astro";
+import Tabs from "@component-utils/tabs/Tabs.astro";
+
+type CodeTab = {
+  label?: string;
+  language?: string;
+  code?: string;
+  filename?: string;
+  description?: string;
+};
+
+const {
+  tabs: rawTabs = [],
+  wrap = true,
+  copyButton = true,
+  lineNumbers = false,
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const tabs = rawTabs as CodeTab[];
+
+const copyLabel = "Copy";
+const copiedLabel = "Copied";
+const copyFailedLabel = "Copy failed";
+const codeBlockId = crypto.randomUUID();
+
+const hasTabs = tabs.length > 0;
+const effectiveTabsDataProp = childrenDataProp ?? (useDefaultEditableBinding ? "tabs" : null);
+const tabsDataAttributes = effectiveTabsDataProp
+  ? { "data-editable": "array", "data-prop": effectiveTabsDataProp }
+  : {};
+const escapeCode = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+if (!hasTabs) return;
+
+let highlightedCodes = tabs.map(() => "");
+
+if (import.meta.env.SSR) {
+  const { codeToHtml } = await import("shiki");
+
+  highlightedCodes = await Promise.all(
+    tabs.map(async (tab) => {
+      const source = tab.code || "";
+
+      if (!source.trim()) return "";
+
+      try {
+        return await codeToHtml(source, {
+          defaultColor: false,
+          lang: (tab.language || tab.label || "text").trim().toLowerCase() || "text",
+          structure: "inline",
+          themes: {
+            light: "github-light",
+            dark: "github-dark",
+          },
+        });
+      } catch {
+        // Keep rendering escaped, readable code when the language is not supported.
+        return "";
+      }
+    })
+  );
+}
+
+const renderedCodes = tabs.map(
+  (tab, index) => highlightedCodes[index] || escapeCode(tab.code || "")
+);
+---
+
+<Tabs
+  class:list={["code-block", "stackable", className]}
+  {...htmlAttributes}
+>
+  <div
+    class:list={["code-block-inner", wrap && "is-wrapped"]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    data-copy-button={copyButton ? "true" : undefined}
+    data-copy-label={copyLabel}
+    data-copied-label={copiedLabel}
+    data-copy-failed-label={copyFailedLabel}
+  >
+    {
+      (hasTabs || copyButton) && (
+        <header class="code-block-header">
+          {hasTabs && (
+            <div class="code-block-tab-scroll">
+              <div
+                class="code-block-tabs"
+                role="tablist"
+                aria-label="Code formats"
+                {...tabsDataAttributes}
+              >
+                {tabs.map((tab, index) => (
+                  <Tab
+                    class="code-block-tab"
+                    id={`${codeBlockId}-tab-${index}`}
+                    controls={`${codeBlockId}-panel-${index}`}
+                    selected={index === 0}
+                    {...(effectiveTabsDataProp ? { "data-editable": "array-item" } : {})}
+                  >
+                    <span
+                      {...(effectiveTabsDataProp
+                        ? { "data-editable": "text", "data-prop": "label" }
+                        : {})}
+                    >
+                      {tab.label || tab.language || `Format ${index + 1}`}
+                    </span>
+                  </Tab>
+                ))}
+              </div>
+            </div>
+          )}
+        </header>
+      )
+    }
+    {
+      tabs.map((tab, index) => {
+        const codeAttributes = effectiveTabsDataProp
+          ? { "data-editable": "text", "data-prop": "code" }
+          : {};
+        const lines = (tab.code || "").split("\n");
+
+        return (
+          <TabPanel
+            class="code-block-panel"
+            element="section"
+            id={`${codeBlockId}-panel-${index}`}
+            labelledBy={`${codeBlockId}-tab-${index}`}
+            selected={index === 0}
+          >
+            <div class:list={["code-block-code", lineNumbers && "has-line-numbers"]}>
+              {lineNumbers && (
+                <ol class="code-block-line-numbers" aria-hidden="true">
+                  {lines.map((_, lineIndex) => <li>{lineIndex + 1}</li>)}
+                </ol>
+              )}
+              <pre>
+                <code
+                  {...codeAttributes}
+                  set:html={renderedCodes[index]}
+                />
+              </pre>
+            </div>
+            {(tab.filename || tab.description) && (
+              <footer class="code-block-context">
+                {tab.filename && <span class="code-block-filename">{tab.filename}</span>}
+                {tab.description && <span class="code-block-description">{tab.description}</span>}
+              </footer>
+            )}
+          </TabPanel>
+        );
+      })
+    }
+    <span
+      class="code-block-status visually-hidden"
+      aria-live="polite"
+    ></span>
+  </div>
+</Tabs>
+
+<style is:global>
+  @layer components {
+    .code-block {
+      > .code-block-inner {
+        background-color: var(--color-bg);
+        border: var(--border-width-sm) solid var(--color-border);
+        border-radius: var(--radius-sm);
+        color: var(--color-text);
+        overflow: hidden;
+      }
+
+      .code-block-header {
+        align-items: stretch;
+        border-block-end: var(--border-width-sm) solid var(--color-border);
+        display: flex;
+        justify-content: space-between;
+        min-height: var(--spacing-2xl);
+        padding-inline: var(--spacing-md);
+      }
+
+      .code-block-tab-scroll {
+        align-items: center;
+        display: flex;
+        min-width: 0;
+        overflow-x: auto;
+      }
+
+      .code-block-tabs {
+        display: flex;
+        gap: var(--spacing-xs);
+        min-width: max-content;
+      }
+
+      .code-block-tab {
+        align-items: center;
+        background-color: transparent;
+        border: none;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        display: inline-flex;
+        font-family: var(--font-mono);
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-tight);
+        padding: var(--spacing-sm);
+        position: relative;
+
+        &::after {
+          background-color: transparent;
+          bottom: 0;
+          content: "";
+          height: var(--border-width-md);
+          inset-inline: var(--spacing-sm);
+          position: absolute;
+        }
+
+        &:hover {
+          color: var(--color-text);
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: calc(var(--focus-ring-width) * -1);
+        }
+
+        &[aria-selected="true"] {
+          color: var(--color-text-strong);
+
+          &::after {
+            background-color: var(--color-text-strong);
+          }
+        }
+      }
+
+      .code-block-copy {
+        align-self: center;
+        flex: none;
+      }
+
+      .code-block-panel[hidden] {
+        display: none;
+      }
+
+      .code-block-code {
+        display: flex;
+        min-width: 0;
+
+        &.has-line-numbers pre {
+          padding-inline-start: var(--spacing-sm);
+        }
+      }
+
+      .code-block-line-numbers {
+        border-inline-end: var(--border-width-sm) solid var(--color-border);
+        color: var(--color-text-muted);
+        flex: none;
+        font-family: var(--font-mono);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        list-style: none;
+        margin: 0;
+        padding: calc(var(--spacing-sm) + var(--spacing-xs)) var(--spacing-sm)
+          calc(var(--spacing-sm) + var(--spacing-xs)) var(--spacing-md);
+        text-align: end;
+        user-select: none;
+      }
+
+      pre {
+        /* Astro preserves formatting whitespace around the nested code element.
+           Collapse that wrapper-only text while code restores its own type scale. */
+        font-size: 0;
+        line-height: 0;
+        margin: 0;
+        min-width: 0;
+        overflow-x: auto;
+        padding: calc(var(--spacing-sm) + var(--spacing-xs)) var(--spacing-md);
+        width: 100%;
+      }
+
+      code {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        tab-size: 2;
+        white-space: pre;
+      }
+
+      [data-theme="light"] & code span {
+        color: color-mix(
+          in srgb,
+          var(--shiki-light, var(--color-text)) 82%,
+          var(--color-text-muted)
+        );
+      }
+
+      [data-theme="dark"] & code span {
+        color: var(--shiki-dark, currentcolor);
+      }
+
+      .code-block-context {
+        align-items: baseline;
+        border-block-start: var(--border-width-sm) solid var(--color-border);
+        color: var(--color-text-muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs) var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+      }
+
+      .code-block-filename {
+        color: var(--color-text);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-xs);
+      }
+
+      .code-block-description {
+        font-family: var(--font-body);
+        font-size: var(--font-size-xs);
+      }
+
+      .is-wrapped pre {
+        overflow-x: visible;
+      }
+
+      .is-wrapped code {
+        overflow-wrap: anywhere;
+        white-space: pre-wrap;
+      }
+
+      @media (width < 640px) {
+        .code-block-header {
+          padding-inline-start: var(--spacing-sm);
+        }
+
+        .code-block-copy {
+          margin-inline-start: var(--spacing-sm);
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllCodeBlocks } from "./setup";
+
+  onPageLoad(() => setupAllCodeBlocks());
+</script>

@@ -2,21 +2,21 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(760);
 
-// Same vertical rail as the wrapper, plus a heading bar so the page section
-// does not twin the wrapper tile.
+// A split rail beneath section chrome keeps the section distinct from the
+// wrapper and makes the responsive alternate layout visible in the picker.
 export default preview({
   width: B.w,
   draw: [
-    bar(B.left + 140, 0, 480, "heading"),
-    box(B.left + 148, 86, 2, 268, { fill: line }),
+    bar(B.left, 0, B.w, "heading"),
+    box(B.cx - 1, 86, 2, 268, { fill: line }),
     [0, 1, 2].map((i) => {
       const y = 68 + i * 124;
 
       return [
-        bar(B.left, y + 8, 100, "label"),
-        box(B.left + 142, y + 12, 14, 14, { r: 7, fill: ink }),
-        bar(B.left + 184, y + 4, 280, "heading"),
-        bar(B.left + 184, y + 40, B.w - 184, "micro"),
+        box(B.cx - 9, y + 8, 18, 18, { r: 9, fill: ink }),
+        i % 2 === 0
+          ? [bar(B.left, y + 4, 260, "heading"), bar(B.left + 150, y + 40, 110, "micro")]
+          : [bar(B.cx + 54, y + 4, 326, "heading"), bar(B.cx + 54, y + 40, 110, "micro")],
       ];
     }),
   ],

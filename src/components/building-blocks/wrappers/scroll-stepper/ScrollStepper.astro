@@ -1,0 +1,478 @@
+---
+import Component from "@component-utils/renderBlock.astro";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import type { ContentBlock } from "../../../../types";
+import ScrollStepperStep from "./ScrollStepperStep.astro";
+
+type StepProps = Record<string, unknown> & {
+  mediaSections?: unknown;
+  contentSections?: unknown;
+};
+
+const {
+  steps = [],
+  contentSections = [],
+  mediaWidth = "half",
+  reverse = false,
+  mediaAspectRatio = "none",
+  progressStyle = "bar",
+  stepHeight = "content",
+  gap = "2xl",
+  spaceBefore = "default",
+  label,
+  class: className,
+  "data-children-prop": childrenDataProp,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) htmlAttributes.id = slugifyLabel(label);
+
+const stepList: StepProps[] = Array.isArray(steps) ? steps : [];
+const wrapperContentBlocks: ContentBlock[] = Array.isArray(contentSections) ? contentSections : [];
+const sectionBlocks = (sections: unknown): ContentBlock[] =>
+  Array.isArray(sections) ? sections : [];
+const stepContent = (step: StepProps, index: number): ContentBlock[] => {
+  const stepBlocks = sectionBlocks(step.contentSections);
+
+  return stepBlocks.length || index !== 0 ? stepBlocks : wrapperContentBlocks;
+};
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "steps" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+const hasSteps = stepList.length > 0;
+
+if (!_component && !hasSteps) return;
+---
+
+<div
+  class:list={[
+    "scroll-stepper",
+    "stackable",
+    `progress-${progressStyle}`,
+    className,
+  ]}
+  {...htmlAttributes}
+>
+  <div
+    class:list={[
+      "scroll-stepper-scenes",
+      `media-${mediaWidth}`,
+      `aspect-${mediaAspectRatio}`,
+      `gap-${gap}`,
+      { reversed: reverse },
+    ]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    <div class="scroll-stepper-layout">
+      <div class="scroll-stepper-media">
+        <div class="scroll-stepper-media-panels">
+          {
+            stepList.map((step: StepProps, index: number) => (
+              <div
+                class="scroll-stepper-media-panel"
+                data-index={index}
+              >
+                <div class="scroll-stepper-media-content flow">
+                  <Component contentSections={sectionBlocks(step.mediaSections)} />
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        {
+          progressStyle === "bar" && (
+            <div
+              class="scroll-stepper-progress"
+              aria-hidden="true"
+            >
+              <span class="scroll-stepper-progress-fill" />
+            </div>
+          )
+        }
+        {
+          progressStyle === "dots" && (
+            <div
+              class="scroll-stepper-progress-dots"
+              aria-hidden="true"
+            >
+              {stepList.map((_step, index) => (
+                <span
+                  class="scroll-stepper-progress-dot"
+                  data-index={index}
+                />
+              ))}
+            </div>
+          )
+        }
+      </div>
+      <div
+        class:list={["scroll-stepper-steps", `height-${stepHeight}`]}
+        {...arrayDataAttributes}
+      >
+        {
+          stepList.map((step: StepProps, index: number) => (
+            <ScrollStepperStep
+              mediaSections={sectionBlocks(step.mediaSections)}
+              contentSections={stepContent(step, index)}
+              aria-label={`Step ${index + 1} of ${stepList.length}`}
+              data-index={index}
+              data-editable="array-item"
+              data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+            />
+          ))
+        }
+      </div>
+    </div>
+    <div
+      class="scroll-stepper-mobile-steps"
+      {...arrayDataAttributes}
+    >
+      {
+        stepList.map((step: StepProps, index: number) => (
+          <div
+            class="scroll-stepper-mobile-step"
+            data-editable="array-item"
+            data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
+          >
+            <div class="scroll-stepper-mobile-media flow">
+              <div class="scroll-stepper-media-content">
+                <Component contentSections={sectionBlocks(step.mediaSections)} />
+              </div>
+            </div>
+            <ScrollStepperStep
+              contentSections={stepContent(step, index)}
+              aria-label={`Step ${index + 1} of ${stepList.length}`}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .scroll-stepper {
+      --scroll-stepper-columns: 1fr 1fr;
+      --scroll-stepper-gap: var(--spacing-2xl);
+      --scroll-stepper-panel-aspect-ratio: auto;
+      --scroll-stepper-progress-height: var(--border-width-lg);
+      --scroll-stepper-dot-size: 8px;
+      --scroll-stepper-content-transition-duration: var(--animation-normal);
+      --scroll-stepper-media-transition-duration: 1s;
+
+      container-type: inline-size;
+      min-width: 0;
+
+      > .scroll-stepper-scenes.media-wide {
+        --scroll-stepper-columns: 3fr 2fr;
+      }
+
+      > .scroll-stepper-scenes.media-narrow {
+        --scroll-stepper-columns: 2fr 3fr;
+      }
+
+      > .scroll-stepper-scenes.gap-none {
+        --scroll-stepper-gap: var(--spacing-none);
+      }
+
+      > .scroll-stepper-scenes.gap-xs {
+        --scroll-stepper-gap: var(--spacing-xs);
+      }
+
+      > .scroll-stepper-scenes.gap-sm {
+        --scroll-stepper-gap: var(--spacing-sm);
+      }
+
+      > .scroll-stepper-scenes.gap-md {
+        --scroll-stepper-gap: var(--spacing-md);
+      }
+
+      > .scroll-stepper-scenes.gap-lg {
+        --scroll-stepper-gap: var(--spacing-lg);
+      }
+
+      > .scroll-stepper-scenes.gap-xl {
+        --scroll-stepper-gap: var(--spacing-xl);
+      }
+
+      > .scroll-stepper-scenes.gap-3xl {
+        --scroll-stepper-gap: var(--spacing-3xl);
+      }
+
+      > .scroll-stepper-scenes.aspect-square {
+        --scroll-stepper-panel-aspect-ratio: 1;
+      }
+
+      > .scroll-stepper-scenes.aspect-landscape {
+        --scroll-stepper-panel-aspect-ratio: 4 / 3;
+      }
+
+      > .scroll-stepper-scenes.aspect-portrait {
+        --scroll-stepper-panel-aspect-ratio: 3 / 4;
+      }
+
+      > .scroll-stepper-scenes.aspect-widescreen {
+        --scroll-stepper-panel-aspect-ratio: 16 / 9;
+      }
+
+      > .scroll-stepper-scenes > .scroll-stepper-layout {
+        --scroll-stepper-layout-mode: split;
+
+        display: grid;
+        gap: var(--scroll-stepper-gap);
+        grid-template-columns: var(--scroll-stepper-columns);
+        min-width: 0;
+      }
+
+      > .scroll-stepper-scenes.reversed .scroll-stepper-layout > .scroll-stepper-media {
+        order: 2;
+      }
+
+      .scroll-stepper-media,
+      .scroll-stepper-steps {
+        align-self: start;
+        min-width: 0;
+      }
+
+      .scroll-stepper-media {
+        display: grid;
+        gap: var(--spacing-lg);
+      }
+
+      .scroll-stepper-media-panels {
+        display: grid;
+      }
+
+      .scroll-stepper-mobile-steps {
+        display: none;
+      }
+
+      &:not([data-scroll-stepper-initialized]) .scroll-stepper-media-panel {
+        grid-area: auto;
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+      }
+
+      .scroll-stepper-media-content {
+        aspect-ratio: var(--scroll-stepper-panel-aspect-ratio);
+        min-width: 0;
+      }
+
+      .scroll-stepper-step {
+        align-content: center;
+        display: grid;
+      }
+
+      .scroll-stepper-steps.height-screen > .scroll-stepper-step {
+        align-content: end;
+        min-height: var(
+          --scroll-stepper-viewport-height,
+          calc(100dvh - var(--main-nav-height, 0px))
+        );
+        padding-block-end: max(
+          var(--spacing-2xl),
+          calc(var(--scroll-stepper-viewport-height, 100dvh) * 0.1)
+        );
+      }
+
+      .scroll-stepper-steps.height-content > .scroll-stepper-step {
+        min-height: 20dvh;
+      }
+
+      .scroll-stepper-progress {
+        background-color: var(--color-border);
+        border-radius: var(--radius-full);
+        height: var(--scroll-stepper-progress-height);
+        overflow: hidden;
+      }
+
+      .scroll-stepper-progress-fill {
+        background-color: var(--color-brand);
+        display: block;
+        height: 100%;
+        transform: scaleX(var(--scroll-stepper-progress, 0));
+        transition: transform var(--animation-normal) var(--ease-in-out);
+        transform-origin: left;
+      }
+
+      .scroll-stepper-progress-dots {
+        display: flex;
+        gap: var(--spacing-xs);
+        justify-content: center;
+      }
+
+      .scroll-stepper-progress-dot {
+        background-color: var(--color-border);
+        border-radius: var(--radius-full);
+        height: var(--scroll-stepper-dot-size);
+        transition:
+          background-color var(--scroll-stepper-content-transition-duration) var(--ease-smooth);
+        width: var(--scroll-stepper-dot-size);
+
+        &[data-active] {
+          background-color: var(--color-brand);
+        }
+      }
+
+      &[data-scroll-stepper-initialized] {
+        .scroll-stepper-media {
+          position: sticky;
+          top: var(
+            --scroll-stepper-sticky-top,
+            calc(50% + var(--main-nav-height, 0px) / 2)
+          );
+          translate: var(--scroll-stepper-sticky-translate, 0 -50%);
+        }
+
+        .scroll-stepper-step {
+          opacity: 0;
+          pointer-events: none;
+          transition:
+            opacity var(--scroll-stepper-content-transition-duration) var(--ease-smooth),
+            visibility 0s linear var(--scroll-stepper-content-transition-duration);
+          visibility: hidden;
+
+          &[data-active] {
+            opacity: 1;
+            pointer-events: auto;
+            transition-delay: 0s, 0s;
+            visibility: visible;
+          }
+        }
+
+        .scroll-stepper-steps {
+          padding-block-start: var(--scroll-stepper-content-offset, 0px);
+          padding-block-end: var(--scroll-stepper-trailing-runway, 0px);
+        }
+
+        .scroll-stepper-media-panel {
+          grid-area: 1 / 1;
+          opacity: 0;
+          pointer-events: none;
+          transition:
+            opacity var(--scroll-stepper-media-transition-duration) var(--ease-smooth),
+            visibility 0s linear var(--scroll-stepper-media-transition-duration);
+          visibility: hidden;
+
+          &[data-active] {
+            opacity: 1;
+            pointer-events: auto;
+            transition-delay: 0s, 0s;
+            visibility: visible;
+          }
+        }
+      }
+
+      @container (max-width: 640px) {
+        > .scroll-stepper-scenes > .scroll-stepper-layout {
+          display: none;
+        }
+
+        > .scroll-stepper-scenes > .scroll-stepper-mobile-steps {
+          display: grid;
+          gap: var(--spacing-4xl);
+        }
+
+        .scroll-stepper-mobile-step {
+          display: grid;
+          gap: var(--spacing-lg);
+        }
+
+        > .scroll-stepper-scenes > .scroll-stepper-layout {
+          --scroll-stepper-layout-mode: stack;
+
+          gap: var(--spacing-lg);
+          grid-template-columns: 1fr;
+        }
+
+        > .scroll-stepper-scenes.reversed .scroll-stepper-layout > .scroll-stepper-media {
+          order: initial;
+        }
+
+        .scroll-stepper-media,
+        .scroll-stepper-steps {
+          position: static;
+          translate: none;
+        }
+
+        .scroll-stepper-progress,
+        .scroll-stepper-progress-dots {
+          display: none;
+        }
+
+        &[data-scroll-stepper-initialized] .scroll-stepper-media-panel {
+          grid-area: auto;
+          opacity: 1;
+          pointer-events: auto;
+          visibility: visible;
+        }
+
+        .scroll-stepper-steps > .scroll-stepper-step + .scroll-stepper-step {
+          margin-block-start: var(--spacing-4xl);
+        }
+      }
+
+      @media (max-width: 767px) {
+        > .scroll-stepper-scenes > .scroll-stepper-layout {
+          display: none;
+        }
+
+        > .scroll-stepper-scenes > .scroll-stepper-mobile-steps {
+          display: grid;
+          gap: var(--spacing-4xl);
+        }
+
+        .scroll-stepper-mobile-step {
+          display: grid;
+          gap: var(--spacing-lg);
+        }
+
+        > .scroll-stepper-scenes > .scroll-stepper-layout {
+          gap: var(--spacing-lg);
+          grid-template-columns: 1fr;
+        }
+
+        > .scroll-stepper-scenes.reversed .scroll-stepper-layout > .scroll-stepper-media {
+          order: initial;
+        }
+
+        .scroll-stepper-media,
+        .scroll-stepper-steps {
+          position: static;
+          translate: none;
+        }
+
+        .scroll-stepper-progress,
+        .scroll-stepper-progress-dots {
+          display: none;
+        }
+
+        &[data-scroll-stepper-initialized] .scroll-stepper-media-panel {
+          grid-area: auto;
+          opacity: 1;
+          pointer-events: auto;
+          visibility: visible;
+        }
+
+        .scroll-stepper-steps > .scroll-stepper-step + .scroll-stepper-step {
+          margin-block-start: var(--spacing-4xl);
+        }
+      }
+    }
+  }
+</style>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllScrollSteppers } from "./setup";
+
+  onPageLoad(() => setupAllScrollSteppers());
+</script>

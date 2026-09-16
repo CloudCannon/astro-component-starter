@@ -1,0 +1,225 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Button from "@core-elements/button/Button.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import { renderMarkdownInline } from "@component-utils/markdown";
+import { slugifyLabel } from "@component-utils/slugify";
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  formAction = "",
+  formMethod = "post",
+  formName = "newsletter",
+  emailName = "email",
+  emailLabel = "Email address",
+  emailPlaceholder = "you@example.com",
+  buttonText = "Subscribe",
+  disclaimer = "",
+  layout = "band",
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "3xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "surface",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const isCard = layout === "card";
+const emailId = `${slugifyLabel(formName || sectionLabel || "newsletter")}-email`;
+---
+
+<CustomSection
+  class:list={["newsletter-signup", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <div
+    class="newsletter-signup-panel"
+    data-layout={layout}
+  >
+    <div class="newsletter-signup-copy">
+      <SimpleText
+        alignmentHorizontal={isCard ? "center" : "start"}
+        class="eyebrow"
+        data-prop="eyebrow"
+        text={eyebrow}
+        size="sm"
+      />
+      <Heading
+        alignmentHorizontal={isCard ? "center" : "start"}
+        level={headingLevel}
+        size="md"
+        data-prop="heading"
+      >
+        {heading}
+      </Heading>
+      <Text
+        alignmentHorizontal={isCard ? "center" : "start"}
+        class="newsletter-signup-subtext"
+        data-prop="subtext"
+        text={subtext}
+      />
+    </div>
+    <form
+      class="newsletter-signup-form"
+      action={formAction || undefined}
+      method={formMethod}
+      name={formName}
+    >
+      <label
+        class="visually-hidden"
+        for={emailId}
+        data-prop="emailLabel"
+      >
+        {emailLabel}
+      </label>
+      <input
+        id={emailId}
+        type="email"
+        name={emailName}
+        placeholder={emailPlaceholder}
+        autocomplete="email"
+        required
+        data-prop="emailPlaceholder"
+      />
+      <Button
+        element="button"
+        type="submit"
+        text={buttonText}
+        variant="primary"
+        size="md"
+        data-prop="buttonText"
+      />
+      {
+        disclaimer && (
+          <p
+            class="newsletter-signup-disclaimer"
+            data-prop="disclaimer"
+          >
+            <Fragment set:html={renderMarkdownInline(disclaimer)} />
+          </p>
+        )
+      }
+    </form>
+  </div>
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .newsletter-signup {
+      .newsletter-signup-panel {
+        background-color: var(--color-bg-surface);
+        border: var(--border-width-sm) solid var(--color-border);
+        border-radius: var(--radius-md);
+        display: grid;
+        gap: var(--spacing-xl);
+        padding: var(--spacing-xl);
+      }
+
+      .newsletter-signup-copy {
+        min-width: 0;
+      }
+
+      .newsletter-signup-subtext {
+        --space-before: var(--spacing-sm);
+      }
+
+      .newsletter-signup-form {
+        display: grid;
+        gap: var(--spacing-sm);
+        min-width: 0;
+      }
+
+      .newsletter-signup-form input {
+        background-color: var(--color-bg);
+        border: var(--border-width-sm) solid var(--color-border-inputs);
+        border-radius: var(--radius-xs);
+        color: var(--color-text);
+        font: inherit;
+        min-width: 0;
+        padding-block: var(--spacing-em-sm);
+        padding-inline: var(--spacing-em-sm);
+        width: 100%;
+
+        &::placeholder {
+          color: var(--color-text-muted);
+        }
+
+        &:focus-visible {
+          border-color: var(--color-brand);
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      .newsletter-signup-form > .button {
+        align-self: stretch;
+      }
+
+      .newsletter-signup-form > .button > .button-inner {
+        width: 100%;
+      }
+
+      .newsletter-signup-disclaimer {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-normal);
+        margin: var(--spacing-xs) 0 0;
+      }
+
+      .newsletter-signup-disclaimer a {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+      }
+
+      .newsletter-signup-panel[data-layout="card"] {
+        margin-inline: auto;
+        max-width: var(--content-width-md);
+        text-align: center;
+      }
+
+      @media (width >= 640px) {
+        .newsletter-signup-panel[data-layout="band"] {
+          align-items: center;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+
+        .newsletter-signup-panel[data-layout="band"] .newsletter-signup-form {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .newsletter-signup-panel[data-layout="band"] .newsletter-signup-disclaimer {
+          grid-column: 1 / -1;
+        }
+
+        .newsletter-signup-panel[data-layout="card"] .newsletter-signup-form {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .newsletter-signup-panel[data-layout="card"] .newsletter-signup-disclaimer {
+          grid-column: 1 / -1;
+        }
+      }
+    }
+  }
+</style>

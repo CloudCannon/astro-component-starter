@@ -1,0 +1,32 @@
+---
+import Card from "@wrappers/card/Card.astro";
+
+const {
+  label: _label = "",
+  contentSections,
+  cardColorScheme = "light",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<article
+  class:list={["scroll-deck-card", className]}
+  {...htmlAttributes}
+>
+  <Card
+    class="scroll-deck-card-inner"
+    rounded={true}
+    border={true}
+    backgroundColor="surface"
+    colorScheme={cardColorScheme}
+    lockColorScheme={cardColorScheme !== "inherit"}
+    paddingHorizontal="xl"
+    paddingVertical="xl"
+    spaceBefore="none"
+    contentSections={contentSections}
+    data-children-prop="contentSections"
+  />
+</article>

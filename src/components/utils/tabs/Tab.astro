@@ -1,0 +1,25 @@
+---
+const {
+  id,
+  controls,
+  selected = false,
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component: _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<button
+  class:list={["tab", className]}
+  type="button"
+  role="tab"
+  id={id}
+  aria-controls={controls}
+  aria-selected={selected ? "true" : "false"}
+  tabindex={selected ? "0" : "-1"}
+  data-tab
+  {...htmlAttributes}
+>
+  <slot />
+</button>

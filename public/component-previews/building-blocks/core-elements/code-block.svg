@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-code-block">
+  <title id="t-code-block">Code block component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 249)">
+    <rect x="260" y="0" width="760" height="222" rx="10" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="286" y="18" width="56" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="366" y="18" width="48" height="8" rx="4" fill="var(--pv-subject, #A8A398)" opacity="0.55"/>
+    <rect x="942" y="18" width="48" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="260" y="46" width="760" height="2" rx="1" fill="var(--pv-line, #E4E1DA)"/>
+    <rect x="286" y="44" width="56" height="4" rx="1" fill="var(--pv-ink, #151515)"/>
+    <rect x="288" y="78" width="220" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="312" y="108" width="206" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="312" y="138" width="318" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="288" y="168" width="34" height="12" rx="6" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="260" y="190" width="760" height="2" rx="1" fill="var(--pv-line, #E4E1DA)"/>
+    <rect x="288" y="202" width="202" height="8" rx="4" fill="var(--pv-subject, #A8A398)"/>
+  </g>
+</svg>

@@ -1,0 +1,107 @@
+label: Scroll Deck
+icon: layers
+description: Equal-height cards that pin and stack as their wrapper scrolls.
+value:
+  _component: building-blocks/wrappers/scroll-deck
+  label: ""
+  cards:
+    - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+      label: Build
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Build the page from blocks
+          level: h3
+          size: xl
+        - _component: building-blocks/core-elements/text
+          text: Every section in the library is a block an editor can drop in, reorder, and fill.
+        - _component: building-blocks/wrappers/button-group
+          buttonSections:
+            - _component: building-blocks/core-elements/button
+              text: See the library
+              link: /component-docs/
+              variant: primary
+    - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+      label: Brand
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Set the brand in one file
+          level: h3
+          size: xl
+        - _component: building-blocks/core-elements/text
+          text: Colors, type and spacing are tokens. Change them once and every block follows.
+        - _component: building-blocks/wrappers/button-group
+          buttonSections:
+            - _component: building-blocks/core-elements/button
+              text: Read about theming
+              link: /component-docs/
+              variant: secondary
+    - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+      label: Ship
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Hand it over and ship
+          level: h3
+          size: xl
+        - _component: building-blocks/core-elements/text
+          text: The team edits real pages in the browser, inside the guardrails you shipped.
+        - _component: building-blocks/wrappers/button-group
+          buttonSections:
+            - _component: building-blocks/core-elements/button
+              text: Get started
+              link: /
+              variant: primary
+  stickyOffset: md
+  cardColorScheme: light
+  showRail: true
+  spaceBefore: default
+preview:
+  text:
+    - Scroll Deck
+  subtext:
+    - key: label
+  image: public/component-previews/building-blocks/wrappers/scroll-deck.svg
+  icon: layers
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/scroll-deck.svg
+    fit: cover
+picker_preview:
+  text: Scroll Deck
+  subtext: Equal-height cards that pin and stack as the wrapper scrolls.
+  image: public/component-previews/building-blocks/wrappers/scroll-deck.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/scroll-deck.svg
+    fit: cover
+_structures:
+  scrollDeckCards:
+    values:
+      - label: Deck card
+        icon: layers
+        value:
+          _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+          label: Card
+          contentSections:
+            - _component: building-blocks/core-elements/heading
+              text: Card heading
+              level: h3
+              size: xl
+            - _component: building-blocks/core-elements/text
+              text: Every card matches the tallest card in the deck.
+        preview:
+          text:
+            - key: label
+            - Deck card
+        _inputs:
+          label:
+            type: text
+            comment: Names the card in the editor and in the array preview. Not rendered on the page.
+          contentSections:
+            type: array
+            label: Card content
+            comment: Blocks shown inside this card.
+            options:
+              structures: _structures.deckCardSections
+        _structures_from_glob:
+          - /.cloudcannon/structures/deckCardSections.cloudcannon.structures.yml
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/scroll-deck/scroll-deck.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

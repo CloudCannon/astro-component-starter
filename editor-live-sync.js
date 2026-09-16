@@ -26,10 +26,6 @@ import {
   setupImageCarousel,
 } from "./src/components/building-blocks/wrappers/image-carousel/setup";
 import {
-  setupAllContentSelectors,
-  setupContentSelector,
-} from "./src/components/building-blocks/wrappers/content-selector/setup";
-import {
   setupAllModals,
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
@@ -39,6 +35,9 @@ import {
 } from "./src/components/building-blocks/wrappers/video-modal/setup";
 import { setupAllForms, setupForm } from "./src/components/building-blocks/forms/form/setup";
 import { setupAllVideos } from "./src/components/building-blocks/core-elements/video/setup";
+import { setupAllCodeBlocks } from "./src/components/building-blocks/core-elements/code-block/setup";
+import { setupAllScrollSteppers } from "./src/components/building-blocks/wrappers/scroll-stepper/setup";
+import { setupAllTabs } from "./src/components/utils/tabs/setup";
 import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
 import { setupAllTocs, setupToc } from "./src/components/navigation/toc/setup";
@@ -53,11 +52,7 @@ import {
 import {
   setupAllScrollDecks,
   setupScrollDeck,
-} from "./src/components/page-sections/builders/scroll-deck/setup";
-import {
-  setupAllScrollSteppers,
-  setupScrollStepper,
-} from "./src/components/page-sections/explainers/scroll-stepper/setup";
+} from "./src/components/building-blocks/wrappers/scroll-deck/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -278,37 +273,6 @@ function initNewComponents(root) {
     setupForm(el);
   }
 
-  const newContentSelectors = [];
-
-  if (root.classList?.contains("content-selector-items")) {
-    newContentSelectors.push(root);
-  }
-
-  root.querySelectorAll(".content-selector-items").forEach((el) => newContentSelectors.push(el));
-
-  for (const el of newContentSelectors) {
-    log("initialising new content selector", el);
-    setupContentSelector(el);
-  }
-
-  const newScrollSteppers = [];
-
-  if (
-    root.classList?.contains("scroll-stepper") &&
-    !root.hasAttribute("data-scroll-stepper-initialized")
-  ) {
-    newScrollSteppers.push(root);
-  }
-
-  root
-    .querySelectorAll(".scroll-stepper:not([data-scroll-stepper-initialized])")
-    .forEach((el) => newScrollSteppers.push(el));
-
-  for (const el of newScrollSteppers) {
-    log("initialising new scroll stepper", el);
-    setupScrollStepper(el);
-  }
-
   const newScrollDecks = [];
 
   if (
@@ -328,6 +292,9 @@ function initNewComponents(root) {
   }
 
   setupAllVideos(root);
+  setupAllTabs(root);
+  setupAllCodeBlocks(root);
+  setupAllScrollSteppers(root);
 }
 
 const observer = new MutationObserver((mutations) => {
@@ -408,10 +375,11 @@ setupAllSearch();
 setupAllTocs();
 setupAllGalleries();
 setupAllMasonry();
-setupAllContentSelectors();
 setupAllScrollDecks();
-setupAllScrollSteppers();
 setupAllVideos();
+setupAllTabs();
+setupAllCodeBlocks();
+setupAllScrollSteppers();
 setupAllForms();
 
 log("observer active", {

@@ -28,6 +28,8 @@ const LAYOUT_WRAPPERS = [
   "grid",
   "image-carousel",
   "masonry",
+  "scroll-deck",
+  "scroll-stepper",
   "split",
   "stack",
 ];
@@ -49,6 +51,7 @@ const WIDE = [
   "carouselSections",
   "contentSelectorSections",
   "deckCardSections",
+  "scrollStepperSections",
 ];
 const NARROW = [
   "cardSections",
@@ -75,6 +78,8 @@ const CHILD_CONTEXT = {
   grid: "gridItemSections",
   "image-carousel": null,
   masonry: "masonryItemSections",
+  "scroll-deck": "deckCardSections",
+  "scroll-stepper": "scrollStepperSections",
   modal: null,
   split: "splitSections",
   stack: "stackSections",

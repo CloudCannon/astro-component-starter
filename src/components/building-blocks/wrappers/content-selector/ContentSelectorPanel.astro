@@ -1,6 +1,8 @@
 ---
 import RenderBlock from "@component-utils/renderBlock.astro";
 import { slugifyLabel } from "@component-utils/slugify";
+import Tab from "@component-utils/tabs/Tab.astro";
+import TabPanel from "@component-utils/tabs/TabPanel.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 
@@ -11,7 +13,7 @@ const {
   iconColor,
   contentSections,
   useDefaultEditableBinding = false,
-  checked = false,
+  selected = false,
   groupName = "content-selector-tabs",
   navigationPosition = "start",
   class: className,
@@ -23,7 +25,6 @@ const {
 } = Astro.props;
 
 const uniqueId = title ? `${groupName}-${slugifyLabel(title)}` : crypto.randomUUID();
-const tabId = `tab-${uniqueId}`;
 const panelId = `panel-${uniqueId}`;
 const tabLabelId = `tablabel-${uniqueId}`;
 
@@ -45,22 +46,11 @@ const subtextDataAttributes = effectiveSubtextProp
   class:list={["content-selector-item", className]}
   {...htmlAttributes}
 >
-  <input
-    type="radio"
-    name={groupName}
-    id={tabId}
-    class="content-selector-input"
-    checked={checked}
-    autocomplete="off"
-  />
-  <label
+  <Tab
     class="content-selector-tab"
     id={tabLabelId}
-    for={tabId}
-    role="button"
-    aria-controls={panelId}
-    aria-expanded={checked ? "true" : "false"}
-    tabindex="0"
+    controls={panelId}
+    selected={selected}
   >
     {
       /* `level="span"`, not a real heading: a tab label is not a section title,
@@ -95,13 +85,12 @@ const subtextDataAttributes = effectiveSubtextProp
       class="content-selector-tab-chevron"
       aria-hidden="true"
     />
-  </label>
-  <div
+  </Tab>
+  <TabPanel
     class="content-selector-panel"
     id={panelId}
-    role="region"
-    aria-labelledby={tabLabelId}
-    aria-hidden={checked ? "false" : "true"}
+    labelledBy={tabLabelId}
+    selected={selected}
   >
     <div
       class="content-selector-panel-content flow"
@@ -118,7 +107,7 @@ const subtextDataAttributes = effectiveSubtextProp
         }
       </slot>
     </div>
-  </div>
+  </TabPanel>
 </div>
 
 <style is:global>
@@ -142,10 +131,6 @@ const subtextDataAttributes = effectiveSubtextProp
       > * {
         pointer-events: auto;
       }
-    }
-
-    .content-selector-input {
-      display: none;
     }
 
     .content-selector-tab {
@@ -197,18 +182,18 @@ const subtextDataAttributes = effectiveSubtextProp
       transition: transform var(--animation-normal) var(--ease-out);
     }
 
-    .content-selector-input:checked + .content-selector-tab::before {
+    .content-selector-tab[aria-selected="true"]::before {
       background: var(--color-border-strong);
-    }
-
-    .content-selector-input:checked + .content-selector-tab + .content-selector-panel {
-      display: block;
     }
 
     .content-selector-panel {
       animation: fade-in var(--animation-slow) var(--ease-in-out) forwards;
       container-type: inline-size;
-      display: none;
+      display: block;
+
+      &[hidden] {
+        display: none;
+      }
     }
   }
 </style>

@@ -1,0 +1,76 @@
+label: Code Block
+icon: code
+description: Tabbed, syntax-highlighted code with optional line numbers, a compact copy action, and footer context.
+value:
+  _component: building-blocks/core-elements/code-block
+  tabs:
+    - label: HTML
+      language: HTML
+      code: |-
+        <img
+          src="/images/workshop.jpg"
+          alt="A woodworker shaping a chair leg"
+        />
+      filename: workshop.html
+      description: A semantic image with alternative text.
+  wrap: true
+  copyButton: true
+  lineNumbers: false
+preview:
+  text:
+    - Code Block
+  subtext:
+    - key: text
+  image: public/component-previews/building-blocks/core-elements/code-block.svg
+  icon: extension
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/code-block.svg
+    fit: cover
+picker_preview:
+  text: Code Block
+  subtext: Tabbed, escaped code with optional line numbers and a copy button.
+  image: public/component-previews/building-blocks/core-elements/code-block.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/code-block.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/code-block/code-block.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
+_structures:
+  codeBlockTabs:
+    values:
+      - label: Code tab
+        icon: code
+        value:
+          label: HTML
+          language: HTML
+          code: |-
+            <img
+              src="/images/workshop.jpg"
+              alt="A woodworker shaping a chair leg"
+            />
+          filename: workshop.html
+          description: A semantic image with alternative text.
+        preview:
+          text:
+            - key: label
+            - Code tab
+          subtext:
+            - key: filename
+            - Add a filename or description
+        _inputs:
+          label:
+            type: text
+            comment: The tab control label, such as YAML, JSON, Astro, or React.
+          language:
+            type: text
+            comment: Syntax-highlighting grammar for this tab, such as HTML, YAML, JSON, or JavaScript.
+          code:
+            type: code
+            comment: Escaped code shown when this tab is active.
+          filename:
+            type: text
+            comment: Optional technical filename shown in the footer.
+          description:
+            type: text
+            comment: Optional plain-language context shown in the footer.

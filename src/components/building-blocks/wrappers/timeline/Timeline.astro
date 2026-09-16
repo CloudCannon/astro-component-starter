@@ -10,6 +10,7 @@ type EntryProps = {
   date?: string;
   title?: string;
   body?: string;
+  iconName?: string;
 };
 
 const {
@@ -40,12 +41,13 @@ const arrayDataAttributes = effectiveChildrenProp
 const hasEntries = entries?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const isHorizontal = layout === "horizontal";
+const isSplit = layout === "split";
 // Grouped entries sit under the year heading, so they take the level below it.
 const YearTag = "h3";
 const entryHeadingLevel = nextHeadingLevel(YearTag);
 
 const isGrouped =
-  !isHorizontal && entries?.some((entry: EntryProps) => isNonEmptyString(entry.year));
+  !isHorizontal && !isSplit && entries?.some((entry: EntryProps) => isNonEmptyString(entry.year));
 
 type YearGroup = { year: string; entries: EntryProps[] };
 
@@ -96,6 +98,25 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           </slot>
         </ol>
       </div>
+    ) : isSplit ? (
+      <ol
+        role="list"
+        class="timeline-list timeline-split"
+        data-space-before={spaceBeforeAttr(spaceBefore)}
+        {...arrayDataAttributes}
+      >
+        <slot>
+          {entries?.map((entry: EntryProps) => (
+            <TimelineItem
+              layout={layout}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              data-editable="array-item"
+              data-id="building-blocks/wrappers/timeline/timeline-item"
+              {...entry}
+            />
+          ))}
+        </slot>
+      </ol>
     ) : isGrouped ? (
       <ol
         role="list"
@@ -356,6 +377,114 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         @media (width < 640px) {
           .timeline-group {
             grid-template-columns: 1fr;
+          }
+        }
+      }
+
+      /* Split is a separate rendered branch rather than a class on the editor
+         region root. Entries remain one chronological list; CSS alternates the
+         visual side and collapses to one rail without changing DOM order. */
+      &:has(> .timeline-split) {
+        --timeline-split-marker: 2.75rem;
+
+        .timeline-split {
+          display: grid;
+          gap: var(--spacing-2xl);
+          position: relative;
+
+          &::before {
+            background-color: var(--color-border);
+            content: "";
+            inset-block: var(--timeline-split-marker) var(--timeline-split-marker);
+            inset-inline-start: 50%;
+            position: absolute;
+            transform: translateX(-50%);
+            width: var(--border-width-sm);
+          }
+        }
+
+        .timeline-entry {
+          align-items: start;
+          display: grid;
+          gap: var(--spacing-xl);
+          grid-template-columns: minmax(0, 1fr) var(--timeline-split-marker) minmax(0, 1fr);
+          position: relative;
+        }
+
+        .timeline-split-content {
+          min-width: 0;
+        }
+
+        .timeline-entry:nth-child(odd) .timeline-split-content {
+          grid-column: 1;
+          justify-self: end;
+          text-align: end;
+        }
+
+        .timeline-entry:nth-child(even) .timeline-split-content {
+          grid-column: 3;
+          justify-self: start;
+        }
+
+        .timeline-split-marker {
+          align-items: center;
+          background-color: var(--color-bg);
+          border: var(--border-width-sm) solid var(--color-bg-brand);
+          border-radius: var(--radius-full);
+          display: flex;
+          grid-column: 2;
+          grid-row: 1;
+          height: var(--timeline-split-marker);
+          justify-content: center;
+          position: relative;
+          width: var(--timeline-split-marker);
+          z-index: var(--layer-1);
+        }
+
+        .timeline-split-marker .icon {
+          color: var(--color-bg-brand);
+        }
+
+        .timeline-split-marker .timeline-dot {
+          height: var(--timeline-dot-size);
+          width: var(--timeline-dot-size);
+        }
+
+        .timeline-date {
+          color: var(--color-bg-brand);
+          display: block;
+          font-family: var(--font-mono);
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-semibold);
+          letter-spacing: 0.08em;
+          margin-block-end: var(--spacing-sm);
+          text-transform: uppercase;
+        }
+
+        @media (width < 640px) {
+          .timeline-split {
+            gap: var(--spacing-xl);
+
+            &::before {
+              inset-block-end: var(--timeline-split-marker);
+              inset-block-start: var(--timeline-split-marker);
+              inset-inline-start: calc(var(--timeline-split-marker) / 2);
+            }
+          }
+
+          .timeline-entry {
+            grid-template-columns: var(--timeline-split-marker) minmax(0, 1fr);
+          }
+
+          .timeline-entry:nth-child(odd) .timeline-split-content,
+          .timeline-entry:nth-child(even) .timeline-split-content {
+            grid-column: 2;
+            justify-self: start;
+            text-align: start;
+          }
+
+          .timeline-split-marker {
+            grid-column: 1;
           }
         }
       }

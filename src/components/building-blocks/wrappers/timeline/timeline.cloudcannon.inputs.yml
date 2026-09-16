@@ -3,13 +3,15 @@ label:
   type: text
 layout:
   type: select
-  comment: Vertical list with a continuous rail, or a horizontal row that scrolls.
+  comment: Vertical list, alternating split story, or a horizontal row that scrolls.
   options:
     values:
       - id: vertical
         name: Vertical
       - id: horizontal
         name: Horizontal
+      - id: split
+        name: Split
 entries:
   type: array
   label: Entries

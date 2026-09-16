@@ -1,0 +1,25 @@
+---
+const {
+  id,
+  labelledBy,
+  selected = false,
+  element: Element = "div",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component: _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<Element
+  class:list={["tab-panel", className]}
+  id={id}
+  role="tabpanel"
+  aria-labelledby={labelledBy}
+  aria-hidden={selected ? "false" : "true"}
+  hidden={!selected}
+  data-tab-panel
+  {...htmlAttributes}
+>
+  <slot />
+</Element>
