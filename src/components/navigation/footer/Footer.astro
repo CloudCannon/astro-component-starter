@@ -6,6 +6,7 @@ import Image from "@core-elements/image/Image.astro";
 import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import Text from "@core-elements/text/Text.astro";
 import type { SocialLink } from "../../../types";
+import privacyData from "@data/privacy.json";
 
 const {
   links = [],
@@ -68,6 +69,17 @@ const {
           text={footerText || ""}
           useDefaultEditableBinding={false}
         />
+        {
+          privacyData.enabled && (
+            <button
+              type="button"
+              class="footer-privacy-settings"
+              data-consent-open
+            >
+              {privacyData.settingsLabel}
+            </button>
+          )
+        }
       </div>
       <div class="content-container">
         {
@@ -121,6 +133,22 @@ const {
         text-align: center;
         @container (min-width: 640px) {
           text-align: start;
+        }
+      }
+
+      .footer-privacy-settings {
+        background: transparent;
+        border: 0;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        font: inherit;
+        margin-top: var(--spacing-xs);
+        padding: 0;
+        text-decoration: underline;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
       }
 

@@ -679,6 +679,8 @@ const liveSyncSource = readFileSync(join(root, "editor-live-sync.js"), "utf8");
 // is a promise that the component degrades rather than breaks on the canvas —
 // verify that before adding one.
 const EDITOR_INERT = {
+  "navigation/consent/Consent.astro":
+    "site chrome stays hidden and never loads optional services in the CloudCannon editor",
   "navigation/bar/Bar.astro": "dropdowns keep their CSS-only `:checked` disclosure",
   "navigation/side/Side.astro": "panels keep their CSS-only `:checked` disclosure",
   "navigation/mobile/Mobile.astro": "the drawer keeps its CSS-only `:checked` disclosure",

@@ -178,7 +178,7 @@ const tests = [
     },
   },
   {
-    name: "video modal injects the embed on open and tears it down on close",
+    name: "video modal keeps its provider frame inert until external-media permission",
     path: "/component-docs/components/building-blocks/wrappers/video-modal/",
     viewport: DESKTOP,
     async run(page) {
@@ -197,40 +197,116 @@ const tests = [
         .locator(`.modal-trigger .button-inner[popovertarget="modal-astro-in-100-seconds"]`)
         .click();
 
-      // The iframe is created on the popover's async "toggle" event.
+      // Component docs deliberately have no site consent manager. Opening a
+      // provider modal must therefore retain the contextual permission prompt
+      // rather than create a YouTube/Vimeo request.
       await page.waitForFunction(
-        (sel) => document.querySelector(sel)?.querySelector("iframe"),
+        (sel) => document.querySelector(sel)?.querySelector("[data-external-media-enable]"),
         embedSel
       );
 
-      const injected = await page.evaluate((sel) => {
-        const iframe = document.querySelector(sel).querySelector("iframe");
-
-        return { src: iframe.src, title: iframe.title, allowFullscreen: iframe.allowFullscreen };
-      }, embedSel);
-
       assert(
-        injected.src.includes("ZoXyK96nyCg") && injected.src.includes("autoplay=1"),
-        `embed src is wrong: ${injected.src}`
+        (await page.locator(`${embedSel} iframe`).count()) === 0,
+        "expected no provider iframe before external-media permission"
       );
-      assert(
-        injected.title === "Astro in 100 Seconds",
-        `expected the iframe to carry the video title, got "${injected.title}"`
-      );
-      assert(injected.allowFullscreen, "expected the iframe to allow fullscreen");
 
       // The overlay fills the viewport, so light dismiss never fires — a click
       // on the dark surround (inside the popover, outside .modal-body) closes.
       await popover.click({ position: { x: 4, y: 4 } });
 
-      // Removing the iframe is what stops playback: a hidden popover keeps its
-      // subtree alive, so an embed left in place goes on playing audio.
+      // Closing leaves no provider iframe behind.
       await page.waitForFunction(
         ({ pop, embed }) =>
           !document.querySelector(pop).matches(":popover-open") &&
           !document.querySelector(embed).querySelector("iframe"),
         { pop: popoverSel, embed: embedSel }
       );
+    },
+  },
+  {
+    name: "privacy settings reflect effective permission and synchronize decisions across tabs",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForFunction(() => Boolean(window.siteConsent));
+      await page.evaluate(() => window.siteConsent?.setPolicy("notice-and-opt-out"));
+
+      await page.locator("[data-consent-open]").click();
+      const popover = page.locator("#privacy-settings");
+      const externalMedia = popover.locator('[data-consent-category="externalMedia"]');
+
+      await page.waitForFunction(() =>
+        document.querySelector("#privacy-settings")?.matches(":popover-open")
+      );
+      assert(
+        await externalMedia.isChecked(),
+        "expected the external-media switch to reflect effective notice-and-opt-out permission"
+      );
+
+      await externalMedia.uncheck();
+      await popover.locator('[data-consent-action="save"] .button-inner').click();
+      await page.waitForFunction(
+        () => window.siteConsent?.record.decisions.externalMedia === "denied"
+      );
+
+      const other = await page.context().newPage();
+
+      other.setDefaultTimeout(10000);
+      await other.goto(page.url(), { waitUntil: "load" });
+      await other.waitForFunction(() => Boolean(window.siteConsent));
+
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "granted"));
+      await other.waitForFunction(
+        () => window.siteConsent?.record.decisions.externalMedia === "granted"
+      );
+      await other.close();
+    },
+  },
+  {
+    name: "analytics stays inert until approval, tracks once per navigation, and stops on revocation",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      let plausibleRequests = 0;
+
+      await page.addInitScript(() => {
+        const parse = JSON.parse;
+
+        JSON.parse = function (...args) {
+          const value = parse.apply(this, args);
+
+          return value?._schema === "analytics"
+            ? { ...value, provider: "plausible-hosted", domain: "example.com" }
+            : value;
+        };
+      });
+      await page.route("https://plausible.io/**", async (route) => {
+        plausibleRequests += 1;
+        await route.abort();
+      });
+      await page.reload({ waitUntil: "load" });
+      await page.waitForFunction(() => Boolean(window.siteConsent));
+      await page.evaluate(() => document.dispatchEvent(new Event("astro:page-load")));
+
+      assert(plausibleRequests === 0, "Plausible loaded before analytics permission");
+
+      await page.evaluate(() => window.siteConsent?.acceptAnalytics());
+      await page.waitForFunction(
+        () =>
+          document.querySelector('script[src="https://plausible.io/js/script.manual.js"]') !== null
+      );
+      await page.waitForFunction(() => window.plausible?.q?.length === 1);
+
+      await page.locator('.desktop-main-nav a[href="/why/"]').click();
+      await page.waitForFunction(() => location.pathname === "/why/");
+      await page.waitForFunction(() => window.plausible?.q?.length === 2);
+
+      await page.evaluate(() => window.siteConsent?.setDecision("analytics", "denied"));
+      await page.locator('.desktop-main-nav a[href="/start/"]').click();
+      await page.waitForFunction(() => location.pathname === "/start/");
+      const afterRevocation = await page.evaluate(() => window.plausible?.q?.length);
+
+      assert(afterRevocation === 2, "analytics queued a page view after revocation");
     },
   },
   {
@@ -1118,25 +1194,42 @@ const tests = [
     },
   },
   {
-    name: "youtube facade upgrades and shows a play button",
+    name: "hosted video stays inert before consent, then mounts no-cookie and tears down on revocation",
     path: "/component-docs/components/building-blocks/core-elements/video/",
     viewport: DESKTOP,
     async run(page) {
-      await page.waitForSelector("lite-youtube");
+      const hostedVideo = page.locator(`${ACTIVE_PREVIEW} [data-hosted-video]`).first();
 
-      const upgraded = await page.evaluate(() => customElements.get("lite-youtube") !== undefined);
+      await hostedVideo.waitFor();
 
-      assert(upgraded, "the lite-youtube custom element never registered");
+      assert(
+        (await hostedVideo.locator("iframe").count()) === 0,
+        "expected no provider iframe before external-media permission"
+      );
+      assert(
+        (await hostedVideo.locator("[data-external-media-enable]").count()) === 1,
+        "expected an external-media enable control"
+      );
 
-      // The facade builds its poster + play button in a shadow root; without
-      // it the element is an empty box with a bare fallback link.
-      const hasPlayButton = await page.evaluate(() => {
-        const el = document.querySelector("lite-youtube");
-
-        return Boolean(el?.shadowRoot?.querySelector("button, .lty-playbtn"));
+      await page.route("https://www.youtube-nocookie.com/**", (route) => route.abort());
+      await page.evaluate(() => {
+        window.siteConsent = { isAllowed: () => true };
+        window.dispatchEvent(new Event("site-consent-change"));
       });
+      await page.waitForFunction(() =>
+        document
+          .querySelector("[data-hosted-video] iframe")
+          ?.getAttribute("src")
+          ?.includes("youtube-nocookie.com")
+      );
 
-      assert(hasPlayButton, "the facade rendered no play button");
+      await page.evaluate(() => {
+        window.siteConsent = { isAllowed: () => false };
+        window.dispatchEvent(new Event("site-consent-change"));
+      });
+      await page.waitForFunction(
+        () => document.querySelector("[data-hosted-video] iframe") === null
+      );
     },
   },
   {

@@ -25,6 +25,10 @@ function openVideo(popover: HTMLElement): void {
   const embedSrc = body?.dataset.videoEmbedSrc;
 
   if (!embedContainer || !embedSrc) return;
+  if (!window.siteConsent?.isAllowed("externalMedia")) {
+    renderConsentPrompt(embedContainer);
+    return;
+  }
 
   const iframe = document.createElement("iframe");
 
@@ -33,6 +37,20 @@ function openVideo(popover: HTMLElement): void {
   iframe.allow = "autoplay; fullscreen; picture-in-picture";
   iframe.allowFullscreen = true;
   embedContainer.replaceChildren(iframe);
+}
+
+function renderConsentPrompt(container: HTMLElement): void {
+  const message = document.createElement("p");
+  const button = document.createElement("button");
+  const prompt = document.createElement("div");
+
+  prompt.className = "video-modal-consent";
+  message.textContent = "Enable external media to play this video.";
+  button.type = "button";
+  button.textContent = "Enable video";
+  button.setAttribute("data-external-media-enable", "");
+  prompt.append(message, button);
+  container.replaceChildren(prompt);
 }
 
 function closeVideo(popover: HTMLElement): void {
@@ -46,7 +64,9 @@ function closeVideo(popover: HTMLElement): void {
 
   // Removing the iframe is what stops playback — a hidden popover keeps its
   // subtree alive, so a YouTube embed left in place goes on playing audio.
-  popover.querySelector<HTMLElement>(".video-modal-embed")?.replaceChildren();
+  const container = popover.querySelector<HTMLElement>(".video-modal-embed");
+
+  if (container) renderConsentPrompt(container);
 }
 
 export function setupVideoModal(popover: HTMLElement): void {
@@ -76,7 +96,18 @@ export function setupVideoModal(popover: HTMLElement): void {
   });
 }
 
+let consentListenerBound = false;
+
 export function setupAllVideoModals(root: ParentNode = document): void {
+  if (!consentListenerBound) {
+    consentListenerBound = true;
+    window.addEventListener("site-consent-change", () => {
+      document
+        .querySelectorAll<HTMLElement>(".video-modal .modal-popover:popover-open")
+        .forEach((popover) => openVideo(popover));
+    });
+  }
+
   root
     .querySelectorAll<HTMLElement>(".video-modal .modal-popover")
     .forEach((el) => setupVideoModal(el));

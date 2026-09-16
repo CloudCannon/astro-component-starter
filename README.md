@@ -139,6 +139,8 @@ component and its editor config, which nothing else will.
 
 See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. The repository ships CloudCannon's build
 settings, so connecting it is a few clicks — and component schemas are picked up automatically.
+For the strict-by-default consent workflow and regional-host adapters, see
+**[docs/PRIVACY.md](docs/PRIVACY.md)**.
 
 ## Prerequisites
 
@@ -169,6 +171,7 @@ npm run deps:check
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — how content becomes HTML, the component
   registry, and the patterns not to refactor.
 - **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** — deploying to CloudCannon.
+- **[docs/PRIVACY.md](docs/PRIVACY.md)** — configuring consent, analytics, and regional policy.
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — adding a component and the checks it has to pass.
 - **`.agents/skills/`** — the workflow playbooks, for you or your coding agent.
 

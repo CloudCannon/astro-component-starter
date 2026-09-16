@@ -1,58 +1,89 @@
-/**
- * YouTube/Vimeo custom elements and autoplay repair for Video.
- *
- * Used by:
- * - `Video.astro`'s inline `<script>` on the live site
- * - `editor-live-sync.js` in the CloudCannon editor, where inline scripts
- *   don't run
- * - `VideoElements.astro` on isolated preview shells that may inject those
- *   tags without going through Video.astro
- *
- * Facade libraries are loaded only when a matching custom element is on the
- * page (`lite-vimeo` / `lite-youtube`). Vite splits those into their own
- * chunks; this file stays one module.
- */
+/** Hosted-video consent hydration and autoplay repair for Video. */
 
-function containsSelector(root: ParentNode, selector: string): boolean {
-  return (
-    (root instanceof Element && root.matches(selector)) || Boolean(root.querySelector?.(selector))
-  );
-}
+function hydrateHostedVideos(root: ParentNode = document): void {
+  if (window.inEditorMode) return;
 
-const facadeLoaded = { vimeo: false, youtube: false };
-
-function defineUsedVideoElements(root: ParentNode = document): void {
-  if (!facadeLoaded.vimeo && containsSelector(root, "lite-vimeo")) {
-    facadeLoaded.vimeo = true;
-    void import("@choctawnationofoklahoma/lite-vimeo");
+  if (!window.siteConsent?.isAllowed("externalMedia")) {
+    resetHostedVideos(root);
+    return;
   }
 
-  if (!facadeLoaded.youtube && containsSelector(root, "lite-youtube")) {
-    facadeLoaded.youtube = true;
-    void import("@justinribeiro/lite-youtube");
-  }
+  const hosted = [
+    ...(root instanceof HTMLElement && root.matches("[data-hosted-video]") ? [root] : []),
+    ...Array.from(root.querySelectorAll<HTMLElement>("[data-hosted-video]")),
+  ];
+
+  hosted.forEach((container) => {
+    if (container.hasAttribute("data-hosted-video-mounted")) return;
+    const type = container.dataset.videoType;
+    const id = container.dataset.videoId;
+
+    if (!id || (type !== "youtube" && type !== "vimeo")) return;
+
+    const autoplay = container.dataset.videoAutoplay === "true";
+    const loop = container.dataset.videoLoop === "true";
+    const params = new URLSearchParams();
+
+    if (autoplay) {
+      params.set("autoplay", "1");
+      params.set("mute", "1");
+      params.set("playsinline", "1");
+    }
+    if (loop && type === "youtube") {
+      params.set("loop", "1");
+      params.set("playlist", id);
+    }
+    if (loop && type === "vimeo") params.set("loop", "1");
+
+    const iframe = document.createElement("iframe");
+
+    iframe.src =
+      type === "youtube"
+        ? `https://www.youtube-nocookie.com/embed/${id}?${params}`
+        : `https://player.vimeo.com/video/${id}?${params}`;
+    iframe.title = container.dataset.videoTitle || "Video";
+    iframe.allow = "autoplay; fullscreen; picture-in-picture";
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    container.replaceChildren(iframe);
+    container.setAttribute("data-hosted-video-mounted", "");
+  });
 }
 
-/**
- * Strips autoplay from hosted embeds for a reduced-motion visitor. Runs before
- * `defineUsedVideoElements` on purpose: until the facade library is imported
- * the custom elements are inert, so their attributes are still free to change.
- */
+function resetHostedVideos(root: ParentNode = document): void {
+  const hosted = [
+    ...(root instanceof HTMLElement && root.matches("[data-hosted-video]") ? [root] : []),
+    ...Array.from(root.querySelectorAll<HTMLElement>("[data-hosted-video]")),
+  ];
+
+  hosted.forEach((container) => {
+    if (!container.hasAttribute("data-hosted-video-mounted")) return;
+    const message = document.createElement("p");
+    const button = document.createElement("button");
+    const link = document.createElement("a");
+    const type = container.dataset.videoType;
+    const id = container.dataset.videoId;
+
+    message.textContent = "Enable external media to play this video.";
+    button.type = "button";
+    button.textContent = "Enable video";
+    button.setAttribute("data-external-media-enable", "");
+    link.href =
+      type === "youtube" ? `https://www.youtube.com/watch?v=${id}` : `https://vimeo.com/${id}`;
+    link.textContent = `Watch on ${type === "youtube" ? "YouTube" : "Vimeo"}`;
+    container.replaceChildren(message, button, link);
+    container.removeAttribute("data-hosted-video-mounted");
+  });
+}
+
 function disarmHostedAutoplay(root: ParentNode = document): void {
   const scope = (selector: string) => [
     ...(root instanceof Element && root.matches(selector) ? [root] : []),
     ...Array.from(root.querySelectorAll(selector)),
   ];
 
-  scope("lite-vimeo[autoload], lite-youtube[autoplay]").forEach((embed) => {
-    embed.removeAttribute("autoload");
-    embed.removeAttribute("autoplay");
-  });
-
-  scope('iframe.video-embed[src*="autoplay=1"]').forEach((embed) => {
-    const iframe = embed as HTMLIFrameElement;
-
-    iframe.src = iframe.src.replace("autoplay=1", "autoplay=0");
+  scope('[data-hosted-video][data-video-autoplay="true"]').forEach((embed) => {
+    embed.setAttribute("data-video-autoplay", "false");
   });
 }
 
@@ -65,10 +96,6 @@ function isBroken(video: HTMLVideoElement) {
 }
 
 function repairAndPlay(video: HTMLVideoElement) {
-  // load() alone isn't enough in Firefox: the <source> nodes themselves
-  // can carry over a failed-selection state from the view-transition
-  // swap, so replace them with fresh nodes (no prior loading history)
-  // before retrying.
   video.querySelectorAll("source").forEach((source) => {
     const fresh = document.createElement("source");
 
@@ -83,34 +110,18 @@ function repairAndPlay(video: HTMLVideoElement) {
 
 function tryPlay(video: HTMLVideoElement) {
   video.play().catch(() => {});
-
-  // A <video> adopted via a view-transition swap can end up genuinely
-  // stuck (Firefox: "All candidate resources failed to load", without
-  // ever setting video.error). By the time this runs the browser has
-  // usually already tried and failed, so the synchronous check catches
-  // it with no added delay; the one deferred recheck covers a failure
-  // that lands moments later. Repair only on confirmed failure — a
-  // video whose load is merely still in flight would be aborted by an
-  // unconditional load() (seen in Chrome).
   if (isBroken(video)) {
     repairAndPlay(video);
     return;
   }
-
   setTimeout(() => {
     if (isBroken(video)) repairAndPlay(video);
   }, 2000);
 }
 
 function playAutoplayVideos(root: ParentNode = document) {
-  // This repair calls play() directly, which the global reduced-motion CSS
-  // reset cannot reach — a visitor who asked for no motion gets no autoplay.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  // Not scoped under a ".video" ancestor: the "video" class sits directly
-  // on the <video> tag itself except for the background-media variant, so
-  // a ".video video[autoplay]" descendant selector silently misses every
-  // other case (vimeo, youtube, and the plain native <video>).
   const videos = [
     ...(root instanceof Element && root.matches("video[autoplay]")
       ? [root as HTMLVideoElement]
@@ -119,15 +130,10 @@ function playAutoplayVideos(root: ParentNode = document) {
   ].filter((video) => !video.hasAttribute("data-video-autoplay-initialized"));
 
   if (!videos.length) return;
-
-  // Waiting until the video is actually scrolled into view gives the
-  // browser plenty of time to settle before we touch it, and naturally
-  // matches when the user would expect to see it play.
   const observer = new IntersectionObserver(
     (entries, obs) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-
         const video = entry.target as HTMLVideoElement;
 
         if (video.paused) tryPlay(video);
@@ -147,7 +153,9 @@ export function setupAllVideos(root: ParentNode = document): void {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     disarmHostedAutoplay(root);
   }
-
-  defineUsedVideoElements(root);
+  hydrateHostedVideos(root);
   playAutoplayVideos(root);
 }
+
+window.addEventListener("site-consent-change", () => hydrateHostedVideos());
+document.addEventListener("astro:page-load", () => hydrateHostedVideos());

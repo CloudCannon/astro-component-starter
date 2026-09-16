@@ -30,6 +30,14 @@ editor automatically — there is no separate CloudCannon-side registration step
 CloudCannon's own [documentation](https://cloudcannon.com/documentation/) is the reference for
 the account-side details — organisations, permissions, custom domains, and staging branches.
 
+## Regional consent policy (optional)
+
+The starter stays global strict opt-in unless **Regional policy** in Data → Privacy & Consent is
+changed. For the EEA, UK & Switzerland preset on CloudCannon, enable the site's **Geolocation**
+setting so CloudCannon includes its country class in the rendered page. If that signal is absent,
+the starter safely uses strict opt-in. See [Privacy, consent, and analytics](PRIVACY.md) for the
+complete host matrix and verification requirements.
+
 ## Set your production URL
 
 This is the one thing a fresh clone will get wrong, and it fails silently. `site` in
