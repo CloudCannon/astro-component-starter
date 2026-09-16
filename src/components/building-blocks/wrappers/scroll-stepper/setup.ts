@@ -13,9 +13,7 @@ function isStacked(stepper: HTMLElement): boolean {
 function setActive(stepper: HTMLElement, index: number): void {
   const panels = [...stepper.querySelectorAll<HTMLElement>(".scroll-stepper-media-panel")];
   const steps = [
-    ...stepper.querySelectorAll<HTMLElement>(
-      ".scroll-stepper-steps > .scroll-stepper-step"
-    ),
+    ...stepper.querySelectorAll<HTMLElement>(".scroll-stepper-steps > .scroll-stepper-step"),
   ];
   const dots = [...stepper.querySelectorAll<HTMLElement>(".scroll-stepper-progress-dot")];
   const activeIndex = Math.max(0, Math.min(index, panels.length - 1));
@@ -83,21 +81,18 @@ function activationPoint(stepper: HTMLElement, scene: HTMLElement): number {
 
 function updateActive(stepper: HTMLElement, scenes: HTMLElement[]): void {
   const track = stepper.querySelector<HTMLElement>(".scroll-stepper-steps");
-  const activeIndex = scenes.reduce(
-    (currentIndex, scene, index) => {
-      const content = scene.querySelector<HTMLElement>(".scroll-stepper-step-content");
+  const activeIndex = scenes.reduce((currentIndex, scene, index) => {
+    const content = scene.querySelector<HTMLElement>(".scroll-stepper-step-content");
 
-      const contentBounds = content?.getBoundingClientRect();
-      const position = track?.classList.contains("height-screen")
-        ? contentBounds?.top
-        : contentBounds && contentBounds.top + contentBounds.height / 2;
+    const contentBounds = content?.getBoundingClientRect();
+    const position = track?.classList.contains("height-screen")
+      ? contentBounds?.top
+      : contentBounds && contentBounds.top + contentBounds.height / 2;
 
-      return position !== undefined && position <= activationPoint(stepper, scene)
-        ? index
-        : currentIndex;
-    },
-    0
-  );
+    return position !== undefined && position <= activationPoint(stepper, scene)
+      ? index
+      : currentIndex;
+  }, 0);
 
   setActive(stepper, activeIndex);
 }
@@ -120,9 +115,7 @@ function updateProgress(stepper: HTMLElement, scenes: HTMLElement[]): void {
   const start = stepper.__scrollStepperProgressStart ?? firstCenter;
   const end = activationPoint(stepper, last) - (lastCenter - firstCenter);
   const distance = start - end;
-  const progress = distance
-    ? Math.max(0, Math.min(1, (start - firstCenter) / distance))
-    : 0;
+  const progress = distance ? Math.max(0, Math.min(1, (start - firstCenter) / distance)) : 0;
 
   stepper.__scrollStepperProgressStart = start;
   stepper.style.setProperty("--scroll-stepper-progress", String(progress));

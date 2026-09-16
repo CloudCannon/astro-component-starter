@@ -1,0 +1,219 @@
+import { setupAllModals } from "@wrappers/modal/setup";
+import { setupAnalytics } from "../../../integrations/consent/analytics";
+import {
+  analyticsConfigSchema,
+  privacyConfigSchema,
+  type AnalyticsConfig,
+  type PrivacyConfig,
+} from "../../../integrations/consent/config";
+import { resolveConsentPolicy } from "../../../integrations/consent/resolvePolicy";
+import { isAllowedExternalMediaUrl } from "../../../integrations/consent/externalMedia";
+import { getConsentManager, type ConsentCategory } from "../../../integrations/consent/runtime";
+
+let initialized = false;
+let controlsBound = false;
+
+function parseConfig(
+  root: HTMLElement
+): { privacy: PrivacyConfig; analytics: AnalyticsConfig } | null {
+  try {
+    return {
+      privacy: privacyConfigSchema.parse(JSON.parse(root.dataset.consentConfig || "{}")),
+      analytics: analyticsConfigSchema.parse(JSON.parse(root.dataset.analyticsConfig || "{}")),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function refresh(root: HTMLElement, privacy: PrivacyConfig): void {
+  const manager = getConsentManager(privacy);
+  const hasAnalytics = root.dataset.hasAnalytics === "true";
+  const banner = root.querySelector<HTMLElement>("[data-consent-banner]");
+
+  root.toggleAttribute("data-consent-decided", manager.hasDecision);
+  if (banner) {
+    banner.hidden =
+      manager.record.decisions.analytics !== "unset" || !hasAnalytics || !privacy.enabled;
+  }
+
+  root.querySelectorAll<HTMLInputElement>("[data-consent-category]").forEach((input) => {
+    const category = input.dataset.consentCategory as ConsentCategory;
+
+    input.checked = manager.isAllowed(category);
+  });
+
+  hydrateExternalMedia();
+}
+
+function hydrateExternalMedia(): void {
+  const manager = window.siteConsent;
+
+  if (!manager?.isAllowed("externalMedia")) {
+    document
+      .querySelectorAll<HTMLElement>("[data-external-media-src][data-external-media-mounted]")
+      .forEach((placeholder) => {
+        placeholder.replaceChildren(
+          externalMediaFallback("Enable external media to view this content.")
+        );
+        placeholder.removeAttribute("data-external-media-mounted");
+      });
+    document
+      .querySelectorAll<HTMLTemplateElement>("template[data-unsafe-external-media]")
+      .forEach((template) => {
+        const host = template.nextElementSibling;
+
+        if (!(host instanceof HTMLElement) || !host.hasAttribute("data-external-media-mounted"))
+          return;
+        host.replaceChildren(externalMediaFallback("Enable external content to view it."));
+        host.removeAttribute("data-external-media-mounted");
+      });
+    return;
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-external-media-src]").forEach((placeholder) => {
+    if (placeholder.hasAttribute("data-external-media-mounted")) return;
+    const src = placeholder.dataset.externalMediaSrc;
+
+    if (!src || !isAllowedExternalMediaUrl(src)) return;
+
+    const iframe = document.createElement("iframe");
+
+    iframe.src = src;
+    iframe.title = placeholder.dataset.externalMediaTitle || "External content";
+    iframe.loading = "lazy";
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    iframe.allowFullscreen = true;
+    placeholder.replaceChildren(iframe);
+    placeholder.setAttribute("data-external-media-mounted", "");
+  });
+
+  document
+    .querySelectorAll<HTMLTemplateElement>("template[data-unsafe-external-media]")
+    .forEach((template) => {
+      const host = template.nextElementSibling;
+
+      if (!(host instanceof HTMLElement) || host.hasAttribute("data-external-media-mounted"))
+        return;
+      host.replaceChildren(sanitizedEmbedContent(template));
+      host.setAttribute("data-external-media-mounted", "");
+    });
+}
+
+function sanitizedEmbedContent(template: HTMLTemplateElement): DocumentFragment {
+  const content = template.content.cloneNode(true) as DocumentFragment;
+
+  content
+    .querySelectorAll("script, style, link, object, embed")
+    .forEach((element) => element.remove());
+
+  content.querySelectorAll<HTMLElement>("*").forEach((element) => {
+    [...element.attributes]
+      .filter((attribute) => attribute.name.toLowerCase().startsWith("on"))
+      .forEach((attribute) => element.removeAttribute(attribute.name));
+  });
+
+  content.querySelectorAll<HTMLIFrameElement>("iframe").forEach((iframe) => {
+    if (!iframe.src || !isAllowedExternalMediaUrl(iframe.src)) {
+      iframe.remove();
+      return;
+    }
+
+    iframe.setAttribute(
+      "sandbox",
+      "allow-scripts allow-popups allow-presentation allow-same-origin"
+    );
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+  });
+
+  return content;
+}
+
+function externalMediaFallback(message: string): DocumentFragment {
+  const content = document.createDocumentFragment();
+  const paragraph = document.createElement("p");
+  const button = document.createElement("button");
+
+  paragraph.textContent = message;
+  button.type = "button";
+  button.textContent = "Enable external media";
+  button.setAttribute("data-external-media-enable", "");
+  content.append(paragraph, button);
+
+  return content;
+}
+
+function bind(root: HTMLElement, privacy: PrivacyConfig): void {
+  const manager = getConsentManager(privacy);
+
+  if (!controlsBound) {
+    controlsBound = true;
+    document.addEventListener("click", (event) => {
+      const target = event.target as Element;
+
+      if (target.closest("[data-external-media-enable]")) {
+        manager.setDecision("externalMedia", "granted");
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-consent-open]").forEach((control) => {
+    if (control.hasAttribute("data-consent-bound")) return;
+    control.setAttribute("data-consent-bound", "");
+    control.addEventListener("click", () => {
+      document.querySelector<HTMLElement>(".consent-popover")?.showPopover();
+    });
+  });
+
+  if (root.hasAttribute("data-consent-initialized")) return;
+  root.setAttribute("data-consent-initialized", "");
+
+  root.querySelectorAll<HTMLElement>("[data-consent-action]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const action = control.dataset.consentAction;
+
+      if (action === "accept-analytics") manager.acceptAnalytics();
+      if (action === "reject") manager.rejectOptional();
+      if (action === "save") {
+        root.querySelectorAll<HTMLInputElement>("[data-consent-category]").forEach((input) => {
+          manager.setDecision(
+            input.dataset.consentCategory as ConsentCategory,
+            input.checked ? "granted" : "denied"
+          );
+        });
+        root.querySelector<HTMLElement>(".consent-popover")?.hidePopover();
+      }
+    });
+  });
+}
+
+export function setupAllConsent(): void {
+  const roots = document.querySelectorAll<HTMLElement>(".consent");
+
+  if (!roots.length || window.inEditorMode) return;
+
+  roots.forEach((root) => {
+    const config = parseConfig(root);
+
+    if (!config) return;
+
+    root.hidden = !config.privacy.enabled;
+    bind(root, config.privacy);
+    setupAllModals();
+
+    if (!initialized) {
+      initialized = true;
+      const manager = getConsentManager(config.privacy);
+
+      void resolveConsentPolicy(config.privacy).then((policy) => manager.setPolicy(policy));
+      manager.subscribe(() => {
+        document
+          .querySelectorAll<HTMLElement>(".consent")
+          .forEach((activeRoot) => refresh(activeRoot, config.privacy));
+      });
+      setupAnalytics(config.analytics, config.privacy);
+    }
+
+    refresh(root, config.privacy);
+  });
+}

@@ -1,6 +1,6 @@
 html:
   type: code
-  comment: The raw HTML content to render.
+  comment: Trusted developer-only HTML. Scripts, event handlers, and unapproved iframe hosts are removed before consent-approved rendering.
   options:
     syntax: html
 aspectRatio:

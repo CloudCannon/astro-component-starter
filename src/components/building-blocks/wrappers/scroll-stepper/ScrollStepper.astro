@@ -49,12 +49,7 @@ if (!_component && !hasSteps) return;
 ---
 
 <div
-  class:list={[
-    "scroll-stepper",
-    "stackable",
-    `progress-${progressStyle}`,
-    className,
-  ]}
+  class:list={["scroll-stepper", "stackable", className]}
   {...htmlAttributes}
 >
   <div
@@ -313,8 +308,8 @@ if (!_component && !hasSteps) return;
         background-color: var(--color-border);
         border-radius: var(--radius-full);
         height: var(--scroll-stepper-dot-size);
-        transition:
-          background-color var(--scroll-stepper-content-transition-duration) var(--ease-smooth);
+        transition: background-color var(--scroll-stepper-content-transition-duration)
+          var(--ease-smooth);
         width: var(--scroll-stepper-dot-size);
 
         &[data-active] {
@@ -325,10 +320,7 @@ if (!_component && !hasSteps) return;
       &[data-scroll-stepper-initialized] {
         .scroll-stepper-media {
           position: sticky;
-          top: var(
-            --scroll-stepper-sticky-top,
-            calc(50% + var(--main-nav-height, 0px) / 2)
-          );
+          top: var(--scroll-stepper-sticky-top, calc(50% + var(--main-nav-height, 0px) / 2));
           translate: var(--scroll-stepper-sticky-translate, 0 -50%);
         }
 

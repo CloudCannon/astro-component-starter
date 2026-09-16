@@ -1,12 +1,12 @@
 ---
 import CustomSection from "@builders/custom-section/CustomSection.astro";
-import Embed from "@core-elements/embed/Embed.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
 import Form from "@forms/form/Form.astro";
 import Split from "@wrappers/split/Split.astro";
+import { isAllowedExternalMediaUrl } from "../../../../integrations/consent/externalMedia";
 
 type DetailProps = { icon?: string; label?: string; value?: string; url?: string };
 
@@ -39,6 +39,7 @@ const addressDetail = details?.find((detail: DetailProps) =>
   /address|location|map/i.test(`${detail.label ?? ""} ${detail.icon ?? ""}`)
 );
 const mapTitle = addressDetail?.value ? `Map of ${addressDetail.value}` : "Map";
+const allowedMapEmbedUrl = isAllowedExternalMediaUrl(mapEmbedUrl) ? mapEmbedUrl : "";
 ---
 
 <CustomSection
@@ -134,16 +135,19 @@ const mapTitle = addressDetail?.value ? `Map of ${addressDetail.value}` : "Map";
       </Split>
     </div>
     {
-      mapEmbedUrl && (
-        <div class="contact-split-map">
-          <Embed aspectRatio="none">
-            <iframe
-              src={mapEmbedUrl}
-              title={mapTitle}
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            />
-          </Embed>
+      allowedMapEmbedUrl && (
+        <div
+          class="contact-split-map external-media-placeholder"
+          data-external-media-src={allowedMapEmbedUrl}
+          data-external-media-title={mapTitle}
+        >
+          <p>Enable external media to view this map.</p>
+          <button
+            type="button"
+            data-external-media-enable
+          >
+            Enable map
+          </button>
         </div>
       )
     }
@@ -193,15 +197,35 @@ const mapTitle = addressDetail?.value ? `Map of ${addressDetail.value}` : "Map";
         background-color: var(--color-bg-surface);
         border-top: var(--border-width-sm) solid var(--color-border);
 
-        .embed-wrapper {
-          margin-top: 0;
-        }
-
         iframe {
           border: none;
           display: block;
           height: var(--contact-map-height);
           width: 100%;
+        }
+
+        &.external-media-placeholder {
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+          justify-content: center;
+
+          p {
+            color: var(--color-text-muted);
+            margin: 0;
+          }
+
+          button {
+            background-color: var(--color-bg-brand);
+            border: var(--border-width-sm) solid var(--color-bg-brand);
+            border-radius: var(--radius-xs);
+            color: var(--color-brand-on);
+            cursor: pointer;
+            font: inherit;
+            font-weight: var(--font-weight-semibold);
+            padding: var(--spacing-em-sm);
+          }
         }
       }
     }

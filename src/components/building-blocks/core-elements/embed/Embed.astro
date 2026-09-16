@@ -19,9 +19,20 @@ const {
     class:list={["embed-content", `ratio-${aspectRatio}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
-    <slot>
-      <Fragment set:html={html} />
-    </slot>
+    <template data-unsafe-external-media>
+      <slot>
+        <Fragment set:html={html} />
+      </slot>
+    </template>
+    <div class="external-media-placeholder">
+      <p>External content is disabled until you enable it.</p>
+      <button
+        type="button"
+        data-external-media-enable
+      >
+        Enable external content
+      </button>
+    </div>
   </div>
 </div>
 
@@ -29,11 +40,49 @@ const {
   @layer components {
     .embed-wrapper {
       > .embed-content {
-        > iframe {
-          border: none;
-          display: block;
+        > .external-media-placeholder {
+          align-items: center;
+          background-color: var(--color-bg-surface);
+          color: var(--color-text-muted);
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-sm);
           height: 100%;
-          width: 100%;
+          justify-content: center;
+          min-height: 10rem;
+          padding: var(--spacing-md);
+          text-align: center;
+
+          p {
+            margin: 0;
+          }
+
+          button {
+            background-color: var(--color-bg-brand);
+            border: var(--border-width-sm) solid var(--color-bg-brand);
+            border-radius: var(--radius-xs);
+            color: var(--color-brand-on);
+            cursor: pointer;
+            font: inherit;
+            font-weight: var(--font-weight-semibold);
+            padding: var(--spacing-em-sm);
+
+            &:focus-visible {
+              outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+              outline-offset: 2px;
+            }
+          }
+
+          &[data-external-media-mounted] {
+            padding: 0;
+          }
+
+          iframe {
+            border: none;
+            display: block;
+            height: 100%;
+            width: 100%;
+          }
         }
 
         &.ratio-square {

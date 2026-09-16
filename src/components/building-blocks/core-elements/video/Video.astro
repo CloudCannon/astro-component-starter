@@ -69,65 +69,42 @@ if (type === "local-source" && source) {
 
   localVideoSources = await discoverVideoSources(source);
 }
-
-// YouTube requires loop=1 to be paired with playlist=<videoId>. Autoplaying
-// YouTube renders a plain lazy iframe instead of the lite-youtube facade: the
-// facade's autoload path pins autoplay=0 in the embed URL and YouTube honours
-// the first occurrence of a duplicated param, so autoplay can never win.
-const youtubeParams =
-  [
-    ...(autoplay ? ["autoplay=1", "mute=1", "playsinline=1"] : []),
-    ...(loop ? ["loop=1", `playlist=${videoId}`] : []),
-  ].join("&") || undefined;
 ---
 
 {
-  type === "vimeo" ? (
-    <lite-vimeo
-      class:list={["video", "stackable", className]}
-      data-space-before={spaceBeforeAttr(spaceBefore)}
-      videotitle={`${title}`}
-      videoid={`${videoId}`}
-      autoload={autoplay}
-      autoplay={autoplay}
-      loop={loop}
+  isHosted ? (
+    <div
+      class:list={["video", "stackable", "hosted-video", className]}
       {...htmlAttributes}
     >
-      <a
-        class="lite-vimeo-fallback"
-        href={`https://vimeo.com/${videoId}`}
+      <div
+        class="hosted-video-content"
+        data-space-before={spaceBeforeAttr(spaceBefore)}
+        data-hosted-video
+        data-video-type={type}
+        data-video-id={videoId}
+        data-video-title={title}
+        data-video-autoplay={autoplay}
+        data-video-loop={loop}
       >
-        Watch on Vimeo: "{title}"
-      </a>
-    </lite-vimeo>
-  ) : type === "youtube" && autoplay ? (
-    <iframe
-      class:list={["video", "stackable", "video-embed", className]}
-      data-space-before={spaceBeforeAttr(spaceBefore)}
-      src={`https://www.youtube.com/embed/${videoId}?${youtubeParams}`}
-      title={`${title}`}
-      loading="lazy"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen
-      {...htmlAttributes}
-    />
-  ) : type === "youtube" ? (
-    <lite-youtube
-      class:list={["video", "stackable", className]}
-      data-space-before={spaceBeforeAttr(spaceBefore)}
-      videotitle={`${title}`}
-      videoid={`${videoId}`}
-      params={youtubeParams}
-      {...htmlAttributes}
-    >
-      <a
-        class="lite-youtube-fallback"
-        href={`https://www.youtube.com/watch?v=${videoId}`}
-      >
-        Watch on YouTube: "{title}"
-      </a>
-    </lite-youtube>
+        <p>Enable external media to play this video.</p>
+        <button
+          type="button"
+          data-external-media-enable
+        >
+          Enable video
+        </button>
+        <a
+          href={
+            type === "youtube"
+              ? `https://www.youtube.com/watch?v=${videoId}`
+              : `https://vimeo.com/${videoId}`
+          }
+        >
+          Watch on {type === "youtube" ? "YouTube" : "Vimeo"}: "{title}"
+        </a>
+      </div>
+    </div>
   ) : background ? (
     <div
       class:list={["video", "background", className]}
@@ -200,6 +177,47 @@ const youtubeParams =
         border: 0;
         height: auto;
         width: 100%;
+      }
+
+      &.hosted-video {
+        > .hosted-video-content {
+          align-items: center;
+          aspect-ratio: var(--ratio-widescreen);
+          background-color: var(--color-bg-surface);
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+          justify-content: center;
+          padding: var(--spacing-md);
+          text-align: center;
+
+          p {
+            color: var(--color-text-muted);
+            margin: 0;
+          }
+
+          button {
+            background-color: var(--color-bg-brand);
+            border: var(--border-width-sm) solid var(--color-bg-brand);
+            border-radius: var(--radius-xs);
+            color: var(--color-brand-on);
+            cursor: pointer;
+            font: inherit;
+            font-weight: var(--font-weight-semibold);
+            padding: var(--spacing-em-sm);
+          }
+
+          iframe {
+            border: 0;
+            height: 100%;
+            width: 100%;
+          }
+
+          &[data-hosted-video-mounted] {
+            display: block;
+            padding: 0;
+          }
+        }
       }
 
       &.background {

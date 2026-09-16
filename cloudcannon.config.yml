@@ -170,6 +170,63 @@ collections_config:
             comment: Browser title template. Include {title} where the page title should appear.
           twitterSite:
             comment: Optional X (Twitter) handle for the site, including the @, used in social share cards.
+      privacy:
+        name: Privacy & Consent
+        path: .cloudcannon/schemas/privacy.json
+        remove_extra_inputs: false
+        preview:
+          text:
+            - Privacy & Consent
+        _inputs:
+          enabled:
+            type: switch
+            comment: Enable the site-wide privacy settings control and consent workflow.
+          policyRevision:
+            type: number
+            comment: Increase this after a material change to optional services or this policy.
+          regionalPolicy:
+            type: select
+            comment: Global strict opt-in is the safe default. Regional mode requires a supported host geo adapter and policy approval.
+            options:
+              values:
+                - value: global-strict
+                  label: Global strict opt-in
+                - value: eea-uk-ch-strict
+                  label: EEA, UK & Switzerland strict opt-in
+          regionalPolicyApproved:
+            type: switch
+            comment: Confirm that your policy owner has approved the selected regional policy. It otherwise stays global strict opt-in.
+          expiryDays:
+            type: number
+            comment: Days before a visitor is asked to review their choices again.
+          policyUrl:
+            type: url
+            comment: Link to the site's privacy policy.
+          bannerText:
+            type: textarea
+          honorGlobalPrivacyControl:
+            type: switch
+            comment: Respect a visitor's Global Privacy Control signal unless they explicitly grant a category.
+      analytics:
+        name: Analytics
+        path: .cloudcannon/schemas/analytics.json
+        remove_extra_inputs: false
+        preview:
+          text:
+            - Analytics
+        _inputs:
+          provider:
+            type: select
+            options:
+              values:
+                - value: none
+                  label: Off
+                - value: plausible-hosted
+                  label: Plausible (hosted)
+            comment: Provider scripts only load after analytics consent.
+          domain:
+            type: text
+            comment: Public tracked domain. Leave empty while analytics is off.
     _inputs:
       logoSource:
         type: image

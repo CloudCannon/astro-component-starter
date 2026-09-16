@@ -144,8 +144,13 @@ const renderedCodes = tabs.map(
           >
             <div class:list={["code-block-code", lineNumbers && "has-line-numbers"]}>
               {lineNumbers && (
-                <ol class="code-block-line-numbers" aria-hidden="true">
-                  {lines.map((_, lineIndex) => <li>{lineIndex + 1}</li>)}
+                <ol
+                  class="code-block-line-numbers"
+                  aria-hidden="true"
+                >
+                  {lines.map((_, lineIndex) => (
+                    <li>{lineIndex + 1}</li>
+                  ))}
                 </ol>
               )}
               <pre>

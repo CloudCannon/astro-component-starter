@@ -1,0 +1,272 @@
+---
+import Button from "@core-elements/button/Button.astro";
+import ModalShell from "@wrappers/modal/ModalShell.astro";
+import type { AnalyticsConfig, PrivacyConfig } from "../../../integrations/consent/config";
+
+type Props = { privacy: PrivacyConfig; analytics: AnalyticsConfig };
+const { privacy, analytics } = Astro.props as Props;
+const hasAnalytics = analytics.provider !== "none";
+const popoverId = "privacy-settings";
+---
+
+<aside
+  class="consent"
+  hidden
+  data-consent-config={JSON.stringify(privacy)}
+  data-analytics-config={JSON.stringify(analytics)}
+  data-has-analytics={hasAnalytics}
+  aria-label="Privacy choices"
+>
+  {
+    hasAnalytics && (
+      <div
+        class="consent-banner"
+        data-consent-banner
+        role="region"
+        aria-labelledby="consent-heading"
+      >
+        <div class="consent-copy">
+          <h2 id="consent-heading">{privacy.bannerHeading}</h2>
+          <p>{privacy.bannerText}</p>
+          <a href={privacy.policyUrl}>Read our privacy policy</a>
+        </div>
+        <div class="consent-actions">
+          <Button
+            text="Accept analytics"
+            variant="primary"
+            size="sm"
+            data-consent-action="accept-analytics"
+          />
+          <Button
+            text="Reject non-essential"
+            variant="secondary"
+            size="sm"
+            data-consent-action="reject"
+          />
+          <Button
+            text="Manage preferences"
+            variant="ghost"
+            size="sm"
+            link={`^${popoverId}`}
+            data-consent-action="manage"
+          />
+        </div>
+      </div>
+    )
+  }
+
+  <Button
+    text={privacy.settingsLabel}
+    iconName="shield-check"
+    variant="primary"
+    size="sm"
+    link={`^${popoverId}`}
+    class="consent-settings-trigger"
+    data-consent-settings-trigger
+  />
+
+  <ModalShell
+    popoverId={popoverId}
+    size="sm"
+    label={privacy.settingsLabel}
+    fullScreenMobile
+    class="consent-popover"
+  >
+    <div class="consent-modal-header">
+      <h2>{privacy.settingsLabel}</h2>
+      <Button
+        text="Close"
+        hideText
+        iconName="x-mark"
+        variant="ghost"
+        size="lg"
+        popovertarget={popoverId}
+        popovertargetaction="hide"
+      />
+    </div>
+    <div class="consent-modal-body">
+      <p>Necessary storage keeps your privacy choices. It is always on.</p>
+      {
+        hasAnalytics && (
+          <label class="consent-category">
+            <span>
+              <strong>{privacy.analyticsLabel}</strong>
+              <span>{privacy.analyticsDescription}</span>
+            </span>
+            <input
+              type="checkbox"
+              data-consent-category="analytics"
+            />
+          </label>
+        )
+      }
+      <label class="consent-category">
+        <span>
+          <strong>{privacy.externalMediaLabel}</strong>
+          <span>{privacy.externalMediaDescription}</span>
+        </span>
+        <input
+          type="checkbox"
+          data-consent-category="externalMedia"
+        />
+      </label>
+    </div>
+    <div class="consent-modal-footer">
+      <Button
+        text="Save choices"
+        variant="primary"
+        size="sm"
+        data-consent-action="save"
+      />
+    </div>
+  </ModalShell>
+</aside>
+
+<script>
+  import { setupAllConsent } from "./setup";
+
+  setupAllConsent();
+  document.addEventListener("astro:page-load", () => setupAllConsent());
+</script>
+
+<style is:global>
+  @layer components {
+    .consent-banner {
+      align-items: end;
+      background-color: var(--color-bg-surface);
+      border: var(--border-width-sm) solid var(--color-border);
+      border-radius: var(--radius-md);
+      bottom: var(--spacing-md);
+      box-shadow: var(--shadow-lg);
+      display: grid;
+      gap: var(--spacing-md);
+      left: var(--spacing-md);
+      max-width: min(var(--content-width-md), calc(100vw - var(--spacing-md) * 2));
+      padding: var(--spacing-md);
+      position: fixed;
+      z-index: var(--layer-8);
+
+      @media (min-width: 640px) {
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+    }
+
+    .consent-copy {
+      display: grid;
+      gap: var(--spacing-xs);
+
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h2 {
+        color: var(--color-text-strong);
+        font-size: var(--font-size-lg);
+      }
+
+      p,
+      a {
+        font-size: var(--font-size-sm);
+      }
+    }
+
+    .consent-actions,
+    .consent-modal-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-xs);
+    }
+
+    .consent-settings-trigger {
+      bottom: var(--spacing-md);
+      display: none;
+      position: fixed;
+      right: var(--spacing-md);
+      z-index: var(--layer-8);
+    }
+
+    .consent[data-consent-decided] .consent-settings-trigger {
+      display: inline-flex;
+    }
+
+    .modal-popover.consent-popover {
+      max-height: min(85vh, 38rem);
+    }
+
+    .consent-modal-header,
+    .consent-modal-footer {
+      align-items: center;
+      background-color: var(--color-bg-surface);
+      display: flex;
+      justify-content: space-between;
+      padding: var(--spacing-md);
+    }
+
+    .consent-modal-header h2 {
+      font-size: var(--font-size-heading-sm);
+      margin: 0;
+    }
+
+    .consent-modal-body {
+      display: grid;
+      gap: var(--spacing-md);
+      overflow-y: auto;
+      padding: var(--spacing-md);
+    }
+
+    .consent-modal-body > p {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .consent-category {
+      align-items: start;
+      border-top: var(--border-width-sm) solid var(--color-border);
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: space-between;
+      padding-top: var(--spacing-md);
+
+      > span {
+        display: grid;
+        gap: var(--spacing-xs);
+      }
+
+      strong {
+        color: var(--color-text-strong);
+      }
+
+      span span {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+      }
+
+      input {
+        accent-color: var(--color-brand);
+        block-size: 1.25rem;
+        inline-size: 1.25rem;
+        margin: 0;
+      }
+    }
+
+    @media (max-width: 639px) {
+      .consent-banner {
+        bottom: var(--spacing-sm);
+        left: var(--spacing-sm);
+        max-width: calc(100vw - var(--spacing-sm) * 2);
+      }
+
+      .consent-settings-trigger {
+        bottom: var(--spacing-sm);
+        right: var(--spacing-sm);
+      }
+
+      body:has(.mobile-menu-popover:popover-open) .consent-banner,
+      body:has(.mobile-menu-popover:popover-open) .consent-settings-trigger {
+        display: none;
+      }
+    }
+  }
+</style>

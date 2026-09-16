@@ -116,7 +116,17 @@ const embedSrc =
           class="video-modal-player"
         />
       ) : (
-        <div class="video-modal-embed" />
+        <div class="video-modal-embed">
+          <div class="video-modal-consent">
+            <p>Enable external media to play this video.</p>
+            <button
+              type="button"
+              data-external-media-enable
+            >
+              Enable video
+            </button>
+          </div>
+        </div>
       )
     }
   </div>
@@ -288,6 +298,32 @@ const embedSrc =
       > .video-modal-embed {
         height: 100%;
         width: 100%;
+      }
+
+      .video-modal-consent {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        min-height: 18rem;
+        padding: var(--spacing-md);
+        text-align: center;
+
+        p {
+          margin: 0;
+        }
+
+        button {
+          background-color: var(--color-bg-brand);
+          border: var(--border-width-sm) solid var(--color-bg-brand);
+          border-radius: var(--radius-xs);
+          color: var(--color-brand-on);
+          cursor: pointer;
+          font: inherit;
+          font-weight: var(--font-weight-semibold);
+          padding: var(--spacing-em-sm);
+        }
       }
 
       > .video-modal-player {
