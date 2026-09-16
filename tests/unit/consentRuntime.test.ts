@@ -86,6 +86,23 @@ describe("consent runtime", () => {
     vi.stubGlobal("BroadcastChannel", undefined);
 
     const manager = new ConsentManager(config);
+    const subscriber = vi.fn();
+
+    manager.subscribe(subscriber);
+
+    manager.acceptAll();
+    expect(manager.record.decisions).toEqual({
+      analytics: "granted",
+      externalMedia: "granted",
+    });
+    expect(subscriber).toHaveBeenCalledTimes(1);
+
+    manager.rejectAll();
+    expect(manager.record.decisions).toEqual({
+      analytics: "denied",
+      externalMedia: "denied",
+    });
+    expect(subscriber).toHaveBeenCalledTimes(2);
 
     manager.setDecision("analytics", "granted");
     expect(manager.record.decisions.analytics).toBe("granted");

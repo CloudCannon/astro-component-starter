@@ -136,8 +136,17 @@ export class ConsentManager {
     this.setDecision("analytics", "granted");
   }
 
+  acceptAll(): void {
+    this.setOptionalDecisions("granted");
+  }
+
+  rejectAll(): void {
+    this.setOptionalDecisions("denied");
+  }
+
+  /** @deprecated Use rejectAll() to match the visitor-facing action. */
   rejectOptional(): void {
-    consentCategories.forEach((category) => this.setDecision(category, "denied"));
+    this.rejectAll();
   }
 
   subscribe(subscriber: Subscriber): () => void {
@@ -161,6 +170,18 @@ export class ConsentManager {
       // Browser storage can be unavailable. The in-memory record still makes
       // the current visit honour the visitor's choice.
     }
+  }
+
+  private setOptionalDecisions(decision: Exclude<ConsentDecision, "unset">): void {
+    this.#record = {
+      policyRevision: this.#config.policyRevision,
+      decidedAt: Date.now(),
+      decisions: Object.fromEntries(
+        consentCategories.map((category) => [category, decision])
+      ) as Record<ConsentCategory, Exclude<ConsentDecision, "unset">>,
+    };
+    this.write();
+    this.notify({ record: this.record });
   }
 
   private sync(): void {

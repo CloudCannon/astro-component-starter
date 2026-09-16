@@ -35,23 +35,23 @@ const popoverId = "privacy-settings";
         </div>
         <div class="consent-actions">
           <Button
-            text="Accept analytics"
-            variant="primary"
-            size="sm"
-            data-consent-action="accept-analytics"
-          />
-          <Button
-            text="Reject non-essential"
+            text="Accept All"
             variant="secondary"
             size="sm"
-            data-consent-action="reject"
+            data-consent-action="accept-all"
           />
           <Button
-            text="Manage preferences"
-            variant="ghost"
+            text="Reject All"
+            variant="secondary"
+            size="sm"
+            data-consent-action="reject-all"
+          />
+          <Button
+            text="Customize"
+            variant="secondary"
             size="sm"
             link={`^${popoverId}`}
-            data-consent-action="manage"
+            data-consent-action="customize"
           />
         </div>
       </div>

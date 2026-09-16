@@ -5,7 +5,7 @@ defaultSize: xl
 overview: |
   Consent is site chrome, not a page section. The starter renders it once from `src/data/privacy.json` and `src/data/analytics.json`; do not add it to a page's `pageSections` array.
 
-  The banner appears before a visitor has made an analytics choice. **Manage preferences** opens the complete settings dialog, and the footer's **Privacy settings** link reopens it later. This docs preview is isolated: its buttons do not save to browser storage or load the example Plausible script.
+  The banner appears before a visitor has made an analytics choice. **Accept All** grants both optional categories, **Reject All** denies both, and **Customize** opens the granular settings dialog. The three choices use equal visual prominence. The footer's **Privacy settings** link reopens the dialog later. This docs preview is isolated: its buttons do not save to browser storage or load the example Plausible script.
 ---
 
 ## Before launch

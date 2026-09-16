@@ -23,7 +23,7 @@ export default preview({
     bar(112, 178, 310, "heading"),
     lines(112, 222, [530, 470]),
     bar(112, 282, 154, "body"),
-    pill(710, 209, 150, 44, { label: 72 }),
+    pill(710, 209, 150, 44, { label: 72, variant: "ghost" }),
     pill(876, 209, 154, 44, { label: 82, variant: "ghost" }),
     pill(1046, 209, 154, 44, { label: 76, variant: "ghost" }),
   ],

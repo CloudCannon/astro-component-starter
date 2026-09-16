@@ -35,7 +35,7 @@ function setupPreview(root: HTMLElement): void {
     control.addEventListener("click", () => {
       const action = control.dataset.consentAction;
 
-      if (action === "accept-analytics" || action === "reject") finishChoice();
+      if (action === "accept-all" || action === "reject-all") finishChoice();
       if (action === "save") {
         finishChoice();
         root.querySelector<HTMLElement>(".consent-popover")?.hidePopover();
@@ -208,8 +208,8 @@ function bind(root: HTMLElement, privacy: PrivacyConfig): void {
     control.addEventListener("click", () => {
       const action = control.dataset.consentAction;
 
-      if (action === "accept-analytics") manager.acceptAnalytics();
-      if (action === "reject") manager.rejectOptional();
+      if (action === "accept-all") manager.acceptAll();
+      if (action === "reject-all") manager.rejectAll();
       if (action === "save") {
         root.querySelectorAll<HTMLInputElement>("[data-consent-category]").forEach((input) => {
           manager.setDecision(

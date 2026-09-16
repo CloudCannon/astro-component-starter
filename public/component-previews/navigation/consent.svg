@@ -25,8 +25,8 @@
     <rect x="112" y="222" width="530" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="112" y="246" width="470" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="112" y="282" width="154" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
-    <rect x="710" y="209" width="150" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
-    <rect x="749" y="227" width="72" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="710" y="209" width="150" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="749" y="227" width="72" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="876" y="209" width="154" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
     <rect x="912" y="227" width="82" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
     <rect x="1046" y="209" width="154" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>

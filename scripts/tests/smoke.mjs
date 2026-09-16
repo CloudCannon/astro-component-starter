@@ -255,7 +255,22 @@ const tests = [
       assert(!initialState.hasLiveManager, "docs preview created the live consent singleton");
       assert(initialState.storedChoice === null, "docs preview started with a persisted choice");
 
-      await root.locator('[data-consent-action="manage"] .button-inner').click();
+      const choices = await root.locator(".consent-actions .button-inner").allTextContents();
+
+      assert(
+        JSON.stringify(choices) === JSON.stringify(["Accept All", "Reject All", "Customize"]),
+        `expected balanced first-layer choices, got ${JSON.stringify(choices)}`
+      );
+      const choiceClasses = await root
+        .locator(".consent-actions .button-inner")
+        .evaluateAll((buttons) => buttons.map((button) => button.className));
+
+      assert(
+        new Set(choiceClasses).size === 1,
+        `first-layer choices do not have equal prominence: ${JSON.stringify(choiceClasses)}`
+      );
+
+      await root.locator('[data-consent-action="customize"] .button-inner').click();
       await page.waitForFunction(
         (sel) => document.querySelector(sel)?.matches(":popover-open"),
         popoverSel
@@ -266,7 +281,7 @@ const tests = [
       );
 
       await page.locator(`${popoverSel} .button-inner[aria-label="Close"]`).click();
-      await root.locator('[data-consent-action="reject"] .button-inner').click();
+      await root.locator('[data-consent-action="reject-all"] .button-inner').click();
       await page.waitForFunction(
         (sel) => document.querySelector(sel)?.hasAttribute("data-consent-decided"),
         `${ACTIVE_PREVIEW} .consent`
@@ -408,7 +423,12 @@ const tests = [
 
       assert(plausibleRequests === 0, "Plausible loaded before analytics permission");
 
-      await page.evaluate(() => window.siteConsent?.acceptAnalytics());
+      await page.evaluate(() => window.siteConsent?.acceptAll());
+      await page.waitForFunction(
+        () =>
+          window.siteConsent?.record.decisions.analytics === "granted" &&
+          window.siteConsent?.record.decisions.externalMedia === "granted"
+      );
       await page.waitForFunction(
         () =>
           document.querySelector('script[src="https://plausible.io/js/pa-smoke-test.js"]') !== null
