@@ -2,8 +2,6 @@
   "_schema": "privacy",
   "enabled": true,
   "policyRevision": 1,
-  "regionalPolicy": "global-strict",
-  "regionalPolicyApproved": false,
   "expiryDays": 180,
   "policyUrl": "/privacy/",
   "bannerHeading": "Your privacy, your choice",

@@ -48,6 +48,26 @@ function readJson(relativePath) {
   }
 }
 
+function pageSourceForUrl(pathname) {
+  const slug = pathname.split(/[?#]/, 1)[0].replace(/^\/+|\/+$/g, "");
+  const candidates = slug
+    ? [
+        `src/content/pages/${slug}.md`,
+        `src/content/pages/${slug}/index.md`,
+        `src/pages/${slug}.astro`,
+        `src/pages/${slug}/index.astro`,
+      ]
+    : ["src/content/pages/index.md", "src/pages/index.astro"];
+
+  for (const candidate of candidates) {
+    const source = read(candidate);
+
+    if (source !== null) return { path: candidate, source };
+  }
+
+  return null;
+}
+
 const breaking = [];
 const branding = [];
 
@@ -69,6 +89,27 @@ if (seo?.url === PLACEHOLDER_URL) {
     detail: `url is still ${PLACEHOLDER_URL}`,
     why: "Organization and WebSite structured data advertise the wrong domain",
   });
+}
+
+const privacy = readJson("src/data/privacy.json");
+
+if (privacy?.enabled) {
+  const policyPage =
+    typeof privacy.policyUrl === "string" ? pageSourceForUrl(privacy.policyUrl) : null;
+
+  if (!policyPage) {
+    breaking.push({
+      file: "src/data/privacy.json",
+      detail: `policyUrl ${JSON.stringify(privacy.policyUrl)} does not resolve to a content page`,
+      why: "the consent interface publishes a broken privacy-policy link",
+    });
+  } else if (/^starterPrivacyPolicyPlaceholder:\s*true\s*$/m.test(policyPage.source)) {
+    breaking.push({
+      file: policyPage.path,
+      detail: "the starter privacy-policy template has not been replaced",
+      why: "a live site's policy must describe its real owner, services, retention, and visitor rights",
+    });
+  }
 }
 if (seo?.name === STARTER_NAME) {
   branding.push({ file: "src/data/seo.json", detail: `name is still "${STARTER_NAME}"` });

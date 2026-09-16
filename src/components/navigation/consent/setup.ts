@@ -6,7 +6,6 @@ import {
   type AnalyticsConfig,
   type PrivacyConfig,
 } from "../../../integrations/consent/config";
-import { resolveConsentPolicy } from "../../../integrations/consent/resolvePolicy";
 import { isAllowedExternalMediaUrl } from "../../../integrations/consent/externalMedia";
 import { getConsentManager, type ConsentCategory } from "../../../integrations/consent/runtime";
 
@@ -54,7 +53,7 @@ function hydrateExternalMedia(): void {
       .querySelectorAll<HTMLElement>("[data-external-media-src][data-external-media-mounted]")
       .forEach((placeholder) => {
         placeholder.replaceChildren(
-          externalMediaFallback("Enable external media to view this content.")
+          externalMediaFallback("Allow external media across this site to view this content.")
         );
         placeholder.removeAttribute("data-external-media-mounted");
       });
@@ -65,7 +64,9 @@ function hydrateExternalMedia(): void {
 
         if (!(host instanceof HTMLElement) || !host.hasAttribute("data-external-media-mounted"))
           return;
-        host.replaceChildren(externalMediaFallback("Enable external content to view it."));
+        host.replaceChildren(
+          externalMediaFallback("Allow external media across this site to view this content.")
+        );
         host.removeAttribute("data-external-media-mounted");
       });
     return;
@@ -136,7 +137,7 @@ function externalMediaFallback(message: string): DocumentFragment {
 
   paragraph.textContent = message;
   button.type = "button";
-  button.textContent = "Enable external media";
+  button.textContent = "Allow all external media";
   button.setAttribute("data-external-media-enable", "");
   content.append(paragraph, button);
 
@@ -205,7 +206,6 @@ export function setupAllConsent(): void {
       initialized = true;
       const manager = getConsentManager(config.privacy);
 
-      void resolveConsentPolicy(config.privacy).then((policy) => manager.setPolicy(policy));
       manager.subscribe(() => {
         document
           .querySelectorAll<HTMLElement>(".consent")

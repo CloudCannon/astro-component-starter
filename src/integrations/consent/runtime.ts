@@ -1,4 +1,4 @@
-import type { ConsentPolicy, PrivacyConfig } from "./config";
+import type { PrivacyConfig } from "./config";
 
 export const CONSENT_STORAGE_KEY = "site-consent";
 
@@ -15,7 +15,6 @@ export type ConsentRecord = {
 export type ConsentChange = {
   category?: ConsentCategory;
   record: ConsentRecord;
-  policy: ConsentPolicy;
 };
 
 type Subscriber = (change: ConsentChange) => void;
@@ -33,7 +32,11 @@ function isDecision(value: unknown): value is ConsentDecision {
   return value === "unset" || value === "granted" || value === "denied";
 }
 
-function parseRecord(value: string | null, config: PrivacyConfig): ConsentRecord {
+export function parseConsentRecord(
+  value: string | null,
+  config: PrivacyConfig,
+  now = Date.now()
+): ConsentRecord {
   if (!value) return emptyRecord(config.policyRevision);
 
   try {
@@ -43,7 +46,7 @@ function parseRecord(value: string | null, config: PrivacyConfig): ConsentRecord
     if (
       parsed.policyRevision !== config.policyRevision ||
       typeof parsed.decidedAt !== "number" ||
-      parsed.decidedAt + maxAge < Date.now()
+      parsed.decidedAt + maxAge < now
     ) {
       return emptyRecord(config.policyRevision);
     }
@@ -63,6 +66,24 @@ function parseRecord(value: string | null, config: PrivacyConfig): ConsentRecord
   }
 }
 
+export function isConsentAllowed(
+  record: ConsentRecord,
+  category: ConsentCategory,
+  config: PrivacyConfig,
+  globalPrivacyControl = false
+): boolean {
+  if (!config.enabled) return false;
+
+  const decision = record.decisions[category];
+
+  if (decision === "denied") return false;
+  if (config.honorGlobalPrivacyControl && globalPrivacyControl && decision !== "granted") {
+    return false;
+  }
+
+  return decision === "granted";
+}
+
 function globalPrivacyControlEnabled(): boolean {
   return (
     (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true
@@ -72,7 +93,6 @@ function globalPrivacyControlEnabled(): boolean {
 export class ConsentManager {
   #config: PrivacyConfig;
   #record: ConsentRecord;
-  #policy: ConsentPolicy = "strict-opt-in";
   #subscribers = new Set<Subscriber>();
   #channel?: BroadcastChannel;
 
@@ -94,38 +114,12 @@ export class ConsentManager {
     return structuredClone(this.#record);
   }
 
-  get policy(): ConsentPolicy {
-    return this.#policy;
-  }
-
   get hasDecision(): boolean {
     return consentCategories.some((category) => this.#record.decisions[category] !== "unset");
   }
 
-  setPolicy(policy: ConsentPolicy): void {
-    if (this.#policy === policy) return;
-    this.#policy = policy;
-    this.notify({ record: this.record, policy });
-  }
-
   isAllowed(category: ConsentCategory): boolean {
-    // Disabling the integration is an intentional site-owner opt-out of this
-    // workflow, rather than a broken state where every optional component can
-    // never be activated.
-    if (!this.#config.enabled) return true;
-
-    const decision = this.#record.decisions[category];
-
-    if (decision === "denied") return false;
-    if (
-      this.#config.honorGlobalPrivacyControl &&
-      globalPrivacyControlEnabled() &&
-      decision !== "granted"
-    ) {
-      return false;
-    }
-
-    return this.#policy === "notice-and-opt-out" || decision === "granted";
+    return isConsentAllowed(this.#record, category, this.#config, globalPrivacyControlEnabled());
   }
 
   setDecision(category: ConsentCategory, decision: Exclude<ConsentDecision, "unset">): void {
@@ -135,7 +129,7 @@ export class ConsentManager {
       decisions: { ...this.#record.decisions, [category]: decision },
     };
     this.write();
-    this.notify({ category, record: this.record, policy: this.#policy });
+    this.notify({ category, record: this.record });
   }
 
   acceptAnalytics(): void {
@@ -153,7 +147,7 @@ export class ConsentManager {
 
   private read(): ConsentRecord {
     try {
-      return parseRecord(localStorage.getItem(CONSENT_STORAGE_KEY), this.#config);
+      return parseConsentRecord(localStorage.getItem(CONSENT_STORAGE_KEY), this.#config);
     } catch {
       return emptyRecord(this.#config.policyRevision);
     }
@@ -174,7 +168,7 @@ export class ConsentManager {
 
     if (JSON.stringify(record) === JSON.stringify(this.#record)) return;
     this.#record = record;
-    this.notify({ record: this.record, policy: this.#policy });
+    this.notify({ record: this.record });
   }
 
   private notify(change: ConsentChange): void {

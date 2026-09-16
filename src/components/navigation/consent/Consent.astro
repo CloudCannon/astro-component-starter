@@ -85,7 +85,10 @@ const popoverId = "privacy-settings";
       />
     </div>
     <div class="consent-modal-body">
-      <p>Necessary storage keeps your privacy choices. It is always on.</p>
+      <p>
+        Necessary storage keeps your privacy choices. It is always on.
+        <a href={privacy.policyUrl}>Read our privacy policy</a>.
+      </p>
       {
         hasAnalytics && (
           <label class="consent-category">

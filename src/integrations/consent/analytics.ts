@@ -7,28 +7,35 @@ let pageSerial = 0;
 let trackedSerial = -1;
 let scriptLoaded = false;
 
+type PlausibleOptions = {
+  autoCapturePageviews: boolean;
+};
+
 function plausibleQueue(): NonNullable<Window["plausible"]> {
   if (!window.plausible) {
     const queue = ((...args: unknown[]) => queue.q?.push(args)) as NonNullable<Window["plausible"]>;
 
     queue.q = [];
+    queue.init = (options) => {
+      queue.o = options;
+    };
     window.plausible = queue;
   }
 
   return window.plausible;
 }
 
-function loadPlausible(domain: string): NonNullable<Window["plausible"]> {
+function loadPlausible(scriptUrl: string): NonNullable<Window["plausible"]> {
   const queue = plausibleQueue();
 
   if (scriptLoaded) return queue;
   scriptLoaded = true;
+  queue.init({ autoCapturePageviews: false });
 
   const script = document.createElement("script");
 
-  script.defer = true;
-  script.dataset.domain = domain;
-  script.src = "https://plausible.io/js/script.manual.js";
+  script.async = true;
+  script.src = scriptUrl;
   document.head.append(script);
   return queue;
 }
@@ -40,8 +47,8 @@ function trackCurrent(config: AnalyticsConfig, privacy: PrivacyConfig): void {
   trackedSerial = pageSerial;
 
   if (config.provider === "plausible-hosted") {
-    loadPlausible(config.domain)("pageview", {
-      u: `${location.origin}${location.pathname}`,
+    loadPlausible(config.scriptUrl)("pageview", {
+      url: `${location.origin}${location.pathname}`,
     });
   }
 }
@@ -63,6 +70,10 @@ export function setupAnalytics(config: AnalyticsConfig, privacy: PrivacyConfig):
 declare global {
   interface Window {
     inEditorMode?: boolean;
-    plausible?: ((event: string, options?: Record<string, unknown>) => void) & { q?: unknown[][] };
+    plausible?: ((event: string, options?: Record<string, unknown>) => void) & {
+      init: (options: PlausibleOptions) => void;
+      o?: PlausibleOptions;
+      q?: unknown[][];
+    };
   }
 }

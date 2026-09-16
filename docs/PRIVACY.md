@@ -7,16 +7,30 @@ privacy control, records only a small local preference, and uses global strict o
 Edit both files in CloudCannon's **Data** editor, or in the repository. Configuration is
 validated during the Astro build:
 
-- **Privacy & Consent** controls the policy revision, the expiry period, banner copy, Global
-  Privacy Control behaviour, and the regional policy preset.
+- **Privacy & Consent** controls the policy revision, the expiry period, banner copy, and Global
+  Privacy Control behaviour. The same strict opt-in policy applies to every visitor.
 - **Analytics** currently supports `none` and `plausible-hosted`. Choose `none` until a
-  Plausible site has been configured for the production domain.
+  Plausible site has been configured and you have copied its site-specific script URL.
 
 The visitor can separately allow analytics and external media. Rejecting non-essential
 services denies both. Their choices are versioned in `localStorage`, synchronized across tabs,
 and are re-requested when the configured policy revision changes or the expiry period passes.
 The first-visit banner appears only when analytics is configured; external media is requested
 where the visitor chooses to use it.
+
+Turning **Privacy & Consent** off fails closed: analytics and external media remain disabled.
+It does not provide a shortcut for loading optional services without consent. When Global
+Privacy Control is enabled in the configuration, an unset choice remains denied; a later,
+explicit choice made in this site's privacy settings is authoritative.
+
+## Privacy-policy page
+
+The starter includes an editable `/privacy/` scaffold. It deliberately contains bracketed
+prompts and `starterPrivacyPolicyPlaceholder: true`; it is not a publishable generic policy.
+Replace it with text that describes the live site's real owner, services, purposes, recipients,
+retention, and visitor rights, then remove the placeholder flag. `npm run check:placeholders --
+--strict` fails when the configured policy route is missing or the scaffold is still marked as a
+placeholder.
 
 ## External media
 
@@ -27,43 +41,36 @@ playback interaction; it does not make YouTube a first-party service or remove t
 external-media permission.
 
 `Embed` is a trusted-developer escape hatch, not a general script loader. Its raw HTML remains
-inert until approval; scripts, event handlers, and iframe hosts outside the built-in YouTube,
-Vimeo, Google Maps, and OpenStreetMap allowlist are removed before it is mounted. Contact Split
-maps use the same allowlist. Prefer typed video and map paths for editor-managed content.
+inert until approval; scripts and event handlers are removed, and iframes must match the built-in
+YouTube embed, Vimeo player, Google Maps embed, or OpenStreetMap export paths before mounting.
+Contact Split maps use the same allowlist. Prefer typed video and map paths for editor-managed
+content. A contextual **Allow all external media** action grants this category across the site,
+not only for that one video or map.
 
-## Regional policy
+## Configure Plausible
 
-`global-strict` is the default and needs no server code. `eea-uk-ch-strict` keeps strict opt-in
-for the EEA, UK, and Switzerland and uses notice-and-opt-out elsewhere. It never invents a
-visitor choice: a denial always wins, and missing, invalid, timed-out, or unknown geo data falls
-back to strict opt-in.
-
-Regional resolution is country-level only so it can be portable. Before enabling the regional
-preset, have the organisation's policy owner approve the mapping, turn on **Regional policy
-approved**, and verify it on the actual deployment host. Without that explicit approval the
-site remains global strict opt-in.
-
-| Host               | Included resolver                           | Deployment requirement                                                                    |
-| ------------------ | ------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| CloudCannon        | Reads its injected `country-xx` page class. | Enable the site's Geolocation setting in CloudCannon.                                     |
-| Netlify            | `netlify/edge-functions/consent-policy.ts`  | Deploy with Netlify Edge Functions enabled.                                               |
-| Vercel             | `api/consent-policy.ts`                     | Deploy the repository as a Vercel project so the Function receives `x-vercel-ip-country`. |
-| Cloudflare Pages   | `functions/api/consent-policy.ts`           | Deploy with Pages Functions (Git integration or Wrangler, not Dashboard Direct Upload).   |
-| Other static hosts | No geo lookup.                              | The client safely remains global strict opt-in.                                           |
-
-All four adapters expose the same endpoint, `/api/consent-policy`, return only the resolved
-policy, and do not store or return location details. They are deliberately included as separate
-platform entry points; a host cannot use another host's request metadata automatically.
+1. Add the production domain to Plausible.
+2. In Plausible's Site Installation settings, copy the script `src`. It has the form
+   `https://plausible.io/js/pa-….js` and is specific to the configured site.
+3. Set **Analytics → Provider** to **Plausible (hosted)** and paste that complete URL into
+   **Plausible script URL**. The build rejects the legacy shared script and non-Plausible hosts.
+4. Deploy, grant analytics permission, and use Plausible's integration checker plus the browser
+   Network panel to confirm that the script and event endpoint succeed.
 
 ## Analytics behaviour
 
-The Plausible adapter loads `script.manual.js` only after effective analytics permission. It
-queues one manual `pageview` for the current Astro page after approval and one for each later
-`astro:page-load`; it sends the path only, never pre-consent buffered events. Revoking
-permission stops future events. A third-party script already fetched cannot be reliably removed
-or made to clear provider-domain storage by the site, so changing a decision is prospective.
+The Plausible adapter loads the configured site-specific script only after effective analytics
+permission, initializes it with automatic pageviews disabled, and queues one manual `pageview`
+for the current Astro page after approval plus one for each later `astro:page-load`. It sends the
+origin and path only and never buffers pre-consent events. Revoking permission stops future
+events. A third-party script already fetched cannot be reliably removed or made to clear
+provider-domain storage by the site, so changing a decision is prospective.
 
 Before release, test a production deployment with browser network tools: no Plausible request,
 provider thumbnail, iframe, preconnect, map, or raw embed request should occur before the
-relevant approval. Test each regional host adapter with its documented country simulation or a
-real in-country request.
+relevant approval.
+
+Also exercise accept, reject, granular save, revocation, policy-revision and expiry changes,
+cross-tab synchronization, Global Privacy Control, blocked browser storage, mobile layout, and
+keyboard/screen-reader operation. Inventory every new third-party service: add it to an existing
+category or introduce an appropriately named category before its network code ships.

@@ -64,9 +64,9 @@ function resetHostedVideos(root: ParentNode = document): void {
     const type = container.dataset.videoType;
     const id = container.dataset.videoId;
 
-    message.textContent = "Enable external media to play this video.";
+    message.textContent = "Allow external media across this site to play this video.";
     button.type = "button";
-    button.textContent = "Enable video";
+    button.textContent = "Allow all external media";
     button.setAttribute("data-external-media-enable", "");
     link.href =
       type === "youtube" ? `https://www.youtube.com/watch?v=${id}` : `https://vimeo.com/${id}`;

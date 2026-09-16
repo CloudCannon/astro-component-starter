@@ -305,6 +305,7 @@ if (dryRun) {
   if (resetBranding)
     console.log("    • Add your logo — src/data/mainNav.json, footer.json, seo.json");
   console.log("    • Write your description — src/data/seo.json");
+  console.log("    • Replace the privacy-policy template — src/content/pages/privacy.md");
   console.log("    • Set your colours and fonts — src/styles/themes/, site-fonts.mjs");
   console.log("    • npm run dev\n");
 }

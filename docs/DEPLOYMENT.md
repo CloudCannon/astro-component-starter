@@ -30,14 +30,6 @@ editor automatically — there is no separate CloudCannon-side registration step
 CloudCannon's own [documentation](https://cloudcannon.com/documentation/) is the reference for
 the account-side details — organisations, permissions, custom domains, and staging branches.
 
-## Regional consent policy (optional)
-
-The starter stays global strict opt-in unless **Regional policy** in Data → Privacy & Consent is
-changed. For the EEA, UK & Switzerland preset on CloudCannon, enable the site's **Geolocation**
-setting so CloudCannon includes its country class in the rendered page. If that signal is absent,
-the starter safely uses strict opt-in. See [Privacy, consent, and analytics](PRIVACY.md) for the
-complete host matrix and verification requirements.
-
 ## Set your production URL
 
 This is the one thing a fresh clone will get wrong, and it fails silently. `site` in
@@ -93,6 +85,14 @@ For a very large site, `shareImageGeneration` in `src/data/seo.json` (**Share ca
   `src/data/mainNav.json` and `footer.json` don't still link to `/component-docs/`.
 - Edit `public/llms.txt` so it lists _your_ pages, not the starter's Home / Why / Get started /
   Examples / Blog.
+- Replace `src/content/pages/privacy.md`, remove its
+  `starterPrivacyPolicyPlaceholder: true` flag, and confirm the configured policy URL resolves.
+- If analytics is enabled, paste the site-specific Plausible `pa-….js` URL into the Analytics
+  data panel and verify a consented pageview in the production dashboard.
+- Run `npm run check:placeholders -- --strict` so placeholder URLs and privacy policy text fail
+  the production gate rather than warn.
+- Inspect production network traffic before and after each privacy choice. Optional analytics,
+  video, map, and embed requests must remain absent until their category is granted.
 
 `npm run build` strips the component documentation from the output: the per-component pages
 aren't generated at all, and `/component-docs/` and `/gallery/` render

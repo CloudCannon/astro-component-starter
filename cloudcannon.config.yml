@@ -180,22 +180,10 @@ collections_config:
         _inputs:
           enabled:
             type: switch
-            comment: Enable the site-wide privacy settings control and consent workflow.
+            comment: Enable the site-wide privacy settings control and consent workflow. When off, optional services remain blocked.
           policyRevision:
             type: number
             comment: Increase this after a material change to optional services or this policy.
-          regionalPolicy:
-            type: select
-            comment: Global strict opt-in is the safe default. Regional mode requires a supported host geo adapter and policy approval.
-            options:
-              values:
-                - value: global-strict
-                  label: Global strict opt-in
-                - value: eea-uk-ch-strict
-                  label: EEA, UK & Switzerland strict opt-in
-          regionalPolicyApproved:
-            type: switch
-            comment: Confirm that your policy owner has approved the selected regional policy. It otherwise stays global strict opt-in.
           expiryDays:
             type: number
             comment: Days before a visitor is asked to review their choices again.
@@ -224,9 +212,10 @@ collections_config:
                 - value: plausible-hosted
                   label: Plausible (hosted)
             comment: Provider scripts only load after analytics consent.
-          domain:
-            type: text
-            comment: Public tracked domain. Leave empty while analytics is off.
+          scriptUrl:
+            type: url
+            label: Plausible script URL
+            comment: Site-specific https://plausible.io/js/pa-….js URL from Plausible. Leave empty while analytics is off.
     _inputs:
       logoSource:
         type: image

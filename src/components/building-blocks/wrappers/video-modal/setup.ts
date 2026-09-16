@@ -45,9 +45,9 @@ function renderConsentPrompt(container: HTMLElement): void {
   const prompt = document.createElement("div");
 
   prompt.className = "video-modal-consent";
-  message.textContent = "Enable external media to play this video.";
+  message.textContent = "Allow external media across this site to play this video.";
   button.type = "button";
-  button.textContent = "Enable video";
+  button.textContent = "Allow all external media";
   button.setAttribute("data-external-media-enable", "");
   prompt.append(message, button);
   container.replaceChildren(prompt);

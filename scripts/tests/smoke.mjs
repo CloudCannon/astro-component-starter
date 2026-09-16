@@ -80,7 +80,7 @@ const tests = [
         !(await response.text()).includes('class="button code-block-copy"'),
         "the copy button should not render before JavaScript runs"
       );
-      const expected = await block.locator("code").textContent();
+      const expected = await block.locator(".code-block-panel:not([hidden]) code").textContent();
       const origin = new URL(page.url()).origin;
 
       await page.context().grantPermissions(["clipboard-read", "clipboard-write"], { origin });
@@ -281,13 +281,11 @@ const tests = [
     },
   },
   {
-    name: "privacy settings reflect effective permission and synchronize decisions across tabs",
+    name: "privacy settings default to strict opt-in and synchronize decisions across tabs",
     path: "/",
     viewport: DESKTOP,
     async run(page) {
       await page.waitForFunction(() => Boolean(window.siteConsent));
-      await page.evaluate(() => window.siteConsent?.setPolicy("notice-and-opt-out"));
-
       await page.locator("[data-consent-open]").click();
       const popover = page.locator("#privacy-settings");
       const externalMedia = popover.locator('[data-consent-category="externalMedia"]');
@@ -296,14 +294,18 @@ const tests = [
         document.querySelector("#privacy-settings")?.matches(":popover-open")
       );
       assert(
-        await externalMedia.isChecked(),
-        "expected the external-media switch to reflect effective notice-and-opt-out permission"
+        (await popover.locator('a[href="/privacy/"]').count()) === 1,
+        "privacy settings did not link to the configured policy"
+      );
+      assert(
+        !(await externalMedia.isChecked()),
+        "expected external media to remain off until the visitor opts in"
       );
 
-      await externalMedia.uncheck();
+      await externalMedia.check();
       await popover.locator('[data-consent-action="save"] .button-inner').click();
       await page.waitForFunction(
-        () => window.siteConsent?.record.decisions.externalMedia === "denied"
+        () => window.siteConsent?.record.decisions.externalMedia === "granted"
       );
 
       const other = await page.context().newPage();
@@ -312,9 +314,9 @@ const tests = [
       await other.goto(page.url(), { waitUntil: "load" });
       await other.waitForFunction(() => Boolean(window.siteConsent));
 
-      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "granted"));
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "denied"));
       await other.waitForFunction(
-        () => window.siteConsent?.record.decisions.externalMedia === "granted"
+        () => window.siteConsent?.record.decisions.externalMedia === "denied"
       );
       await other.close();
     },
@@ -333,7 +335,11 @@ const tests = [
           const value = parse.apply(this, args);
 
           return value?._schema === "analytics"
-            ? { ...value, provider: "plausible-hosted", domain: "example.com" }
+            ? {
+                ...value,
+                provider: "plausible-hosted",
+                scriptUrl: "https://plausible.io/js/pa-smoke-test.js",
+              }
             : value;
         };
       });
@@ -350,9 +356,27 @@ const tests = [
       await page.evaluate(() => window.siteConsent?.acceptAnalytics());
       await page.waitForFunction(
         () =>
-          document.querySelector('script[src="https://plausible.io/js/script.manual.js"]') !== null
+          document.querySelector('script[src="https://plausible.io/js/pa-smoke-test.js"]') !== null
       );
       await page.waitForFunction(() => window.plausible?.q?.length === 1);
+      const initialAnalytics = await page.evaluate(() => ({
+        init: window.plausible?.o,
+        event: window.plausible?.q?.[0],
+      }));
+
+      assert(
+        initialAnalytics.init?.autoCapturePageviews === false,
+        "Plausible automatic pageviews were not disabled"
+      );
+      assert(initialAnalytics.event?.[0] === "pageview", "expected a manual pageview event");
+      assert(
+        initialAnalytics.event?.[1]?.url === `${new URL(page.url()).origin}/`,
+        `expected a current Plausible url, got ${JSON.stringify(initialAnalytics.event?.[1])}`
+      );
+      assert(
+        initialAnalytics.event?.[1]?.u === undefined,
+        "the obsolete Plausible u option was queued"
+      );
 
       await page.locator('.desktop-main-nav a[href="/why/"]').click();
       await page.waitForFunction(() => location.pathname === "/why/");
@@ -364,6 +388,67 @@ const tests = [
       const afterRevocation = await page.evaluate(() => window.plausible?.q?.length);
 
       assert(afterRevocation === 2, "analytics queued a page view after revocation");
+    },
+  },
+  {
+    name: "maps and raw embeds stay inert until site-wide external-media approval",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      let providerRequests = 0;
+
+      await page.route(
+        /https:\/\/(www\.google\.com|www\.openstreetmap\.org)\/.*/,
+        async (route) => {
+          providerRequests += 1;
+          await route.abort();
+        }
+      );
+      await page.waitForFunction(() => Boolean(window.siteConsent));
+      await page.evaluate(() => {
+        const fixtures = document.createElement("div");
+
+        fixtures.id = "external-media-smoke-fixtures";
+        fixtures.innerHTML = `
+          <div
+            id="consent-map-fixture"
+            data-external-media-src="https://www.openstreetmap.org/export/embed.html?bbox=example"
+            data-external-media-title="Test map"
+          ></div>
+          <template data-unsafe-external-media>
+            <iframe src="https://www.google.com/maps/embed?pb=example" title="Test raw embed"></iframe>
+          </template>
+          <div id="consent-raw-embed-fixture"></div>
+        `;
+        document.body.append(fixtures);
+        window.siteConsent?.setDecision("externalMedia", "denied");
+      });
+
+      assert(providerRequests === 0, "external media requested a provider before approval");
+      assert(
+        (await page.locator("#external-media-smoke-fixtures iframe").count()) === 0,
+        "an external iframe mounted before approval"
+      );
+
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "granted"));
+      await page.waitForFunction(
+        () => document.querySelectorAll("#external-media-smoke-fixtures iframe").length === 2
+      );
+      const mountedSources = await page
+        .locator("#external-media-smoke-fixtures iframe")
+        .evaluateAll((frames) => frames.map((frame) => frame.getAttribute("src")));
+
+      assert(
+        mountedSources.some((src) => src?.includes("openstreetmap.org/export/embed.html")) &&
+          mountedSources.some((src) => src?.includes("www.google.com/maps/embed")),
+        `expected the approved map and raw embed, got ${mountedSources.join(", ")}`
+      );
+      assert(providerRequests > 0, "approved external media did not contact a provider");
+
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "denied"));
+      await page.waitForFunction(
+        () => document.querySelectorAll("#external-media-smoke-fixtures iframe").length === 0
+      );
     },
   },
   {
@@ -1753,37 +1838,27 @@ const tests = [
         { polling: 100 }
       );
 
-      const screenStepper = await page.evaluate(() =>
-        [...document.querySelectorAll(".scroll-stepper")].find((stepper) =>
-          stepper.classList.contains("progress-dots")
-        )
-      );
+      const dotStepperSel =
+        '.component-viewer[data-viewer-id="media-end-dots"] .preview.active .scroll-stepper:has(.scroll-stepper-progress-dots)';
 
-      assert(screenStepper, "expected a dot-progress Scroll Stepper example");
+      await page.waitForSelector(dotStepperSel);
 
       await page.setViewportSize(DESKTOP);
-      await page.waitForFunction(() =>
-        [...document.querySelectorAll(".scroll-stepper")].some(
-          (stepper) =>
-            stepper.classList.contains("progress-dots") &&
-            stepper.hasAttribute("data-scroll-stepper-initialized")
-        )
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.hasAttribute("data-scroll-stepper-initialized"),
+        dotStepperSel
       );
-      await page.evaluate(() => {
-        const stepper = [...document.querySelectorAll(".scroll-stepper")].find((item) =>
-          item.classList.contains("progress-dots")
-        );
+      await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
         const pane = stepper.closest(".preview");
         const secondContent = stepper.querySelectorAll(".scroll-stepper-step-content")[1];
         const paneBounds = pane.getBoundingClientRect();
         const contentBounds = secondContent.getBoundingClientRect();
 
         pane.scrollTop += contentBounds.top - paneBounds.bottom + 1;
-      });
-      await page.waitForFunction(() => {
-        const stepper = [...document.querySelectorAll(".scroll-stepper")].find((item) =>
-          item.classList.contains("progress-dots")
-        );
+      }, dotStepperSel);
+      await page.waitForFunction((sel) => {
+        const stepper = document.querySelector(sel);
         const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
         const message = stepper.querySelectorAll(".scroll-stepper-step")[1];
 
@@ -1791,18 +1866,16 @@ const tests = [
           panels.findIndex((panel) => panel.hasAttribute("data-active")) === 1 &&
           getComputedStyle(message).visibility === "visible"
         );
-      });
-      const screenEntry = await page.evaluate(() => {
-        const stepper = [...document.querySelectorAll(".scroll-stepper")].find((item) =>
-          item.classList.contains("progress-dots")
-        );
+      }, dotStepperSel);
+      const screenEntry = await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
         const pane = stepper.closest(".preview").getBoundingClientRect();
         const content = stepper
           .querySelectorAll(".scroll-stepper-step-content")[1]
           .getBoundingClientRect();
 
         return { distanceFromBottom: Math.abs(content.top - pane.bottom) };
-      });
+      }, dotStepperSel);
 
       assert(
         screenEntry.distanceFromBottom <= 2,

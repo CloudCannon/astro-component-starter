@@ -1,19 +1,22 @@
 import { z } from "zod";
 
-export const consentPolicySchema = z.enum(["strict-opt-in", "notice-and-opt-out"]);
-export type ConsentPolicy = z.infer<typeof consentPolicySchema>;
-
-export const regionalPolicySchema = z.enum(["global-strict", "eea-uk-ch-strict"]);
-export type RegionalPolicy = z.infer<typeof regionalPolicySchema>;
-
 export const privacyConfigSchema = z.object({
   _schema: z.literal("privacy"),
   enabled: z.boolean().default(true),
   policyRevision: z.number().int().positive(),
-  regionalPolicy: regionalPolicySchema.default("global-strict"),
-  regionalPolicyApproved: z.boolean().default(false),
   expiryDays: z.number().int().min(1).max(365).default(180),
-  policyUrl: z.string().startsWith("/"),
+  policyUrl: z
+    .string()
+    .startsWith("/")
+    .refine(
+      (value) =>
+        !value.startsWith("//") &&
+        !value
+          .split(/[?#]/, 1)[0]
+          .split("/")
+          .some((segment) => segment === "." || segment === ".."),
+      "Use a safe, site-relative policy URL"
+    ),
   bannerHeading: z.string().min(1),
   bannerText: z.string().min(1),
   settingsLabel: z.string().min(1),
@@ -26,12 +29,26 @@ export const privacyConfigSchema = z.object({
 
 export type PrivacyConfig = z.infer<typeof privacyConfigSchema>;
 
+const plausibleScriptUrlSchema = z.url().refine((value) => {
+  const url = new URL(value);
+
+  return (
+    url.protocol === "https:" &&
+    url.hostname === "plausible.io" &&
+    /^\/js\/pa-[a-zA-Z0-9_-]+\.js$/.test(url.pathname)
+  );
+}, "Use the site-specific https://plausible.io/js/pa-….js URL from Plausible");
+
 export const analyticsConfigSchema = z.discriminatedUnion("provider", [
-  z.object({ _schema: z.literal("analytics"), provider: z.literal("none"), domain: z.string() }),
+  z.object({
+    _schema: z.literal("analytics"),
+    provider: z.literal("none"),
+    scriptUrl: z.literal("").default(""),
+  }),
   z.object({
     _schema: z.literal("analytics"),
     provider: z.literal("plausible-hosted"),
-    domain: z.string().min(1),
+    scriptUrl: plausibleScriptUrlSchema,
   }),
 ]);
 
