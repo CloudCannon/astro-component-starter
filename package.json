@@ -19,7 +19,6 @@
     "check:quick": "npm run lint:cms && npm run lint:css-vars && npm run typecheck",
     "check:placeholders": "node scripts/check/placeholders.mjs",
     "editor": "node scripts/setup/editor.mjs",
-    "preinstall": "node scripts/setup/guard-install.mjs",
     "reset:starter": "node scripts/setup/reset-starter.mjs",
     "check:fix": "npm run lint:fix && npm run format:fix",
     "typecheck": "astro check",

@@ -25,9 +25,9 @@ Run `npm run check` before claiming any work done. It chains:
 - `agents:check` — fails if `.claude/skills/` or `.cursor/rules/` drift from canonical `.agents/`.
 - `lint:cms` — validates the CloudCannon layer against the components: prop drift, orphaned/missing YAML, `_component` resolution.
 
-## Dependencies: never bare `npm install`
+## Dependencies
 
-After editing `package.json`, run `npm run deps:sync` — never plain `npm install`. A macOS install strips the Linux-only optional dependencies (sharp and rollup native binaries) from the lockfile, which breaks CI. `deps:sync` regenerates the lockfile with those platforms pinned, then runs `npm ci`. `package.json` is JSON and can't carry a comment saying this — that's why it lives here.
+Plain `npm install` works. The native binaries CI needs (`sharp`, `pagefind`, `rollup`) are declared in `optionalDependencies`, so the lockfile keeps the Linux and Windows rows whatever platform you install from. If CI reports the lockfile is out of sync, run `npm run deps:sync` — it re-resolves for Linux/x64 first, then installs from the lockfile — and commit the regenerated `package-lock.json`. `npm run deps:check` verifies CI-readiness locally.
 
 ## Changelog
 

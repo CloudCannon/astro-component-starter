@@ -34,7 +34,7 @@ jobs:
         run: |
           if ! npm ci --dry-run > /dev/null 2>&1; then
             echo "::error::package-lock.json is out of sync with package.json."
-            echo "This usually happens when running 'npm install' on macOS, which strips Linux-only peer dependencies from the lockfile."
+            echo "This job installs the Linux/Windows optional dependencies (sharp, pagefind, rollup native binaries), so they have to be in the lockfile."
             echo "Run 'npm run deps:sync' locally, commit the updated package-lock.json, and push again."
             exit 1
           fi

@@ -148,15 +148,16 @@ For the blanket strict opt-in consent workflow, see
 
 ## Updating Dependencies
 
-When adding, removing, or updating packages (on macOS especially), use:
+Plain `npm install` is all you need when adding, removing or updating packages. The Linux and
+Windows native binaries CI needs (`sharp`, `pagefind`, `rollup`) are declared in
+`optionalDependencies`, so the lockfile keeps them whatever platform you install on.
+
+If CI reports that `package-lock.json` is out of sync, regenerate it for every target platform
+(Linux, Windows, macOS) and install from it:
 
 ```bash
 npm run deps:sync
 ```
-
-This regenerates `package-lock.json` with resolutions for all target platforms (Linux, Windows,
-macOS) so CI doesn't break. Plain `npm install` on macOS silently strips Linux-only peer
-dependencies out of the lockfile, which causes `npm ci` to fail on GitHub Actions.
 
 You can verify the lockfile is CI-ready at any time with:
 

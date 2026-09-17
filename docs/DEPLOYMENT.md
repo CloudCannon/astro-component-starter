@@ -66,8 +66,10 @@ developers' own npm configs — suppresses lifecycle hooks while leaving an expl
 `/search/` renders, it just never returns a result.
 
 Pagefind ships platform binaries as optional dependencies, so `@pagefind/linux-x64` is pinned
-in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages. Keep using
-`npm run deps:sync` rather than bare `npm install` when changing dependencies — see the README.
+in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages — which is what
+keeps the Linux rows in `package-lock.json` when a dependency change is installed on macOS.
+`npm run deps:sync` re-resolves the lockfile for Linux/x64 first and then installs from it; reach
+for it when CI reports the lockfile out of sync.
 
 ## Share cards (optional speed-up)
 
