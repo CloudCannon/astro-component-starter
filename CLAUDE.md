@@ -41,7 +41,7 @@ Two staleness traps, both silent:
 ## Detailed workflow guides
 
 `.agents/skills/*/SKILL.md` are the canonical playbooks — follow them when the task matches:
-create-component, screenshot-to-component, migrate-existing-site, editable-regions, theming, adding-fonts, page-content-authoring, blog-mdx-content, site-data-navigation, debug-cloudcannon. Everything agent-facing is canonical under `.agents/` (skills in `.agents/skills/`, rules in `.agents/rules/`); `.claude/skills/` and `.cursor/rules/` are generated — never hand-edit them, run `npm run agents:sync` (`agents:check` in `check` fails on drift).
+create-component, screenshot-to-component, migrate-existing-site, editable-regions, theming, adding-fonts, page-content-authoring, blog-mdx-content, site-data-navigation, privacy-consent, debug-cloudcannon. Everything agent-facing is canonical under `.agents/` (skills in `.agents/skills/`, rules in `.agents/rules/`); `.claude/skills/` and `.cursor/rules/` are generated — never hand-edit them, run `npm run agents:sync` (`agents:check` in `check` fails on drift).
 
 ## Conventions that bite
 
@@ -55,7 +55,7 @@ create-component, screenshot-to-component, migrate-existing-site, editable-regio
 - **Interactive components** must work in the CloudCannon editor, where inline `<script>`s don't run — put setup logic in an importable module and register it in `editor-live-sync.js` (see `carousel/setup.ts`). `lint:cms` enforces this: a scripted component is either registered there or listed in the script's `EDITOR_INERT` map with the reason its editor behaviour is acceptable.
 - **Editable regions**: inline editing is opt-in via `data-editable` / `data-prop` attributes and the `useDefaultEditableBinding` prop — see the editable-regions skill before touching these.
 - **Comments**: default to none. Add one only when a reader would otherwise make a wrong edit — a constraint, a silent failure mode, a coupling. Never to describe what code does, explain a design choice, or mark a change you just made (that belongs in the conversation or `CHANGELOG.md`). One line, two at most; no section banners. Full rule imported below.
-- Fonts change in `site-fonts.mjs` only. Site nav/footer/SEO data lives in `src/data/*.json`.
+- Fonts change in `site-fonts.mjs` only. Site nav/footer/SEO/privacy/analytics data lives in `src/data/*.json`.
 - Update `CHANGELOG.md` (Keep a Changelog format) with user-facing changes — full rule imported below.
 
 ## Current state

@@ -98,7 +98,7 @@ Components live in `src/components/` and are grouped by purpose:
 
 - **Page Sections** (`page-sections/`): Full-width sections that make up a page (heroes, feature showcases, CTAs, FAQ sections, team grids). Each one is built from building blocks internally, but presents editors with a simple, flat interface.
 
-- **Navigation** (`navigation/`): Header, footer, mobile nav, sidebar nav.
+- **Navigation** (`navigation/`): Header, footer, mobile nav, sidebar nav, and site-wide consent controls.
 
 The key relationship: **building blocks** combine into **page sections**. A `FeatureSplit` page section, for example, internally uses `CustomSection`, `Split`, `Heading`, `Text`, and `Image` building blocks, but editors just see inputs for heading, text, and image.
 
@@ -142,13 +142,13 @@ Here's a quick map of where things live:
 
 | Directory               | What's there                                                    |
 | ----------------------- | --------------------------------------------------------------- |
-| `src/components/`       | All 50+ components (building blocks, page sections, navigation) |
+| `src/components/`       | All 80+ components (building blocks, page sections, navigation) |
 | `src/content/pages/`    | Your site's pages as Markdown with `pageSections` arrays        |
 | `src/content/blog/`     | Blog posts in MDX                                               |
 | `src/styles/variables/` | Design tokens: colors, fonts, spacing, widths                   |
 | `src/styles/themes/`    | Light and dark theme definitions                                |
 | `src/styles/base/`      | CSS reset, typography defaults, form styles                     |
-| `src/data/`             | Site-wide data: navigation links, SEO config, footer content    |
+| `src/data/`             | Site-wide data: navigation, footer, SEO, privacy, and analytics |
 | `src/component-docs/`   | These docs; can be excluded from production builds              |
 
 ## Removing components you don't need

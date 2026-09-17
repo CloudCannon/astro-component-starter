@@ -1,17 +1,18 @@
 ---
 name: site-data-navigation
-description: Use when editing site-wide navigation, footer, or SEO defaults — mainNav.json, footer.json, seo.json under src/data/ — or figuring out how those files reach the nav bar, mobile menu, footer, and meta tags.
+description: Use when editing the starter's site-wide nav, footer, SEO, privacy, or analytics data under src/data, or tracing those files into the page shell and CloudCannon data panels. Route consent-runtime and third-party-provider changes to privacy-consent.
 ---
 
 # Site data & navigation
 
-Three JSON files under `src/data/` drive every page's chrome: header nav, footer, and default SEO/meta. They are plain data imported by layouts — not content collections — and CloudCannon edits them through its generic "Data" collection.
+This guide covers the five site-wide configuration files for navigation, footer, SEO, privacy, and analytics. They are plain JSON imported by layouts — not content collections — and CloudCannon edits them through its **Data** collection. Privacy and analytics are rendered globally by `BaseLayout.astro`, while nav and footer data pass through `Page.astro`.
 
 ## When to use
 
 - Adding, removing, reordering, or nesting a header nav item.
 - Adding a footer link column entry or a social media link.
 - Updating the site name, production URL, default description, or title template.
+- Configuring privacy labels, decision lifetime, policy URL, or the supported analytics provider.
 - Tracing how `src/data/*.json` reaches `MainNav.astro` / `Footer.astro` / `BaseLayout.astro`.
 
 ## When not to use
@@ -21,16 +22,19 @@ Three JSON files under `src/data/` drive every page's chrome: header nav, footer
 | Changing how the nav bar, dropdowns, or footer _look_ (colors, spacing, hover states) | [create-component](../create-component/SKILL.md) styling rules + [theming](../theming/SKILL.md) tokens |
 | Composing page body content, choosing which page sections to use                      | [page-content-authoring](../page-content-authoring/SKILL.md)                                           |
 | Wiring new `data-prop` / editable bindings on a nav component                         | [editable-regions](../editable-regions/SKILL.md)                                                       |
+| Adding a consent category/provider or debugging optional network loading              | [privacy-consent](../privacy-consent/SKILL.md)                                                         |
 
 ## Data files overview
 
-| File                    | Controls                                                    | Imported by                                                                                                                                |
-| ----------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/data/mainNav.json` | Logo, header nav links, nav CTA button                      | `src/layouts/Page.astro` (default prop) → `MainNav.astro`; also imported directly by `src/pages/[...slug].astro` and `src/pages/404.astro` |
-| `src/data/footer.json`  | Footer logo, link column, socials, legal text               | Same import chain as above → `Footer.astro`                                                                                                |
-| `src/data/seo.json`     | Site name/URL/description, default OG image, title template | `src/layouts/BaseLayout.astro` → `SeoHead.astro` + `StructuredData.astro`                                                                  |
+| File                      | Controls                                                    | Imported by                                                                                                                                |
+| ------------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `src/data/mainNav.json`   | Logo, header nav links, nav CTA button                      | `src/layouts/Page.astro` (default prop) → `MainNav.astro`; also imported directly by `src/pages/[...slug].astro` and `src/pages/404.astro` |
+| `src/data/footer.json`    | Footer logo, link column, socials, legal text               | Same import chain as above → `Footer.astro`                                                                                                |
+| `src/data/seo.json`       | Site name/URL/description, default OG image, title template | `src/layouts/BaseLayout.astro` → `SeoHead.astro` + `StructuredData.astro`                                                                  |
+| `src/data/privacy.json`   | Consent UI, policy revision/URL, expiry, category wording   | `src/layouts/BaseLayout.astro` → `Consent.astro`; footer also reads `enabled` and `settingsLabel`                                          |
+| `src/data/analytics.json` | Optional analytics provider and script URL                  | `src/layouts/BaseLayout.astro` → `Consent.astro` → consent-aware analytics setup                                                           |
 
-`Page.astro` defaults `mainNav`/`footer` props to these JSON imports; `[...slug].astro` and `404.astro` also import and pass them explicitly. Either way, editing the JSON file is what changes the rendered output — there's no other place these values come from.
+`Page.astro` defaults `mainNav`/`footer` props to those JSON imports; `[...slug].astro` and `404.astro` also import and pass them explicitly. `BaseLayout.astro` parses SEO, privacy, and analytics directly. Build-time validation rejects an invalid privacy or analytics configuration before the site can ship.
 
 ---
 
@@ -172,6 +176,7 @@ Real excerpt (`src/data/footer.json`):
 - Top row: logo (`Image`) + `links` (via `Bar`, flat list, no dropdown).
 - `Divider`.
 - Bottom row: `footerText` (via `Text`) + `socials` as ghost icon-only `Button`s, each `target="_blank" rel="noopener noreferrer"`.
+- When `privacy.json` has `enabled: true`, a separate underlined button using `settingsLabel` reopens the global privacy dialog. It is controlled by privacy data, not `footer.json`.
 
 ---
 
@@ -223,6 +228,21 @@ Per-page overrides (`description`, `image`, `canonical`, `noindex`, `article`) c
 
 ---
 
+## Privacy and analytics (`privacy.json`, `analytics.json`)
+
+Keep `_schema: privacy` and `_schema: analytics`; those discriminators select the dedicated CloudCannon forms and are required by the build-time Zod schemas.
+
+`privacy.json` owns whether controls render, `policyRevision`, `expiryDays`, the site-relative `policyUrl`, banner/settings/category wording, and `honorGlobalPrivacyControl`. The necessary row describes the small preference record and is always on; analytics and external media are optional. `enabled: false` hides the interface and fails closed, so it never enables optional services without consent.
+
+`analytics.json` supports:
+
+- `provider: "none"` with an empty `scriptUrl` — the safe default and no analytics banner.
+- `provider: "plausible-hosted"` with the site-specific `https://plausible.io/js/pa-….js` URL. Other hosts, legacy shared scripts, and insecure URLs fail the build.
+
+Changing these files is only the configuration surface. For saved-decision behavior, provider allowlists, implementation changes, and verification, follow [privacy-consent](../privacy-consent/SKILL.md) and `docs/PRIVACY.md`.
+
+---
+
 ## Checklists
 
 ### Add / remove / reorder a nav item
@@ -248,11 +268,14 @@ Per-page overrides (`description`, `image`, `canonical`, `noindex`, `article`) c
 
 - Edit the `socials` array in `src/data/footer.json`: `icon` must be a `social/<name>` id with a matching SVG in `src/icons/social/`; `link` is the full profile URL.
 
-### Set up SEO / nav / footer for a new site
+### Set up site-wide data for a new site
 
 - `seo.json`: set `name`, `url` (must match `site` in `astro.config.mjs`), `description`, `titleFormat`.
 - `mainNav.json`: replace `logoSource`/`logoAlternateSource`/`logoAlt` (place new logo files under `src/assets/images/`), replace `navData`, adjust or empty `buttonSections`.
 - `footer.json`: replace logo fields, `links`, `socials`, `footerText`.
+- `privacy.json`: set final labels, expiry, site-relative policy URL, and GPC choice; increase `policyRevision` only for a material policy/service change.
+- `analytics.json`: keep analytics off or configure the site-specific hosted Plausible script.
+- Replace `src/content/pages/privacy.md`, remove `starterPrivacyPolicyPlaceholder: true`, then run `npm run check:placeholders -- --strict`.
 
 ---
 
@@ -261,7 +284,7 @@ Per-page overrides (`description`, `image`, `canonical`, `noindex`, `article`) c
 Verified against `cloudcannon.config.yml`:
 
 - The `data` collection (`collections_config.data`) globs `src/data/**/*.json`, `disable_url: true`, `icon: database`, `_enabled_editors: [data]` — grouped under the "Data" heading in `collection_groups`.
-- Only `seo.json` has an explicit schema (`schemas.seo`, backed by `.cloudcannon/schemas/seo.json`), matched by its `_schema: seo` key; it also gets field-level comments from `collections_config.data.schemas.seo._inputs`.
+- `seo.json`, `privacy.json`, and `analytics.json` have explicit schemas backed by `.cloudcannon/schemas/{seo,privacy,analytics}.json`, selected by their `_schema` keys. Their field controls and comments are extended under `collections_config.data.schemas` in `cloudcannon.config.yml`.
 - `mainNav.json` and `footer.json` have no dedicated schema — CloudCannon renders them with the collection's generic `_inputs` (`logoSource`/`logoAlternateSource`/`image` typed as `image` fields with upload path `src/assets/images`) plus **global structures matched by field name**: `.cloudcannon/structures/navData.cloudcannon.structures.yml`, `links.cloudcannon.structures.yml`, and `socials.cloudcannon.structures.yml`, all loaded via the root `_structures_from_glob: [/.cloudcannon/structures/*.cloudcannon.structures.yml]`. CloudCannon applies a structure automatically to any array field named `navData`, `links`, or `socials` in any collection — this is why the data file needs no per-field YAML of its own.
 - Both `navData` and `navItemLevel1MegaMenu` offer two structure values: plain "Navigation Item" and "Mega Menu Item". The mega item's column/link sub-shapes live once in `.cloudcannon/structures/megaMenu.cloudcannon.structures.yml` (`megaMenuColumns` / `megaMenuLinks`) and are referenced from both — edit them there. `navItemLevel1` is the plain-only twin, used by `side` and `mobile`: `side` ignores `megaMenu` and `mobile` only flattens one it is handed, so neither offers the variant. `structures:` takes one reference, so the plain variant is duplicated between the two — change one, change both.
 - These three structure files are the single source of truth for the nav-item / footer-link / social-link input shapes (name/path text+url fields, icon `select` sourced from `data.icons`). If you rename a field in `mainNav.json`/`footer.json`, update the matching structure file or the editor UI will show the old field name.
@@ -273,4 +296,5 @@ Verified against `cloudcannon.config.yml`:
 - Run `npm run check`. Expect exit 0 — no lint/format/type errors, no skills drift.
 - Run `npm run dev`, load any page, and confirm the header nav / mobile menu / footer reflect your JSON change (dropdown behavior if you changed nesting, split-row behavior if you changed a parent `path`).
 - If you edited `seo.json`, view source (or the dev tools Elements panel `<head>`) and confirm `<title>`, `og:*` meta tags, and the `application/ld+json` script reflect the new values.
-- In the CloudCannon Visual Editor, open Data → mainNav / footer / seo and confirm each field/array renders with the expected labels — an unlabeled raw JSON field usually means a structure file's key no longer matches the data field name.
+- If you edited privacy or analytics, verify the policy link, banner/settings wording, strict opt-in behavior, and production network traffic before and after each choice. Optional requests must be absent before permission.
+- In the CloudCannon Visual Editor, open Data → mainNav / footer / seo / Privacy & Consent / Analytics and confirm each file renders with the expected form. An unlabeled raw JSON field usually means a schema, structure, or discriminator no longer matches the data.

@@ -169,7 +169,7 @@ jq -r 'paths(scalars) | join(".")' src/data/*.json | sort -u
 
 Every path should have a corresponding `_inputs` entry or be intentionally left untyped. Keys in `_inputs` that do NOT appear in the JSON are dead config — remove them.
 
-> **In this starter:** site nav/footer/SEO data lives in `src/data/*.json` (see CLAUDE.md). Fonts are the exception — they change in `site-fonts.mjs` only, owned by the `adding-fonts` skill.
+> **In this starter:** site nav/footer/SEO/privacy/analytics data lives in `src/data/*.json` (see CLAUDE.md). Fonts are the exception — they change in `site-fonts.mjs` only, owned by the `adding-fonts` skill.
 
 ## `_inputs` key collision across nesting levels
 

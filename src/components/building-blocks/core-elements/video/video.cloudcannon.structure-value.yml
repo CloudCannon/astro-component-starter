@@ -1,6 +1,6 @@
 label: Video
 icon: videocam
-description: Video from YouTube, Vimeo, or a local file.
+description: Local video, or YouTube/Vimeo gated by site-wide external-media consent.
 value:
   _component: building-blocks/core-elements/video
   type: youtube
@@ -25,7 +25,7 @@ preview:
     fit: cover
 picker_preview:
   text: Video
-  subtext: Video component for YouTube, Vimeo, and HTML5 sources.
+  subtext: Local video and consent-gated YouTube or Vimeo players.
   image: public/component-previews/building-blocks/core-elements/video.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/video.svg

@@ -21,16 +21,16 @@ Orchestration workflow for turning an existing website into this starter. Almost
 
 Work top to bottom. Each phase's deliverable is an input to the next — do not skip ahead to building pages before the brand and component gaps are settled.
 
-| #   | Phase                               | Owner skill                                                                                          | Deliverable                                                          |
-| --- | ----------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Inventory the source site           | Here (below)                                                                                         | Written inventory: pages, sections, nav/footer, brand, content types |
-| 2   | Brand first                         | [theming](../theming/SKILL.md), [adding-fonts](../adding-fonts/SKILL.md)                             | Token edits + fonts configured                                       |
-| 3   | Map sections to existing components | [page-content-authoring](../page-content-authoring/SKILL.md) catalog                                 | A source-section → `_component` mapping, with gaps flagged           |
-| 4   | Build the gap components            | [screenshot-to-component](../screenshot-to-component/SKILL.md)                                       | New page-section directories for every flagged gap                   |
-| 5   | Recreate pages                      | [page-content-authoring](../page-content-authoring/SKILL.md)                                         | `.md` files in `src/content/pages/` with full `pageSections`         |
-| 6   | Nav / footer / SEO data             | [site-data-navigation](../site-data-navigation/SKILL.md)                                             | `mainNav.json`, `footer.json`, `seo.json` updated                    |
-| 7   | Blog/article content (skip if none) | [blog-mdx-content](../blog-mdx-content/SKILL.md)                                                     | `.mdx` files in `src/content/blog/`                                  |
-| 8   | Verify in CloudCannon               | [editable-regions](../editable-regions/SKILL.md), [debug-cloudcannon](../debug-cloudcannon/SKILL.md) | Every section renders and is editable                                |
+| #   | Phase                               | Owner skill                                                                                              | Deliverable                                                                         |
+| --- | ----------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 1   | Inventory the source site           | Here (below)                                                                                             | Written inventory: pages, sections, nav/footer, brand, content types, third parties |
+| 2   | Brand first                         | [theming](../theming/SKILL.md), [adding-fonts](../adding-fonts/SKILL.md)                                 | Token edits + fonts configured                                                      |
+| 3   | Map sections to existing components | [page-content-authoring](../page-content-authoring/SKILL.md) catalog                                     | A source-section → `_component` mapping, with gaps flagged                          |
+| 4   | Build the gap components            | [screenshot-to-component](../screenshot-to-component/SKILL.md)                                           | New page-section directories for every flagged gap                                  |
+| 5   | Recreate pages                      | [page-content-authoring](../page-content-authoring/SKILL.md)                                             | `.md` files in `src/content/pages/` with full `pageSections`                        |
+| 6   | Site-wide data, privacy, analytics  | [site-data-navigation](../site-data-navigation/SKILL.md), [privacy-consent](../privacy-consent/SKILL.md) | Nav/footer/SEO configured; policy and optional services made site-specific          |
+| 7   | Blog/article content (skip if none) | [blog-mdx-content](../blog-mdx-content/SKILL.md)                                                         | `.mdx` files in `src/content/blog/`                                                 |
+| 8   | Verify in CloudCannon               | [editable-regions](../editable-regions/SKILL.md), [debug-cloudcannon](../debug-cloudcannon/SKILL.md)     | Every section renders and is editable                                               |
 
 **Why brand before sections:** a section built against the wrong tokens has to be re-checked once the palette/radii/shadows land. Locking the brand first means every component built in phase 4 is already correct.
 
@@ -49,11 +49,12 @@ Load each page of the source site (browser, fetch, or provided screenshots) and 
 | Brand — shape                                               | Border radius (sharp/soft/pill), shadow depth (flat/subtle/heavy)                                                                                                                                                                                                             |
 | Brand — fonts                                               | Body and heading typeface names, weights used, provider (Google Fonts, self-hosted, system)                                                                                                                                                                                   |
 | Content types                                               | Is there a blog? Tags/categories? Pagination? Any other repeating content collection?                                                                                                                                                                                         |
+| Privacy and third parties                                   | Existing privacy policy/contact, analytics, videos, maps, embeds, forms, newsletters, chat, payment/account tools, hosting logs, and every external host they contact. Record purpose, data handled, and whether the migrated site will keep each service.                    |
 | Per-section (for every distinct visual block on every page) | Layout type (centered / split / grid of cards / accordion / slider / custom), exact heading + body text, image URLs + what they depict, button labels + link targets + primary-vs-secondary, background treatment (light/dark/colored/image), repeating-item count and fields |
 
 Segment sections at background-color changes, large vertical gaps, or dividers — each becomes one row. This is the same segmentation rule [screenshot-to-component](../screenshot-to-component/SKILL.md#multi-section-screenshots) uses when the reference is one long screenshot; do it once here for the whole site rather than re-deriving it per page.
 
-**Done-check:** every page has a list of ordered sections, each with a layout type and its text/image/button content noted — enough to fill in `pageSections` later without going back to the source site.
+**Done-check:** every page has a list of ordered sections, each with enough content detail to fill `pageSections`, and every retained third-party service has an owner, purpose, provider/host, consent category, and policy disclosure requirement.
 
 ## Phase 2: Brand first
 
@@ -119,11 +120,13 @@ Content rules specific to migration:
 
 **Done-check:** `npm run dev` renders every recreated page with no console "Component not found" warnings and no placeholder text left over from a page that's supposed to be finished.
 
-## Phase 6: Nav / footer / SEO data
+## Phase 6: Site-wide data, privacy, and analytics
 
-Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/mainNav.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 nav/footer capture, and update `site` in `astro.config.mjs` to the production URL. Logo files (light + dark variant) go in `src/assets/images/` and are referenced from all three data files via `logoSource` / `logoAlternateSource`.
+Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/mainNav.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 capture, and update `site` in `astro.config.mjs` to the production URL. Logo files (light + dark variant) go in `src/assets/images/` and are referenced from all three data files via `logoSource` / `logoAlternateSource`.
 
-**Done-check:** header and footer render the migrated nav/logo/socials on every page; `seo.json`'s title/description show correctly in a page's `<title>`.
+Then follow [privacy-consent](../privacy-consent/SKILL.md): configure `src/data/privacy.json` and `src/data/analytics.json`, replace the `/privacy/` scaffold with the migrated site's real owner/services/purposes/retention/rights, remove `starterPrivacyPolicyPlaceholder: true`, and map every retained third party to the existing analytics or external-media category. Unsupported providers require an intentional allowlist/adapter change; never paste their script or iframe directly into migrated content.
+
+**Done-check:** header/footer/SEO are site-specific; the privacy page and labels match the retained services; `npm run check:placeholders -- --strict` passes; and production-like Network inspection shows no optional request before its category is granted.
 
 ## Phase 7: Blog/article content
 
@@ -146,5 +149,6 @@ Download every source image into `src/assets/images/` (Astro optimizes images fr
 ## Verify your work
 
 - Run `npm run check` — expect exit 0, no lint/type errors, no skills drift.
+- Run `npm run check:placeholders -- --strict` — the migrated policy route resolves and no starter policy marker remains.
 - If phase 4 added any page-builder component, author each a `*.preview.mjs` recipe and run `npm run previews:build` — new SVGs appear with no build errors.
-- Run `npm run dev`, click through every migrated page, and open each in the CloudCannon Visual Editor per phase 8's done-check.
+- Run `npm run dev`, click through every migrated page, and open each in the CloudCannon Visual Editor per phase 8's done-check. In a production-like build, verify each optional provider before consent, after consent, and after revocation.

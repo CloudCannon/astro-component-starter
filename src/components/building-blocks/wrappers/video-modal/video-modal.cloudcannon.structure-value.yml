@@ -1,6 +1,6 @@
 label: Video Modal
 icon: play_circle
-description: Popup video that plays when opened and pauses when closed.
+description: Popup local video, or consent-gated YouTube/Vimeo mounted only while open.
 value:
   _component: building-blocks/wrappers/video-modal
   label: null
@@ -29,7 +29,7 @@ preview:
     fit: cover
 picker_preview:
   text: Video Modal
-  subtext: Dialog overlay with an embedded video that autoplays on open and pauses on close.
+  subtext: Local or consent-gated hosted video mounted only while open.
   image: public/component-previews/building-blocks/wrappers/video-modal.svg
   gallery:
     image: public/component-previews/building-blocks/wrappers/video-modal.svg

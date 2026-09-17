@@ -101,23 +101,27 @@ showToc: true
 
 A `*.cloudcannon.snippets.yml` next to a component lets an editor insert it into a post's body from the CloudCannon content editor's snippet picker, instead of hand-writing JSX. Snippet files are auto-discovered — `cloudcannon.config.yml` collects them via `_snippets_from_glob: /**/*.cloudcannon.snippets.yml` and enables MDX output with `_snippets_imports: { mdx: true }`. The blog collection's `_editables.content.snippet: true` turns on the picker button for the `blog` collection specifically.
 
-Components with a snippet today (13 total):
+Components with a snippet today (15 total):
 
-| Component (MDX tag)  | `_component` directory                    |
-| -------------------- | ----------------------------------------- |
-| `Image`              | `building-blocks/core-elements/image`     |
-| `Video`              | `building-blocks/core-elements/video`     |
-| `Embed`              | `building-blocks/core-elements/embed`     |
-| `Form`               | `building-blocks/forms/form`              |
-| `CtaCenter`          | `page-sections/conversion/cta-center`     |
-| `CtaSplit`           | `page-sections/conversion/cta-split`      |
-| `CtaForm`            | `page-sections/conversion/cta-form`       |
-| `FeatureGrid`        | `page-sections/explainers/feature-grid`   |
-| `FeatureSplit`       | `page-sections/explainers/feature-split`  |
-| `FeatureSlider`      | `page-sections/explainers/feature-slider` |
-| `FaqSection`         | `page-sections/explainers/faq-section`    |
-| `TeamGrid`           | `page-sections/collections/team-grid`     |
-| `TestimonialSection` | `page-sections/proof/testimonial-section` |
+| Component (MDX tag)  | `_component` directory                     |
+| -------------------- | ------------------------------------------ |
+| `Alert`              | `building-blocks/core-elements/alert`      |
+| `CodeBlock`          | `building-blocks/core-elements/code-block` |
+| `Image`              | `building-blocks/core-elements/image`      |
+| `Video`              | `building-blocks/core-elements/video`      |
+| `Embed`              | `building-blocks/core-elements/embed`      |
+| `Form`               | `building-blocks/forms/form`               |
+| `CtaCenter`          | `page-sections/conversion/cta-center`      |
+| `CtaSplit`           | `page-sections/conversion/cta-split`       |
+| `CtaForm`            | `page-sections/conversion/cta-form`        |
+| `FeatureGrid`        | `page-sections/explainers/feature-grid`    |
+| `FeatureSplit`       | `page-sections/explainers/feature-split`   |
+| `FeatureSlider`      | `page-sections/explainers/feature-slider`  |
+| `FaqSection`         | `page-sections/explainers/faq-section`     |
+| `TeamGrid`           | `page-sections/collections/team-grid`      |
+| `TestimonialSection` | `page-sections/proof/testimonial-section`  |
+
+`Video` and `Embed` participate in the site-wide external-media consent workflow. Local video is first-party, while hosted content stays inert until permission is granted. Always use `Video` for YouTube or Vimeo; never paste their iframe code into `Embed`. Embed is not a general third-party script loader: use it only for trusted HTML without a typed component, follow the provider rules in [privacy-consent](../privacy-consent/SKILL.md), and add a provider deliberately before authoring content that depends on it.
 
 Each snippet's `definitions.named_args` maps an editor field to a prop (`type: string` → `prop="value"`, `type: array` → `prop={[...]}`, `type: boolean` → `prop={true}`, omitted when false) and `_inputs_from_glob` reuses the component's own `*.cloudcannon.inputs.yml` for field UI. In real posts, only `Image`, `TestimonialSection`, `CtaCenter`, `CtaSplit`, and `CtaForm` are actually used — the rest exist but are unexercised in current content.
 

@@ -28,8 +28,9 @@ npm run agents:sync
 - **editable-regions** — Deep reference for wiring `data-prop` / `data-children-prop` visual-editing bindings.
 - **migrate-existing-site** — End-to-end workflow for migrating an existing website into this component starter.
 - **page-content-authoring** — Assemble pages from existing components via `pageSections` YAML.
+- **privacy-consent** — Configure or extend strict consent, analytics, and third-party media loading.
 - **screenshot-to-component** — Build a new page section component from a screenshot.
-- **site-data-navigation** — Configure site-wide navigation, footer, and SEO data.
+- **site-data-navigation** — Configure site-wide navigation, footer, SEO, privacy, and analytics data.
 - **theming** — Customize colors, fonts, spacing, and other design tokens for brand matching.
 
 ### Companion plugin

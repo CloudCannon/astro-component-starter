@@ -1,6 +1,6 @@
 html:
   type: code
-  comment: Trusted developer-only HTML. Scripts, event handlers, and unapproved iframe hosts are removed before consent-approved rendering.
+  comment: Trusted developer-only HTML. Use Video for YouTube/Vimeo. Active content and unapproved iframe hosts are removed before consent-approved rendering.
   options:
     syntax: html
 aspectRatio:

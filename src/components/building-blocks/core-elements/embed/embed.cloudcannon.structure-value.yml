@@ -1,6 +1,6 @@
 label: Embed
 icon: data_object
-description: Embed for maps, iframes, or raw HTML.
+description: Consent-gated trusted HTML without a typed component; use Video for YouTube or Vimeo.
 value:
   _component: building-blocks/core-elements/embed
   html: ""
@@ -15,7 +15,7 @@ preview:
     fit: cover
 picker_preview:
   text: Embed
-  subtext: Responsive wrapper for third-party embeds.
+  subtext: Sanitized trusted HTML; hosted video belongs in Video.
   image: public/component-previews/building-blocks/core-elements/embed.svg
   gallery:
     image: public/component-previews/building-blocks/core-elements/embed.svg

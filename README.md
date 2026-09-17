@@ -54,17 +54,17 @@ errors. `npm run check` warns until it's set.
 - **Components are born CMS-editable.** Every component ships its editor schema beside it. There's
   no second project to "make it editable" — add a component and it appears in the editor's Add
   menu with a preview.
-- **Design lives in tokens, not components.** The same 55 components render as a law firm, a SaaS
+- **Design lives in tokens, not components.** The same 84 components render as a law firm, a SaaS
   product, or a university department by swapping token files. No component CSS to fight.
-- **It's built to be operated by AI.** Ten skills in `.agents/skills/` encode the workflows —
+- **It's built to be operated by AI.** Eleven skills in `.agents/skills/` encode the workflows —
   create a component, turn a screenshot into one, migrate an existing site, retheme — as
   playbooks your coding agent can follow. The conventions are what make its output predictable.
-- **The output is boring, excellent Astro.** Static, no runtime, tiny JS payload, inlined CSS,
+- **The output is boring, excellent Astro.** Static, no client-framework runtime, tiny JS payload, inlined CSS,
   and top-tier Core Web Vitals by construction.
 
 ## Components
 
-55 components across three tiers — 12 page sections, 38 building blocks, and 5 navigation
+84 components across three tiers — 25 page sections, 51 building blocks, and 8 navigation
 components — plus 343 icons.
 
 [![Every component in the library](docs/images/components.png)](https://astro-component-starter.cc/component-docs/)
@@ -91,12 +91,12 @@ npm run new:component building-blocks/core-elements/my-thing
 
 ```
 src/
-├── components/          # All 55 components (yours to edit)
+├── components/          # All 84 components (yours to edit)
 │   ├── building-blocks/ # Core UI: buttons, headings, forms, layout wrappers
 │   ├── page-sections/   # Full-width sections: heroes, features, CTAs
-│   └── navigation/      # Header, footer, mobile nav
+│   └── navigation/      # Header, footer, mobile nav, consent
 ├── content/             # Your pages and blog posts (Markdown/MDX)
-├── data/                # Site nav, footer, and SEO defaults (editable in the CMS)
+├── data/                # Nav, footer, SEO, privacy, and analytics data (editable in the CMS)
 ├── styles/              # Design tokens, themes, base styles
 │   ├── variables/       # Colors, fonts, spacing, widths
 │   └── themes/          # Light and dark theme definitions
@@ -110,7 +110,7 @@ Rebranding is a token change, not a redesign:
 - **Colors, spacing, radius, shadows, type scale** — `src/styles/variables/`
 - **Light and dark semantics** — `src/styles/themes/_light.css` and `_dark.css`
 - **Fonts** — `site-fonts.mjs`, the single source of truth
-- **Nav, footer, SEO defaults** — `src/data/*.json`
+- **Nav, footer, SEO, privacy, analytics** — `src/data/*.json`
 
 `npm run lint:css-vars` fails the build on any `var(--x)` that doesn't resolve, which catches the
 silent-failure class of theming bug. The

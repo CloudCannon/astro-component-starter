@@ -1,14 +1,14 @@
 ---
 title: Astro Component Starter
 description: >-
-  Documentation for the Astro Component Starter: browse 50+ components, learn the CloudCannon
+  Documentation for the Astro Component Starter: browse 80+ components, learn the CloudCannon
   editing workflow, and follow guides from first clone to custom page sections.
 contentSections: []
 ---
 
 # Astro Component Starter
 
-This is your starter template: 50+ Astro components, each built for visual editing in CloudCannon. Every component is your source code. Modify anything, delete what you don't need, and build on what's here.
+This is your starter template: 80+ Astro components, each built for visual editing in CloudCannon. Every component is your source code. Modify anything, delete what you don't need, and build on what's here.
 
 The design is intentionally unbranded so it can become any brand. Components are built on web fundamentals (vanilla CSS, semantic HTML, minimal JS) and are fast and accessible out of the box.
 

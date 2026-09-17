@@ -12,11 +12,13 @@ validated during the Astro build:
 - **Analytics** currently supports `none` and `plausible-hosted`. Choose `none` until a
   Plausible site has been configured and you have copied its site-specific script URL.
 
-The visitor can separately allow analytics and external media. Rejecting non-essential
-services denies both. Their choices are versioned in `localStorage`, synchronized across tabs,
-and are re-requested when the configured policy revision changes or the expiry period passes.
-The first-visit banner appears only when analytics is configured; external media is requested
-where the visitor chooses to use it.
+The visitor can separately allow analytics and external media. **Accept All** grants both,
+**Reject All** denies both, and **Customize** opens the granular controls; the banner gives those
+three choices equal visual prominence. The settings dialog identifies the small necessary
+preference record as **Always on** and repeats both bulk actions. Choices are versioned in
+`localStorage`, synchronized across tabs, and re-requested when the configured policy revision
+changes or the expiry period passes. The first-visit banner appears only when analytics is
+configured; external media is requested where the visitor chooses to use it.
 
 Turning **Privacy & Consent** off fails closed: analytics and external media remain disabled.
 It does not provide a shortcut for loading optional services without consent. When Global
@@ -41,11 +43,29 @@ playback interaction; it does not make YouTube a first-party service or remove t
 external-media permission.
 
 `Embed` is a trusted-developer escape hatch, not a general script loader. Its raw HTML remains
-inert until approval; scripts and event handlers are removed, and iframes must match the built-in
-YouTube embed, Vimeo player, Google Maps embed, or OpenStreetMap export paths before mounting.
-Contact Split maps use the same allowlist. Prefer typed video and map paths for editor-managed
-content. A contextual **Allow all external media** action grants this category across the site,
-not only for that one video or map.
+inert until approval; `script`, `style`, `link`, `object`, and `embed` elements plus inline event
+handlers are removed. Iframes must match the built-in YouTube embed, Vimeo player, Google Maps
+embed, or OpenStreetMap export paths before mounting, and allowed frames are sandboxed. Contact
+Split maps use the same allowlist. Authors must use `Video` or `VideoModal` for YouTube and Vimeo
+rather than pasting video iframe code into `Embed`; the video hosts remain recognized only for
+trusted compatibility paths. Prefer `ContactSplit` when its typed map layout fits. A contextual
+**Allow all external media** action grants this category across the site, not only for that one
+video or map.
+
+## Extending the workflow
+
+Adding a provider is not only an allowlist edit. Update the real privacy policy first, then keep
+the initial component HTML inert, add the narrowest HTTPS hostname/path rule in
+`src/integrations/consent/externalMedia.ts`, hydrate only after effective permission, tear mounted
+content down on revocation, and add unit plus browser coverage for all three states. Never emit a
+provider iframe, thumbnail, preconnect, SDK, or script before permission. Component authors should
+follow `.agents/skills/privacy-consent/SKILL.md` for the complete file map and verification steps.
+
+Adding an analytics provider also requires the discriminated config schema, data and CloudCannon
+defaults, loader adapter, policy copy, and tests to change together. A new consent category is
+broader again: update the stored record, parsing, UI, bulk actions, GPC behavior, every consumer,
+schemas, policy, and network tests rather than folding an unrelated service into an existing
+category.
 
 ## Configure Plausible
 

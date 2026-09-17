@@ -67,6 +67,8 @@ Use this to translate what you see. For the authoritative prop list of each bloc
 | Tabbed content              | `ContentSelector`             |
 | Embedded video / map        | `Video` / `Embed`             |
 
+When the design contains hosted video, a map, or another third-party iframe, account for the blocked state as part of the design. `Video`, `VideoModal`, `ContactSplit`, and `Embed` make no provider request until site-wide external-media permission; Embed accepts only the provider paths documented in [privacy-consent](../privacy-consent/SKILL.md). Do not reproduce a screenshot by inserting an unsupported iframe or a provider script directly.
+
 The section itself always wraps in `CustomSection` (`@builders/custom-section/CustomSection.astro`) — it provides `maxContentWidth`, `paddingHorizontal`/`paddingVertical`, `colorScheme`, `backgroundColor`, `background`, and `label`. Page section wrappers forward `label` as `sectionLabel`.
 
 ### 3. Decide prop vs. hardcoded

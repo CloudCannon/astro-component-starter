@@ -96,6 +96,7 @@ One canonical owner per topic. Everyone else links — never restates. When a ru
 | Fonts (`site-fonts.mjs`, self-hosting, `SiteFonts.astro`)                                                                  | `adding-fonts` skill                                                          | Link to it.   |
 | Component catalog (what page sections / building blocks exist, when to use each)                                           | `page-content-authoring` skill                                                | Link to it.   |
 | Design token tables (primitive + semantic vars)                                                                            | `theming` skill (which **links to the CSS files**, never pastes token values) | Link to it.   |
+| Consent runtime, analytics providers, external-media allowlists, and network verification                                  | `privacy-consent` skill                                                       | Link to it.   |
 | Generic CloudCannon API (region types, structure rules, invalid config keys)                                               | `references/*.md` (vendored)                                                  | Link to it.   |
 
 **MUST NOT:** paste a token table, an attribute table, or a structure YAML template into a skill that isn't the owner. Link to the owner.
