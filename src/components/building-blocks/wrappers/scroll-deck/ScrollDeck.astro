@@ -49,41 +49,37 @@ if (!_component && !hasCards && !hasSlotContent) return;
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          cardList.map((card: CardProps, index: number) => (
-            <ScrollDeckCard
-              id={cardId(index)}
-              cardColorScheme={cardColorScheme}
-              aria-label={`Card ${index + 1} of ${cardList.length}`}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/scroll-deck/scroll-deck-card"
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-              {...card}
-            />
-          ))
-        }
+        {cardList.map((card: CardProps, index: number) => (
+          <ScrollDeckCard
+            id={cardId(index)}
+            cardColorScheme={cardColorScheme}
+            aria-label={`Card ${index + 1} of ${cardList.length}`}
+            data-editable="array-item"
+            data-id="building-blocks/wrappers/scroll-deck/scroll-deck-card"
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...card}
+          />
+        ))}
       </slot>
     </div>
 
-    {
-      showRail && cardList.length > 1 && (
-        <nav
-          class="scroll-deck-rail"
-          aria-label={label ? `${label} cards` : "Cards"}
-        >
-          {cardList.map((_card: CardProps, index: number) => (
-            <a
-              class="scroll-deck-rail-link"
-              href={`#${cardId(index)}`}
-              aria-current={index === 0 ? "true" : undefined}
-            >
-              <span class="scroll-deck-rail-dot" />
-              <span class="visually-hidden">Card {index + 1}</span>
-            </a>
-          ))}
-        </nav>
-      )
-    }
+    {showRail && cardList.length > 1 && (
+      <nav
+        class="scroll-deck-rail"
+        aria-label={label ? `${label} cards` : "Cards"}
+      >
+        {cardList.map((_card: CardProps, index: number) => (
+          <a
+            class="scroll-deck-rail-link"
+            href={`#${cardId(index)}`}
+            aria-current={index === 0 ? "true" : undefined}
+          >
+            <span class="scroll-deck-rail-dot" />
+            <span class="visually-hidden">Card {index + 1}</span>
+          </a>
+        ))}
+      </nav>
+    )}
   </div>
 </div>
 

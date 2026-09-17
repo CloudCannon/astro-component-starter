@@ -31,7 +31,7 @@ const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" 
   iconPosition={iconPosition}
   hideText={hideText}
   disabled={disabled}
-  {...effectiveDataProp ? { "data-prop": effectiveDataProp } : {}}
+  {...(effectiveDataProp ? { "data-prop": effectiveDataProp } : {})}
   class:list={["submit", className]}
   {...htmlAttributes}
 />

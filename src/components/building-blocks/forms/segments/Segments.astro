@@ -30,24 +30,22 @@ const requireEachInput = required && !multiple;
   aria-required={required ? "true" : undefined}
   {...htmlAttributes}
 >
-  {
-    title && (
-      <legend
-        id={`${groupId}-legend`}
-        class="legend"
-      >
-        {title}
-        {required && (
-          <span
-            class="segments-required"
-            aria-hidden="true"
-          >
-            *
-          </span>
-        )}
-      </legend>
-    )
-  }
+  {title && (
+    <legend
+      id={`${groupId}-legend`}
+      class="legend"
+    >
+      {title}
+      {required && (
+        <span
+          class="segments-required"
+          aria-hidden="true"
+        >
+          *
+        </span>
+      )}
+    </legend>
+  )}
   <div class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}>
     {
       /* `aria-label` on the input for icon-only segments: they render no label

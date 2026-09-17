@@ -17,49 +17,46 @@ const slots: SlotDoc[] = slotData;
 ---
 
 <div class="slots">
-  {
-    slots.map((slot) => (
-      <div class="slot">
-        <h3>{slot.title}</h3>
-        {slot.description && (
-          <p>
-            {slot.description}
-            {slot.fallback_for && (
-              <>
-                {" "}
-                Used only when the <code>{slot.fallback_for}</code> property is not set.
-              </>
-            )}
-          </p>
-        )}
-        {slot.child_component && (
-          <div class="wrapper-component">
-            <strong>Child Component:</strong>
-            <div class="wrapper-details">
-              <div class="wrapper-name">
-                <code>&lt;{slot.child_component.name}&gt;</code>
-              </div>
-              {slot.child_component.props && slot.child_component.props.length > 0 && (
-                <div class="wrapper-props">
-                  <span class="label">
-                    Properties (documented under the <code>{slot.fallback_for}</code> property
-                    above):
-                  </span>
-                  <ul>
-                    {slot.child_component.props.map((prop) => (
-                      <li>
-                        <code>{prop}</code>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+  {slots.map((slot) => (
+    <div class="slot">
+      <h3>{slot.title}</h3>
+      {slot.description && (
+        <p>
+          {slot.description}
+          {slot.fallback_for && (
+            <>
+              {" "}
+              Used only when the <code>{slot.fallback_for}</code> property is not set.
+            </>
+          )}
+        </p>
+      )}
+      {slot.child_component && (
+        <div class="wrapper-component">
+          <strong>Child Component:</strong>
+          <div class="wrapper-details">
+            <div class="wrapper-name">
+              <code>&lt;{slot.child_component.name}&gt;</code>
             </div>
+            {slot.child_component.props && slot.child_component.props.length > 0 && (
+              <div class="wrapper-props">
+                <span class="label">
+                  Properties (documented under the <code>{slot.fallback_for}</code> property above):
+                </span>
+                <ul>
+                  {slot.child_component.props.map((prop) => (
+                    <li>
+                      <code>{prop}</code>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    ))
-  }
+        </div>
+      )}
+    </div>
+  ))}
 </div>
 
 <style is:global>

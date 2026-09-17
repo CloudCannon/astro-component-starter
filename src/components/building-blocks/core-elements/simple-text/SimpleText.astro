@@ -42,9 +42,7 @@ if (!_component && !hasText && !hasSlotContent) return;
       class="simple-text-inner"
       {...textDataAttributes}
     >
-      <slot>
-        {text && <Fragment set:html={MarkdownText} />}
-      </slot>
+      <slot>{text && <Fragment set:html={MarkdownText} />}</slot>
     </span>
   </p>
 </div>

@@ -48,17 +48,15 @@ const arrayDataAttributes = effectiveChildrenProp
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        items?.map((item: ItemProps) => (
-          <ListItem
-            data-id="building-blocks/core-elements/list/list-item"
-            data-editable="array-item"
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            showIcon={showIcons}
-            {...item}
-          />
-        ))
-      }
+      {items?.map((item: ItemProps) => (
+        <ListItem
+          data-id="building-blocks/core-elements/list/list-item"
+          data-editable="array-item"
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          showIcon={showIcons}
+          {...item}
+        />
+      ))}
     </slot>
   </ListTag>
 </div>

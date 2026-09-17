@@ -30,50 +30,44 @@ const hasHeaderEnd = Astro.slots.has("header-end");
   class:list={["form-field", className]}
   {...htmlAttributes}
 >
-  {
-    (hasLabel || hasHeaderEnd) && (
-      <div class="form-field-header">
-        {hasLabel && (
-          <label
-            for={fieldId}
-            class="label"
-          >
-            {label}
-            {required && (
-              <span
-                class="form-field-required"
-                aria-hidden="true"
-              >
-                *
-              </span>
-            )}
-          </label>
-        )}
-        <slot name="header-end" />
-      </div>
-    )
-  }
-  {
-    hintId && (
-      <p
-        class="form-field-hint"
-        id={hintId}
-      >
-        {hint}
-      </p>
-    )
-  }
+  {(hasLabel || hasHeaderEnd) && (
+    <div class="form-field-header">
+      {hasLabel && (
+        <label
+          for={fieldId}
+          class="label"
+        >
+          {label}
+          {required && (
+            <span
+              class="form-field-required"
+              aria-hidden="true"
+            >
+              *
+            </span>
+          )}
+        </label>
+      )}
+      <slot name="header-end" />
+    </div>
+  )}
+  {hintId && (
+    <p
+      class="form-field-hint"
+      id={hintId}
+    >
+      {hint}
+    </p>
+  )}
   <slot />
-  {
-    errorId && (
-      <p
-        class="form-field-error"
-        id={errorId}
-      >
-        {error}
-      </p>
-    )
-  }
+  {errorId && (
+    <p
+      class="form-field-error"
+      id={errorId}
+    >
+      {error}
+    </p>
+  )}
 </div>
 
 <style is:global>

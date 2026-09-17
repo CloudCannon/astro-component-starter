@@ -73,16 +73,14 @@ const itemHeadingLevel = nextHeadingLevel(headingLevel);
     class="feature-grid-grid"
     data-children-prop="features"
   >
-    {
-      features?.map((feature: FeatureProps) => (
-        <FeatureItem
-          data-id="page-sections/explainers/feature-grid/feature-item"
-          data-editable="array-item"
-          {...feature}
-          headingLevel={itemHeadingLevel}
-        />
-      ))
-    }
+    {features?.map((feature: FeatureProps) => (
+      <FeatureItem
+        data-id="page-sections/explainers/feature-grid/feature-item"
+        data-editable="array-item"
+        {...feature}
+        headingLevel={itemHeadingLevel}
+      />
+    ))}
   </Grid>
 </CustomSection>
 

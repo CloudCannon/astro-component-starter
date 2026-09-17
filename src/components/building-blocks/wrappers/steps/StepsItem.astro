@@ -35,35 +35,31 @@ const showImage = isNonEmptyString(image);
     <span class="step-marker"></span>
   </div>
   <div class="step-body">
-    {
-      showImage && (
-        <Image
-          class="step-image"
-          source={image}
-          alt={imageAlt || ""}
-          rounded={true}
-          aspectRatio={imageAspectRatio}
-          sizes="(max-width: 768px) 100vw, 360px"
-          widths={[320, 480, 720]}
-          width={720}
-          data-prop-src="image"
-          data-prop-alt="imageAlt"
-        />
-      )
-    }
+    {showImage && (
+      <Image
+        class="step-image"
+        source={image}
+        alt={imageAlt || ""}
+        rounded={true}
+        aspectRatio={imageAspectRatio}
+        sizes="(max-width: 768px) 100vw, 360px"
+        widths={[320, 480, 720]}
+        width={720}
+        data-prop-src="image"
+        data-prop-alt="imageAlt"
+      />
+    )}
     <div
       class="step-content"
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <RenderBlock
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <RenderBlock
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
   </div>

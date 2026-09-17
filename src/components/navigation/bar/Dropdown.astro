@@ -28,50 +28,48 @@ const itemData = createNavItemData(pathname, item, groupName);
     class="nav-item-content"
   >
     <ul class="nav-list">
-      {
-        itemData.children!.map((child) => {
-          const childData = createNavItemData(pathname, child, `bar-nav-${itemData.parentGroupId}`);
+      {itemData.children!.map((child) => {
+        const childData = createNavItemData(pathname, child, `bar-nav-${itemData.parentGroupId}`);
 
-          if (!childData.hasChildren) {
-            return (
-              <li class="nav-item">
-                <a
-                  href={childData.path}
-                  aria-current={childData.isCurrent ? "page" : undefined}
-                >
-                  {childData.name}
-                </a>
-              </li>
-            );
-          }
-
+        if (!childData.hasChildren) {
           return (
-            <li class="nav-item has-children">
-              <NavItemTrigger
-                item={childData}
-                inputType="radio"
-              />
-              <div
-                id={childData.contentId}
-                class="nav-item-nested"
+            <li class="nav-item">
+              <a
+                href={childData.path}
+                aria-current={childData.isCurrent ? "page" : undefined}
               >
-                <ul class="nav-list">
-                  {childData.children!.map((grandChild) => (
-                    <li class="nav-item">
-                      <a
-                        href={grandChild.path}
-                        aria-current={isCurrentPage(pathname, grandChild) ? "page" : undefined}
-                      >
-                        {grandChild.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                {childData.name}
+              </a>
             </li>
           );
-        })
-      }
+        }
+
+        return (
+          <li class="nav-item has-children">
+            <NavItemTrigger
+              item={childData}
+              inputType="radio"
+            />
+            <div
+              id={childData.contentId}
+              class="nav-item-nested"
+            >
+              <ul class="nav-list">
+                {childData.children!.map((grandChild) => (
+                  <li class="nav-item">
+                    <a
+                      href={grandChild.path}
+                      aria-current={isCurrentPage(pathname, grandChild) ? "page" : undefined}
+                    >
+                      {grandChild.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   </div>
 </li>

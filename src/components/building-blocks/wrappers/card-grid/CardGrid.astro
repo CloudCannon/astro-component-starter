@@ -62,68 +62,66 @@ const hasSlotContent = Astro.slots.has("default");
 if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
-{
-  masonry ? (
-    /* The Masonry wrapper brings its own order-preserving enhancement and
+{masonry ? (
+  /* The Masonry wrapper brings its own order-preserving enhancement and
        editor wiring, so masonry mode composes it rather than repeating the
        layout JS here. */
-    <div
-      class:list={["card-grid", "stackable", className]}
-      {...htmlAttributes}
-    >
-      {/* data-space-before rides a child so flow's :has() hoist finds it — on
+  <div
+    class:list={["card-grid", "stackable", className]}
+    {...htmlAttributes}
+  >
+    {/* data-space-before rides a child so flow's :has() hoist finds it — on
           the region root a prop-driven attribute goes stale in the editor. */}
-      <Masonry
-        class="card-grid-masonry"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
-        columns={columnCount}
-        gap={gap}
-        data-children-prop={effectiveChildrenProp}
-      >
-        <slot>
-          {/* MasonryItem is the measurement probe for the JS enhancement.
+    <Masonry
+      class="card-grid-masonry"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      columns={columnCount}
+      gap={gap}
+      data-children-prop={effectiveChildrenProp}
+    >
+      <slot>
+        {/* MasonryItem is the measurement probe for the JS enhancement.
                CardGridItem can't be the grid child: it has overflow:hidden
                and a flex column, so measuring it after the row-span is set
                feeds back into an 8px-tall collapse. */}
-          {items?.map((item: ItemProps) => (
-            <MasonryItem {...itemRegionAttributes}>
-              <CardGridItem
-                useDefaultEditableBinding={!!effectiveChildrenProp}
-                {...item}
-                aspectRatio={cardRatio}
-                data-children-prop={itemContentProp}
-              />
-            </MasonryItem>
-          ))}
-        </slot>
-      </Masonry>
-    </div>
-  ) : (
-    <div
-      class:list={["card-grid", "stackable", className]}
-      {...htmlAttributes}
-    >
-      <div
-        class="card-grid-inner"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
-        style={gridStyles}
-        {...arrayDataAttributes}
-      >
-        <slot>
-          {items?.map((item: ItemProps) => (
+        {items?.map((item: ItemProps) => (
+          <MasonryItem {...itemRegionAttributes}>
             <CardGridItem
               useDefaultEditableBinding={!!effectiveChildrenProp}
               {...item}
-              {...itemRegionAttributes}
               aspectRatio={cardRatio}
               data-children-prop={itemContentProp}
             />
-          ))}
-        </slot>
-      </div>
+          </MasonryItem>
+        ))}
+      </slot>
+    </Masonry>
+  </div>
+) : (
+  <div
+    class:list={["card-grid", "stackable", className]}
+    {...htmlAttributes}
+  >
+    <div
+      class="card-grid-inner"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      style={gridStyles}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {items?.map((item: ItemProps) => (
+          <CardGridItem
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...item}
+            {...itemRegionAttributes}
+            aspectRatio={cardRatio}
+            data-children-prop={itemContentProp}
+          />
+        ))}
+      </slot>
     </div>
-  )
-}
+  </div>
+)}
 
 <style is:global>
   @layer components {

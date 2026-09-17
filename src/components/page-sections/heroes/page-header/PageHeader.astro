@@ -48,14 +48,12 @@ const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading)
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
-  {
-    showBreadcrumbs && trail.length > 0 && (
-      <Breadcrumbs
-        class:list={["page-header-breadcrumbs", `align-${alignmentHorizontal}`]}
-        items={trail}
-      />
-    )
-  }
+  {showBreadcrumbs && trail.length > 0 && (
+    <Breadcrumbs
+      class:list={["page-header-breadcrumbs", `align-${alignmentHorizontal}`]}
+      items={trail}
+    />
+  )}
   <SimpleText
     alignmentHorizontal={alignmentHorizontal}
     class="eyebrow"

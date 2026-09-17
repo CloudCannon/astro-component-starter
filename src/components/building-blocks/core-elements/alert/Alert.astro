@@ -58,16 +58,14 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
     class:list={["alert-content", `variant-${variant}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
-    {
-      title && (
-        <p
-          class="alert-title"
-          {...titleDataAttributes}
-        >
-          {title}
-        </p>
-      )
-    }
+    {title && (
+      <p
+        class="alert-title"
+        {...titleDataAttributes}
+      >
+        {title}
+      </p>
+    )}
     <div
       class="alert-text"
       {...textDataAttributes}

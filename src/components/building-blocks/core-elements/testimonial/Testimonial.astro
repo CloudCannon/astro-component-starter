@@ -61,11 +61,9 @@ const authorImageDataAttributes = effectiveAuthorImageProp
   class:list={["testimonial", "stackable", className]}
   {...htmlAttributes}
 >
-  {
-    /* The <figure> is the inner box, not the root: <figcaption> has to be a
+  {/* The <figure> is the inner box, not the root: <figcaption> has to be a
       direct child of its <figure>, and the root has to stay a plain wrapper the
-      alignment class can be hoisted off. */
-  }
+      alignment class can be hoisted off. */}
   <figure
     class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
@@ -74,46 +72,42 @@ const authorImageDataAttributes = effectiveAuthorImageProp
       class="quote"
       {...textDataAttributes}
     >
-      <slot>
-        {text && <Fragment set:html={MarkdownText} />}
-      </slot>
+      <slot>{text && <Fragment set:html={MarkdownText} />}</slot>
     </blockquote>
-    {
-      hasAuthor && (
-        <figcaption class="author">
-          {authorImage && (
-            <Avatar
-              image={authorImage}
-              alt={authorName}
-              border={false}
-              class="author-image"
-              displaySize={avatarPx}
-              style={`--avatar-size: ${avatarPx}px;`}
-              {...authorImageDataAttributes}
-            />
+    {hasAuthor && (
+      <figcaption class="author">
+        {authorImage && (
+          <Avatar
+            image={authorImage}
+            alt={authorName}
+            border={false}
+            class="author-image"
+            displaySize={avatarPx}
+            style={`--avatar-size: ${avatarPx}px;`}
+            {...authorImageDataAttributes}
+          />
+        )}
+        <div class="author-content">
+          <strong
+            class="name"
+            {...authorNameDataAttributes}
+          >
+            {authorName}
+          </strong>
+          {authorDescription && (
+            <>
+              <br />
+              <span
+                class="description"
+                {...authorDescriptionDataAttributes}
+              >
+                {authorDescription}
+              </span>
+            </>
           )}
-          <div class="author-content">
-            <strong
-              class="name"
-              {...authorNameDataAttributes}
-            >
-              {authorName}
-            </strong>
-            {authorDescription && (
-              <>
-                <br />
-                <span
-                  class="description"
-                  {...authorDescriptionDataAttributes}
-                >
-                  {authorDescription}
-                </span>
-              </>
-            )}
-          </div>
-        </figcaption>
-      )
-    }
+        </div>
+      </figcaption>
+    )}
   </figure>
 </div>
 

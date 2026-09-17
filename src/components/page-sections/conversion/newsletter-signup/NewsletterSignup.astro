@@ -109,16 +109,14 @@ const emailId = `${slugifyLabel(formName || sectionLabel || "newsletter")}-email
         size="md"
         data-prop="buttonText"
       />
-      {
-        disclaimer && (
-          <p
-            class="newsletter-signup-disclaimer"
-            data-prop="disclaimer"
-          >
-            <Fragment set:html={renderMarkdownInline(disclaimer)} />
-          </p>
-        )
-      }
+      {disclaimer && (
+        <p
+          class="newsletter-signup-disclaimer"
+          data-prop="disclaimer"
+        >
+          <Fragment set:html={renderMarkdownInline(disclaimer)} />
+        </p>
+      )}
     </form>
   </div>
 </CustomSection>

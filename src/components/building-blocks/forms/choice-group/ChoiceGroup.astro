@@ -36,10 +36,8 @@ const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
   class:list={["choice-group", className]}
   {...htmlAttributes}
 >
-  {
-    /* A <fieldset> already maps to `group`, so only the radio case needs a role
-      — and a `radiogroup` with no legend has no name, hence the fallback. */
-  }
+  {/* A <fieldset> already maps to `group`, so only the radio case needs a role
+      — and a `radiogroup` with no legend has no name, hence the fallback. */}
   <fieldset
     id={groupId}
     class="choice-group-fieldset"
@@ -49,60 +47,52 @@ const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
     aria-describedby={describedBy}
     aria-invalid={errorId ? "true" : undefined}
   >
-    {
-      title && (
-        <legend class="legend">
-          {title}
-          {required && (
-            <span
-              class="choice-group-required"
-              aria-hidden="true"
-            >
-              *
-            </span>
-          )}
-        </legend>
-      )
-    }
-    {
-      hintId && (
-        <p
-          class="choice-group-hint"
-          id={hintId}
-        >
-          {hint}
-        </p>
-      )
-    }
+    {title && (
+      <legend class="legend">
+        {title}
+        {required && (
+          <span
+            class="choice-group-required"
+            aria-hidden="true"
+          >
+            *
+          </span>
+        )}
+      </legend>
+    )}
+    {hintId && (
+      <p
+        class="choice-group-hint"
+        id={hintId}
+      >
+        {hint}
+      </p>
+    )}
     <div
       class:list={["choice-group-options", `orientation-${orientation}`, multiple && "multiple"]}
     >
-      {
-        options?.map((option: SegmentOption, index: number) => (
-          <label class="choice-group-option">
-            <input
-              type={inputType}
-              name={inputName}
-              value={option.value}
-              checked={option.checked || false}
-              required={requireEachInput && index === 0}
-              class="choice-group-field"
-            />
-            <span class="choice-group-label-text">{option.label}</span>
-          </label>
-        ))
-      }
+      {options?.map((option: SegmentOption, index: number) => (
+        <label class="choice-group-option">
+          <input
+            type={inputType}
+            name={inputName}
+            value={option.value}
+            checked={option.checked || false}
+            required={requireEachInput && index === 0}
+            class="choice-group-field"
+          />
+          <span class="choice-group-label-text">{option.label}</span>
+        </label>
+      ))}
     </div>
-    {
-      errorId && (
-        <p
-          class="choice-group-error"
-          id={errorId}
-        >
-          {error}
-        </p>
-      )
-    }
+    {errorId && (
+      <p
+        class="choice-group-error"
+        id={errorId}
+      >
+        {error}
+      </p>
+    )}
   </fieldset>
 </div>
 

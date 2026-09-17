@@ -26,14 +26,12 @@ const arrayDataAttributes = effectiveChildrenProp
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        contentSections && (
-          <RenderBlock
-            contentSections={contentSections}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {contentSections && (
+        <RenderBlock
+          contentSections={contentSections}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
 </div>

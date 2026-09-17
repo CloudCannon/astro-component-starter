@@ -27,17 +27,15 @@ const hasIcon = showIcon && iconName;
   class:list={["item", className]}
   {...htmlAttributes}
 >
-  {
-    hasIcon && (
-      <Icon
-        name={iconName}
-        color={iconColor}
-        size="none"
-        class="list-icon"
-        aria-hidden="true"
-      />
-    )
-  }
+  {hasIcon && (
+    <Icon
+      name={iconName}
+      color={iconColor}
+      size="none"
+      class="list-icon"
+      aria-hidden="true"
+    />
+  )}
   {
     /* The text is a <span>, not a <p>: the non-link branch wraps it in a
        <span>, and a <p> inside phrasing content is invalid. It was styled

@@ -103,60 +103,56 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         {...arrayDataAttributes}
       >
         <slot>
-          {
-            slides?.map((slide: SlideProps, index: number) => (
-              <CarouselSlide
-                {...slide}
-                data-editable="array-item"
-                data-id="building-blocks/wrappers/carousel/carousel-slide"
-                useDefaultEditableBinding={!!effectiveChildrenProp}
-                aria-label={`Slide ${index + 1} of ${slides.length}`}
-              />
-            ))
-          }
+          {slides?.map((slide: SlideProps, index: number) => (
+            <CarouselSlide
+              {...slide}
+              data-editable="array-item"
+              data-id="building-blocks/wrappers/carousel/carousel-slide"
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              aria-label={`Slide ${index + 1} of ${slides.length}`}
+            />
+          ))}
         </slot>
       </div>
     </div>
 
-    {
-      (effectiveShowArrows || effectiveShowIndicators) && (
-        <div class="controls-wrapper">
-          {effectiveShowArrows && (
-            <Button
-              iconName="chevron-left"
-              size="none"
-              variant="tertiary"
-              hideText={true}
-              aria-label="Previous slide"
-              class="prev"
-              element="button"
-            />
-          )}
+    {(effectiveShowArrows || effectiveShowIndicators) && (
+      <div class="controls-wrapper">
+        {effectiveShowArrows && (
+          <Button
+            iconName="chevron-left"
+            size="none"
+            variant="tertiary"
+            hideText={true}
+            aria-label="Previous slide"
+            class="prev"
+            element="button"
+          />
+        )}
 
-          {effectiveShowIndicators && indicatorStyle === "fraction" && (
-            <div
-              class="carousel-fraction"
-              aria-live="polite"
-              aria-atomic="true"
-            />
-          )}
+        {effectiveShowIndicators && indicatorStyle === "fraction" && (
+          <div
+            class="carousel-fraction"
+            aria-live="polite"
+            aria-atomic="true"
+          />
+        )}
 
-          {effectiveShowIndicators && indicatorStyle === "dots" && <div class="indicators" />}
+        {effectiveShowIndicators && indicatorStyle === "dots" && <div class="indicators" />}
 
-          {effectiveShowArrows && (
-            <Button
-              iconName="chevron-right"
-              size="none"
-              variant="tertiary"
-              hideText={true}
-              aria-label="Next slide"
-              class="next"
-              element="button"
-            />
-          )}
-        </div>
-      )
-    }
+        {effectiveShowArrows && (
+          <Button
+            iconName="chevron-right"
+            size="none"
+            variant="tertiary"
+            hideText={true}
+            aria-label="Next slide"
+            class="next"
+            element="button"
+          />
+        )}
+      </div>
+    )}
 
     {
       /* Thumbnails are a full-width strip under the controls rather than an

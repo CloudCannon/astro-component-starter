@@ -56,222 +56,218 @@ const formattedCodeCache = await Promise.all(
   data-viewer-id={viewerId}
 >
   <div class:list={["previews", size && `viewer-size-${size}`]}>
-    {
-      component_examples.map((example: any, idx: number) => {
-        const bodyPadding = getBodyPadding(example.data.spacing);
-        const exampleName = example.data.title;
-        const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
+    {component_examples.map((example: any, idx: number) => {
+      const bodyPadding = getBodyPadding(example.data.spacing);
+      const exampleName = example.data.title;
+      const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
 
-        const blocks = example.data.blocks || [];
-        const blocksArray = Array.isArray(blocks) ? blocks : [blocks];
+      const blocks = example.data.blocks || [];
+      const blocksArray = Array.isArray(blocks) ? blocks : [blocks];
 
-        const formattedCode = formattedCodeCache[idx] || { astro: "", yaml: "" };
+      const formattedCode = formattedCodeCache[idx] || { astro: "", yaml: "" };
 
-        return (
-          <>
+      return (
+        <>
+          <div
+            id={exampleId}
+            class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}
+            tabindex={idx === 0 ? 0 : -1}
+            role="region"
+            aria-label={`${exampleName} example preview`}
+            aria-hidden={idx === 0 ? "false" : "true"}
+            inert={idx === 0 ? undefined : true}
+          >
             <div
-              id={exampleId}
-              class:list={[`preview`, `${idx === 0 ? "active" : ""}`]}
-              tabindex={idx === 0 ? 0 : -1}
-              role="region"
-              aria-label={`${exampleName} example preview`}
-              aria-hidden={idx === 0 ? "false" : "true"}
-              inert={idx === 0 ? undefined : true}
+              class="examples flow"
+              style={bodyPadding}
             >
-              <div
-                class="examples flow"
-                style={bodyPadding}
-              >
-                {blocksArray.map((block) => {
-                  const componentPath = block._component;
-                  const Component = components[componentPath];
+              {blocksArray.map((block) => {
+                const componentPath = block._component;
+                const Component = components[componentPath];
 
-                  if (!Component) {
-                    console.warn(`Component not found: ${componentPath}`);
-                    return null;
-                  }
+                if (!Component) {
+                  console.warn(`Component not found: ${componentPath}`);
+                  return null;
+                }
 
-                  return <Component {...block} />;
-                })}
-              </div>
+                return <Component {...block} />;
+              })}
             </div>
+          </div>
 
+          <div
+            class="code"
+            id={`astro-code-${exampleId}`}
+          >
             <div
-              class="code"
-              id={`astro-code-${exampleId}`}
+              class="code-header"
+              data-theme="dark"
             >
-              <div
-                class="code-header"
-                data-theme="dark"
-              >
-                <Button
-                  variant="primary"
-                  text="Copy Astro Code"
-                  size="lg"
-                  iconName="document-duplicate"
-                  data-action="copy-code"
-                  hideText={true}
-                  data-code={formattedCode.astro}
-                  element="button"
-                  class="copy-button"
-                />
-              </div>
-              <Code
-                lang="astro"
-                code={formattedCode.astro}
-                style="height: 100%; padding: var(--spacing-sm);"
+              <Button
+                variant="primary"
+                text="Copy Astro Code"
+                size="lg"
+                iconName="document-duplicate"
+                data-action="copy-code"
+                hideText={true}
+                data-code={formattedCode.astro}
+                element="button"
+                class="copy-button"
               />
             </div>
-            <div
-              class="code frontmatter-code"
-              id={`frontmatter-code-${exampleId}`}
-            >
-              <div
-                class="code-header"
-                data-theme="dark"
-              >
-                <Button
-                  variant="primary"
-                  text="Copy Frontmatter Code"
-                  size="lg"
-                  iconName="document-duplicate"
-                  data-action="copy-code"
-                  hideText={true}
-                  data-code={formattedCode.yaml}
-                  element="button"
-                  class="copy-button"
-                />
-              </div>
-              <Code
-                lang="yaml"
-                code={formattedCode.yaml}
-                style="height: 100%; padding: var(--spacing-sm);"
-              />
-            </div>
-          </>
-        );
-      })
-    }
-  </div>
-
-  {
-    component_examples.length > 0 && (
-      <nav class="controls">
-        <div
-          class="resize-handle"
-          title="Drag to resize"
-        />
-        <div>
-          {component_examples.length > 1 && (
-            <>
-              <label
-                for={`${viewerId}-examples`}
-                class="visually-hidden"
-              >
-                Examples:
-              </label>
-              <select
-                class="example-select"
-                id={`${viewerId}-examples`}
-              >
-                {component_examples.map((example: any, idx: number) => {
-                  const exampleName = example.data.title;
-                  const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
-                  const exampleSlug = example.id.split("/").pop() || "";
-
-                  return (
-                    <option
-                      value={exampleId}
-                      data-slug={exampleSlug}
-                    >
-                      {exampleName}
-                    </option>
-                  );
-                })}
-              </select>
-            </>
-          )}
-        </div>
-        <div class="end-segments">
-          <div class="hidden-segments">
-            <Segments
-              name={`device-size-${viewerId}`}
-              options={[
-                {
-                  value: "desktop",
-                  label: "Desktop",
-                  icon: "computer-desktop",
-                  checked: true,
-                },
-                {
-                  value: "tablet",
-                  label: "Tablet",
-                  icon: "device-tablet",
-                  checked: false,
-                },
-                {
-                  value: "mobile",
-                  label: "Mobile",
-                  icon: "device-phone-mobile",
-                  checked: false,
-                },
-              ]}
-              iconOnly={true}
-              class="device-size-segments"
-              data-action="device-size-toggle"
-            />
-            <Segments
-              name={`direction-mode-${viewerId}`}
-              options={[
-                {
-                  value: "ltr",
-                  label: "Left to Right",
-                  icon: "ltr",
-                  checked: true,
-                },
-                {
-                  value: "rtl",
-                  label: "Right to Left",
-                  icon: "rtl",
-                  checked: false,
-                },
-              ]}
-              iconOnly={true}
-              class="direction-segments"
-              data-action="direction-toggle"
+            <Code
+              lang="astro"
+              code={formattedCode.astro}
+              style="height: 100%; padding: var(--spacing-sm);"
             />
           </div>
+          <div
+            class="code frontmatter-code"
+            id={`frontmatter-code-${exampleId}`}
+          >
+            <div
+              class="code-header"
+              data-theme="dark"
+            >
+              <Button
+                variant="primary"
+                text="Copy Frontmatter Code"
+                size="lg"
+                iconName="document-duplicate"
+                data-action="copy-code"
+                hideText={true}
+                data-code={formattedCode.yaml}
+                element="button"
+                class="copy-button"
+              />
+            </div>
+            <Code
+              lang="yaml"
+              code={formattedCode.yaml}
+              style="height: 100%; padding: var(--spacing-sm);"
+            />
+          </div>
+        </>
+      );
+    })}
+  </div>
+
+  {component_examples.length > 0 && (
+    <nav class="controls">
+      <div
+        class="resize-handle"
+        title="Drag to resize"
+      />
+      <div>
+        {component_examples.length > 1 && (
+          <>
+            <label
+              for={`${viewerId}-examples`}
+              class="visually-hidden"
+            >
+              Examples:
+            </label>
+            <select
+              class="example-select"
+              id={`${viewerId}-examples`}
+            >
+              {component_examples.map((example: any, idx: number) => {
+                const exampleName = example.data.title;
+                const exampleId = `component-${exampleName.toLowerCase().replace(/\s+/g, "-")}-${idx}`;
+                const exampleSlug = example.id.split("/").pop() || "";
+
+                return (
+                  <option
+                    value={exampleId}
+                    data-slug={exampleSlug}
+                  >
+                    {exampleName}
+                  </option>
+                );
+              })}
+            </select>
+          </>
+        )}
+      </div>
+      <div class="end-segments">
+        <div class="hidden-segments">
           <Segments
-            name={`view-mode-${viewerId}`}
-            keepStateOnRefresh={false}
+            name={`device-size-${viewerId}`}
             options={[
               {
-                value: "component",
-                label: "Preview",
-                icon: "cube",
+                value: "desktop",
+                label: "Desktop",
+                icon: "computer-desktop",
                 checked: true,
               },
               {
-                value: "frontmatter",
-                label: "Frontmatter Code",
-                icon: "bars-4",
+                value: "tablet",
+                label: "Tablet",
+                icon: "device-tablet",
                 checked: false,
               },
               {
-                value: "astro",
-                label: "Astro Code",
-                icon: "code-bracket",
+                value: "mobile",
+                label: "Mobile",
+                icon: "device-phone-mobile",
                 checked: false,
               },
             ]}
             iconOnly={true}
-            class="view-segments"
-            data-action="view-toggle"
+            class="device-size-segments"
+            data-action="device-size-toggle"
+          />
+          <Segments
+            name={`direction-mode-${viewerId}`}
+            options={[
+              {
+                value: "ltr",
+                label: "Left to Right",
+                icon: "ltr",
+                checked: true,
+              },
+              {
+                value: "rtl",
+                label: "Right to Left",
+                icon: "rtl",
+                checked: false,
+              },
+            ]}
+            iconOnly={true}
+            class="direction-segments"
+            data-action="direction-toggle"
           />
         </div>
-      </nav>
-    )
-  }
+        <Segments
+          name={`view-mode-${viewerId}`}
+          keepStateOnRefresh={false}
+          options={[
+            {
+              value: "component",
+              label: "Preview",
+              icon: "cube",
+              checked: true,
+            },
+            {
+              value: "frontmatter",
+              label: "Frontmatter Code",
+              icon: "bars-4",
+              checked: false,
+            },
+            {
+              value: "astro",
+              label: "Astro Code",
+              icon: "code-bracket",
+              checked: false,
+            },
+          ]}
+          iconOnly={true}
+          class="view-segments"
+          data-action="view-toggle"
+        />
+      </div>
+    </nav>
+  )}
 </div>
 
 <script src="./script.js"></script>

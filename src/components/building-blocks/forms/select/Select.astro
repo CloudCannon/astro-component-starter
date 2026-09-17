@@ -49,46 +49,40 @@ const placeholderSelected = !options?.some((option: SelectOptionData) => option.
   {...htmlAttributes}
 >
   <div class:list={["field-shell", { "has-leading-icon": hasLeadingIcon }]}>
-    {
-      hasLeadingIcon && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="select-icon select-leading-icon"
-          aria-hidden="true"
-        />
-      )
-    }
+    {hasLeadingIcon && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="select-icon select-leading-icon"
+        aria-hidden="true"
+      />
+    )}
     <select
       name={name}
       class="field"
       {...controlAttributes}
     >
-      {
-        placeholder && (
-          <option
-            value=""
-            disabled
-            selected={placeholderSelected}
-          >
-            {placeholder}
-          </option>
-        )
-      }
-      {
-        options?.length > 0 ? (
-          options?.map((option: SelectOptionData) => (
-            <SelectOption
-              value={option.value}
-              label={option.label}
-              selected={option.value === value}
-            />
-          ))
-        ) : (
-          <slot />
-        )
-      }
+      {placeholder && (
+        <option
+          value=""
+          disabled
+          selected={placeholderSelected}
+        >
+          {placeholder}
+        </option>
+      )}
+      {options?.length > 0 ? (
+        options?.map((option: SelectOptionData) => (
+          <SelectOption
+            value={option.value}
+            label={option.label}
+            selected={option.value === value}
+          />
+        ))
+      ) : (
+        <slot />
+      )}
     </select>
     <Icon
       name="chevron-down"

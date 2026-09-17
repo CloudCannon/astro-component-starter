@@ -44,47 +44,41 @@ const imageAltProp = imageAltDataProp ?? (imageEditable ? "imageAlt" : undefined
   class:list={["card-grid-item", className]}
   {...htmlAttributes}
 >
-  {
-    image && (
-      <Image
-        class="card-grid-image"
-        source={image}
-        alt={imageAlt}
-        decorative={!hasExplicitAlt}
-        aspectRatio={aspectRatio}
-        sizes="(max-width: 640px) 100vw, 400px"
-        widths={[320, 400, 640, 800]}
-        width={800}
-        data-prop-src={imageSrcProp}
-        data-prop-alt={imageAltProp}
-      />
-    )
-  }
+  {image && (
+    <Image
+      class="card-grid-image"
+      source={image}
+      alt={imageAlt}
+      decorative={!hasExplicitAlt}
+      aspectRatio={aspectRatio}
+      sizes="(max-width: 640px) 100vw, 400px"
+      widths={[320, 400, 640, 800]}
+      width={800}
+      data-prop-src={imageSrcProp}
+      data-prop-alt={imageAltProp}
+    />
+  )}
   <div
     class="card-grid-body"
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        blocks.length > 0 && (
-          <RenderBlock
-            contentSections={blocks}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {blocks.length > 0 && (
+        <RenderBlock
+          contentSections={blocks}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
-  {
-    hasLink && (
-      <a
-        class="card-grid-hit"
-        href={link}
-      >
-        <span class="visually-hidden">{linkLabel}</span>
-      </a>
-    )
-  }
+  {hasLink && (
+    <a
+      class="card-grid-hit"
+      href={link}
+    >
+      <span class="visually-hidden">{linkLabel}</span>
+    </a>
+  )}
 </article>
 
 <style is:global>

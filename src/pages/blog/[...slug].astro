@@ -90,7 +90,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
   <script
     type="application/ld+json"
     set:html={JSON.stringify(breadcrumbJsonLd)}
-  />
+  ></script>
   <CustomSection
     maxContentWidth={showToc ? "2xl" : "xl"}
     paddingHorizontal="lg"
@@ -119,42 +119,38 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
           {post.data.title}
         </Heading>
 
-        {
-          post.data.description && (
-            <SimpleText
-              data-prop="description"
-              data-pagefind-meta="description"
-              data-pagefind-weight="3"
-              size="lg"
-              class="post-description"
-            >
-              {post.data.description}
-            </SimpleText>
-          )
-        }
+        {post.data.description && (
+          <SimpleText
+            data-prop="description"
+            data-pagefind-meta="description"
+            data-pagefind-weight="3"
+            size="lg"
+            class="post-description"
+          >
+            {post.data.description}
+          </SimpleText>
+        )}
 
         <SimpleText
           size="sm"
           class="post-meta"
         >
-          {
-            category && (
-              <>
-                <a
-                  class="post-meta-category"
-                  href={categoryHref}
-                >
-                  {category}
-                </a>
-                <span
-                  class="post-meta-separator"
-                  aria-hidden="true"
-                >
-                  ·
-                </span>
-              </>
-            )
-          }
+          {category && (
+            <>
+              <a
+                class="post-meta-category"
+                href={categoryHref}
+              >
+                {category}
+              </a>
+              <span
+                class="post-meta-separator"
+                aria-hidden="true"
+              >
+                ·
+              </span>
+            </>
+          )}
           <time
             datetime={dateIso}
             data-pagefind-meta={`published:${dateIso}`}
@@ -178,23 +174,21 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
         </SimpleText>
       </header>
 
-      {
-        post.data.image && (
-          <Image
-            source={post.data.image}
-            alt={post.data.title}
-            rounded={true}
-            data-prop-src="image"
-            data-prop-alt="title"
-            class="post-image"
-            aspectRatio="widescreen"
-            positionVertical="center"
-            imageElementAttributes={{
-              "data-pagefind-meta": "image[src], image_alt[alt]",
-            }}
-          />
-        )
-      }
+      {post.data.image && (
+        <Image
+          source={post.data.image}
+          alt={post.data.title}
+          rounded={true}
+          data-prop-src="image"
+          data-prop-alt="title"
+          class="post-image"
+          aspectRatio="widescreen"
+          positionVertical="center"
+          imageElementAttributes={{
+            "data-pagefind-meta": "image[src], image_alt[alt]",
+          }}
+        />
+      )}
 
       {showToc && <Toc headings={tocHeadings} />}
       <div
@@ -204,29 +198,27 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
       >
         <Content components={mdxComponents} />
       </div>
-      {
-        post.data.tags.length > 0 && (
-          <div
-            class="post-tags"
-            data-editable="array"
-            data-prop="tags"
-            data-direction="row"
-          >
-            {post.data.tags.map((tag) => (
-              <Badge
-                text={tag.trim()}
-                link={`/blog/tag/${slugifyLabel(tag.trim())}/`}
-                showArrow={false}
-                variant="plain"
-                size="sm"
-                data-pagefind-filter="Tag"
-                data-editable="array-item"
-                data-id={tag.trim()}
-              />
-            ))}
-          </div>
-        )
-      }
+      {post.data.tags.length > 0 && (
+        <div
+          class="post-tags"
+          data-editable="array"
+          data-prop="tags"
+          data-direction="row"
+        >
+          {post.data.tags.map((tag) => (
+            <Badge
+              text={tag.trim()}
+              link={`/blog/tag/${slugifyLabel(tag.trim())}/`}
+              showArrow={false}
+              variant="plain"
+              size="sm"
+              data-pagefind-filter="Tag"
+              data-editable="array-item"
+              data-id={tag.trim()}
+            />
+          ))}
+        </div>
+      )}
     </div>
   </CustomSection>
 </Page>

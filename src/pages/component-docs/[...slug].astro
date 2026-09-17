@@ -42,34 +42,31 @@ const { page, isDisabled = false, disabledTitle } = Astro.props;
 const { Content } = isDisabled ? { Content: null } : await render(page);
 ---
 
-{
-  isDisabled ? (
-    <Page
-      frontmatter={{
-        title: disabledTitle ? `${disabledTitle} (local development only)` : "Component Docs",
-        description: `${disabledTitle ?? "The component docs"} is available in local development, or in a build made with npm run build:with-library.`,
-        noindex: true,
-      }}
-    >
-      <section class="component-docs-disabled">
-        <h1>{disabledTitle ?? "Component Docs"}: Available in Local Development</h1>
-        <p>
-          The component docs are disabled in this production build to keep the generated site lean
-          and to avoid shipping the full example gallery when you only need marketing pages and the
-          blog.
-        </p>
-        <p>
-          Run <code>npm run dev</code> and open <code>/component-docs/</code> locally to browse the
-          full docs, live examples, and props tables. To include them in a static build, run{" "}
-          <code>npm run build:with-library</code>, which enables every route under{" "}
-          <code>/component-docs/</code>.
-        </p>
-      </section>
-    </Page>
-  ) : (
-    <LibraryLayout frontmatter={page.data}>{Content && <Content />}</LibraryLayout>
-  )
-}
+{isDisabled ? (
+  <Page
+    frontmatter={{
+      title: disabledTitle ? `${disabledTitle} (local development only)` : "Component Docs",
+      description: `${disabledTitle ?? "The component docs"} is available in local development, or in a build made with npm run build:with-library.`,
+      noindex: true,
+    }}
+  >
+    <section class="component-docs-disabled">
+      <h1>{disabledTitle ?? "Component Docs"}: Available in Local Development</h1>
+      <p>
+        The component docs are disabled in this production build to keep the generated site lean and
+        to avoid shipping the full example gallery when you only need marketing pages and the blog.
+      </p>
+      <p>
+        Run <code>npm run dev</code> and open <code>/component-docs/</code> locally to browse the
+        full docs, live examples, and props tables. To include them in a static build, run{" "}
+        <code>npm run build:with-library</code>, which enables every route under{" "}
+        <code>/component-docs/</code>.
+      </p>
+    </section>
+  </Page>
+) : (
+  <LibraryLayout frontmatter={page.data}>{Content && <Content />}</LibraryLayout>
+)}
 
 <style is:global>
   .component-docs-disabled {

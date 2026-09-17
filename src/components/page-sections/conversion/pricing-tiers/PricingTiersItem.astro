@@ -53,17 +53,15 @@ const priceRows = [
 
 <GridItem {...htmlAttributes}>
   <article class:list={["pricing-tier", highlight && "highlight", className]}>
-    {
-      highlight && badgeText && (
-        <Badge
-          class="pricing-tier-badge"
-          variant="brand"
-          size="sm"
-          text={badgeText}
-          data-prop="badgeText"
-        />
-      )
-    }
+    {highlight && badgeText && (
+      <Badge
+        class="pricing-tier-badge"
+        variant="brand"
+        size="sm"
+        text={badgeText}
+        data-prop="badgeText"
+      />
+    )}
     <Heading
       class="pricing-tier-name"
       level={headingLevel}
@@ -78,61 +76,57 @@ const priceRows = [
       data-prop="description"
       text={description}
     />
-    {
-      priceRows.map((row) => (
-        <p
-          class:list={[
-            "pricing-tier-price",
-            showAnnualPricing && `pricing-tier-price-${row.interval}`,
-          ]}
-          aria-live={showAnnualPricing ? "polite" : undefined}
+    {priceRows.map((row) => (
+      <p
+        class:list={[
+          "pricing-tier-price",
+          showAnnualPricing && `pricing-tier-price-${row.interval}`,
+        ]}
+        aria-live={showAnnualPricing ? "polite" : undefined}
+      >
+        <span
+          class="pricing-tier-amount"
+          data-editable="text"
+          data-prop={row.amountProp}
         >
+          {row.amount}
+        </span>
+        {row.suffix && (
           <span
-            class="pricing-tier-amount"
+            class="pricing-tier-suffix"
             data-editable="text"
-            data-prop={row.amountProp}
+            data-prop={row.suffixProp}
           >
-            {row.amount}
+            {row.suffix}
           </span>
-          {row.suffix && (
+        )}
+      </p>
+    ))}
+    {features?.length > 0 && (
+      <ul
+        class="pricing-tier-features"
+        data-editable="array"
+        data-prop="features"
+      >
+        {features?.map((feature: TierFeature) => (
+          <li
+            class:list={["pricing-tier-feature", feature.included === false && "excluded"]}
+            data-editable="array-item"
+          >
+            <Icon
+              name={feature.included === false ? "minus" : "check"}
+              size="sm"
+            />
             <span
-              class="pricing-tier-suffix"
               data-editable="text"
-              data-prop={row.suffixProp}
+              data-prop="text"
             >
-              {row.suffix}
+              {feature.text}
             </span>
-          )}
-        </p>
-      ))
-    }
-    {
-      features?.length > 0 && (
-        <ul
-          class="pricing-tier-features"
-          data-editable="array"
-          data-prop="features"
-        >
-          {features?.map((feature: TierFeature) => (
-            <li
-              class:list={["pricing-tier-feature", feature.included === false && "excluded"]}
-              data-editable="array-item"
-            >
-              <Icon
-                name={feature.included === false ? "minus" : "check"}
-                size="sm"
-              />
-              <span
-                data-editable="text"
-                data-prop="text"
-              >
-                {feature.text}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )
-    }
+          </li>
+        ))}
+      </ul>
+    )}
     <Button
       class="pricing-tier-button"
       text={buttonText}

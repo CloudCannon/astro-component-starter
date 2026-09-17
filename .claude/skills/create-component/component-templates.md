@@ -123,16 +123,14 @@ if (!_component && !hasItems && !hasSlotContent) return;
 <div class:list={['my-wrapper', 'stackable', className]} {...htmlAttributes}>
   <div data-space-before={spaceBeforeAttr(spaceBefore)} {...arrayDataAttributes}>
     <slot>
-      {
-        items?.map((item: ItemProps) => (
-          <ChildItem
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/my-wrapper/my-wrapper-item"
-            {...item}
-          />
-        ))
-      }
+      {items?.map((item: ItemProps) => (
+        <ChildItem
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          data-editable="array-item"
+          data-id="building-blocks/wrappers/my-wrapper/my-wrapper-item"
+          {...item}
+        />
+      ))}
     </slot>
   </div>
 </div>

@@ -165,54 +165,50 @@ const cards = showingPlaceholders
     data-prop="subtext"
     text={subtext}
   />
-  {
-    showingPlaceholders ? (
-      <div
-        class="latest-posts-placeholders"
-        data-space-before="loose"
-        aria-hidden="true"
-      >
-        <CardGrid
-          items={cards}
-          columns={3}
-          gap="lg"
-          aspectRatio="landscape"
-        />
-        <SimpleText
-          class="latest-posts-notice"
-          alignmentHorizontal="center"
-          size="sm"
-        >
-          The latest blog posts appear here on the published site.
-        </SimpleText>
-      </div>
-    ) : (
-      cards.length > 0 && (
-        <CardGrid
-          items={cards}
-          columns={3}
-          gap="lg"
-          aspectRatio="landscape"
-        />
-      )
-    )
-  }
-  {
-    showViewAllButton && (
-      <ButtonGroup
-        class="latest-posts-view-all"
+  {showingPlaceholders ? (
+    <div
+      class="latest-posts-placeholders"
+      data-space-before="loose"
+      aria-hidden="true"
+    >
+      <CardGrid
+        items={cards}
+        columns={3}
+        gap="lg"
+        aspectRatio="landscape"
+      />
+      <SimpleText
+        class="latest-posts-notice"
         alignmentHorizontal="center"
-        spaceBefore="loose"
+        size="sm"
       >
-        <Button
-          text={viewAllLabel}
-          link="/blog/"
-          variant="tertiary"
-          data-prop="viewAllLabel"
-        />
-      </ButtonGroup>
+        The latest blog posts appear here on the published site.
+      </SimpleText>
+    </div>
+  ) : (
+    cards.length > 0 && (
+      <CardGrid
+        items={cards}
+        columns={3}
+        gap="lg"
+        aspectRatio="landscape"
+      />
     )
-  }
+  )}
+  {showViewAllButton && (
+    <ButtonGroup
+      class="latest-posts-view-all"
+      alignmentHorizontal="center"
+      spaceBefore="loose"
+    >
+      <Button
+        text={viewAllLabel}
+        link="/blog/"
+        variant="tertiary"
+        data-prop="viewAllLabel"
+      />
+    </ButtonGroup>
+  )}
 </CustomSection>
 
 <style is:global>

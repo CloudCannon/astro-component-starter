@@ -52,10 +52,8 @@ const subtextDataAttributes = effectiveSubtextProp
     controls={panelId}
     selected={selected}
   >
-    {
-      /* `level="span"`, not a real heading: a tab label is not a section title,
-        and an h3 per tab injects the whole tab strip into the page outline. */
-    }
+    {/* `level="span"`, not a real heading: a tab label is not a section title,
+        and an h3 per tab injects the whole tab strip into the page outline. */}
     <Heading
       text={title}
       level="span"
@@ -66,19 +64,17 @@ const subtextDataAttributes = effectiveSubtextProp
       class="content-selector-tab-heading"
       data-prop={effectiveTitleProp}
     />
-    {
-      subtext && (
-        <span
-          class:list={[
-            "content-selector-tab-subtext",
-            `align-${navigationPosition === "top" ? "center" : "start"}`,
-          ]}
-          {...subtextDataAttributes}
-        >
-          {subtext}
-        </span>
-      )
-    }
+    {subtext && (
+      <span
+        class:list={[
+          "content-selector-tab-subtext",
+          `align-${navigationPosition === "top" ? "center" : "start"}`,
+        ]}
+        {...subtextDataAttributes}
+      >
+        {subtext}
+      </span>
+    )}
     <Icon
       name="chevron-down"
       size="none"
@@ -97,14 +93,12 @@ const subtextDataAttributes = effectiveSubtextProp
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <RenderBlock
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <RenderBlock
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
   </TabPanel>

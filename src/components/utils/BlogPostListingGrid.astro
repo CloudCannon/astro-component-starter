@@ -26,92 +26,88 @@ interface Props {
 const { page, emptyMessage, locale = "en-US", tagBreadcrumb } = Astro.props;
 ---
 
-{
-  /* The leading gap stays an inline margin: whichever element comes first here
+{/* The leading gap stays an inline margin: whichever element comes first here
     is the section's first flow child, and `.flow > * + *` never gives that one
-    a margin. Sibling gaps below do use `spaceBefore`. */
-}
+    a margin. Sibling gaps below do use `spaceBefore`. */}
 
-{
-  page.data.length > 0 ? (
-    <>
-      {tagBreadcrumb && (
-        <Breadcrumbs
-          style="margin-top: var(--space-before-loose);"
-          items={[
-            { label: tagBreadcrumb.allPostsLabel ?? "Blog", url: tagBreadcrumb.allPostsHref },
-            { label: tagBreadcrumb.currentLabel },
-          ]}
-        />
-      )}
-      <Grid
-        gap="lg"
-        minItemWidth="320"
-        maxItemWidth="400"
-        spaceBefore="default"
-        style={tagBreadcrumb ? undefined : "margin-top: var(--space-before-loose);"}
-      >
-        {page.data.map((post: any) => {
-          const pubDate = formatPostDate(post.data.date, locale);
-
-          const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
-
-          return (
-            <GridItem>
-              <Card
-                link={`/blog/${slug}`}
-                rounded={true}
-                border={true}
-                paddingVertical="lg"
-                paddingHorizontal="lg"
-              >
-                {post.data.image && (
-                  <Image
-                    slot="before"
-                    source={post.data.image}
-                    decorative={true}
-                    aspectRatio="landscape"
-                    sizes="(max-width: 400px) 100vw, 400px"
-                    widths={[320, 400, 640, 800]}
-                    width={800}
-                  />
-                )}
-                <SimpleText
-                  size="sm"
-                  style="color: var(--color-text-muted); margin-bottom: var(--spacing-xs);"
-                >
-                  {pubDate} • {post.data.author || "Anonymous"}
-                </SimpleText>
-                <Heading
-                  level="h2"
-                  size="md"
-                  style="margin-bottom: var(--spacing-md); margin-top: var(--spacing-sm);"
-                >
-                  {post.data.title}
-                </Heading>
-                <SimpleText
-                  size="sm"
-                  style="color: var(--color-text-muted); margin-top: 0;"
-                >
-                  {post.data.description}
-                </SimpleText>
-              </Card>
-            </GridItem>
-          );
-        })}
-      </Grid>
-      <Pagination
-        page={page}
-        showArrows={true}
-        spaceBefore="loose"
+{page.data.length > 0 ? (
+  <>
+    {tagBreadcrumb && (
+      <Breadcrumbs
+        style="margin-top: var(--space-before-loose);"
+        items={[
+          { label: tagBreadcrumb.allPostsLabel ?? "Blog", url: tagBreadcrumb.allPostsHref },
+          { label: tagBreadcrumb.currentLabel },
+        ]}
       />
-    </>
-  ) : (
-    <SimpleText
-      alignmentHorizontal="center"
-      style="margin-top: var(--space-before-loose);"
+    )}
+    <Grid
+      gap="lg"
+      minItemWidth="320"
+      maxItemWidth="400"
+      spaceBefore="default"
+      style={tagBreadcrumb ? undefined : "margin-top: var(--space-before-loose);"}
     >
-      {emptyMessage}
-    </SimpleText>
-  )
-}
+      {page.data.map((post: any) => {
+        const pubDate = formatPostDate(post.data.date, locale);
+
+        const slug = post.id?.replace(/\.mdx?$/, "") || post.slug;
+
+        return (
+          <GridItem>
+            <Card
+              link={`/blog/${slug}`}
+              rounded={true}
+              border={true}
+              paddingVertical="lg"
+              paddingHorizontal="lg"
+            >
+              {post.data.image && (
+                <Image
+                  slot="before"
+                  source={post.data.image}
+                  decorative={true}
+                  aspectRatio="landscape"
+                  sizes="(max-width: 400px) 100vw, 400px"
+                  widths={[320, 400, 640, 800]}
+                  width={800}
+                />
+              )}
+              <SimpleText
+                size="sm"
+                style="color: var(--color-text-muted); margin-bottom: var(--spacing-xs);"
+              >
+                {pubDate} • {post.data.author || "Anonymous"}
+              </SimpleText>
+              <Heading
+                level="h2"
+                size="md"
+                style="margin-bottom: var(--spacing-md); margin-top: var(--spacing-sm);"
+              >
+                {post.data.title}
+              </Heading>
+              <SimpleText
+                size="sm"
+                style="color: var(--color-text-muted); margin-top: 0;"
+              >
+                {post.data.description}
+              </SimpleText>
+            </Card>
+          </GridItem>
+        );
+      })}
+    </Grid>
+    <Pagination
+      page={page}
+      showArrows={true}
+      spaceBefore="loose"
+    />
+  </>
+) : (
+  <SimpleText
+    alignmentHorizontal="center"
+    style="margin-top: var(--space-before-loose);"
+  >
+    {emptyMessage}
+  </SimpleText>
+)}

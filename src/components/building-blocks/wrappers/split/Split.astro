@@ -75,10 +75,8 @@ const finalDistributionMode = reverse
 const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
 ---
 
-{
-  /* A <div>, not a <section>: this is a layout wrapper with no accessible
-    name, which maps to a generic container anyway. */
-}
+{/* A <div>, not a <section>: this is a layout wrapper with no accessible
+    name, which maps to a generic container anyway. */}
 <div
   class:list={["split", "stackable", className]}
   {...htmlAttributes}
@@ -100,60 +98,55 @@ const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
       class="pane first flow"
       {...arrayDataAttributesFirst}
     >
-      {
-        reverse ? (
-          <slot name="second">
-            {firstSplitBlocks && (
-              <Component
-                contentSections={firstSplitBlocks}
-                useDefaultEditableBinding={firstPaneEditable}
-              />
-            )}
-          </slot>
-        ) : (
-          <slot name="first">
-            {firstSplitBlocks && (
-              <Component
-                contentSections={firstSplitBlocks}
-                useDefaultEditableBinding={firstPaneEditable}
-              />
-            )}
-          </slot>
-        )
-      }
+      {reverse ? (
+        <slot name="second">
+          {firstSplitBlocks && (
+            <Component
+              contentSections={firstSplitBlocks}
+              useDefaultEditableBinding={firstPaneEditable}
+            />
+          )}
+        </slot>
+      ) : (
+        <slot name="first">
+          {firstSplitBlocks && (
+            <Component
+              contentSections={firstSplitBlocks}
+              useDefaultEditableBinding={firstPaneEditable}
+            />
+          )}
+        </slot>
+      )}
     </div>
     <div
       class="pane second flow"
       {...arrayDataAttributesSecond}
     >
-      {
-        reverse ? (
-          <slot name="first">
-            {secondSplitBlocks && (
-              <Component
-                contentSections={secondSplitBlocks}
-                useDefaultEditableBinding={secondPaneEditable}
-              />
-            )}
-          </slot>
-        ) : (
-          <slot name="second">
-            {secondSplitBlocks && (
-              <Component
-                contentSections={secondSplitBlocks}
-                useDefaultEditableBinding={secondPaneEditable}
-              />
-            )}
-          </slot>
-        )
-      }
+      {reverse ? (
+        <slot name="first">
+          {secondSplitBlocks && (
+            <Component
+              contentSections={secondSplitBlocks}
+              useDefaultEditableBinding={secondPaneEditable}
+            />
+          )}
+        </slot>
+      ) : (
+        <slot name="second">
+          {secondSplitBlocks && (
+            <Component
+              contentSections={secondSplitBlocks}
+              useDefaultEditableBinding={secondPaneEditable}
+            />
+          )}
+        </slot>
+      )}
     </div>
   </div>
-  {
-    minSplitWidth > 0 && (
-      <style
-        is:inline
-        set:html={`
+  {minSplitWidth > 0 && (
+    <style
+      is:inline
+      set:html={`
       @container (max-width: ${minSplitWidth}px) {
         .split-inner[data-split-id="${splitId}"] {
           grid-template-columns: var(--split-columns-mobile);
@@ -175,9 +168,8 @@ const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
         }
       }
     `}
-      />
-    )
-  }
+    ></style>
+  )}
 </div>
 
 <style is:global>

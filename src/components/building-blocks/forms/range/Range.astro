@@ -54,22 +54,20 @@ const ticks = showTicks
   {...shellAttributes}
   {...htmlAttributes}
 >
-  {
-    showValue && (
-      <div
-        class="range-readout"
-        slot="header-end"
+  {showValue && (
+    <div
+      class="range-readout"
+      slot="header-end"
+    >
+      <output
+        class="range-value"
+        for={fieldId}
       >
-        <output
-          class="range-value"
-          for={fieldId}
-        >
-          <span class="range-number">{displayValue}</span>
-          {unit && <span class="range-unit">{unit}</span>}
-        </output>
-      </div>
-    )
-  }
+        <span class="range-number">{displayValue}</span>
+        {unit && <span class="range-unit">{unit}</span>}
+      </output>
+    </div>
+  )}
   <input
     type="range"
     name={name}
@@ -81,19 +79,17 @@ const ticks = showTicks
     style={`--range-pct: ${initialPct}%`}
     {...controlAttributes}
   />
-  {
-    showTicks && (
-      <div
-        class="range-ticks"
-        data-tick-style={tickStyle}
-        aria-hidden="true"
-      >
-        {ticks.map((tick) => (
-          <span class:list={["range-tick", tick.filled && "is-filled", tick.near && "is-near"]} />
-        ))}
-      </div>
-    )
-  }
+  {showTicks && (
+    <div
+      class="range-ticks"
+      data-tick-style={tickStyle}
+      aria-hidden="true"
+    >
+      {ticks.map((tick) => (
+        <span class:list={["range-tick", tick.filled && "is-filled", tick.near && "is-near"]} />
+      ))}
+    </div>
+  )}
   <div
     class="range-bounds"
     aria-hidden="true"

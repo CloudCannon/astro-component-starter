@@ -81,38 +81,36 @@ const annualSelected = defaultInterval === "annual";
     data-prop="subtext"
     text={subtext}
   />
-  {
-    showAnnualPricing && (
-      <div class="pricing-tiers-billing">
-        <Segments
-          class="pricing-tiers-billing-segments"
-          name={billingName}
-          aria-label={`${monthlyLabel} or ${annualLabel}`}
-          options={[
-            {
-              value: "monthly",
-              label: monthlyLabel,
-              checked: !annualSelected,
-            },
-            {
-              value: "annual",
-              label: annualLabel,
-              checked: annualSelected,
-            },
-          ]}
+  {showAnnualPricing && (
+    <div class="pricing-tiers-billing">
+      <Segments
+        class="pricing-tiers-billing-segments"
+        name={billingName}
+        aria-label={`${monthlyLabel} or ${annualLabel}`}
+        options={[
+          {
+            value: "monthly",
+            label: monthlyLabel,
+            checked: !annualSelected,
+          },
+          {
+            value: "annual",
+            label: annualLabel,
+            checked: annualSelected,
+          },
+        ]}
+      />
+      {isNonEmptyString(annualBadge) && (
+        <Badge
+          class="pricing-tiers-billing-badge"
+          variant="success"
+          size="sm"
+          text={annualBadge}
+          data-prop="annualBadge"
         />
-        {isNonEmptyString(annualBadge) && (
-          <Badge
-            class="pricing-tiers-billing-badge"
-            variant="success"
-            size="sm"
-            text={annualBadge}
-            data-prop="annualBadge"
-          />
-        )}
-      </div>
-    )
-  }
+      )}
+    </div>
+  )}
   <Grid
     gap="lg"
     minItemWidth={272}
@@ -121,17 +119,15 @@ const annualSelected = defaultInterval === "annual";
     spaceBefore="loose"
     data-children-prop="tiers"
   >
-    {
-      tiers?.map((tier: TierProps) => (
-        <PricingTiersItem
-          data-id="page-sections/conversion/pricing-tiers/pricing-tiers-item"
-          data-editable="array-item"
-          {...tier}
-          headingLevel={itemHeadingLevel}
-          showAnnualPricing={showAnnualPricing}
-        />
-      ))
-    }
+    {tiers?.map((tier: TierProps) => (
+      <PricingTiersItem
+        data-id="page-sections/conversion/pricing-tiers/pricing-tiers-item"
+        data-editable="array-item"
+        {...tier}
+        headingLevel={itemHeadingLevel}
+        showAnnualPricing={showAnnualPricing}
+      />
+    ))}
   </Grid>
 </CustomSection>
 

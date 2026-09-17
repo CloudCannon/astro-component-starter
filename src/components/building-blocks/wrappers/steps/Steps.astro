@@ -41,11 +41,9 @@ if (!_component && !hasItems && !hasSlotContent) return;
   class:list={["steps", "stackable", className]}
   {...htmlAttributes}
 >
-  {
-    /* `role="list"` is load-bearing: `.steps-list` sets `list-style: none`,
+  {/* `role="list"` is load-bearing: `.steps-list` sets `list-style: none`,
       which drops the list role in Safari's a11y tree. Remove one and remove
-      both. */
-  }
+      both. */}
   <ol
     role="list"
     data-space-before={spaceBeforeAttr(spaceBefore)}
@@ -53,17 +51,15 @@ if (!_component && !hasItems && !hasSlotContent) return;
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        items?.map((item: ItemProps) => (
-          <StepsItem
-            imageAspectRatio={imageAspectRatio}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/steps/steps-item"
-            {...item}
-          />
-        ))
-      }
+      {items?.map((item: ItemProps) => (
+        <StepsItem
+          imageAspectRatio={imageAspectRatio}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          data-editable="array-item"
+          data-id="building-blocks/wrappers/steps/steps-item"
+          {...item}
+        />
+      ))}
     </slot>
   </ol>
 </div>

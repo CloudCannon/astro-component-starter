@@ -90,66 +90,10 @@ const pathname = Astro.url.pathname;
 
   <div class="mobile-content">
     <ul class="mobile-list">
-      {
-        navData?.map((item: NavItem) => {
-          const itemData = createNavItemData(pathname, item, `mobile-nav-top-${navInstanceId}`);
+      {navData?.map((item: NavItem) => {
+        const itemData = createNavItemData(pathname, item, `mobile-nav-top-${navInstanceId}`);
 
-          if (itemHasMegaMenu(item)) {
-            return (
-              <li class="nav-item has-children">
-                <NavItemTrigger
-                  item={itemData}
-                  inputType="radio"
-                  expanded={itemData.hasCurrent}
-                />
-                <div
-                  id={itemData.contentId}
-                  class="nav-item-content mobile-mega"
-                >
-                  {(item.megaMenu?.columns ?? []).map((column) => (
-                    <Fragment>
-                      {column.heading && <p class="mobile-mega-heading">{column.heading}</p>}
-                      <ul class="nav-list">
-                        {(column.items ?? []).map((link) => (
-                          <li class="nav-item">
-                            <a
-                              href={link.path}
-                              aria-current={isCurrentPage(pathname, link) ? "page" : undefined}
-                            >
-                              {link.icon && (
-                                <span class="mobile-mega-icon">
-                                  <Icon
-                                    name={link.icon}
-                                    size="none"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              )}
-                              {link.name}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </Fragment>
-                  ))}
-                </div>
-              </li>
-            );
-          }
-
-          if (!itemData.hasChildren) {
-            return (
-              <li class="nav-item">
-                <a
-                  href={itemData.path}
-                  aria-current={itemData.isCurrent ? "page" : undefined}
-                >
-                  {itemData.name}
-                </a>
-              </li>
-            );
-          }
-
+        if (itemHasMegaMenu(item)) {
           return (
             <li class="nav-item has-children">
               <NavItemTrigger
@@ -159,64 +103,118 @@ const pathname = Astro.url.pathname;
               />
               <div
                 id={itemData.contentId}
-                class="nav-item-content"
+                class="nav-item-content mobile-mega"
               >
-                <ul class="nav-list">
-                  {itemData.children!.map((child) => {
-                    const childData = createNavItemData(
-                      pathname,
-                      child,
-                      `mobile-nav-${itemData.parentGroupId}`
-                    );
-
-                    if (!childData.hasChildren) {
-                      return (
+                {(item.megaMenu?.columns ?? []).map((column) => (
+                  <Fragment>
+                    {column.heading && <p class="mobile-mega-heading">{column.heading}</p>}
+                    <ul class="nav-list">
+                      {(column.items ?? []).map((link) => (
                         <li class="nav-item">
                           <a
-                            href={childData.path}
-                            aria-current={childData.isCurrent ? "page" : undefined}
+                            href={link.path}
+                            aria-current={isCurrentPage(pathname, link) ? "page" : undefined}
                           >
-                            {childData.name}
+                            {link.icon && (
+                              <span class="mobile-mega-icon">
+                                <Icon
+                                  name={link.icon}
+                                  size="none"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            )}
+                            {link.name}
                           </a>
                         </li>
-                      );
-                    }
-
-                    return (
-                      <li class="nav-item has-children">
-                        <NavItemTrigger
-                          item={childData}
-                          inputType="radio"
-                          expanded={childData.hasCurrent}
-                        />
-                        <div
-                          id={childData.contentId}
-                          class="nav-item-content"
-                        >
-                          <ul class="nav-list">
-                            {childData.children!.map((grandChild) => (
-                              <li class="nav-item">
-                                <a
-                                  href={grandChild.path}
-                                  aria-current={
-                                    isCurrentPage(pathname, grandChild) ? "page" : undefined
-                                  }
-                                >
-                                  {grandChild.name}
-                                </a>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </li>
-                    );
-                  })}
-                </ul>
+                      ))}
+                    </ul>
+                  </Fragment>
+                ))}
               </div>
             </li>
           );
-        })
-      }
+        }
+
+        if (!itemData.hasChildren) {
+          return (
+            <li class="nav-item">
+              <a
+                href={itemData.path}
+                aria-current={itemData.isCurrent ? "page" : undefined}
+              >
+                {itemData.name}
+              </a>
+            </li>
+          );
+        }
+
+        return (
+          <li class="nav-item has-children">
+            <NavItemTrigger
+              item={itemData}
+              inputType="radio"
+              expanded={itemData.hasCurrent}
+            />
+            <div
+              id={itemData.contentId}
+              class="nav-item-content"
+            >
+              <ul class="nav-list">
+                {itemData.children!.map((child) => {
+                  const childData = createNavItemData(
+                    pathname,
+                    child,
+                    `mobile-nav-${itemData.parentGroupId}`
+                  );
+
+                  if (!childData.hasChildren) {
+                    return (
+                      <li class="nav-item">
+                        <a
+                          href={childData.path}
+                          aria-current={childData.isCurrent ? "page" : undefined}
+                        >
+                          {childData.name}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li class="nav-item has-children">
+                      <NavItemTrigger
+                        item={childData}
+                        inputType="radio"
+                        expanded={childData.hasCurrent}
+                      />
+                      <div
+                        id={childData.contentId}
+                        class="nav-item-content"
+                      >
+                        <ul class="nav-list">
+                          {childData.children!.map((grandChild) => (
+                            <li class="nav-item">
+                              <a
+                                href={grandChild.path}
+                                aria-current={
+                                  isCurrentPage(pathname, grandChild) ? "page" : undefined
+                                }
+                              >
+                                {grandChild.name}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   </div>
 </nav>

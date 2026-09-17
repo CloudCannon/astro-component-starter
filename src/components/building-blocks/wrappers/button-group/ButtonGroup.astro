@@ -50,14 +50,12 @@ if (!_component && !hasButtonSections && !hasSlotContent) return;
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        buttonSections && buttonSections.length > 0 && (
-          <Component
-            contentSections={buttonSections}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {buttonSections && buttonSections.length > 0 && (
+        <Component
+          contentSections={buttonSections}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
 </div>

@@ -46,24 +46,22 @@ const arrayDataAttributes = effectiveChildrenProp
     data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
-    {
-      links?.map((social: SocialLink) => (
-        <li data-editable={effectiveChildrenProp ? "array-item" : undefined}>
-          <a
-            class="social-link"
-            href={social.link}
-            aria-label={linkLabel(social)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Icon
-              name={social.icon}
-              size="none"
-            />
-          </a>
-        </li>
-      ))
-    }
+    {links?.map((social: SocialLink) => (
+      <li data-editable={effectiveChildrenProp ? "array-item" : undefined}>
+        <a
+          class="social-link"
+          href={social.link}
+          aria-label={linkLabel(social)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon
+            name={social.icon}
+            size="none"
+          />
+        </a>
+      </li>
+    ))}
   </ul>
 </nav>
 

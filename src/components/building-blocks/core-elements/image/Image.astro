@@ -117,42 +117,40 @@ if (hasAlternate) {
       background && "background",
     ]}
   >
-    {
-      imageEntries.map(({ prepared, attrs, wrapperClass }) => {
-        const img = prepared.shouldRenderOptimizedPicture ? (
-          <Picture
+    {imageEntries.map(({ prepared, attrs, wrapperClass }) => {
+      const img = prepared.shouldRenderOptimizedPicture ? (
+        <Picture
+          src={prepared.imageSrc}
+          alt={normalizedAlt}
+          widths={prepared.filteredWidths}
+          sizes={effectiveSizes}
+          formats={["webp"]}
+          width={prepared.finalWidth}
+          height={prepared.finalHeight}
+          fit={prepared.useFit}
+          position={prepared.usePosition}
+          loading={priority ? "eager" : "lazy"}
+          decoding={priority ? "sync" : "async"}
+          fetchpriority={priority ? "high" : undefined}
+          {...attrs}
+        />
+      ) : (
+        <picture>
+          <img
             src={prepared.imageSrc}
             alt={normalizedAlt}
-            widths={prepared.filteredWidths}
-            sizes={effectiveSizes}
-            formats={["webp"]}
-            width={prepared.finalWidth}
-            height={prepared.finalHeight}
-            fit={prepared.useFit}
-            position={prepared.usePosition}
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? "sync" : "async"}
             fetchpriority={priority ? "high" : undefined}
+            width={prepared.imageWidth}
+            height={prepared.imageHeight}
             {...attrs}
           />
-        ) : (
-          <picture>
-            <img
-              src={prepared.imageSrc}
-              alt={normalizedAlt}
-              loading={priority ? "eager" : "lazy"}
-              decoding={priority ? "sync" : "async"}
-              fetchpriority={priority ? "high" : undefined}
-              width={prepared.imageWidth}
-              height={prepared.imageHeight}
-              {...attrs}
-            />
-          </picture>
-        );
+        </picture>
+      );
 
-        return wrapperClass ? <div class:list={wrapperClass}>{img}</div> : img;
-      })
-    }
+      return wrapperClass ? <div class:list={wrapperClass}>{img}</div> : img;
+    })}
   </div>
 </div>
 

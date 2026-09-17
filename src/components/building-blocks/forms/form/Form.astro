@@ -43,48 +43,42 @@ const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
   enctype={hasFileUpload ? "multipart/form-data" : undefined}
   {...htmlAttributes}
 >
-  {
-    successMessage && (
-      <p
-        class="form-success"
-        role="status"
-        tabindex="-1"
-        hidden
-      >
-        {successMessage}
-      </p>
-    )
-  }
+  {successMessage && (
+    <p
+      class="form-success"
+      role="status"
+      tabindex="-1"
+      hidden
+    >
+      {successMessage}
+    </p>
+  )}
   <div
     class="form-fields"
     data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        formBlocks && (
-          <RenderBlock
-            contentSections={formBlocks}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {formBlocks && (
+        <RenderBlock
+          contentSections={formBlocks}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
-  {
-    honeypotName && (
-      <div class="form-honeypot">
-        <label for={`${honeypotName}-field`}>Leave this field empty</label>
-        <input
-          type="text"
-          id={`${honeypotName}-field`}
-          name={honeypotName}
-          tabindex="-1"
-          autocomplete="off"
-        />
-      </div>
-    )
-  }
+  {honeypotName && (
+    <div class="form-honeypot">
+      <label for={`${honeypotName}-field`}>Leave this field empty</label>
+      <input
+        type="text"
+        id={`${honeypotName}-field`}
+        name={honeypotName}
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+  )}
 </form>
 
 <script>

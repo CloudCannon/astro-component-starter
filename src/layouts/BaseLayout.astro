@@ -68,14 +68,12 @@ const analyticsConfig = parseAnalyticsConfig(analyticsData);
 
     <SiteFonts />
 
-    {
-      import.meta.env.DEV ? (
-        <script
-          type="module"
-          src="/@vite/client"
-        />
-      ) : null
-    }
+    {import.meta.env.DEV ? (
+      <script
+        type="module"
+        src="/@vite/client"
+      ></script>
+    ) : null}
 
     <script>
       if (window.inEditorMode) {
@@ -90,7 +88,6 @@ const analyticsConfig = parseAnalyticsConfig(analyticsData);
         import("../../editor-live-sync");
       }
     </script>
-
     <SeoHead
       site={seoData}
       title={props.title}

@@ -95,17 +95,15 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     labelledby={hasHeading ? `${popoverId}-header` : undefined}
   >
     <div class:list={["modal-header", hasHeading ? "has-header" : "no-header"]}>
-      {
-        hasHeading && (
-          <HeadingTag
-            id={`${popoverId}-header`}
-            class="modal-title"
-            {...headingDataAttributes}
-          >
-            {heading}
-          </HeadingTag>
-        )
-      }
+      {hasHeading && (
+        <HeadingTag
+          id={`${popoverId}-header`}
+          class="modal-title"
+          {...headingDataAttributes}
+        >
+          {heading}
+        </HeadingTag>
+      )}
       <Button
         iconName="x-mark"
         hideText
@@ -122,14 +120,12 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <Component
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <Component
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
   </ModalShell>

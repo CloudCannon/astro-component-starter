@@ -31,61 +31,56 @@ const structuredData = breadcrumbListJsonLd(items, {
   {...htmlAttributes}
 >
   <ol class="breadcrumbs-trail">
-    {
-      trail.map((item, index) => {
-        const isCurrent = index === trail.length - 1;
+    {trail.map((item, index) => {
+      const isCurrent = index === trail.length - 1;
 
-        return (
-          <li class="breadcrumbs-item">
-            {index > 0 && (
-              <Icon
-                name="chevron-right"
-                size="none"
-                class="breadcrumbs-separator"
-              />
-            )}
-            {item.url && !isCurrent ? (
-              <a
-                class="breadcrumbs-link"
-                href={item.url}
-              >
-                {item.label}
-              </a>
-            ) : (
-              <span
-                class="breadcrumbs-current"
-                aria-current={isCurrent ? "page" : undefined}
-              >
-                {item.label}
-              </span>
-            )}
-          </li>
-        );
-      })
-    }
+      return (
+        <li class="breadcrumbs-item">
+          {index > 0 && (
+            <Icon
+              name="chevron-right"
+              size="none"
+              class="breadcrumbs-separator"
+            />
+          )}
+          {item.url && !isCurrent ? (
+            <a
+              class="breadcrumbs-link"
+              href={item.url}
+            >
+              {item.label}
+            </a>
+          ) : (
+            <span
+              class="breadcrumbs-current"
+              aria-current={isCurrent ? "page" : undefined}
+            >
+              {item.label}
+            </span>
+          )}
+        </li>
+      );
+    })}
   </ol>
 
-  {
-    backTarget && (
-      <a
-        class="breadcrumbs-back"
-        href={backTarget.url}
-      >
-        <Icon
-          name="chevron-left"
-          size="none"
-        />
-        {backTarget.label}
-      </a>
-    )
-  }
+  {backTarget && (
+    <a
+      class="breadcrumbs-back"
+      href={backTarget.url}
+    >
+      <Icon
+        name="chevron-left"
+        size="none"
+      />
+      {backTarget.label}
+    </a>
+  )}
 </nav>
 
 <script
   type="application/ld+json"
   set:html={JSON.stringify(structuredData)}
-/>
-
+></script>
 <style is:global>
   @layer components {
     .breadcrumbs {

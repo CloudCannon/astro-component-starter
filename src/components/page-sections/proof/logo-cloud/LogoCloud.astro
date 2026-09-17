@@ -47,83 +47,81 @@ const {
     data-prop="heading"
     text={heading}
   />
-  {
-    logos?.length > 0 &&
-      (scrolling ? (
-        /* Marquee mode: the Carousel wrapper's auto-scroll does the work — it
+  {logos?.length > 0 &&
+    (scrolling ? (
+      /* Marquee mode: the Carousel wrapper's auto-scroll does the work — it
            already hides the arrows and indicators, and honors
            prefers-reduced-motion (the strip then sits still, fully readable). */
-        <Carousel
-          class:list={["logo-cloud-marquee", grayscale && "grayscale"]}
-          label={sectionLabel || heading || "Client logos"}
-          autoScroll={true}
-          loop={true}
-          slideWidthPercent={20}
-          minSlideWidth={150}
-          alignmentHorizontal="start"
-          data-children-prop="logos"
-        >
-          {logos?.map((logo: LogoProps) => {
-            const LogoWrapper = logo.url ? "a" : "span";
-            const wrapperProps = logo.url ? { href: logo.url } : {};
+      <Carousel
+        class:list={["logo-cloud-marquee", grayscale && "grayscale"]}
+        label={sectionLabel || heading || "Client logos"}
+        autoScroll={true}
+        loop={true}
+        slideWidthPercent={20}
+        minSlideWidth={150}
+        alignmentHorizontal="start"
+        data-children-prop="logos"
+      >
+        {logos?.map((logo: LogoProps) => {
+          const LogoWrapper = logo.url ? "a" : "span";
+          const wrapperProps = logo.url ? { href: logo.url } : {};
 
-            return (
-              <CarouselSlide
-                class="logo-cloud-item"
-                data-editable="array-item"
+          return (
+            <CarouselSlide
+              class="logo-cloud-item"
+              data-editable="array-item"
+            >
+              <LogoWrapper
+                class="logo-cloud-logo"
+                {...wrapperProps}
               >
-                <LogoWrapper
-                  class="logo-cloud-logo"
-                  {...wrapperProps}
-                >
-                  <Image
-                    source={logo.image}
-                    alt={logo.alt}
-                    widths={[320]}
-                    sizes="320px"
-                    data-prop-src="image"
-                    data-prop-alt="alt"
-                  />
-                </LogoWrapper>
-              </CarouselSlide>
-            );
-          })}
-        </Carousel>
-      ) : (
-        <ul
-          class:list={["logo-cloud-grid", grayscale && "grayscale"]}
-          data-editable="array"
-          data-prop="logos"
-          data-direction="row"
-        >
-          {logos?.map((logo: LogoProps) => {
-            const LogoWrapper = logo.url ? "a" : "span";
-            const wrapperProps = logo.url ? { href: logo.url } : {};
+                <Image
+                  source={logo.image}
+                  alt={logo.alt}
+                  widths={[320]}
+                  sizes="320px"
+                  data-prop-src="image"
+                  data-prop-alt="alt"
+                />
+              </LogoWrapper>
+            </CarouselSlide>
+          );
+        })}
+      </Carousel>
+    ) : (
+      <ul
+        class:list={["logo-cloud-grid", grayscale && "grayscale"]}
+        data-editable="array"
+        data-prop="logos"
+        data-direction="row"
+      >
+        {logos?.map((logo: LogoProps) => {
+          const LogoWrapper = logo.url ? "a" : "span";
+          const wrapperProps = logo.url ? { href: logo.url } : {};
 
-            return (
-              <li
-                class="logo-cloud-item"
-                data-editable="array-item"
+          return (
+            <li
+              class="logo-cloud-item"
+              data-editable="array-item"
+            >
+              <LogoWrapper
+                class="logo-cloud-logo"
+                {...wrapperProps}
               >
-                <LogoWrapper
-                  class="logo-cloud-logo"
-                  {...wrapperProps}
-                >
-                  <Image
-                    source={logo.image}
-                    alt={logo.alt}
-                    widths={[320]}
-                    sizes="320px"
-                    data-prop-src="image"
-                    data-prop-alt="alt"
-                  />
-                </LogoWrapper>
-              </li>
-            );
-          })}
-        </ul>
-      ))
-  }
+                <Image
+                  source={logo.image}
+                  alt={logo.alt}
+                  widths={[320]}
+                  sizes="320px"
+                  data-prop-src="image"
+                  data-prop-alt="alt"
+                />
+              </LogoWrapper>
+            </li>
+          );
+        })}
+      </ul>
+    ))}
 </CustomSection>
 
 <style is:global>

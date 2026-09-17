@@ -40,21 +40,19 @@ const fieldId = generateFieldId("toggle", customId, name || label);
       />
       <span class="toggle-track"></span>
     </span>
-    {
-      label && (
-        <span class="toggle-label">
-          {label}
-          {required && (
-            <span
-              class="toggle-required"
-              aria-hidden="true"
-            >
-              *
-            </span>
-          )}
-        </span>
-      )
-    }
+    {label && (
+      <span class="toggle-label">
+        {label}
+        {required && (
+          <span
+            class="toggle-required"
+            aria-hidden="true"
+          >
+            *
+          </span>
+        )}
+      </span>
+    )}
   </label>
 </div>
 

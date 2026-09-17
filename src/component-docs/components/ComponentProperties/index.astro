@@ -308,142 +308,140 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
 ---
 
 <div class="properties">
-  {
-    (() => {
-      function chevron() {
-        return (
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m19.5 8.25-7.5 7.5-7.5-7.5"
-            />
-          </svg>
-        );
-      }
+  {(() => {
+    function chevron() {
+      return (
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="m19.5 8.25-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+      );
+    }
 
-      function childDisclosure(label: string, comment: string | undefined, body: any) {
+    function childDisclosure(label: string, comment: string | undefined, body: any) {
+      return (
+        <details class="property-children">
+          <summary>
+            <span class="property-children-text">
+              <span class="property-children-label">{label}</span>
+              {comment && <span class="property-children-comment">{comment}</span>}
+            </span>
+            {chevron()}
+          </summary>
+          <div class="property-children-body">{body}</div>
+        </details>
+      );
+    }
+
+    function renderProperty(prop: PropertyMeta) {
+      return (
+        <div class="property">
+          <h3>
+            <span class="property-name">{prop.name}</span>{" "}
+            <span class="property-type">
+              {prop.type}
+              {prop.default && prop.type !== "object" && ` | default: ${prop.default}`}
+            </span>
+          </h3>
+          {prop.description && <p>{prop.description}</p>}
+
+          {prop.enumValues && prop.enumValues.length > 0 && (
+            <div class="enum-values">
+              <strong>Accepted values:</strong>
+              <ul>
+                {prop.enumValues.map((value: string) => (
+                  <li>
+                    <code>{value}</code>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {prop.nestedProperties &&
+            prop.nestedProperties.length > 0 &&
+            childDisclosure(
+              `Properties (${prop.nestedProperties.length})`,
+              undefined,
+              prop.nestedProperties.map((nestedProp: PropertyMeta) => renderProperty(nestedProp))
+            )}
+
+          {prop.arrayItemVariants &&
+            prop.arrayItemVariants.length === 1 &&
+            childDisclosure(
+              `Item properties (${prop.arrayItemVariants[0].properties.length})`,
+              undefined,
+              prop.arrayItemVariants[0].properties.map((itemProp: PropertyMeta) =>
+                renderProperty(itemProp)
+              )
+            )}
+
+          {prop.arrayItemVariants && prop.arrayItemVariants.length > 1 && (
+            <div class="item-variants">
+              <strong>
+                Item types ({prop.arrayItemVariants.length}) — each array entry is one of:
+              </strong>
+              {prop.arrayItemVariants.map((variant: ArrayItemVariant, index: number) =>
+                childDisclosure(
+                  variant.label ?? `Variant ${index + 1}`,
+                  variant.description,
+                  variant.properties.map((itemProp: PropertyMeta) => renderProperty(itemProp))
+                )
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    if (propertyGroups.length === 0 || properties.length === 0) {
+      return (
+        <p>
+          No properties available. Make sure the component has a valid
+          .cloudcannon.structure-value.yml file.
+        </p>
+      );
+    }
+
+    return propertyGroups.map((group) => {
+      const list = group.properties.map((prop) => renderProperty(prop));
+      const showHeading = Boolean(group.heading) && group.heading !== "Content";
+
+      if (group.collapsed) {
         return (
-          <details class="property-children">
+          <details
+            class="property-group"
+            id={group.heading ? slugify(group.heading) : undefined}
+          >
             <summary>
-              <span class="property-children-text">
-                <span class="property-children-label">{label}</span>
-                {comment && <span class="property-children-comment">{comment}</span>}
+              <span class="property-group-text">
+                <span class="property-group-heading">{group.heading || "More settings"}</span>
+                {group.comment && <span class="property-group-comment">{group.comment}</span>}
               </span>
               {chevron()}
             </summary>
-            <div class="property-children-body">{body}</div>
+            <div class="property-group-body">{list}</div>
           </details>
         );
       }
 
-      function renderProperty(prop: PropertyMeta) {
-        return (
-          <div class="property">
-            <h3>
-              <span class="property-name">{prop.name}</span>{" "}
-              <span class="property-type">
-                {prop.type}
-                {prop.default && prop.type !== "object" && ` | default: ${prop.default}`}
-              </span>
-            </h3>
-            {prop.description && <p>{prop.description}</p>}
-
-            {prop.enumValues && prop.enumValues.length > 0 && (
-              <div class="enum-values">
-                <strong>Accepted values:</strong>
-                <ul>
-                  {prop.enumValues.map((value: string) => (
-                    <li>
-                      <code>{value}</code>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {prop.nestedProperties &&
-              prop.nestedProperties.length > 0 &&
-              childDisclosure(
-                `Properties (${prop.nestedProperties.length})`,
-                undefined,
-                prop.nestedProperties.map((nestedProp: PropertyMeta) => renderProperty(nestedProp))
-              )}
-
-            {prop.arrayItemVariants &&
-              prop.arrayItemVariants.length === 1 &&
-              childDisclosure(
-                `Item properties (${prop.arrayItemVariants[0].properties.length})`,
-                undefined,
-                prop.arrayItemVariants[0].properties.map((itemProp: PropertyMeta) =>
-                  renderProperty(itemProp)
-                )
-              )}
-
-            {prop.arrayItemVariants && prop.arrayItemVariants.length > 1 && (
-              <div class="item-variants">
-                <strong>
-                  Item types ({prop.arrayItemVariants.length}) — each array entry is one of:
-                </strong>
-                {prop.arrayItemVariants.map((variant: ArrayItemVariant, index: number) =>
-                  childDisclosure(
-                    variant.label ?? `Variant ${index + 1}`,
-                    variant.description,
-                    variant.properties.map((itemProp: PropertyMeta) => renderProperty(itemProp))
-                  )
-                )}
-              </div>
-            )}
-          </div>
-        );
-      }
-
-      if (propertyGroups.length === 0 || properties.length === 0) {
-        return (
-          <p>
-            No properties available. Make sure the component has a valid
-            .cloudcannon.structure-value.yml file.
-          </p>
-        );
-      }
-
-      return propertyGroups.map((group) => {
-        const list = group.properties.map((prop) => renderProperty(prop));
-        const showHeading = Boolean(group.heading) && group.heading !== "Content";
-
-        if (group.collapsed) {
-          return (
-            <details
-              class="property-group"
-              id={group.heading ? slugify(group.heading) : undefined}
-            >
-              <summary>
-                <span class="property-group-text">
-                  <span class="property-group-heading">{group.heading || "More settings"}</span>
-                  {group.comment && <span class="property-group-comment">{group.comment}</span>}
-                </span>
-                {chevron()}
-              </summary>
-              <div class="property-group-body">{list}</div>
-            </details>
-          );
-        }
-
-        return (
-          <div class="property-group-open">
-            {showHeading && <h3 class="property-group-title">{group.heading}</h3>}
-            {list}
-          </div>
-        );
-      });
-    })()
-  }
+      return (
+        <div class="property-group-open">
+          {showHeading && <h3 class="property-group-title">{group.heading}</h3>}
+          {list}
+        </div>
+      );
+    });
+  })()}
 </div>
 
 <style is:global>

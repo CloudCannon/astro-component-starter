@@ -109,7 +109,7 @@ const placeholderTemplate = `
           type="text/pagefind-template"
           data-template="placeholder"
           set:html={placeholderTemplate}
-        />
+        ></script>
       </pagefind-results>
       <template class="search-result-template">
         <SearchResult />
@@ -121,9 +121,15 @@ const placeholderTemplate = `
       class="search-footer"
       aria-hidden="true"
     >
-      <span><kbd>↓</kbd>navigate</span>
-      <span><kbd>↵</kbd>open</span>
-      <span><kbd>esc</kbd>close</span>
+      <span>
+        <kbd>↓</kbd>navigate
+      </span>
+      <span>
+        <kbd>↵</kbd>open
+      </span>
+      <span>
+        <kbd>esc</kbd>close
+      </span>
     </div>
   </ModalShell>
 </div>

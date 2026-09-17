@@ -34,22 +34,20 @@ const {
   >
     <div class="footer-content">
       <div class="content-container">
-        {
-          logoSource && (
-            <a
-              href="/"
-              class="footer-logo-link"
-            >
-              <Image
-                source={logoSource}
-                alternateSource={logoAlternateSource}
-                alt={logoAlt}
-                class="footer-logo"
-                useDefaultEditableBinding={false}
-              />
-            </a>
-          )
-        }
+        {logoSource && (
+          <a
+            href="/"
+            class="footer-logo-link"
+          >
+            <Image
+              source={logoSource}
+              alternateSource={logoAlternateSource}
+              alt={logoAlt}
+              class="footer-logo"
+              useDefaultEditableBinding={false}
+            />
+          </a>
+        )}
       </div>
       <div class="content-container">
         <Bar
@@ -69,24 +67,20 @@ const {
           text={footerText || ""}
           useDefaultEditableBinding={false}
         />
-        {
-          privacyData.enabled && (
-            <button
-              type="button"
-              class="footer-privacy-settings"
-              data-consent-open
-            >
-              {privacyData.settingsLabel}
-            </button>
-          )
-        }
+        {privacyData.enabled && (
+          <button
+            type="button"
+            class="footer-privacy-settings"
+            data-consent-open
+          >
+            {privacyData.settingsLabel}
+          </button>
+        )}
       </div>
       <div class="content-container">
-        {
-          /* The same block editors can place on a page — it owns the nav/list
+        {/* The same block editors can place on a page — it owns the nav/list
             semantics, the 44px targets, and the new-tab rel attributes, so the
-            footer doesn't hand-roll a second social row. */
-        }
+            footer doesn't hand-roll a second social row. */}
         <SocialLinks
           class="footer-socials"
           links={socials}

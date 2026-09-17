@@ -71,38 +71,17 @@ if (!_component && !hasEntries && !hasSlotContent) return;
   class:list={["timeline", "stackable", className]}
   {...htmlAttributes}
 >
-  {
-    isHorizontal ? (
-      <div
-        class="timeline-scroller"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
-        role="region"
-        tabindex="0"
-        aria-label={label || "Timeline"}
-      >
-        <ol
-          role="list"
-          class="timeline-list"
-          {...arrayDataAttributes}
-        >
-          <slot>
-            {entries?.map((entry: EntryProps) => (
-              <TimelineItem
-                layout={layout}
-                useDefaultEditableBinding={!!effectiveChildrenProp}
-                data-editable="array-item"
-                data-id="building-blocks/wrappers/timeline/timeline-item"
-                {...entry}
-              />
-            ))}
-          </slot>
-        </ol>
-      </div>
-    ) : isSplit ? (
+  {isHorizontal ? (
+    <div
+      class="timeline-scroller"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      role="region"
+      tabindex="0"
+      aria-label={label || "Timeline"}
+    >
       <ol
         role="list"
-        class="timeline-list timeline-split"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
+        class="timeline-list"
         {...arrayDataAttributes}
       >
         <slot>
@@ -117,58 +96,77 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           ))}
         </slot>
       </ol>
-    ) : isGrouped ? (
-      <ol
-        role="list"
-        class="timeline-list"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
-        {...arrayDataAttributes}
-      >
-        <slot>
-          {groups.map((group) => (
-            <li class="timeline-group">
-              <YearTag class="timeline-year">{group.year}</YearTag>
-              <ol
-                role="list"
-                class="timeline-group-list"
-              >
-                {group.entries.map((entry) => (
-                  <TimelineItem
-                    layout={layout}
-                    grouped={true}
-                    headingLevel={entryHeadingLevel}
-                    useDefaultEditableBinding={!!effectiveChildrenProp}
-                    data-editable="array-item"
-                    data-id="building-blocks/wrappers/timeline/timeline-item"
-                    {...entry}
-                  />
-                ))}
-              </ol>
-            </li>
-          ))}
-        </slot>
-      </ol>
-    ) : (
-      <ol
-        role="list"
-        class="timeline-list"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
-        {...arrayDataAttributes}
-      >
-        <slot>
-          {entries?.map((entry: EntryProps) => (
-            <TimelineItem
-              layout={layout}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/timeline/timeline-item"
-              {...entry}
-            />
-          ))}
-        </slot>
-      </ol>
-    )
-  }
+    </div>
+  ) : isSplit ? (
+    <ol
+      role="list"
+      class="timeline-list timeline-split"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {entries?.map((entry: EntryProps) => (
+          <TimelineItem
+            layout={layout}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            data-editable="array-item"
+            data-id="building-blocks/wrappers/timeline/timeline-item"
+            {...entry}
+          />
+        ))}
+      </slot>
+    </ol>
+  ) : isGrouped ? (
+    <ol
+      role="list"
+      class="timeline-list"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {groups.map((group) => (
+          <li class="timeline-group">
+            <YearTag class="timeline-year">{group.year}</YearTag>
+            <ol
+              role="list"
+              class="timeline-group-list"
+            >
+              {group.entries.map((entry) => (
+                <TimelineItem
+                  layout={layout}
+                  grouped={true}
+                  headingLevel={entryHeadingLevel}
+                  useDefaultEditableBinding={!!effectiveChildrenProp}
+                  data-editable="array-item"
+                  data-id="building-blocks/wrappers/timeline/timeline-item"
+                  {...entry}
+                />
+              ))}
+            </ol>
+          </li>
+        ))}
+      </slot>
+    </ol>
+  ) : (
+    <ol
+      role="list"
+      class="timeline-list"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {entries?.map((entry: EntryProps) => (
+          <TimelineItem
+            layout={layout}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            data-editable="array-item"
+            data-id="building-blocks/wrappers/timeline/timeline-item"
+            {...entry}
+          />
+        ))}
+      </slot>
+    </ol>
+  )}
 </div>
 
 <style is:global>

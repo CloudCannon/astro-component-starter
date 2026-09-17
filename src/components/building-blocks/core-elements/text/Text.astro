@@ -37,9 +37,7 @@ if (!_component && !hasText && !hasSlotContent) return;
     data-space-before={spaceBeforeAttr(spaceBefore)}
     {...textDataAttributes}
   >
-    <slot>
-      {text && <Fragment set:html={markdownContent} />}
-    </slot>
+    <slot>{text && <Fragment set:html={markdownContent} />}</slot>
   </div>
 </div>
 

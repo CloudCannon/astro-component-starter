@@ -85,181 +85,177 @@ const hasLightbox = lightbox && items.length > 0;
     text={subtext}
   />
 
-  {
-    masonry ? (
-      <Masonry
-        class="gallery-items"
-        columns={columnCount}
-        gap={gap}
-        data-children-prop="images"
-      >
-        {items.map((item: any, index: number) => (
-          <GalleryItem
-            data-editable="array-item"
-            image={item.image}
-            alt={item.alt}
-            caption={item.caption}
-            index={index}
-            aspectRatio={tileRatio}
-            lightbox={hasLightbox}
-          />
-        ))}
-      </Masonry>
-    ) : (
-      <div
-        class="gallery-items grid"
-        style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
-        data-editable="array"
-        data-prop="images"
-        data-direction="row"
-      >
-        {items.map((item: any, index: number) => (
-          <GalleryItem
-            data-editable="array-item"
-            image={item.image}
-            alt={item.alt}
-            caption={item.caption}
-            index={index}
-            aspectRatio={tileRatio}
-            lightbox={hasLightbox}
-          />
-        ))}
-      </div>
-    )
-  }
+  {masonry ? (
+    <Masonry
+      class="gallery-items"
+      columns={columnCount}
+      gap={gap}
+      data-children-prop="images"
+    >
+      {items.map((item: any, index: number) => (
+        <GalleryItem
+          data-editable="array-item"
+          image={item.image}
+          alt={item.alt}
+          caption={item.caption}
+          index={index}
+          aspectRatio={tileRatio}
+          lightbox={hasLightbox}
+        />
+      ))}
+    </Masonry>
+  ) : (
+    <div
+      class="gallery-items grid"
+      style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
+      data-editable="array"
+      data-prop="images"
+      data-direction="row"
+    >
+      {items.map((item: any, index: number) => (
+        <GalleryItem
+          data-editable="array-item"
+          image={item.image}
+          alt={item.alt}
+          caption={item.caption}
+          index={index}
+          aspectRatio={tileRatio}
+          lightbox={hasLightbox}
+        />
+      ))}
+    </div>
+  )}
 
-  {
-    hasLightbox && (
-      <div
-        id={popoverId}
-        popover="auto"
-        class="gallery-lightbox modal-popover"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Gallery image"
-      >
-        {/* Frame shrink-wraps the photo so optional thumbnails sit under it
+  {hasLightbox && (
+    <div
+      id={popoverId}
+      popover="auto"
+      class="gallery-lightbox modal-popover"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Gallery image"
+    >
+      {/* Frame shrink-wraps the photo so optional thumbnails sit under it
             without becoming a viewport-width band. Controls stay inside the
             figure — never on this frame or the overlay. */}
-        <div class="gallery-lightbox-frame">
-          <figure class="gallery-lightbox-figure">
-            {items.map((item: any, index: number) => (
-              <Image
-                class="gallery-lightbox-photo"
-                data-active={index === 0 ? "true" : "false"}
-                data-caption={item.caption || ""}
-                aria-hidden={index !== 0}
-                source={item.image}
-                alt={item.alt}
-                sizes="min(1024px, calc(100vw - 4rem))"
-                widths={[640, 1280, 1920]}
-                width={1920}
-              />
-            ))}
-            <div
-              class="gallery-lightbox-scrim"
-              aria-hidden="true"
+      <div class="gallery-lightbox-frame">
+        <figure class="gallery-lightbox-figure">
+          {items.map((item: any, index: number) => (
+            <Image
+              class="gallery-lightbox-photo"
+              data-active={index === 0 ? "true" : "false"}
+              data-caption={item.caption || ""}
+              aria-hidden={index !== 0}
+              source={item.image}
+              alt={item.alt}
+              sizes="min(1024px, calc(100vw - 4rem))"
+              widths={[640, 1280, 1920]}
+              width={1920}
             />
-            <div class="gallery-lightbox-chrome">
-              <span
-                class="gallery-lightbox-counter"
-                aria-live="polite"
+          ))}
+          <div
+            class="gallery-lightbox-scrim"
+            aria-hidden="true"
+          />
+          <div class="gallery-lightbox-chrome">
+            <span
+              class="gallery-lightbox-counter"
+              aria-live="polite"
+            >
+              1 / {items.length}
+            </span>
+            <button
+              type="button"
+              class="gallery-lightbox-close"
+              aria-label="Close"
+            >
+              <svg
+                viewBox="0 0 20 20"
+                width="17"
+                height="17"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
               >
-                1 / {items.length}
-              </span>
+                <path d="M5 5l10 10M15 5L5 15" />
+              </svg>
+            </button>
+          </div>
+          {items.length > 1 && (
+            <>
               <button
                 type="button"
-                class="gallery-lightbox-close"
-                aria-label="Close"
+                class="gallery-lightbox-prev"
+                aria-label="Previous image"
               >
                 <svg
                   viewBox="0 0 20 20"
-                  width="17"
-                  height="17"
+                  width="16"
+                  height="16"
                   fill="none"
                   stroke="currentColor"
                   stroke-width="1.8"
                   aria-hidden="true"
                 >
-                  <path d="M5 5l10 10M15 5L5 15" />
+                  <path d="M12 4l-6 6 6 6" />
                 </svg>
               </button>
-            </div>
-            {items.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  class="gallery-lightbox-prev"
-                  aria-label="Previous image"
+              <button
+                type="button"
+                class="gallery-lightbox-next"
+                aria-label="Next image"
+              >
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
                 >
-                  <svg
-                    viewBox="0 0 20 20"
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 4l-6 6 6 6" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  class="gallery-lightbox-next"
-                  aria-label="Next image"
-                >
-                  <svg
-                    viewBox="0 0 20 20"
-                    width="16"
-                    height="16"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                    aria-hidden="true"
-                  >
-                    <path d="M8 4l6 6-6 6" />
-                  </svg>
-                </button>
-              </>
-            )}
-            <figcaption
-              class="gallery-lightbox-caption"
-              hidden={!items[0]?.caption}
-            >
-              {items[0]?.caption}
-            </figcaption>
-          </figure>
-          {showThumbnails && items.length > 1 && (
-            <div
-              class="gallery-lightbox-thumbs"
-              role="group"
-              aria-label="Gallery images"
-            >
-              {items.map((item: any, index: number) => (
-                <button
-                  type="button"
-                  class="gallery-lightbox-thumb"
-                  data-selected={index === 0 ? "true" : "false"}
-                  aria-label={`Go to image ${index + 1}`}
-                  aria-current={index === 0 ? "true" : undefined}
-                >
-                  <Image
-                    source={item.image}
-                    alt=""
-                    decorative
-                    sizes="64px"
-                    widths={[64, 128]}
-                    width={128}
-                  />
-                </button>
-              ))}
-            </div>
+                  <path d="M8 4l6 6-6 6" />
+                </svg>
+              </button>
+            </>
           )}
-        </div>
+          <figcaption
+            class="gallery-lightbox-caption"
+            hidden={!items[0]?.caption}
+          >
+            {items[0]?.caption}
+          </figcaption>
+        </figure>
+        {showThumbnails && items.length > 1 && (
+          <div
+            class="gallery-lightbox-thumbs"
+            role="group"
+            aria-label="Gallery images"
+          >
+            {items.map((item: any, index: number) => (
+              <button
+                type="button"
+                class="gallery-lightbox-thumb"
+                data-selected={index === 0 ? "true" : "false"}
+                aria-label={`Go to image ${index + 1}`}
+                aria-current={index === 0 ? "true" : undefined}
+              >
+                <Image
+                  source={item.image}
+                  alt=""
+                  decorative
+                  sizes="64px"
+                  widths={[64, 128]}
+                  width={128}
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-    )
-  }
+    </div>
+  )}
 </CustomSection>
 
 <script>

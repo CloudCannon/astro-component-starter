@@ -64,37 +64,31 @@ if (!_component && width === 0) return;
     style={`--table-columns: ${width};`}
   >
     <table>
-      {
-        caption && (
-          <caption
-            id={captionId}
-            {...captionDataAttributes}
-          >
-            {caption}
-          </caption>
-        )
-      }
-      {
-        headerCells?.length > 0 && (
-          <thead>
-            <tr>
-              {normalizedHeader.map((cell) => (
-                <th scope="col">{cell}</th>
-              ))}
-            </tr>
-          </thead>
-        )
-      }
+      {caption && (
+        <caption
+          id={captionId}
+          {...captionDataAttributes}
+        >
+          {caption}
+        </caption>
+      )}
+      {headerCells?.length > 0 && (
+        <thead>
+          <tr>
+            {normalizedHeader.map((cell) => (
+              <th scope="col">{cell}</th>
+            ))}
+          </tr>
+        </thead>
+      )}
       <tbody>
-        {
-          normalizedRows.map((cells) => (
-            <tr>
-              {cells.map((cell, cellIndex) =>
-                cellIndex === 0 && firstColumnHeader ? <th scope="row">{cell}</th> : <td>{cell}</td>
-              )}
-            </tr>
-          ))
-        }
+        {normalizedRows.map((cells) => (
+          <tr>
+            {cells.map((cell, cellIndex) =>
+              cellIndex === 0 && firstColumnHeader ? <th scope="row">{cell}</th> : <td>{cell}</td>
+            )}
+          </tr>
+        ))}
       </tbody>
     </table>
   </div>

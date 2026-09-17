@@ -68,67 +68,63 @@ const embedSrc =
   _component={_component}
   {...htmlAttributes}
 >
-  {
-    usePoster && (
-      <button
-        slot="trigger"
-        type="button"
-        class="video-modal-poster"
-        popovertarget={posterPopoverId}
-        aria-label={title ? `Play video: ${title}` : "Play video"}
+  {usePoster && (
+    <button
+      slot="trigger"
+      type="button"
+      class="video-modal-poster"
+      popovertarget={posterPopoverId}
+      aria-label={title ? `Play video: ${title}` : "Play video"}
+    >
+      <Image
+        source={posterImage}
+        alt={posterAlt}
+        aspectRatio={posterAspectRatio}
+        sizes="(max-width: 640px) 100vw, 800px"
+        widths={[400, 800, 1280]}
+        width={1280}
+        data-prop-src="posterImage"
+        data-prop-alt="posterAlt"
+      />
+      <span
+        class="video-modal-poster-disc"
+        aria-hidden="true"
       >
-        <Image
-          source={posterImage}
-          alt={posterAlt}
-          aspectRatio={posterAspectRatio}
-          sizes="(max-width: 640px) 100vw, 800px"
-          widths={[400, 800, 1280]}
-          width={1280}
-          data-prop-src="posterImage"
-          data-prop-alt="posterAlt"
-        />
-        <span
-          class="video-modal-poster-disc"
-          aria-hidden="true"
+        <svg
+          viewBox="0 0 24 24"
+          width="28"
+          height="28"
+          fill="currentColor"
         >
-          <svg
-            viewBox="0 0 24 24"
-            width="28"
-            height="28"
-            fill="currentColor"
-          >
-            <path d="M8 5.5v13l11-6.5z" />
-          </svg>
-        </span>
-      </button>
-    )
-  }
+          <path d="M8 5.5v13l11-6.5z" />
+        </svg>
+      </span>
+    </button>
+  )}
   <div
     class="video-modal-body"
     data-video-embed-src={embedSrc}
     data-video-title={title}
   >
-    {
-      type === "local-source" ? (
-        <Video
-          type="local-source"
-          source={source}
-          class="video-modal-player"
-        />
-      ) : (
-        <div class="video-modal-embed">
-          <div class="video-modal-consent">
-            <p>Allow external media across this site to play this video.</p>
-            <button
-              type="button"
-              data-external-media-enable
-            >
-              Allow all external media
-            </button>
-          </div>
+    {type === "local-source" ? (
+      <Video
+        type="local-source"
+        source={source}
+        class="video-modal-player"
+      />
+    ) : (
+      <div class="video-modal-embed">
+        <div class="video-modal-consent">
+          <p>Allow external media across this site to play this video.</p>
+          <button
+            type="button"
+            data-external-media-enable
+          >
+            Allow all external media
+          </button>
         </div>
-      )
-    }
+      </div>
+    )}
   </div>
 </Modal>
 

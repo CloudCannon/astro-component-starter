@@ -43,16 +43,14 @@ const {
     autoScroll={false}
     data-children-prop="slides"
   >
-    {
-      slides?.map((slide: SlideProps, index: number) => (
-        <FeatureSliderItem
-          index={index}
-          aria-label={`Slide ${index + 1} of ${slides.length}`}
-          data-editable="array-item"
-          data-id="page-sections/explainers/feature-slider/feature-slider-item"
-          {...slide}
-        />
-      ))
-    }
+    {slides?.map((slide: SlideProps, index: number) => (
+      <FeatureSliderItem
+        index={index}
+        aria-label={`Slide ${index + 1} of ${slides.length}`}
+        data-editable="array-item"
+        data-id="page-sections/explainers/feature-slider/feature-slider-item"
+        {...slide}
+      />
+    ))}
   </Carousel>
 </CustomSection>

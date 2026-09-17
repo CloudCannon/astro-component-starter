@@ -46,14 +46,12 @@ if (!_component && !hasText && !hasIcon && !Astro.slots.has("default")) return;
     ]}
     {...innerAttributes}
   >
-    {
-      showDot && (
-        <span
-          class="badge-dot"
-          aria-hidden="true"
-        />
-      )
-    }
+    {showDot && (
+      <span
+        class="badge-dot"
+        aria-hidden="true"
+      />
+    )}
     <Icon
       name={iconName}
       size="none"
@@ -64,15 +62,13 @@ if (!_component && !hasText && !hasIcon && !Astro.slots.has("default")) return;
     >
       <slot>{text}</slot>
     </span>
-    {
-      hasLink && showArrow && (
-        <Icon
-          name="arrow-right"
-          size="none"
-          class="badge-arrow"
-        />
-      )
-    }
+    {hasLink && showArrow && (
+      <Icon
+        name="arrow-right"
+        size="none"
+        class="badge-arrow"
+      />
+    )}
   </Inner>
 </div>
 

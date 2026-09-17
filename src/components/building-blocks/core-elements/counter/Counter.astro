@@ -46,8 +46,9 @@ const formattedTarget = target.toLocaleString(undefined, {
       data-duration={`${duration}`}
       data-decimals={`${decimals}`}
       aria-live="off"
-      >{formattedTarget}</span
     >
+      {formattedTarget}
+    </span>
     {suffix && <span class="suffix">{suffix}</span>}
   </span>
 </div>

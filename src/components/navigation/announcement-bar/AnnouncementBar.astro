@@ -39,7 +39,10 @@ if (!enabled || !message) return;
   </button>
 </aside>
 
-<script is:inline data-astro-rerun>
+<script
+  is:inline
+  data-astro-rerun
+>
   // is:inline so the dismissed check runs synchronously during parsing,
   // before the bar can paint, and data-astro-rerun so the ClientRouter
   // re-executes it when a client-side navigation swaps in a fresh bar.

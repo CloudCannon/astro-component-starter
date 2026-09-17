@@ -30,18 +30,18 @@ if (items.length === 0) return;
   >
     <p class="toc-heading">On this page</p>
     <ul class="toc-list">
-      {
-        items.map((h) => (
-          <li class:list={[h.depth === 3 && "toc-sub"]}>
-            <a href={`#${h.slug}`}>{h.text}</a>
-          </li>
-        ))
-      }
+      {items.map((h) => (
+        <li class:list={[h.depth === 3 && "toc-sub"]}>
+          <a href={`#${h.slug}`}>{h.text}</a>
+        </li>
+      ))}
     </ul>
   </nav>
   <details class="toc-disclosure">
     <summary>
-      <span>On this page · {sectionCount} section{sectionCount === 1 ? "" : "s"}</span>
+      <span>
+        On this page · {sectionCount} section{sectionCount === 1 ? "" : "s"}
+      </span>
       <Icon
         name="chevron-down"
         size="none"
@@ -52,13 +52,11 @@ if (items.length === 0) return;
     <!-- Sidebar is the one "On this page" landmark; the summary names this control. -->
     <div>
       <ul class="toc-list">
-        {
-          items.map((h) => (
-            <li class:list={[h.depth === 3 && "toc-sub"]}>
-              <a href={`#${h.slug}`}>{h.text}</a>
-            </li>
-          ))
-        }
+        {items.map((h) => (
+          <li class:list={[h.depth === 3 && "toc-sub"]}>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
       </ul>
     </div>
   </details>

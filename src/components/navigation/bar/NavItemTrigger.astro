@@ -32,36 +32,19 @@ const { item, inputType = "checkbox", expanded = false } = Astro.props;
   autocomplete="off"
   checked={expanded}
 />
-{
-  item.hasSplitLink ? (
-    <div class="nav-item-split">
-      <a
-        href={item.path}
-        class="nav-item-link"
-        aria-current={item.isCurrent ? "page" : undefined}
-      >
-        {item.name}
-      </a>
-      <label
-        for={item.dropdownId}
-        class="nav-item-trigger nav-item-toggle-btn"
-      >
-        <span class="nav-item-icon">
-          <Icon
-            name="chevron-right"
-            size="none"
-            aria-hidden="true"
-          />
-        </span>
-      </label>
-    </div>
-  ) : (
-    <label
-      for={item.dropdownId}
-      class="nav-item-trigger"
+{item.hasSplitLink ? (
+  <div class="nav-item-split">
+    <a
+      href={item.path}
+      class="nav-item-link"
       aria-current={item.isCurrent ? "page" : undefined}
     >
       {item.name}
+    </a>
+    <label
+      for={item.dropdownId}
+      class="nav-item-trigger nav-item-toggle-btn"
+    >
       <span class="nav-item-icon">
         <Icon
           name="chevron-right"
@@ -70,5 +53,20 @@ const { item, inputType = "checkbox", expanded = false } = Astro.props;
         />
       </span>
     </label>
-  )
-}
+  </div>
+) : (
+  <label
+    for={item.dropdownId}
+    class="nav-item-trigger"
+    aria-current={item.isCurrent ? "page" : undefined}
+  >
+    {item.name}
+    <span class="nav-item-icon">
+      <Icon
+        name="chevron-right"
+        size="none"
+        aria-hidden="true"
+      />
+    </span>
+  </label>
+)}

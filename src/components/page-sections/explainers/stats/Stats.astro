@@ -69,48 +69,46 @@ const {
     data-prop="subtext"
     text={subtext}
   />
-  {
-    stats?.length > 0 && (
-      <dl
-        class:list={["stats-grid", dividers && "dividers"]}
-        data-editable="array"
-        data-prop="stats"
-        data-direction="row"
-      >
-        {stats?.map((stat: StatProps) => (
-          <div
-            class="stat"
-            data-editable="array-item"
+  {stats?.length > 0 && (
+    <dl
+      class:list={["stats-grid", dividers && "dividers"]}
+      data-editable="array"
+      data-prop="stats"
+      data-direction="row"
+    >
+      {stats?.map((stat: StatProps) => (
+        <div
+          class="stat"
+          data-editable="array-item"
+        >
+          <dt
+            class="stat-label"
+            data-editable="text"
+            data-prop="label"
           >
-            <dt
-              class="stat-label"
+            {stat.label}
+          </dt>
+          <dd class="stat-value">
+            <Counter
+              number={stat.number}
+              prefix={stat.prefix}
+              suffix={stat.suffix}
+              alignmentHorizontal="center"
+            />
+          </dd>
+          {stat.sublabel && (
+            <dd
+              class="stat-sublabel"
               data-editable="text"
-              data-prop="label"
+              data-prop="sublabel"
             >
-              {stat.label}
-            </dt>
-            <dd class="stat-value">
-              <Counter
-                number={stat.number}
-                prefix={stat.prefix}
-                suffix={stat.suffix}
-                alignmentHorizontal="center"
-              />
+              {stat.sublabel}
             </dd>
-            {stat.sublabel && (
-              <dd
-                class="stat-sublabel"
-                data-editable="text"
-                data-prop="sublabel"
-              >
-                {stat.sublabel}
-              </dd>
-            )}
-          </div>
-        ))}
-      </dl>
-    )
-  }
+          )}
+        </div>
+      ))}
+    </dl>
+  )}
 </CustomSection>
 
 <style is:global>

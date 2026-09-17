@@ -128,15 +128,13 @@ Three shapes, depending on how children are rendered. Prefer A, then B; C is the
 
 ```astro
 <Grid gap="lg" minItemWidth="360" data-children-prop="features">
-  {
-    features.map((feature) => (
-      <FeatureItem
-        data-editable="array-item"
-        data-id="page-sections/explainers/feature-grid/feature-item"
-        {...feature}
-      />
-    ))
-  }
+  {features.map((feature) => (
+    <FeatureItem
+      data-editable="array-item"
+      data-id="page-sections/explainers/feature-grid/feature-item"
+      {...feature}
+    />
+  ))}
 </Grid>
 ```
 
@@ -144,13 +142,11 @@ Three shapes, depending on how children are rendered. Prefer A, then B; C is the
 
 ```astro
 <ul data-editable="array" data-prop="images" data-direction="row">
-  {
-    images.map((item) => (
-      <li data-editable="array-item">
-        <Image source={item.image} alt={item.alt} data-prop-src="image" data-prop-alt="alt" />
-      </li>
-    ))
-  }
+  {images.map((item) => (
+    <li data-editable="array-item">
+      <Image source={item.image} alt={item.alt} data-prop-src="image" data-prop-alt="alt" />
+    </li>
+  ))}
 </ul>
 ```
 

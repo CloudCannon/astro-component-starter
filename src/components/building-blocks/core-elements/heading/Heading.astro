@@ -95,36 +95,30 @@ if (!_component && !hasText && !hasSlotContent) return;
     ]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
   >
-    {
-      iconPosition == "before" && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="heading-icon"
-          aria-hidden="true"
-        />
-      )
-    }
+    {iconPosition == "before" && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="heading-icon"
+        aria-hidden="true"
+      />
+    )}
     <span
       class="heading-text"
       {...textDataAttributes}
     >
-      <slot>
-        {text && <Fragment set:html={MarkdownText} />}
-      </slot>
+      <slot>{text && <Fragment set:html={MarkdownText} />}</slot>
     </span>
-    {
-      iconPosition === "after" && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="heading-icon heading-icon-after"
-          aria-hidden="true"
-        />
-      )
-    }
+    {iconPosition === "after" && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="heading-icon heading-icon-after"
+        aria-hidden="true"
+      />
+    )}
   </span>
 </Tag>
 

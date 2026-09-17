@@ -23,38 +23,36 @@ const pathname = Astro.url.pathname;
   {...htmlAttributes}
 >
   <ul class="bar-list">
-    {
-      navData?.map((item: NavItem) => {
-        if (itemHasMegaMenu(item)) {
-          return (
-            <MegaPanel
-              item={item}
-              groupName={`bar-nav-top-${navInstanceId}`}
-            />
-          );
-        }
-
-        if (!item.children?.length) {
-          return (
-            <li class="nav-item">
-              <a
-                href={item.path}
-                aria-current={isCurrentPage(pathname, item) ? "page" : undefined}
-              >
-                {item.name}
-              </a>
-            </li>
-          );
-        }
-
+    {navData?.map((item: NavItem) => {
+      if (itemHasMegaMenu(item)) {
         return (
-          <Dropdown
+          <MegaPanel
             item={item}
             groupName={`bar-nav-top-${navInstanceId}`}
           />
         );
-      })
-    }
+      }
+
+      if (!item.children?.length) {
+        return (
+          <li class="nav-item">
+            <a
+              href={item.path}
+              aria-current={isCurrentPage(pathname, item) ? "page" : undefined}
+            >
+              {item.name}
+            </a>
+          </li>
+        );
+      }
+
+      return (
+        <Dropdown
+          item={item}
+          groupName={`bar-nav-top-${navInstanceId}`}
+        />
+      );
+    })}
   </ul>
 </nav>
 

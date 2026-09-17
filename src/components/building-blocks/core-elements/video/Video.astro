@@ -71,74 +71,52 @@ if (type === "local-source" && source) {
 }
 ---
 
-{
-  isHosted ? (
+{isHosted ? (
+  <div
+    class:list={["video", "stackable", "hosted-video", className]}
+    {...htmlAttributes}
+  >
     <div
-      class:list={["video", "stackable", "hosted-video", className]}
-      {...htmlAttributes}
-    >
-      <div
-        class="hosted-video-content"
-        data-space-before={spaceBeforeAttr(spaceBefore)}
-        data-hosted-video
-        data-video-type={type}
-        data-video-id={videoId}
-        data-video-title={title}
-        data-video-autoplay={autoplay}
-        data-video-loop={loop}
-      >
-        <p>Allow external media across this site to play this video.</p>
-        <button
-          type="button"
-          data-external-media-enable
-        >
-          Allow all external media
-        </button>
-        <a
-          href={
-            type === "youtube"
-              ? `https://www.youtube.com/watch?v=${videoId}`
-              : `https://vimeo.com/${videoId}`
-          }
-        >
-          Watch on {type === "youtube" ? "YouTube" : "Vimeo"}: "{title}"
-        </a>
-      </div>
-    </div>
-  ) : background ? (
-    <div
-      class:list={["video", "background", className]}
-      aria-hidden="true"
-      {...htmlAttributes}
-    >
-      <video
-        preload="metadata"
-        autoplay={autoplay}
-        muted
-        loop={loop}
-        playsinline
-        poster={posterUrl}
-      >
-        {localVideoSources.map(({ src, type: sourceType }) => (
-          <source
-            src={src}
-            type={sourceType}
-          />
-        ))}
-      </video>
-    </div>
-  ) : (
-    <video
-      preload={autoplay ? "auto" : "none"}
-      controls
-      autoplay={autoplay}
-      muted={autoplay}
-      playsinline={autoplay}
-      loop={loop}
-      poster={posterUrl}
-      class:list={["video", "stackable", className]}
+      class="hosted-video-content"
       data-space-before={spaceBeforeAttr(spaceBefore)}
-      {...htmlAttributes}
+      data-hosted-video
+      data-video-type={type}
+      data-video-id={videoId}
+      data-video-title={title}
+      data-video-autoplay={autoplay}
+      data-video-loop={loop}
+    >
+      <p>Allow external media across this site to play this video.</p>
+      <button
+        type="button"
+        data-external-media-enable
+      >
+        Allow all external media
+      </button>
+      <a
+        href={
+          type === "youtube"
+            ? `https://www.youtube.com/watch?v=${videoId}`
+            : `https://vimeo.com/${videoId}`
+        }
+      >
+        Watch on {type === "youtube" ? "YouTube" : "Vimeo"}: "{title}"
+      </a>
+    </div>
+  </div>
+) : background ? (
+  <div
+    class:list={["video", "background", className]}
+    aria-hidden="true"
+    {...htmlAttributes}
+  >
+    <video
+      preload="metadata"
+      autoplay={autoplay}
+      muted
+      loop={loop}
+      playsinline
+      poster={posterUrl}
     >
       {localVideoSources.map(({ src, type: sourceType }) => (
         <source
@@ -146,19 +124,39 @@ if (type === "local-source" && source) {
           type={sourceType}
         />
       ))}
-      {captionsSrc && (
-        <track
-          kind="captions"
-          src={captionsSrc}
-          srclang={captionsLanguage}
-          label={captionsLabel}
-          default
-        />
-      )}
-      Your browser does not support the HTML5 video element.
     </video>
-  )
-}
+  </div>
+) : (
+  <video
+    preload={autoplay ? "auto" : "none"}
+    controls
+    autoplay={autoplay}
+    muted={autoplay}
+    playsinline={autoplay}
+    loop={loop}
+    poster={posterUrl}
+    class:list={["video", "stackable", className]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...htmlAttributes}
+  >
+    {localVideoSources.map(({ src, type: sourceType }) => (
+      <source
+        src={src}
+        type={sourceType}
+      />
+    ))}
+    {captionsSrc && (
+      <track
+        kind="captions"
+        src={captionsSrc}
+        srclang={captionsLanguage}
+        label={captionsLabel}
+        default
+      />
+    )}
+    Your browser does not support the HTML5 video element.
+  </video>
+)}
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";

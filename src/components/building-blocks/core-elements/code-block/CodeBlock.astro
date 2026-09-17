@@ -93,83 +93,79 @@ const renderedCodes = tabs.map(
     data-copied-label={copiedLabel}
     data-copy-failed-label={copyFailedLabel}
   >
-    {
-      (hasTabs || copyButton) && (
-        <header class="code-block-header">
-          {hasTabs && (
-            <div class="code-block-tab-scroll">
-              <div
-                class="code-block-tabs"
-                role="tablist"
-                aria-label="Code formats"
-                {...tabsDataAttributes}
-              >
-                {tabs.map((tab, index) => (
-                  <Tab
-                    class="code-block-tab"
-                    id={`${codeBlockId}-tab-${index}`}
-                    controls={`${codeBlockId}-panel-${index}`}
-                    selected={index === 0}
-                    {...(effectiveTabsDataProp ? { "data-editable": "array-item" } : {})}
-                  >
-                    <span
-                      {...(effectiveTabsDataProp
-                        ? { "data-editable": "text", "data-prop": "label" }
-                        : {})}
-                    >
-                      {tab.label || tab.language || `Format ${index + 1}`}
-                    </span>
-                  </Tab>
-                ))}
-              </div>
-            </div>
-          )}
-        </header>
-      )
-    }
-    {
-      tabs.map((tab, index) => {
-        const codeAttributes = effectiveTabsDataProp
-          ? { "data-editable": "text", "data-prop": "code" }
-          : {};
-        const lines = (tab.code || "").split("\n");
-
-        return (
-          <TabPanel
-            class="code-block-panel"
-            element="section"
-            id={`${codeBlockId}-panel-${index}`}
-            labelledBy={`${codeBlockId}-tab-${index}`}
-            selected={index === 0}
-          >
-            <div class:list={["code-block-code", lineNumbers && "has-line-numbers"]}>
-              {lineNumbers && (
-                <ol
-                  class="code-block-line-numbers"
-                  aria-hidden="true"
+    {(hasTabs || copyButton) && (
+      <header class="code-block-header">
+        {hasTabs && (
+          <div class="code-block-tab-scroll">
+            <div
+              class="code-block-tabs"
+              role="tablist"
+              aria-label="Code formats"
+              {...tabsDataAttributes}
+            >
+              {tabs.map((tab, index) => (
+                <Tab
+                  class="code-block-tab"
+                  id={`${codeBlockId}-tab-${index}`}
+                  controls={`${codeBlockId}-panel-${index}`}
+                  selected={index === 0}
+                  {...(effectiveTabsDataProp ? { "data-editable": "array-item" } : {})}
                 >
-                  {lines.map((_, lineIndex) => (
-                    <li>{lineIndex + 1}</li>
-                  ))}
-                </ol>
-              )}
-              <pre>
+                  <span
+                    {...(effectiveTabsDataProp
+                      ? { "data-editable": "text", "data-prop": "label" }
+                      : {})}
+                  >
+                    {tab.label || tab.language || `Format ${index + 1}`}
+                  </span>
+                </Tab>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+    )}
+    {tabs.map((tab, index) => {
+      const codeAttributes = effectiveTabsDataProp
+        ? { "data-editable": "text", "data-prop": "code" }
+        : {};
+      const lines = (tab.code || "").split("\n");
+
+      return (
+        <TabPanel
+          class="code-block-panel"
+          element="section"
+          id={`${codeBlockId}-panel-${index}`}
+          labelledBy={`${codeBlockId}-tab-${index}`}
+          selected={index === 0}
+        >
+          <div class:list={["code-block-code", lineNumbers && "has-line-numbers"]}>
+            {lineNumbers && (
+              <ol
+                class="code-block-line-numbers"
+                aria-hidden="true"
+              >
+                {lines.map((_, lineIndex) => (
+                  <li>{lineIndex + 1}</li>
+                ))}
+              </ol>
+            )}
+            <pre>
                 <code
                   {...codeAttributes}
                   set:html={renderedCodes[index]}
                 />
               </pre>
-            </div>
-            {(tab.filename || tab.description) && (
-              <footer class="code-block-context">
-                {tab.filename && <span class="code-block-filename">{tab.filename}</span>}
-                {tab.description && <span class="code-block-description">{tab.description}</span>}
-              </footer>
-            )}
-          </TabPanel>
-        );
-      })
-    }
+          </div>
+          {(tab.filename || tab.description) && (
+            <footer class="code-block-context">
+              {tab.filename && <span class="code-block-filename">{tab.filename}</span>}
+              {tab.description && <span class="code-block-description">{tab.description}</span>}
+            </footer>
+          )}
+        </TabPanel>
+      );
+    })}
     <span
       class="code-block-status visually-hidden"
       aria-live="polite"

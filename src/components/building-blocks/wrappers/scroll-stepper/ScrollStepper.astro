@@ -65,88 +65,78 @@ if (!_component && !hasSteps) return;
     <div class="scroll-stepper-layout">
       <div class="scroll-stepper-media">
         <div class="scroll-stepper-media-panels">
-          {
-            stepList.map((step: StepProps, index: number) => (
-              <div
-                class="scroll-stepper-media-panel"
-                data-index={index}
-              >
-                <div class="scroll-stepper-media-content flow">
-                  <Component contentSections={sectionBlocks(step.mediaSections)} />
-                </div>
+          {stepList.map((step: StepProps, index: number) => (
+            <div
+              class="scroll-stepper-media-panel"
+              data-index={index}
+            >
+              <div class="scroll-stepper-media-content flow">
+                <Component contentSections={sectionBlocks(step.mediaSections)} />
               </div>
-            ))
-          }
+            </div>
+          ))}
         </div>
-        {
-          progressStyle === "bar" && (
-            <div
-              class="scroll-stepper-progress"
-              aria-hidden="true"
-            >
-              <span class="scroll-stepper-progress-fill" />
-            </div>
-          )
-        }
-        {
-          progressStyle === "dots" && (
-            <div
-              class="scroll-stepper-progress-dots"
-              aria-hidden="true"
-            >
-              {stepList.map((_step, index) => (
-                <span
-                  class="scroll-stepper-progress-dot"
-                  data-index={index}
-                />
-              ))}
-            </div>
-          )
-        }
+        {progressStyle === "bar" && (
+          <div
+            class="scroll-stepper-progress"
+            aria-hidden="true"
+          >
+            <span class="scroll-stepper-progress-fill" />
+          </div>
+        )}
+        {progressStyle === "dots" && (
+          <div
+            class="scroll-stepper-progress-dots"
+            aria-hidden="true"
+          >
+            {stepList.map((_step, index) => (
+              <span
+                class="scroll-stepper-progress-dot"
+                data-index={index}
+              />
+            ))}
+          </div>
+        )}
       </div>
       <div
         class:list={["scroll-stepper-steps", `height-${stepHeight}`]}
         {...arrayDataAttributes}
       >
-        {
-          stepList.map((step: StepProps, index: number) => (
-            <ScrollStepperStep
-              mediaSections={sectionBlocks(step.mediaSections)}
-              contentSections={stepContent(step, index)}
-              aria-label={`Step ${index + 1} of ${stepList.length}`}
-              data-index={index}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          ))
-        }
+        {stepList.map((step: StepProps, index: number) => (
+          <ScrollStepperStep
+            mediaSections={sectionBlocks(step.mediaSections)}
+            contentSections={stepContent(step, index)}
+            aria-label={`Step ${index + 1} of ${stepList.length}`}
+            data-index={index}
+            data-editable="array-item"
+            data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        ))}
       </div>
     </div>
     <div
       class="scroll-stepper-mobile-steps"
       {...arrayDataAttributes}
     >
-      {
-        stepList.map((step: StepProps, index: number) => (
-          <div
-            class="scroll-stepper-mobile-step"
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
-          >
-            <div class="scroll-stepper-mobile-media flow">
-              <div class="scroll-stepper-media-content">
-                <Component contentSections={sectionBlocks(step.mediaSections)} />
-              </div>
+      {stepList.map((step: StepProps, index: number) => (
+        <div
+          class="scroll-stepper-mobile-step"
+          data-editable="array-item"
+          data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
+        >
+          <div class="scroll-stepper-mobile-media flow">
+            <div class="scroll-stepper-media-content">
+              <Component contentSections={sectionBlocks(step.mediaSections)} />
             </div>
-            <ScrollStepperStep
-              contentSections={stepContent(step, index)}
-              aria-label={`Step ${index + 1} of ${stepList.length}`}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
           </div>
-        ))
-      }
+          <ScrollStepperStep
+            contentSections={stepContent(step, index)}
+            aria-label={`Step ${index + 1} of ${stepList.length}`}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        </div>
+      ))}
     </div>
   </div>
 </div>

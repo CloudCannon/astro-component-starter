@@ -101,122 +101,120 @@ const hasTable = planList.length > 0 && rows?.length > 0;
     text={subtext}
   />
 
-  {
-    hasTable && (
-      <div class:list={["pricing-comparison-frame", striped && "striped"]}>
-        <p
-          class="pricing-comparison-hint"
-          aria-hidden="true"
-        >
-          Scroll →
-        </p>
-        <div
-          class="pricing-comparison-scroller"
-          role="region"
-          tabindex="0"
-          aria-label={heading || "Plan comparison"}
-        >
-          <table>
-            <thead>
-              {/* The only place `plans` is bound — the body and footer cells
+  {hasTable && (
+    <div class:list={["pricing-comparison-frame", striped && "striped"]}>
+      <p
+        class="pricing-comparison-hint"
+        aria-hidden="true"
+      >
+        Scroll →
+      </p>
+      <div
+        class="pricing-comparison-scroller"
+        role="region"
+        tabindex="0"
+        aria-label={heading || "Plan comparison"}
+      >
+        <table>
+          <thead>
+            {/* The only place `plans` is bound — the body and footer cells
                   are copies of the same items, and duplicate bindings compete
                   for the same rows on the canvas. */}
-              <tr
-                data-editable="array"
-                data-prop="plans"
-                data-direction="row"
-              >
-                <td />
-                {planList.map((plan) => (
-                  <th
-                    scope="col"
-                    class:list={[plan.highlight && "highlight"]}
-                    data-editable="array-item"
-                  >
-                    <span
-                      class="pricing-comparison-plan"
-                      data-editable="text"
-                      data-prop="name"
-                    >
-                      {plan.name}
-                    </span>
-                    {plan.price && (
-                      <span
-                        class="pricing-comparison-price"
-                        data-editable="text"
-                        data-prop="price"
-                      >
-                        {plan.price}
-                      </span>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody
+            <tr
               data-editable="array"
-              data-prop="rows"
+              data-prop="plans"
+              data-direction="row"
             >
-              {rows?.map((row: Row) => (
-                <tr data-editable="array-item">
-                  <th
-                    scope="row"
+              <td />
+              {planList.map((plan) => (
+                <th
+                  scope="col"
+                  class:list={[plan.highlight && "highlight"]}
+                  data-editable="array-item"
+                >
+                  <span
+                    class="pricing-comparison-plan"
                     data-editable="text"
-                    data-prop="feature"
+                    data-prop="name"
                   >
-                    {row?.feature}
-                  </th>
-                  {planList.map((plan, index) => {
-                    const value = cellFor(row, index);
-                    const mark = markFor(value);
-
-                    return (
-                      <td class:list={[plan.highlight && "highlight", `mark-${mark}`]}>
-                        {mark === "text" ? (
-                          value
-                        ) : (
-                          <>
-                            <Icon
-                              name={mark === "included" ? "check" : "minus"}
-                              size="sm"
-                            />
-                            <span class="visually-hidden">
-                              {mark === "included" ? "Included" : "Not included"}
-                            </span>
-                          </>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
+                    {plan.name}
+                  </span>
+                  {plan.price && (
+                    <span
+                      class="pricing-comparison-price"
+                      data-editable="text"
+                      data-prop="price"
+                    >
+                      {plan.price}
+                    </span>
+                  )}
+                </th>
               ))}
-            </tbody>
-            {/* In `tfoot`, not `tbody`: the CTA row is not one of `rows`, and a
-                non-item child inside the array region confuses row insertion. */}
-            {planList.some((plan) => plan.buttonText) && (
-              <tfoot>
-                <tr class="pricing-comparison-actions">
-                  <td />
-                  {planList.map((plan) => (
-                    <td class:list={[plan.highlight && "highlight"]}>
-                      {plan.buttonText && (
-                        <Button
-                          text={plan.buttonText}
-                          link={plan.buttonLink}
-                          variant={plan.highlight ? "primary" : "tertiary"}
-                          size="sm"
-                        />
+            </tr>
+          </thead>
+          <tbody
+            data-editable="array"
+            data-prop="rows"
+          >
+            {rows?.map((row: Row) => (
+              <tr data-editable="array-item">
+                <th
+                  scope="row"
+                  data-editable="text"
+                  data-prop="feature"
+                >
+                  {row?.feature}
+                </th>
+                {planList.map((plan, index) => {
+                  const value = cellFor(row, index);
+                  const mark = markFor(value);
+
+                  return (
+                    <td class:list={[plan.highlight && "highlight", `mark-${mark}`]}>
+                      {mark === "text" ? (
+                        value
+                      ) : (
+                        <>
+                          <Icon
+                            name={mark === "included" ? "check" : "minus"}
+                            size="sm"
+                          />
+                          <span class="visually-hidden">
+                            {mark === "included" ? "Included" : "Not included"}
+                          </span>
+                        </>
                       )}
                     </td>
-                  ))}
-                </tr>
-              </tfoot>
-            )}
-          </table>
-        </div>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+          {/* In `tfoot`, not `tbody`: the CTA row is not one of `rows`, and a
+                non-item child inside the array region confuses row insertion. */}
+          {planList.some((plan) => plan.buttonText) && (
+            <tfoot>
+              <tr class="pricing-comparison-actions">
+                <td />
+                {planList.map((plan) => (
+                  <td class:list={[plan.highlight && "highlight"]}>
+                    {plan.buttonText && (
+                      <Button
+                        text={plan.buttonText}
+                        link={plan.buttonLink}
+                        variant={plan.highlight ? "primary" : "tertiary"}
+                        size="sm"
+                      />
+                    )}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
+          )}
+        </table>
       </div>
-    )
-  }
+    </div>
+  )}
 </CustomSection>
 
 <style is:global>

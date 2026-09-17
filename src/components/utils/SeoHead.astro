@@ -126,95 +126,85 @@ const twitterSite = site.twitterSite?.trim();
   property="og:site_name"
   content={site.name}
 />
-{
-  pageDescription ? (
-    <>
-      <meta
-        name="description"
-        content={pageDescription}
-      />
-      <meta
-        property="og:description"
-        content={pageDescription}
-      />
-    </>
-  ) : null
-}
-{
-  keywordContent ? (
+{pageDescription ? (
+  <>
     <meta
-      name="keywords"
-      content={keywordContent}
+      name="description"
+      content={pageDescription}
     />
-  ) : null
-}
-{
-  pageImageUrl ? (
-    <>
+    <meta
+      property="og:description"
+      content={pageDescription}
+    />
+  </>
+) : null}
+{keywordContent ? (
+  <meta
+    name="keywords"
+    content={keywordContent}
+  />
+) : null}
+{pageImageUrl ? (
+  <>
+    <meta
+      property="og:image"
+      content={pageImageUrl}
+    />
+    {share?.width ? (
       <meta
-        property="og:image"
-        content={pageImageUrl}
+        property="og:image:width"
+        content={String(share.width)}
       />
-      {share?.width ? (
-        <meta
-          property="og:image:width"
-          content={String(share.width)}
-        />
-      ) : null}
-      {share?.height ? (
-        <meta
-          property="og:image:height"
-          content={String(share.height)}
-        />
-      ) : null}
-      {pageImageAlt ? (
-        <meta
-          property="og:image:alt"
-          content={pageImageAlt}
-        />
-      ) : null}
-    </>
-  ) : null
-}
+    ) : null}
+    {share?.height ? (
+      <meta
+        property="og:image:height"
+        content={String(share.height)}
+      />
+    ) : null}
+    {pageImageAlt ? (
+      <meta
+        property="og:image:alt"
+        content={pageImageAlt}
+      />
+    ) : null}
+  </>
+) : null}
 <meta
   name="twitter:card"
   content={twitterCard}
 />
-{
-  twitterSite ? (
-    <meta
-      name="twitter:site"
-      content={twitterSite}
-    />
-  ) : null
-}
-{
-  pageType === "article" ? (
-    <>
-      {article?.publishedTime ? (
-        <meta
-          property="article:published_time"
-          content={article.publishedTime}
-        />
-      ) : null}
-      {article?.modifiedTime ? (
-        <meta
-          property="article:modified_time"
-          content={article.modifiedTime}
-        />
-      ) : null}
-      {articleAuthors.map((author) => (
-        <meta
-          property="article:author"
-          content={author}
-        />
-      ))}
-      {articleTags.map((tag) => (
-        <meta
-          property="article:tag"
-          content={tag}
-        />
-      ))}
-    </>
-  ) : null
-}
+{twitterSite ? (
+  <meta
+    name="twitter:site"
+    content={twitterSite}
+  />
+) : null}
+{pageType === "article" ? (
+  <>
+    {article?.publishedTime ? (
+      <meta
+        property="article:published_time"
+        content={article.publishedTime}
+      />
+    ) : null}
+    {article?.modifiedTime ? (
+      <meta
+        property="article:modified_time"
+        content={article.modifiedTime}
+      />
+    ) : null}
+    {articleAuthors.map((author) => (
+      <meta
+        property="article:author"
+        content={author}
+      />
+    ))}
+    {articleTags.map((tag) => (
+      <meta
+        property="article:tag"
+        content={tag}
+      />
+    ))}
+  </>
+) : null}

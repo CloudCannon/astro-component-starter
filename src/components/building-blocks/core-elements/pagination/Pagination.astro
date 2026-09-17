@@ -51,71 +51,63 @@ const getPageUrl = (pageNum: number) => {
   aria-label="Pagination Navigation"
   {...htmlAttributes}
 >
-  {
-    showArrows && currentPage > 1 && (
-      <a
-        href={getPageUrl(currentPage - 1)}
-        class="pagination-arrow pagination-prev"
-        aria-label="Go to previous page"
-      >
-        <Icon
-          name="chevron-left"
-          size="sm"
-        />
-      </a>
-    )
-  }
+  {showArrows && currentPage > 1 && (
+    <a
+      href={getPageUrl(currentPage - 1)}
+      class="pagination-arrow pagination-prev"
+      aria-label="Go to previous page"
+    >
+      <Icon
+        name="chevron-left"
+        size="sm"
+      />
+    </a>
+  )}
 
   {showFirst && <a href={getPageUrl(1)}>1</a>}
 
   {gapBefore && <span aria-hidden="true">…</span>}
 
-  {
-    pages.map((pageNum) => {
-      // A bare `<span>` exposes no role that can carry an `aria-label`, so the
-      // context is given as visually hidden text instead.
-      return pageNum === currentPage ? (
-        <span
-          class="current"
-          aria-current="page"
-        >
-          <span class="visually-hidden">Page </span>
-          {pageNum}
-        </span>
-      ) : (
-        <a
-          href={getPageUrl(pageNum)}
-          aria-label={`Go to page ${pageNum}`}
-        >
-          {pageNum}
-        </a>
-      );
-    })
-  }
-
-  {
-    showLast && (
-      <>
-        <span aria-hidden="true">…</span>
-        <a href={getPageUrl(totalPages)}>{totalPages}</a>
-      </>
-    )
-  }
-
-  {
-    showArrows && currentPage < totalPages && (
-      <a
-        href={getPageUrl(currentPage + 1)}
-        class="pagination-arrow pagination-next"
-        aria-label="Go to next page"
+  {pages.map((pageNum) => {
+    // A bare `<span>` exposes no role that can carry an `aria-label`, so the
+    // context is given as visually hidden text instead.
+    return pageNum === currentPage ? (
+      <span
+        class="current"
+        aria-current="page"
       >
-        <Icon
-          name="chevron-right"
-          size="sm"
-        />
+        <span class="visually-hidden">Page </span>
+        {pageNum}
+      </span>
+    ) : (
+      <a
+        href={getPageUrl(pageNum)}
+        aria-label={`Go to page ${pageNum}`}
+      >
+        {pageNum}
       </a>
-    )
-  }
+    );
+  })}
+
+  {showLast && (
+    <>
+      <span aria-hidden="true">…</span>
+      <a href={getPageUrl(totalPages)}>{totalPages}</a>
+    </>
+  )}
+
+  {showArrows && currentPage < totalPages && (
+    <a
+      href={getPageUrl(currentPage + 1)}
+      class="pagination-arrow pagination-next"
+      aria-label="Go to next page"
+    >
+      <Icon
+        name="chevron-right"
+        size="sm"
+      />
+    </a>
+  )}
 </nav>
 
 <style is:global>

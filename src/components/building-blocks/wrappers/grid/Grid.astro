@@ -58,16 +58,14 @@ if (!_component && !hasItems && !hasSlotContent) return;
     style={gridStyles}
   >
     <slot>
-      {
-        items?.map((item: ItemProps) => (
-          <GridItem
-            data-id="building-blocks/wrappers/grid/grid-item"
-            data-editable="array-item"
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            {...item}
-          />
-        ))
-      }
+      {items?.map((item: ItemProps) => (
+        <GridItem
+          data-id="building-blocks/wrappers/grid/grid-item"
+          data-editable="array-item"
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          {...item}
+        />
+      ))}
     </slot>
   </div>
 </div>

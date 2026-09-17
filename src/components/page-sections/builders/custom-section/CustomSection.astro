@@ -69,56 +69,46 @@ const arrayDataAttributes =
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
     data-theme-lock={lockColorScheme || undefined}
   >
-    {
-      bgType === "image" && (
-        <Image
-          class:list={["background-image"]}
-          source={imageSource}
-          alt={imageAlt}
-          priority={priority}
-          positionVertical={positionVertical}
-          positionHorizontal={positionHorizontal}
-          background={true}
-          sizes="100vw"
-          widths={[640, 1280, 1920, 2560]}
-        />
-      )
-    }
-    {
-      bgType === "video" && (
-        <Video
-          type="local-source"
-          source={videoSource}
-          background={true}
-          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
-        />
-      )
-    }
-    {
-      patternImageUrl && (
-        <div
-          class:list={["background-pattern", `pattern-size-${patternSize}`]}
-          aria-hidden="true"
-          style={{ backgroundImage: `url("${patternImageUrl}")` }}
-        />
-      )
-    }
-    {
-      overlay !== 0 && (
-        <div
-          class="background-overlay"
-          aria-hidden="true"
-          style={{
-            backgroundColor: overlayColor(overlay),
-          }}
-        />
-      )
-    }
-    {
-      backgroundColor && (
-        <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
-      )
-    }
+    {bgType === "image" && (
+      <Image
+        class:list={["background-image"]}
+        source={imageSource}
+        alt={imageAlt}
+        priority={priority}
+        positionVertical={positionVertical}
+        positionHorizontal={positionHorizontal}
+        background={true}
+        sizes="100vw"
+        widths={[640, 1280, 1920, 2560]}
+      />
+    )}
+    {bgType === "video" && (
+      <Video
+        type="local-source"
+        source={videoSource}
+        background={true}
+        style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+      />
+    )}
+    {patternImageUrl && (
+      <div
+        class:list={["background-pattern", `pattern-size-${patternSize}`]}
+        aria-hidden="true"
+        style={{ backgroundImage: `url("${patternImageUrl}")` }}
+      />
+    )}
+    {overlay !== 0 && (
+      <div
+        class="background-overlay"
+        aria-hidden="true"
+        style={{
+          backgroundColor: overlayColor(overlay),
+        }}
+      />
+    )}
+    {backgroundColor && (
+      <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
+    )}
 
     <div
       class:list={[
@@ -132,14 +122,12 @@ const arrayDataAttributes =
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <Component
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <Component
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
   </div>

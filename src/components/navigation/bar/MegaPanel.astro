@@ -33,75 +33,71 @@ const columns: MegaMenuColumn[] = item.megaMenu?.columns ?? [];
     class="nav-item-content mega-panel"
   >
     <div class="mega-panel-layout">
-      {
-        hasFeature && (
-          <FeatureTag
-            href={feature!.link || undefined}
-            aria-label={feature!.link && !feature!.heading ? featureLinkLabel : undefined}
-            class="mega-feature"
-          >
-            {feature!.image && (
-              <Image
-                source={feature!.image}
-                alt={feature!.imageAlt ?? ""}
-                aspectRatio="widescreen"
-                rounded={true}
-                sizes="20rem"
-                widths={[320, 640]}
-                width={640}
-                class="mega-feature-image"
-              />
-            )}
-            {feature!.heading && (
-              <span class="mega-feature-heading">
-                {feature!.heading}
-                <span class="mega-feature-arrow">
-                  <Icon
-                    name="arrow-right"
-                    size="none"
-                    aria-hidden="true"
-                  />
-                </span>
+      {hasFeature && (
+        <FeatureTag
+          href={feature!.link || undefined}
+          aria-label={feature!.link && !feature!.heading ? featureLinkLabel : undefined}
+          class="mega-feature"
+        >
+          {feature!.image && (
+            <Image
+              source={feature!.image}
+              alt={feature!.imageAlt ?? ""}
+              aspectRatio="widescreen"
+              rounded={true}
+              sizes="20rem"
+              widths={[320, 640]}
+              width={640}
+              class="mega-feature-image"
+            />
+          )}
+          {feature!.heading && (
+            <span class="mega-feature-heading">
+              {feature!.heading}
+              <span class="mega-feature-arrow">
+                <Icon
+                  name="arrow-right"
+                  size="none"
+                  aria-hidden="true"
+                />
               </span>
-            )}
-          </FeatureTag>
-        )
-      }
+            </span>
+          )}
+        </FeatureTag>
+      )}
       <ul class="mega-columns">
-        {
-          columns.map((column) => (
-            <li class="mega-column">
-              {column.heading && <p class="mega-column-heading">{column.heading}</p>}
-              <ul class="mega-links">
-                {(column.items ?? []).map((link) => (
-                  <li>
-                    <a
-                      href={link.path}
-                      class:list={["mega-link", link.highlight && "is-highlighted"]}
-                      aria-current={isCurrentPage(pathname, link) ? "page" : undefined}
-                    >
-                      {link.icon && (
-                        <span class="mega-link-icon">
-                          <Icon
-                            name={link.icon}
-                            size="none"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      )}
-                      <span class="mega-link-text">
-                        <span class="mega-link-name">{link.name}</span>
-                        {link.description && (
-                          <span class="mega-link-description">{link.description}</span>
-                        )}
+        {columns.map((column) => (
+          <li class="mega-column">
+            {column.heading && <p class="mega-column-heading">{column.heading}</p>}
+            <ul class="mega-links">
+              {(column.items ?? []).map((link) => (
+                <li>
+                  <a
+                    href={link.path}
+                    class:list={["mega-link", link.highlight && "is-highlighted"]}
+                    aria-current={isCurrentPage(pathname, link) ? "page" : undefined}
+                  >
+                    {link.icon && (
+                      <span class="mega-link-icon">
+                        <Icon
+                          name={link.icon}
+                          size="none"
+                          aria-hidden="true"
+                        />
                       </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))
-        }
+                    )}
+                    <span class="mega-link-text">
+                      <span class="mega-link-name">{link.name}</span>
+                      {link.description && (
+                        <span class="mega-link-description">{link.description}</span>
+                      )}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
       </ul>
     </div>
   </div>

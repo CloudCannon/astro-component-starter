@@ -50,24 +50,22 @@ if (!_component && !hasItems && !hasSlotContent) return;
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        items?.map((item: ContentSelectorItem, index: number) => (
-          <ContentSelectorPanel
-            title={item.title}
-            subtext={item.subtext}
-            iconName={item.iconName}
-            iconColor={item.iconColor}
-            contentSections={item.contentSections}
-            _component={item._component}
-            selected={index === 0}
-            groupName={groupName}
-            navigationPosition={navigationPosition}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-id="building-blocks/wrappers/content-selector/content-selector-panel"
-            data-editable="array-item"
-          />
-        ))
-      }
+      {items?.map((item: ContentSelectorItem, index: number) => (
+        <ContentSelectorPanel
+          title={item.title}
+          subtext={item.subtext}
+          iconName={item.iconName}
+          iconColor={item.iconColor}
+          contentSections={item.contentSections}
+          _component={item._component}
+          selected={index === 0}
+          groupName={groupName}
+          navigationPosition={navigationPosition}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          data-id="building-blocks/wrappers/content-selector/content-selector-panel"
+          data-editable="array-item"
+        />
+      ))}
     </slot>
   </Tabs>
 </section>

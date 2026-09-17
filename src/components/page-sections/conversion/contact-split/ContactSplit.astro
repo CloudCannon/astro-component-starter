@@ -83,47 +83,45 @@ const allowedMapEmbedUrl = isAllowedExternalMediaUrl(mapEmbedUrl) ? mapEmbedUrl 
             data-prop="subtext"
             text={subtext}
           />
-          {
-            details?.length > 0 && (
-              <ul
-                class="contact-details"
-                data-editable="array"
-                data-prop="details"
-                data-direction="column"
-              >
-                {details?.map((detail: DetailProps) => (
-                  <li
-                    class="contact-detail"
-                    data-editable="array-item"
-                  >
-                    <Icon
-                      name={detail.icon}
-                      size="md"
-                    />
-                    <span class="contact-detail-text">
-                      {detail.label && <span class="visually-hidden">{detail.label}: </span>}
-                      {detail.url ? (
-                        <a
-                          href={detail.url}
-                          data-editable="text"
-                          data-prop="value"
-                        >
-                          {detail.value}
-                        </a>
-                      ) : (
-                        <span
-                          data-editable="text"
-                          data-prop="value"
-                        >
-                          {detail.value}
-                        </span>
-                      )}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )
-          }
+          {details?.length > 0 && (
+            <ul
+              class="contact-details"
+              data-editable="array"
+              data-prop="details"
+              data-direction="column"
+            >
+              {details?.map((detail: DetailProps) => (
+                <li
+                  class="contact-detail"
+                  data-editable="array-item"
+                >
+                  <Icon
+                    name={detail.icon}
+                    size="md"
+                  />
+                  <span class="contact-detail-text">
+                    {detail.label && <span class="visually-hidden">{detail.label}: </span>}
+                    {detail.url ? (
+                      <a
+                        href={detail.url}
+                        data-editable="text"
+                        data-prop="value"
+                      >
+                        {detail.value}
+                      </a>
+                    ) : (
+                      <span
+                        data-editable="text"
+                        data-prop="value"
+                      >
+                        {detail.value}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </Fragment>
         <Fragment slot="second">
           <Form
@@ -134,23 +132,21 @@ const allowedMapEmbedUrl = isAllowedExternalMediaUrl(mapEmbedUrl) ? mapEmbedUrl 
         </Fragment>
       </Split>
     </div>
-    {
-      allowedMapEmbedUrl && (
-        <div
-          class="contact-split-map external-media-placeholder"
-          data-external-media-src={allowedMapEmbedUrl}
-          data-external-media-title={mapTitle}
+    {allowedMapEmbedUrl && (
+      <div
+        class="contact-split-map external-media-placeholder"
+        data-external-media-src={allowedMapEmbedUrl}
+        data-external-media-title={mapTitle}
+      >
+        <p>Allow external media across this site to view this map.</p>
+        <button
+          type="button"
+          data-external-media-enable
         >
-          <p>Allow external media across this site to view this map.</p>
-          <button
-            type="button"
-            data-external-media-enable
-          >
-            Allow all external media
-          </button>
-        </div>
-      )
-    }
+          Allow all external media
+        </button>
+      </div>
+    )}
   </div>
 </CustomSection>
 

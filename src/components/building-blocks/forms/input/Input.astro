@@ -44,22 +44,18 @@ const hasIcon = isNonEmptyString(iconName);
   {...shellAttributes}
   {...htmlAttributes}
 >
-  {
-    /* The shell renders with or without an icon: it reproduces the base input's
-      box exactly, so one branch is enough. */
-  }
+  {/* The shell renders with or without an icon: it reproduces the base input's
+      box exactly, so one branch is enough. */}
   <span class:list={["field-shell", hasIcon && iconPosition === "after" && "icon-after"]}>
-    {
-      hasIcon && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="input-icon"
-          aria-hidden="true"
-        />
-      )
-    }
+    {hasIcon && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="input-icon"
+        aria-hidden="true"
+      />
+    )}
     <input
       type={type}
       name={name}

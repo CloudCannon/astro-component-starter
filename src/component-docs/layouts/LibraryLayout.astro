@@ -52,27 +52,23 @@ const contentSections = props.frontmatter?.contentSections || [];
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
     <SiteFonts />
-    {
-      import.meta.env.DEV ? (
-        <script
-          type="module"
-          src="/@vite/client"
-        />
-      ) : null
-    }
+    {import.meta.env.DEV ? (
+      <script
+        type="module"
+        src="/@vite/client"
+      ></script>
+    ) : null}
     <title>{pageTitle}</title>
     <meta
       name="robots"
       content="noindex"
     />
-    {
-      pageDescription ? (
-        <meta
-          name="description"
-          content={pageDescription}
-        />
-      ) : null
-    }
+    {pageDescription ? (
+      <meta
+        name="description"
+        content={pageDescription}
+      />
+    ) : null}
     <slot name="head" />
     <ClientRouter />
   </head>

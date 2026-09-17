@@ -104,76 +104,64 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
     data-theme-lock={lockColorScheme || undefined}
   >
-    {
-      bgType === "image" && (
-        <Image
-          class:list={["background-image"]}
-          source={imageSource}
-          alt={imageAlt}
-          priority={priority}
-          positionVertical={positionVertical}
-          positionHorizontal={positionHorizontal}
-          background={true}
-          sizes="100vw"
-        />
-      )
-    }
-    {
-      bgType === "video" && (
-        <Video
-          type="local-source"
-          source={videoSource}
-          background={true}
-          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
-        />
-      )
-    }
-    {
-      patternImageUrl && (
-        <div
-          class:list={["background-pattern", `pattern-size-${patternSize}`]}
-          aria-hidden="true"
-          style={{ backgroundImage: `url("${patternImageUrl}")` }}
-        />
-      )
-    }
-    {
-      overlay !== 0 && (
-        <div
-          class="background-overlay"
-          aria-hidden="true"
-          style={{
-            backgroundColor: overlayColor(overlay),
-          }}
-        />
-      )
-    }
-    {
-      backgroundColor && (
-        <div
-          aria-hidden="true"
-          class:list={["background", backgroundColor && `bg-${backgroundColor}`]}
-        />
-      )
-    }
+    {bgType === "image" && (
+      <Image
+        class:list={["background-image"]}
+        source={imageSource}
+        alt={imageAlt}
+        priority={priority}
+        positionVertical={positionVertical}
+        positionHorizontal={positionHorizontal}
+        background={true}
+        sizes="100vw"
+      />
+    )}
+    {bgType === "video" && (
+      <Video
+        type="local-source"
+        source={videoSource}
+        background={true}
+        style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+      />
+    )}
+    {patternImageUrl && (
+      <div
+        class:list={["background-pattern", `pattern-size-${patternSize}`]}
+        aria-hidden="true"
+        style={{ backgroundImage: `url("${patternImageUrl}")` }}
+      />
+    )}
+    {overlay !== 0 && (
+      <div
+        class="background-overlay"
+        aria-hidden="true"
+        style={{
+          backgroundColor: overlayColor(overlay),
+        }}
+      />
+    )}
+    {backgroundColor && (
+      <div
+        aria-hidden="true"
+        class:list={["background", backgroundColor && `bg-${backgroundColor}`]}
+      />
+    )}
 
-    {
-      (usesBeforeContentSections || hasBeforeSlot) && (
-        <div
-          class="before-content flow"
-          {...arrayDataAttributesBefore}
-        >
-          <slot name="before">
-            {beforeContentSections && (
-              <Component
-                contentSections={beforeContentSections}
-                useDefaultEditableBinding={!!effectiveBeforeProp}
-              />
-            )}
-          </slot>
-        </div>
-      )
-    }
+    {(usesBeforeContentSections || hasBeforeSlot) && (
+      <div
+        class="before-content flow"
+        {...arrayDataAttributesBefore}
+      >
+        <slot name="before">
+          {beforeContentSections && (
+            <Component
+              contentSections={beforeContentSections}
+              useDefaultEditableBinding={!!effectiveBeforeProp}
+            />
+          )}
+        </slot>
+      </div>
+    )}
 
     <div class="card-outer-content">
       <div
@@ -188,47 +176,41 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         {...arrayDataAttributes}
       >
         <slot>
-          {
-            contentSections && (
-              <Component
-                contentSections={contentSections}
-                useDefaultEditableBinding={!!effectiveChildrenProp}
-              />
-            )
-          }
+          {contentSections && (
+            <Component
+              contentSections={contentSections}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+            />
+          )}
         </slot>
       </div>
     </div>
 
-    {
-      (usesAfterContentSections || hasAfterSlot) && (
-        <div
-          class="after-content flow"
-          {...arrayDataAttributesAfter}
-        >
-          <slot name="after">
-            {afterContentSections && (
-              <Component
-                contentSections={afterContentSections}
-                useDefaultEditableBinding={!!effectiveAfterProp}
-              />
-            )}
-          </slot>
-        </div>
-      )
-    }
-    {
-      hasHit && (
-        <HitTag
-          class="card-hit"
-          {...(isPopoverLink
-            ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
-            : { href: link })}
-        >
-          <span class="visually-hidden">{hitLabel}</span>
-        </HitTag>
-      )
-    }
+    {(usesAfterContentSections || hasAfterSlot) && (
+      <div
+        class="after-content flow"
+        {...arrayDataAttributesAfter}
+      >
+        <slot name="after">
+          {afterContentSections && (
+            <Component
+              contentSections={afterContentSections}
+              useDefaultEditableBinding={!!effectiveAfterProp}
+            />
+          )}
+        </slot>
+      </div>
+    )}
+    {hasHit && (
+      <HitTag
+        class="card-hit"
+        {...(isPopoverLink
+          ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+          : { href: link })}
+      >
+        <span class="visually-hidden">{hitLabel}</span>
+      </HitTag>
+    )}
   </div>
 </div>
 

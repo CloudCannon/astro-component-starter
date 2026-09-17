@@ -65,24 +65,22 @@ const {
     text={subtext}
   />
 
-  {
-    testimonials?.length > 0 && (
-      /* Quotes are uneven by nature, so the wall is a Masonry — the wrapper's
+  {testimonials?.length > 0 && (
+    /* Quotes are uneven by nature, so the wall is a Masonry — the wrapper's
          JS enhancement keeps reading order while packing the columns. */
-      <Masonry
-        class="testimonial-wall-masonry"
-        columns={columns}
-        gap="md"
-        data-children-prop="testimonials"
-      >
-        {testimonials?.map((testimonial: TestimonialProps) => (
-          <TestimonialWallItem
-            data-editable="array-item"
-            data-id="page-sections/proof/testimonial-wall/testimonial-wall-item"
-            {...testimonial}
-          />
-        ))}
-      </Masonry>
-    )
-  }
+    <Masonry
+      class="testimonial-wall-masonry"
+      columns={columns}
+      gap="md"
+      data-children-prop="testimonials"
+    >
+      {testimonials?.map((testimonial: TestimonialProps) => (
+        <TestimonialWallItem
+          data-editable="array-item"
+          data-id="page-sections/proof/testimonial-wall/testimonial-wall-item"
+          {...testimonial}
+        />
+      ))}
+    </Masonry>
+  )}
 </CustomSection>

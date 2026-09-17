@@ -42,33 +42,29 @@ const stars = Array.from({ length: starCount });
       aria-hidden="true"
     >
       <span class="rating-row rating-base">
-        {
-          stars.map(
-            () =>
-              star && (
-                <svg
-                  {...star.attributes}
-                  set:html={star.body}
-                />
-              )
-          )
-        }
+        {stars.map(
+          () =>
+            star && (
+              <svg
+                {...star.attributes}
+                set:html={star.body}
+              />
+            )
+        )}
       </span>
       <span
         class="rating-row rating-overlay"
         style={`--rating-full: ${fullStars}; --rating-partial: ${partialStar.toFixed(3)};`}
       >
-        {
-          stars.map(
-            () =>
-              star && (
-                <svg
-                  {...star.attributes}
-                  set:html={star.body}
-                />
-              )
-          )
-        }
+        {stars.map(
+          () =>
+            star && (
+              <svg
+                {...star.attributes}
+                set:html={star.body}
+              />
+            )
+        )}
       </span>
     </span>
     {showValue && <span class="rating-value">{clampedValue}</span>}
