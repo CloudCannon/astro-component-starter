@@ -46,6 +46,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - `llms.txt` is generated from the content collections rather than hand-maintained in `public/`, so it lists every indexable page instead of falling behind as pages are added. It skips `noindex` pages, matching the sitemap.
 - `npm run test:css-parity` proves the per-page CSS pruning under Changed removed nothing that renders. It builds the site twice — once with `PRUNE_CSS=0` — and compares the full computed style of every element and its `::before`/`::after`/`::marker`/`::placeholder`, plus every bounding box, across all pages, at three viewports, in both colour schemes, before and after clicking every stateful control. `CSS_PARITY_EDITOR=1` runs the same comparison with the editor's full stylesheet loaded.
 
+- `package.json` records the two install scripts this tree runs — `esbuild` and `fsevents` — in the `allowScripts` field, so npm no longer lists them as unreviewed on every install. Both are pinned to the exact installed version. The field is advisory on npm 11 (the scripts still run), but npm 12 skips unreviewed install scripts outright, so the same entries keep esbuild's postinstall running after that upgrade.
+- Every dependency is on its latest release, bar two deliberate holds. `@astrojs/mdx` 7 → 8, `@cloudcannon/editable-regions` 0.0.19 → 0.0.20, `@takumi-rs/core` and `@takumi-rs/helpers` 2.13.5 → 2.14.0, `sharp` 0.35.3 → 0.35.4, `vitest` 4 → 5, `@cloudcannon/configuration-types` 0.0.60 → 0.0.62 and `prettier-plugin-astro` 0.14 → 1.0.0, with the cross-platform optional pins moved to match. The lockfile was re-resolved from scratch, so transitive dependencies landed on their newest release inside the declared ranges too. Node 22.12 or later is still the floor.
+- `prettier-plugin-astro` is pinned to exactly `1.0.0`, because `1.0.1` is not idempotent: every `prettier --write` produces a different file, so `prettier --check .` never converges and `npm run check` cannot pass. `1.0.0` formats identically and is stable. The plugin's 1.0 output collapses `{condition && (<Tag />)}` expression containers onto one line, which rewrites 107 `.astro` files; building the 127-page site both ways gives byte-identical HTML apart from per-build UUIDs, so nothing rendered changed.
+- TypeScript stays on `6.0.3`, the latest 6.x, rather than `7.0.2`: `@typescript-eslint` requires `>=4.8.4 <6.1.0` and `@astrojs/check` requires `^5.0.0 || ^6.0.0`, so 7 would break `npm run lint:js` and `npm run typecheck`.
+
 ### Changed
 
 - The main navigation publishes its bar height as `--main-nav-height`, and the blog table of contents reads it instead of repeating `5rem`. Anything sticky can now clear the nav with `var(--main-nav-height, 0px)`, which falls back to zero on a site that removes the nav.
@@ -210,6 +215,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Stack's row-only controls and Split's fixed-width and mobile-order controls declare the conditions that should gate them.
 - An input inside a disabled Input field is styled as disabled. The icon variant's shell hid the state.
 - `utils/` helpers no longer appear as placeable component keys in the "component not found" warning.
+
+### Security
+
+- Eight advisories filed against this tree since the Astro 7 upgrade are cleared — `npm audit` reports 0, from 8 (1 critical, 4 high, 3 moderate). The lockfile was re-resolved rather than the ranges widened: every fix already sat inside a range `package.json` declares, so no dependency range changed. Astro 7.2.0 → 7.3.3 covers the critical AVIF remote-code-execution and `base` authorization-bypass issues, sharp 0.35.3 → 0.35.4 the libheif set, and svgo, the three nested 4.x `js-yaml` copies, fast-uri, colord and `vitest`/`@vitest/mocker` (4.1.10 → 4.1.11) move to their patched releases. Re-resolved with the `deps:sync` flags, so the Linux and Windows optional dependencies CI needs stay pinned.
 
 ## [2.0.0] - 2026-08-19
 

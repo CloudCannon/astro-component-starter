@@ -60,18 +60,18 @@
     "lint:nesting": "node scripts/cms/lint-nesting.mjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.5",
+    "@astrojs/mdx": "^8.0.1",
     "@astrojs/node": "^11.1.0",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@choctawnationofoklahoma/lite-vimeo": "^1.3.1",
-    "@cloudcannon/editable-regions": "^0.0.19",
+    "@cloudcannon/editable-regions": "^0.0.20",
     "@fontsource/inter": "^5.3.0",
     "@fontsource/raleway": "^5.3.0",
     "@justinribeiro/lite-youtube": "^1.9.0",
     "@pagefind/component-ui": "^1.5.2",
-    "@takumi-rs/core": "2.13.5",
-    "@takumi-rs/helpers": "2.13.5",
+    "@takumi-rs/core": "2.14.0",
+    "@takumi-rs/helpers": "2.14.0",
     "astro": "^7.2.0",
     "embla-carousel": "^8.6.0",
     "embla-carousel-auto-scroll": "^8.6.0",
@@ -80,13 +80,13 @@
     "js-beautify": "^2.0.3",
     "js-yaml": "^5.2.3",
     "markdown-it": "^15.0.0",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.4",
     "shiki": "^4.4.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@cloudcannon/configuration-types": "^0.0.60",
+    "@cloudcannon/configuration-types": "^0.0.62",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
     "ajv": "^8.20.0",
@@ -101,23 +101,27 @@
     "postcss": "^8.5.26",
     "postcss-value-parser": "^4.2.0",
     "prettier": "^3.9.6",
-    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-astro": "1.0.0",
     "stylelint": "^17.14.1",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-order": "^8.1.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.10",
+    "vitest": "^5.0.1",
     "yaml-eslint-parser": "^2.1.0"
   },
   "engines": {
     "node": ">=22.12.0"
   },
   "optionalDependencies": {
-    "@img/sharp-linux-x64": "^0.35.3",
-    "@img/sharp-linuxmusl-x64": "^0.35.3",
+    "@img/sharp-linux-x64": "^0.35.4",
+    "@img/sharp-linuxmusl-x64": "^0.35.4",
     "@pagefind/linux-x64": "^1.5.2",
     "@pagefind/windows-x64": "^1.5.2",
-    "@rollup/rollup-linux-x64-gnu": "^4.62.4",
-    "@rollup/rollup-win32-x64-msvc": "^4.62.4"
+    "@rollup/rollup-linux-x64-gnu": "^4.63.3",
+    "@rollup/rollup-win32-x64-msvc": "^4.63.3"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true,
+    "esbuild@0.28.2": true
   }
 }
