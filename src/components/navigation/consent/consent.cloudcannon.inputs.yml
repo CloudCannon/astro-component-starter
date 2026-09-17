@@ -25,6 +25,12 @@ privacy.bannerText:
 privacy.settingsLabel:
   type: text
   comment: Label for the persistent settings button and dialog.
+privacy.necessaryLabel:
+  type: text
+  comment: Visitor-facing name for storage required to remember privacy choices.
+privacy.necessaryDescription:
+  type: textarea
+  comment: Explain the essential storage that cannot be switched off.
 privacy.analyticsLabel:
   type: text
   comment: Visitor-facing name for the analytics category.

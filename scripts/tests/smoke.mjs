@@ -279,14 +279,36 @@ const tests = [
         (await page.locator(`${popoverSel} [data-consent-category]`).count()) === 2,
         "settings dialog did not show both optional categories"
       );
+      assert(
+        (await page.locator(`${popoverSel} .consent-category-necessary strong`).textContent()) ===
+          "Necessary",
+        "settings dialog did not identify necessary storage"
+      );
+      assert(
+        (await page.locator(`${popoverSel} .consent-category-status`).textContent()) ===
+          "Always on",
+        "settings dialog did not identify necessary storage as always on"
+      );
+      const modalChoices = await page
+        .locator(`${popoverSel} [data-consent-action] .button-inner`)
+        .allTextContents();
 
-      await page.locator(`${popoverSel} .button-inner[aria-label="Close"]`).click();
-      await root.locator('[data-consent-action="reject-all"] .button-inner').click();
+      assert(
+        JSON.stringify(modalChoices) ===
+          JSON.stringify(["Accept All", "Reject All", "Save choices"]),
+        `expected complete preference controls, got ${JSON.stringify(modalChoices)}`
+      );
+
+      await page.locator(`${popoverSel} [data-consent-action="reject-all"] .button-inner`).click();
       await page.waitForFunction(
         (sel) => document.querySelector(sel)?.hasAttribute("data-consent-decided"),
         `${ACTIVE_PREVIEW} .consent`
       );
 
+      assert(
+        !(await page.locator(popoverSel).isVisible()),
+        "settings stayed open after Reject All"
+      );
       assert(!(await banner.isVisible()), "banner stayed visible after making a demo choice");
       assert(
         await root.locator("[data-consent-settings-trigger]").isVisible(),
@@ -368,6 +390,10 @@ const tests = [
         "privacy settings did not link to the configured policy"
       );
       assert(
+        (await popover.locator(".consent-category-status").textContent()) === "Always on",
+        "privacy settings did not explain necessary storage"
+      );
+      assert(
         !(await externalMedia.isChecked()),
         "expected external media to remain off until the visitor opts in"
       );
@@ -389,6 +415,18 @@ const tests = [
         () => window.siteConsent?.record.decisions.externalMedia === "denied"
       );
       await other.close();
+
+      await page.locator("[data-consent-open]").click();
+      await page.waitForFunction(() =>
+        document.querySelector("#privacy-settings")?.matches(":popover-open")
+      );
+      await popover.locator('[data-consent-action="reject-all"] .button-inner').click();
+      await page.waitForFunction(
+        () =>
+          window.siteConsent?.record.decisions.analytics === "denied" &&
+          window.siteConsent?.record.decisions.externalMedia === "denied" &&
+          !document.querySelector("#privacy-settings")?.matches(":popover-open")
+      );
     },
   },
   {

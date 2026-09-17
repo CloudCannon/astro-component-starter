@@ -20,6 +20,8 @@ export const privacyConfigSchema = z.object({
   bannerHeading: z.string().min(1),
   bannerText: z.string().min(1),
   settingsLabel: z.string().min(1),
+  necessaryLabel: z.string().min(1),
+  necessaryDescription: z.string().min(1),
   analyticsLabel: z.string().min(1),
   analyticsDescription: z.string().min(1),
   externalMediaLabel: z.string().min(1),

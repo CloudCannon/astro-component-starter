@@ -16,6 +16,8 @@ const config: PrivacyConfig = {
   bannerHeading: "Privacy",
   bannerText: "Choose optional services.",
   settingsLabel: "Privacy settings",
+  necessaryLabel: "Necessary",
+  necessaryDescription: "Remember privacy choices.",
   analyticsLabel: "Analytics",
   analyticsDescription: "Measure site use.",
   externalMediaLabel: "External media",

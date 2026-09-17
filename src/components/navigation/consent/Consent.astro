@@ -88,10 +88,13 @@ const popoverId = "privacy-settings";
       />
     </div>
     <div class="consent-modal-body">
-      <p>
-        Necessary storage keeps your privacy choices. It is always on.
-        <a href={privacy.policyUrl}>Read our privacy policy</a>.
-      </p>
+      <div class="consent-category consent-category-necessary">
+        <span>
+          <strong>{privacy.necessaryLabel}</strong>
+          <span>{privacy.necessaryDescription}</span>
+        </span>
+        <span class="consent-category-status">Always on</span>
+      </div>
       {
         hasAnalytics && (
           <label class="consent-category">
@@ -116,8 +119,25 @@ const popoverId = "privacy-settings";
           data-consent-category="externalMedia"
         />
       </label>
+      <p class="consent-policy-link">
+        For more information, <a href={privacy.policyUrl}>read our privacy policy</a>.
+      </p>
     </div>
     <div class="consent-modal-footer">
+      <div class="consent-modal-bulk-actions">
+        <Button
+          text="Accept All"
+          variant="secondary"
+          size="sm"
+          data-consent-action="accept-all"
+        />
+        <Button
+          text="Reject All"
+          variant="secondary"
+          size="sm"
+          data-consent-action="reject-all"
+        />
+      </div>
       <Button
         text="Save choices"
         variant="primary"
@@ -182,7 +202,8 @@ const popoverId = "privacy-settings";
     }
 
     .consent-actions,
-    .consent-modal-footer {
+    .consent-modal-footer,
+    .consent-modal-bulk-actions {
       display: flex;
       flex-wrap: wrap;
       gap: var(--spacing-xs);
@@ -232,7 +253,7 @@ const popoverId = "privacy-settings";
       padding: var(--spacing-md);
     }
 
-    .consent-modal-body > p {
+    .consent-policy-link {
       color: var(--color-text-muted);
       font-size: var(--font-size-sm);
       margin: 0;
@@ -266,6 +287,22 @@ const popoverId = "privacy-settings";
         inline-size: 1.25rem;
         margin: 0;
       }
+    }
+
+    .consent-category-necessary {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .consent-category-status {
+      background-color: var(--color-bg-muted);
+      border-radius: var(--radius-full);
+      color: var(--color-text-muted);
+      flex: none;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1;
+      padding: var(--spacing-xs) var(--spacing-sm);
     }
 
     @media (max-width: 639px) {

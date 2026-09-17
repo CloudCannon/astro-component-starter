@@ -192,6 +192,12 @@ collections_config:
             comment: Link to the site's privacy policy.
           bannerText:
             type: textarea
+          necessaryLabel:
+            type: text
+            comment: Visitor-facing name for storage required to remember privacy choices.
+          necessaryDescription:
+            type: textarea
+            comment: Explain the essential storage that cannot be switched off.
           honorGlobalPrivacyControl:
             type: switch
             comment: Respect a visitor's Global Privacy Control signal unless they explicitly grant a category.

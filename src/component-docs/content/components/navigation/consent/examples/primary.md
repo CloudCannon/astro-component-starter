@@ -12,6 +12,8 @@ blocks:
     bannerHeading: Your privacy, your choice
     bannerText: We use optional services to understand site usage and show external media. You can change your choices at any time.
     settingsLabel: Privacy settings
+    necessaryLabel: Necessary
+    necessaryDescription: Stores your privacy choices so the site can remember them.
     analyticsLabel: Analytics
     analyticsDescription: Helps us understand which pages are useful. It does not use advertising or marketing pixels.
     externalMediaLabel: External media
