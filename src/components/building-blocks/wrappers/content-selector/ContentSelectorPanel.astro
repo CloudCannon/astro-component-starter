@@ -16,6 +16,7 @@ const {
   selected = false,
   groupName = "content-selector-tabs",
   navigationPosition = "start",
+  tablistLabel,
   class: className,
   _component,
   "data-children-prop": childrenDataProp,
@@ -46,42 +47,54 @@ const subtextDataAttributes = effectiveSubtextProp
   class:list={["content-selector-item", className]}
   {...htmlAttributes}
 >
-  <Tab
-    class="content-selector-tab"
-    id={tabLabelId}
-    controls={panelId}
-    selected={selected}
+  {/* The array-item root has to hold both the tab and its panel, but a
+      `tablist` may contain only tabs — so the tab gets its own `tablist`
+      wrapper here, a sibling of the panel. setup.ts reads the orientation
+      from this element and stamps `aria-posinset`/`aria-setsize` on every
+      tab, so the split lists still announce "2 of 5", not "1 of 1". */}
+  <div
+    class="content-selector-tablist"
+    role="tablist"
+    aria-label={tablistLabel || "Content sections"}
+    aria-orientation={navigationPosition === "start" ? "vertical" : "horizontal"}
   >
-    {/* `level="span"`, not a real heading: a tab label is not a section title,
+    <Tab
+      class="content-selector-tab"
+      id={tabLabelId}
+      controls={panelId}
+      selected={selected}
+    >
+      {/* `level="span"`, not a real heading: a tab label is not a section title,
         and an h3 per tab injects the whole tab strip into the page outline. */}
-    <Heading
-      text={title}
-      level="span"
-      size="sm"
-      iconName={iconName}
-      iconColor={iconColor}
-      alignmentHorizontal={navigationPosition === "top" ? "center" : "start"}
-      class="content-selector-tab-heading"
-      data-prop={effectiveTitleProp}
-    />
-    {subtext && (
-      <span
-        class:list={[
-          "content-selector-tab-subtext",
-          `align-${navigationPosition === "top" ? "center" : "start"}`,
-        ]}
-        {...subtextDataAttributes}
-      >
-        {subtext}
-      </span>
-    )}
-    <Icon
-      name="chevron-down"
-      size="none"
-      class="content-selector-tab-chevron"
-      aria-hidden="true"
-    />
-  </Tab>
+      <Heading
+        text={title}
+        level="span"
+        size="sm"
+        iconName={iconName}
+        iconColor={iconColor}
+        alignmentHorizontal={navigationPosition === "top" ? "center" : "start"}
+        class="content-selector-tab-heading"
+        data-prop={effectiveTitleProp}
+      />
+      {subtext && (
+        <span
+          class:list={[
+            "content-selector-tab-subtext",
+            `align-${navigationPosition === "top" ? "center" : "start"}`,
+          ]}
+          {...subtextDataAttributes}
+        >
+          {subtext}
+        </span>
+      )}
+      <Icon
+        name="chevron-down"
+        size="none"
+        class="content-selector-tab-chevron"
+        aria-hidden="true"
+      />
+    </Tab>
+  </div>
   <TabPanel
     class="content-selector-panel"
     id={panelId}
@@ -113,7 +126,8 @@ const subtextDataAttributes = effectiveSubtextProp
      * is the array-item region root, and `display: contents` leaves the editor
      * nothing to select or drag. Overlapping boxes would swallow each other's
      * clicks, hence pointer-events passing through to the children.
-     * The tab's own row/column comes from `:nth-of-type` in ContentSelector.
+     * The tablist's own row/column comes from `:nth-of-type` in ContentSelector;
+     * the tab fills that box.
      */
     .content-selector-item {
       display: grid;

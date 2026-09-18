@@ -25,9 +25,17 @@ const inputType = multiple ? "checkbox" : "radio";
 const requireEachInput = required && !multiple;
 ---
 
+{/* A `<fieldset>` maps to `group`, which doesn't support `aria-required`;
+    only the radio case gets `radiogroup` (same shape as ChoiceGroup). The
+    checkbox case keeps the native `required` on the first input. The explicit
+    `aria-labelledby` exists because a `<legend>` does not reliably name a
+    fieldset whose role has been overridden. */}
 <fieldset
   class:list={["segments", className]}
-  aria-required={required ? "true" : undefined}
+  role={multiple ? undefined : "radiogroup"}
+  aria-labelledby={title ? `${groupId}-legend` : undefined}
+  aria-label={title ? undefined : name || undefined}
+  aria-required={!multiple && required ? "true" : undefined}
   {...htmlAttributes}
 >
   {title && (

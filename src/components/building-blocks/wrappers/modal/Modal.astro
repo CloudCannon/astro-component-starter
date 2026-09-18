@@ -81,6 +81,8 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         link={`^${popoverId}`}
         class="modal-trigger"
         data-prop={effectiveTriggerTextProp}
+        aria-haspopup="dialog"
+        aria-expanded="false"
       />
     ) : (
       <slot name="trigger" />

@@ -49,7 +49,12 @@ export interface CardFontFamilies {
   body: string;
 }
 
-const kebab = (name: string) => name.trim().toLowerCase().replace(/\s+/g, "-");
+/**
+ * Lowercase, space-to-hyphen family slug as fontsource names its packages:
+ * `"Noto Sans JP"` → `"noto-sans-jp"`. Shared with `coverage.ts` so both agree
+ * on which `@fontsource/<slug>` package a family resolves to.
+ */
+export const kebab = (name: string) => name.trim().toLowerCase().replace(/\s+/g, "-");
 
 function familyFor(cssVariable: string): string {
   const entry = siteFonts.find((font) => font.cssVariable === cssVariable);

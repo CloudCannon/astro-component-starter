@@ -20,12 +20,8 @@
           "value": "nosniff"
         },
         {
-          "name": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
           "name": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://app.cloudcannon.com https://*.cloudcannon.com"
+          "value": "frame-ancestors 'self' https://app.cloudcannon.com https://*.cloudcannon.com; object-src 'none'; base-uri 'self'"
         },
         {
           "name": "Referrer-Policy",

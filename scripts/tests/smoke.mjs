@@ -373,6 +373,107 @@ const tests = [
     },
   },
   {
+    name: "hosted video picks the right provider player per hosted type after consent",
+    path: "/component-docs/components/building-blocks/core-elements/video/",
+    viewport: DESKTOP,
+    async run(page) {
+      // Component docs carry no consent manager, so every hosted video stays a
+      // prompt and mounts no provider element of its own.
+      const containers = page.locator("[data-hosted-video]");
+
+      await containers.first().waitFor();
+
+      assert(
+        (await page
+          .locator(
+            "[data-hosted-video] lite-youtube, [data-hosted-video] lite-vimeo, [data-hosted-video] iframe"
+          )
+          .count()) === 0,
+        "a provider player mounted before external-media permission"
+      );
+
+      const mounted = await page.evaluate(async () => {
+        // Drop the page's own examples so the test makes no provider request,
+        // then mount one container per hosted shape the component renders.
+        document.querySelectorAll("[data-hosted-video]").forEach((el) => el.remove());
+
+        Object.defineProperty(window, "siteConsent", {
+          configurable: true,
+          value: { isAllowed: () => true },
+        });
+
+        const host = document.createElement("div");
+
+        host.innerHTML = [
+          '<div data-hosted-video data-video-type="youtube" data-video-id="dQw4w9WgXcQ" data-video-title="YT" data-video-autoplay="false" data-video-loop="false"></div>',
+          '<div data-hosted-video data-video-type="vimeo" data-video-id="76979871" data-video-title="VM" data-video-autoplay="false" data-video-loop="false"></div>',
+          '<div data-hosted-video data-video-type="youtube" data-video-id="dQw4w9WgXcQ" data-video-title="YTA" data-video-autoplay="true" data-video-loop="true"></div>',
+          '<div data-hosted-video data-video-type="vimeo" data-video-id="76979871" data-video-title="VMA" data-video-autoplay="true" data-video-loop="true"></div>',
+        ].join("");
+        document.body.append(host);
+        window.dispatchEvent(new Event("site-consent-change"));
+
+        // The facade libraries load on demand, so poll until they have both
+        // defined their custom element and mounted into every container.
+        const deadline = Date.now() + 5000;
+
+        while (
+          Date.now() < deadline &&
+          ![...host.children].every((container) => container.firstElementChild)
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        const child = (index) => host.children[index].firstElementChild;
+
+        return {
+          youtubeTag: child(0)?.tagName.toLowerCase(),
+          youtubeNoCookie: child(0)?.hasAttribute("nocookie"),
+          youtubeId: child(0)?.getAttribute("videoid"),
+          youtubeParams: child(0)?.getAttribute("params"),
+          vimeoTag: child(1)?.tagName.toLowerCase(),
+          vimeoId: child(1)?.getAttribute("videoid"),
+          autoplayTag: child(2)?.tagName.toLowerCase(),
+          autoplaySrc: child(2)?.getAttribute("src"),
+          autoplayVimeoAutoload: child(3)?.hasAttribute("autoload"),
+          autoplayVimeoAutoplay: child(3)?.hasAttribute("autoplay"),
+        };
+      });
+
+      assert(
+        mounted.youtubeTag === "lite-youtube",
+        `expected a lite-youtube facade, got ${mounted.youtubeTag}`
+      );
+      assert(
+        mounted.youtubeNoCookie === true,
+        "the YouTube facade did not use privacy-enhanced (nocookie) mode"
+      );
+      assert(mounted.youtubeId === "dQw4w9WgXcQ", "the facade lost the video id");
+      assert(mounted.youtubeParams === "", "the facade params attribute is not the empty string");
+      assert(
+        mounted.vimeoTag === "lite-vimeo",
+        `expected a lite-vimeo facade, got ${mounted.vimeoTag}`
+      );
+      assert(mounted.vimeoId === "76979871", "the vimeo facade lost the video id");
+      // lite-youtube's autoload pins autoplay=0, so autoplaying YouTube cannot
+      // use the facade and mounts a lazy privacy-enhanced iframe instead.
+      assert(
+        mounted.autoplayTag === "iframe",
+        `expected autoplaying YouTube to mount an iframe, got ${mounted.autoplayTag}`
+      );
+      assert(
+        mounted.autoplaySrc?.includes("youtube-nocookie.com/embed/") &&
+          mounted.autoplaySrc.includes("autoplay=1") &&
+          mounted.autoplaySrc.includes("playlist=dQw4w9WgXcQ"),
+        `autoplay embed URL is wrong: ${mounted.autoplaySrc}`
+      );
+      assert(
+        mounted.autoplayVimeoAutoload === true && mounted.autoplayVimeoAutoplay === true,
+        "autoplaying Vimeo did not keep the facade's autoload/autoplay"
+      );
+    },
+  },
+  {
     name: "privacy settings default to strict opt-in and synchronize decisions across tabs",
     path: "/",
     viewport: DESKTOP,
@@ -1460,32 +1561,57 @@ const tests = [
       await hostedVideo.waitFor();
 
       assert(
-        (await hostedVideo.locator("iframe").count()) === 0,
-        "expected no provider iframe before external-media permission"
+        (await hostedVideo.locator("lite-youtube, lite-vimeo, iframe").count()) === 0,
+        "expected no provider player before external-media permission"
       );
       assert(
         (await hostedVideo.locator("[data-external-media-enable]").count()) === 1,
         "expected an external-media enable control"
       );
 
-      await page.route("https://www.youtube-nocookie.com/**", (route) => route.abort());
+      // Keep the run hermetic: the facade fetches provider posters, so abort
+      // every provider request instead of letting the test hit the network.
+      await page.route(/(youtube-nocookie\.com|i\.ytimg\.com|vimeo\.com|vumbnail\.com)/, (route) =>
+        route.abort()
+      );
       await page.evaluate(() => {
-        window.siteConsent = { isAllowed: () => true };
+        Object.defineProperty(window, "siteConsent", {
+          configurable: true,
+          value: { isAllowed: () => true },
+        });
         window.dispatchEvent(new Event("site-consent-change"));
       });
-      await page.waitForFunction(() =>
-        document
-          .querySelector("[data-hosted-video] iframe")
-          ?.getAttribute("src")
-          ?.includes("youtube-nocookie.com")
-      );
+      await page.waitForFunction(() => {
+        const players = document.querySelectorAll(
+          "[data-hosted-video] lite-youtube, [data-hosted-video] lite-vimeo, [data-hosted-video] iframe"
+        );
+
+        if (!players.length) return false;
+
+        // Every YouTube player is privacy-enhanced, whether it mounted as the
+        // facade or as the autoplaying iframe.
+        return (
+          [...document.querySelectorAll("[data-hosted-video] lite-youtube")].every((el) =>
+            el.hasAttribute("nocookie")
+          ) &&
+          [...document.querySelectorAll("[data-hosted-video] iframe")].every((el) =>
+            el.getAttribute("src")?.includes("youtube-nocookie.com")
+          )
+        );
+      });
 
       await page.evaluate(() => {
-        window.siteConsent = { isAllowed: () => false };
+        Object.defineProperty(window, "siteConsent", {
+          configurable: true,
+          value: { isAllowed: () => false },
+        });
         window.dispatchEvent(new Event("site-consent-change"));
       });
       await page.waitForFunction(
-        () => document.querySelector("[data-hosted-video] iframe") === null
+        () =>
+          document.querySelector(
+            "[data-hosted-video] lite-youtube, [data-hosted-video] lite-vimeo, [data-hosted-video] iframe"
+          ) === null
       );
     },
   },

@@ -131,11 +131,20 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         )}
 
         {effectiveShowIndicators && indicatorStyle === "fraction" && (
-          <div
-            class="carousel-fraction"
-            aria-live="polite"
-            aria-atomic="true"
-          />
+          /* The visible fraction is aria-hidden; a dedicated announcer (always
+             `polite`, so screen readers register it at load) speaks only
+             gesture-driven changes. Autoplay writes nothing to it. */
+          <>
+            <div
+              class="carousel-fraction"
+              aria-hidden="true"
+            />
+            <span
+              class="carousel-fraction-announcer visually-hidden"
+              aria-live="polite"
+              aria-atomic="true"
+            />
+          </>
         )}
 
         {effectiveShowIndicators && indicatorStyle === "dots" && <div class="indicators" />}

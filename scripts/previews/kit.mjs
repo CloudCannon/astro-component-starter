@@ -7,7 +7,7 @@
  * diffs to catch drift. Screenshots (`screenshot.mjs`) are an authoring reference
  * only, never an input.
  *
- * The five rules that keep 55 previews looking like one family:
+ * The five rules that keep 84 previews looking like one family:
  *
  *   1. NINE COLOUR ROLES, no raw hex — see the glossary below. Re-skin and
  *      dark-mode the whole set from one place.
@@ -295,54 +295,9 @@ export function bounds(els) {
   return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0 };
 }
 
-/**
- * Stack groups vertically from (x, y), each offset by the previous group's
- * height plus `gap`. Groups keep their own internal x positions.
- */
-export function stackY(x, y, gap, groups) {
-  const out = [];
-  let cy = y;
-
-  for (const group of groups) {
-    const g = flatten(group);
-
-    if (!g.length) continue;
-    const b = bounds(g);
-
-    out.push(at(x - b.x0, cy - b.y0, g));
-    cy += b.h + gap;
-  }
-  return out;
-}
-
-/** Lay groups out horizontally from (x, y), top-aligned. */
-export function rowX(x, y, gap, groups) {
-  const out = [];
-  let cx = x;
-
-  for (const group of groups) {
-    const g = flatten(group);
-
-    if (!g.length) continue;
-    const b = bounds(g);
-
-    out.push(at(cx - b.x0, y - b.y0, g));
-    cx += b.w + gap;
-  }
-  return out;
-}
-
 /** Even columns: `columns(x, 4, 293, i => …)` places group i at x + i * pitch. */
 export function columns(x, count, pitch, fn) {
   return repeat(count, (i) => at(x + i * pitch, 0, fn(i)));
-}
-
-/** Centre a group horizontally on `cx` (leaves y alone). */
-export function centerX(cx, els) {
-  const g = flatten(els);
-  const b = bounds(g);
-
-  return b ? at(cx - (b.x0 + b.x1) / 2, 0, g) : g;
 }
 
 /**

@@ -9,7 +9,7 @@
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
  *      (e.g. Carousel / ImageCarousel Embla setup, Modal focus trap,
- *      Video's lite-youtube / lite-vimeo custom elements)
+ *      Video's consent-gated hosted-player hydration)
  *      never initialise in the editor, so we initialise them here instead.
  *
  * Logs editor mutations to the console in dev; silent in production.

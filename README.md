@@ -1,6 +1,6 @@
 # Astro Component Starter
 
-A starter template with 55 Astro components, each built for visual editing in
+A starter template with 84 Astro components, each built for visual editing in
 [CloudCannon](https://cloudcannon.com/). You clone it, you own it. Every component is your
 source code to modify, extend, or delete.
 
@@ -144,12 +144,13 @@ For the blanket strict opt-in consent workflow, see
 
 ## Prerequisites
 
-- **Node.js 22.12 or later.** The repo pins `24.18.0` in `.nvmrc`, which is the version CI uses.
+- **Node.js `^22.12.0 || ^24.0.0 || ^26.0.0`** (see `engines` in `package.json`). The repo pins
+  `24.18.0` in `.nvmrc`, which is the version CI uses.
 
 ## Updating Dependencies
 
 Plain `npm install` is all you need when adding, removing or updating packages. The Linux and
-Windows native binaries CI needs (`sharp`, `pagefind`, `rollup`) are declared in
+Windows native binaries CI needs (`sharp`, `pagefind`) are declared in
 `optionalDependencies`, so the lockfile keeps them whatever platform you install on.
 
 If CI reports that `package-lock.json` is out of sync, regenerate it for every target platform

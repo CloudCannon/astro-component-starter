@@ -242,6 +242,22 @@ const pathname = Astro.url.pathname;
     const allMobileNavs = document.querySelectorAll<HTMLElement>(".mobile");
     const overlaysContainer = getOrCreateOverlaysContainer();
 
+    // `trapFocus` keeps Tab in the panel, but the page behind it stays in the
+    // accessibility tree. `inert` removes that content entirely while a panel
+    // is open. The panel itself lives in the overlays container, which must
+    // stay interactive.
+    function syncBackgroundInert() {
+      const isOpen = Boolean(document.querySelector('.mobile[aria-hidden="false"]'));
+
+      for (const child of Array.from(document.body.children)) {
+        if (child.id === "overlays-container") continue;
+        // A popover or dialog already open (modal, search) must stay usable.
+        if (child.matches("[popover]:popover-open, dialog[open]")) continue;
+
+        child.toggleAttribute("inert", isOpen);
+      }
+    }
+
     allMobileNavs.forEach((nav) => {
       if (nav.dataset.mobileInitialized === "true") return;
       nav.dataset.mobileInitialized = "true";
@@ -260,6 +276,7 @@ const pathname = Astro.url.pathname;
           nav.setAttribute("aria-hidden", "false");
           nav.style.transform = "translateX(0)";
           document.body.style.overflow = "hidden";
+          syncBackgroundInert();
           // Into the panel, not the close affordance — that is a `<label>` and
           // takes no focus. The panel is also moved into the overlays container,
           // outside the checkbox's tab sequence, so place focus explicitly.
@@ -268,6 +285,8 @@ const pathname = Astro.url.pathname;
           nav.setAttribute("aria-hidden", "true");
           nav.style.transform = "translateX(-100%)";
           document.body.style.overflow = "";
+          // Drop `inert` before focusing: the checkbox is part of the page.
+          syncBackgroundInert();
           // Focusing the checkbox draws the ring on the hamburger label.
           toggle?.focus();
         }
@@ -398,6 +417,16 @@ const pathname = Astro.url.pathname;
     .nav-toggle:focus-visible ~ .nav-hamburger,
     .nav-toggle:focus-visible ~ .mobile .mobile-close {
       outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+    }
+
+    /* MainNav hides the hamburger label at this width. Hide the checkbox in the
+       same container query, or Tab would land on a control whose only label is
+       off-screen. Mobile keeps it `visually-hidden` (focusable), so the CSS-only
+       toggle and the off-canvas panel are unaffected. */
+    @container (width >= 768px) {
+      .nav-toggle {
+        display: none;
+      }
     }
 
     .mobile-button {

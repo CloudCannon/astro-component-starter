@@ -1,4 +1,6 @@
 ---
+import { slugifyLabel } from "@component-utils/slugify";
+
 const { configData } = Astro.props;
 
 function parseConfigProperties(configData: any): PropertyMeta[] {
@@ -246,13 +248,6 @@ type PropertyGroup = {
   properties: PropertyMeta[];
 };
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 /**
  * Mirror CloudCannon's `groups` block so page-section shell props sit in a
  * collapsed "Section settings" disclosure instead of mixing with content.
@@ -420,7 +415,7 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
         return (
           <details
             class="property-group"
-            id={group.heading ? slugify(group.heading) : undefined}
+            id={group.heading ? slugifyLabel(group.heading) : undefined}
           >
             <summary>
               <span class="property-group-text">

@@ -9,7 +9,7 @@ export default {
   // are graded as external, and `src/data/seo.json` says the same thing.
   siteUrl: "https://example.com",
   offline: true,
-  // `npm run test:render` leaves a page in dist/ that renders all 79 structure
+  // `npm run test:render` leaves a page in dist/ that renders all 84 structure
   // defaults at once. Grading a dist left over from that run manufactures five
   // duplicate-id errors and eight placeholder-link warnings out of a fixture
   // that never ships.

@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
@@ -22,17 +25,17 @@ jobs:
             os: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           cache: npm
           node-version-file: .nvmrc
 
       - name: Verify lockfile is in sync
         run: |
-          if ! npm ci --dry-run > /dev/null 2>&1; then
+          if ! npm run deps:check > /dev/null 2>&1; then
             echo "::error::package-lock.json is out of sync with package.json."
             echo "This job installs the Linux/Windows optional dependencies (sharp, pagefind, rollup native binaries), so they have to be in the lockfile."
             echo "Run 'npm run deps:sync' locally, commit the updated package-lock.json, and push again."
@@ -48,6 +51,28 @@ jobs:
       - name: Unit tests
         run: npm run test:unit
 
+  # Blocking on purpose: the 2.0 release re-resolved the lockfile to clear eight
+  # advisories by hand, so a re-acquisition has to turn this job red rather than
+  # scroll past in a log.
+  audit:
+    name: Audit dependencies
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Fail on high or critical advisories
+        run: npm audit --audit-level=high
+
   build:
     name: Build all components
     runs-on: ubuntu-24.04
@@ -56,10 +81,10 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           cache: npm
           node-version-file: .nvmrc
@@ -69,6 +94,35 @@ jobs:
 
       - name: Render every component's structure defaults
         run: npm run test:render
+
+  # Proves the per-page CSS pruning in scripts/build/pruneCss.mjs dropped nothing
+  # that renders: the baseline and the pruned build are served side by side and
+  # every computed style compared. It builds the site twice, so it gets its own
+  # job rather than slowing the lint or smoke jobs down.
+  css-parity:
+    name: CSS pruning parity
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          cache: npm
+          node-version-file: .nvmrc
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright-core install --with-deps chromium
+
+      - name: Compare unpruned and pruned builds
+        run: npm run test:css-parity
 
   # Interactive smoke tests against the full library build (the component-docs
   # pages render a live example of every component). This script locates Chrome
@@ -81,10 +135,10 @@ jobs:
         shell: bash
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 1
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           cache: npm
           node-version-file: .nvmrc
@@ -97,6 +151,9 @@ jobs:
 
       - name: Build site with component library
         run: npm run build:with-library
+
+      - name: Check for dead page-section margins
+        run: npm run test:flow-margins
 
       - name: Smoke-test interactive components
         run: npm run test:smoke

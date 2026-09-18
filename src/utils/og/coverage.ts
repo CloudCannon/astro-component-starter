@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
+import { kebab } from "./fonts.js";
 
 /**
  * Which codepoints the registered card fonts can actually draw.
@@ -23,8 +24,6 @@ interface Range {
   from: number;
   to: number;
 }
-
-const kebab = (name: string) => name.trim().toLowerCase().replace(/\s+/g, "-");
 
 function parseUnicodeRange(value: string): Range[] {
   const ranges: Range[] = [];

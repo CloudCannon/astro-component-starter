@@ -4,6 +4,7 @@ import ComponentSlots from "@component-docs/components/ComponentSlots/index.astr
 import ComponentViewer from "@component-docs/components/ComponentViewer/index.astro";
 import LibraryLayout from "@component-docs/layouts/LibraryLayout.astro";
 import { formatDisplayName } from "@component-docs/shared/componentIndex";
+import { slugifyLabel } from "@component-utils/slugify";
 import MarkdownIt from "markdown-it";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -60,13 +61,6 @@ if (!primaryExample && configData?.value) {
 
 const frontmatterExamples = frontmatter.examples || [];
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
 let processedExamples: {
   title: string;
   id: string;
@@ -93,7 +87,7 @@ if (frontmatterExamples.length > 0) {
 
     return {
       title: exampleConfig.title,
-      id: slugify(exampleConfig.title),
+      id: slugifyLabel(exampleConfig.title),
       examples: sortedExamples,
       size: exampleConfig.size || defaultExampleSize,
     };
@@ -120,7 +114,7 @@ if (frontmatterExamples.length > 0) {
 
     return {
       title: exampleTitle,
-      id: slugify(exampleTitle),
+      id: slugifyLabel(exampleTitle),
       examples: [example],
       size: defaultExampleSize,
     };

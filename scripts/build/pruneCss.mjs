@@ -174,7 +174,10 @@ export default function pruneCss({
             if (!scriptCache.has(src)) {
               try {
                 scriptCache.set(src, await readFile(join(root, src.split("/").join(sep)), "utf8"));
-              } catch {
+              } catch (error) {
+                logger.warn(
+                  `could not read linked script ${src} in ${relative(root, page)}: ${error.message} - its classes will not be counted`
+                );
                 scriptCache.set(src, "");
               }
             }

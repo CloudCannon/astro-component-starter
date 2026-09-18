@@ -44,6 +44,14 @@ export function setupTabs(root: HTMLElement): void {
 
   if (!tabs.length) return;
 
+  // The Content Selector splits its tabs across one tablist per item, so a
+  // screen reader would compute "1 of 1" per tab; the explicit set size and
+  // position keep the announcement "2 of 5".
+  tabs.forEach((tab, index) => {
+    tab.setAttribute("aria-setsize", String(tabs.length));
+    tab.setAttribute("aria-posinset", String(index + 1));
+  });
+
   const selectedTab = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") ?? tabs[0];
 
   activateTab(root, selectedTab);

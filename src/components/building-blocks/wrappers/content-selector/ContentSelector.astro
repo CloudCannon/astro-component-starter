@@ -44,9 +44,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
   <Tabs
     class:list={["content-selector-items", `nav-${navigationPosition}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
-    role="tablist"
-    aria-label={label || "Content sections"}
-    aria-orientation={navigationPosition === "start" ? "vertical" : "horizontal"}
     {...arrayDataAttributes}
   >
     <slot>
@@ -61,6 +58,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           selected={index === 0}
           groupName={groupName}
           navigationPosition={navigationPosition}
+          tablistLabel={label}
           useDefaultEditableBinding={!!effectiveChildrenProp}
           data-id="building-blocks/wrappers/content-selector/content-selector-panel"
           data-editable="array-item"
@@ -79,13 +77,14 @@ if (!_component && !hasItems && !hasSlotContent) return;
       > .content-selector-items {
         width: 100%;
 
-        &:not(:has(.content-selector-item > .content-selector-tab[aria-selected="true"]))
+        &:not(:has(.content-selector-item .content-selector-tab[aria-selected="true"]))
           .content-selector-item:first-of-type
+          > .content-selector-tablist
           > .content-selector-tab::before {
           background: var(--color-border-strong);
         }
 
-        &:not(:has(.content-selector-item > .content-selector-tab[aria-selected="true"]))
+        &:not(:has(.content-selector-item .content-selector-tab[aria-selected="true"]))
           .content-selector-item:first-of-type
           > .content-selector-panel {
           display: block;
@@ -103,9 +102,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
              free; past the 12th tab a tab falls back to auto placement. */
           grid-template-rows: repeat(12, auto) 1fr;
 
+          .content-selector-tablist {
+            grid-column: 1;
+          }
+
           .content-selector-tab {
             border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
-            grid-column: 1;
 
             &::before {
               inset-block: 0;
@@ -118,51 +120,51 @@ if (!_component && !hasItems && !hasSlotContent) return;
              its position in the DOM. Read off `:nth-of-type` rather than a
              prop, so a reorder or a single-item re-render can't leave a stale
              index behind. */
-          .content-selector-item:nth-of-type(1) > .content-selector-tab {
+          .content-selector-item:nth-of-type(1) > .content-selector-tablist {
             grid-row: 1;
           }
 
-          .content-selector-item:nth-of-type(2) > .content-selector-tab {
+          .content-selector-item:nth-of-type(2) > .content-selector-tablist {
             grid-row: 2;
           }
 
-          .content-selector-item:nth-of-type(3) > .content-selector-tab {
+          .content-selector-item:nth-of-type(3) > .content-selector-tablist {
             grid-row: 3;
           }
 
-          .content-selector-item:nth-of-type(4) > .content-selector-tab {
+          .content-selector-item:nth-of-type(4) > .content-selector-tablist {
             grid-row: 4;
           }
 
-          .content-selector-item:nth-of-type(5) > .content-selector-tab {
+          .content-selector-item:nth-of-type(5) > .content-selector-tablist {
             grid-row: 5;
           }
 
-          .content-selector-item:nth-of-type(6) > .content-selector-tab {
+          .content-selector-item:nth-of-type(6) > .content-selector-tablist {
             grid-row: 6;
           }
 
-          .content-selector-item:nth-of-type(7) > .content-selector-tab {
+          .content-selector-item:nth-of-type(7) > .content-selector-tablist {
             grid-row: 7;
           }
 
-          .content-selector-item:nth-of-type(8) > .content-selector-tab {
+          .content-selector-item:nth-of-type(8) > .content-selector-tablist {
             grid-row: 8;
           }
 
-          .content-selector-item:nth-of-type(9) > .content-selector-tab {
+          .content-selector-item:nth-of-type(9) > .content-selector-tablist {
             grid-row: 9;
           }
 
-          .content-selector-item:nth-of-type(10) > .content-selector-tab {
+          .content-selector-item:nth-of-type(10) > .content-selector-tablist {
             grid-row: 10;
           }
 
-          .content-selector-item:nth-of-type(11) > .content-selector-tab {
+          .content-selector-item:nth-of-type(11) > .content-selector-tablist {
             grid-row: 11;
           }
 
-          .content-selector-item:nth-of-type(12) > .content-selector-tab {
+          .content-selector-item:nth-of-type(12) > .content-selector-tablist {
             grid-row: 12;
           }
 
@@ -202,58 +204,60 @@ if (!_component && !hasItems && !hasSlotContent) return;
             width: 100cqi;
           }
 
-          .content-selector-item:nth-of-type(1) > .content-selector-tab {
+          .content-selector-item:nth-of-type(1) > .content-selector-tablist {
             grid-column: 1;
           }
 
-          .content-selector-item:nth-of-type(2) > .content-selector-tab {
+          .content-selector-item:nth-of-type(2) > .content-selector-tablist {
             grid-column: 2;
           }
 
-          .content-selector-item:nth-of-type(3) > .content-selector-tab {
+          .content-selector-item:nth-of-type(3) > .content-selector-tablist {
             grid-column: 3;
           }
 
-          .content-selector-item:nth-of-type(4) > .content-selector-tab {
+          .content-selector-item:nth-of-type(4) > .content-selector-tablist {
             grid-column: 4;
           }
 
-          .content-selector-item:nth-of-type(5) > .content-selector-tab {
+          .content-selector-item:nth-of-type(5) > .content-selector-tablist {
             grid-column: 5;
           }
 
-          .content-selector-item:nth-of-type(6) > .content-selector-tab {
+          .content-selector-item:nth-of-type(6) > .content-selector-tablist {
             grid-column: 6;
           }
 
-          .content-selector-item:nth-of-type(7) > .content-selector-tab {
+          .content-selector-item:nth-of-type(7) > .content-selector-tablist {
             grid-column: 7;
           }
 
-          .content-selector-item:nth-of-type(8) > .content-selector-tab {
+          .content-selector-item:nth-of-type(8) > .content-selector-tablist {
             grid-column: 8;
           }
 
-          .content-selector-item:nth-of-type(9) > .content-selector-tab {
+          .content-selector-item:nth-of-type(9) > .content-selector-tablist {
             grid-column: 9;
           }
 
-          .content-selector-item:nth-of-type(10) > .content-selector-tab {
+          .content-selector-item:nth-of-type(10) > .content-selector-tablist {
             grid-column: 10;
           }
 
-          .content-selector-item:nth-of-type(11) > .content-selector-tab {
+          .content-selector-item:nth-of-type(11) > .content-selector-tablist {
             grid-column: 11;
           }
 
-          .content-selector-item:nth-of-type(12) > .content-selector-tab {
+          .content-selector-item:nth-of-type(12) > .content-selector-tablist {
             grid-column: 12;
           }
 
-          .content-selector-tab {
+          .content-selector-tablist {
             grid-row: 1;
             scroll-snap-align: start;
+          }
 
+          .content-selector-tab {
             &::before {
               background: var(--color-bg-muted);
               height: var(--content-selector-border-width);

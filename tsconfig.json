@@ -37,5 +37,5 @@
     }
   },
   "include": [".astro/types.d.ts", "src/env.d.ts", "**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist", ".css-baseline"]
 }

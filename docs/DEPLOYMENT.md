@@ -66,7 +66,7 @@ developers' own npm configs — suppresses lifecycle hooks while leaving an expl
 `/search/` renders, it just never returns a result.
 
 Pagefind ships platform binaries as optional dependencies, so `@pagefind/linux-x64` is pinned
-in `optionalDependencies` alongside the equivalent `sharp` and `rollup` packages — which is what
+in `optionalDependencies` alongside the equivalent `sharp` binary packages — which is what
 keeps the Linux rows in `package-lock.json` when a dependency change is installed on macOS.
 `npm run deps:sync` re-resolves the lockfile for Linux/x64 first and then installs from it; reach
 for it when CI reports the lockfile out of sync.
@@ -85,8 +85,9 @@ For a very large site, `shareImageGeneration` in `src/data/seo.json` (**Share ca
 - `npm run build && npm run preview` — production build with search indexed.
 - Confirm `src/data/seo.json` has your name, description, and logo, and that
   `src/data/mainNav.json` and `footer.json` don't still link to `/component-docs/`.
-- Edit `public/llms.txt` so it lists _your_ pages, not the starter's Home / Why / Get started /
-  Examples / Blog.
+- `/llms.txt` is generated at build time from your content collections by
+  `src/pages/llms.txt.ts`, so it already lists _your_ pages and posts (skipping `noindex` pages) —
+  nothing to hand-edit.
 - Replace `src/content/pages/privacy.md`, remove its
   `starterPrivacyPolicyPlaceholder: true` flag, and confirm the configured policy URL resolves.
 - If analytics is enabled, paste the site-specific Plausible `pa-….js` URL into the Analytics

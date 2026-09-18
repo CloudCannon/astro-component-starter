@@ -54,6 +54,10 @@ const tagKeys = new Set<string>([
   "popovertargetaction",
   // Toggle-button state must sit on the real <button> to mean anything.
   "aria-pressed",
+  // Dialog trigger state: `aria-expanded` is server-rendered false and flipped
+  // by modal/setup.ts; `aria-haspopup` announces what opens.
+  "aria-haspopup",
+  "aria-expanded",
 ]);
 
 if (Tag === "a" && link) {

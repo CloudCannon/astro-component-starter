@@ -89,7 +89,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
 >
   <script
     type="application/ld+json"
-    set:html={JSON.stringify(breadcrumbJsonLd)}
+    set:html={JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c")}
   ></script>
   <CustomSection
     maxContentWidth={showToc ? "2xl" : "xl"}

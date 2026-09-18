@@ -15,7 +15,7 @@ What makes this starter different from a typical Astro project is that every com
 
 ## Run it locally
 
-The project requires Node.js 24+ (specified in `.nvmrc`).
+The project requires Node.js `^22.12.0 || ^24.0.0 || ^26.0.0` (the `engines` range in `package.json`). The `.nvmrc` pins `24.18.0`, which is what CI uses.
 
 To create a new project:
 
@@ -142,7 +142,7 @@ Here's a quick map of where things live:
 
 | Directory               | What's there                                                    |
 | ----------------------- | --------------------------------------------------------------- |
-| `src/components/`       | All 80+ components (building blocks, page sections, navigation) |
+| `src/components/`       | All 84 components (building blocks, page sections, navigation)  |
 | `src/content/pages/`    | Your site's pages as Markdown with `pageSections` arrays        |
 | `src/content/blog/`     | Blog posts in MDX                                               |
 | `src/styles/variables/` | Design tokens: colors, fonts, spacing, widths                   |

@@ -115,7 +115,7 @@ const isInfraProp = (key) => INFRA_PROPS.has(key) || key.startsWith("data-");
 
 // Wiring props specific to the fixed set of *child-item* components a parent
 // wrapper passes state into — `isOpen`/`accordionName` (AccordionItem),
-// `checked`/`groupName` (ContentSelectorPanel), `imageAspectRatio`
+// `checked`/`groupName`/`tablistLabel` (ContentSelectorPanel), `imageAspectRatio`
 // (StepsItem), `showAnnualPricing` (PricingTiersItem), `aspectRatio`/
 // `lightbox` (CardGridItem, GalleryItem). These names collide
 // with genuine content props elsewhere
@@ -131,6 +131,7 @@ const CHILD_WIRING_PROPS = new Set([
   "accordionName",
   "checked",
   "groupName",
+  "tablistLabel",
   "imageAspectRatio",
   "aspectRatio",
   "lightbox",

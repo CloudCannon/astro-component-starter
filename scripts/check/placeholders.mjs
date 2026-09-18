@@ -29,22 +29,36 @@ const PLACEHOLDER_URL = "https://example.com";
 const STARTER_NAME = "Astro Component Starter";
 const STARTER_LOGO = "acs-logo";
 
+/**
+ * A missing file is tolerated — some checks probe optional paths — but one that
+ * exists and cannot be read or parsed must fail loudly. Returning null for both
+ * skipped every downstream check, so a malformed data file printed success.
+ */
+function fatal(relativePath, reason) {
+  console.error(`✖ Cannot read ${relativePath}: ${reason}`);
+  console.error(
+    "  Fix the file or remove it; a present-but-broken input is not a placeholder warning."
+  );
+  process.exit(1);
+}
+
 function read(relativePath) {
   try {
     return readFileSync(join(root, relativePath), "utf8");
-  } catch {
-    return null;
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    fatal(relativePath, error.message);
   }
 }
 
 function readJson(relativePath) {
   const raw = read(relativePath);
 
-  if (!raw) return null;
+  if (raw === null) return null;
   try {
     return JSON.parse(raw);
-  } catch {
-    return null;
+  } catch (error) {
+    fatal(relativePath, error.message);
   }
 }
 

@@ -132,21 +132,12 @@ export class ConsentManager {
     this.notify({ category, record: this.record });
   }
 
-  acceptAnalytics(): void {
-    this.setDecision("analytics", "granted");
-  }
-
   acceptAll(): void {
     this.setOptionalDecisions("granted");
   }
 
   rejectAll(): void {
     this.setOptionalDecisions("denied");
-  }
-
-  /** @deprecated Use rejectAll() to match the visitor-facing action. */
-  rejectOptional(): void {
-    this.rejectAll();
   }
 
   subscribe(subscriber: Subscriber): () => void {

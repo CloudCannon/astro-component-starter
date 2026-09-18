@@ -207,7 +207,6 @@ export default [
       ".local/**",
       ".astro/**",
       "**/*.min.js",
-      "packages/*/dist/**",
       "**/.astro/**",
       "**/content.d.ts",
       "**/types.d.ts",

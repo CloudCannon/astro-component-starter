@@ -22,32 +22,85 @@ function hydrateHostedVideos(root: ParentNode = document): void {
 
     const autoplay = container.dataset.videoAutoplay === "true";
     const loop = container.dataset.videoLoop === "true";
-    const params = new URLSearchParams();
 
+    mountHostedVideo(container, type, id, container.dataset.videoTitle || "Video", autoplay, loop);
+    container.setAttribute("data-hosted-video-mounted", "");
+  });
+}
+
+const facadeLoaded = { vimeo: false, youtube: false };
+
+/** A facade library registers its custom element on import, so load one only when a player needs it. */
+function loadFacade(facade: "vimeo" | "youtube"): void {
+  if (facadeLoaded[facade]) return;
+  facadeLoaded[facade] = true;
+  void (
+    facade === "vimeo"
+      ? import("@choctawnationofoklahoma/lite-vimeo")
+      : import("@justinribeiro/lite-youtube")
+  ).catch(() => {
+    // A failed fetch (offline, dropped chunk) must not permanently wedge the
+    // player: reset so the next mount retries and upgrades the element.
+    facadeLoaded[facade] = false;
+  });
+}
+
+function mountHostedVideo(
+  container: HTMLElement,
+  type: "youtube" | "vimeo",
+  id: string,
+  title: string,
+  autoplay: boolean,
+  loop: boolean
+): void {
+  if (type === "vimeo") {
+    loadFacade("vimeo");
+    const player = document.createElement("lite-vimeo");
+
+    player.setAttribute("videoid", id);
+    player.setAttribute("videotitle", title);
     if (autoplay) {
-      params.set("autoplay", "1");
-      params.set("mute", "1");
-      params.set("playsinline", "1");
+      player.setAttribute("autoload", "");
+      player.setAttribute("autoplay", "autoplay");
     }
-    if (loop && type === "youtube") {
+    if (loop) player.setAttribute("loop", "");
+    container.replaceChildren(player);
+    return;
+  }
+
+  if (autoplay) {
+    // lite-youtube's autoload path pins autoplay=0 in the embed URL, and
+    // YouTube honours the first of a duplicated param, so an autoplaying
+    // YouTube video mounts a plain lazy iframe instead of the facade.
+    const params = new URLSearchParams({ autoplay: "1", mute: "1", playsinline: "1" });
+
+    if (loop) {
       params.set("loop", "1");
       params.set("playlist", id);
     }
-    if (loop && type === "vimeo") params.set("loop", "1");
 
     const iframe = document.createElement("iframe");
 
-    iframe.src =
-      type === "youtube"
-        ? `https://www.youtube-nocookie.com/embed/${id}?${params}`
-        : `https://player.vimeo.com/video/${id}?${params}`;
-    iframe.title = container.dataset.videoTitle || "Video";
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?${params}`;
+    iframe.title = title;
+    iframe.loading = "lazy";
     iframe.allow = "autoplay; fullscreen; picture-in-picture";
     iframe.allowFullscreen = true;
     iframe.referrerPolicy = "strict-origin-when-cross-origin";
     container.replaceChildren(iframe);
-    container.setAttribute("data-hosted-video-mounted", "");
-  });
+    return;
+  }
+
+  loadFacade("youtube");
+  const player = document.createElement("lite-youtube");
+
+  player.setAttribute("videoid", id);
+  player.setAttribute("videotitle", title);
+  player.setAttribute("nocookie", "");
+  // lite-youtube interpolates `params` into the embed URL unconditionally, so
+  // an absent attribute renders the literal string "null" in the query.
+  player.setAttribute("params", loop ? `loop=1&playlist=${id}` : "");
+  container.replaceChildren(player);
 }
 
 function resetHostedVideos(root: ParentNode = document): void {

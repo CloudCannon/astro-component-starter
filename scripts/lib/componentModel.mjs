@@ -56,10 +56,7 @@ export function parseDestructure(source) {
 
   // Strip JS comments — destructures carry doc comments (`/** ... */`) whose
   // punctuation (backticks, `=`, `:`) would otherwise corrupt key extraction.
-  const inner = source
-    .slice(openIdx + 1, closeIdx)
-    .replace(/\/\*[\s\S]*?\*\//g, "")
-    .replace(/\/\/[^\n]*/g, "");
+  const inner = stripComments(source.slice(openIdx + 1, closeIdx));
   const parts = splitTopLevel(inner);
 
   const props = new Set();
@@ -76,7 +73,7 @@ export function parseDestructure(source) {
     }
     // Key is the text before the first top-level `:` (rename) or `=` (default).
     let key = part;
-    const cut = firstTopLevelDelimiter(part);
+    const cut = firstTopLevel(part, ":=");
 
     if (cut !== -1) key = part.slice(0, cut);
     key = key.trim().replace(/^['"]|['"]$/g, "");
@@ -85,7 +82,7 @@ export function parseDestructure(source) {
 
     // A rename (`class: className = "x"`) puts the default after a second `=`.
     const rest = cut === -1 ? "" : part.slice(cut);
-    const eq = rest.startsWith("=") ? 0 : firstTopLevelDelimiter(rest.slice(1)) + 1;
+    const eq = rest.startsWith("=") ? 0 : firstTopLevel(rest.slice(1), ":=") + 1;
     const value = rest.startsWith("=")
       ? rest.slice(1)
       : eq > 0 && rest[eq] === "="
@@ -98,8 +95,11 @@ export function parseDestructure(source) {
   return { props, hasRest, defaults };
 }
 
-/** Split a destructure body on top-level commas (ignoring nested brackets/strings). */
-function splitTopLevel(text) {
+/** Split a destructure body on top-level `sep` (default `,`), ignoring nested
+ *  brackets/strings. Shared with `scripts/cms/lint-roots.mjs`. A separate .ts
+ *  copy lives in `src/component-docs/shared/slotDerivation.ts` (the Astro side
+ *  cannot import this .mjs) — keep the two in step. */
+export function splitTopLevel(text, sep = ",") {
   const out = [];
   let depth = 0;
   let quote = null;
@@ -115,7 +115,7 @@ function splitTopLevel(text) {
     if (ch === '"' || ch === "'" || ch === "`") quote = ch;
     else if (ch === "{" || ch === "[" || ch === "(") depth += 1;
     else if (ch === "}" || ch === "]" || ch === ")") depth -= 1;
-    else if (ch === "," && depth === 0) {
+    else if (ch === sep && depth === 0) {
       out.push(text.slice(start, i));
       start = i + 1;
     }
@@ -124,24 +124,34 @@ function splitTopLevel(text) {
   return out;
 }
 
-/** Index of the first top-level `:` or `=` in a single destructure entry, or -1. */
-function firstTopLevelDelimiter(part) {
+/** Index of the first top-level character from `chars` in a single destructure
+ *  entry, or -1. */
+export function firstTopLevel(text, chars) {
   let depth = 0;
   let quote = null;
 
-  for (let i = 0; i < part.length; i++) {
-    const ch = part[i];
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
 
     if (quote) {
-      if (ch === quote && part[i - 1] !== "\\") quote = null;
+      if (ch === quote && text[i - 1] !== "\\") quote = null;
       continue;
     }
     if (ch === '"' || ch === "'" || ch === "`") quote = ch;
     else if (ch === "{" || ch === "[" || ch === "(") depth += 1;
     else if (ch === "}" || ch === "]" || ch === ")") depth -= 1;
-    else if (depth === 0 && (ch === ":" || ch === "=")) return i;
+    else if (depth === 0 && chars.includes(ch)) return i;
   }
   return -1;
+}
+
+/** Drop block and line comments from a destructure body. Applied before
+ *  splitting: prose is not code — an apostrophe in a comment
+ *  ("VideoModal's poster") would otherwise open a string literal that never
+ *  closes and swallow every prop after it. Mirrors the same strip in
+ *  `src/component-docs/shared/slotDerivation.ts`. */
+export function stripComments(source) {
+  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
 }
 
 // Shared helpers

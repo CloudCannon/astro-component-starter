@@ -6,6 +6,7 @@ import Segments from "@forms/segments/Segments.astro";
 import { Code } from "astro:components";
 import "./styles.css";
 import { componentKeyFromPath } from "@component-utils/componentKey.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
 import { formatBlocksAstro } from "./utils/astroFormatter";
 import { getBodyPadding } from "./utils/spacing";
 import { formatBlocksYaml } from "./utils/yamlFormatter";
@@ -21,10 +22,7 @@ Object.entries(componentImports).forEach(([path, obj]) => {
   components[componentName] = (obj as any).default;
 });
 
-const viewerId = title
-  .toLowerCase()
-  .replace(/[^a-z0-9]+/g, "-")
-  .replace(/^-|-$/g, "");
+const viewerId = slugifyLabel(title);
 
 const formattedCodeCache = await Promise.all(
   component_examples.map(async (example: any) => {

@@ -30,6 +30,9 @@ const { class: className, ...htmlAttributes } = Astro.props;
   const darkQuery = matchMedia("(prefers-color-scheme: dark)");
   let systemThemeBound = false;
 
+  // Kept in step with the inline pre-paint copy in ThemeToggleScript.astro —
+  // that script runs before paint and cannot import, so the two implementations
+  // must agree on flipTheme, this selector, and data-default-theme handling.
   const themedSelector =
     '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])';
 

@@ -65,7 +65,10 @@ function stripComments(str: string): string {
 }
 
 /** Split a string on a single-character separator, ignoring separators that
- *  appear inside (), [], {}, or string/template literals. */
+ *  appear inside (), [], {}, or string/template literals. Mirrors
+ *  `splitTopLevel` in `scripts/lib/componentModel.mjs` — a deliberate .ts copy,
+ *  since this module is bundled by Astro and cannot import the scripts/ .mjs.
+ *  Keep the two in step. */
 function splitTopLevel(str: string, sep: string): string[] {
   const result: string[] = [];
   let depth = 0;

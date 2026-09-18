@@ -212,6 +212,19 @@ if (nextConfig !== config) {
   record(`${configPath}   site → ${siteUrl}`);
 }
 
+// siteready.config.js: its `siteUrl` must match what seo.json now carries, or
+// the QA run grades the site's own absolute links as external.
+const sitereadyPath = "siteready.config.js";
+const siteready = readFileSync(abs(sitereadyPath), "utf8");
+const nextSiteready = siteready
+  .replace(/^[ \t]*\/\/ TODO: replace with the real domain\.[^\n]*\n[ \t]*\/\/[^\n]*\n/m, "")
+  .replace(/siteUrl: "https:\/\/example\.com",/, `siteUrl: ${yaml(siteUrl)},`);
+
+if (nextSiteready !== siteready) {
+  writeText(sitereadyPath, nextSiteready);
+  record(`${sitereadyPath}   siteUrl → ${siteUrl}`);
+}
+
 // SEO defaults.
 const seo = readJson("src/data/seo.json");
 

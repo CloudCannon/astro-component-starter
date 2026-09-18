@@ -27,7 +27,12 @@
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { glob } from "glob";
-import { parseDestructure } from "../lib/componentModel.mjs";
+import {
+  firstTopLevel,
+  parseDestructure,
+  splitTopLevel,
+  stripComments,
+} from "../lib/componentModel.mjs";
 
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 
@@ -213,10 +218,7 @@ function propDerivedNames(source) {
       }
     }
 
-    const body = source
-      .slice(open + 1, close)
-      .replace(/\/\*[\s\S]*?\*\//g, "")
-      .replace(/\/\/[^\n]*/g, "");
+    const body = stripComments(source.slice(open + 1, close));
 
     for (const part of splitTopLevel(body)) {
       const trimmed = part.trim();
@@ -255,54 +257,6 @@ function stripStrings(text) {
     )
     .replace(/"(?:[^"\\]|\\.)*"/g, " ")
     .replace(/'(?:[^'\\]|\\.)*'/g, " ");
-}
-
-/** Split on top-level commas, ignoring nested brackets and strings. */
-function splitTopLevel(text) {
-  const out = [];
-  let depth = 0;
-  let quote = null;
-  let start = 0;
-
-  for (let i = 0; i < text.length; i += 1) {
-    const char = text[i];
-
-    if (quote) {
-      if (char === quote) quote = null;
-      continue;
-    }
-    if (char === '"' || char === "'" || char === "`") quote = char;
-    else if ("{[(".includes(char)) depth += 1;
-    else if ("}])".includes(char)) depth -= 1;
-    else if (char === "," && depth === 0) {
-      out.push(text.slice(start, i));
-      start = i + 1;
-    }
-  }
-  out.push(text.slice(start));
-
-  return out;
-}
-
-/** Index of the first top-level occurrence of `needle`, or -1. */
-function firstTopLevel(text, needle) {
-  let depth = 0;
-  let quote = null;
-
-  for (let i = 0; i < text.length; i += 1) {
-    const char = text[i];
-
-    if (quote) {
-      if (char === quote) quote = null;
-      continue;
-    }
-    if (char === '"' || char === "'" || char === "`") quote = char;
-    else if ("{[(".includes(char)) depth += 1;
-    else if ("}])".includes(char)) depth -= 1;
-    else if (char === needle && depth === 0) return i;
-  }
-
-  return -1;
 }
 
 const files = (

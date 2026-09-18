@@ -120,6 +120,21 @@ export function setupCarousel(carousel: CarouselElement): void {
   const prevButton = inner.querySelector<HTMLButtonElement>(".prev > .button-inner");
   const nextButton = inner.querySelector<HTMLButtonElement>(".next > .button-inner");
 
+  // Autoplay and auto-scroll emit `select` on their own; only a gesture should
+  // announce the fraction. Controls mark themselves below, and Embla's pointer
+  // drags mark via `pointerDown`. `updateFraction` consumes and clears the flag;
+  // the timeout covers a gesture that moves nothing, so it can't leak into the
+  // next autoplay tick.
+  let userDrivenNavigation = false;
+  const markUserDrivenNavigation = () => {
+    userDrivenNavigation = true;
+    window.setTimeout(() => {
+      userDrivenNavigation = false;
+    }, 1000);
+  };
+
+  embla.on("pointerDown", markUserDrivenNavigation);
+
   if (prevButton) prevButton.style.borderRadius = "var(--radius-full)";
   if (nextButton) nextButton.style.borderRadius = "var(--radius-full)";
 
@@ -130,8 +145,16 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   updateButtons();
   embla.on("select", updateButtons);
-  if (prevButton) prevButton.addEventListener("click", () => embla.scrollPrev());
-  if (nextButton) nextButton.addEventListener("click", () => embla.scrollNext());
+  if (prevButton)
+    prevButton.addEventListener("click", () => {
+      markUserDrivenNavigation();
+      embla.scrollPrev();
+    });
+  if (nextButton)
+    nextButton.addEventListener("click", () => {
+      markUserDrivenNavigation();
+      embla.scrollNext();
+    });
 
   if (indicatorsContainer) {
     const renderDots = () => {
@@ -147,7 +170,10 @@ export function setupCarousel(carousel: CarouselElement): void {
         dot.setAttribute("aria-label", `Go to slide ${index + 1}`);
         dot.setAttribute("data-selected", selected.toString());
         if (selected) dot.setAttribute("aria-current", "true");
-        dot.addEventListener("click", () => embla.scrollTo(index));
+        dot.addEventListener("click", () => {
+          markUserDrivenNavigation();
+          embla.scrollTo(index);
+        });
         indicatorsContainer.appendChild(dot);
       });
     };
@@ -220,7 +246,10 @@ export function setupCarousel(carousel: CarouselElement): void {
           button.textContent = String(index + 1);
         }
 
-        button.addEventListener("click", () => embla.scrollTo(index));
+        button.addEventListener("click", () => {
+          markUserDrivenNavigation();
+          embla.scrollTo(index);
+        });
         thumbnailsContainer.appendChild(button);
       });
     };
@@ -237,14 +266,22 @@ export function setupCarousel(carousel: CarouselElement): void {
   }
 
   if (fractionEl) {
+    const announcer = inner.querySelector<HTMLElement>(".carousel-fraction-announcer");
+
     const updateFraction = () => {
       const snaps = embla.scrollSnapList().length;
       const current = embla.selectedScrollSnap() + 1;
       const safeTotal = Math.max(snaps, 1);
       const safeCurrent = Math.min(current, safeTotal);
+      // Announce only the update a gesture caused; autoplay and auto-scroll
+      // update the visible fraction without touching the live region.
+      const announce = userDrivenNavigation;
 
+      userDrivenNavigation = false;
       fractionEl.textContent = `${safeCurrent}/${safeTotal}`;
-      fractionEl.setAttribute("aria-label", `Slide ${safeCurrent} of ${safeTotal}`);
+      if (announce && announcer) {
+        announcer.textContent = `Slide ${safeCurrent} of ${safeTotal}`;
+      }
     };
 
     embla.on("select", updateFraction);

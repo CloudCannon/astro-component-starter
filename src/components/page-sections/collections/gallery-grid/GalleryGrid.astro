@@ -427,7 +427,7 @@ const hasLightbox = lightbox && items.length > 0;
           color-mix(in srgb, var(--color-media-scrim) 22%, transparent) 26%,
           transparent 46%,
           transparent 82%,
-          var(--color-overlay-media) 100%
+          var(--color-overlay-media-strong) 100%
         );
         inset: 0;
         pointer-events: none;
@@ -449,7 +449,7 @@ const hasLightbox = lightbox && items.length > 0;
       }
 
       .gallery-lightbox-counter {
-        color: var(--color-text-on-media-muted);
+        color: var(--color-text-on-media);
         font-family: var(--font-mono);
         font-size: var(--font-size-xs);
         letter-spacing: 0.16em;
@@ -479,7 +479,7 @@ const hasLightbox = lightbox && items.length > 0;
       .gallery-lightbox-close {
         background: transparent;
         border-radius: var(--radius-sm);
-        color: var(--color-text-on-media-muted);
+        color: var(--color-text-on-media);
 
         &:hover {
           background: var(--color-state-hover-on-media);
