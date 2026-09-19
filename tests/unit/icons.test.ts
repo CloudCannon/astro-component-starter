@@ -52,22 +52,17 @@ describe("icon registry", () => {
     expect(unpainted).toEqual([]);
   });
 
-  it("strips the intrinsic size from icons that declared one", () => {
-    // These three shipped with a pixel width/height; kept, they would render at
-    // 800px (ltr/rtl) or 36px (bluesky) instead of following font-size.
-    for (const name of ["ltr", "rtl", "social/bluesky"]) {
-      const { attributes } = getIcon(name)!;
+  it("paints every icon with currentColor, never a literal colour", () => {
+    // A source that ships its own colour (the Bluesky brand asset arrived with
+    // a hardcoded black) renders the same wherever it is placed and ignores the
+    // surrounding text colour. None of the sources may pin one.
+    const hardcoded = iconNames.filter((name) => {
+      const { attributes, body } = getIcon(name)!;
 
-      expect(attributes.width).toBe("1em");
-      expect(attributes.height).toBe("1em");
-    }
-  });
+      return /#[\da-f]{3,8}\b|\brgba?\(|\bhsla?\(/i.test(`${JSON.stringify(attributes)}${body}`);
+    });
 
-  it("recolors the one icon that hardcoded black", () => {
-    const bluesky = getIcon("social/bluesky")!;
-
-    expect(`${JSON.stringify(bluesky.attributes)}${bluesky.body}`).not.toMatch(/#000\b/);
-    expect(bluesky.body).toContain("currentColor");
+    expect(hardcoded).toEqual([]);
   });
 
   it("returns null for an unknown name rather than throwing", () => {
