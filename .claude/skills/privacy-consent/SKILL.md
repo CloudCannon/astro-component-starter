@@ -35,7 +35,7 @@ The starter applies one strict opt-in policy globally. Necessary preference stor
 | CloudCannon data panels                                       | `cloudcannon.config.yml` and `.cloudcannon/schemas/{privacy,analytics}.json` |
 | Editable policy scaffold                                      | `src/content/pages/privacy.md`                                               |
 
-`BaseLayout.astro` parses both data files and renders one Consent instance on every page. Do not add `navigation/consent` to `pageSections`; its component-doc example is an isolated, non-persistent demonstration.
+`SiteConsent.astro` — mounted by `BaseLayout` and by the component library's own shell — parses both data files and renders one Consent instance on every page; `LibraryLayout` needs it just as much as the site shell, because the Embed, Video and Video Modal examples carry the same placeholders. Do not add `navigation/consent` to `pageSections`; its component-doc example is an isolated, non-persistent demonstration.
 
 ## Configure a site
 

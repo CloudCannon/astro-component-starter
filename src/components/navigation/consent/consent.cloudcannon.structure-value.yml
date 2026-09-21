@@ -3,6 +3,7 @@ icon: privacy_tip
 description: Site-wide privacy choices for analytics and third-party media.
 value:
   _component: navigation/consent
+  label: ''
   privacy:
     _schema: privacy
     enabled: true

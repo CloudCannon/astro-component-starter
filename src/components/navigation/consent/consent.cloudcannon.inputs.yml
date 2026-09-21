@@ -1,3 +1,6 @@
+label:
+  type: text
+  comment: Optional name for this consent instance. It names the settings dialog, so a page that renders a second instance — the documentation example on this component's own page — needs its own.
 privacy:
   type: object
   comment: Site-wide consent wording and decision lifetime. In normal use this comes from src/data/privacy.json.

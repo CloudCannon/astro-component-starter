@@ -76,9 +76,28 @@ if (import.meta.env.SSR) {
   );
 }
 
-const renderedCodes = tabs.map(
-  (tab, index) => highlightedCodes[index] || escapeCode(tab.code || "")
+const renderedCodes = tabs.map((tab, index) =>
+  renderCodeLines(highlightedCodes[index] || escapeCode(tab.code || ""), lineNumbers)
 );
+
+/**
+ * A gutter column holds one row per SOURCE line, so the first wrapped line
+ * pushes every number below it out of step. Each number therefore rides in its
+ * own line's flow, hanging into the gutter (see the styles). Shiki's inline
+ * output separates lines with `<br>` and the escaped fallback keeps the
+ * source's own newlines; both become newlines, which also keeps the line breaks
+ * in the copied text.
+ */
+function renderCodeLines(html: string, numbered: boolean): string {
+  return html
+    .split(/<br>|\n/)
+    .map((line, index) =>
+      numbered
+        ? `<span class="code-block-line-number" aria-hidden="true">${index + 1}</span>${line}`
+        : line
+    )
+    .join("\n");
+}
 ---
 
 <Tabs
@@ -139,17 +158,10 @@ const renderedCodes = tabs.map(
           labelledBy={`${codeBlockId}-tab-${index}`}
           selected={index === 0}
         >
-          <div class:list={["code-block-code", lineNumbers && "has-line-numbers"]}>
-            {lineNumbers && (
-              <ol
-                class="code-block-line-numbers"
-                aria-hidden="true"
-              >
-                {lines.map((_, lineIndex) => (
-                  <li>{lineIndex + 1}</li>
-                ))}
-              </ol>
-            )}
+          <div
+            class:list={["code-block-code", lineNumbers && "has-line-numbers"]}
+            style={lineNumbers ? `--code-number-digits: ${String(lines.length).length}` : undefined}
+          >
             <pre>
                 <code
                   {...codeAttributes}
@@ -255,28 +267,62 @@ const renderedCodes = tabs.map(
         display: none;
       }
 
-      .code-block-code {
-        display: flex;
-        min-width: 0;
+      .code-block-code.has-line-numbers {
+        /* The box is the whole gutter — digits, the gap to the rule, the rule,
+           then the gap to the code — because the box's own width is what the
+           first row of code advances past. A wrapped line's continuation rows
+           indent by that same padding, so the two line up. The digit count
+           comes from the panel's own line count, so a 3-digit listing gets the
+           room it needs. */
+        --code-number-gap: var(--spacing-sm);
+        --code-gutter: calc(
+          var(--code-number-digits, 1) * 1ch + var(--code-number-gap) * 2 + var(--border-width-sm)
+        );
 
-        &.has-line-numbers pre {
-          padding-inline-start: var(--spacing-sm);
+        /* The block's leading inset lives on this wrapper, not on the scrolling
+           pre: padding inside a scroller is a strip the code slides across, and
+           it sits right beside the pinned numbers. */
+        padding-inline-start: var(--spacing-md);
+
+        /* No leading padding inside the scroller itself, for the same reason. */
+        pre {
+          padding-inline-start: 0;
+        }
+
+        code {
+          padding-inline-start: var(--code-gutter);
+        }
+
+        /* The rule is a background line rather than an end border: it has to sit
+           a gap inside the box, and the box also has to stay opaque so the code
+           cannot show through it while pinned. Both consumers of the gutter —
+           the code's padding and this box — must resolve the `ch` in it, so
+           neither may read it from the pre, whose font is zeroed below. */
+        .code-block-line-number {
+          background-color: var(--color-bg);
+          background-image: linear-gradient(var(--color-border), var(--color-border));
+          background-position: calc(100% - var(--code-number-gap) - var(--border-width-sm)) 0;
+          background-repeat: no-repeat;
+          background-size: var(--border-width-sm) 100%;
+          color: var(--color-text-muted);
+          display: inline-block;
+          margin-inline-start: calc(var(--code-gutter) * -1);
+          padding-inline-end: calc(var(--code-number-gap) * 2 + var(--border-width-sm));
+          text-align: end;
+          user-select: none;
+          width: var(--code-gutter);
         }
       }
 
-      .code-block-line-numbers {
-        border-inline-end: var(--border-width-sm) solid var(--color-border);
-        color: var(--color-text-muted);
-        flex: none;
-        font-family: var(--font-mono);
-        font-size: var(--font-size-sm);
-        line-height: var(--line-height-relaxed);
-        list-style: none;
-        margin: 0;
-        padding: calc(var(--spacing-sm) + var(--spacing-xs)) var(--spacing-sm)
-          calc(var(--spacing-sm) + var(--spacing-xs)) var(--spacing-md);
-        text-align: end;
-        user-select: none;
+      /* Numbers stay in view while the code scrolls sideways: `code` is a single
+         block as wide as its longest line, so every number can travel with it. */
+      .code-block-inner:not(.is-wrapped) .code-block-code.has-line-numbers code {
+        min-width: max-content;
+      }
+
+      .code-block-inner:not(.is-wrapped) .code-block-line-number {
+        inset-inline-start: 0;
+        position: sticky;
       }
 
       pre {

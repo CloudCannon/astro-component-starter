@@ -42,9 +42,9 @@ function initializeComponentViewers() {
         codeBlocks.forEach((block) => {
           block.style.display = block.id === `astro-code-${exampleId}` ? "block" : "none";
         });
-      } else if (viewMode === "frontmatter") {
+      } else if (viewMode === "yaml") {
         codeBlocks.forEach((block) => {
-          block.style.display = block.id === `frontmatter-code-${exampleId}` ? "block" : "none";
+          block.style.display = block.id === `yaml-code-${exampleId}` ? "block" : "none";
         });
       }
     };

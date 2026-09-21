@@ -80,7 +80,19 @@ const tests = [
         !(await response.text()).includes('class="button code-block-copy"'),
         "the copy button should not render before JavaScript runs"
       );
-      const expected = await block.locator(".code-block-panel:not([hidden]) code").textContent();
+      // The line-number gutter rides inside the code's own text flow (so a
+      // wrapped line keeps its number); the copied text leaves it out.
+      const expected = await block
+        .locator(".code-block-panel:not([hidden]) code")
+        .evaluate((code) => {
+          const clone = code.cloneNode(true);
+
+          clone.querySelectorAll(".code-block-line-number").forEach((number) => number.remove());
+
+          return clone.textContent ?? "";
+        });
+
+      assert(expected.includes("\n"), "rendered code lost its line breaks");
       const origin = new URL(page.url()).origin;
 
       await page.context().grantPermissions(["clipboard-read", "clipboard-write"], { origin });
@@ -241,18 +253,25 @@ const tests = [
     async run(page) {
       const root = page.locator(`${ACTIVE_PREVIEW} .consent`);
       const banner = root.locator("[data-consent-banner]");
-      const popoverSel = "#privacy-settings";
+      const popoverSel = `${ACTIVE_PREVIEW} .consent .consent-popover`;
 
       await banner.waitFor({ state: "visible" });
 
       const initialState = await page.evaluate(() => ({
         hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
-        hasLiveManager: Boolean(window.siteConsent),
+        liveMediaAllowed: window.siteConsent?.isAllowed("externalMedia") ?? null,
+        previewBoundToLive: Boolean(
+          document.querySelector(".component-viewer .consent[data-consent-initialized]")
+        ),
         storedChoice: localStorage.getItem("site-consent"),
       }));
 
       assert(!initialState.hasAnalyticsScript, "docs preview loaded the example analytics script");
-      assert(!initialState.hasLiveManager, "docs preview created the live consent singleton");
+      assert(
+        !initialState.previewBoundToLive,
+        "the preview was wired to the live consent singleton"
+      );
+      assert(initialState.liveMediaAllowed === false, "the live manager started with a decision");
       assert(initialState.storedChoice === null, "docs preview started with a persisted choice");
 
       const choices = await root.locator(".consent-actions .button-inner").allTextContents();
@@ -317,13 +336,49 @@ const tests = [
 
       const finalState = await page.evaluate(() => ({
         hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
-        hasLiveManager: Boolean(window.siteConsent),
+        liveMediaAllowed: window.siteConsent?.isAllowed("externalMedia") ?? null,
         storedChoice: localStorage.getItem("site-consent"),
       }));
 
       assert(!finalState.hasAnalyticsScript, "demo choice loaded the example analytics script");
-      assert(!finalState.hasLiveManager, "demo choice created the live consent singleton");
+      assert(
+        finalState.liveMediaAllowed === false,
+        "demo choice reached the live consent singleton"
+      );
       assert(finalState.storedChoice === null, "demo choice was written to browser storage");
+    },
+  },
+  {
+    name: "embed example loads its map only after external-media permission",
+    path: "/component-docs/components/building-blocks/core-elements/embed/",
+    viewport: DESKTOP,
+    async run(page) {
+      const content = page.locator(`${ACTIVE_PREVIEW} .embed-content`).first();
+
+      await content.waitFor();
+      assert(
+        (await content.locator("iframe").count()) === 0,
+        "embed mounted its iframe before permission"
+      );
+
+      await content.locator("[data-external-media-enable]").click();
+      await page.waitForFunction(
+        (sel) => Boolean(document.querySelector(sel)?.querySelector("iframe")),
+        `${ACTIVE_PREVIEW} .embed-content`
+      );
+
+      const src = await content.locator("iframe").first().getAttribute("src");
+
+      assert(
+        /^https:\/\/(www\.google\.com\/maps\/embed|www\.openstreetmap\.org\/export\/embed\.html)/.test(
+          src ?? ""
+        ),
+        `embed mounted an unexpected source: ${src}`
+      );
+      assert(
+        await page.evaluate(() => window.siteConsent?.isAllowed("externalMedia") === true),
+        "external-media permission was not recorded"
+      );
     },
   },
   {

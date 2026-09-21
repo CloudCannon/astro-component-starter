@@ -3,6 +3,7 @@ title: 'Consent banner and settings'
 spacing: null
 blocks:
   _component: navigation/consent
+  label: 'Privacy settings preview'
   privacy:
     _schema: privacy
     enabled: true

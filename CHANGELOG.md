@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- External-media placeholders now work in the component library. Its pages render through their own shell, which never mounted a Consent instance, and the "Allow all external media" action is bound only where that instance exists — so the button on every Embed, Video, and Video Modal example did nothing. Both shells now mount the same site-wide instance, built from `src/data/`, and a page that renders the Consent example alongside it gives each instance its own settings-dialog id.
+- Code Block line numbers now sit on the line they number even when a long line wraps. The numbers were a gutter column of one row per source line, so the first wrapped line pushed every number below it out of step; each number now rides in its own line's flow, indents at the code's edge, and stays in view — pinned with a rule beside it — when an unwrapped long line is scrolled sideways.
+- Code Block copied its code with the line breaks lost: shiki separates lines with `<br>`, which carries no text, so `textContent` came back as one long line. Lines are now separated by real newlines, and the number gutter is excluded from the copy.
+
+### Changed
+
+- The Button **Icon Colors** example now shows all nine `iconColor` options — `default`, `blue`, `cyan`, `green`, `yellow`, `orange`, `red`, `purple`, `pink` — instead of five of them, each labelled with its colour name.
+- Component docs code views show the block tree as a YAML fragment — no `blocks:` key, no `---` fences — and the view is now labelled **YAML Code**. `blocks:` is the docs-examples collection's own field, and the fences framed a partial snippet as a whole file's frontmatter, so a copied snippet was never paste-able anywhere; a page's array is `pageSections`, `contentSections`, or `buttonSections`. The panel now mirrors the Astro one: the tree, nothing about how the example is stored.
+
+### Fixed
+
+- The multi-button Button and Submit examples laid their buttons out as bare siblings, so every button after the first picked up the flow system's block-start margin — a margin on an inline-level control shifts it half a gap down, which left the examples visibly off-centre and made a small button sit lower than a large one. Those examples now wrap their buttons in a Button Group, the container the Button docs already require, and their copyable code shows it.
+
 ## [2.0.0] - 2026-08-19
 
 A big release: a browsable reference site for every component, site-wide

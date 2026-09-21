@@ -28,11 +28,7 @@ const formattedCodeCache = await Promise.all(
   component_examples.map(async (example: any) => {
     try {
       const astroCode = await formatBlocksAstro(example.data.blocks);
-      const yamlCode = formatBlocksYaml(
-        example.data.blocks,
-        example.data.title,
-        example.data.spacing
-      );
+      const yamlCode = formatBlocksYaml(example.data.blocks);
 
       return {
         astro: astroCode,
@@ -120,8 +116,8 @@ const formattedCodeCache = await Promise.all(
             />
           </div>
           <div
-            class="code frontmatter-code"
-            id={`frontmatter-code-${exampleId}`}
+            class="code yaml-code"
+            id={`yaml-code-${exampleId}`}
           >
             <div
               class="code-header"
@@ -129,7 +125,7 @@ const formattedCodeCache = await Promise.all(
             >
               <Button
                 variant="primary"
-                text="Copy Frontmatter Code"
+                text="Copy YAML"
                 size="lg"
                 iconName="document-duplicate"
                 data-action="copy-code"
@@ -247,8 +243,8 @@ const formattedCodeCache = await Promise.all(
               checked: true,
             },
             {
-              value: "frontmatter",
-              label: "Frontmatter Code",
+              value: "yaml",
+              label: "YAML Code",
               icon: "bars-4",
               checked: false,
             },

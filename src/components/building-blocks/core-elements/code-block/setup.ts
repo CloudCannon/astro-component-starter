@@ -45,6 +45,19 @@ function createCopyButton(container: HTMLElement): HTMLButtonElement {
   return button;
 }
 
+/** Line numbers sit inside the code's own text flow, so they come out of the
+ *  copied text: the gutter is decoration, not content. */
+function codeText(code: HTMLElement | null): string {
+  if (!code) return "";
+
+  // cloneNode preserves the node's type at runtime.
+  const clone = code.cloneNode(true) as HTMLElement;
+
+  clone.querySelectorAll(".code-block-line-number").forEach((number) => number.remove());
+
+  return clone.textContent || "";
+}
+
 export function setupCodeBlock(block: HTMLElement): void {
   const container = block.querySelector<HTMLElement>(".code-block-inner");
 
@@ -64,7 +77,7 @@ export function setupCodeBlock(block: HTMLElement): void {
 
   button.addEventListener("click", async () => {
     const code = block.querySelector<HTMLElement>(".code-block-panel:not([hidden]) code");
-    const copied = await copyText(code?.textContent || "");
+    const copied = await copyText(codeText(code));
     const nextLabel = copied ? container.dataset.copiedLabel : container.dataset.copyFailedLabel;
     const labelWidth = label.getBoundingClientRect().width;
 

@@ -1,0 +1,19 @@
+---
+/**
+ * The site-wide consent instance, built from `src/data/{privacy,analytics}.json`.
+ * Every shell that renders finished pages mounts one: the site shell
+ * (`BaseLayout`) and the component library's shell (`LibraryLayout`), whose
+ * pages carry the same external-media placeholders and must be able to grant
+ * them. The Consent component's our own docs example stays a demo — it passes
+ * its own config and never reaches this.
+ */
+import Consent from "@navigation/consent/Consent.astro";
+import analyticsData from "@data/analytics.json";
+import privacyData from "@data/privacy.json";
+import { parseAnalyticsConfig, parsePrivacyConfig } from "../../integrations/consent/config";
+---
+
+<Consent
+  privacy={parsePrivacyConfig(privacyData)}
+  analytics={parseAnalyticsConfig(analyticsData)}
+/>

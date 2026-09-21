@@ -1,12 +1,17 @@
 ---
 import Button from "@core-elements/button/Button.astro";
 import ModalShell from "@wrappers/modal/ModalShell.astro";
+import { slugifyLabel } from "@component-utils/slugify";
 import type { AnalyticsConfig, PrivacyConfig } from "../../../integrations/consent/config";
 
-type Props = { privacy: PrivacyConfig; analytics: AnalyticsConfig };
-const { privacy, analytics } = Astro.props as Props;
+type Props = { privacy: PrivacyConfig; analytics: AnalyticsConfig; label?: string };
+const { privacy, analytics, label } = Astro.props as Props;
 const hasAnalytics = analytics.provider !== "none";
-const popoverId = "privacy-settings";
+// A page mounts one site-wide instance, but the component library's own example
+// renders a second one on the same page — each needs its own popover id, and the
+// label (which the settings trigger and the banner both target) is how an
+// instance is named.
+const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
 ---
 
 <aside

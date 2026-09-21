@@ -24,7 +24,20 @@ const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-if (import.meta.env.DEV && _component && !link && !element && !htmlAttributes.popovertarget) {
+// The component library's button pages are palettes of inert samples (a variant
+// or size with no destination), so the authored-content warning below only
+// makes sense on real pages — `/` and everything else. `Astro.url` is absent in
+// CloudCannon's editable-regions re-render, hence the optional chain.
+const isLibraryPage = Astro.url?.pathname?.startsWith("/component-docs") ?? false;
+
+if (
+  import.meta.env.DEV &&
+  !isLibraryPage &&
+  _component &&
+  !link &&
+  !element &&
+  !htmlAttributes.popovertarget
+) {
   console.warn(
     `[button] "${text ?? ""}" has no link, element or popover target, so it renders a button that does nothing when clicked.`
   );
