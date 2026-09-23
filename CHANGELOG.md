@@ -34,6 +34,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Modal behaviour (focus trap, focus restore, the page scroll lock) now attaches to any popover with a `data-modal` attribute instead of the `.modal-popover` class, which is now styling only. The Gallery Grid lightbox and Video Modal's full-screen player use `data-modal` without the class, so restyling `.modal-popover` no longer leaks onto them. A custom full-screen overlay can do the same (`ModalShell` and `Modal` take `sheet={false}`) instead of overriding the modal sheet styles. Every `ModalShell` sets `data-modal` itself, so existing modals need no change.
 - Gallery Grid captions are centred under their image.
 - Gallery Grid's lightbox is announced with the section heading ("Gallery: Field notes from the coast") instead of a generic "Gallery image", and its id is stable across builds: an unnamed gallery used a random suffix, and two galleries with the same heading shared one id.
+- Section and Card backgrounds are CloudCannon structures keyed on `type`: picking Image, Video, or Pattern shows only that type's fields and drops the other types' keys from the content. Page sections share one definition, `.cloudcannon/inputs/background.yml` (which replaces `background-mask.yml`), so a new section's structure value lists it in `_inputs_from_glob`. Pattern backgrounds are seeded with Fade the middle.
+- **Breaking:** Video Modal groups its props into two structures. `type`, `videoId`, and `source` move into `media`; `triggerStyle` and the button and poster fields move into `trigger` as `style`, `text`, `variant`, `size`, `iconName`, `image`, `alt`, and `aspectRatio`. The editor now shows only the fields for the chosen video source and trigger style.
+- List items show Icon color only once an icon is picked.
+- Video shows only the fields that apply, in both the page builder and the MDX snippet: Video ID and Title hide once a local file is picked, Video Source hides once a video ID is entered, Thumbnail and Captions appear only for a local file, and Captions language only once a captions file is set.
 
 ### Removed
 

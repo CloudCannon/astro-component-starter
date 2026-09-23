@@ -4,18 +4,16 @@ description: Popup local video, or consent-gated YouTube/Vimeo mounted only whil
 value:
   _component: building-blocks/wrappers/video-modal
   label: null
-  type: youtube
-  videoId: ""
   title: ""
-  source: ""
-  triggerStyle: button
-  posterImage: ""
-  posterAlt: ""
-  posterAspectRatio: widescreen
-  triggerText: Watch video
-  triggerVariant: primary
-  triggerSize: md
-  triggerIconName: play-circle
+  media:
+    type: youtube
+    videoId: ""
+  trigger:
+    style: button
+    text: Watch video
+    variant: primary
+    size: md
+    iconName: play-circle
   size: xl
 preview:
   text:

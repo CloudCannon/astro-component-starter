@@ -73,8 +73,7 @@ _structures:
               removeformat: true
           iconName:
             type: select
-            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
-            hidden: "listType !== 'icon'"
+            comment: Icon lists only. The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
             options:
               values: data.icons
               preview:
@@ -85,7 +84,7 @@ _structures:
           iconColor:
             type: select
             comment: The color of the icon.
-            hidden: "listType !== 'icon'"
+            hidden: "!iconName"
             options:
               values:
                 - id: default

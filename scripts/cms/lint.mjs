@@ -398,8 +398,8 @@ for (const abs of structureFiles) {
 //   - `hidden: true` inputs are dev-set props (Image's `sizes`/`widths`), where
 //     the component's own default is the intended value and seeding it into
 //     every block would just duplicate that default into content.
-//   - `hidden: "<expression>"` inputs are conditionally shown; their parent key
-//     is what needs seeding, and dotted keys resolve through it.
+//   - a dotted key under an object input with `options.structures` is seeded by
+//     whichever structure value lists it, not by the block's default.
 //   - `<name>[*]` keys configure an array's items, not a field of their own —
 //     the parent array is what needs seeding (and check 7 requires the `[*]`
 //     entry to exist for plain arrays).
@@ -422,10 +422,25 @@ for (const [dir] of mainByDir) {
   if (!existsSync(inputsAbs) || !existsSync(valueAbs)) continue;
 
   const value = (loadYaml(valueAbs) || {}).value || {};
-  const unseeded = Object.entries(loadYaml(inputsAbs) || {})
+  const inputs = loadYaml(inputsAbs) || {};
+  const seededByStructure = (key) => {
+    const dot = key.lastIndexOf(".");
+    const options = inputs[key.slice(0, dot)]?.options?.structures?.values;
+
+    return (
+      dot > 0 &&
+      Array.isArray(options) &&
+      options.some((o) => hasPath(o?.value, key.slice(dot + 1)))
+    );
+  };
+  const unseeded = Object.entries(inputs)
     .filter(
       ([key, cfg]) =>
-        !NON_PROP_KEY(key) && !key.endsWith("[*]") && cfg?.hidden !== true && !hasPath(value, key)
+        !NON_PROP_KEY(key) &&
+        !key.endsWith("[*]") &&
+        cfg?.hidden !== true &&
+        !hasPath(value, key) &&
+        !seededByStructure(key)
     )
     .map(([key]) => key);
 

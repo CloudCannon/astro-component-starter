@@ -4,12 +4,14 @@ spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/video-modal'
   label: 'Poster landscape (4:3)'
-  type: 'youtube'
-  videoId: '4mB5KwenCzI'
+  media:
+    type: 'youtube'
+    videoId: '4mB5KwenCzI'
+  trigger:
+    style: 'poster'
+    image: /src/assets/images/component-docs/video-placeholder.jpg
+    alt: 'Still frame from the product tour'
+    aspectRatio: 'landscape'
   title: 'Live visual editing in Astro with CloudCannon'
-  triggerStyle: 'poster'
-  posterImage: /src/assets/images/component-docs/video-placeholder.jpg
-  posterAlt: 'Still frame from the product tour'
-  posterAspectRatio: 'landscape'
   size: 'xl'
 ---

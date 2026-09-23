@@ -4,12 +4,15 @@ spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/video-modal'
   label: 'Astro in 100 Seconds'
-  type: 'youtube'
-  videoId: 'ZoXyK96nyCg'
+  media:
+    type: 'youtube'
+    videoId: 'ZoXyK96nyCg'
+  trigger:
+    style: 'button'
+    text: 'Watch video'
+    variant: 'primary'
+    size: 'md'
+    iconName: 'play-circle'
   title: 'Astro in 100 Seconds'
-  triggerText: 'Watch video'
-  triggerVariant: 'primary'
-  triggerSize: 'md'
-  triggerIconName: 'play-circle'
   size: 'xl'
 ---

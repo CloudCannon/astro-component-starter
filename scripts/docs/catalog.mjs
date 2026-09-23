@@ -40,6 +40,9 @@ const catalogPath = join(
 const catalogLabel = rel(catalogPath);
 
 const SECTION_MARKER = "# --- section wrapper inputs (CustomSection) ---";
+// Shared input files that document content props; `space-before.yml` is flow
+// spacing on every block, so listing it would repeat it in every row.
+const SHARED_CONTENT_INPUTS = ["/.cloudcannon/inputs/background.yml"];
 
 // Editorial grouping order, preserved from the hand-authored catalog. Unknown
 // groups (a new top-level dir under a tier that isn't listed here) are
@@ -146,18 +149,35 @@ const CHILD_WIRING_PROPS = new Set([
  * keys above the CustomSection shell-props marker. Components with no marker
  * (building blocks) get every key.
  */
-function contentInputsDoc(inputsPath, tier) {
+function contentInputsDoc(inputsPath, tier, structureValue = {}) {
   if (!inputsPath) return {};
   const raw = readFileSync(inputsPath, "utf8");
   const idx = tier === "page-sections" ? raw.indexOf(SECTION_MARKER) : -1;
-  const text = idx === -1 ? raw : raw.slice(0, idx);
 
-  return yaml.load(text) || {};
+  if (idx !== -1) return yaml.load(raw.slice(0, idx)) || {};
+
+  const shared = (structureValue._inputs_from_glob || [])
+    .filter((p) => SHARED_CONTENT_INPUTS.includes(p))
+    .map((p) => loadYaml(join(root, p)) || {});
+
+  return Object.assign(yaml.load(raw) || {}, ...shared);
 }
 
 /** Format one inputs.yml key for a "Key content props" cell. */
 function formatProp(key, cfg) {
   const label = cfg?.type === "array" ? `\`${key}[]\`` : `\`${key}\``;
+  const structures = cfg?.type === "object" ? cfg.options?.structures : undefined;
+
+  if (structures?.id_key && Array.isArray(structures.values)) {
+    const idKey = structures.id_key;
+    const variants = structures.values.map(({ value = {} }) => {
+      const fields = Object.keys(value).filter((k) => k !== idKey);
+
+      return `\`${value[idKey]}\`: ${fields.map((k) => `\`${k}\``).join("/")}`;
+    });
+
+    return `${label} (by \`${idKey}\` — ${variants.join("; ")})`;
+  }
 
   if (cfg?.type === "markdown") return `${label} (markdown)`;
   if (cfg?.type === "select" && Array.isArray(cfg.options?.values)) {
@@ -327,7 +347,7 @@ function buildTier(tier, headerLabel) {
         ? loadYaml(entry.structureValuePath) || {}
         : {};
       const useFor = structureValue.description || "";
-      const doc = contentInputsDoc(entry.inputsPath, tier);
+      const doc = contentInputsDoc(entry.inputsPath, tier, structureValue);
       const firstCell = tier === "page-sections" ? `\`${entry.key}\`` : `\`${slug}\``;
 
       rows.push([firstCell, useFor, propsCell(doc)]);

@@ -4,12 +4,15 @@ spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/video-modal'
   label: 'Large modal'
-  type: 'youtube'
-  videoId: 'ZoXyK96nyCg'
+  media:
+    type: 'youtube'
+    videoId: 'ZoXyK96nyCg'
+  trigger:
+    style: 'button'
+    text: 'Large modal'
+    variant: 'secondary'
+    size: 'md'
+    iconName: 'play-circle'
   title: 'Astro in 100 Seconds'
-  triggerText: 'Large modal'
-  triggerVariant: 'secondary'
-  triggerSize: 'md'
-  triggerIconName: 'play-circle'
   size: 'lg'
 ---

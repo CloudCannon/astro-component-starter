@@ -83,15 +83,13 @@ value:
   backgroundColor: base
   background:
     type: image
+    imageSource: ""
+    imageAlt: ""
     positionVertical: top
     positionHorizontal: center
     fixed: false
     priority: false
-    imageSource: ""
-    imageAlt: ""
-    patternSize: natural
     mask: none
-    videoSource: null
     overlay: 0
 preview:
   text:
@@ -112,7 +110,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/conversion/pricing-tiers/pricing-tiers.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
+  - /.cloudcannon/inputs/background.yml
 _structures:
   pricingTiers:
     values:

@@ -1,112 +1,6 @@
-label:
-  type: text
-  comment: Optional label for the card to help identify it in the editor.
-contentSections:
-  type: array
-  comment: Content inside the main area of the card, with padding.
-  options:
-    structures: _structures.cardSections
-beforeContentSections:
-  type: array
-  comment: Content that appears above the main card area, without padding.
-  hidden: "!showBeforeAfter"
-  options:
-    structures: _structures.cardSections
-afterContentSections:
-  type: array
-  comment: Content that appears below the main card area, without padding.
-  hidden: "!showBeforeAfter"
-  options:
-    structures: _structures.cardSections
-maxContentWidth:
-  type: select
-  comment: Maximum width constraint for the card content.
-  options:
-    values:
-      - id: none
-        name: None
-      - id: xs
-        name: Extra Small
-      - id: sm
-        name: Small
-      - id: md
-        name: Medium
-      - id: lg
-        name: Large
-      - id: xl
-        name: Extra Large
-      - id: 2xl
-        name: 2xl
-      - id: 3xl
-        name: 3xl
-showBeforeAfter:
-  type: switch
-  label: Show Before / After Content Sections
-  comment: Whether to show the before/after content blocks used to add content outside the card's padding.
-paddingHorizontal:
-  type: select
-  comment: Horizontal padding applied to the card content.
-  options:
-    values:
-      - id: xs
-        name: Extra Small
-      - id: sm
-        name: Small
-      - id: md
-        name: Medium
-      - id: lg
-        name: Large
-      - id: xl
-        name: Extra Large
-      - id: 2xl
-        name: 2xl
-paddingVertical:
-  type: select
-  comment: Vertical padding applied to the card content.
-  options:
-    values:
-      - id: xs
-        name: Extra Small
-      - id: sm
-        name: Small
-      - id: md
-        name: Medium
-      - id: lg
-        name: Large
-      - id: xl
-        name: Extra Large
-      - id: 2xl
-        name: 2xl
-colorScheme:
-  type: select
-  comment: Color scheme theme for the card.
-  options:
-    values:
-      - id: inherit
-        name: Inherit
-      - id: light
-        name: Light
-      - id: dark
-        name: Dark
-lockColorScheme:
-  type: switch
-  label: Lock color scheme
-  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
-backgroundColor:
-  type: select
-  comment: Background color for the card.
-  options:
-    values:
-      - id: none
-        name: None
-      - id: base
-        name: Base
-      - id: surface
-        name: Surface
-      - id: accent
-        name: Accent
-      - id: highlight
-        name: Highlight
+# Shared by every page section with a background via a second _inputs_from_glob entry.
+# Each structure value lists exactly the keys its type reads: `remove_extra_inputs`
+# drops any other key when an editor switches `type`.
 background:
   type: object
   comment: "Optional background: a cover image, a looping HTML5 video (self-hosted), or a repeating tiled pattern image. Video is hidden when the user prefers reduced motion."
@@ -132,6 +26,7 @@ background:
             positionHorizontal: center
             fixed: false
             priority: false
+            mask: none
             overlay: 0
         - label: Video
           icon: videocam
@@ -140,6 +35,7 @@ background:
             videoSource: ""
             positionVertical: top
             positionHorizontal: center
+            mask: none
             overlay: 0
         - label: Pattern
           icon: texture
@@ -147,6 +43,7 @@ background:
             type: pattern
             imageSource: ""
             patternSize: natural
+            mask: frame
             overlay: 0
 background.type:
   type: select
@@ -185,11 +82,11 @@ background.positionHorizontal:
 background.fixed:
   type: switch
   label: Fixed background (parallax)
-  comment: Pin the background image in place so the card scrolls over it.
+  comment: Pin the background image in place so the section scrolls over it.
 background.priority:
   type: switch
   label: Prioritize image load
-  comment: Load the image eagerly (use for above-the-fold cards).
+  comment: Load the image eagerly (use for above-the-fold sections).
 background.imageSource:
   comment: URL or path to the background or pattern image.
   type: image
@@ -216,7 +113,7 @@ background.patternSize:
         name: Large
 background.imageAlt:
   comment: Alt text for the background image.
-  type: text
+  type: textarea
 background.videoSource:
   type: file
   label: Video source
@@ -236,12 +133,25 @@ background.overlay:
     min: -1
     max: 1
     step: 0.1
-link:
-  type: url
-  comment: URL to make the entire card clickable. Leave empty for a non-clickable card.
-rounded:
-  type: switch
-  comment: Whether to apply rounded corners to the card.
-border:
-  type: switch
-  comment: Whether to apply a border to the card.
+background.mask:
+  type: select
+  label: Background fade
+  comment: Which part of the background fades out — the faded part reveals the background color.
+  options:
+    values:
+      - id: none
+        name: No fade
+      - id: frame
+        name: Fade the middle
+      - id: vignette
+        name: Fade the edges
+      - id: top
+        name: Fade the top
+      - id: bottom
+        name: Fade the bottom
+      - id: left
+        name: Fade the left
+      - id: right
+        name: Fade the right
+      - id: blend
+        name: Fade top and bottom

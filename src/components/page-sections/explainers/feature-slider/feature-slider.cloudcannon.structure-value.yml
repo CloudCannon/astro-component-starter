@@ -31,15 +31,13 @@ value:
   backgroundColor: base
   background:
     type: image
+    imageSource: ""
+    imageAlt: ""
     positionVertical: top
     positionHorizontal: center
     fixed: false
     priority: false
-    imageSource: ""
-    imageAlt: ""
-    patternSize: natural
     mask: none
-    videoSource: null
     overlay: 0
 preview:
   text:
@@ -100,7 +98,7 @@ _structures:
             comment: Alt text describing the slide image.
 _inputs_from_glob:
   - /src/components/page-sections/explainers/feature-slider/feature-slider.cloudcannon.inputs.yml
-  - /.cloudcannon/inputs/background-mask.yml
+  - /.cloudcannon/inputs/background.yml
 groups:
   - heading: Content
     inputs:

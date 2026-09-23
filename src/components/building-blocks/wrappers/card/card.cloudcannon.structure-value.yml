@@ -13,14 +13,12 @@ value:
   backgroundColor: base
   background:
     type: image
+    imageSource: ""
+    imageAlt: ""
     positionVertical: top
     positionHorizontal: center
     fixed: false
     priority: false
-    imageSource: ""
-    imageAlt: ""
-    patternSize: natural
-    videoSource: null
     overlay: 0
   link: null
   rounded: false

@@ -6,19 +6,9 @@ import { slugifyLabel } from "@component-utils/slugify";
 
 const {
   label,
-  type = "youtube",
-  videoId,
+  media,
   title,
-  source,
-  /** `"button"` (default) or `"poster"` — a still image with a play disc. */
-  triggerStyle = "button",
-  triggerText,
-  triggerVariant = "primary",
-  triggerSize = "md",
-  triggerIconName = "play-circle",
-  posterImage = "",
-  posterAlt = "",
-  posterAspectRatio = "widescreen",
+  trigger,
   size = "xl",
   spaceBefore = "default",
   class: className,
@@ -29,6 +19,18 @@ const {
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const { type = "youtube", videoId, source } = media ?? {};
+const {
+  style: triggerStyle = "button",
+  text: triggerText,
+  variant: triggerVariant = "primary",
+  size: triggerSize = "md",
+  iconName: triggerIconName = "play-circle",
+  image: posterImage = "",
+  alt: posterAlt = "",
+  aspectRatio: posterAspectRatio = "widescreen",
+} = trigger ?? {};
 
 const hasVideo =
   (type === "local-source" && source) || ((type === "youtube" || type === "vimeo") && videoId);
@@ -58,7 +60,7 @@ const embedSrc =
   label={label}
   popoverId={posterPopoverId}
   triggerText={usePoster ? undefined : triggerText}
-  data-prop-trigger-text="triggerText"
+  data-prop-trigger-text="trigger.text"
   triggerVariant={triggerVariant}
   triggerSize={triggerSize}
   triggerIconName={usePoster ? undefined : triggerIconName}
@@ -86,8 +88,8 @@ const embedSrc =
         sizes="(max-width: 640px) 100vw, 800px"
         widths={[400, 800, 1280]}
         width={1280}
-        data-prop-src="posterImage"
-        data-prop-alt="posterAlt"
+        data-prop-src="trigger.image"
+        data-prop-alt="trigger.alt"
       />
       <span
         class="video-modal-poster-disc"

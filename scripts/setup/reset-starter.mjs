@@ -151,12 +151,13 @@ pageSections:
     backgroundColor: base
     background:
       type: image
-      positionVertical: top
-      positionHorizontal: center
-      priority: false
       imageSource: ""
       imageAlt: ""
-      videoSource: null
+      positionVertical: top
+      positionHorizontal: center
+      fixed: false
+      priority: false
+      mask: none
       overlay: 0
 ---
 `;

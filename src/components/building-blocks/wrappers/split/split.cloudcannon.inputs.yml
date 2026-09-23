@@ -31,8 +31,7 @@ distributionMode:
       - id: flexible-fixed
         name: Flexible-Fixed
 fixedWidth:
-  hidden: "distributionMode !== 'fixed-flexible' && distributionMode !== 'flexible-fixed'"
-  comment: Fixed width in pixels for the fixed column (used when distribution mode includes 'fixed').
+  comment: Fixed-Flexible and Flexible-Fixed only — the width in pixels of the fixed column.
   type: number
 minSplitWidth:
   comment: Minimum width in pixels before switching to mobile layout.

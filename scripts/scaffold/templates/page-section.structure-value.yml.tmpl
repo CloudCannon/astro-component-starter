@@ -12,14 +12,13 @@ value:
   backgroundColor: base
   background:
     type: image
+    imageSource: ""
+    imageAlt: ""
     positionVertical: top
     positionHorizontal: center
     fixed: false
     priority: false
-    imageSource: ""
-    imageAlt: ""
-    patternSize: natural
-    videoSource: null
+    mask: none
     overlay: 0
 preview:
   text:
@@ -40,6 +39,7 @@ picker_preview:
     fit: cover
 _inputs_from_glob:
   - /src/components/__KEY__/__SLUG__.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
 groups:
   # Every key under value: (except _component) must appear in exactly one
   # group — lint:cms fails otherwise. Add new content props to Content.

@@ -41,7 +41,6 @@ gap:
 aspectRatio:
   type: select
   comment: How every card cover is cropped. Grid layout only — Masonry always keeps each image's natural shape.
-  hidden: "layout !== 'grid'"
   options:
     values:
       - id: landscape
