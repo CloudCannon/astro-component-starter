@@ -3,6 +3,7 @@ import { nextHeadingLevel } from "@component-utils/headingLevel";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { slugifyLabel } from "@component-utils/slugify";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { toText } from "@component-utils/toText";
 import TimelineItem from "./TimelineItem.astro";
 
 type EntryProps = {
@@ -47,7 +48,9 @@ const YearTag = "h3";
 const entryHeadingLevel = nextHeadingLevel(YearTag);
 
 const isGrouped =
-  !isHorizontal && !isSplit && entries?.some((entry: EntryProps) => isNonEmptyString(entry.year));
+  !isHorizontal &&
+  !isSplit &&
+  entries?.some((entry: EntryProps) => isNonEmptyString(toText(entry.year)));
 
 type YearGroup = { year: string; entries: EntryProps[] };
 
@@ -56,7 +59,7 @@ const groups: YearGroup[] = [];
 if (isGrouped) {
   for (let i = 0; i < entries.length; i += 1) {
     const entry = entries[i] as EntryProps;
-    const year = String(entry.year || "");
+    const year = toText(entry.year);
     const last = groups[groups.length - 1];
 
     if (last && last.year === year) last.entries.push(entry);
@@ -126,7 +129,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       <slot>
         {groups.map((group) => (
           <li class="timeline-group">
-            <YearTag class="timeline-year">{group.year}</YearTag>
+            {group.year && <YearTag class="timeline-year">{group.year}</YearTag>}
             <ol
               role="list"
               class="timeline-group-list"
@@ -223,11 +226,16 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       /* Layout is read off the rendered shape, never a class on this root: a
          prop-driven class on a region root goes stale in the editor. The
          horizontal branch renders a `.timeline-scroller`, the grouped one a
-         `.timeline-group`; the vertical default is what's left.
+         `.timeline-group`, the split one a `.timeline-split`; the vertical
+         default is what's left. Split's `<ol>` also carries `.timeline-list`
+         (for the shared list reset below), so it matches this selector too —
+         and its extra `:not()` clauses make it MORE specific than the split
+         rule further down, so without this exclusion it wins the cascade and
+         clobbers split's grid-template-columns instead of losing to it.
          Last-item overlay is :last-of-type, not an is-last class: CloudCannon
          inserts array items without re-rendering the parent, so a class
          baked in at SSR would stick to the original last item. */
-      &:has(> .timeline-list):not(:has(.timeline-group)) {
+      &:has(> .timeline-list):not(:has(.timeline-group)):not(:has(> .timeline-split)) {
         .timeline-list {
           display: grid;
           gap: 0;
@@ -319,14 +327,20 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           font-size: var(--font-size-lg);
           font-variant-numeric: lining-nums;
           font-weight: var(--font-weight-bold);
+          grid-column: 1;
           line-height: var(--timeline-year-line);
           margin: 0;
         }
 
+        /* Explicit column, not auto-placement order: a group with no year (an
+           empty `year` on its first entry) renders no `.timeline-year`
+           sibling, and with only one grid item, auto-placement fills column 1
+           — the narrow date column — instead of leaving it for column 2. */
         .timeline-group-list {
           border-inline-start: var(--border-width-sm) solid var(--color-border);
           display: grid;
           gap: var(--spacing-xl);
+          grid-column: 2;
           padding-block-end: var(--spacing-2xl);
           padding-inline-start: var(--spacing-xl);
         }
@@ -376,6 +390,11 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           .timeline-group {
             grid-template-columns: 1fr;
           }
+
+          .timeline-year,
+          .timeline-group-list {
+            grid-column: 1;
+          }
         }
       }
 
@@ -411,6 +430,12 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
         .timeline-split-content {
           min-width: 0;
+
+          /* Heading and SimpleText stamp their own align-start, which beats the
+             side's inherited text-align: end below. */
+          :is(.heading-inner, .simple-text-content) {
+            text-align: inherit;
+          }
         }
 
         .timeline-entry:nth-child(odd) .timeline-split-content {
@@ -500,6 +525,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
             outline-offset: 2px;
           }
           overscroll-behavior-x: contain;
+          padding-block-end: var(--spacing-sm);
           padding-inline-end: var(--timeline-gutter, 0px);
           scroll-snap-type: x proximity;
         }

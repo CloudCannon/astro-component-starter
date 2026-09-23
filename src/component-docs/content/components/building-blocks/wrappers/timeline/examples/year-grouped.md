@@ -15,10 +15,10 @@ blocks:
       body: Three clients on monthly support.
     - year: '2022'
       date: Jun
-      title: The starter
-      body: The one-off theme became a reusable system.
+      title: New studio
+      body: Moved into a permanent space with room to grow.
     - year: '2025'
       date: Jan
-      title: Visual editing
-      body: Editors assemble pages without a developer in the loop.
+      title: New markets
+      body: Took on the first clients outside the country.
 ---

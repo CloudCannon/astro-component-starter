@@ -65,11 +65,11 @@ describe("consent runtime", () => {
     expect(parsed.decisions).toEqual({ analytics: "unset", externalMedia: "granted" });
   });
 
-  it("requires an explicit grant, honors GPC, and fails closed when disabled", () => {
+  it("requires an explicit grant and fails closed when disabled", () => {
     const unset = record({ decisions: { analytics: "unset", externalMedia: "unset" } });
 
     expect(isConsentAllowed(unset, "analytics", config)).toBe(false);
-    expect(isConsentAllowed(record(), "analytics", config, true)).toBe(true);
+    expect(isConsentAllowed(record(), "analytics", config)).toBe(true);
     expect(isConsentAllowed(record(), "externalMedia", config)).toBe(false);
     expect(isConsentAllowed(record(), "analytics", { ...config, enabled: false })).toBe(false);
   });
@@ -109,5 +109,34 @@ describe("consent runtime", () => {
     manager.setDecision("analytics", "granted");
     expect(manager.record.decisions.analytics).toBe("granted");
     expect(manager.isAllowed("analytics")).toBe(true);
+  });
+
+  it("records a decline up front when the browser sends Global Privacy Control", () => {
+    const stored = new Map<string, string>();
+
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => stored.get(key) ?? null,
+      setItem: (key: string, value: string) => void stored.set(key, value),
+    });
+    vi.stubGlobal("window", { addEventListener: vi.fn(), dispatchEvent: vi.fn() });
+    vi.stubGlobal("BroadcastChannel", undefined);
+
+    vi.stubGlobal("navigator", { globalPrivacyControl: true });
+    const honored = new ConsentManager(config);
+
+    expect(honored.hasDecision).toBe(true);
+    expect(honored.record.decisions).toEqual({ analytics: "denied", externalMedia: "denied" });
+
+    stored.clear();
+    vi.stubGlobal("navigator", { globalPrivacyControl: true });
+    const ignored = new ConsentManager({ ...config, honorGlobalPrivacyControl: false });
+
+    expect(ignored.hasDecision).toBe(false);
+
+    stored.clear();
+    vi.stubGlobal("navigator", {});
+    const noSignal = new ConsentManager(config);
+
+    expect(noSignal.hasDecision).toBe(false);
   });
 });

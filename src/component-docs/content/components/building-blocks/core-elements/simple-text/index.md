@@ -6,8 +6,6 @@ slots:
     description: The content inside the Simple Text component (used when text prop is empty).
 examples:
   - slugs:
-      - primary
-  - slugs:
       - align
   - slugs:
       - sizes

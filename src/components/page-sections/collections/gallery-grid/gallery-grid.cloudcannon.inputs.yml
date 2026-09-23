@@ -68,12 +68,16 @@ aspectRatio:
         name: Square (1:1)
       - id: landscape
         name: Landscape (4:3)
+      - id: portrait
+        name: Portrait (3:4)
+      - id: widescreen
+        name: Widescreen (16:9)
 lightbox:
   type: switch
   comment: Open images full size in an overlay when a tile is clicked. The overlay supports swipe, arrow keys, and looping.
 showThumbnails:
   type: switch
-  comment: Show a strip of clickable thumbnails under the photo in the lightbox.
+  comment: Show a strip of clickable thumbnails under the photo in the lightbox. Only has an effect when Lightbox is on.
   hidden: "!lightbox"
 
 # --- section wrapper inputs (CustomSection) ---

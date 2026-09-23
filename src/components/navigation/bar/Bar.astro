@@ -3,6 +3,7 @@ import Dropdown from "./Dropdown.astro";
 import MegaPanel from "./MegaPanel.astro";
 import { isCurrentPage, itemHasMegaMenu, type NavItem } from "./navState";
 import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
 
 const {
   navData = [],
@@ -13,7 +14,13 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const navInstanceId = slugifyLabel(ariaLabel || "navigation");
+// The radio group name has to be unique per nav: two bars sharing an
+// `aria-label` would put both their panels in one group, so opening one closes
+// the other's.
+const navGroupName = uniqueId(
+  Astro.request,
+  `bar-nav-top-${slugifyLabel(ariaLabel || "navigation")}`
+);
 const pathname = Astro.url.pathname;
 ---
 
@@ -28,7 +35,7 @@ const pathname = Astro.url.pathname;
         return (
           <MegaPanel
             item={item}
-            groupName={`bar-nav-top-${navInstanceId}`}
+            groupName={navGroupName}
           />
         );
       }
@@ -49,7 +56,7 @@ const pathname = Astro.url.pathname;
       return (
         <Dropdown
           item={item}
-          groupName={`bar-nav-top-${navInstanceId}`}
+          groupName={navGroupName}
         />
       );
     })}
@@ -161,13 +168,23 @@ const pathname = Astro.url.pathname;
           trigger.addEventListener("click", handleTriggerClick);
         });
 
+      // A press on a label or panel content moves focus to the nearest focusable
+      // ancestor, outside the nav. Closing on that focusout made the trigger's
+      // own click reopen the panel, so presses are left to the click handlers.
+      let pressedInside = false;
+
+      barNav.addEventListener("pointerdown", () => {
+        pressedInside = true;
+      });
+      window.addEventListener("pointerup", () => setTimeout(() => (pressedInside = false)));
+
       // Tabbing out of an open dropdown leaves it hanging over the page; the
       // document click handler only covers the mouse. `relatedTarget` is the
-      // element about to receive focus (null when focus leaves the document).
+      // element about to receive focus.
       barNav.addEventListener("focusout", (e) => {
         const next = (e as FocusEvent).relatedTarget;
 
-        if (next instanceof Node && barNav.contains(next)) return;
+        if (pressedInside || (next instanceof Node && barNav.contains(next))) return;
 
         closeAll(barNav);
       });

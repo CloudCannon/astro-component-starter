@@ -2,11 +2,10 @@
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import { slugifyLabel } from "@component-utils/slugify";
 import CustomSection from "@builders/custom-section/CustomSection.astro";
-import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
-import Segments from "@forms/segments/Segments.astro";
+import Toggle from "@forms/toggle/Toggle.astro";
 import PricingTiersItem from "@page-sections/conversion/pricing-tiers/PricingTiersItem.astro";
 import Grid from "@wrappers/grid/Grid.astro";
 import { nextHeadingLevel } from "@component-utils/headingLevel";
@@ -83,38 +82,32 @@ const annualSelected = defaultInterval === "annual";
   />
   {showAnnualPricing && (
     <div class="pricing-tiers-billing">
-      <Segments
-        class="pricing-tiers-billing-segments"
+      <Toggle
+        class="pricing-tiers-billing-toggle"
         name={billingName}
-        aria-label={`${monthlyLabel} or ${annualLabel}`}
-        options={[
-          {
-            value: "monthly",
-            label: monthlyLabel,
-            checked: !annualSelected,
-          },
-          {
-            value: "annual",
-            label: annualLabel,
-            checked: annualSelected,
-          },
-        ]}
-      />
-      {isNonEmptyString(annualBadge) && (
-        <Badge
-          class="pricing-tiers-billing-badge"
-          variant="success"
-          size="sm"
-          text={annualBadge}
-          data-prop="annualBadge"
-        />
-      )}
+        value="annual"
+        offLabel={monthlyLabel}
+        label={annualLabel}
+        checked={annualSelected}
+      >
+        {annualLabel}
+        {isNonEmptyString(annualBadge) && (
+          <>
+            {" "}
+            <span
+              class="pricing-tiers-billing-saving"
+              data-prop="annualBadge"
+            >
+              ({annualBadge})
+            </span>
+          </>
+        )}
+      </Toggle>
     </div>
   )}
   <Grid
     gap="lg"
     minItemWidth={272}
-    maxItemWidth={420}
     class="pricing-tiers-grid"
     spaceBefore="loose"
     data-children-prop="tiers"
@@ -133,32 +126,35 @@ const annualSelected = defaultInterval === "annual";
 
 <style is:global>
   @layer page-sections {
+    /* Not Grid's maxItemWidth: auto-fill counts tracks at the max, so three
+       420px-capped cards wrapped 2 + 1 until ~1300px. The cap is on the row. */
+    .pricing-tiers-grid > .grid-inner.columns-auto {
+      --pricing-tier-max-width: 420px;
+
+      grid-template-columns: repeat(auto-fit, minmax(min(var(--min-item-width), 100%), 1fr));
+      margin-inline: auto;
+      max-width: calc(var(--pricing-tier-max-width) * 3 + var(--grid-spacing) * 2);
+
+      &:not(:has(> :nth-child(3))) {
+        max-width: calc(var(--pricing-tier-max-width) * 2 + var(--grid-spacing));
+      }
+
+      &:not(:has(> :nth-child(2))) {
+        max-width: var(--pricing-tier-max-width);
+      }
+    }
+
     .pricing-tiers-billing {
-      align-items: center;
-      column-gap: var(--spacing-sm);
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
+      justify-content: center;
 
-      > .pricing-tiers-billing-segments {
-        grid-column: 2;
-        width: max-content;
+      > .pricing-tiers-billing-toggle {
+        width: auto;
       }
 
-      > .pricing-tiers-billing-badge {
-        justify-self: start;
-      }
-
-      /* Stack so a long savings chip can't shove the switch off-center. */
-      @media (width < 640px) {
-        grid-template-columns: 1fr;
-        justify-items: center;
-        row-gap: var(--spacing-sm);
-
-        > .pricing-tiers-billing-segments,
-        > .pricing-tiers-billing-badge {
-          grid-column: 1;
-          justify-self: center;
-        }
+      .pricing-tiers-billing-saving {
+        color: var(--color-success);
+        font-weight: var(--font-weight-semibold);
       }
     }
   }

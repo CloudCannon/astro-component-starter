@@ -17,12 +17,13 @@ value:
   buttonText: Subscribe
   disclaimer: "By subscribing, you agree to our [privacy policy](/privacy/)."
   layout: band
+  panelBackgroundColor: surface
   maxContentWidth: xl
   paddingHorizontal: lg
   paddingVertical: 3xl
   colorScheme: inherit
   lockColorScheme: false
-  backgroundColor: surface
+  backgroundColor: base
   background:
     type: image
     positionVertical: top
@@ -70,6 +71,7 @@ groups:
       - buttonText
       - disclaimer
       - layout
+      - panelBackgroundColor
   - heading: Section settings
     comment: Width, spacing, color scheme, and background for this section.
     collapsed: true

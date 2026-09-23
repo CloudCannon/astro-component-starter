@@ -10,17 +10,17 @@ value:
   subtext: One line that frames the points below.
   alignmentHorizontal: center
   features:
-    - title: Fast by default
+    - title: Fast
       description: Static HTML and CSS, so a page renders before any JavaScript runs.
       iconName: bolt
       iconColor: yellow
       iconBackground: true
-    - title: Yours to brand
+    - title: Brandable
       description: Color, type, and spacing come from one token file you set once.
       iconName: swatch
       iconColor: blue
       iconBackground: true
-    - title: Editable in place
+    - title: Editable
       description: Anyone on the team can update a page without opening the code.
       iconName: pencil-square
       iconColor: green

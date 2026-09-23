@@ -124,7 +124,7 @@ Content rules specific to migration:
 
 Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/mainNav.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 capture, and update `site` in `astro.config.mjs` to the production URL. Logo files (light + dark variant) go in `src/assets/images/` and are referenced from all three data files via `logoSource` / `logoAlternateSource`.
 
-Then follow [privacy-consent](../privacy-consent/SKILL.md): configure `src/data/privacy.json` and `src/data/analytics.json`, replace the `/privacy/` scaffold with the migrated site's real owner/services/purposes/retention/rights, remove `starterPrivacyPolicyPlaceholder: true`, and map every retained third party to the existing analytics or external-media category. Unsupported providers require an intentional allowlist/adapter change; never paste their script or iframe directly into migrated content.
+Then follow [privacy-consent](../privacy-consent/SKILL.md): configure `src/data/privacy.json` and `src/data/analytics.json`, rewrite the default `/privacy/` markdown page with the migrated site's real owner/services/purposes/retention/rights, and map every retained third party to the existing analytics or external-media category. Unsupported providers require an intentional allowlist/adapter change; never paste their script or iframe directly into migrated content.
 
 **Done-check:** header/footer/SEO are site-specific; the privacy page and labels match the retained services; `npm run check:placeholders -- --strict` passes; and production-like Network inspection shows no optional request before its category is granted.
 
@@ -149,6 +149,6 @@ Download every source image into `src/assets/images/` (Astro optimizes images fr
 ## Verify your work
 
 - Run `npm run check` — expect exit 0, no lint/type errors, no skills drift.
-- Run `npm run check:placeholders -- --strict` — the migrated policy route resolves and no starter policy marker remains.
+- Run `npm run check:placeholders -- --strict` — no starter URL or branding remains. Read `/privacy/` yourself; nothing checks the policy text.
 - If phase 4 added any page-builder component, author each a `*.preview.mjs` recipe and run `npm run previews:build` — new SVGs appear with no build errors.
 - Run `npm run dev`, click through every migrated page, and open each in the CloudCannon Visual Editor per phase 8's done-check. In a production-like build, verify each optional provider before consent, after consent, and after revocation.

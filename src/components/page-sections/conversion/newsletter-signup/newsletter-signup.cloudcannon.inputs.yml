@@ -85,6 +85,22 @@ layout:
         name: Band
       - id: card
         name: Card
+panelBackgroundColor:
+  type: select
+  label: Panel background color
+  comment: Background of the bordered panel that holds the copy and form. None lets the section background show through.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: base
+        name: Base
+      - id: surface
+        name: Surface
+      - id: accent
+        name: Accent
+      - id: highlight
+        name: Highlight
 
 # --- section wrapper inputs (CustomSection) ---
 # Configures the CustomSection wrapper, not this section's own content. Inline

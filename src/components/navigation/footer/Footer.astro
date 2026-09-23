@@ -7,7 +7,9 @@ import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import Text from "@core-elements/text/Text.astro";
 import type { SocialLink } from "../../../types";
 import privacyData from "@data/privacy.json";
+import { parsePrivacyConfig } from "../../../integrations/consent/config";
 
+const privacy = parsePrivacyConfig(privacyData);
 const {
   links = [],
   socials = [] as SocialLink[],
@@ -67,13 +69,13 @@ const {
           text={footerText || ""}
           useDefaultEditableBinding={false}
         />
-        {privacyData.enabled && (
+        {privacy.enabled && (
           <button
             type="button"
             class="footer-privacy-settings"
             data-consent-open
           >
-            {privacyData.settingsLabel}
+            {privacy.settingsLabel}
           </button>
         )}
       </div>

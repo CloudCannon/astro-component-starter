@@ -4,7 +4,7 @@ overview: A row of social icon links. Ghost is the default. Solid uses brand-col
 examples:
   - slugs: [variant-ghost, variant-solid]
     title: Variants
-  - slugs: [size-sm, size-md]
+  - slugs: [size-sm, size-md, size-lg, size-xl]
     title: Sizes
   - slugs: [alignment-start, alignment-center, alignment-end]
     title: Horizontal Alignment

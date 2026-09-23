@@ -3,11 +3,15 @@ import { generateFieldId } from "@component-utils/formField";
 
 const {
   label,
+  /** Text before the switch naming its off state ("Monthly" beside "Annual"). Hidden from assistive tech: the switch is named by `label` alone. */
+  offLabel,
   name,
   checked = false,
   required = false,
   value = "on",
   id: customId,
+  /** Attributes for the `<input>` itself; the rest go on the wrapper. */
+  inputAttributes = {},
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -25,6 +29,14 @@ const fieldId = generateFieldId("toggle", customId, name || label);
     class="toggle-container"
     for={fieldId}
   >
+    {offLabel && (
+      <span
+        class="toggle-off-label"
+        aria-hidden="true"
+      >
+        {offLabel}
+      </span>
+    )}
     <span class="toggle-switch">
       <input
         type="checkbox"
@@ -37,12 +49,13 @@ const fieldId = generateFieldId("toggle", customId, name || label);
         aria-label={label ? undefined : name}
         value={value}
         class="toggle-input"
+        {...inputAttributes}
       />
       <span class="toggle-track"></span>
     </span>
     {label && (
       <span class="toggle-label">
-        {label}
+        <slot>{label}</slot>
         {required && (
           <span
             class="toggle-required"
@@ -73,6 +86,20 @@ const fieldId = generateFieldId("toggle", customId, name || label);
 
       .toggle-label {
         flex: 1;
+      }
+
+      /* Two-sided: both labels hug the switch, and the unselected side mutes. */
+      .toggle-container:has(.toggle-off-label) {
+        width: auto;
+
+        .toggle-label {
+          flex: none;
+        }
+
+        &:has(.toggle-input:checked) .toggle-off-label,
+        &:not(:has(.toggle-input:checked)) .toggle-label {
+          color: var(--color-text-muted);
+        }
       }
 
       .toggle-required {

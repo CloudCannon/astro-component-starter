@@ -275,7 +275,7 @@ Changing these files is only the configuration surface. For saved-decision behav
 - `footer.json`: replace logo fields, `links`, `socials`, `footerText`.
 - `privacy.json`: set final labels, expiry, site-relative policy URL, and GPC choice; increase `policyRevision` only for a material policy/service change.
 - `analytics.json`: keep analytics off or configure the site-specific hosted Plausible script.
-- Replace `src/content/pages/privacy.md`, remove `starterPrivacyPolicyPlaceholder: true`, then run `npm run check:placeholders -- --strict`.
+- Replace the bracketed prompts in `src/content/pages/privacy.md`, a plain markdown page, with the site's real policy. No check covers it.
 
 ---
 

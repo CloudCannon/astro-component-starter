@@ -83,18 +83,19 @@ const renderedCodes = tabs.map((tab, index) =>
 /**
  * A gutter column holds one row per SOURCE line, so the first wrapped line
  * pushes every number below it out of step. Each number therefore rides in its
- * own line's flow, hanging into the gutter (see the styles). Shiki's inline
- * output separates lines with `<br>` and the escaped fallback keeps the
- * source's own newlines; both become newlines, which also keeps the line breaks
- * in the copied text.
+ * own line's flow, hanging into the gutter (see the styles). The marker stays
+ * textless and the digit comes from a CSS counter: this same `code` element is
+ * the inline-editable region, so any text here would be written back into the
+ * `code` prop and re-numbered on the next render. Shiki's inline output
+ * separates lines with `<br>` and the escaped fallback keeps the source's own
+ * newlines; both become newlines, which also keeps the line breaks in the
+ * copied text.
  */
 function renderCodeLines(html: string, numbered: boolean): string {
   return html
     .split(/<br>|\n/)
-    .map((line, index) =>
-      numbered
-        ? `<span class="code-block-line-number" aria-hidden="true">${index + 1}</span>${line}`
-        : line
+    .map((line) =>
+      numbered ? `<span class="code-block-line-number" aria-hidden="true"></span>${line}` : line
     )
     .join("\n");
 }
@@ -263,8 +264,19 @@ function renderCodeLines(html: string, numbered: boolean): string {
         flex: none;
       }
 
-      .code-block-panel[hidden] {
-        display: none;
+      .code-block-panel {
+        animation: fade-in var(--animation-slow) var(--ease-in-out) forwards;
+
+        /* The tab open on page load shouldn't fade in with the rest of the
+           page — only a real switch (setup.ts clears this once one happens)
+           should animate. */
+        &[data-initial] {
+          animation: none;
+        }
+
+        &[hidden] {
+          display: none;
+        }
       }
 
       .code-block-code.has-line-numbers {
@@ -290,6 +302,7 @@ function renderCodeLines(html: string, numbered: boolean): string {
         }
 
         code {
+          counter-reset: code-block-line;
           padding-inline-start: var(--code-gutter);
         }
 
@@ -311,6 +324,11 @@ function renderCodeLines(html: string, numbered: boolean): string {
           text-align: end;
           user-select: none;
           width: var(--code-gutter);
+
+          &::before {
+            content: counter(code-block-line);
+            counter-increment: code-block-line;
+          }
         }
       }
 

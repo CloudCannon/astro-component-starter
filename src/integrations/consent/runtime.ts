@@ -66,22 +66,20 @@ export function parseConsentRecord(
   }
 }
 
+/**
+ * Strict opt-in: only an explicit grant allows a category, so an undecided one
+ * is already denied. Global Privacy Control is honoured where it can still
+ * change something — `ConsentManager` records the decline up front, so the
+ * banner never asks a visitor who has signalled.
+ */
 export function isConsentAllowed(
   record: ConsentRecord,
   category: ConsentCategory,
-  config: PrivacyConfig,
-  globalPrivacyControl = false
+  config: PrivacyConfig
 ): boolean {
   if (!config.enabled) return false;
 
-  const decision = record.decisions[category];
-
-  if (decision === "denied") return false;
-  if (config.honorGlobalPrivacyControl && globalPrivacyControl && decision !== "granted") {
-    return false;
-  }
-
-  return decision === "granted";
+  return record.decisions[category] === "granted";
 }
 
 function globalPrivacyControlEnabled(): boolean {
@@ -108,6 +106,17 @@ export class ConsentManager {
     window.addEventListener("storage", (event) => {
       if (event.key === CONSENT_STORAGE_KEY) this.sync();
     });
+
+    // A browser sending Global Privacy Control has already declined optional
+    // services; recording that up front keeps the banner from asking again.
+    if (
+      config.enabled &&
+      config.honorGlobalPrivacyControl &&
+      globalPrivacyControlEnabled() &&
+      !this.hasDecision
+    ) {
+      this.rejectAll();
+    }
   }
 
   get record(): ConsentRecord {
@@ -119,7 +128,7 @@ export class ConsentManager {
   }
 
   isAllowed(category: ConsentCategory): boolean {
-    return isConsentAllowed(this.#record, category, this.#config, globalPrivacyControlEnabled());
+    return isConsentAllowed(this.#record, category, this.#config);
   }
 
   setDecision(category: ConsentCategory, decision: Exclude<ConsentDecision, "unset">): void {

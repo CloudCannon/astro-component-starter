@@ -81,6 +81,25 @@ function refresh(root: HTMLElement, privacy: PrivacyConfig): void {
   });
 
   hydrateExternalMedia();
+
+  if (!privacy.enabled) lockExternalMedia();
+}
+
+/**
+ * With the workflow off, optional services are denied for good — so the
+ * placeholder's enable button is a control that writes a decision, re-renders
+ * the same placeholder and changes nothing a visitor can see.
+ */
+function lockExternalMedia(): void {
+  document.querySelectorAll<HTMLElement>("[data-external-media-enable]").forEach((button) => {
+    const message = button.previousElementSibling;
+
+    if (message instanceof HTMLElement) {
+      message.textContent = "External content is unavailable on this site.";
+    }
+
+    button.remove();
+  });
 }
 
 function hydrateExternalMedia(): void {
@@ -200,12 +219,20 @@ function bind(root: HTMLElement, privacy: PrivacyConfig): void {
     if (control.hasAttribute("data-consent-bound")) return;
     control.setAttribute("data-consent-bound", "");
     control.addEventListener("click", () => {
-      document.querySelector<HTMLElement>(".consent-popover")?.showPopover();
+      root.querySelector<HTMLElement>(".consent-popover")?.showPopover();
     });
   });
 
   if (root.hasAttribute("data-consent-initialized")) return;
   root.setAttribute("data-consent-initialized", "");
+
+  // Every opener ends up here, including the banner's Customize button, which
+  // uses `popovertarget` and so never reaches a click handler. Closing with
+  // Escape or the X leaves the boxes as the visitor last ticked them, which
+  // would otherwise read as a saved choice next time the dialog opens.
+  root.querySelector<HTMLElement>(".consent-popover")?.addEventListener("beforetoggle", (event) => {
+    if ((event as ToggleEvent).newState === "open") refresh(root, privacy);
+  });
 
   root.querySelectorAll<HTMLElement>("[data-consent-action]").forEach((control) => {
     control.addEventListener("click", () => {
@@ -253,9 +280,12 @@ export function setupAllConsent(): void {
       const manager = getConsentManager(config.privacy);
 
       manager.subscribe(() => {
-        document
-          .querySelectorAll<HTMLElement>(".consent")
-          .forEach((activeRoot) => refresh(activeRoot, config.privacy));
+        document.querySelectorAll<HTMLElement>(".consent").forEach((activeRoot) => {
+          // The docs example runs on its own state; refreshing it from the live
+          // record would decide it on the visitor's behalf.
+          if (activeRoot.closest(".component-viewer")) return;
+          refresh(activeRoot, config.privacy);
+        });
       });
       setupAnalytics(config.analytics, config.privacy);
     }

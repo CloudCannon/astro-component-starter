@@ -2,6 +2,7 @@
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
 import Page from "@layouts/Page.astro";
+import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
 import { ogCardPath } from "../utils/og/paths";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 
@@ -14,12 +15,12 @@ export async function getStaticPaths() {
 
   return pages
     .filter((page) => {
-      const slug = page.id.replace(/\/?index$/, "");
+      const slug = page.id.replace(/(^|\/)index$/, "");
 
       return slug !== "blog";
     })
     .map((page) => {
-      const slug = page.id.replace(/\/?index$/, "");
+      const slug = page.id.replace(/(^|\/)index$/, "");
 
       if (slug.length === 0) return { params: { slug: undefined }, props: { page } };
       return { params: { slug }, props: { page } };
@@ -28,6 +29,7 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { Content } = await render(page);
+const hasBody = Boolean(page.body?.trim());
 ---
 
 <Page
@@ -36,5 +38,15 @@ const { Content } = await render(page);
   mainNav={mainNavData}
   footer={footerData}
 >
-  <Content />
+  {hasBody && (
+    <CustomSection
+      maxContentWidth="md"
+      paddingHorizontal="lg"
+      paddingVertical="4xl"
+    >
+      <div class="prose">
+        <Content />
+      </div>
+    </CustomSection>
+  )}
 </Page>

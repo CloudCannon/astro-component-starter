@@ -106,7 +106,17 @@ const primaryHeading = sections.find(
     id="main-content"
     {...(disablePagefind ? { "data-pagefind-ignore": "all" } : {})}
   >
-    {sections.length > 0 && <MainComponent sections={sections} />}
+    {sections.length > 0 && (
+      <div
+        data-pagefind-body
+        data-pagefind-filter="Type:Page"
+        data-editable="component"
+        data-component="utils/main-component"
+        data-prop-sections="pageSections"
+      >
+        <MainComponent sections={sections} />
+      </div>
+    )}
     <div {...(disablePagefind ? {} : { "data-pagefind-body": true })}>
       <slot />
     </div>

@@ -11,31 +11,31 @@ value:
       imageAlt: ""
       contentSections:
         - _component: building-blocks/core-elements/heading
-          text: Connect the repo
+          text: Place your order
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Point the starter at your Git repository and it builds on every push.
+          text: Choose a size, add it to the cart, and check out in a couple of minutes.
           size: sm
     - image: ""
       imageAlt: ""
       contentSections:
         - _component: building-blocks/core-elements/heading
-          text: Swap the tokens
+          text: We pack and ship
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Brand color, fonts, and radius are one token file — change it once.
+          text: Orders placed before 2pm leave the warehouse the same day.
           size: sm
     - image: ""
       imageAlt: ""
       contentSections:
         - _component: building-blocks/core-elements/heading
-          text: Ship it
+          text: Track delivery
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Publish from the editor. The CDN and SSL are already handled.
+          text: A tracking link arrives by email as soon as the parcel is scanned.
           size: sm
 preview:
   text:

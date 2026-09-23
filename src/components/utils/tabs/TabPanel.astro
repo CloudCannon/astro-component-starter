@@ -11,6 +11,10 @@ const {
 } = Astro.props;
 ---
 
+{/* `data-initial` is cleared by setup.ts on the first real switch — lets a
+    consumer's CSS suppress a switch-in animation for the panel that's
+    already showing on load, without also suppressing it for later switches
+    back to that tab. */}
 <Element
   class:list={["tab-panel", className]}
   id={id}
@@ -19,6 +23,7 @@ const {
   aria-hidden={selected ? "false" : "true"}
   hidden={!selected}
   data-tab-panel
+  data-initial={selected || undefined}
   {...htmlAttributes}
 >
   <slot />

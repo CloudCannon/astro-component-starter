@@ -178,78 +178,77 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
         &.nav-top {
           display: grid;
-          /* An explicit track list rather than `grid-auto-flow: column`: the
-             panel spans `1 / -1` so that it starts at the container's inline
-             edge, and `-1` only resolves against explicit tracks. Same static
-             count as nav-start, and empty `max-content` columns collapse. */
-          grid-template-columns: repeat(12, minmax(max-content, auto));
+          /* A flexible track on each side centers the tab columns without
+             `justify-content` — which repositions the whole track set,
+             including where line 1 falls. The panel below spans `1 / -1`
+             and needs line 1 to always be the container's true inline edge,
+             not wherever the tab group happens to start once centered. */
+          grid-template-columns: minmax(0, 1fr) repeat(12, minmax(max-content, auto)) minmax(
+              0,
+              1fr
+            );
           grid-template-rows: auto auto;
-          justify-content: start;
           overflow-x: auto;
           scroll-snap-type: x proximity;
 
-          /* Content-sized tabs no longer tile the full width, so the strip's
-             baseline rule comes from here. `width: 100cqi` with the matching
-             negative margin draws the full width while contributing nothing to
-             track sizing, which would otherwise re-stretch the tabs. */
+          /* No column-gap, so adjacent tabs' own underline segments (below)
+             already abut into one continuous line under the tab group; this
+             rail extends it to the container's true edges on both sides. */
           &::before {
             align-self: end;
             background: var(--color-bg-muted);
             content: "";
-            grid-column: 1;
+            grid-column: 1 / -1;
             grid-row: 1;
             height: var(--content-selector-border-width);
-            margin-inline-end: -100cqi;
-            pointer-events: none;
-            width: 100cqi;
           }
 
           .content-selector-item:nth-of-type(1) > .content-selector-tablist {
-            grid-column: 1;
-          }
-
-          .content-selector-item:nth-of-type(2) > .content-selector-tablist {
             grid-column: 2;
           }
 
-          .content-selector-item:nth-of-type(3) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(2) > .content-selector-tablist {
             grid-column: 3;
           }
 
-          .content-selector-item:nth-of-type(4) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(3) > .content-selector-tablist {
             grid-column: 4;
           }
 
-          .content-selector-item:nth-of-type(5) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(4) > .content-selector-tablist {
             grid-column: 5;
           }
 
-          .content-selector-item:nth-of-type(6) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(5) > .content-selector-tablist {
             grid-column: 6;
           }
 
-          .content-selector-item:nth-of-type(7) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(6) > .content-selector-tablist {
             grid-column: 7;
           }
 
-          .content-selector-item:nth-of-type(8) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(7) > .content-selector-tablist {
             grid-column: 8;
           }
 
-          .content-selector-item:nth-of-type(9) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(8) > .content-selector-tablist {
             grid-column: 9;
           }
 
-          .content-selector-item:nth-of-type(10) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(9) > .content-selector-tablist {
             grid-column: 10;
           }
 
-          .content-selector-item:nth-of-type(11) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(10) > .content-selector-tablist {
             grid-column: 11;
           }
 
-          .content-selector-item:nth-of-type(12) > .content-selector-tablist {
+          .content-selector-item:nth-of-type(11) > .content-selector-tablist {
             grid-column: 12;
+          }
+
+          .content-selector-item:nth-of-type(12) > .content-selector-tablist {
+            grid-column: 13;
           }
 
           .content-selector-tablist {
@@ -261,7 +260,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
             &::before {
               background: var(--color-bg-muted);
               height: var(--content-selector-border-width);
-              inset-block: 100%;
+              /* `inset-block-end: 0`, not `inset-block: 100%` — the latter
+                 sits just below the tab's own box, a pixel under where the
+                 baseline rail (a plain grid item, flush with its row's own
+                 end edge) renders. Same edge here puts the active tab's
+                 indicator (painted after the rail, since it's positioned)
+                 visibly over the rail instead of as a second line beneath it. */
+              inset-block-end: 0;
               inset-inline-start: 0;
               width: 100%;
             }
@@ -276,8 +281,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
            * and letting its inner content (which has width: 100cqi and
            * position: sticky) render over the full visible container width.
            * This lets the tabs row size to its labels and scroll naturally.
+           * `contain: layout` is load-bearing, not defensive: without it,
+           * the engine's own track-sizing pass on the grid above still
+           * measures this item by its overflowing (100cqi) child despite
+           * `width: 0`, which throws off sizing for the whole row.
            */
           .content-selector-panel {
+            contain: layout;
             container-type: normal;
             grid-column: 1 / -1;
             grid-row: 2;

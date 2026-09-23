@@ -3,7 +3,7 @@ title: '5 columns'
 spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/masonry'
-  columns: 5
+  columns: '5'
   items:
     - contentSections:
         - _component: building-blocks/wrappers/card

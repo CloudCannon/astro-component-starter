@@ -1,5 +1,6 @@
 ---
 import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
@@ -43,11 +44,24 @@ const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
 const masonry = layout === "masonry" || aspectRatio === "natural";
 const tileRatio = masonry ? "none" : aspectRatio;
 
-// Lightbox popover target: unique per gallery on the page, so an unnamed
-// gallery keeps a generated suffix.
 const derivedLabel = sectionLabel || heading;
-const popoverId = `gallery-${derivedLabel ? slugifyLabel(derivedLabel) : crypto.randomUUID()}`;
+const popoverId = uniqueId(
+  Astro.request,
+  `gallery-${derivedLabel ? slugifyLabel(derivedLabel) : "lightbox"}`
+);
+const lightboxLabel = heading ? `Gallery: ${heading}` : "Gallery";
 const hasLightbox = lightbox && items.length > 0;
+
+const Items = masonry ? Masonry : "div";
+const itemsAttributes = masonry
+  ? { class: "gallery-items", columns: columnCount, gap, "data-children-prop": "images" }
+  : {
+      class: "gallery-items grid",
+      style: `--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`,
+      "data-editable": "array",
+      "data-prop": "images",
+      "data-direction": "row",
+    };
 ---
 
 <CustomSection
@@ -85,55 +99,29 @@ const hasLightbox = lightbox && items.length > 0;
     text={subtext}
   />
 
-  {masonry ? (
-    <Masonry
-      class="gallery-items"
-      columns={columnCount}
-      gap={gap}
-      data-children-prop="images"
-    >
-      {items.map((item: any, index: number) => (
-        <GalleryItem
-          data-editable="array-item"
-          image={item.image}
-          alt={item.alt}
-          caption={item.caption}
-          index={index}
-          aspectRatio={tileRatio}
-          lightbox={hasLightbox}
-        />
-      ))}
-    </Masonry>
-  ) : (
-    <div
-      class="gallery-items grid"
-      style={`--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`}
-      data-editable="array"
-      data-prop="images"
-      data-direction="row"
-    >
-      {items.map((item: any, index: number) => (
-        <GalleryItem
-          data-editable="array-item"
-          image={item.image}
-          alt={item.alt}
-          caption={item.caption}
-          index={index}
-          aspectRatio={tileRatio}
-          lightbox={hasLightbox}
-        />
-      ))}
-    </div>
-  )}
+  <Items {...itemsAttributes}>
+    {items.map((item: any, index: number) => (
+      <GalleryItem
+        data-editable="array-item"
+        image={item.image}
+        alt={item.alt}
+        caption={item.caption}
+        index={index}
+        aspectRatio={tileRatio}
+        lightbox={hasLightbox}
+      />
+    ))}
+  </Items>
 
   {hasLightbox && (
     <div
       id={popoverId}
       popover="auto"
-      class="gallery-lightbox modal-popover"
+      data-modal
+      class="gallery-lightbox"
       role="dialog"
       aria-modal="true"
-      aria-label="Gallery image"
+      aria-label={lightboxLabel}
     >
       {/* Frame shrink-wraps the photo so optional thumbnails sit under it
             without becoming a viewport-width band. Controls stay inside the
@@ -311,6 +299,11 @@ const hasLightbox = lightbox && items.length > 0;
         &:hover {
           border-color: var(--color-border-strong);
         }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
       }
 
       .gallery-caption {
@@ -320,39 +313,37 @@ const hasLightbox = lightbox && items.length > 0;
            through the list markup this section no longer uses. */
         line-height: var(--line-height-relaxed);
         margin: var(--spacing-sm) 0 0;
+        text-align: center;
       }
 
       /* Lightbox is one object: the photograph. Every control is positioned
          against the figure (which shrink-wraps the photo), never the
-         viewport, so nothing drifts onto the page behind. The shared
-         .modal-popover class is kept for the focus trap and scroll-lock in
-         modal/setup.ts; every sheet style it brings is neutralized here
-         (page-sections layer wins). */
+         viewport, so nothing drifts onto the page behind. */
       .gallery-lightbox {
         background: var(--color-overlay-media-opaque);
         border: 0;
-        border-radius: 0;
-        box-shadow: none;
         height: 100%;
         inset: 0;
         margin: 0;
-        max-height: none;
+        opacity: 0;
         overflow: hidden;
         padding: var(--spacing-xl);
         position: fixed;
-        transform: none;
+        transition:
+          opacity var(--animation-normal) var(--ease-out),
+          overlay var(--animation-normal) var(--ease-out) allow-discrete,
+          display var(--animation-normal) var(--ease-out) allow-discrete;
         width: 100%;
         z-index: var(--layer-7);
 
         &:popover-open {
           display: grid;
+          opacity: 1;
           place-items: center;
-          transform: none;
-        }
 
-        /* The overlay itself is the backdrop — don't stack the native one. */
-        &::backdrop {
-          background: transparent;
+          @starting-style {
+            opacity: 0;
+          }
         }
       }
 
@@ -378,13 +369,19 @@ const hasLightbox = lightbox && items.length > 0;
         max-height: calc(100dvh - var(--spacing-xl) * 2);
         overflow: hidden;
         position: relative;
-        touch-action: none;
+        /* pan-y, not none: none also blocks pinch-zoom on the photo. setup.ts
+           widens it while zoomed so the zoomed photo can be panned sideways. */
+        touch-action: pan-y pinch-zoom;
         transition: width var(--animation-normal) var(--ease-out);
         width: min(
           var(--content-width-xl),
           calc(100vw - var(--spacing-xl) * 2),
           calc((100dvh - var(--spacing-xl) * 2) * var(--gallery-photo-aspect))
         );
+
+        &.is-zoomed {
+          touch-action: auto;
+        }
 
         &.is-instant {
           transition: none;

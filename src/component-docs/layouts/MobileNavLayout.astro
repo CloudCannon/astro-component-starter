@@ -1,12 +1,16 @@
 ---
+import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
 import Mobile from "@navigation/mobile/Mobile.astro";
 import ThemeToggle from "@navigation/theme-toggle/ThemeToggle.astro";
 import navData from "../data/nav.json";
+import privacyData from "@data/privacy.json";
+import { parsePrivacyConfig } from "../../integrations/consent/config";
 import { generateNavData } from "../utils/navGenerator.js";
 
 const generatedNavData = await generateNavData(navData);
 const mobileNavData = [{ name: "← Back to site", path: "/", children: [] }, ...generatedNavData];
+const privacy = parsePrivacyConfig(privacyData);
 ---
 
 <div class="library-mobile-nav">
@@ -18,6 +22,19 @@ const mobileNavData = [{ name: "← Back to site", path: "/", children: [] }, ..
   />
   <div class="library-mobile-nav-actions">
     <ThemeToggle />
+    {privacy.enabled && (
+      <button
+        type="button"
+        class="privacy-settings-toggle tap-target"
+        aria-label={privacy.settingsLabel}
+        data-consent-open
+      >
+        <Icon
+          name="shield-check"
+          size="none"
+        />
+      </button>
+    )}
     <Mobile navData={mobileNavData}>
       <span
         slot="logo"

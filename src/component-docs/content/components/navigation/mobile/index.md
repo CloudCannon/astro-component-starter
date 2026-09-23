@@ -1,5 +1,6 @@
 ---
 title: 'Mobile'
+defaultSize: 'xl'
 overview: 'Mobile navigation that opens as a full-screen overlay with expandable sections. Built for touch. Usually used inside [Main Nav](/component-docs/components/navigation/main-nav/) for mobile layouts.'
 slots:
   - title: logo

@@ -1,12 +1,12 @@
 ---
-title: 'Video Modal Size Medium'
+title: 'Medium modal'
 spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/video-modal'
-  label: 'Live visual editing'
+  label: 'Medium modal'
   type: 'youtube'
-  videoId: '4mB5KwenCzI'
-  title: 'Live visual editing in Astro with CloudCannon'
+  videoId: 'ZoXyK96nyCg'
+  title: 'Astro in 100 Seconds'
   triggerText: 'Medium modal'
   triggerVariant: 'secondary'
   triggerSize: 'md'

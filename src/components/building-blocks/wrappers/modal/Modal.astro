@@ -2,6 +2,7 @@
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Component from "@component-utils/renderBlock.astro";
 import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
 import Button from "@core-elements/button/Button.astro";
 import ModalShell from "./ModalShell.astro";
 
@@ -17,6 +18,7 @@ const {
    * (VideoModal's poster) need to know the id up front to point at it. */
   popoverId: providedPopoverId,
   size = "md",
+  sheet = true,
   contentSections,
   useDefaultEditableBinding = false,
   spaceBefore = "default",
@@ -29,12 +31,13 @@ const {
 } = Astro.props;
 
 // The trigger's `popovertarget` points here, so the id has to exist and be
-// unique on the page — a modal with nothing to name it falls back to a
-// generated suffix rather than colliding with the next one.
+// unique on the page — two modals sharing a heading or trigger text derive the
+// same base, so the second takes a numbered suffix rather than colliding.
 const HeadingTag = headingLevel;
 const derivedLabel = label || heading || triggerText;
 const popoverId =
-  providedPopoverId || `modal-${derivedLabel ? slugifyLabel(derivedLabel) : crypto.randomUUID()}`;
+  providedPopoverId ||
+  uniqueId(Astro.request, `modal-${derivedLabel ? slugifyLabel(derivedLabel) : "dialog"}`);
 
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
@@ -93,6 +96,7 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     data-space-before={spaceBeforeAttr(spaceBefore)}
     popoverId={popoverId}
     size={size}
+    sheet={sheet}
     label={hasHeading ? undefined : label}
     labelledby={hasHeading ? `${popoverId}-header` : undefined}
   >

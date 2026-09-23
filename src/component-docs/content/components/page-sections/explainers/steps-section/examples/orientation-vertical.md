@@ -13,22 +13,22 @@ blocks:
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: We map the scope, the brand tokens, and the launch date.
+          text: We agree the scope, the budget, and the date you need to be live.
           size: sm
     - contentSections:
         - _component: building-blocks/core-elements/heading
-          text: Content migration
+          text: First draft
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Existing pages move into the component library, section by section.
+          text: You see the plan in week one and give notes in a single pass.
           size: sm
     - contentSections:
         - _component: building-blocks/core-elements/heading
-          text: Editor handover
+          text: Handover
           level: h3
           size: xs
         - _component: building-blocks/core-elements/simple-text
-          text: Your team gets the visual editor and a walkthrough of every block.
+          text: Your team gets a walkthrough and a written guide before launch.
           size: sm
 ---

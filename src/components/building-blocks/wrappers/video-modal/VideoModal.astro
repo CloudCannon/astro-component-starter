@@ -63,6 +63,7 @@ const embedSrc =
   triggerSize={triggerSize}
   triggerIconName={usePoster ? undefined : triggerIconName}
   size={size}
+  sheet={false}
   class:list={["video-modal", "stackable", className]}
   spaceBefore={spaceBefore}
   _component={_component}
@@ -188,9 +189,8 @@ const embedSrc =
 
     /* Centred chrome overlay: no panel, video floating on a dark backdrop,
        close in a bar above it. Modal's default close sits on the player,
-       and a YouTube/Vimeo iframe eats those clicks. Sheet styles from
-       .modal-popover are neutralized here (same layer, higher specificity). */
-    .video-modal .modal-popover {
+       and a YouTube/Vimeo iframe eats those clicks. */
+    .video-modal [data-modal] {
       --video-modal-column: min(
         90vw,
         calc(
@@ -200,22 +200,18 @@ const embedSrc =
 
       background: var(--color-overlay);
       border: 0;
-      border-radius: 0;
-      box-shadow: none;
+      color: var(--color-text);
       height: 100%;
       inset: 0;
       margin: 0;
-      max-height: none;
-      max-width: none;
+      opacity: 0;
       overflow: hidden;
       padding: var(--spacing-xl);
-      transform: none;
+      transition:
+        opacity var(--animation-normal) var(--ease-out),
+        overlay var(--animation-normal) var(--ease-out) allow-discrete,
+        display var(--animation-normal) var(--ease-out) allow-discrete;
       width: 100%;
-
-      /* Beat .modal-popover.size-* (same specificity as the rule above). */
-      &:is(.size-sm, .size-md, .size-lg, .size-xl) {
-        max-width: none;
-      }
 
       &:popover-open {
         align-items: center;
@@ -223,15 +219,11 @@ const embedSrc =
         flex-direction: column;
         gap: var(--spacing-md);
         justify-content: center;
-        transform: none;
+        opacity: 1;
 
         @starting-style {
-          transform: none;
+          opacity: 0;
         }
-      }
-
-      &::backdrop {
-        background: transparent;
       }
 
       &.size-sm :is(.modal-header, .modal-body) {
@@ -282,6 +274,7 @@ const embedSrc =
     }
 
     .video-modal .modal-body {
+      flex: none;
       overflow: hidden;
       width: var(--video-modal-column);
     }
@@ -300,15 +293,18 @@ const embedSrc =
 
       .video-modal-consent {
         align-items: center;
+        background-color: var(--color-bg-surface);
         display: flex;
         flex-direction: column;
         gap: var(--spacing-sm);
+        height: 100%;
         justify-content: center;
-        min-height: 18rem;
+        line-height: var(--line-height-normal);
         padding: var(--spacing-md);
         text-align: center;
 
         p {
+          color: var(--color-text-muted);
           margin: 0;
         }
 

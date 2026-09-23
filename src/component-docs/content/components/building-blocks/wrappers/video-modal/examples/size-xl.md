@@ -1,12 +1,12 @@
 ---
-title: 'Video Modal Size Extra Large'
+title: 'Extra large modal'
 spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/video-modal'
-  label: 'Dunedin Tourism'
-  type: 'vimeo'
-  videoId: '129371220'
-  title: 'Dunedin Tourism'
+  label: 'Extra large modal'
+  type: 'youtube'
+  videoId: 'ZoXyK96nyCg'
+  title: 'Astro in 100 Seconds'
   triggerText: 'Extra large modal'
   triggerVariant: 'secondary'
   triggerSize: 'md'

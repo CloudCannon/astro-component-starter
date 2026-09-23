@@ -1,5 +1,6 @@
 ---
 import Button from "@core-elements/button/Button.astro";
+import Toggle from "@forms/toggle/Toggle.astro";
 import ModalShell from "@wrappers/modal/ModalShell.astro";
 import { slugifyLabel } from "@component-utils/slugify";
 import type { AnalyticsConfig, PrivacyConfig } from "../../../integrations/consent/config";
@@ -9,8 +10,7 @@ const { privacy, analytics, label } = Astro.props as Props;
 const hasAnalytics = analytics.provider !== "none";
 // A page mounts one site-wide instance, but the component library's own example
 // renders a second one on the same page — each needs its own popover id, and the
-// label (which the settings trigger and the banner both target) is how an
-// instance is named.
+// label (which the "Customize" banner action targets) is how an instance is named.
 const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
 ---
 
@@ -29,30 +29,31 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
     <div
       class="consent-banner"
       data-consent-banner
+      data-theme="dark"
       role="region"
-      aria-labelledby="consent-heading"
+      aria-labelledby={`${popoverId}-heading`}
     >
       <div class="consent-copy">
-        <h2 id="consent-heading">{privacy.bannerHeading}</h2>
+        <h2 id={`${popoverId}-heading`}>{privacy.bannerHeading}</h2>
         <p>{privacy.bannerText}</p>
         <a href={privacy.policyUrl}>Read our privacy policy</a>
       </div>
       <div class="consent-actions">
         <Button
           text="Accept All"
-          variant="secondary"
+          variant="primary"
           size="sm"
           data-consent-action="accept-all"
         />
         <Button
           text="Reject All"
-          variant="secondary"
+          variant="primary"
           size="sm"
           data-consent-action="reject-all"
         />
         <Button
           text="Customize"
-          variant="secondary"
+          variant="tertiary"
           size="sm"
           link={`^${popoverId}`}
           data-consent-action="customize"
@@ -60,16 +61,6 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
       </div>
     </div>
   )}
-
-  <Button
-    text={privacy.settingsLabel}
-    iconName="shield-check"
-    variant="primary"
-    size="sm"
-    link={`^${popoverId}`}
-    class="consent-settings-trigger"
-    data-consent-settings-trigger
-  />
 
   <ModalShell
     popoverId={popoverId}
@@ -99,27 +90,41 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
         <span class="consent-category-status">Always on</span>
       </div>
       {hasAnalytics && (
-        <label class="consent-category">
-          <span>
-            <strong>{privacy.analyticsLabel}</strong>
-            <span>{privacy.analyticsDescription}</span>
-          </span>
-          <input
-            type="checkbox"
-            data-consent-category="analytics"
+        <div class="consent-category">
+          <Toggle
+            class="consent-category-toggle"
+            id={`${popoverId}-analytics`}
+            label={privacy.analyticsLabel}
+            inputAttributes={{
+              "data-consent-category": "analytics",
+              "aria-describedby": `${popoverId}-analytics-description`,
+            }}
           />
-        </label>
+          <span
+            id={`${popoverId}-analytics-description`}
+            class="consent-category-description"
+          >
+            {privacy.analyticsDescription}
+          </span>
+        </div>
       )}
-      <label class="consent-category">
-        <span>
-          <strong>{privacy.externalMediaLabel}</strong>
-          <span>{privacy.externalMediaDescription}</span>
-        </span>
-        <input
-          type="checkbox"
-          data-consent-category="externalMedia"
+      <div class="consent-category">
+        <Toggle
+          class="consent-category-toggle"
+          id={`${popoverId}-external-media`}
+          label={privacy.externalMediaLabel}
+          inputAttributes={{
+            "data-consent-category": "externalMedia",
+            "aria-describedby": `${popoverId}-external-media-description`,
+          }}
         />
-      </label>
+        <span
+          id={`${popoverId}-external-media-description`}
+          class="consent-category-description"
+        >
+          {privacy.externalMediaDescription}
+        </span>
+      </div>
       <p class="consent-policy-link">
         For more information, <a href={privacy.policyUrl}>read our privacy policy</a>.
       </p>
@@ -128,13 +133,13 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
       <div class="consent-modal-bulk-actions">
         <Button
           text="Accept All"
-          variant="secondary"
+          variant="tertiary"
           size="sm"
           data-consent-action="accept-all"
         />
         <Button
           text="Reject All"
-          variant="secondary"
+          variant="tertiary"
           size="sm"
           data-consent-action="reject-all"
         />
@@ -158,13 +163,15 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
 
 <style is:global>
   @layer components {
+    /* Inverse, not shadowed: data-theme="dark" gives a solid fill that
+       contrasts with the page, and the theme toggle flips it with the site. */
     .consent-banner {
       align-items: end;
-      background-color: var(--color-bg-surface);
+      background-color: var(--color-bg);
       border: var(--border-width-sm) solid var(--color-border);
       border-radius: var(--radius-md);
       bottom: var(--spacing-md);
-      box-shadow: var(--shadow-lg);
+      color: var(--color-text);
       display: grid;
       gap: var(--spacing-md);
       left: var(--spacing-md);
@@ -210,22 +217,9 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
       gap: var(--spacing-xs);
     }
 
-    .consent-settings-trigger {
-      bottom: var(--spacing-md);
-      display: none;
-      position: fixed;
-      right: var(--spacing-md);
-      z-index: var(--layer-8);
-    }
-
-    .consent[data-consent-decided] .consent-settings-trigger {
-      display: inline-flex;
-    }
-
     /* Component docs are a contained, non-persistent demonstration. Pin the
        chrome to the preview frame instead of the browser viewport. */
-    .component-viewer .consent-banner,
-    .component-viewer .consent-settings-trigger {
+    .component-viewer .consent-banner {
       position: absolute;
     }
 
@@ -281,12 +275,26 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
       }
+    }
 
-      input {
-        accent-color: var(--color-brand);
-        block-size: 1.25rem;
-        inline-size: 1.25rem;
-        margin: 0;
+    /* Toggle rows stack the label + switch over the description; the
+       necessary row keeps its side-by-side "Always on" layout above. */
+    .consent-category:has(> .consent-category-toggle) {
+      display: grid;
+      gap: var(--spacing-xs);
+
+      .toggle-container {
+        flex-direction: row-reverse;
+      }
+
+      .toggle-label {
+        color: var(--color-text-strong);
+        font-weight: var(--font-weight-bold);
+      }
+
+      > .consent-category-description {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
       }
     }
 
@@ -313,13 +321,7 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
         max-width: calc(100vw - var(--spacing-sm) * 2);
       }
 
-      .consent-settings-trigger {
-        bottom: var(--spacing-sm);
-        right: var(--spacing-sm);
-      }
-
-      body:has(.mobile-menu-popover:popover-open) .consent-banner,
-      body:has(.mobile-menu-popover:popover-open) .consent-settings-trigger {
+      body:has(.mobile-menu-popover:popover-open) .consent-banner {
         display: none;
       }
     }

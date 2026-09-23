@@ -2,8 +2,9 @@
 title: 'Icon Colors'
 spacing: 'all'
 blocks:
-  _component: 'building-blocks/wrappers/button-group'
-  buttonSections:
+  _component: 'building-blocks/forms/form'
+  action: './'
+  formBlocks:
     - _component: 'building-blocks/forms/submit'
       text: 'Confirm'
       iconName: 'check'

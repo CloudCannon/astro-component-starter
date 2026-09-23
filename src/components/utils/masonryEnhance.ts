@@ -13,9 +13,12 @@ import { masonrySpan } from "./masonrySpan";
 export const ROW_UNIT = 8;
 
 /** `root` takes the `data-masonry-enhanced` attribute the consumer's CSS keys
- *  on; Gallery Grid passes the same element as both root and inner. */
-export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): void {
-  if (CSS.supports("display", "masonry")) return;
+ *  on; Gallery Grid passes the same element as both root and inner. Returns a
+ *  teardown — the editor re-renders this subtree and strips the attribute, so
+ *  the caller re-runs the whole enhancement rather than leaving observers bound
+ *  to nodes the re-render replaced. */
+export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): () => void {
+  if (CSS.supports("display", "masonry")) return () => {};
 
   root.setAttribute("data-masonry-enhanced", "");
 
@@ -66,4 +69,15 @@ export function enhanceMasonryLayout(root: HTMLElement, inner: HTMLElement): voi
   observeItems();
 
   queueRelayout();
+
+  return () => {
+    resizeObserver.disconnect();
+    mutationObserver.disconnect();
+    if (frame) cancelAnimationFrame(frame);
+    root.removeAttribute("data-masonry-enhanced");
+
+    for (const item of Array.from(inner.children) as HTMLElement[]) {
+      item.style.gridRow = "";
+    }
+  };
 }

@@ -7,7 +7,7 @@ type ItemProps = Record<string, unknown>;
 
 const {
   label,
-  columns = 3,
+  columns = "3",
   gap = "md",
   items = [],
   spaceBefore = "default",
@@ -23,7 +23,7 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
+const columnCount = Number(columns);
 const masonryStyles = [
   `--masonry-columns: ${columnCount}`,
   `--masonry-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`}`,

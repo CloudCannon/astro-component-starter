@@ -8,15 +8,15 @@ blocks:
   layout: split
   entries:
     - date: June 2022
-      title: The first release
-      body: A small starter focused on clean, editable pages.
+      title: Opened the doors
+      body: Two of us, one room, and a handful of local clients.
       iconName: rocket-launch
-    - date: 2023
-      title: A system takes shape
-      body: Shared blocks made every new section easier to maintain.
+    - date: '2023'
+      title: A bigger team
+      body: Three hires and the first year-long retainer.
       iconName: sparkles
-    - date: 2024
-      title: Polish and handoff
-      body: The library became easier for editors to use independently.
+    - date: '2024'
+      title: A place of our own
+      body: Moved into a studio on the main street.
       iconName: puzzle-piece
 ---

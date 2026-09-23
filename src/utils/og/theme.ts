@@ -60,7 +60,16 @@ function declaredProperties(root: string, theme: CardTheme): Map<string, string>
   const declared = new Map<string, string>();
 
   for (const source of [PRIMITIVES, THEME_FILE[theme]]) {
-    const css = readFileSync(path.join(root, source), "utf8");
+    let css: string;
+
+    try {
+      css = readFileSync(path.join(root, source), "utf8");
+    } catch {
+      // Moving or renaming a token file leaves every colour unresolved, which
+      // the caller reports as a warning. Throwing here would fail the build
+      // instead, which this module promises not to do.
+      continue;
+    }
 
     for (const [, name, value] of css.matchAll(DECLARATION)) {
       declared.set(name, value.trim());

@@ -1,0 +1,20 @@
+@layer utils {
+  /**
+   * CloudCannon mints an edit control for any editable region carrying a
+   * `data-prop*` attribute, and that same attribute is what feeds the region
+   * its value — there is no way to have one without the other. The page-wide
+   * component region in `Page.astro` exists only so the editor re-renders
+   * through Astro (without it, blocks nested deeper than `pageSections` lose
+   * their editable-region cascade), so its control is a duplicate covering the
+   * first section's own. Every other region keeps its controls: placed blocks
+   * carry `<editable-array-item-controls>`, a different element.
+   *
+   * `!important` is load-bearing. The rule that reveals a control on hover
+   * (`@cloudcannon/editable-regions/styles/index.css`) ships unlayered, and an
+   * unlayered normal declaration beats a layered one whatever its specificity —
+   * importance is the only lever a layered sheet has left.
+   */
+  [data-component="utils/main-component"] > editable-component-controls {
+    display: none !important;
+  }
+}

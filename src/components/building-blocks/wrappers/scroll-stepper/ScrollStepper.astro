@@ -310,8 +310,8 @@ if (!_component && !hasSteps) return;
       &[data-scroll-stepper-initialized] {
         .scroll-stepper-media {
           position: sticky;
-          top: var(--scroll-stepper-sticky-top, calc(50% + var(--main-nav-height, 0px) / 2));
-          translate: var(--scroll-stepper-sticky-translate, 0 -50%);
+          top: var(--scroll-stepper-sticky-top, var(--main-nav-height, 0px));
+          translate: var(--scroll-stepper-sticky-translate, none);
         }
 
         .scroll-stepper-step {

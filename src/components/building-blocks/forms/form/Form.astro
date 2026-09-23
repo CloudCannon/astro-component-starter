@@ -1,6 +1,7 @@
 ---
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import RenderBlock from "@component-utils/renderBlock.astro";
+import Alert from "@core-elements/alert/Alert.astro";
 
 type FormBlock = { _component?: string };
 
@@ -44,14 +45,14 @@ const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
   {...htmlAttributes}
 >
   {successMessage && (
-    <p
+    <Alert
+      variant="success"
+      text={successMessage}
       class="form-success"
       role="status"
       tabindex="-1"
       hidden
-    >
-      {successMessage}
-    </p>
+    />
   )}
   <div
     class="form-fields"
@@ -110,12 +111,7 @@ const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
       }
 
       > .form-success {
-        background-color: var(--color-bg-surface);
-        border-inline-start: var(--border-width-md) solid var(--color-success);
-        border-radius: var(--radius-xs);
-        color: var(--color-text-strong);
         margin: 0 0 var(--spacing-md);
-        padding: var(--spacing-sm) var(--spacing-md);
       }
     }
   }

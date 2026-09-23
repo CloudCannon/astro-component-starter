@@ -27,12 +27,11 @@ explicit choice made in this site's privacy settings is authoritative.
 
 ## Privacy-policy page
 
-The starter includes an editable `/privacy/` scaffold. It deliberately contains bracketed
-prompts and `starterPrivacyPolicyPlaceholder: true`; it is not a publishable generic policy.
-Replace it with text that describes the live site's real owner, services, purposes, recipients,
-retention, and visitor rights, then remove the placeholder flag. `npm run check:placeholders --
---strict` fails when the configured policy route is missing or the scaffold is still marked as a
-placeholder.
+`/privacy/` is a plain markdown file, `src/content/pages/privacy.md`, edited by hand like any
+other page. The starter ships a default policy with bracketed prompts; it is not a publishable
+generic policy. Replace the prompts with text that describes the live site's real owner,
+services, purposes, recipients, retention, and visitor rights. Nothing checks it: keeping the text
+true, and `policyUrl` in `privacy.json` pointing at it, is the site owner's job.
 
 ## External media
 

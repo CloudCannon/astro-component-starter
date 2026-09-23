@@ -1,6 +1,6 @@
 ---
 name: privacy-consent
-description: Use when configuring, extending, or debugging the starter's site-wide privacy workflow, consent-aware analytics, or third-party video, map, and Embed loading. Covers privacy.json, analytics.json, the policy scaffold, consent categories, provider allowlists, and pre-consent network verification.
+description: Use when configuring, extending, or debugging the starter's site-wide privacy workflow, consent-aware analytics, or third-party video, map, and Embed loading. Covers privacy.json, analytics.json, the default policy page, consent categories, provider allowlists, and pre-consent network verification.
 ---
 
 # Privacy, consent, and analytics
@@ -19,7 +19,7 @@ The starter applies one strict opt-in policy globally. Necessary preference stor
 
 - For ordinary nav, footer, or SEO data, use [site-data-navigation](../site-data-navigation/SKILL.md).
 - For page composition only, use [page-content-authoring](../page-content-authoring/SKILL.md); its catalog identifies the components already wired into consent.
-- For generic legal advice or deciding what a policy must say in a jurisdiction, involve the responsible privacy professional. The starter supplies technical controls and a scaffold, not a publishable universal policy.
+- For generic legal advice or deciding what a policy must say in a jurisdiction, involve the responsible privacy professional. The starter supplies technical controls and a default policy, not a publishable universal policy.
 
 ## Configuration and ownership
 
@@ -33,13 +33,13 @@ The starter applies one strict opt-in policy globally. Necessary preference stor
 | Analytics loading and pageviews                               | `src/integrations/consent/analytics.ts`                                      |
 | Allowed external iframe hosts and paths                       | `src/integrations/consent/externalMedia.ts`                                  |
 | CloudCannon data panels                                       | `cloudcannon.config.yml` and `.cloudcannon/schemas/{privacy,analytics}.json` |
-| Editable policy scaffold                                      | `src/content/pages/privacy.md`                                               |
+| Default policy (plain markdown, edited by hand)               | `src/content/pages/privacy.md`                                               |
 
 `SiteConsent.astro` — mounted by `BaseLayout` and by the component library's own shell — parses both data files and renders one Consent instance on every page; `LibraryLayout` needs it just as much as the site shell, because the Embed, Video and Video Modal examples carry the same placeholders. Do not add `navigation/consent` to `pageSections`; its component-doc example is an isolated, non-persistent demonstration.
 
 ## Configure a site
 
-1. Replace every prompt in `src/content/pages/privacy.md`, remove `starterPrivacyPolicyPlaceholder: true`, and make the text describe the site's actual owner, purposes, services, recipients, retention, and visitor rights.
+1. Replace every bracketed prompt in `src/content/pages/privacy.md` and make the text describe the site's actual owner, purposes, services, recipients, retention, and visitor rights.
 2. Set the site-relative `policyUrl`, final labels, `expiryDays`, and `honorGlobalPrivacyControl` in `privacy.json`.
 3. Keep analytics at `provider: "none"` unless it is intentionally configured. For hosted Plausible, use the site-specific `https://plausible.io/js/pa-….js` URL; the schema rejects the legacy shared script and other hosts.
 4. Increase `policyRevision` after a material change that should invalidate saved choices. Do not increase it for wording-only edits that do not change the services or purposes disclosed.
@@ -52,7 +52,7 @@ Turning `enabled` off hides the UI and fails closed. It is not a way to bypass c
 - With analytics configured and no analytics decision, the banner presents equal-prominence **Accept All**, **Reject All**, and **Customize** actions.
 - The settings dialog identifies the necessary preference record as **Always on**, exposes analytics only when configured, always exposes external media, and allows bulk or granular changes.
 - When analytics is off, there is no first-visit banner. External media asks contextually where a visitor tries to use it.
-- The footer and persistent control reopen settings after a decision.
+- The footer's **Privacy settings** control reopens settings after a decision.
 - Choices expire after `expiryDays`, reset on a `policyRevision` mismatch, and synchronize through `BroadcastChannel` plus the storage event.
 - Effective permission is false for unset or denied categories. GPC keeps an unset choice denied, while a later explicit grant on this site is authoritative.
 - If browser storage is unavailable, the in-memory decision still governs the current visit.
@@ -76,11 +76,11 @@ When adding a host or path:
 3. Keep the component's initial HTML inert. Use `data-external-media-src` for one allowed iframe or `template[data-unsafe-external-media]` plus an adjacent host for trusted HTML. Never emit a provider iframe, thumbnail, preconnect, SDK, or script before permission.
 4. Provide a useful fallback with `data-external-media-enable`. That action grants external media across the site, not only for one item.
 5. Hydrate on the existing consent lifecycle and remove mounted content when permission is revoked. A hidden iframe can keep sending data or playing audio, so hiding is insufficient.
-6. Add allowlist unit tests and smoke coverage for no pre-consent request, successful hydration, and revocation teardown. Update the component docs, catalog, examples, and policy scaffold prompts if the provider changes what sites must disclose.
+6. Add allowlist unit tests and smoke coverage for no pre-consent request, successful hydration, and revocation teardown. Update the component docs, catalog, examples, and default policy text if the provider changes what sites must disclose.
 
 ## Add analytics or a consent category
 
-An analytics provider is a cross-layer change: extend the discriminated schema and data defaults, CloudCannon schema/options, loader adapter, privacy documentation, policy scaffold, and tests together. Preserve the current guarantees: no script or event before permission, no buffering of pre-consent activity, one deliberate pageview per Astro navigation, and no future events after revocation. Document that an already-fetched third-party script cannot reliably be unloaded or clear provider-domain storage.
+An analytics provider is a cross-layer change: extend the discriminated schema and data defaults, CloudCannon schema/options, loader adapter, privacy documentation, default policy text, and tests together. Preserve the current guarantees: no script or event before permission, no buffering of pre-consent activity, one deliberate pageview per Astro navigation, and no future events after revocation. Document that an already-fetched third-party script cannot reliably be unloaded or clear provider-domain storage.
 
 A new consent category is broader still. Update `consentCategories`, blank/parsed records, UI labels and controls, bulk actions, storage tests, GPC behavior, every consumer, CloudCannon inputs/schema, policy text, and network smoke tests. Do not overload an unrelated category merely to avoid this work.
 

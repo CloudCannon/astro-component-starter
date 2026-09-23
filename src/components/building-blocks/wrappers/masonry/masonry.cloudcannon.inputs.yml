@@ -2,12 +2,18 @@ label:
   type: text
   comment: Optional label to identify the wrapper in the editor. When set and no HTML id is provided, an id is derived from this value.
 columns:
-  type: range
+  type: select
   comment: Number of columns on screens 640px and up (small screens always show two).
   options:
-    min: 2
-    max: 5
-    step: 1
+    values:
+      - id: "2"
+        name: 2 Columns
+      - id: "3"
+        name: 3 Columns
+      - id: "4"
+        name: 4 Columns
+      - id: "5"
+        name: 5 Columns
 gap:
   comment: The gap between masonry items.
   type: select

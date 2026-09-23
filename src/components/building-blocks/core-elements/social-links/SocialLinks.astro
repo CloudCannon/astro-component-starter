@@ -82,7 +82,6 @@ const arrayDataAttributes = effectiveChildrenProp
         border-radius: var(--radius-sm);
         color: var(--color-text-muted);
         display: flex;
-        font-size: var(--font-size-lg);
         justify-content: center;
         text-decoration: none;
         transition-duration: var(--animation-normal);
@@ -106,13 +105,27 @@ const arrayDataAttributes = effectiveChildrenProp
       /* md is the 44px touch-target minimum; sm is for footers where the row
          sits inline with legal text. */
       > .social-links-list.size-md .social-link {
+        font-size: var(--font-size-lg);
         height: 2.75rem;
         width: 2.75rem;
       }
 
       > .social-links-list.size-sm .social-link {
+        font-size: var(--font-size-md);
         height: 2.25rem;
         width: 2.25rem;
+      }
+
+      > .social-links-list.size-lg .social-link {
+        font-size: var(--font-size-xl);
+        height: 3.25rem;
+        width: 3.25rem;
+      }
+
+      > .social-links-list.size-xl .social-link {
+        font-size: var(--font-size-2xl);
+        height: 3.75rem;
+        width: 3.75rem;
       }
 
       > .social-links-list.variant-solid {

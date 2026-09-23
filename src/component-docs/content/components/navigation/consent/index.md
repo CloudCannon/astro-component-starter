@@ -3,13 +3,13 @@ title: Consent
 description: Site-wide privacy choices for analytics and third-party media.
 defaultSize: xl
 overview: |
-  Consent is site chrome, not a page section. The starter renders it once from `src/data/privacy.json` and `src/data/analytics.json`; do not add it to a page's `pageSections` array.
+  Consent is site chrome, not a page section: it appears once on every page, so you don't add it to a page. Its wording, and whether it shows at all, come from the site's **Privacy & Consent** and **Analytics** settings.
 
-  The first-visit banner appears only when analytics is configured and the visitor has not made an analytics choice. External media asks contextually on each blocked video, map, or embed. **Accept All** grants both optional categories, **Reject All** denies both, and **Customize** opens the granular settings dialog. The three choices use equal visual prominence. The dialog identifies the necessary preference record as **Always on** and repeats **Accept All** and **Reject All**, so changing or withdrawing consent remains one action away. The footer or persistent **Privacy settings** control reopens it later.
+  The first-visit banner appears only when analytics is set up and the visitor hasn't chosen yet. External media asks separately, on each blocked video, map, or embed. **Accept All** allows both optional categories, **Reject All** blocks both, and **Customize** opens a settings dialog with a switch for each one. Accepting and rejecting always carry equal weight. Necessary storage is marked **Always on**, and the footer's **Privacy settings** link reopens the dialog at any time.
 
-  Choices use strict opt-in, expire after `expiryDays`, reset when `policyRevision` changes, synchronize across tabs, and respect Global Privacy Control until the visitor explicitly grants a category. Turning the workflow off fails closed: it hides the controls but does not load optional services. This docs preview is isolated, so its buttons do not save to browser storage or load the example Plausible script. See the [privacy, consent, and analytics guide](https://github.com/CloudCannon/astro-component-starter/blob/main/docs/PRIVACY.md) for configuration, provider limits, and launch testing.
+  Everything optional stays off until the visitor allows it, and turning the banner off in settings keeps it off rather than loading anything. A saved choice expires after a while and is asked again when the privacy policy changes. This preview is a demonstration: its buttons don't save anything or load analytics. See the [privacy, consent, and analytics guide](https://github.com/CloudCannon/astro-component-starter/blob/main/docs/PRIVACY.md) for setup and testing.
 ---
 
 ## Before launch
 
-Replace the privacy-policy scaffold at `/privacy/`, remove `starterPrivacyPolicyPlaceholder: true`, set the final wording and policy URL in `src/data/privacy.json`, and either keep analytics off or add the site-specific Plausible script URL in `src/data/analytics.json`. Increase `policyRevision` whenever a material policy or service change should require visitors to choose again, then run `npm run check:placeholders -- --strict` and verify production network traffic before and after each choice.
+Rewrite the default privacy policy at `/privacy/` to describe your site, and set the banner wording in **Privacy & Consent**. Leave analytics off, or add your own Plausible script in **Analytics**. After a significant change to the policy or the services you use, increase the policy revision so visitors are asked again.

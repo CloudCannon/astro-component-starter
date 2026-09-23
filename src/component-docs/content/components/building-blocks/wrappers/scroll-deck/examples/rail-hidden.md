@@ -1,29 +1,29 @@
 ---
-title: 'Two cards, no rail'
+title: 'Without rail'
 spacing: null
 blocks:
   _component: 'building-blocks/wrappers/scroll-deck'
-  label: 'Scroll Deck no rail'
-  stickyOffset: lg
-  cardColorScheme: inherit
+  label: 'Scroll Deck without rail'
+  stickyOffset: md
+  cardColorScheme: light
   showRail: false
   cards:
     - _component: 'building-blocks/wrappers/scroll-deck/scroll-deck-card'
-      label: 'Before'
+      label: 'First'
       contentSections:
         - _component: 'building-blocks/core-elements/heading'
-          text: 'Before'
+          text: 'First card'
           level: h3
           size: xl
         - _component: 'building-blocks/core-elements/text'
-          text: 'Four years, two rebuilds, and a template folder nobody wanted to open.'
+          text: 'No rail of anchor links alongside the deck.'
     - _component: 'building-blocks/wrappers/scroll-deck/scroll-deck-card'
-      label: 'After'
+      label: 'Second'
       contentSections:
         - _component: 'building-blocks/core-elements/heading'
-          text: 'After'
+          text: 'Second card'
           level: h3
           size: xl
         - _component: 'building-blocks/core-elements/text'
-          text: 'One library, one token file, and pages the marketing team ships on their own.'
+          text: 'Slides up and covers the first card as the deck continues.'
 ---

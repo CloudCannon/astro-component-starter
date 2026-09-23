@@ -15,6 +15,7 @@ blocks:
   buttonText: Subscribe
   disclaimer: 'By subscribing, you agree to our [privacy policy](/privacy/).'
   layout: band
+  panelBackgroundColor: surface
   colorScheme: inherit
-  backgroundColor: surface
+  backgroundColor: base
 ---

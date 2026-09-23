@@ -6,6 +6,9 @@ import Icon from "@core-elements/icon/Icon.astro";
 
 const {
   variant = "info",
+  // A live-region alert (a form's success message) needs `status`/`alert`;
+  // Astro keeps the first `role` it sees, so a spread one never lands.
+  role = "note",
   title = "",
   text = "",
   iconName = "",
@@ -47,7 +50,7 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
 
 <div
   class:list={["alert", "stackable", className]}
-  role="note"
+  role={role}
   {...htmlAttributes}
 >
   <Icon

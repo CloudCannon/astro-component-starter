@@ -2,8 +2,9 @@
 title: 'Submit Button Sizes'
 spacing: 'all'
 blocks:
-  _component: 'building-blocks/wrappers/button-group'
-  buttonSections:
+  _component: 'building-blocks/forms/form'
+  action: './'
+  formBlocks:
     - _component: 'building-blocks/forms/submit'
       text: 'Small Submit'
       size: 'sm'

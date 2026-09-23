@@ -5,7 +5,7 @@
  * Registered in `editor-live-sync.js` — without it the iframe is never
  * injected in the CloudCannon editor and the modal opens empty.
  *
- * Keyed on `.modal-popover`, not the `.video-modal` root: the root survives an
+ * Keyed on the `[data-modal]` popover, not the `.video-modal` root: the root survives an
  * editor re-render while its contents are replaced, so a guard flag on the
  * root would leave the new popover uninitialised.
  *
@@ -103,12 +103,12 @@ export function setupAllVideoModals(root: ParentNode = document): void {
     consentListenerBound = true;
     window.addEventListener("site-consent-change", () => {
       document
-        .querySelectorAll<HTMLElement>(".video-modal .modal-popover:popover-open")
+        .querySelectorAll<HTMLElement>(".video-modal [data-modal]:popover-open")
         .forEach((popover) => openVideo(popover));
     });
   }
 
   root
-    .querySelectorAll<HTMLElement>(".video-modal .modal-popover")
+    .querySelectorAll<HTMLElement>(".video-modal [data-modal]")
     .forEach((el) => setupVideoModal(el));
 }

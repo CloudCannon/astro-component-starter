@@ -67,18 +67,18 @@ pageSections:
         iconName: rocket-launch
       - year: ''
         date: '2018'
-        title: First component library
-        body: We stopped rebuilding the same hero for every client.
+        title: First full-time hires
+        body: Three people joined and we took on our first retainer clients.
         iconName: cube
       - year: ''
         date: '2022'
-        title: Visual editing as the handoff
-        body: Editors started assembling pages without a ticket queue.
+        title: A studio of our own
+        body: Moved out of the spare room into a space on the main street.
         iconName: pencil-square
       - year: ''
         date: '2026'
         title: Still shipping
-        body: Same craft, more of the system reused, fewer late nights on launch week.
+        body: Same craft, a bigger team, fewer late nights on launch week.
         iconName: sparkles
     colorScheme: inherit
     backgroundColor: base

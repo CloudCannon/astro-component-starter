@@ -21,7 +21,7 @@ import MobileNavLayout from "@component-docs/layouts/MobileNavLayout.astro";
 import SidebarNavLayout from "@component-docs/layouts/SidebarNavLayout.astro";
 import SiteConsent from "@component-utils/SiteConsent.astro";
 import ThemeToggleScript from "@navigation/theme-toggle/ThemeToggleScript.astro";
-import RenderBlock from "@component-utils/renderBlock.astro";
+import MainComponent from "@component-utils/MainComponent.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
 const pageDescription = props.frontmatter?.description;
@@ -32,6 +32,7 @@ const contentSections = props.frontmatter?.contentSections || [];
 <html
   lang="en"
   data-theme="light"
+  data-pathname={Astro.url.pathname}
 >
   <head>
     <meta charset="UTF-8" />
@@ -59,6 +60,19 @@ const contentSections = props.frontmatter?.contentSections || [];
         src="/@vite/client"
       ></script>
     ) : null}
+    <script>
+      if (window.inEditorMode) {
+        // Pages ship only the component CSS their own markup uses (see
+        // `scripts/build/pruneCss.mjs`). The editor renders components that
+        // were never in the HTML, so it needs the whole sheet.
+        const full = document.createElement("style");
+        full.textContent = '@import url("/_astro/components-full.css");';
+        document.head.append(full);
+
+        import("../../../live-editing");
+        import("../../../editor-live-sync");
+      }
+    </script>
     <title>{pageTitle}</title>
     <meta
       name="robots"
@@ -88,10 +102,11 @@ const contentSections = props.frontmatter?.contentSections || [];
         <SidebarNavLayout />
         <main class="main">
           <div
-            data-editable="array"
-            data-children-prop="contentSections"
+            data-editable="component"
+            data-component="utils/main-component"
+            data-prop-sections="contentSections"
           >
-            <RenderBlock contentSections={contentSections} />
+            <MainComponent sections={contentSections} />
           </div>
           <slot />
         </main>

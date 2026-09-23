@@ -4,7 +4,7 @@ description: Column layout for mixed-height items that keeps reading order.
 value:
   _component: building-blocks/wrappers/masonry
   label: ""
-  columns: 3
+  columns: "3"
   gap: md
   items:
     - contentSections:

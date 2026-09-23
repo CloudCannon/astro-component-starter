@@ -29,18 +29,18 @@ subtext:
     numberedlist: false
 showAnnualPricing:
   type: switch
-  comment: Show a Monthly/Annual switch above the cards. Each tier can then set a separate annual price.
+  comment: Show a Monthly/Annual toggle above the cards. Each tier can then set a separate annual price.
 monthlyLabel:
   type: text
-  comment: Label for the monthly option on the billing switch.
+  comment: Label before the billing toggle, for monthly pricing.
   hidden: "!showAnnualPricing"
 annualLabel:
   type: text
-  comment: Label for the annual option on the billing switch.
+  comment: Label after the billing toggle, for annual pricing.
   hidden: "!showAnnualPricing"
 annualBadge:
   type: text
-  comment: Optional savings chip beside the switch (e.g. "2 months free"). Leave empty to hide.
+  comment: Optional saving shown in brackets after the annual label (e.g. "save 17%" or "2 months free"). Leave empty to hide.
   hidden: "!showAnnualPricing"
 defaultInterval:
   type: select

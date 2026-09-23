@@ -20,6 +20,7 @@ import {
   PHOTO_TITLE_MAX_LINES,
   TEMPLATE_SOURCE_PATH,
   cardHtml,
+  escapeHtml,
   photoTitleFontSize,
   photoTitleWidth,
 } from "./template.js";
@@ -145,7 +146,7 @@ async function wrapTitle(
   const html =
     `<div style="width:${width}px">` +
     `<p style="font-family:${fontStacks.heading};font-weight:700;font-size:${size}px;` +
-    `line-height:1.3;margin:0;width:${width}px">${title.replace(/[&<>]/g, " ")}</p></div>`;
+    `line-height:1.3;margin:0;width:${width}px">${escapeHtml(title)}</p></div>`;
 
   const measured = await renderer.measure(fromHtml(html).node, { width, height: CARD_HEIGHT, css });
   const lines: string[] = [];

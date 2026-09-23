@@ -11,6 +11,9 @@ export const privacyConfigSchema = z.object({
     .refine(
       (value) =>
         !value.startsWith("//") &&
+        // A backslash is a path separator to the URL parser, so "/\evil.com"
+        // resolves to another origin while passing every check below.
+        !value.includes("\\") &&
         !value
           .split(/[?#]/, 1)[0]
           .split("/")

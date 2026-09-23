@@ -1,0 +1,119 @@
+---
+import Testimonial from "@core-elements/testimonial/Testimonial.astro";
+
+/**
+ * One cell of TestimonialBento. Size and tone live on the inner Testimonial,
+ * not this root: the root is an array-item region the editor keeps across
+ * re-renders, so a prop-driven attribute here would go stale.
+ */
+const {
+  text = "",
+  authorName = "",
+  authorDescription = "",
+  authorImage = "",
+  size = "standard",
+  tone = "base",
+  class: className,
+  _component,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<div
+  class:list={["testimonial-bento-item", className]}
+  {...htmlAttributes}
+>
+  <Testimonial
+    class="testimonial-bento-card"
+    data-size={size}
+    data-tone={tone}
+    data-theme={tone === "inverse" ? "dark" : undefined}
+    text={text}
+    authorName={authorName}
+    authorDescription={authorDescription}
+    authorImage={authorImage}
+    alignmentHorizontal="start"
+    avatarSize={size === "featured" ? 56 : 44}
+    data-prop="text"
+    data-prop-author-name="authorName"
+    data-prop-author-description="authorDescription"
+    data-prop-author-image="authorImage"
+  />
+</div>
+
+<style is:global>
+  @layer page-sections {
+    .testimonial-bento-item {
+      display: grid;
+      min-width: 0;
+
+      &:has(> [data-size="wide"]),
+      &:has(> [data-size="featured"]) {
+        grid-column: span 2;
+      }
+
+      &:has(> [data-size="full"]) {
+        grid-column: 1 / -1;
+      }
+
+      &:has(> [data-size="tall"]),
+      &:has(> [data-size="featured"]) {
+        grid-row: span 2;
+      }
+
+      /* Two columns: a featured cell already fills the row, so it drops the
+         second row rather than becoming a tall full-width slab. */
+      @container (width <= 800px) {
+        &:has(> [data-size="featured"]) {
+          grid-row: span 1;
+        }
+      }
+
+      @container (width <= 450px) {
+        &:has(> [data-size]) {
+          grid-column: auto;
+          grid-row: auto;
+        }
+      }
+
+      > .testimonial-bento-card {
+        display: grid;
+
+        > .testimonial-inner {
+          color: var(--color-text);
+          height: 100%;
+
+          > .quote > * {
+            font-size: var(--font-size-lg);
+          }
+
+          > .author {
+            margin-top: auto;
+            padding-top: var(--spacing-md);
+          }
+        }
+
+        &[data-size="featured"] > .testimonial-inner {
+          padding: var(--spacing-xl);
+
+          > .quote > * {
+            font-size: var(--font-size-2xl);
+          }
+        }
+
+        &[data-tone="surface"] > .testimonial-inner {
+          background: var(--color-bg-surface);
+        }
+
+        &[data-tone="accent"] > .testimonial-inner {
+          background: var(--color-bg-accent);
+        }
+
+        &[data-tone="highlight"] > .testimonial-inner {
+          background: var(--color-bg-highlight);
+        }
+      }
+    }
+  }
+</style>

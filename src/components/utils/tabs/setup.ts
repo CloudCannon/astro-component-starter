@@ -14,7 +14,7 @@ function matchingPanel(tab: HTMLElement, panels: HTMLElement[]): HTMLElement | u
   return panels.find((panel) => panel.id === panelId);
 }
 
-function activateTab(root: HTMLElement, activeTab: HTMLButtonElement): void {
+function activateTab(root: HTMLElement, activeTab: HTMLButtonElement, userInitiated = false): void {
   const tabs = ownedElements<HTMLButtonElement>(root, TAB_SELECTOR);
   const panels = ownedElements<HTMLElement>(root, PANEL_SELECTOR);
   const activePanel = matchingPanel(activeTab, panels);
@@ -33,6 +33,11 @@ function activateTab(root: HTMLElement, activeTab: HTMLButtonElement): void {
 
     panel.hidden = !active;
     panel.setAttribute("aria-hidden", String(!active));
+    // A real switch, not the initial-state call below: once a visitor has
+    // interacted, the panel that started selected is just another panel —
+    // any consumer CSS gating a switch-in animation on `data-initial` should
+    // start animating it too, the next time it's selected again.
+    if (userInitiated) delete panel.dataset.initial;
   });
 }
 
@@ -61,7 +66,7 @@ export function setupTabs(root: HTMLElement): void {
     if (tab.dataset.tabInitialized === "true") return;
     tab.dataset.tabInitialized = "true";
 
-    tab.addEventListener("click", () => activateTab(root, tab));
+    tab.addEventListener("click", () => activateTab(root, tab, true));
     tab.addEventListener("keydown", (event) => {
       const currentTabs = ownedElements<HTMLButtonElement>(root, TAB_SELECTOR).filter((item) =>
         Boolean(matchingPanel(item, ownedElements(root, PANEL_SELECTOR)))
@@ -83,7 +88,7 @@ export function setupTabs(root: HTMLElement): void {
       const nextTab = currentTabs[nextIndex];
 
       if (!nextTab) return;
-      activateTab(root, nextTab);
+      activateTab(root, nextTab, true);
       nextTab.focus();
     });
   });

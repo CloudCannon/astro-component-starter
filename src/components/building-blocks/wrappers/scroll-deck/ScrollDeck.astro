@@ -105,23 +105,35 @@ if (!_component && !hasCards && !hasSlotContent) return;
       --deck-cover-dim: 0.12;
       --deck-exit-runway: var(--spacing-none);
 
+      /* `--deck-offset` has to resolve here, not on `.scroll-deck-layout`
+         where the `.offset-*` class actually lives: `--deck-top` below (and
+         `--deck-entry-gap`/the runway margin further down) are declared on
+         this element, and a custom property only ever sees an override made
+         on itself or an ancestor, never one made on a descendant. The class
+         still can't move to this root element instead — CloudCannon keeps
+         the root and swaps its content on a re-render, so a prop-driven
+         class here would go stale — hence reading it back via `:has()`. */
+      /* `0px`, not `var(--spacing-none)`: that token is a bare `0`, and
+         `--deck-top` below adds it to `--main-nav-height` inside a `calc()`
+         — a length plus a unitless number is invalid, so `top` silently
+         fell back to `auto` and the card didn't stick at all. */
+      &:has(> .scroll-deck-layout.offset-none) {
+        --deck-offset: 0px;
+      }
+
+      &:has(> .scroll-deck-layout.offset-sm) {
+        --deck-offset: var(--spacing-sm);
+      }
+
+      &:has(> .scroll-deck-layout.offset-lg) {
+        --deck-offset: var(--spacing-lg);
+      }
+
       position: relative;
       > .scroll-deck-layout {
         display: grid;
         gap: var(--spacing-lg);
         grid-template-columns: minmax(0, 1fr);
-
-        &.offset-none {
-          --deck-offset: var(--spacing-none);
-        }
-
-        &.offset-sm {
-          --deck-offset: var(--spacing-sm);
-        }
-
-        &.offset-lg {
-          --deck-offset: var(--spacing-lg);
-        }
       }
 
       .scroll-deck-track {
@@ -207,9 +219,17 @@ if (!_component && !hasCards && !hasSlotContent) return;
           gap: var(--spacing-xs);
           justify-items: center;
           position: sticky;
-          top: calc(50% + var(--main-nav-height, 0px) / 2);
+          /* Centered on the pinned card, not on the viewport: the stack pins
+             at `--deck-top` near the top of the screen, so a viewport-centered
+             rail floats below the cards with nothing beside it. A real pixel
+             `top` rather than `50%` + a `-50%` translate — the translate keeps
+             applying while the rail is still in normal flow, lifting it over
+             the section above. */
+          top: calc(
+            var(--deck-top) +
+              max(0px, (var(--deck-card-height, 0px) - var(--deck-rail-height, 0px)) / 2)
+          );
           transform: translateY(var(--deck-rail-release, 0px));
-          translate: 0 -50%;
         }
       }
 

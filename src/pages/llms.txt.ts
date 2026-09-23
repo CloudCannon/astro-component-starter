@@ -11,7 +11,7 @@ const line = (title: string, path: string, description?: string) =>
   description ? `- [${title}](${path}): ${description}` : `- [${title}](${path})`;
 
 const pagePath = (id: string) => {
-  const slug = id.replace(/\/?index$/, "");
+  const slug = id.replace(/(^|\/)index$/, "");
 
   return slug.length === 0 ? "/" : `/${slug}/`;
 };

@@ -88,12 +88,12 @@ For a very large site, `shareImageGeneration` in `src/data/seo.json` (**Share ca
 - `/llms.txt` is generated at build time from your content collections by
   `src/pages/llms.txt.ts`, so it already lists _your_ pages and posts (skipping `noindex` pages) —
   nothing to hand-edit.
-- Replace `src/content/pages/privacy.md`, remove its
-  `starterPrivacyPolicyPlaceholder: true` flag, and confirm the configured policy URL resolves.
+- Replace the bracketed prompts in `src/content/pages/privacy.md` with the site's real policy, and
+  confirm `policyUrl` in `src/data/privacy.json` still points at it.
 - If analytics is enabled, paste the site-specific Plausible `pa-….js` URL into the Analytics
   data panel and verify a consented pageview in the production dashboard.
-- Run `npm run check:placeholders -- --strict` so placeholder URLs and privacy policy text fail
-  the production gate rather than warn.
+- Run `npm run check:placeholders -- --strict` so placeholder URLs and branding fail the
+  production gate rather than warn.
 - Inspect production network traffic before and after each privacy choice. Optional analytics,
   video, map, and embed requests must remain absent until their category is granted.
 

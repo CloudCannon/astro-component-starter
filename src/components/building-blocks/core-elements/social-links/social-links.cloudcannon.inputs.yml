@@ -24,6 +24,10 @@ size:
         name: Small
       - id: md
         name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra large
 alignmentHorizontal:
   type: select
   comment: Horizontal alignment of the row.

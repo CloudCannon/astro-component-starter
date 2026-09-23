@@ -1,6 +1,7 @@
 ---
 import Button from "@core-elements/button/Button.astro";
 import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
 import NavItemTrigger from "@navigation/bar/NavItemTrigger.astro";
@@ -24,7 +25,9 @@ const {
 } = Astro.props;
 
 const navInstanceId = slugifyLabel(ariaLabel || "mobile");
-const toggleId = `mobile-toggle-${navInstanceId}`;
+// `<label for>` and the script's getElementById both resolve to the first match,
+// so two navs sharing an `aria-label` would leave the second unopenable.
+const toggleId = uniqueId(Astro.request, `mobile-toggle-${navInstanceId}`);
 const pathname = Astro.url.pathname;
 ---
 
@@ -262,7 +265,11 @@ const pathname = Astro.url.pathname;
       if (nav.dataset.mobileInitialized === "true") return;
       nav.dataset.mobileInitialized = "true";
 
-      overlaysContainer.appendChild(nav);
+      // A component library preview is a sandbox: the panel covers that frame,
+      // not the page, so it moves into the frame and leaves the page usable.
+      const sandbox = nav.closest<HTMLElement>(".component-viewer .preview");
+
+      (sandbox ?? overlaysContainer).appendChild(nav);
 
       const toggleId = nav.getAttribute("data-toggle-id");
       const toggleElement = toggleId ? document.getElementById(toggleId) : null;
@@ -275,8 +282,13 @@ const pathname = Astro.url.pathname;
         if (isOpen) {
           nav.setAttribute("aria-hidden", "false");
           nav.style.transform = "translateX(0)";
-          document.body.style.overflow = "hidden";
-          syncBackgroundInert();
+          if (sandbox) {
+            sandbox.scrollTop = 0;
+            sandbox.style.overflowY = "hidden";
+          } else {
+            document.body.style.overflow = "hidden";
+            syncBackgroundInert();
+          }
           // Into the panel, not the close affordance — that is a `<label>` and
           // takes no focus. The panel is also moved into the overlays container,
           // outside the checkbox's tab sequence, so place focus explicitly.
@@ -284,9 +296,13 @@ const pathname = Astro.url.pathname;
         } else {
           nav.setAttribute("aria-hidden", "true");
           nav.style.transform = "translateX(-100%)";
-          document.body.style.overflow = "";
-          // Drop `inert` before focusing: the checkbox is part of the page.
-          syncBackgroundInert();
+          if (sandbox) {
+            sandbox.style.overflowY = "";
+          } else {
+            document.body.style.overflow = "";
+            // Drop `inert` before focusing: the checkbox is part of the page.
+            syncBackgroundInert();
+          }
           // Focusing the checkbox draws the ring on the hamburger label.
           toggle?.focus();
         }
@@ -438,6 +454,11 @@ const pathname = Astro.url.pathname;
       &:focus-visible {
         outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
       }
+    }
+
+    .component-viewer .mobile {
+      height: 100%;
+      position: absolute;
     }
 
     .mobile {

@@ -11,12 +11,15 @@ import { setupModalShell } from "../../../building-blocks/wrappers/modal/setup";
 const SWIPE_THRESHOLD_PX = 40;
 
 export function setupGallery(root: HTMLElement): void {
-  if (root.hasAttribute("data-gallery-initialized")) return;
-  root.setAttribute("data-gallery-initialized", "");
-
   const popover = root.querySelector<HTMLElement>(".gallery-lightbox");
 
   if (!popover) return; // lightbox turned off — tiles are static figures
+
+  // Keyed on the lightbox, not the `.gallery-grid` root: the root survives an
+  // editor re-render while its contents are replaced, so a flag on the root
+  // would skip the new tiles and leave the lightbox unopenable.
+  if (popover.hasAttribute("data-gallery-initialized")) return;
+  popover.setAttribute("data-gallery-initialized", "");
 
   setupModalShell(popover);
 
@@ -123,8 +126,16 @@ export function setupGallery(root: HTMLElement): void {
   // Horizontal swipe on the photo (no extra dependency — the repo has no
   // standalone gesture helper now that the lightbox no longer wraps Carousel).
   if (figure && total > 1) {
+    // A pinch-zoomed viewport needs horizontal drags to pan the photo, not
+    // to change it.
+    const isZoomed = () => (window.visualViewport?.scale ?? 1) > 1.01;
+
+    window.visualViewport?.addEventListener("resize", () => {
+      figure.classList.toggle("is-zoomed", isZoomed());
+    });
+
     figure.addEventListener("pointerdown", (e) => {
-      if ((e.target as HTMLElement).closest("button")) return;
+      if ((e.target as HTMLElement).closest("button") || isZoomed()) return;
       pointerStartX = e.clientX;
       figure.setPointerCapture(e.pointerId);
     });

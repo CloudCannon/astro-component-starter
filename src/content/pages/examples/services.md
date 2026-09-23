@@ -121,7 +121,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Tokens and sections, designed against the real sitemap.
+            text: Layouts and a look, designed against the real sitemap.
             size: sm
       - image: ''
         imageAlt: ''
@@ -131,7 +131,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Content in, redirects mapped, editors in the preview.
+            text: Content in, redirects mapped, and a staging link to review.
             size: sm
       - image: ''
         imageAlt: ''
@@ -141,7 +141,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Training, a short guide, and a clean repo, not a war room.
+            text: Training, a short guide, and a tidy handover, not a war room.
             size: sm
     orientation: horizontal
     imageAspectRatio: landscape

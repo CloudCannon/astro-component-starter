@@ -26,6 +26,7 @@ import {
   setupImageCarousel,
 } from "./src/components/building-blocks/wrappers/image-carousel/setup";
 import {
+  MODAL_SELECTOR,
   setupAllModals,
   setupModalShell,
 } from "./src/components/building-blocks/wrappers/modal/setup";
@@ -46,6 +47,7 @@ import {
   setupGallery,
 } from "./src/components/page-sections/collections/gallery-grid/setup";
 import {
+  destroyMasonry,
   setupAllMasonry,
   setupMasonry,
 } from "./src/components/building-blocks/wrappers/masonry/setup";
@@ -147,6 +149,17 @@ const queueImageCarouselReset = makeResetScheduler({
   label: "image-carousel",
 });
 
+/**
+ * The re-render keeps `.masonry` but replaces its items and strips the
+ * attributes the enhancement set on it — so the layout CSS switches off while
+ * observers stay bound to items that no longer exist. Rebuild it from scratch.
+ */
+const queueMasonryReset = makeResetScheduler({
+  destroy: destroyMasonry,
+  init: setupMasonry,
+  label: "masonry",
+});
+
 function initNewComponents(root) {
   if (root.nodeType !== Node.ELEMENT_NODE) return;
 
@@ -182,12 +195,12 @@ function initNewComponents(root) {
 
   const newModals = [];
 
-  if (root.classList?.contains("modal-popover") && !root.hasAttribute("data-modal-initialized")) {
+  if (root.matches?.(MODAL_SELECTOR) && !root.hasAttribute("data-modal-initialized")) {
     newModals.push(root);
   }
 
   root
-    .querySelectorAll(".modal-popover:not([data-modal-initialized])")
+    .querySelectorAll(`${MODAL_SELECTOR}:not([data-modal-initialized])`)
     .forEach((el) => newModals.push(el));
 
   for (const el of newModals) {
@@ -230,13 +243,11 @@ function initNewComponents(root) {
 
   const newGalleries = [];
 
-  if (root.classList?.contains("gallery-grid") && !root.hasAttribute("data-gallery-initialized")) {
+  if (root.classList?.contains("gallery-grid")) {
     newGalleries.push(root);
   }
 
-  root
-    .querySelectorAll(".gallery-grid:not([data-gallery-initialized])")
-    .forEach((el) => newGalleries.push(el));
+  root.querySelectorAll(".gallery-grid").forEach((el) => newGalleries.push(el));
 
   for (const el of newGalleries) {
     log("initialising new gallery", el);
@@ -275,16 +286,11 @@ function initNewComponents(root) {
 
   const newScrollDecks = [];
 
-  if (
-    root.classList?.contains("scroll-deck") &&
-    !root.hasAttribute("data-scroll-deck-initialized")
-  ) {
+  if (root.classList?.contains("scroll-deck")) {
     newScrollDecks.push(root);
   }
 
-  root
-    .querySelectorAll(".scroll-deck:not([data-scroll-deck-initialized])")
-    .forEach((el) => newScrollDecks.push(el));
+  root.querySelectorAll(".scroll-deck").forEach((el) => newScrollDecks.push(el));
 
   for (const el of newScrollDecks) {
     log("initialising new scroll deck", el);
@@ -339,6 +345,12 @@ const observer = new MutationObserver((mutations) => {
         if (target.classList.contains("image-carousel")) {
           // showArrows toggles .arrow-prev / .arrow-next in/out
           queueImageCarouselReset(target, "arrows toggled");
+        }
+
+        const masonryRoot = target.closest(".masonry");
+
+        if (masonryRoot) {
+          queueMasonryReset(masonryRoot, "items changed");
         }
       }
 

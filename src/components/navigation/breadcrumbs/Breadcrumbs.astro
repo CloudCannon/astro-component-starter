@@ -18,10 +18,12 @@ const backTarget = trail
   .reverse()
   .find((item) => item.url);
 
-const structuredData = breadcrumbListJsonLd(items, {
-  homeLabel,
-  base: Astro.site ?? Astro.url,
-});
+// `new URL(path, base)` throws without an absolute base, and both `Astro.site`
+// and `Astro.url` are undefined in CloudCannon's in-browser re-render — where
+// throwing would blank the entire section. A build always has one, so the
+// shipped page keeps its structured data.
+const base = Astro.site ?? Astro.url;
+const structuredData = base ? breadcrumbListJsonLd(items, { homeLabel, base }) : null;
 ---
 
 <nav
@@ -77,10 +79,12 @@ const structuredData = breadcrumbListJsonLd(items, {
   )}
 </nav>
 
-<script
-  type="application/ld+json"
-  set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
-></script>
+{structuredData && (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
+  ></script>
+)}
 <style is:global>
   @layer components {
     .breadcrumbs {
@@ -103,6 +107,12 @@ const structuredData = breadcrumbListJsonLd(items, {
       display: flex;
       gap: var(--spacing-xs);
       min-width: 0;
+    }
+
+    /* Only the current crumb gives up width; ancestors shrinking squeezes
+       their nowrap links under the separators. */
+    .breadcrumbs .breadcrumbs-item:not(:last-child) {
+      flex-shrink: 0;
     }
 
     .breadcrumbs .breadcrumbs-separator {

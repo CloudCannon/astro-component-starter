@@ -260,17 +260,10 @@ const tests = [
       const initialState = await page.evaluate(() => ({
         hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
         liveMediaAllowed: window.siteConsent?.isAllowed("externalMedia") ?? null,
-        previewBoundToLive: Boolean(
-          document.querySelector(".component-viewer .consent[data-consent-initialized]")
-        ),
         storedChoice: localStorage.getItem("site-consent"),
       }));
 
       assert(!initialState.hasAnalyticsScript, "docs preview loaded the example analytics script");
-      assert(
-        !initialState.previewBoundToLive,
-        "the preview was wired to the live consent singleton"
-      );
       assert(initialState.liveMediaAllowed === false, "the live manager started with a decision");
       assert(initialState.storedChoice === null, "docs preview started with a persisted choice");
 
@@ -284,9 +277,30 @@ const tests = [
         .locator(".consent-actions .button-inner")
         .evaluateAll((buttons) => buttons.map((button) => button.className));
 
+      // Accepting and rejecting must weigh the same; Customize may be secondary.
       assert(
-        new Set(choiceClasses).size === 1,
-        `first-layer choices do not have equal prominence: ${JSON.stringify(choiceClasses)}`
+        choiceClasses[0] === choiceClasses[1],
+        `accept and reject do not have equal prominence: ${JSON.stringify(choiceClasses)}`
+      );
+
+      // A decision on the live instance must not decide the preview for the
+      // visitor: the manager's subscribers refresh every consent root on the page.
+      const storedAfterLiveChoice = await page.evaluate(() => {
+        window.siteConsent.acceptAll();
+        return localStorage.getItem("site-consent");
+      });
+
+      assert(storedAfterLiveChoice !== null, "the live choice was not persisted");
+      assert(await banner.isVisible(), "a live choice hid the preview's banner");
+      assert(
+        !(await root.evaluate((el) => el.hasAttribute("data-consent-decided"))),
+        "a live choice decided the preview"
+      );
+      assert(
+        await root
+          .locator("[data-consent-category]")
+          .evaluateAll((inputs) => inputs.every((input) => !input.checked)),
+        "a live choice ticked the preview's categories"
       );
 
       await root.locator('[data-consent-action="customize"] .button-inner').click();
@@ -329,10 +343,6 @@ const tests = [
         "settings stayed open after Reject All"
       );
       assert(!(await banner.isVisible()), "banner stayed visible after making a demo choice");
-      assert(
-        await root.locator("[data-consent-settings-trigger]").isVisible(),
-        "settings trigger did not replace the banner"
-      );
 
       const finalState = await page.evaluate(() => ({
         hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
@@ -342,10 +352,13 @@ const tests = [
 
       assert(!finalState.hasAnalyticsScript, "demo choice loaded the example analytics script");
       assert(
-        finalState.liveMediaAllowed === false,
+        finalState.liveMediaAllowed === true,
         "demo choice reached the live consent singleton"
       );
-      assert(finalState.storedChoice === null, "demo choice was written to browser storage");
+      assert(
+        finalState.storedChoice === storedAfterLiveChoice,
+        "demo choice was written to browser storage"
+      );
     },
   },
   {
@@ -529,6 +542,52 @@ const tests = [
     },
   },
   {
+    // The video setup skips its scroll-triggered play path outright when the
+    // visitor prefers reduced motion, so this test opts out of the suite's
+    // reduced-motion context.
+    name: "autoplay video starts playing when it scrolls into view",
+    path: "/component-docs/components/building-blocks/core-elements/video/",
+    viewport: DESKTOP,
+    reducedMotion: "no-preference",
+    async run(page) {
+      // "Autoplay & Loop" is the second example set on the docs page.
+      const videoSel =
+        '.component-viewer[data-viewer-id="autoplay-loop"] .preview.active video[autoplay]';
+      const video = page.locator(videoSel);
+
+      await video.waitFor();
+
+      // Chromium defers a muted autoplay video that loads off-screen and starts
+      // it by itself once it is visible, so scrolling alone would pass even
+      // with the component's intersection path missing. Pausing while the video
+      // is still below the fold leaves that path as the only thing that can
+      // start playback.
+      const belowFold = await video.evaluate(
+        (el) => el.getBoundingClientRect().top > window.innerHeight
+      );
+
+      assert(
+        belowFold,
+        "the autoplay example starts above the fold, so it cannot prove intersection starts playback"
+      );
+
+      const pausedAt = await video.evaluate((el) => {
+        el.pause();
+        return el.currentTime;
+      });
+
+      await video.scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        ({ sel, from }) => {
+          const video = document.querySelector(sel);
+
+          return Boolean(video && !video.paused && video.currentTime > from + 0.1);
+        },
+        { sel: videoSel, from: pausedAt }
+      );
+    },
+  },
+  {
     name: "privacy settings default to strict opt-in and synchronize decisions across tabs",
     path: "/",
     viewport: DESKTOP,
@@ -554,7 +613,9 @@ const tests = [
         "expected external media to remain off until the visitor opts in"
       );
 
-      await externalMedia.check();
+      await externalMedia
+        .locator("xpath=following-sibling::*[contains(@class, 'toggle-track')]")
+        .click();
       await popover.locator('[data-consent-action="save"] .button-inner').click();
       await page.waitForFunction(
         () => window.siteConsent?.record.decisions.externalMedia === "granted"
@@ -970,6 +1031,28 @@ const tests = [
     },
   },
   {
+    name: "bar dropdown closes on a second click and nested items open inside it",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      const bar = page.locator(".preview.active .bar").first();
+      const top = bar.locator(".bar-list > .nav-item.has-children").first();
+      const nested = top.locator(".nav-item-content .nav-item.has-children").first();
+      const isOpen = (item) => item.locator("> .nav-item-toggle").evaluate((t) => t.checked);
+
+      await top.locator("> .nav-item-trigger").click();
+      assert(await isOpen(top), "top-level dropdown did not open");
+
+      await nested.locator("> .nav-item-trigger").click();
+      assert(await isOpen(nested), "nested item did not open");
+      assert(await isOpen(top), "opening a nested item closed its parent dropdown");
+
+      await top.locator("> .nav-item-trigger").click();
+      await page.waitForTimeout(200);
+      assert(!(await isOpen(top)), "second click on the trigger reopened the dropdown");
+    },
+  },
+  {
     name: "content selector tab switches panels with arrow keys",
     path: "/component-docs/components/building-blocks/wrappers/content-selector/",
     viewport: DESKTOP,
@@ -1244,7 +1327,7 @@ const tests = [
     path: "/component-docs/components/page-sections/collections/gallery-grid/",
     viewport: DESKTOP,
     async run(page) {
-      const gallerySel = `${ACTIVE_PREVIEW} .gallery-grid[data-gallery-initialized]`;
+      const gallerySel = `${ACTIVE_PREVIEW} .gallery-grid:has(.gallery-lightbox[data-gallery-initialized])`;
       const popoverSel = `${gallerySel} .gallery-lightbox`;
 
       await page.waitForSelector(gallerySel);
@@ -1359,7 +1442,7 @@ const tests = [
     async run(page) {
       // The thumbnails example is the third preview on the page; scope to the
       // gallery that actually renders a strip rather than to a preview index.
-      const gallerySel = `.gallery-grid:has(.gallery-lightbox-thumbs)[data-gallery-initialized]`;
+      const gallerySel = `.gallery-grid:has(.gallery-lightbox-thumbs):has(.gallery-lightbox[data-gallery-initialized])`;
       const popoverSel = `${gallerySel} .gallery-lightbox`;
 
       await page.waitForSelector(gallerySel);
@@ -1508,7 +1591,7 @@ const tests = [
       assert(before.monthlyDisplay === "flex", "monthly price should be visible initially");
       assert(before.annualDisplay === "none", "annual price should be hidden initially");
 
-      await page.locator(`${sectionSel} .segments-option`).nth(1).click();
+      await page.locator(`${sectionSel} .pricing-tiers-billing .toggle-track`).click();
 
       await page.waitForFunction((sel) => {
         const card = document.querySelector(`${sel} .pricing-tier`);
@@ -1895,7 +1978,7 @@ const tests = [
     // A locked section keeps its own colour scheme when the visitor toggles
     // the site theme — that is the whole point of the lock.
     name: "a data-theme-lock section keeps its theme when the site theme flips",
-    path: "/component-docs/components/page-sections/builders/custom-section/",
+    path: "/",
     viewport: DESKTOP,
     async run(page) {
       await page.waitForSelector("[data-theme-lock]", { state: "attached" });
@@ -2182,7 +2265,7 @@ const tests = [
     path: "/component-docs/components/building-blocks/wrappers/scroll-deck/",
     viewport: DESKTOP,
     async run(page) {
-      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck[data-scroll-deck-initialized]`;
+      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck:has(.scroll-deck-layout[data-scroll-deck-initialized])`;
 
       await page.waitForSelector(deckSel);
 
@@ -2406,7 +2489,7 @@ const tests = [
       });
       await page.reload({ waitUntil: "load" });
 
-      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck[data-scroll-deck-initialized]`;
+      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck:has(.scroll-deck-layout[data-scroll-deck-initialized])`;
 
       await page.waitForSelector(deckSel);
 
@@ -2537,8 +2620,9 @@ try {
       colorScheme: "light",
       // Keeps CSS transitions/entrance animations and carousel autoplay from
       // racing the assertions; Embla's manual navigation is JS-driven and
-      // unaffected (matches scripts/previews/screenshot.mjs).
-      reducedMotion: "reduce",
+      // unaffected (matches scripts/previews/screenshot.mjs). Tests that need
+      // motion in flight (video autoplay) opt back in per test.
+      reducedMotion: test.reducedMotion ?? "reduce",
     });
 
     try {

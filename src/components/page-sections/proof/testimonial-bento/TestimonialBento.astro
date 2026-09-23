@@ -1,0 +1,134 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import TestimonialBentoItem from "./TestimonialBentoItem.astro";
+
+type TestimonialProps = Record<string, unknown>;
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  testimonials = [],
+  columns = "3",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const columnCount = String(columns) === "4" ? "4" : "3";
+---
+
+<CustomSection
+  class:list={["testimonial-bento", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level={headingLevel}
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="section-subtext testimonial-bento-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  {testimonials?.length > 0 && (
+    <div class="testimonial-bento-frame">
+      <div
+        class="testimonial-bento-grid"
+        data-columns={columnCount}
+        data-editable="array"
+        data-prop="testimonials"
+        data-direction="row"
+      >
+        {testimonials.map((testimonial: TestimonialProps) => (
+          <TestimonialBentoItem
+            data-editable="array-item"
+            data-id="page-sections/proof/testimonial-bento/testimonial-bento-item"
+            {...testimonial}
+          />
+        ))}
+      </div>
+    </div>
+  )}
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .testimonial-bento {
+      .testimonial-bento-frame {
+        --space-before: var(--space-before-loose);
+
+        container-type: inline-size;
+      }
+
+      .testimonial-bento-grid {
+        display: grid;
+        gap: var(--spacing-md);
+        grid-auto-flow: dense;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+        &[data-columns="4"] {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        /* Container widths, not viewport breakpoints: a bento in a narrow
+           column on a wide screen must still collapse. Each step is where a
+           standard cell drops below ~240px, too narrow for a quote and byline. */
+        @container (width <= 1000px) {
+          &[data-columns="4"] {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+
+        @container (width <= 800px) {
+          &,
+          &[data-columns="4"] {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @container (width <= 450px) {
+          &,
+          &[data-columns="4"] {
+            grid-template-columns: minmax(0, 1fr);
+          }
+        }
+      }
+    }
+  }
+</style>

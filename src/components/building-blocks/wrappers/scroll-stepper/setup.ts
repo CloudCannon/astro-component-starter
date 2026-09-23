@@ -121,6 +121,24 @@ function updateProgress(stepper: HTMLElement, scenes: HTMLElement[]): void {
   stepper.style.setProperty("--scroll-stepper-progress", String(progress));
 }
 
+// `getComputedStyle().getPropertyValue('--main-nav-height')` returns the custom
+// property's raw authored value ("5rem"), not a resolved length — unlike a real
+// property such as `top`, custom properties don't get resolved to px, so
+// `parseFloat` silently read "5" instead of 80. Applying the value to a real
+// property on a probe element makes the browser resolve it properly.
+function resolveNavHeight(stepper: HTMLElement): number {
+  const probe = document.createElement("div");
+
+  probe.style.cssText = "position:absolute;visibility:hidden;height:var(--main-nav-height, 0px);";
+  stepper.appendChild(probe);
+
+  const navHeight = Number.parseFloat(getComputedStyle(probe).height);
+
+  probe.remove();
+
+  return Number.isFinite(navHeight) ? navHeight : 0;
+}
+
 function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
   const media = stepper.querySelector<HTMLElement>(".scroll-stepper-media");
   const first = scenes[0];
@@ -129,18 +147,23 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
   if (!media || !first || !track) return;
 
   const port = scrollport(media);
-  const navHeight = Number.parseFloat(
-    getComputedStyle(stepper).getPropertyValue("--main-nav-height")
-  );
-  const viewportHeight = port
-    ? port.clientHeight
-    : Math.max(0, window.innerHeight - (Number.isFinite(navHeight) ? navHeight : 0));
+  const navHeight = resolveNavHeight(stepper);
+  const viewportHeight = port ? port.clientHeight : Math.max(0, window.innerHeight - navHeight);
 
   stepper.style.setProperty("--scroll-stepper-viewport-height", `${viewportHeight}px`);
 
   const mediaHeight = media.getBoundingClientRect().height;
-  const stepHeight = first.getBoundingClientRect().height;
-  const runway = Math.max(mediaHeight - stepHeight, (scenes.length - 1) * stepHeight, 0);
+  const last = scenes[scenes.length - 1] ?? first;
+  const lastStepHeight = last.getBoundingClientRect().height;
+  // Just enough trailing space for the last step to land where every other step
+  // landed, while the media is still sticky — anything more keeps the media frozen
+  // while that step travels on past, ending up against the top of the media instead
+  // of released to scroll away with the rest of the page. `height-content` steps
+  // start half a media-height down (`contentOffset` centres the first step on the
+  // media), so they need half the runway bottom-aligned `height-screen` steps do.
+  const runway = track.classList.contains("height-content")
+    ? Math.max((mediaHeight - lastStepHeight) / 2, 0)
+    : Math.max(mediaHeight - lastStepHeight, 0);
   const content = first.querySelector<HTMLElement>(".scroll-stepper-step-content");
   const contentDelta =
     track.classList.contains("height-content") && content
@@ -176,16 +199,17 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
     }
   }
 
-  if (port) {
-    stepper.style.setProperty(
-      "--scroll-stepper-sticky-top",
-      `${Math.max(0, (port.clientHeight - mediaHeight) / 2)}px`
-    );
-    stepper.style.setProperty("--scroll-stepper-sticky-translate", "none");
-  } else {
-    stepper.style.removeProperty("--scroll-stepper-sticky-top");
-    stepper.style.removeProperty("--scroll-stepper-sticky-translate");
-  }
+  // A `top: 50%` + `translate: -50%` centering trick only centers the box once it's
+  // actually stuck — translate keeps applying while the box is still in normal flow
+  // (not yet scrolled up to its sticky offset), shifting it above its own container
+  // and overlapping whatever precedes the section. Computing a real pixel `top` here
+  // (mediaHeight is already known) centers it without a translate, so native sticky
+  // clamping keeps it from ever rising above its container.
+  const visibleAreaTop = port ? 0 : navHeight;
+  const stickyTop = visibleAreaTop + Math.max(0, (viewportHeight - mediaHeight) / 2);
+
+  stepper.style.setProperty("--scroll-stepper-sticky-top", `${stickyTop}px`);
+  stepper.style.setProperty("--scroll-stepper-sticky-translate", "none");
 }
 
 function showStaticGallery(stepper: HTMLElement): void {
@@ -217,7 +241,37 @@ function showStaticGallery(stepper: HTMLElement): void {
     });
 }
 
+/**
+ * A ClientRouter navigation discards the stepper but not the listeners it
+ * registered on `document` and on its own MediaQueryList, which would keep
+ * re-measuring detached DOM on every scroll for the rest of the session.
+ */
+function teardownIfDetached(stepper: HTMLElement): boolean {
+  if (stepper.isConnected) return false;
+
+  if (stepper.__scrollStepperOnScroll) {
+    document.removeEventListener("scroll", stepper.__scrollStepperOnScroll, true);
+    stepper.__scrollStepperOnScroll = undefined;
+  }
+
+  if (stepper.__scrollStepperOnMediaChange) {
+    stepper.__scrollStepperMediaQuery?.removeEventListener(
+      "change",
+      stepper.__scrollStepperOnMediaChange
+    );
+    stepper.__scrollStepperOnMediaChange = undefined;
+    stepper.__scrollStepperMediaQuery = undefined;
+  }
+
+  stepper.__scrollStepperResizeObserver?.disconnect();
+  stepper.__scrollStepperResizeObserver = undefined;
+
+  return true;
+}
+
 export function setupScrollStepper(stepper: HTMLElement): void {
+  if (teardownIfDetached(stepper)) return;
+
   const scenes = [
     ...stepper.querySelectorAll<HTMLElement>(".scroll-stepper-steps > .scroll-stepper-step"),
   ];
@@ -225,9 +279,11 @@ export function setupScrollStepper(stepper: HTMLElement): void {
 
   if (!stepper.__scrollStepperMediaQuery) {
     const mediaQuery = window.matchMedia(desktopQuery);
+    const onMediaChange = () => setupScrollStepper(stepper);
 
     stepper.__scrollStepperMediaQuery = mediaQuery;
-    mediaQuery.addEventListener("change", () => setupScrollStepper(stepper));
+    stepper.__scrollStepperOnMediaChange = onMediaChange;
+    mediaQuery.addEventListener("change", onMediaChange);
   }
 
   if (!stepper.__scrollStepperResizeObserver) {
@@ -255,14 +311,16 @@ export function setupScrollStepper(stepper: HTMLElement): void {
   if (stepper.__scrollStepperOnScroll) {
     document.removeEventListener("scroll", stepper.__scrollStepperOnScroll, true);
   }
-  stepper.__scrollStepperOnScroll = () => {
+
+  const onScroll = () => {
+    if (teardownIfDetached(stepper)) return;
+
     updateActive(stepper, scenes);
     updateProgress(stepper, scenes);
   };
-  document.addEventListener("scroll", stepper.__scrollStepperOnScroll, {
-    capture: true,
-    passive: true,
-  });
+
+  stepper.__scrollStepperOnScroll = onScroll;
+  document.addEventListener("scroll", onScroll, { capture: true, passive: true });
 }
 
 export function setupAllScrollSteppers(root: ParentNode = document): void {
@@ -281,6 +339,7 @@ declare global {
   interface HTMLElement {
     __scrollStepperMediaQuery?: MediaQueryList;
     __scrollStepperOnScroll?: () => void;
+    __scrollStepperOnMediaChange?: () => void;
     __scrollStepperResizeObserver?: ResizeObserver;
     __scrollStepperProgressStart?: number;
     __scrollStepperContentOffset?: number;

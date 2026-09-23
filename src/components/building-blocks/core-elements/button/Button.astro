@@ -226,9 +226,11 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           border-color: var(--color-border-strong);
           color: var(--color-text-strong);
 
+          /* A tint of the text colour, not a surface token: it has to read on
+             any backing (page, dialog footer, inverse banner). */
           &:hover,
           &:focus {
-            background-color: var(--color-bg-surface);
+            background-color: color-mix(in srgb, var(--color-text-strong) 12%, transparent);
             border-color: var(--color-border-strong);
             color: var(--color-text-strong);
           }

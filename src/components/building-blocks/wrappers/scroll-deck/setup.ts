@@ -14,8 +14,13 @@
 const MAX_DEPTH = 3;
 
 export function setupScrollDeck(deck: HTMLElement): void {
-  if (deck.hasAttribute("data-scroll-deck-initialized")) return;
-  deck.setAttribute("data-scroll-deck-initialized", "");
+  // Keyed on the layout, not the `.scroll-deck` root: the root survives an
+  // editor re-render while its contents are replaced, so a flag on the root
+  // would skip the new cards and leave the observers on discarded nodes.
+  const layout = deck.querySelector<HTMLElement>(".scroll-deck-layout");
+
+  if (!layout || layout.hasAttribute("data-scroll-deck-initialized")) return;
+  layout.setAttribute("data-scroll-deck-initialized", "");
 
   const cards = Array.from(deck.querySelectorAll<HTMLElement>(".scroll-deck-card"));
   const links = Array.from(deck.querySelectorAll<HTMLAnchorElement>(".scroll-deck-rail-link"));
@@ -42,6 +47,13 @@ export function setupScrollDeck(deck: HTMLElement): void {
     );
 
     deck.style.setProperty("--deck-card-height", `${tallest}px`);
+
+    if (rail) {
+      deck.style.setProperty(
+        "--deck-rail-height",
+        `${Math.ceil(rail.getBoundingClientRect().height)}px`
+      );
+    }
   };
 
   deck.style.setProperty("--deck-last-index", String(cards.length - 1));
@@ -136,7 +148,9 @@ export function setupScrollDeck(deck: HTMLElement): void {
   // final card can remain fully intersecting while it travels through its
   // trailing runway. Capture sees both document and nested preview scrollports.
   const onScroll = () => {
-    if (!deck.isConnected) {
+    // The root outlives an editor re-render, so the layout is what says whether
+    // these observers still point at live nodes.
+    if (!layout.isConnected) {
       observer.disconnect();
       resizeObserver.disconnect();
       contentObserver.disconnect();

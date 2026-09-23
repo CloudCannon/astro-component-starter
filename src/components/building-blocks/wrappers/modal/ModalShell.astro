@@ -5,7 +5,8 @@
  * modals like `navigation/search`. Consumers provide all interior markup via
  * the default slot and their own trigger via `popovertarget={popoverId}`;
  * focus trapping and scroll locking come from `setup.ts` (`setupModalShell`),
- * which targets `.modal-popover` elements.
+ * which targets `[data-modal]` — `.modal-popover` is styling only, and
+ * `sheet={false}` drops it for a consumer that draws its own overlay.
  *
  * Not a page-builder block: no CloudCannon YAML, never referenced by
  * `_component`.
@@ -16,6 +17,7 @@ const {
   label,
   labelledby,
   fullScreenMobile = false,
+  sheet = true,
   class: className,
   ...htmlAttributes
 } = Astro.props;
@@ -24,7 +26,13 @@ const {
 <div
   id={popoverId}
   popover="auto"
-  class:list={["modal-popover", `size-${size}`, fullScreenMobile && "fullscreen-mobile", className]}
+  data-modal
+  class:list={[
+    sheet && "modal-popover",
+    `size-${size}`,
+    sheet && fullScreenMobile && "fullscreen-mobile",
+    className,
+  ]}
   role="dialog"
   aria-modal="true"
   aria-label={label}

@@ -297,6 +297,7 @@ pageSections:
         variant: tertiary
         size: md
     colorScheme: dark
+    lockColorScheme: true
     backgroundColor: surface
     background:
       type: pattern

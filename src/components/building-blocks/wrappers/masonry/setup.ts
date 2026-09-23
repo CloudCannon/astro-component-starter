@@ -6,6 +6,8 @@
 
 import { enhanceMasonryLayout } from "../../../utils/masonryEnhance";
 
+const teardowns = new WeakMap<HTMLElement, () => void>();
+
 export function setupMasonry(root: HTMLElement): void {
   if (root.hasAttribute("data-masonry-initialized")) return;
   root.setAttribute("data-masonry-initialized", "");
@@ -14,7 +16,13 @@ export function setupMasonry(root: HTMLElement): void {
 
   if (!inner) return;
 
-  enhanceMasonryLayout(root, inner);
+  teardowns.set(root, enhanceMasonryLayout(root, inner));
+}
+
+export function destroyMasonry(root: HTMLElement): void {
+  teardowns.get(root)?.();
+  teardowns.delete(root);
+  root.removeAttribute("data-masonry-initialized");
 }
 
 export function setupAllMasonry(root: ParentNode = document): void {

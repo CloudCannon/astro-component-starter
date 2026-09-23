@@ -1,20 +1,17 @@
 ---
-title: Split CTA (Reversed)
+title: 'Reversed'
 spacing: all
 blocks:
   _component: 'page-sections/conversion/cta-split'
-  heading: 'Prefer to talk first?'
-  subtext: 'Swap the layout so the buttons lead, perfect for contact prompts.'
+  heading: 'Ready to get started?'
+  subtext: 'One line that makes the next step obvious.'
+  imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+  imageAlt: 'Sea cliffs above a bay'
   reverse: true
   buttonSections:
     - _component: building-blocks/core-elements/button
-      text: 'Contact sales'
+      text: 'Get started'
       variant: primary
       size: md
-      link: '/contact'
-    - _component: building-blocks/core-elements/button
-      text: 'Chat live'
-      variant: tertiary
-      size: md
-      link: '/chat'
+      link: '/'
 ---

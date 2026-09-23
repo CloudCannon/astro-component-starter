@@ -6,15 +6,15 @@ blocks:
   layout: horizontal
   entries:
     - date: Q1 2025
-      title: Public beta
-      body: The editor shipped to the first fifty sites.
+      title: Beta launch
+      body: Early access opened to the first hundred customers.
     - date: Q3 2025
-      title: Component library
-      body: Every section is assembled from the same blocks.
+      title: Wider release
+      body: Available in every region we ship to.
     - date: Q1 2026
       title: Mobile app
-      body: Read and comment on drafts from a phone.
+      body: Read, comment, and approve from a phone.
     - date: Q3 2026
       title: Public API
-      body: Programmatic access to pages and collections.
+      body: Programmatic access for partner integrations.
 ---

@@ -1,0 +1,162 @@
+label: Testimonial Bento
+icon: dashboard
+description: Customer quotes in a bento grid, with a featured quote and cells of different sizes and tones.
+value:
+  _component: page-sections/proof/testimonial-bento
+  sectionLabel: ""
+  eyebrow: Testimonials
+  heading: Loved by the teams who use it
+  headingLevel: h2
+  subtext: ""
+  testimonials:
+    - text: We handed the site to our marketing team on a Friday and they had three new landing pages live by Monday. No tickets, no deploys, nothing broken.
+      authorName: Priya Raman
+      authorDescription: Head of Marketing, Northwind
+      authorImage: /src/assets/images/component-docs/profile1.jpg
+      size: featured
+      tone: surface
+    - text: Our Lighthouse scores went up without anyone working on performance.
+      authorName: Dana Whitfield
+      authorDescription: Engineering Lead, Cascade
+      authorImage: /src/assets/images/component-docs/profile3.jpg
+      size: standard
+      tone: base
+    - text: The guardrails mean nobody can wreck the design.
+      authorName: Tom Alvarez
+      authorDescription: Founder, Fieldnote
+      authorImage: /src/assets/images/component-docs/profile2.jpg
+      size: standard
+      tone: inverse
+    - text: Two weeks from kickoff to launch, including content. The component library did most of the work for us.
+      authorName: Sam Okafor
+      authorDescription: Design Director, Loam Studio
+      authorImage: /src/assets/images/component-docs/profile4.jpg
+      size: full
+      tone: base
+  columns: "3"
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    imageSource: ""
+    imageAlt: ""
+    patternSize: natural
+    mask: none
+    videoSource: null
+    overlay: 0
+preview:
+  text:
+    - Testimonial Bento
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/proof/testimonial-bento.svg
+  icon: dashboard
+  gallery:
+    image: public/component-previews/page-sections/proof/testimonial-bento.svg
+    fit: cover
+picker_preview:
+  text: Testimonial Bento
+  subtext: Customer quotes in a bento grid, led by one featured quote.
+  image: public/component-previews/page-sections/proof/testimonial-bento.svg
+  icon: dashboard
+  gallery:
+    image: public/component-previews/page-sections/proof/testimonial-bento.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/proof/testimonial-bento/testimonial-bento.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background-mask.yml
+_structures:
+  testimonialBentoItems:
+    values:
+      - label: Testimonial
+        icon: format_quote
+        value:
+          text: ""
+          authorName: ""
+          authorDescription: ""
+          authorImage: ""
+          size: standard
+          tone: base
+        preview:
+          text:
+            - key: authorName
+            - Testimonial
+          subtext:
+            - key: text
+          icon: format_quote
+        _inputs:
+          text:
+            type: markdown
+            comment: The quote itself.
+          authorName:
+            type: text
+            comment: Who said it.
+          authorDescription:
+            type: text
+            comment: Their role and company. Leave empty to hide.
+          authorImage:
+            type: image
+            comment: Optional headshot. Falls back to the author's initials.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+          size:
+            type: select
+            comment: How much of the grid this quote takes. Featured is two columns by two rows, and Full width spans the whole row. On small screens every quote is full width.
+            options:
+              values:
+                - id: standard
+                  name: Standard (1 × 1)
+                - id: wide
+                  name: Wide (2 × 1)
+                - id: tall
+                  name: Tall (1 × 2)
+                - id: featured
+                  name: Featured (2 × 2)
+                - id: full
+                  name: Full width
+          tone:
+            type: select
+            comment: The card's background. Inverse uses the opposite color scheme, so it stands out in both light and dark mode.
+            options:
+              values:
+                - id: base
+                  name: Base
+                - id: surface
+                  name: Surface
+                - id: accent
+                  name: Accent
+                - id: highlight
+                  name: Highlight
+                - id: inverse
+                  name: Inverse
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - testimonials
+      - columns
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

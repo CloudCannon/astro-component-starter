@@ -136,6 +136,45 @@ pageSections:
     striped: true
     colorScheme: inherit
     backgroundColor: surface
+  - _component: page-sections/proof/testimonial-bento
+    eyebrow: Customers
+    heading: Teams that switched, in their words
+    headingLevel: h2
+    subtext: ''
+    testimonials:
+      - text: We moved twelve client sites onto Studio in a quarter. The per-seat pricing meant we could bring every editor along without a budget conversation.
+        authorName: Priya Raman
+        authorDescription: Head of Marketing, Northwind
+        authorImage: /src/assets/images/component-docs/profile1.jpg
+        size: featured
+        tone: surface
+      - text: Starter covered our launch. Upgrading later took one click.
+        authorName: Dana Whitfield
+        authorDescription: Engineering Lead, Cascade
+        authorImage: /src/assets/images/component-docs/profile3.jpg
+        size: standard
+        tone: base
+      - text: Annual billing paid for our staging environment.
+        authorName: Tom Alvarez
+        authorDescription: Founder, Fieldnote
+        authorImage: /src/assets/images/component-docs/profile2.jpg
+        size: standard
+        tone: inverse
+      - text: The SLA on Agency is the reason our procurement team said yes. Everything else was already there.
+        authorName: Sam Okafor
+        authorDescription: Design Director, Loam Studio
+        authorImage: /src/assets/images/component-docs/profile4.jpg
+        size: wide
+        tone: base
+      - text: No surprise invoices, ever.
+        authorName: Richard Johnson
+        authorDescription: CEO, Tech Innovations
+        authorImage: /src/assets/images/component-docs/profile.jpg
+        size: standard
+        tone: accent
+    columns: '3'
+    colorScheme: inherit
+    backgroundColor: base
   - _component: page-sections/explainers/faq-section
     heading: Billing questions
     items:

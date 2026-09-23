@@ -4,11 +4,18 @@ import Components from "@component-utils/renderBlock.astro";
 const { sections } = Astro.props;
 ---
 
+<!--
+  Renders a page's block tree for both shells (`Page.astro`, `LibraryLayout`).
+  `data-prop` is relative to the `data-editable="component"` region the shell
+  wraps this in, whose `data-prop-<key>` maps it back to that shell's own
+  frontmatter key. That wrapper cannot live here: the editor's re-render would
+  nest a second copy of the region inside the first. Search indexing is the
+  shell's business too — the site shell marks the wrapper as a Pagefind body,
+  the docs shell deliberately does not.
+-->
 <div
-  data-pagefind-body
-  data-pagefind-filter="Type:Page"
   data-editable="array"
-  data-prop="pageSections"
+  data-prop="sections"
   data-component-key="_component"
 >
   <Components contentSections={sections} />

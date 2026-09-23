@@ -21,13 +21,14 @@ const {
   buttonText = "Subscribe",
   disclaimer = "",
   layout = "band",
+  panelBackgroundColor = "surface",
   sectionLabel,
   maxContentWidth = "xl",
   paddingHorizontal = "lg",
   paddingVertical = "3xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor = "surface",
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -53,7 +54,7 @@ const emailId = `${slugifyLabel(formName || sectionLabel || "newsletter")}-email
   {...htmlAttributes}
 >
   <div
-    class="newsletter-signup-panel"
+    class:list={["newsletter-signup-panel", `bg-${panelBackgroundColor}`]}
     data-layout={layout}
   >
     <div class="newsletter-signup-copy">
@@ -131,6 +132,22 @@ const emailId = `${slugifyLabel(formName || sectionLabel || "newsletter")}-email
         display: grid;
         gap: var(--spacing-xl);
         padding: var(--spacing-xl);
+
+        &.bg-none {
+          background-color: transparent;
+        }
+
+        &.bg-base {
+          background-color: var(--color-bg);
+        }
+
+        &.bg-accent {
+          background-color: var(--color-bg-accent);
+        }
+
+        &.bg-highlight {
+          background-color: var(--color-bg-highlight);
+        }
       }
 
       .newsletter-signup-copy {

@@ -35,6 +35,66 @@ pageSections:
     reverse: true
     colorScheme: inherit
     backgroundColor: base
+  - _component: page-sections/builders/custom-section
+    label: Scroll deck demo
+    contentSections:
+      - _component: building-blocks/wrappers/scroll-deck
+        label: ''
+        stickyOffset: md
+        cardColorScheme: light
+        showRail: true
+        cards:
+          - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+            label: Build
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Build the page from blocks
+                level: h3
+                size: xl
+              - _component: building-blocks/core-elements/text
+                text: Every section in the library is a block an editor can drop in, reorder, and fill.
+              - _component: building-blocks/wrappers/button-group
+                buttonSections:
+                  - _component: building-blocks/core-elements/button
+                    text: See the library
+                    link: /component-docs/
+                    variant: primary
+          - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+            label: Brand
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Set the brand in one file
+                level: h3
+                size: xl
+              - _component: building-blocks/core-elements/text
+                text: Colors, type and spacing are tokens. Change them once and every block follows.
+              - _component: building-blocks/wrappers/button-group
+                buttonSections:
+                  - _component: building-blocks/core-elements/button
+                    text: Read about theming
+                    link: /component-docs/
+                    variant: secondary
+          - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+            label: Ship
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Hand it over and ship
+                level: h3
+                size: xl
+              - _component: building-blocks/core-elements/text
+                text: The team edits real pages in the browser, inside the guardrails you shipped.
+              - _component: building-blocks/wrappers/button-group
+                buttonSections:
+                  - _component: building-blocks/core-elements/button
+                    text: Get started
+                    link: /start/
+                    variant: primary
+    maxContentWidth: lg
+    paddingHorizontal: lg
+    paddingVertical: 4xl
+    colorScheme: inherit
+    backgroundColor: surface
+    rounded: false
   - _component: page-sections/explainers/timeline-section
     eyebrow: History
     heading: How the starter grew
@@ -62,6 +122,76 @@ pageSections:
           galleries, and more.
     colorScheme: inherit
     backgroundColor: surface
+  - _component: page-sections/builders/custom-section
+    label: Scroll stepper demo
+    contentSections:
+      - _component: building-blocks/wrappers/scroll-stepper
+        label: ''
+        steps:
+          - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+            mediaSections:
+              - _component: building-blocks/core-elements/image
+                source: /src/assets/images/component-docs/castle.jpg
+                alt: A stone castle on a hillside
+                rounded: true
+                aspectRatio: landscape
+            contentSections:
+              - _component: building-blocks/core-elements/simple-text
+                text: Step one
+                size: sm
+              - _component: building-blocks/core-elements/heading
+                text: Build visually
+                level: h3
+                size: lg
+              - _component: building-blocks/core-elements/text
+                text: Start with the pieces of the page and shape the first draft in the editor.
+          - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+            mediaSections:
+              - _component: building-blocks/core-elements/image
+                source: /src/assets/images/component-docs/dunedin-cliff.jpg
+                alt: Sea cliffs above a bay
+                rounded: true
+                aspectRatio: landscape
+            contentSections:
+              - _component: building-blocks/core-elements/simple-text
+                text: Step two
+                size: sm
+              - _component: building-blocks/core-elements/heading
+                text: Make it yours
+                level: h3
+                size: lg
+              - _component: building-blocks/core-elements/text
+                text: Set the brand, arrange the content, and share a preview with the people reviewing it.
+          - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+            mediaSections:
+              - _component: building-blocks/core-elements/image
+                source: /src/assets/images/component-docs/sheep.jpg
+                alt: Sheep grazing on a green hillside
+                rounded: true
+                aspectRatio: landscape
+            contentSections:
+              - _component: building-blocks/core-elements/simple-text
+                text: Step three
+                size: sm
+              - _component: building-blocks/core-elements/heading
+                text: Publish with confidence
+                level: h3
+                size: lg
+              - _component: building-blocks/core-elements/text
+                text: Finish the page and ship the same polished experience your reviewers approved.
+        mediaWidth: half
+        reverse: false
+        mediaAspectRatio: none
+        progressStyle: bar
+        stepHeight: content
+        gap: 2xl
+        spaceBefore: default
+    maxContentWidth: xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
+    colorScheme: inherit
+    backgroundColor: base
+    rounded: false
   - _component: page-sections/builders/custom-section
     label: ''
     contentSections:

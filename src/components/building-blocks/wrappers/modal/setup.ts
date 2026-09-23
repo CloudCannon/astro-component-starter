@@ -1,6 +1,8 @@
 /**
- * Shared setup logic for modal popovers (`.modal-popover`, rendered by
- * `ModalShell.astro`).
+ * Shared setup logic for modal popovers: any element carrying `data-modal`
+ * (every `ModalShell.astro`, plus bespoke overlays like the gallery lightbox).
+ * `data-modal` is behaviour only — the sheet look is `.modal-popover`, and
+ * nothing here may key on that class.
  *
  * Used by:
  * - `Modal.astro`'s inline `<script>` on the live site
@@ -12,8 +14,10 @@
  */
 import { getFocusableElements, trapFocus } from "@component-utils/focusTrap";
 
+export const MODAL_SELECTOR = "[data-modal]";
+
 function updateModalScrollLock(): void {
-  const openPopovers = Array.from(document.querySelectorAll<HTMLElement>(".modal-popover")).filter(
+  const openPopovers = Array.from(document.querySelectorAll<HTMLElement>(MODAL_SELECTOR)).filter(
     (popover) => popover.matches(":popover-open")
   );
   const hasOpenModal = openPopovers.length > 0;
@@ -75,6 +79,6 @@ export function setupModalShell(popover: HTMLElement): void {
 }
 
 export function setupAllModals(root: ParentNode = document): void {
-  root.querySelectorAll<HTMLElement>(".modal-popover").forEach((el) => setupModalShell(el));
+  root.querySelectorAll<HTMLElement>(MODAL_SELECTOR).forEach((el) => setupModalShell(el));
   updateModalScrollLock();
 }
