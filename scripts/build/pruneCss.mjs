@@ -158,6 +158,7 @@ export default function pruneCss({
         let after = 0;
         let droppedBlocks = 0;
         let keptBlocks = 0;
+        let dedupedBlocks = 0;
 
         const results = [];
 
@@ -190,64 +191,79 @@ export default function pruneCss({
           let pageBefore = 0;
           let pageAfter = 0;
 
-          const rewritten = html.replace(
-            /(<style[^>]*>)([\s\S]*?)(<\/style>)/g,
-            (whole, open, css, close) => {
-              pageBefore += css.length;
-              if (!css.includes("@layer")) {
-                pageAfter += css.length;
-                return whole;
-              }
-              let parsed;
+          const STYLE_TAG = /(<style[^>]*>)([\s\S]*?)(<\/style>)/g;
+          const parsedTags = [];
 
-              try {
-                parsed = postcss.parse(css);
-              } catch (error) {
-                logger.warn(
-                  `could not parse a style block in ${relative(root, page)}: ${error.message}`
-                );
-                pageAfter += css.length;
-                return whole;
-              }
-
-              // Remove dead nodes and re-serialize the whole root. Joining
-              // per-node `toString()` instead drops the terminating `;` of a
-              // childless at-rule — which silently deletes the `@layer a, b, c;`
-              // order statement, letting layers order by first appearance and
-              // inverting the entire cascade.
-              const doomed = [];
-
-              parsed.each((node) => {
-                const isPrunable =
-                  node.type === "atrule" &&
-                  node.name === "layer" &&
-                  node.nodes &&
-                  PRUNABLE_LAYERS.has(node.params.trim());
-
-                if (!isPrunable) return;
-
-                const text = node.toString();
-
-                if (!fullBlocks.has(text)) fullBlocks.set(text, node.params.trim());
-
-                if (containerIsLive(node, [new Set()], present)) keptBlocks++;
-                else {
-                  droppedBlocks++;
-                  doomed.push(node);
-                }
-              });
-              for (const node of doomed) node.remove();
-
-              const next = parsed.toString();
-              const order = /@layer\s+[^{;]*,[^{;]*;/;
-
-              if (order.test(css) && !order.test(next)) {
-                throw new Error(`lost the @layer order statement in ${relative(root, page)}`);
-              }
-              pageAfter += next.length;
-              return open + next + close;
+          for (const [, , css] of html.matchAll(STYLE_TAG)) {
+            pageBefore += css.length;
+            if (!css.includes("@layer")) {
+              parsedTags.push(null);
+              continue;
             }
-          );
+            try {
+              parsedTags.push(postcss.parse(css));
+            } catch (error) {
+              logger.warn(
+                `could not parse a style block in ${relative(root, page)}: ${error.message}`
+              );
+              parsedTags.push(null);
+            }
+          }
+
+          const blocks = [];
+
+          for (const parsed of parsedTags) {
+            parsed?.each((node) => {
+              if (
+                node.type === "atrule" &&
+                node.name === "layer" &&
+                node.nodes &&
+                PRUNABLE_LAYERS.has(node.params.trim())
+              )
+                blocks.push({ node, text: node.toString() });
+            });
+          }
+
+          // Astro can inline the same component block twice on one page. Only the
+          // last copy of identical text in the same layer can win the cascade, so
+          // earlier copies are dropped; keeping the first instead would reorder it.
+          const lastIndex = new Map();
+
+          blocks.forEach(({ text }, i) => lastIndex.set(text, i));
+          blocks.forEach(({ node, text }, i) => {
+            if (!fullBlocks.has(text)) fullBlocks.set(text, node.params.trim());
+            if (lastIndex.get(text) !== i) {
+              dedupedBlocks++;
+              node.remove();
+            } else if (containerIsLive(node, [new Set()], present)) keptBlocks++;
+            else {
+              droppedBlocks++;
+              node.remove();
+            }
+          });
+
+          let tagIndex = 0;
+
+          // Re-serialize the whole root. Joining per-node `toString()` instead
+          // drops the terminating `;` of a childless at-rule — which silently
+          // deletes the `@layer a, b, c;` order statement, letting layers order by
+          // first appearance and inverting the entire cascade.
+          const rewritten = html.replace(STYLE_TAG, (whole, open, css, close) => {
+            const parsed = parsedTags[tagIndex++];
+
+            if (!parsed) {
+              pageAfter += css.length;
+              return whole;
+            }
+            const next = parsed.toString();
+            const order = /@layer\s+[^{;]*,[^{;]*;/;
+
+            if (order.test(css) && !order.test(next)) {
+              throw new Error(`lost the @layer order statement in ${relative(root, page)}`);
+            }
+            pageAfter += next.length;
+            return open + next + close;
+          });
 
           before += pageBefore;
           after += pageAfter;
@@ -296,7 +312,7 @@ export default function pruneCss({
         logger.info(
           `${
             alwaysKeep.length ? `alwaysKeep: ${alwaysKeep.join(", ")}\n` : ""
-          }pruned ${droppedBlocks} of ${droppedBlocks + keptBlocks} component style blocks across ${pages.length} pages ` +
+          }pruned ${droppedBlocks} of ${droppedBlocks + keptBlocks} component style blocks and ${dedupedBlocks} duplicates across ${pages.length} pages ` +
             `(${(before / 1024).toFixed(0)}KB → ${(after / 1024).toFixed(0)}KB inline, ` +
             `-${((saved / before) * 100).toFixed(1)}%); full sheet ${(full.length / 1024).toFixed(0)}KB for the editor`
         );

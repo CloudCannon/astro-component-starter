@@ -24,7 +24,7 @@ change how things look, and every page section moves to a new path.
 
 #### Privacy and consent
 
-- A site-wide privacy and consent workflow, edited in CloudCannon's **Privacy & Consent** and **Analytics** data panels. It is strict opt-in: analytics and external media stay off until the visitor allows them, and stay off when the workflow is disabled. The banner gives Accept All, Reject All and Customize equal weight, the settings dialog has a switch per optional category, and the footer's **Privacy settings** link reopens it. A browser's Global Privacy Control signal counts as a decline.
+- A site-wide privacy and consent workflow, edited in CloudCannon's **Privacy & Consent** and **Analytics** data panels. It is strict opt-in: analytics and external media stay off until the visitor allows them, and stay off when the workflow is disabled. The banner gives Accept All, Reject All and Customize equal weight, the settings dialog has a switch per optional category and opens fullscreen on phones, and the footer's **Privacy settings** link reopens it. A browser's Global Privacy Control signal counts as a decline.
 - Hosted video, maps and embeds wait for external-media approval, provider URLs are limited to known embed paths, and YouTube uses Privacy Enhanced Mode.
 - A default privacy policy at `src/content/pages/privacy.md`, a plain markdown page to rewrite for your site, and a Plausible analytics integration.
 
@@ -147,7 +147,7 @@ quietly broken in the editor.
 
 #### Performance
 
-- Each page ships only the component CSS its own markup uses, once. Inline CSS is 45% smaller on the homepage and 49% site-wide, and total HTML 39.6% smaller, which takes about 1.2s off first and largest contentful paint on a cold Slow 4G load.
+- Each page ships only the component CSS its own markup uses, once. Inline CSS is 64% smaller on the homepage and 66% site-wide, and total HTML 57% smaller, which takes about 1.2s off first and largest contentful paint on a cold Slow 4G load.
 
 #### Authoring and the editor
 

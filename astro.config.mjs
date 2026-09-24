@@ -85,6 +85,9 @@ export default defineConfig({
   vite: {
     build: {
       minify: "esbuild",
+      // lightningcss (Vite's default) merges same-name `@layer` blocks, fusing
+      // unrelated components into one block that `pruneCss` can only keep whole.
+      cssMinify: "esbuild",
       chunkSizeWarningLimit: 1024,
     },
     server: {

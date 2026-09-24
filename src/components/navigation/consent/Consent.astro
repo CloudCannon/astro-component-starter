@@ -223,8 +223,10 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
       position: absolute;
     }
 
-    .modal-popover.consent-popover {
-      max-height: min(85vh, 38rem);
+    @media (min-width: 640px) {
+      .modal-popover.consent-popover {
+        max-height: min(85vh, 38rem);
+      }
     }
 
     .consent-modal-header,
