@@ -251,13 +251,17 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         z-index: var(--layer-0);
       }
 
-      /* Interactive content sits above the stretched hit, so a button, link or
-         form control inside a linked card is still reachable. Scoped to those
-         elements: lifting the whole body would swallow the card's own click. */
-      .card-inner:has(> .card-hit)
+      /* The body's layers are stacking contexts painted over the hit, so clicks
+         pass through them to it, except on a nested control. Not in the editor,
+         where a click on the body has to reach its editable regions. */
+      :root:not([data-in-editor]) & .card-inner:has(> .card-hit) {
+        > :not(.card-hit) {
+          pointer-events: none;
+        }
+
         :is(a, button, input, select, textarea, label, summary):not(.card-hit) {
-        position: relative;
-        z-index: var(--layer-1);
+          pointer-events: auto;
+        }
       }
 
       > .card-inner {

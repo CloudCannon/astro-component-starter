@@ -46,6 +46,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Linked Cards open their link when clicked again, including the blog listing cards. The card's content was painted over the link, so only its padding was clickable. A button, link or form control inside a linked card still works on its own. In the Visual Editor, clicking a linked card's content still selects it for editing.
 - A Card with its own color scheme (including Scroll Deck cards) uses that scheme's text colour. The card kept the surrounding page's text colour, so a light card on a dark page showed light text wherever a block didn't set its own colour. The Why page's Scroll Deck lost its body text this way in the Visual Editor.
 - Scroll Stepper's step media works in the Visual Editor. Each image rendered as an editable array item with no array region around it, so CloudCannon replaced every one with a "Failed to render array item" card. The media is now wired to each step's `mediaSections`, in both the desktop and mobile layouts, so the images render and can be selected on the canvas.
 - Following a link or going back inside CloudCannon's Visual Editor does a real page load instead of an Astro view-transition swap, so the editor knows which page is open. The live site keeps its view transitions.

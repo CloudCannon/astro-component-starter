@@ -73,6 +73,8 @@ const generatedImage = props.generatedImage ?? ogCardPath("site");
 
     <script>
       if (window.inEditorMode) {
+        document.documentElement.dataset.inEditor = "";
+
         // Pages ship only the component CSS their own markup uses (see
         // `scripts/build/pruneCss.mjs`). The editor renders components that
         // were never in the HTML, so it needs the whole sheet.
