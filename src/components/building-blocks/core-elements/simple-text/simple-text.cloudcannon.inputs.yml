@@ -2,7 +2,7 @@ text:
   comment: The text content of the simple text (inline markdown only).
   type: textarea
 alignmentHorizontal:
-  comment: The horizontal alignment of the text.
+  comment: Horizontal alignment of the text.
   type: select
   options:
     values:

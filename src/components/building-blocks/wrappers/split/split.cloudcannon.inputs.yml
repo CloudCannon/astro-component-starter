@@ -1,14 +1,14 @@
 label:
-  comment: Optional label for the split to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
   type: text
 firstColumnContentSections:
   type: array
-  comment: Array of content sections to render in the first column.
+  comment: Content blocks in the first column.
   options:
     structures: _structures.splitSections
 secondColumnContentSections:
   type: array
-  comment: Array of content sections to render in the second column.
+  comment: Content blocks in the second column.
   options:
     structures: _structures.splitSections
 distributionMode:
@@ -31,7 +31,7 @@ distributionMode:
       - id: flexible-fixed
         name: Flexible-Fixed
 fixedWidth:
-  comment: Fixed-Flexible and Flexible-Fixed only — the width in pixels of the fixed column.
+  comment: Width of the fixed column in pixels. Fixed-Flexible and Flexible-Fixed only.
   type: number
 minSplitWidth:
   comment: Minimum width in pixels before switching to mobile layout.
@@ -54,10 +54,10 @@ reverse:
   type: switch
 reverseOrderOnMobile:
   hidden: "!reverse"
-  comment: When true, reversed splits will have their order flipped on mobile (text-image pattern). When false, reversed splits keep their desktop order on mobile.
+  comment: Restores the original column order when the split stacks on mobile.
   type: switch
 gap:
-  comment: Spacing between the two columns.
+  comment: The gap between the two columns.
   type: select
   options:
     values:

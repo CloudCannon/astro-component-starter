@@ -30,7 +30,7 @@ size:
         name: Large
 iconName:
   type: select
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  comment: Icon to display, from [Heroicons](https://heroicons.com/).
   options:
     values: data.icons
     preview:
@@ -74,5 +74,5 @@ iconPosition:
         name: After
 hideText:
   type: switch
-  comment: Whether to hide the button text and show only the icon.
+  comment: Shows only the icon and hides the text.
   hidden: "!iconName"

@@ -1,6 +1,6 @@
 ---
 title: Counter
-overview: 'A number that counts to its target when it scrolls into view. A target of 0 counts down. For a number that does not animate, use [Heading](/component-docs/components/building-blocks/core-elements/heading/) instead.'
+overview: A number that counts to its target when scrolled into view. A target of 0 counts down. For a static number, use [Heading](/component-docs/components/building-blocks/core-elements/heading/).
 examples:
   - slugs:
       - size-xs

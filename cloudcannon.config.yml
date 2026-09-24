@@ -87,9 +87,6 @@ collections_config:
         comment: Optional meta keywords for this post.
       keywords[*]:
         type: text
-      showToc:
-        type: switch
-        comment: Show an "On this page" table of contents built from the post's headings.
     _editables:
       content:
         format: p h2 h3 h4 h5 h6

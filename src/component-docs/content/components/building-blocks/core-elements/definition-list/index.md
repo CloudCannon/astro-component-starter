@@ -3,7 +3,7 @@ title: Definition List
 overview: A list of terms and their definitions. Good for glossaries and other label and description pairs. Definitions can use markdown.
 slots:
   - title: default
-    description: The content inside the DefinitionList.
+    description: Terms and definitions.
     child_component:
       props:
         - title

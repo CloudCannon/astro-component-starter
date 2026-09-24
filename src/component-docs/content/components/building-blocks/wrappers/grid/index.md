@@ -1,10 +1,10 @@
 ---
 title: Grid
 order: 4
-overview: 'A responsive grid of items in rows and columns. Pick a fixed column count, or let Auto fit as many items as the minimum width allows. For a handful of different blocks in a set arrangement, use [Stack](/component-docs/components/building-blocks/wrappers/stack/) instead.'
+overview: A responsive grid of similar items, with a set column count or Auto to fit as many as the space allows. For a few different blocks, use [Stack](/component-docs/components/building-blocks/wrappers/stack/).
 slots:
   - title: default
-    description: The contents for the the Grid.
+    description: Grid items.
     child_component:
       props:
         - 'contentSections/slot'

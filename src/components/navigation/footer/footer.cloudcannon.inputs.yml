@@ -1,33 +1,33 @@
 logoSource:
   type: image
-  comment: "Logo image source URL or path."
+  comment: Logo image path or URL. Leave empty to hide the logo.
   options:
     resize_style: contain
     width: 1920
     height: 1280
 logoAlternateSource:
   type: image
-  comment: "Optional alternate logo shown when the site theme is toggled. The main logo is shown by default."
+  comment: Logo shown instead when a visitor toggles the site theme.
   options:
     resize_style: contain
     width: 1920
     height: 1280
 logoAlt:
   type: text
-  comment: "Alt text for the logo image for accessibility."
+  comment: Alt text for the logo image.
 links:
   type: array
-  comment: "Array of navigation links to display in the footer."
+  comment: Navigation links shown in the footer.
   options:
     structures: _structures.linkItems
 socials:
   type: array
-  comment: "Array of social media links to display in the footer."
+  comment: Social media links shown in the footer.
   options:
     structures: _structures.socialItems
 footerText:
   type: markdown
-  comment: "Legal text or copyright information to display at the bottom of the footer."
+  comment: Legal or copyright text at the bottom of the footer.
   options:
     blockquote: false
     bold: true

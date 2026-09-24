@@ -4,7 +4,7 @@ overview: A sliding gallery of content. Supports autoplay, indicators, and slide
 
 slots:
   - title: default
-    description: The contents for the the Carousel.
+    description: Slides.
     child_component:
       props:
         - 'contentSections/slot'

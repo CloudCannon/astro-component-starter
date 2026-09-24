@@ -1,6 +1,6 @@
 value:
   type: number
-  comment: The rating shown, 0 to the maximum. Halves work (e.g. 4.5). Anything above the maximum is clamped to it.
+  comment: Rating shown, from 0 to the maximum. Halves work, e.g. 4.5.
   options:
     step: 0.5
     min: 0

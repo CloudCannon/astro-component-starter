@@ -3,7 +3,7 @@
 # drops any other key when an editor switches `type`.
 background:
   type: object
-  comment: "Optional background: a cover image, a looping HTML5 video (self-hosted), or a repeating tiled pattern image. Video is hidden when the user prefers reduced motion."
+  comment: An image, video, or tiled pattern behind the content.
   options:
     preview:
       icon: wallpaper
@@ -82,11 +82,11 @@ background.positionHorizontal:
 background.fixed:
   type: switch
   label: Fixed background (parallax)
-  comment: Pin the background image in place so the section scrolls over it.
+  comment: Pins the image in place while the page scrolls past.
 background.priority:
   type: switch
   label: Prioritize image load
-  comment: Load the image eagerly (use for above-the-fold sections).
+  comment: Loads the image eagerly. Use near the top of the page.
 background.imageSource:
   comment: URL or path to the background or pattern image.
   type: image
@@ -100,7 +100,7 @@ background.imageSource:
 background.patternSize:
   type: select
   label: Pattern tile size
-  comment: How large each repeated tile renders — Natural uses the image's own size.
+  comment: Size of each repeated tile. Natural uses the image's own size.
   options:
     values:
       - id: natural
@@ -117,7 +117,7 @@ background.imageAlt:
 background.videoSource:
   type: file
   label: Video source
-  comment: Path to a video under public/videos. Sibling formats with the same basename are added automatically when present.
+  comment: Video file in public/videos. Same-named files in other formats are added too.
   options:
     accepts_mime_types:
       - video/mp4
@@ -128,7 +128,7 @@ background.videoSource:
       static: public
 background.overlay:
   type: range
-  comment: "Overlay in front of the background (-1.0 to 1.0). Negative values darken, positive values lighten."
+  comment: Tints the background. -1 darkens, 1 lightens.
   options:
     min: -1
     max: 1
@@ -136,7 +136,7 @@ background.overlay:
 background.mask:
   type: select
   label: Background fade
-  comment: Which part of the background fades out — the faded part reveals the background color.
+  comment: Which part of the background fades into the background color.
   options:
     values:
       - id: none

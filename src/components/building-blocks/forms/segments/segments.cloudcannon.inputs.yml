@@ -1,9 +1,9 @@
 title:
   type: text
-  comment: Optional title text for the fieldset.
+  comment: Title text for the fieldset.
 name:
   type: text
-  comment: A unique name attribute for the radio button group.
+  comment: Name the choices are submitted under. Must be unique in the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.
@@ -19,10 +19,10 @@ options:
     min_items_message: At least one option is required.
 iconOnly:
   type: switch
-  comment: When true, labels are used as tooltips instead of being displayed as text.
+  comment: Hides the labels and shows them as tooltips instead.
 multiple:
   type: switch
-  comment: When true, uses checkboxes for multiple selection instead of radio buttons for single selection.
+  comment: Allows more than one choice, using checkboxes instead of radio buttons.
 keepStateOnRefresh:
   type: switch
-  comment: When true, sets autocomplete="on" to allow browser to remember state on page refresh. Defaults to false (autocomplete="off").
+  comment: Lets the browser keep the selection after a page refresh.

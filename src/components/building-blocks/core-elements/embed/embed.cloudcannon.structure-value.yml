@@ -1,6 +1,6 @@
 label: Embed
 icon: data_object
-description: Consent-gated trusted HTML without a typed component; use Video for YouTube or Vimeo.
+description: Trusted third-party HTML. Use Video for YouTube or Vimeo.
 value:
   _component: building-blocks/core-elements/embed
   html: ""

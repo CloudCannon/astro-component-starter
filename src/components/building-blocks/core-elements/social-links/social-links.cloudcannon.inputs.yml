@@ -5,7 +5,7 @@ links:
     structures: _structures.socials
 ariaLabel:
   type: text
-  comment: Names the navigation landmark for screen readers. Give each set of social links on a page a different name.
+  comment: Screen reader name for the links. Give each set on a page its own.
 variant:
   type: select
   comment: Ghost icons stay quiet; solid tiles use the brand fill and read like buttons.

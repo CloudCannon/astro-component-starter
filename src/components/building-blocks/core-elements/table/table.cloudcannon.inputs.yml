@@ -15,7 +15,7 @@ rows:
     structures: _structures.tableRows
 firstColumnHeader:
   type: switch
-  comment: Treat the first cell of each row as a row header (bold, and pinned while the table scrolls on small screens).
+  comment: Treats each row's first cell as a bold row header, pinned on small screens.
 striped:
   type: switch
   comment: Tint every second row instead of drawing row rules.

@@ -15,7 +15,7 @@ variant:
         name: Note
 title:
   type: text
-  comment: Optional bold title. Without it, the icon aligns to the first line of text.
+  comment: Bold title for the alert.
 text:
   type: markdown
   comment: The alert body.
@@ -33,7 +33,7 @@ text:
     numberedlist: true
 iconName:
   type: select
-  comment: Overrides the variant's default icon. Sourced from [Heroicons](https://heroicons.com/).
+  comment: Replaces the variant's default icon, from [Heroicons](https://heroicons.com/).
   options:
     values: data.icons
     preview:

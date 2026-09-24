@@ -3,7 +3,7 @@ title: List
 overview: A list with icons, bullets, or numbers. Layout can be vertical or horizontal.
 slots:
   - title: default
-    description: The content inside the List.
+    description: List items.
     child_component:
       props:
         - iconName

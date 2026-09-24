@@ -1,9 +1,9 @@
 ---
 title: Masonry
-overview: 'A column layout for mixed-height content that keeps reading order. Items flow into the shortest column. For photo grids with a lightbox, use [Gallery Grid](/component-docs/components/page-sections/collections/gallery-grid/) instead.'
+overview: Columns of mixed-height items that keep reading order. For photos with a lightbox, use [Gallery Grid](/component-docs/components/page-sections/collections/gallery-grid/).
 slots:
   - title: default
-    description: The tiles in the masonry.
+    description: Masonry tiles.
     child_component:
       props:
         - 'contentSections/slot'

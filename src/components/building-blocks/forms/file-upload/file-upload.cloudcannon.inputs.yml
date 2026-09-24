@@ -3,7 +3,7 @@ label:
   comment: The label text for the file upload field.
 name:
   type: text
-  comment: A unique name attribute for the file upload field.
+  comment: Name the field is submitted under. Must be unique in the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.
@@ -18,4 +18,4 @@ multiple:
   comment: Whether multiple files can be selected.
 hint:
   type: text
-  comment: Optional help text shown between the label and the field, announced to assistive technology.
+  comment: Help text shown between the label and the field.

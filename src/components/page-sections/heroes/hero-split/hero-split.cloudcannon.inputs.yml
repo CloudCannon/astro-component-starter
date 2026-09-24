@@ -1,12 +1,12 @@
 eyebrow:
   type: text
-  comment: Optional label displayed above the hero heading.
+  comment: Short label above the heading.
 heading:
   type: text
-  comment: Main heading text for the hero section.
+  comment: Main heading for the section.
 headingLevel:
   type: select
-  comment: Heading level for this section's title. A page needs exactly one h1; drop this to h2 when another section above already carries it.
+  comment: Heading level for the title. Use h1 once per page, on the first section.
   options:
     values:
       - h1
@@ -14,7 +14,7 @@ headingLevel:
       - h3
 subtext:
   type: markdown
-  comment: Subtitle text displayed below the main heading.
+  comment: Supporting copy beneath the heading.
   options:
     blockquote: false
     bold: true
@@ -29,7 +29,7 @@ subtext:
     numberedlist: false
 imageSource:
   type: image
-  comment: Feature image to display alongside the hero content.
+  comment: Image shown beside the copy.
   options:
     paths:
       uploads: src/assets/images
@@ -39,10 +39,10 @@ imageSource:
     height: 1280
 imageAlt:
   type: text
-  comment: Alt text for the feature image for accessibility.
+  comment: Alt text describing the image.
 imageAspectRatio:
   type: select
-  comment: Set a fixed aspect ratio for the image.
+  comment: Crops the image to a fixed aspect ratio.
   options:
     values:
       - id: none
@@ -57,18 +57,18 @@ imageAspectRatio:
         name: Widescreen (16:9)
 imageBleed:
   type: switch
-  comment: Runs the image to the edge of the page instead of stopping at the content width. The image column widens to half; Aspect ratio sets how much is cropped at the edge and bottom (Landscape or Square work best; None shows the whole image). Overlays such as floating badges should be baked into the image.
+  comment: Runs the image to the page edge. Landscape or Square aspect ratios work best.
 buttonSections:
   type: array
-  comment: Array of button components for call-to-action buttons. See the Button component documentation for more information.
+  comment: Call-to-action buttons.
   options:
     structures: _structures.buttonSections
 reverse:
   type: switch
-  comment: Whether to reverse the order of content and image (image first, content second).
+  comment: Flips the columns so the image comes before the copy.
 imageRounded:
   type: switch
-  comment: Toggles rounded corners on the image.
+  comment: Rounds the image's corners.
 
 # --- section wrapper inputs (CustomSection) ---
 # Configures the CustomSection wrapper, not this section's own content. Inline
@@ -76,10 +76,10 @@ imageRounded:
 # `new:component` slices from this marker down — keep the marker line verbatim.
 sectionLabel:
   type: text
-  comment: Optional label to identify the section in the editor. When set and no HTML id is provided, an id is derived from this value.
+  comment: Names the section in the editor and sets its anchor id.
 maxContentWidth:
   type: select
-  comment: Maximum width constraint for the content.
+  comment: Maximum width of the content.
   options:
     values:
       - id: none
@@ -100,7 +100,7 @@ maxContentWidth:
         name: 3xl
 paddingHorizontal:
   type: select
-  comment: Horizontal padding applied to the section content.
+  comment: Horizontal padding around the content.
   options:
     values:
       - id: none
@@ -121,7 +121,7 @@ paddingHorizontal:
         name: 3xl
 paddingVertical:
   type: select
-  comment: Vertical padding applied to the section content.
+  comment: Vertical padding around the content.
   options:
     values:
       - id: none
@@ -148,7 +148,7 @@ paddingVertical:
         name: 6xl
 colorScheme:
   type: select
-  comment: Color scheme theme for the section wrapper.
+  comment: Light or dark scheme for the section. Inherit follows the page.
   options:
     values:
       - id: inherit
@@ -160,10 +160,10 @@ colorScheme:
 lockColorScheme:
   type: switch
   label: Lock color scheme
-  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
-  comment: Solid background color token behind the section content.
+  comment: Background color for the section.
   options:
     values:
       - id: none

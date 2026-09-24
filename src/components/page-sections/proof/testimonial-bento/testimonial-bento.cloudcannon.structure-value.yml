@@ -1,6 +1,6 @@
 label: Testimonial Bento
 icon: dashboard
-description: Customer quotes in a bento grid, with a featured quote and cells of different sizes and tones.
+description: Customer quotes in a bento grid, led by a featured quote.
 value:
   _component: page-sections/proof/testimonial-bento
   sectionLabel: ""

@@ -1,36 +1,36 @@
 logoSource:
   type: image
-  comment: "Logo image source URL or path. Leave empty to hide the logo."
+  comment: Logo image path or URL. Leave empty to hide the logo.
   options:
     resize_style: contain
     width: 1920
     height: 1280
 logoAlternateSource:
   type: image
-  comment: "Optional alternate logo shown when the site theme is toggled. The main logo is shown by default."
+  comment: Logo shown instead when a visitor toggles the site theme.
   options:
     resize_style: contain
     width: 1920
     height: 1280
 logoAlt:
   type: text
-  comment: "Alt text for the logo image for accessibility."
+  comment: Alt text for the logo image.
 navData:
   type: array
-  comment: "Array of navigation items to render in the navigation bar."
+  comment: Navigation items with a name, path, and children, up to 3 levels deep.
   options:
     structures: _structures.navItemLevel1MegaMenu
 buttonSections:
   type: array
-  comment: "Array of button components to display in the navigation bar. See the Button component documentation for more information."
+  comment: Buttons shown in the navigation bar.
   options:
     structures: _structures.buttonSections
 search:
   type: switch
-  comment: "Show the site-wide search button in the navigation bar. The search index is generated when the site builds."
+  comment: Shows a site search button in the navigation bar.
 searchPlaceholder:
   type: text
   comment: "Placeholder text for the search input. Leave empty for the default."
 themeToggle:
   type: switch
-  comment: "Show the light/dark theme toggle in the navigation bar. Sections with a locked color scheme keep theirs."
+  comment: Shows the light/dark theme toggle. Locked sections keep their scheme.

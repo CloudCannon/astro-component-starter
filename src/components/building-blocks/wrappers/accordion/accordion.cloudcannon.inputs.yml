@@ -1,5 +1,5 @@
 label:
-  comment: Optional label for the accordion to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
   type: text
 items:
   comment: The items to display in the accordion.
@@ -7,8 +7,8 @@ items:
   options:
     structures: _structures.accordionItems
 openFirst:
-  comment: Whether the first item will be open by default.
+  comment: Opens the first item by default.
   type: switch
 singleOpen:
-  comment: Whether only one item can be open at a time within this accordion.
+  comment: Allows only one item open at a time.
   type: switch

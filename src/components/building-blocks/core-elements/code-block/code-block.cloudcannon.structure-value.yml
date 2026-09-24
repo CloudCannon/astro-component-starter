@@ -1,6 +1,6 @@
 label: Code Block
 icon: code
-description: Tabbed, syntax-highlighted code with optional line numbers, a compact copy action, and footer context.
+description: Code in tabs, with syntax highlighting, line numbers, and a copy button.
 value:
   _component: building-blocks/core-elements/code-block
   tabs:

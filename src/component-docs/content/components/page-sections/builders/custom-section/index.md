@@ -4,7 +4,7 @@ order: 1
 overview: The main building block for a page section. Sets background, padding, and width so layouts stay consistent.
 slots:
   - title: default
-    description: The contents of the Custom Section.
+    description: Section content.
 examples:
   - title: Background color
     slugs:

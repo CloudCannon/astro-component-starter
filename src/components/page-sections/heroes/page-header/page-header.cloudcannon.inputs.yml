@@ -1,12 +1,12 @@
 eyebrow:
   type: text
-  comment: Short uppercase kicker above the title. Leave empty to hide.
+  comment: Short label above the heading.
 heading:
   type: text
-  comment: The page title. Renders as the page's h1.
+  comment: The page title. Also names the last breadcrumb.
 headingLevel:
   type: select
-  comment: Heading level for this section's title. A page needs exactly one h1; drop this to h2 when another section above already carries it.
+  comment: Heading level for the title. Use h1 once per page, on the first section.
   options:
     values:
       - h1
@@ -14,13 +14,13 @@ headingLevel:
       - h3
 subtext:
   type: markdown
-  comment: One or two lines introducing the page. Leave empty to hide.
+  comment: One or two lines introducing the page.
 showBreadcrumbs:
   type: switch
-  comment: Show a breadcrumb trail above the title, built from this page's URL. Hidden on the home page, where it would only read "Home".
+  comment: Shows a breadcrumb trail above the title, built from the URL. Hidden on the home page.
 alignmentHorizontal:
   type: select
-  comment: Alignment of the title block.
+  comment: Alignment for the heading and supporting text.
   options:
     values:
       - id: start
@@ -34,10 +34,10 @@ alignmentHorizontal:
 # `new:component` slices from this marker down — keep the marker line verbatim.
 sectionLabel:
   type: text
-  comment: Optional label to identify the section in the editor. When set and no HTML id is provided, an id is derived from this value.
+  comment: Names the section in the editor and sets its anchor id.
 maxContentWidth:
   type: select
-  comment: Maximum width constraint for the content.
+  comment: Maximum width of the content.
   options:
     values:
       - id: none
@@ -58,7 +58,7 @@ maxContentWidth:
         name: 3xl
 paddingHorizontal:
   type: select
-  comment: Horizontal padding applied to the section content.
+  comment: Horizontal padding around the content.
   options:
     values:
       - id: none
@@ -79,7 +79,7 @@ paddingHorizontal:
         name: 3xl
 paddingVertical:
   type: select
-  comment: Vertical padding applied to the section content.
+  comment: Vertical padding around the content.
   options:
     values:
       - id: none
@@ -106,7 +106,7 @@ paddingVertical:
         name: 6xl
 colorScheme:
   type: select
-  comment: Color scheme theme for the section wrapper.
+  comment: Light or dark scheme for the section. Inherit follows the page.
   options:
     values:
       - id: inherit
@@ -118,10 +118,10 @@ colorScheme:
 lockColorScheme:
   type: switch
   label: Lock color scheme
-  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
-  comment: Solid background color token behind the section content.
+  comment: Background color for the section.
   options:
     values:
       - id: none

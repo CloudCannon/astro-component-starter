@@ -1,9 +1,9 @@
 ---
 title: Button
-overview: 'A button for actions and links. Must sit inside a [Button Group](/component-docs/components/building-blocks/wrappers/button-group/). For submitting a form, use [Submit](/component-docs/components/building-blocks/forms/submit) instead.'
+overview: A button for actions and links. It must sit inside a [Button Group](/component-docs/components/building-blocks/wrappers/button-group/); to submit a form, use [Submit](/component-docs/components/building-blocks/forms/submit).
 slots:
   - title: default
-    description: The button content.
+    description: Button content.
 order: 4
 examples:
   - slugs:

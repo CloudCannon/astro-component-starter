@@ -1,10 +1,10 @@
 label:
   type: text
-  comment: Optional label for the scroll stepper to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
 steps:
   type: array
   label: Steps
-  comment: Each step scrolls through its own message while its media state is shown beside it.
+  comment: Steps, each with its own message and media.
   options:
     structures: _structures.scrollStepperSteps
 mediaWidth:
@@ -21,11 +21,11 @@ mediaWidth:
         name: Narrow
 reverse:
   type: switch
-  comment: Put the sticky media column on the end side on desktop. Narrow layouts pair each image with its message.
+  comment: Puts the media column on the end side on desktop.
 mediaAspectRatio:
   type: select
   label: Media canvas ratio
-  comment: A preferred minimum canvas for each media panel. Panels grow when their content needs more room.
+  comment: Minimum shape of each media panel. Panels grow to fit content.
   options:
     values:
       - id: none
@@ -53,7 +53,7 @@ progressStyle:
 stepHeight:
   type: select
   label: Scroll state height
-  comment: Content is the shorter default (about a third of a viewport); Screen gives each media state a full viewport interval.
+  comment: Scroll distance per step. Content is about a third of a screen; Screen is a full one.
   options:
     values:
       - id: screen
@@ -62,7 +62,7 @@ stepHeight:
         name: Content
 gap:
   type: select
-  comment: Space between the sticky media and scrolling content on desktop.
+  comment: The gap between the media and content on desktop.
   options:
     values:
       - id: none

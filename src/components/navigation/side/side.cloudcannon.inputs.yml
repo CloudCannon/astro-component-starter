@@ -1,6 +1,6 @@
 navData:
   type: array
   label: Navigation Data
-  comment: Array of navigation items with name, path, and optional children (up to 3 levels).
+  comment: Navigation items with a name, path, and children, up to 3 levels deep.
   options:
     structures: _structures.navItemLevel1

@@ -7,7 +7,7 @@ title:
 media:
   type: object
   label: Video
-  comment: The video to play — a YouTube or Vimeo ID, or a local file.
+  comment: "The video to play: a YouTube or Vimeo ID, or a local file."
   options:
     preview:
       icon: videocam
@@ -103,7 +103,7 @@ trigger.style:
 trigger.image:
   type: image
   label: Poster image
-  comment: The still frame shown before the video plays. Without one the trigger falls back to an icon-only play button.
+  comment: Still frame shown before playback. Without one, the trigger is a play button.
   options:
     paths:
       uploads: src/assets/images
@@ -161,7 +161,7 @@ trigger.size:
 trigger.iconName:
   type: select
   label: Button icon
-  comment: Optional icon for the trigger button. Sourced from [Heroicons](https://heroicons.com/).
+  comment: Icon on the trigger button.
   options:
     values: data.icons
     preview:

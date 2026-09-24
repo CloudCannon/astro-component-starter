@@ -1,10 +1,10 @@
 label:
   type: text
-  comment: Optional label for the scroll deck to help identify it in the editor.
+  comment: Names this block in the editor and for screen readers. Sets its anchor id.
 cards:
   type: array
   label: Cards
-  comment: Cards stacked in a deck. Each one pins under the last as the wrapper scrolls.
+  comment: Cards in the deck. Each slides up over the one before it.
   options:
     structures: _structures.scrollDeckCards
 stickyOffset:
@@ -24,7 +24,7 @@ stickyOffset:
 cardColorScheme:
   type: select
   label: Card color scheme
-  comment: Color scheme for the cards themselves.
+  comment: Light or dark scheme for the cards. Inherit follows the section.
   options:
     values:
       - id: inherit
@@ -36,4 +36,4 @@ cardColorScheme:
 showRail:
   type: switch
   label: Show card rail
-  comment: A column of anchor links marking which card is on top. Hidden below 768px, where the deck stacks flat.
+  comment: Anchor links marking the card on top. Hidden on small screens.

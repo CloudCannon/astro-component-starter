@@ -1,6 +1,6 @@
 name:
   type: select
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
+  comment: Icon to display, from [Heroicons](https://heroicons.com/).
   options:
     values: data.icons
     preview:

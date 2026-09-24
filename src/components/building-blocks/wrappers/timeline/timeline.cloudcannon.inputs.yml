@@ -1,5 +1,5 @@
 label:
-  comment: Optional label for the timeline to help identify it in the editor.
+  comment: Names this block in the editor and for screen readers. Sets its anchor id.
   type: text
 layout:
   type: select

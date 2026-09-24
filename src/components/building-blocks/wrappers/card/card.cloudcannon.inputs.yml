@@ -1,26 +1,26 @@
 label:
   type: text
-  comment: Optional label for the card to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
 contentSections:
   type: array
-  comment: Content inside the main area of the card, with padding.
+  comment: Card body content, inside the padding.
   options:
     structures: _structures.cardSections
 beforeContentSections:
   type: array
-  comment: Content that appears above the main card area, without padding.
+  comment: Content above the card body, outside the padding.
   hidden: "!showBeforeAfter"
   options:
     structures: _structures.cardSections
 afterContentSections:
   type: array
-  comment: Content that appears below the main card area, without padding.
+  comment: Content below the card body, outside the padding.
   hidden: "!showBeforeAfter"
   options:
     structures: _structures.cardSections
 maxContentWidth:
   type: select
-  comment: Maximum width constraint for the card content.
+  comment: Maximum width of the content.
   options:
     values:
       - id: none
@@ -42,10 +42,10 @@ maxContentWidth:
 showBeforeAfter:
   type: switch
   label: Show Before / After Content Sections
-  comment: Whether to show the before/after content blocks used to add content outside the card's padding.
+  comment: Shows content areas above and below the card body, outside the padding.
 paddingHorizontal:
   type: select
-  comment: Horizontal padding applied to the card content.
+  comment: Horizontal padding around the content.
   options:
     values:
       - id: xs
@@ -62,7 +62,7 @@ paddingHorizontal:
         name: 2xl
 paddingVertical:
   type: select
-  comment: Vertical padding applied to the card content.
+  comment: Vertical padding around the content.
   options:
     values:
       - id: xs
@@ -79,7 +79,7 @@ paddingVertical:
         name: 2xl
 colorScheme:
   type: select
-  comment: Color scheme theme for the card.
+  comment: Light or dark scheme for the card. Inherit follows its container.
   options:
     values:
       - id: inherit
@@ -91,7 +91,7 @@ colorScheme:
 lockColorScheme:
   type: switch
   label: Lock color scheme
-  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
   comment: Background color for the card.
@@ -109,7 +109,7 @@ backgroundColor:
         name: Highlight
 background:
   type: object
-  comment: "Optional background: a cover image, a looping HTML5 video (self-hosted), or a repeating tiled pattern image. Video is hidden when the user prefers reduced motion."
+  comment: An image, video, or tiled pattern behind the content.
   options:
     preview:
       icon: wallpaper
@@ -185,11 +185,11 @@ background.positionHorizontal:
 background.fixed:
   type: switch
   label: Fixed background (parallax)
-  comment: Pin the background image in place so the card scrolls over it.
+  comment: Pins the image in place while the page scrolls past.
 background.priority:
   type: switch
   label: Prioritize image load
-  comment: Load the image eagerly (use for above-the-fold cards).
+  comment: Loads the image eagerly. Use near the top of the page.
 background.imageSource:
   comment: URL or path to the background or pattern image.
   type: image
@@ -203,7 +203,7 @@ background.imageSource:
 background.patternSize:
   type: select
   label: Pattern tile size
-  comment: How large each repeated tile renders — Natural uses the image's own size.
+  comment: Size of each repeated tile. Natural uses the image's own size.
   options:
     values:
       - id: natural
@@ -220,7 +220,7 @@ background.imageAlt:
 background.videoSource:
   type: file
   label: Video source
-  comment: Path to a video under public/videos. Sibling formats with the same basename are added automatically when present.
+  comment: Video file in public/videos. Same-named files in other formats are added too.
   options:
     accepts_mime_types:
       - video/mp4
@@ -231,7 +231,7 @@ background.videoSource:
       static: public
 background.overlay:
   type: range
-  comment: "Overlay in front of the background (-1.0 to 1.0). Negative values darken, positive values lighten."
+  comment: Tints the background. -1 darkens, 1 lightens.
   options:
     min: -1
     max: 1
@@ -241,7 +241,7 @@ link:
   comment: URL to make the entire card clickable. Leave empty for a non-clickable card.
 rounded:
   type: switch
-  comment: Whether to apply rounded corners to the card.
+  comment: Rounds the card's corners.
 border:
   type: switch
-  comment: Whether to apply a border to the card.
+  comment: Adds a border to the card.

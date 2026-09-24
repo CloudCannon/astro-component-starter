@@ -11,16 +11,16 @@ type:
 title:
   type: text
   hidden: source
-  comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
+  comment: Accessible title for the YouTube or Vimeo video.
 videoId:
   type: text
   hidden: source
-  comment: Used for externally hosted videos - Enter the YouTube or Vimeo video ID.
+  comment: YouTube or Vimeo video ID.
 source:
   type: file
   hidden: videoId
   label: Video Source
-  comment: Used for locally hosted videos - Select a video file; matching sibling formats with the same filename are added as additional sources automatically.
+  comment: Self-hosted video file. Same-named files in other formats are added automatically.
   options:
     accepts_mime_types:
       - video/mp4
@@ -31,7 +31,7 @@ source:
       static: public
 autoplay:
   type: switch
-  comment: Start playing automatically. The video is muted so browsers allow it; YouTube and Vimeo players load when scrolled into view instead of waiting for a click.
+  comment: Plays automatically, muted. YouTube and Vimeo load when scrolled into view.
 loop:
   type: switch
   comment: Restart the video from the beginning when it ends.
@@ -39,7 +39,7 @@ captions:
   type: file
   hidden: "!source"
   label: Captions
-  comment: Used for locally hosted videos - A WebVTT (.vtt) track shown by default. YouTube and Vimeo carry their own captions.
+  comment: WebVTT (.vtt) captions for a self-hosted video, shown by default.
   options:
     paths:
       uploads: public/videos
@@ -47,11 +47,11 @@ captions:
 captionsLanguage:
   type: text
   hidden: "!captions"
-  comment: BCP 47 tag for the captions track (e.g. en, mi, fr-CA). The track's menu label is derived from it.
+  comment: Language tag for the captions, e.g. en or fr-CA.
 thumbnail:
   type: image
   hidden: "!source"
-  comment: Used for locally hosted videos - Poster image before the video plays. YouTube and Vimeo draw their own poster from the video, so this does not apply to them. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
+  comment: Poster image shown before a self-hosted video plays.
   options:
     accepts_mime_types:
       - image/jpeg

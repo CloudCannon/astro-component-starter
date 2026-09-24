@@ -1,6 +1,6 @@
 ---
 title: Icon
-overview: 'Adds an icon to other components, including buttons and headings. Artwork comes from [Heroicons](https://heroicons.com/) and lives in `/src/icons/`.'
+overview: An icon for buttons, headings, and other components, from [Heroicons](https://heroicons.com/) or your own SVGs in `src/icons/`.
 examples:
   - title: Sizes
     slugs:

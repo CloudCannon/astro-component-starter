@@ -1,6 +1,6 @@
 label: Timeline
 icon: timeline
-description: Dated timeline. Vertical is a continuous list, split alternates events, and horizontal scrolls.
+description: Dated sequence of events on a rail.
 value:
   _component: building-blocks/wrappers/timeline
   label: ""

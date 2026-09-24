@@ -3,7 +3,7 @@ title: Card Grid
 overview: A row of cards with a set number of columns. Each card can have a cover, an optional link, and freeform content. Choose Grid or Masonry layout.
 slots:
   - title: default
-    description: The cards in the grid. Pass `items` or slot CardGridItem children (Team Grid does this so name, role, and bio stay their own fields).
+    description: Cards in the grid, from `items` or CardGridItem children.
     # Derivation would pick MasonryItem — the masonry branch's measurement
     # probe, imported from the masonry wrapper — not the real repeating child.
     child_component:

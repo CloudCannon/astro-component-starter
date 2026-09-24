@@ -3,10 +3,10 @@ label:
   comment: Accessible label for the modal dialog.
 heading:
   type: text
-  comment: Optional heading displayed at the top of the modal.
+  comment: Heading at the top of the modal.
 headingLevel:
   type: select
-  comment: The heading level for the modal title. Pick the level that follows the heading above the trigger.
+  comment: Heading level for the modal title. Follow the heading above the trigger.
   options:
     values:
       - h2
@@ -45,7 +45,7 @@ triggerSize:
         name: Large
 triggerIconName:
   type: select
-  comment: Optional icon for the trigger button. Sourced from [Heroicons](https://heroicons.com/).
+  comment: Icon on the trigger button.
   options:
     values: data.icons
     preview:
@@ -68,6 +68,6 @@ size:
         name: Extra Large
 contentSections:
   type: array
-  comment: Content blocks displayed inside the modal.
+  comment: Content blocks in the modal.
   options:
     structures: _structures.modalSections

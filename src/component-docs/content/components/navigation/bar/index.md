@@ -2,7 +2,7 @@
 title: 'Bar'
 description: Horizontal navigation bar with dropdown menus.
 defaultSize: 'xl'
-overview: 'A horizontal navigation bar with dropdown menus for multi-level links. A top-level item can open a full-width mega menu instead of a dropdown. Usually used inside [Main Nav](/component-docs/components/navigation/main-nav/) for desktop layouts.'
+overview: A horizontal nav bar with dropdowns or full-width mega menus. [Main Nav](/component-docs/components/navigation/main-nav/) uses it on desktop.
 examples:
   - title: 'Dropdowns'
     slugs:

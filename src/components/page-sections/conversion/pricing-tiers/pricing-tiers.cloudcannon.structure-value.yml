@@ -1,6 +1,6 @@
 label: Pricing Tiers
 icon: payments
-description: Plan cards with feature lists, a highlighted plan, and an optional monthly or annual price switch.
+description: Plan cards with features, a highlighted plan, and a monthly/annual switch.
 value:
   _component: page-sections/conversion/pricing-tiers
   sectionLabel: ""

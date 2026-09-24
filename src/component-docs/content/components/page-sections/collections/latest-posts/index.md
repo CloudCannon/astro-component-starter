@@ -1,4 +1,4 @@
 ---
 title: Latest Posts
-overview: The newest blog posts as cards, loaded when the site builds. Optionally filter to one tag. In the Visual Editor this section shows placeholder cards.
+overview: The newest blog posts as cards, updated each build and optionally filtered by tag. The Visual Editor shows placeholder cards.
 ---

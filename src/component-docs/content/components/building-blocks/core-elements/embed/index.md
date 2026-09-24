@@ -1,7 +1,6 @@
 ---
 title: Embed
-overview: |
-  Holds trusted HTML inert until the visitor grants site-wide external-media permission. When mounted, scripts, styles, resource links, object/embed elements, and event-handler attributes are removed, while approved iframes are sandboxed. Use Contact Split for its built-in map layout. Always use Video or Video Modal for YouTube and Vimeo—do not paste video iframe code into Embed. Embed is the developer escape hatch for trusted HTML that has no typed component.
+overview: Trusted HTML that no other component covers, shown once the visitor allows external media. Scripts are removed. For YouTube or Vimeo, use [Video](/component-docs/components/building-blocks/core-elements/video/).
 examples:
   - title: Aspect Ratios
     slugs:

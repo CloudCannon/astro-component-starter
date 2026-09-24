@@ -4,7 +4,7 @@ order: 1
 overview: A heading for page structure. Choose a level from h1 to h6, plus size, alignment, and optional icons.
 slots:
   - title: default
-    description: The content inside the Heading.
+    description: Heading text.
 examples:
   - slugs:
       - types

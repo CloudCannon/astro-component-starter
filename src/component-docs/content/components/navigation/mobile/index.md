@@ -1,10 +1,10 @@
 ---
 title: 'Mobile'
 defaultSize: 'xl'
-overview: 'Mobile navigation that opens as a full-screen overlay with expandable sections. Built for touch. Usually used inside [Main Nav](/component-docs/components/navigation/main-nav/) for mobile layouts.'
+overview: A full-screen navigation overlay with expandable sections. [Main Nav](/component-docs/components/navigation/main-nav/) uses it on small screens.
 slots:
   - title: logo
-    description: 'Custom logo markup for the overlay header. Falls back to an image built from logoSource (with logoAlternateSource and logoAlt).'
+    description: Custom overlay logo. Falls back to the logo image.
     fallback_for: logoSource
     child_component:
 examples:

@@ -1,6 +1,6 @@
 ---
 title: Stack
-overview: 'A row or column of mixed blocks with one even gap between them. Use it when siblings should sit at a fixed rhythm instead of the document flow — toolbars, badge rows, or equal-height columns of mixed content. For many items of the same kind that should reflow into columns, use [Grid](/component-docs/components/building-blocks/wrappers/grid/) instead.'
+overview: A row or column of different blocks with one even gap, such as a toolbar or badge row. For many similar items, use [Grid](/component-docs/components/building-blocks/wrappers/grid/).
 examples:
   - title: Direction
     slugs:

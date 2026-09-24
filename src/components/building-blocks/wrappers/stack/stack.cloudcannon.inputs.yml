@@ -1,9 +1,9 @@
 label:
-  comment: Optional label to identify this stack in the editor.
+  comment: Names this block in the editor and sets its anchor id.
   type: text
 contentSections:
   type: array
-  comment: Blocks laid out with one even gap between them.
+  comment: Content blocks in the stack.
   options:
     structures: _structures.stackSections
 direction:
@@ -16,7 +16,7 @@ direction:
       - id: row
         name: Row
 distribution:
-  comment: Rows only. How a row shares its width. Content sizes children to their content; Equal gives every child the same width (needed for cards or mixed blocks, which have no width of their own in a row). For many uniform items, use Grid instead — Equal is for a few different blocks.
+  comment: Rows only. Content fits each child; Equal gives each the same width (use for cards).
   type: select
   options:
     values:

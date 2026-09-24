@@ -1,5 +1,5 @@
 text:
-  comment: The content for the text component (Markdown format). Leave empty to use slot content instead.
+  comment: Markdown content. Leave empty to use slot content instead.
   type: markdown
   options:
     blockquote: false
@@ -25,7 +25,7 @@ alignmentHorizontal:
         name: Center
       - id: end
         name: End
-  comment: The horizontal alignment of the text component.
+  comment: Horizontal alignment of the text.
 size:
   type: select
   comment: The font size of paragraphs and lists. Does not affect headings.

@@ -3,7 +3,7 @@ label:
   comment: The label text for the date field.
 name:
   type: text
-  comment: The name attribute for the date field.
+  comment: Name the field is submitted under. Must be unique in the form.
 required:
   type: switch
   comment: Whether the field is required.
@@ -18,7 +18,7 @@ max:
   comment: The latest date that can be chosen.
 hint:
   type: text
-  comment: Optional help text shown between the label and the field, announced to assistive technology.
+  comment: Help text shown between the label and the field.
 autocomplete:
   type: select
   options:
@@ -30,4 +30,4 @@ autocomplete:
         - key: name
       subtext:
         - key: id
-  comment: Autofill hint for browsers and password managers (WCAG 1.3.5). Leave blank to derive one from the field's type and name. Compound tokens such as `shipping street-address` can be typed in.
+  comment: Autofill hint for browsers. Leave blank to derive it from the field's type and name.

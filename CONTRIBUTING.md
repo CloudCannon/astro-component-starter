@@ -38,7 +38,7 @@ Plain `npm install` works. The native binaries CI needs (`sharp`, `pagefind`) ar
 
 ## Changelog
 
-User-facing changes (features, fixes, behavior changes) get an entry in the `[Unreleased]` section of `CHANGELOG.md`, [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Append to an existing `### Added`/`### Changed`/etc. heading — never duplicate one. Skip internal-only refactors. Full rule: [`.agents/rules/changelog.md`](.agents/rules/changelog.md).
+User-facing changes (features, fixes, behavior changes) get an entry in the unreleased section at the top of `CHANGELOG.md` (currently `[2.0.0] - Unreleased`), [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format. Append to an existing `### Added`/`### Changed`/etc. heading — never duplicate one. Skip internal-only refactors. Full rule: [`.agents/rules/changelog.md`](.agents/rules/changelog.md).
 
 ## Skills layout
 

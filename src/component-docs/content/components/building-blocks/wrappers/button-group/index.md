@@ -3,7 +3,7 @@ title: Button Group
 overview: Groups buttons in a row or column with even spacing and alignment.
 slots:
   - title: default
-    description: The contents for the the ButtonGroup.
+    description: Buttons.
 examples:
   - title: Direction
     slugs:

@@ -1,14 +1,14 @@
 label:
   type: text
-  comment: Optional label for the custom section to help identify it in the editor.
+  comment: Names the section in the editor and sets its anchor id.
 contentSections:
   type: array
-  comment: Array of content sections to render within the custom section.
+  comment: Content blocks inside the section.
   options:
     structures: _structures.containerSections
 maxContentWidth:
   type: select
-  comment: Maximum width constraint for the content.
+  comment: Maximum width of the content.
   options:
     values:
       - id: none
@@ -29,7 +29,7 @@ maxContentWidth:
         name: 3xl
 paddingHorizontal:
   type: select
-  comment: Horizontal padding applied to the custom section content.
+  comment: Horizontal padding around the content.
   options:
     values:
       - id: none
@@ -56,7 +56,7 @@ paddingHorizontal:
         name: 6xl
 paddingVertical:
   type: select
-  comment: Vertical padding applied to the custom section content.
+  comment: Vertical padding around the content.
   options:
     values:
       - id: none
@@ -83,7 +83,7 @@ paddingVertical:
         name: 6xl
 colorScheme:
   type: select
-  comment: Color scheme theme for the custom section.
+  comment: Light or dark scheme for the section. Inherit follows the page.
   options:
     values:
       - id: inherit
@@ -95,10 +95,10 @@ colorScheme:
 lockColorScheme:
   type: switch
   label: Lock color scheme
-  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
-  comment: Background color for the custom section.
+  comment: Background color for the section.
   options:
     values:
       - id: none
@@ -113,8 +113,8 @@ backgroundColor:
         name: Highlight
 rounded:
   type: switch
-  comment: Whether to apply rounded corners to the custom section.
+  comment: Rounds the section's corners.
 useDefaultEditableBinding:
   type: switch
-  comment: Whether the custom section should use its default editable bindings.
+  comment: Enables adding and reordering content blocks on the canvas.
   hidden: true

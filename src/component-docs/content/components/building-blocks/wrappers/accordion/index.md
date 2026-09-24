@@ -4,7 +4,7 @@ overview: Expandable panels that users can open or close. Allow one open panel o
 
 slots:
   - title: default
-    description: The contents for the the Accordion.
+    description: Accordion items.
     child_component:
       props:
         - 'contentSections/slot'

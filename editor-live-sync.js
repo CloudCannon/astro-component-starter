@@ -43,7 +43,6 @@ import { setupAllScrollSteppers } from "./src/components/building-blocks/wrapper
 import { setupAllTabs } from "./src/components/utils/tabs/setup";
 import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
-import { setupAllTocs, setupToc } from "./src/components/navigation/toc/setup";
 import {
   setupAllGalleries,
   setupGallery,
@@ -230,23 +229,14 @@ function initNewComponents(root) {
     setupSearch(el);
   }
 
-  const newTocs = [];
-
-  if (root.classList?.contains("toc") && !root.hasAttribute("data-toc-initialized")) {
-    newTocs.push(root);
-  }
-
-  root.querySelectorAll(".toc:not([data-toc-initialized])").forEach((el) => newTocs.push(el));
-
-  for (const el of newTocs) {
-    log("initialising new toc", el);
-    setupToc(el);
-  }
-
   const newGalleries = [];
 
-  if (root.classList?.contains("gallery-grid")) {
-    newGalleries.push(root);
+  // The editor keeps `.gallery-grid` and swaps its contents, so the added node
+  // holding a fresh lightbox is usually inside the gallery, not the gallery.
+  const enclosingGallery = root.closest?.(".gallery-grid");
+
+  if (enclosingGallery) {
+    newGalleries.push(enclosingGallery);
   }
 
   root.querySelectorAll(".gallery-grid").forEach((el) => newGalleries.push(el));
@@ -412,7 +402,6 @@ setupAllMainNavs();
 setupAllModals();
 setupAllVideoModals();
 setupAllSearch();
-setupAllTocs();
 setupAllGalleries();
 setupAllMasonry();
 setupAllScrollDecks();

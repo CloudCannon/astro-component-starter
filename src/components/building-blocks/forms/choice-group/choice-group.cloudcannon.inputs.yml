@@ -1,18 +1,18 @@
 title:
   type: text
-  comment: Optional title text for the fieldset.
+  comment: Title text for the fieldset.
 name:
   type: text
-  comment: A unique name attribute for the input group.
+  comment: Name the choices are submitted under. Must be unique in the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.
 hint:
   type: text
-  comment: Optional help text shown between the title and the options, announced to assistive technology.
+  comment: Help text shown between the title and the options.
 error:
   type: text
-  comment: Optional validation message shown below the options. Setting it also marks the group invalid.
+  comment: Validation message shown below the options. Also marks the group invalid.
 required:
   type: switch
   comment: Whether the field is required.
@@ -25,7 +25,7 @@ options:
     min_items_message: At least one option is required.
 orientation:
   type: select
-  comment: The layout orientation - vertical for stacked layout, horizontal for grid layout.
+  comment: Stacks the options vertically or lays them out in a grid.
   options:
     values:
       - id: vertical
@@ -34,4 +34,4 @@ orientation:
         name: Horizontal
 multiple:
   type: switch
-  comment: When true, uses checkboxes for multiple selection. When false, uses radio buttons for single selection.
+  comment: Allows more than one choice, using checkboxes instead of radio buttons.

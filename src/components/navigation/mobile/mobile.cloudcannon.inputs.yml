@@ -1,7 +1,7 @@
 logoSource:
   type: image
   label: Logo Source
-  comment: Path to the logo image.
+  comment: Logo image path or URL.
   options:
     resize_style: contain
     width: 1920
@@ -9,10 +9,10 @@ logoSource:
 logoAlt:
   type: text
   label: Logo Alt Text
-  comment: Alternative text for the logo image.
+  comment: Alt text for the logo image.
 navData:
   type: array
   label: Navigation Data
-  comment: Array of navigation items with name, path, and optional children (up to 3 levels).
+  comment: Navigation items with a name, path, and children, up to 3 levels deep.
   options:
     structures: _structures.navItemLevel1

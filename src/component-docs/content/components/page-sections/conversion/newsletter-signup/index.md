@@ -1,7 +1,7 @@
 ---
 title: Newsletter Signup
 description: A focused email signup form with supporting copy and consent text.
-overview: Use this instead of a general form when the only visitor action is subscribing with an email address. Set **Form action** and **Form method** to the endpoint required by your email provider; the component does not send email itself.
+overview: An email signup form. Set **Form action** and **Form method** to your email provider's endpoint, since it doesn't send email itself.
 examples:
   - title: Panel Background Color
     slugs: [panel-surface, panel-base, panel-accent, panel-highlight, panel-none]

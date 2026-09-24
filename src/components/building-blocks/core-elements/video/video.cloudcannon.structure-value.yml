@@ -1,6 +1,6 @@
 label: Video
 icon: videocam
-description: Local video, or YouTube/Vimeo gated by site-wide external-media consent.
+description: Video from YouTube, Vimeo, or a local file.
 value:
   _component: building-blocks/core-elements/video
   type: youtube

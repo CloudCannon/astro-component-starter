@@ -2,15 +2,15 @@
 title: Card
 description: Groups related content in a card.
 order: 2
-overview: Groups related content with background and padding. Before and after slots sit outside the inner padding, for edge-to-edge images or banners.
+overview: Groups content with a background and padding. The before and after slots run edge to edge, for images or banners.
 
 slots:
   - title: default
-    description: The contents for the body of the Card.
+    description: Card body.
   - title: before
-    description: The contents to display before the Card content.
+    description: Content above the card's padded body.
   - title: after
-    description: The contents to display after the Card content.
+    description: Content below the card's padded body.
 examples:
   - slugs:
       - link

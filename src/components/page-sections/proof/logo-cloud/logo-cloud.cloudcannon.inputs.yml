@@ -1,6 +1,6 @@
 heading:
   type: text
-  comment: Short muted lead line above the logos (e.g. "Trusted by…"). Leave empty to hide.
+  comment: Short muted line above the logos, e.g. "Trusted by…".
 logos:
   type: array
   label: Logos
@@ -12,7 +12,7 @@ grayscale:
   comment: Render logos in muted grayscale. Linked logos restore color on hover.
 scrolling:
   type: switch
-  comment: Scroll the logos continuously as a marquee instead of laying them out in a static row. Visitors who prefer reduced motion see a still strip.
+  comment: Scrolls the logos as a continuous marquee instead of a static row.
 
 # --- section wrapper inputs (CustomSection) ---
 # Configures the CustomSection wrapper, not this section's own content. Inline
@@ -20,10 +20,10 @@ scrolling:
 # `new:component` slices from this marker down — keep the marker line verbatim.
 sectionLabel:
   type: text
-  comment: Optional label to identify the section in the editor. When set and no HTML id is provided, an id is derived from this value.
+  comment: Names the section in the editor and sets its anchor id.
 maxContentWidth:
   type: select
-  comment: Maximum width constraint for the content.
+  comment: Maximum width of the content.
   options:
     values:
       - id: none
@@ -44,7 +44,7 @@ maxContentWidth:
         name: 3xl
 paddingHorizontal:
   type: select
-  comment: Horizontal padding applied to the section content.
+  comment: Horizontal padding around the content.
   options:
     values:
       - id: none
@@ -65,7 +65,7 @@ paddingHorizontal:
         name: 3xl
 paddingVertical:
   type: select
-  comment: Vertical padding applied to the section content.
+  comment: Vertical padding around the content.
   options:
     values:
       - id: none
@@ -92,7 +92,7 @@ paddingVertical:
         name: 6xl
 colorScheme:
   type: select
-  comment: Color scheme theme for the section wrapper.
+  comment: Light or dark scheme for the section. Inherit follows the page.
   options:
     values:
       - id: inherit
@@ -104,10 +104,10 @@ colorScheme:
 lockColorScheme:
   type: switch
   label: Lock color scheme
-  comment: Keep this section on the color scheme above when a visitor toggles the site theme. Only has an effect when Color Scheme is Light or Dark.
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
-  comment: Solid background color token behind the section content.
+  comment: Background color for the section.
   options:
     values:
       - id: none

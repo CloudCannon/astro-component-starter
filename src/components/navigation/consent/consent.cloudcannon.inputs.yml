@@ -1,9 +1,9 @@
 label:
   type: text
-  comment: Optional name for this consent instance. It names the settings dialog, so a page that renders a second instance — the documentation example on this component's own page — needs its own.
+  comment: Names the settings dialog. A second consent on the same page needs its own.
 privacy:
   type: object
-  comment: Site-wide consent wording and decision lifetime. On a real page this comes from the site's Privacy & Consent settings.
+  comment: Consent wording and lifetime. Real pages use the site's Privacy & Consent settings.
 privacy._schema:
   type: text
   comment: Internal schema discriminator. Keep this set to privacy.
@@ -48,10 +48,10 @@ privacy.externalMediaDescription:
   comment: Explain that third-party videos, maps, and embeds may load after consent.
 privacy.honorGlobalPrivacyControl:
   type: switch
-  comment: Treat a browser Global Privacy Control signal as a decline, so the banner does not ask a visitor who has already opted out.
+  comment: Treats a browser Global Privacy Control signal as a decline.
 analytics:
   type: object
-  comment: Optional analytics integration. On a real page this comes from the site's Analytics settings.
+  comment: Analytics integration. Real pages use the site's Analytics settings.
 analytics._schema:
   type: text
   comment: Internal schema discriminator. Keep this set to analytics.

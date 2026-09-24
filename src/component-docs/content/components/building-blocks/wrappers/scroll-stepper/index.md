@@ -1,7 +1,7 @@
 ---
 title: Scroll Stepper
 description: Scrolling messages with media that changes for each step.
-overview: 'A two-column storytelling wrapper with a scrolling message for every step and a matching media state. On desktop, media stays in view while its matching message scrolls beside it. In narrow layouts, every image sits directly above its matching message.'
+overview: Steps of text beside media that changes as each step scrolls past. On narrow screens each image sits above its text.
 examples:
   - slugs: [media-end-dots]
 ---

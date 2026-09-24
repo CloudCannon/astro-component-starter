@@ -1,7 +1,7 @@
 tabs:
   type: array
   label: Code tabs
-  comment: One or more code representations. Each tab supplies its own label, code, syntax language, and optional footer context.
+  comment: One tab per code sample, each with its own label, code, and language.
   options:
     structures: _structures.codeBlockTabs
 wrap:
@@ -11,7 +11,7 @@ wrap:
 copyButton:
   type: switch
   label: Show copy button
-  comment: Adds a button with JavaScript that copies the rendered code. Enabled by default.
+  comment: Adds a button that copies the code.
 lineNumbers:
   type: switch
   label: Show line numbers

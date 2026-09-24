@@ -1,6 +1,6 @@
 # Shared by every stackable building block via a second _inputs_from_glob entry.
 spaceBefore:
-  comment: Space above this block. Default follows the block's type; a Spacer replaces the gap entirely.
+  comment: Space above this block. Default follows the block type; a Spacer overrides it.
   type: select
   options:
     values:

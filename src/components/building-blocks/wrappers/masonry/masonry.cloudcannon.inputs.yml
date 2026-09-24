@@ -1,9 +1,9 @@
 label:
   type: text
-  comment: Optional label to identify the wrapper in the editor. When set and no HTML id is provided, an id is derived from this value.
+  comment: Names this block in the editor and sets its anchor id.
 columns:
   type: select
-  comment: Number of columns on screens 640px and up (small screens always show two).
+  comment: Columns from 640px up; two below.
   options:
     values:
       - id: "2"
@@ -37,7 +37,7 @@ gap:
         name: 3xl
 items:
   label: Masonry Items
-  comment: Array of masonry items, each containing content blocks to render. Reading order is preserved left-to-right.
+  comment: Masonry items, each holding content blocks. Order reads left to right.
   type: array
   options:
     structures: _structures.masonryItems

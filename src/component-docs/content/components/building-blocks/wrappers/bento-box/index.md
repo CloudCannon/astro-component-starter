@@ -4,7 +4,7 @@ order: 8
 overview: A grid where items can span more than one column or row, for uneven magazine-style layouts. Set columns, spacing, and row height.
 slots:
   - title: default
-    description: The contents for the Bento Box.
+    description: Bento cells.
     child_component:
       props:
         - 'contentSections/slot'

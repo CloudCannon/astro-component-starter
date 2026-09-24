@@ -1,5 +1,5 @@
 label:
-  comment: Optional label for the content selector to help identify it in the editor.
+  comment: Names this block in the editor and for screen readers. Sets its anchor id.
   type: text
 items:
   type: array
@@ -8,7 +8,7 @@ items:
     structures: _structures.contentSelectorItems
 navigationPosition:
   type: select
-  comment: Where the tabs sit relative to the panel. Both collapse to an accordion on narrow screens.
+  comment: Where the tabs sit. Both collapse to an accordion on small screens.
   options:
     values:
       - id: start

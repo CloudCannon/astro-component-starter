@@ -1246,33 +1246,6 @@ const tests = [
     },
   },
   {
-    name: "blog toc scroll-spy highlights the scrolled-to section",
-    path: "/blog/2025-10-15-why-we-built-our-component-starter/",
-    viewport: DESKTOP,
-    async run(page) {
-      const sidebar = page.locator(".toc-sidebar");
-
-      await sidebar.waitFor();
-
-      // Anchor navigation works without JS; the spy then marks the target's
-      // link as current once its heading sits in the top viewport band.
-      await page.evaluate(() => document.getElementById("what-it-ships-with").scrollIntoView());
-      await page.waitForFunction(() => {
-        const active = document.querySelector(".toc-sidebar a[aria-current='true']");
-
-        return active?.getAttribute("href") === "#what-it-ships-with";
-      });
-
-      // Scrolling back to an earlier section moves the highlight with it.
-      await page.evaluate(() => document.getElementById("why-another-starter").scrollIntoView());
-      await page.waitForFunction(() => {
-        const active = document.querySelector(".toc-sidebar a[aria-current='true']");
-
-        return active?.getAttribute("href") === "#why-another-starter";
-      });
-    },
-  },
-  {
     name: "feature split image bleed reaches the section edge without overflowing",
     path: "/component-docs/components/page-sections/explainers/feature-split/",
     viewport: DESKTOP,

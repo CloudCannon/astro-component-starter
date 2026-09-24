@@ -6,7 +6,7 @@ prefix:
 suffix:
   comment: Text immediately after the number.
 alignmentHorizontal:
-  comment: The horizontal alignment of the counter.
+  comment: Horizontal alignment of the counter.
   type: select
   options:
     values:

@@ -40,7 +40,6 @@ Source of truth: `blogPostSchema` in `src/content.config.ts`.
 | `image`       | string   | No       | —             | Path under `/src/...`; rendered as the post hero and card thumbnail when set.                            |
 | `tags`        | string[] | No       | `[]`          | Powers `/blog/tag/{tag}/` archives.                                                                      |
 | `keywords`    | string[] | No       | —             | Output as `<meta name="keywords">` when set.                                                             |
-| `showToc`     | boolean  | No       | `true`        | "On this page" sidebar from the post's `h2`/`h3`s. Hidden automatically when the post has no headings.   |
 
 **Note:** the blog schema has no `canonical` field — that exists on the `pages` collection (`pageSchema`) but not `blog`.
 
@@ -58,14 +57,13 @@ tags:
   - Design
   - Development
 keywords: []
-showToc: true
 ---
 ```
 
 ## Creating a new post
 
 1. Create `src/content/blog/{date-prefix}-{slug}.mdx` (or let CloudCannon's "Add New Blog Post" scaffold it from the schema).
-2. Fill in frontmatter per the table above — `title`, `description`, and `date` are required; everything else can be omitted. Add `h2`/`h3` headings in the body if you want the "On this page" sidebar to list sections (`showToc` defaults to on).
+2. Fill in frontmatter per the table above — `title`, `description`, and `date` are required; everything else can be omitted.
 3. Write the body in standard Markdown; embed components per [Using components in MDX](#using-components-in-mdx) where needed.
 4. If the post has an `image`, confirm the referenced file exists under `src/assets/images/` (see [Images](#images)).
 5. Run `npm run dev`, visit `/blog/{slug}/`, and confirm the post appears on `/blog/` (newest-first, by `date`) and on any `/blog/tag/{tag}/` pages for its tags.
@@ -93,7 +91,7 @@ showToc: true
 
 **Prop syntax:** strings as `prop="value"`, booleans as `prop={true}` (or bare `prop`), numbers as `prop={42}`, arrays/objects as JSX expressions (`prop={[{ key: "value" }]}`) — arrays need `_component` on every nested block item exactly like page-section YAML. For the actual prop list of a given page section (`CtaCenter`, `FeatureGrid`, `TestimonialSection`, etc.), read its entry in the [page-content-authoring catalog](../page-content-authoring/SKILL.md) — this skill does not duplicate those tables.
 
-**Full width:** post body content sits in a centered `70ch` grid column (see `.post` in `src/pages/blog/[...slug].astro`). Add `class="wide"` to any component to span the article's side rails; `<pre>` (code blocks), `.image`, and `.video` elements get it automatically. The "On this page" sidebar sits in its own column beside that article, so wide components grow to the article edge rather than under the sidebar.
+**Full width:** post body content sits in a centered `70ch` grid column (see `.post` in `src/pages/blog/[...slug].astro`). Add `class="wide"` to any component to span the article's side rails; `<pre>` (code blocks), `.image`, and `.video` elements get it automatically.
 
 **Common miss:** page sections accept arbitrary extra attributes (e.g. `rounded`, `class`, `style`) beyond their declared props because most spread `...htmlAttributes` down to `CustomSection` — real posts rely on this (`rounded={true}`, `style="margin-top: var(--spacing-xl);"`). Don't assume every attribute you see in an existing post is a documented prop; check the component's `.astro` destructure if unsure.
 
@@ -135,7 +133,7 @@ For a genuinely new/placeholder image an editor will later replace, use the one 
 
 ## CloudCannon editing
 
-The `blog` collection is configured in `cloudcannon.config.yml` (`path: src/content/blog`, `glob: **/*.mdx`, `url: /blog/[full_slug]/`). Editors create a post via the "Add New Blog Post" add-option, which scaffolds from `.cloudcannon/schemas/blog-post.mdx` (empty `title`/`description`/`date`, `author: Anonymous`, `image: ""`, `tags: []`, `keywords: []`, `showToc: true`). The collection has both `content` and `visual` editors enabled; `_editables.content` configures the rich-text toolbar for the MDX body (headings, lists, blockquote, code, snippets) — the native image toolbar button is not in that format list, so editors add images via the `Image` snippet instead of the generic editor image button.
+The `blog` collection is configured in `cloudcannon.config.yml` (`path: src/content/blog`, `glob: **/*.mdx`, `url: /blog/[full_slug]/`). Editors create a post via the "Add New Blog Post" add-option, which scaffolds from `.cloudcannon/schemas/blog-post.mdx` (empty `title`/`description`/`date`, `author: Anonymous`, `image: ""`, `tags: []`, `keywords: []`). The collection has both `content` and `visual` editors enabled; `_editables.content` configures the rich-text toolbar for the MDX body (headings, lists, blockquote, code, snippets) — the native image toolbar button is not in that format list, so editors add images via the `Image` snippet instead of the generic editor image button.
 
 ## Blog index, tags, and pagination
 

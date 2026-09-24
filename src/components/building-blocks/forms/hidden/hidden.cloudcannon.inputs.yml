@@ -1,6 +1,6 @@
 name:
   type: text
-  comment: The name attribute for the hidden input field.
+  comment: Name the field is submitted under. Must be unique in the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.

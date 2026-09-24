@@ -36,7 +36,7 @@ size:
       - id: 4xl
         name: 4xl
 alignmentHorizontal:
-  comment: The horizontal alignment of the text.
+  comment: Horizontal alignment of the text.
   type: select
   options:
     values:
@@ -47,7 +47,7 @@ alignmentHorizontal:
       - id: end
         name: End
 iconName:
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
+  comment: Icon to display, from [Heroicons](https://heroicons.com/).
   type: select
   options:
     values: data.icons
