@@ -15,9 +15,6 @@ const {
 ---
 
 <MasonryItem {...htmlAttributes}>
-  {/* The card chrome (background, border, padding) comes from Testimonial
-      itself — the wall only supplies the layout and the start alignment that
-      suits a column of quotes. */}
   <Testimonial
     class:list={["testimonial-wall-item", className]}
     text={text}
@@ -36,8 +33,7 @@ const {
 <style is:global>
   @layer page-sections {
     .testimonial-wall-item {
-      /* Card height stays content-driven on purpose — it feeds the masonry
-         span measurement. */
+      /* Height must stay content-driven: it feeds the masonry span measurement. */
       margin-top: 0;
     }
   }

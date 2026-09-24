@@ -20,9 +20,7 @@ function initializeComponentViewers() {
 
     const manuallyResized = new Map();
 
-    // A Form hides its success message until the endpoint sends the visitor
-    // back with `?success`. An example is never arrived at that way, so the
-    // state would be undemonstrable here.
+    // The success message only shows on `?success`, which an example never gets.
     viewer
       .querySelectorAll(".preview .form-success[hidden]")
       .forEach((message) => (message.hidden = false));

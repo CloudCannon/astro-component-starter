@@ -1,13 +1,6 @@
 /**
- * Sync the CloudCannon icon picker with the SVGs on disk.
- *
- * Every `.svg` under `src/icons/` is the single source of truth for selectable icons.
- * `.cloudcannon/data/icons.yml` is generated from it, and reaches the editor as the
- * `icons` dataset in `data_config` — every `select` input that references
- * `values: data.icons` shows that list, and each option's thumbnail resolves through
- * `template: src/icons/{id}.svg`. An id with no SVG renders a broken preview; an SVG
- * with no id is invisible to editors. Neither shows up as an error anywhere, so the
- * list is checked in CI.
+ * Generates `.cloudcannon/data/icons.yml` (the `data.icons` dataset) from `src/icons/`.
+ * An id with no SVG is a broken thumbnail and an SVG with no id is unselectable; neither errors.
  *
  *   node scripts/icons/sync.mjs           regenerate the data file from src/icons/
  *   node scripts/icons/sync.mjs --check   verify the data file matches disk (CI)
@@ -26,7 +19,6 @@ const dataLabel = relative(root, dataPath);
 /** Ids are emitted unquoted, so keep them to characters YAML never reinterprets. */
 const SAFE_ID = /^[a-z0-9]+(?:[-/][a-z0-9]+)*$/;
 
-/** Recursively collect the id of every SVG under `dir`. */
 function listIcons(dir, base = dir, out = []) {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const absolute = join(dir, entry.name);
@@ -40,11 +32,7 @@ function listIcons(dir, base = dir, out = []) {
   return out;
 }
 
-/**
- * Casing a filename can't express. Applied to the leaf segment of icons that
- * live in a subdirectory only, so a future top-level `x.svg` is never caught by
- * the entry for `social/x`.
- */
+/** Applied only to the leaf of an id with a directory prefix, never to a top-level icon. */
 const LEAF_LABELS = {
   github: "GitHub",
   gitlab: "GitLab",
@@ -53,7 +41,6 @@ const LEAF_LABELS = {
   youtube: "YouTube",
 };
 
-/** `arrow-down-tray` -> `Arrow Down Tray`. */
 function titleizeSegment(segment) {
   return segment
     .split("-")
@@ -61,15 +48,7 @@ function titleizeSegment(segment) {
     .join(" ");
 }
 
-/**
- * `arrow-down-tray` -> `Arrow Down Tray`; `social/github` -> `Social/GitHub`.
- *
- * Every path segment is titleized, so the directory prefix survives — typing
- * "social" in the picker's filter is how editors pull up the brand marks as a
- * set, and the alphabetical list keeps them together. The leaf then gets its
- * real brand casing from `LEAF_LABELS`, since `github` -> `Github` is wrong in
- * a picker an editor reads.
- */
+/** `social/github` -> `Social/GitHub`. Keep the prefix: editors filter the picker by "social". */
 function titleize(id) {
   const segments = id.split("/");
 
@@ -116,7 +95,6 @@ if (mode === "write") {
   process.exit(0);
 }
 
-// --check: report which ids drifted rather than just that the file differs.
 if (existing === generated) {
   console.log(`ok     ${dataLabel} (${ids.length} icons)`);
   process.exit(0);

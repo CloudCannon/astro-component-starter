@@ -1,23 +1,8 @@
 /*
- * Shared spacing utility classes: pad-x-*, pad-y-*, gap-*.
- *
- * Consumed by CustomSection, Card and Split. Declared in the `utils` layer
- * (which intentionally beats component layers) so they override any base
- * padding/gap set in a component's own `components`-layer rules.
- *
- * SCOPING / LEAK PROTECTION: every selector is compounded with the
- * `.uses-spacing-utils` marker class, which the consuming component adds to
- * the same element that carries the pad/gap class. This prevents the bare
- * `.gap-*` names from leaking onto OTHER components that reuse the same class
- * names with different behaviour — notably BentoBox, whose `.bento-box-inner`
- * has its own container-query gap reductions and does NOT carry the marker.
- *
- * Mobile reductions use the canonical literal 640px switch. The pad-y and gap
- * reduction ladders are identical (one step down per size); they are kept as
- * separate declarations because they set different properties.
+ * Every selector requires the `.uses-spacing-utils` marker on the same element, so
+ * these don't leak onto components that reuse `.gap-*` names (BentoBox).
  */
 @layer utils {
-  /* Horizontal padding — no responsive reduction */
   .uses-spacing-utils.pad-x-xs {
     padding-inline: var(--spacing-xs);
   }
@@ -58,7 +43,6 @@
     padding-inline: var(--spacing-6xl);
   }
 
-  /* Vertical padding */
   .uses-spacing-utils.pad-y-xs {
     padding-block: var(--spacing-xs);
   }
@@ -99,7 +83,6 @@
     padding-block: var(--spacing-6xl);
   }
 
-  /* Grid/flex gap */
   .uses-spacing-utils.gap-none {
     gap: 0;
   }
@@ -132,7 +115,6 @@
     gap: var(--spacing-3xl);
   }
 
-  /* Mobile reductions — canonical 640px switch. One step down per size. */
   @media (width < 640px) {
     .uses-spacing-utils.pad-y-xs {
       padding-block: var(--spacing-xs);

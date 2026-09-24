@@ -2,8 +2,7 @@ import { preview, band, bar, dot, media } from "../../../../../scripts/previews/
 
 const B = band(960);
 
-// A quote on a filled full-width surface, attribution centred beneath. The
-// panel is what makes it a section, vs the `testimonial` block on bare paper.
+// The filled panel separates it from the `testimonial` block on bare paper.
 export default preview({
   width: B.w,
   draw: [

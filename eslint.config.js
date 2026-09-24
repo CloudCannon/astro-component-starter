@@ -187,8 +187,7 @@ export default [
     },
   },
 
-  // Vitest unit tests + vitest config: not part of tsconfig.json's include
-  // (astro check only covers src/), so lint them without a TS project.
+  // Outside tsconfig.json's include, so lint them without a TS project.
   {
     files: ["tests/**/*.ts", "vitest.config.ts"],
     languageOptions: {

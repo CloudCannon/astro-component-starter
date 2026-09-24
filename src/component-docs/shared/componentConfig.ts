@@ -1,12 +1,3 @@
-/**
- * Loads a component's CloudCannon structure-value config (label/icon/description
- * plus the fully-populated default `value`) directly from disk, merging in the
- * `_inputs`/`_structures` it references via `_inputs_from_glob`.
- *
- * This is the same data CloudCannon itself reads to drive the visual editor —
- * reusing it here means a component with no hand-written docs entry still gets
- * a complete docs page (see [...slug].astro / componentIndex.ts).
- */
 import { load as yamlLoad } from "js-yaml";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, relative, sep } from "node:path";
@@ -32,16 +23,10 @@ function getGlobalStructures(): Record<string, unknown> {
   return globalStructuresCache;
 }
 
-/** POSIX-normalize a path so cached keys are stable across platforms. */
 function toPosix(path: string): string {
   return path.split(sep).join("/");
 }
 
-/**
- * Every component key derivable from a `*.cloudcannon.structure-value.yml`
- * file under `src/components` — the directory path relative to
- * `src/components`, POSIX-normalized (e.g. "building-blocks/wrappers/card").
- */
 export function listComponentKeys(): string[] {
   if (componentKeysCache) {
     return componentKeysCache;
@@ -59,13 +44,6 @@ export function listComponentKeys(): string[] {
   return componentKeysCache;
 }
 
-/**
- * Reads and merges a single component's structure-value config, following
- * `_inputs_from_glob` to hoist `_inputs`/`_structures` onto the returned
- * object. Returns null when no structure-value file exists for the key.
- *
- * Preserve the exact merge semantics if this changes.
- */
 export function loadComponentConfig(componentKey: string): ComponentConfig | null {
   if (componentConfigCache.has(componentKey)) {
     return componentConfigCache.get(componentKey) ?? null;
@@ -82,8 +60,7 @@ export function loadComponentConfig(componentKey: string): ComponentConfig | nul
 
       configData = yamlLoad(content) as ComponentConfig | null;
 
-      // Merge order: global structures < glob-file structures < the
-      // structure-value's own `_structures` block.
+      // Precedence: global structures < glob-file structures < the file's own `_structures`.
       const structures: Record<string, unknown> = { ...getGlobalStructures() };
 
       if (configData?._inputs_from_glob && Array.isArray(configData._inputs_from_glob)) {

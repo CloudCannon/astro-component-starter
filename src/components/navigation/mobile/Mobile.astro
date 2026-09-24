@@ -25,16 +25,12 @@ const {
 } = Astro.props;
 
 const navInstanceId = slugifyLabel(ariaLabel || "mobile");
-// `<label for>` and the script's getElementById both resolve to the first match,
-// so two navs sharing an `aria-label` would leave the second unopenable.
+// Must be unique: two navs sharing an `aria-label` would leave the second unopenable.
 const toggleId = uniqueId(Astro.request, `mobile-toggle-${navInstanceId}`);
 const pathname = Astro.url.pathname;
 ---
 
-<!-- The checkbox is the real control: ARIA permits a `<label for>` no role, so a
-  name set there is discarded. Naming the checkbox keeps the CSS-only toggle the
-  CloudCannon editor needs while exposing a control that has a role and a name.
-  The labels stay as click targets. -->
+<!-- Name the checkbox, not the labels: ARIA discards a name set on a `<label for>`. -->
 <input
   type="checkbox"
   id={toggleId}
@@ -229,7 +225,6 @@ const pathname = Astro.url.pathname;
 
   let mobileEscapeBound = false;
 
-  // Overlays live in one container so z-index stacking is predictable.
   function getOrCreateOverlaysContainer() {
     let container = document.getElementById("overlays-container");
     if (!container) {
@@ -245,10 +240,6 @@ const pathname = Astro.url.pathname;
     const allMobileNavs = document.querySelectorAll<HTMLElement>(".mobile");
     const overlaysContainer = getOrCreateOverlaysContainer();
 
-    // `trapFocus` keeps Tab in the panel, but the page behind it stays in the
-    // accessibility tree. `inert` removes that content entirely while a panel
-    // is open. The panel itself lives in the overlays container, which must
-    // stay interactive.
     function syncBackgroundInert() {
       const isOpen = Boolean(document.querySelector('.mobile[aria-hidden="false"]'));
 
@@ -265,8 +256,6 @@ const pathname = Astro.url.pathname;
       if (nav.dataset.mobileInitialized === "true") return;
       nav.dataset.mobileInitialized = "true";
 
-      // A component library preview is a sandbox: the panel covers that frame,
-      // not the page, so it moves into the frame and leaves the page usable.
       const sandbox = nav.closest<HTMLElement>(".component-viewer .preview");
 
       (sandbox ?? overlaysContainer).appendChild(nav);
@@ -289,9 +278,7 @@ const pathname = Astro.url.pathname;
             document.body.style.overflow = "hidden";
             syncBackgroundInert();
           }
-          // Into the panel, not the close affordance — that is a `<label>` and
-          // takes no focus. The panel is also moved into the overlays container,
-          // outside the checkbox's tab sequence, so place focus explicitly.
+          // Not the close affordance: it is a `<label>` and takes no focus.
           nav.querySelector<HTMLElement>("a[href], button, input, [tabindex]")?.focus();
         } else {
           nav.setAttribute("aria-hidden", "true");
@@ -300,10 +287,9 @@ const pathname = Astro.url.pathname;
             sandbox.style.overflowY = "";
           } else {
             document.body.style.overflow = "";
-            // Drop `inert` before focusing: the checkbox is part of the page.
+            // Before focusing: the checkbox is in the inert page.
             syncBackgroundInert();
           }
-          // Focusing the checkbox draws the ring on the hamburger label.
           toggle?.focus();
         }
       }
@@ -374,8 +360,6 @@ const pathname = Astro.url.pathname;
       nav.addEventListener("click", handleDropdownToggle);
       nav.addEventListener("change", () => syncExpanded(nav));
       bindToggleKeys(nav);
-      // The open panel covers the page, so Tab must not walk into content
-      // behind it. `aria-hidden` is the open flag `handleNavToggle` maintains.
       trapFocus(nav, () => nav.getAttribute("aria-hidden") === "false");
 
       nav.addEventListener("mobile:close", () => {
@@ -386,8 +370,7 @@ const pathname = Astro.url.pathname;
       });
     });
 
-    // One document listener for every mobile nav, bound once: the per-nav
-    // version added another on every re-init after a view transition.
+    // Bound once for all navs: a per-nav listener stacks on every view-transition re-init.
     if (!mobileEscapeBound) {
       mobileEscapeBound = true;
       document.addEventListener("keydown", (e) => {
@@ -405,40 +388,27 @@ const pathname = Astro.url.pathname;
 
 <style is:global>
   @layer components {
-    /* Created by the script below, which relocates the panel out of MainNav's
-       container-type box so it can cover the page. */
     .overlays-container {
       position: relative;
       z-index: var(--layer-8);
     }
 
-    /* `.nav-toggle:checked ~` covers the pre-JS/editor DOM; `[aria-hidden]`
-       covers the live site, where the panel is relocated into
-       #overlays-container and is no longer the checkbox's sibling. */
+    /* `:checked ~` is the pre-JS/editor DOM; once relocated the panel is no longer a sibling. */
     .nav-toggle:checked ~ .mobile,
     .mobile[aria-hidden="false"] {
       transform: translateX(0);
-      /* No visibility delay on the way in, so the panel is focusable from the
-         first frame of the slide. */
       transition:
         transform var(--animation-normal) var(--ease-in-out),
         visibility 0s;
       visibility: visible;
     }
 
-    /* The checkbox is hidden by `.visually-hidden`, not `display: none`, which
-       would drop it out of the tab order and the accessibility tree. */
-    /* Draw the hidden control's focus ring on whichever label is on screen —
-       only one is, since the open panel covers the hamburger. */
     .nav-toggle:focus-visible ~ .nav-hamburger,
     .nav-toggle:focus-visible ~ .mobile .mobile-close {
       outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
     }
 
-    /* MainNav hides the hamburger label at this width. Hide the checkbox in the
-       same container query, or Tab would land on a control whose only label is
-       off-screen. Mobile keeps it `visually-hidden` (focusable), so the CSS-only
-       toggle and the off-canvas panel are unaffected. */
+    /* Matches MainNav hiding the hamburger, or Tab lands on a control with no visible label. */
     @container (width >= 768px) {
       .nav-toggle {
         display: none;
@@ -448,7 +418,6 @@ const pathname = Astro.url.pathname;
     .mobile-button {
       border-radius: var(--radius-xs);
       display: inline-block;
-      /* Inset offset: these buttons sit flush to the panel edge / scroll box. */
       outline-offset: -2px;
 
       &:focus-visible {
@@ -469,9 +438,7 @@ const pathname = Astro.url.pathname;
       inset: 0;
       position: fixed;
       transform: translateX(-100%);
-      /* transform alone leaves every link focusable off-canvas, so a desktop
-         visitor tabs through the whole mobile menu. `visibility` is delayed by
-         the slide duration so closing still animates. */
+      /* `visibility` keeps off-canvas links out of the tab order; delayed so closing still animates. */
       transition:
         transform var(--animation-normal) var(--ease-in-out),
         visibility 0s linear var(--animation-normal);
@@ -676,13 +643,10 @@ const pathname = Astro.url.pathname;
         }
       }
 
-      /* The radio drives expand/collapse via `:checked ~` selectors, and is
-         hidden by `.visually-hidden` so it stays focusable. */
       .nav-item-content {
         display: none;
       }
 
-      /* Draw the hidden control's focus ring on the trigger the user can see. */
       .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
       .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
         outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);

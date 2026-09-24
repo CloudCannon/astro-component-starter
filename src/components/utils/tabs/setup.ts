@@ -33,10 +33,7 @@ function activateTab(root: HTMLElement, activeTab: HTMLButtonElement, userInitia
 
     panel.hidden = !active;
     panel.setAttribute("aria-hidden", String(!active));
-    // A real switch, not the initial-state call below: once a visitor has
-    // interacted, the panel that started selected is just another panel —
-    // any consumer CSS gating a switch-in animation on `data-initial` should
-    // start animating it too, the next time it's selected again.
+    // After a real switch the initially selected panel animates like any other.
     if (userInitiated) delete panel.dataset.initial;
   });
 }
@@ -49,9 +46,7 @@ export function setupTabs(root: HTMLElement): void {
 
   if (!tabs.length) return;
 
-  // The Content Selector splits its tabs across one tablist per item, so a
-  // screen reader would compute "1 of 1" per tab; the explicit set size and
-  // position keep the announcement "2 of 5".
+  // Content Selector uses one tablist per tab; without these a screen reader announces "1 of 1".
   tabs.forEach((tab, index) => {
     tab.setAttribute("aria-setsize", String(tabs.length));
     tab.setAttribute("aria-posinset", String(index + 1));

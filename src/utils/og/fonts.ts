@@ -4,18 +4,10 @@ import path from "node:path";
 import { siteFonts } from "../../../site-fonts.mjs";
 
 /**
- * Fonts for the share cards, derived from `site-fonts.mjs` so swapping the site
- * typeface swaps the card typeface.
- *
- * Two Takumi behaviours make this file fussier than it looks, and both fail
- * silently:
- *
- *   - A weight with no registered face gets SYNTHETIC bold of the nearest face,
- *     not an error. So the weights here must be exactly the ones
- *     `template.ts` asks for.
- *   - Several files registered under one `name` at one weight overwrite each
- *     other. A coverage subset needs a unique `name` plus a shared `subsetOf`,
- *     which `font-family: <subsetOf>` then expands across.
+ * Two silent Takumi failures:
+ *   - A weight with no registered face renders synthetic bold; weights must match `template.ts`.
+ *   - Files sharing a `name` and weight overwrite each other; a subset needs a unique `name`
+ *     plus `subsetOf`.
  */
 
 const require = createRequire(import.meta.url);
@@ -27,11 +19,7 @@ export const HEADING_WEIGHT = 700;
 
 export const EMOJI_FAMILY = "CardEmoji";
 
-/**
- * Resolved against the project root, not `import.meta.url`: Vite bundles this
- * module into `dist/.prerender/`, so a module-relative path points at a
- * directory the font was never copied to. Must track the file's real location.
- */
+/** Root-relative: Vite bundles this module into `dist/.prerender/`, where the font isn't. */
 const EMOJI_FONT_PATH = "src/utils/og/fonts/twemoji.woff2";
 
 export interface CardFont {
@@ -43,17 +31,11 @@ export interface CardFont {
 }
 
 export interface CardFontFamilies {
-  /** Family name for headings, from the `--font-headings` entry. */
   heading: string;
-  /** Family name for body copy, from the `--font-body` entry. */
   body: string;
 }
 
-/**
- * Lowercase, space-to-hyphen family slug as fontsource names its packages:
- * `"Noto Sans JP"` → `"noto-sans-jp"`. Shared with `coverage.ts` so both agree
- * on which `@fontsource/<slug>` package a family resolves to.
- */
+/** Fontsource package slug (`"Noto Sans JP"` → `"noto-sans-jp"`); shared with `coverage.ts`. */
 export const kebab = (name: string) => name.trim().toLowerCase().replace(/\s+/g, "-");
 
 function familyFor(cssVariable: string): string {
@@ -69,10 +51,7 @@ function familyFor(cssVariable: string): string {
   return entry.name;
 }
 
-/**
- * Fontsource path for one static face. The card renderer needs real bytes, so
- * it cannot use the variable-weight files Astro's font pipeline prefers.
- */
+/** Static faces only: the card renderer can't use Astro's variable-weight font files. */
 function fontsourceFace(family: string, weight: number): Buffer {
   const slug = kebab(family);
   const specifier = `@fontsource/${slug}/files/${slug}-latin-${weight}-normal.woff2`;
@@ -102,8 +81,7 @@ export function cardFonts(root: string): CardFont[] {
     { name: body, data: fontsourceFace(body, BODY_WEIGHT), weight: BODY_WEIGHT },
     { name: body, data: fontsourceFace(body, BODY_STRONG_WEIGHT), weight: BODY_STRONG_WEIGHT },
     { name: heading, data: fontsourceFace(heading, HEADING_WEIGHT), weight: HEADING_WEIGHT },
-    // Last, so it only serves codepoints the text faces do not cover. COLR, not
-    // a bitmap font: Takumi silently draws nothing for CBDT/CBLC.
+    // Last, so it only fills gaps. COLR, not bitmap: Takumi silently draws nothing for CBDT/CBLC.
     {
       name: `${EMOJI_FAMILY}-twemoji`,
       data: readFileSync(path.join(root, EMOJI_FONT_PATH)),

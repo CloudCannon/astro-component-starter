@@ -2,8 +2,7 @@ import { preview, band, bar, lines, pill, plate } from "../../../../../scripts/p
 
 const B = band(760);
 
-// A vertical tab list on the left with the first tab selected, and its panel on
-// the right. Vertical (not a top tab strip) so it does not read as `segments`.
+// Vertical tabs, not a top strip, so it does not read as `segments`.
 export default preview({
   width: B.w,
   draw: [

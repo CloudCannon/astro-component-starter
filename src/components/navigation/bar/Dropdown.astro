@@ -2,11 +2,7 @@
 import NavItemTrigger from "./NavItemTrigger.astro";
 import { createNavItemData, isCurrentPage, type NavItem } from "./navState";
 
-/**
- * Private helper for Bar.astro: one top-level nav item with a dropdown panel.
- * Not a CloudCannon component — no YAML siblings. Bar.astro owns the shared
- * script and class vocabulary.
- */
+// Bar.astro owns the script and class vocabulary this markup relies on.
 interface Props {
   item: NavItem;
   groupName: string;

@@ -30,8 +30,7 @@ const captionDataAttributes = effectiveCaptionProp
   ? { "data-editable": "text", "data-prop": effectiveCaptionProp }
   : {};
 
-// The caption names the table natively; the scroll region borrows it rather
-// than repeating the text, which a screen reader would otherwise read twice.
+// The scroll region borrows the caption's name so a screen reader doesn't read it twice.
 const captionId = caption
   ? `table-caption-${slugifyLabel(caption) || crypto.randomUUID()}`
   : undefined;
@@ -119,9 +118,7 @@ if (!_component && width === 0) return;
       }
 
       table {
-        /* Scales with the column count, and capped at 100% so a narrow table
-           never forces a pan: a two-column table wants far less room than a
-           ten-column one, which a blanket floor cannot express. */
+        /* Scales with the column count, capped at 100% so a narrow table never forces a pan. */
         border-collapse: collapse;
         min-width: min(calc(var(--table-columns, 3) * var(--table-column-min)), 100%);
         width: 100%;
@@ -140,8 +137,7 @@ if (!_component && width === 0) return;
         text-align: start;
       }
 
-      /* `border` and `background` reset the boxed look the base layer gives
-         markdown-content tables — this component is horizontal rules only. */
+      /* Resets the boxed look the base layer gives markdown-content tables. */
       thead th {
         background: none;
         border: 0;
@@ -170,8 +166,7 @@ if (!_component && width === 0) return;
         font-weight: var(--font-weight-semibold);
       }
 
-      /* The striped/compact/first-col-header classes ride on the scroller — a
-         prop-driven class on a region root goes stale in the editor. */
+      /* These classes ride on the scroller: a prop-driven class on a region root goes stale. */
       > .table-scroller.striped {
         tbody th,
         tbody td {
@@ -197,8 +192,6 @@ if (!_component && width === 0) return;
         }
       }
 
-      /* 640px = canonical mobile/stacking breakpoint — below it the table pans
-         with a sticky row-header column. */
       @media (width < 640px) {
         .table-scroll-hint {
           display: block;

@@ -1,8 +1,5 @@
-# Column / link structures for the mega menu variant of a top-level nav item.
-# Referenced by the "Mega Menu Item" values in `navData` (data-file editing)
-# and `navItemLevel1MegaMenu` (bar and main-nav as page-section blocks) — edit
-# here, not in either caller. The link array is named `items`, not `links`: `links`
-# is a global structure key (footer) that CloudCannon matches by field name.
+# Shared by `navData` and `navItemLevel1MegaMenu`: edit here, not in either caller.
+# The link array is `items`, not `links`: `links` is a global structure key (footer).
 megaMenuColumns:
   style: modal
   values:

@@ -13,8 +13,6 @@ const B = band(760);
 
 const COL_X = [260, 468, 664, 860];
 
-// Caption, uppercase header row over a heavy rule, then hairline-ruled rows —
-// the rules-only silhouette says "table", not "list" or "definition list".
 export default preview({
   width: B.w,
   draw: [

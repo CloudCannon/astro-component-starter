@@ -2,8 +2,7 @@ import { preview, band, bar, field, lines, pill } from "../../../../../scripts/p
 
 const B = band(960);
 
-// Split copy and one-field form show the section's email-only purpose at a
-// glance; the consent line keeps it distinct from the generic CTA layouts.
+// The consent line keeps it distinct from the generic CTA layouts.
 export default preview({
   width: B.w,
   draw: [

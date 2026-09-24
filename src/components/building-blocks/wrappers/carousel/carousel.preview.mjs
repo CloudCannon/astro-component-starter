@@ -11,9 +11,7 @@ import {
 
 const B = band(960);
 
-// A content slide with the control row below — round arrow buttons flanking the
-// position dots, matching where the component actually puts them. The active
-// dot is the darker one, not a bigger or longer one.
+// The active dot is darker, not bigger or longer.
 export default preview({
   width: B.w,
   draw: [

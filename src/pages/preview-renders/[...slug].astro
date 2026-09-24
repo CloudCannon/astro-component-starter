@@ -14,9 +14,7 @@ import {
   type StructureValueDoc,
 } from "./_seed-structure-defaults";
 
-// One bare page per page-builder component, rendered from its structure-value
-// defaults. These routes exist only for `npm run previews:screenshot`, which
-// builds with COMPONENT_PREVIEWS=true — normal builds emit nothing.
+// Only `previews:screenshot` sets COMPONENT_PREVIEWS=true; normal builds emit no routes.
 export async function getStaticPaths() {
   if (process.env.COMPONENT_PREVIEWS !== "true") {
     return [];
@@ -33,9 +31,6 @@ export async function getStaticPaths() {
       return [];
     }
 
-    // Merge this component's own input/structure definitions on top of the
-    // global registry, so top-level arrays resolve via the component's inputs
-    // and any nested container arrays resolve via the global structures.
     const { inputs, structures } = resolveDocInputs(file, structure);
     const mergedStructures: StructureDefs = { ...globalStructures, ...structures };
 

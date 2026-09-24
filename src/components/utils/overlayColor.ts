@@ -1,10 +1,4 @@
-/**
- * Builds the CSS `rgba(...)` string for a background overlay.
- *
- * A negative `overlay` darkens (black); a positive one lightens (white).
- * The alpha is the magnitude of `overlay`. Callers only render the overlay
- * element when `overlay !== 0`, so the sign is always meaningful here.
- */
+/** Negative darkens (black), positive lightens (white); alpha is the magnitude. */
 export function overlayColor(overlay: number): string {
   const rgb = overlay < 0 ? "0, 0, 0" : "255, 255, 255";
 

@@ -21,8 +21,7 @@ async function copyText(text: string): Promise<boolean> {
       return true;
     }
   } catch {
-    // Clipboard access may be unavailable outside a secure context. Fall back
-    // to the browser's legacy copy command for these older environments.
+    // Clipboard access may be unavailable outside a secure context.
   }
 
   return copyFallback(text);

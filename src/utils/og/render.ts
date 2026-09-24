@@ -26,10 +26,7 @@ import {
 } from "./template.js";
 import { type CardTheme, resolveCardColors } from "./theme.js";
 
-/**
- * The only module that touches Takumi. Everything else goes through
- * `renderCard`, so swapping the engine is a change to this file alone.
- */
+// The only module that touches Takumi; keep engine calls out of other files.
 
 const require = createRequire(import.meta.url);
 
@@ -46,14 +43,11 @@ export interface CardRequest {
   description?: string | null;
   siteName: string;
   siteUrl: string;
-  /** Primary logo, drawn on a light ground. */
   logoSource?: string | null;
-  /** Light-on-dark logo, drawn on a dark ground. */
   logoAlternateSource?: string | null;
   theme?: CardTheme;
-  /** The entry's own image, drawn full-bleed under the text plates. */
   featuredImage?: string | null;
-  /** Encoding, chosen by the URL's extension so the bytes match what it claims. */
+  /** Must match the URL's extension. */
   format?: "png" | "jpeg";
 }
 
@@ -70,7 +64,6 @@ const prepared = new Map<CardTheme, Promise<Prepared>>();
 const digest = (data: Buffer | string) =>
   createHash("sha256").update(data).digest("hex").slice(0, 16);
 
-/** Content digest of a source file, or null when it cannot be read. */
 function sourceDigest(root: string, source: string): string | null {
   try {
     return digest(readFileSync(path.join(root, source.slice(1))));
@@ -87,11 +80,7 @@ function takumiVersion(): string {
   }
 }
 
-/**
- * Logo bytes inlined as a data URI. Read from disk only: a build must not
- * depend on the network, so a remote `logoSource` is dropped rather than
- * fetched.
- */
+// Disk only: a build must not depend on the network, so a remote logo is dropped.
 function logoDataUri(root: string, source?: string | null): string | null {
   if (!source || !source.startsWith("/src/")) return null;
 
@@ -109,11 +98,6 @@ function logoDataUri(root: string, source?: string | null): string | null {
   }
 }
 
-/**
- * Cover-crop the featured image to the card's exact size before Takumi sees it.
- * sharp is already a dependency, and handing the renderer a 1200x630 buffer
- * avoids decoding a multi-megapixel original for every card.
- */
 async function backgroundDataUri(root: string, source?: string | null): Promise<string | null> {
   if (!source || !source.startsWith("/src/")) return null;
 
@@ -125,16 +109,10 @@ async function backgroundDataUri(root: string, source?: string | null): Promise<
 
     return `data:image/jpeg;base64,${cropped.toString("base64")}`;
   } catch {
-    // An unreadable or non-raster source falls back to the plain card.
     return null;
   }
 }
 
-/**
- * Ask Takumi where the title wraps, so each line can be drawn on its own plate.
- * Measuring the real layout beats guessing from character counts, which cannot
- * know the font's metrics.
- */
 async function wrapTitle(
   renderer: Renderer,
   title: string,
@@ -204,8 +182,6 @@ function prepare(root: string, theme: CardTheme): Promise<Prepared> {
       fingerprint: digest(
         [
           takumiVersion(),
-          // The template's own source, so a visual edit invalidates every
-          // cached card with nothing to remember to bump.
           digest(readFileSync(path.join(root, TEMPLATE_SOURCE_PATH))),
           JSON.stringify(colors),
           ...fonts.map(({ name, weight, data }) => `${name}:${weight}:${digest(data)}`),
@@ -226,16 +202,13 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     root,
     request.theme ?? "light"
   );
-  // The plain card sits on the theme's ground; the photo card's plate inverts
-  // it. So the two layouts want opposite logos in the same theme.
+  // The photo card's plate inverts the theme, so it takes the opposite logo.
   const onDark = logoDataUri(root, request.logoAlternateSource ?? request.logoSource);
   const onLight = logoDataUri(root, request.logoSource);
   const dark = (request.theme ?? "light") === "dark";
   const plainLogo = dark ? onDark : onLight;
   const plateLogo = dark ? onLight : onDark;
 
-  // The image's own bytes, so re-cropping the same photo reuses the card but
-  // replacing it does not. Cheap next to the render it guards.
   const featured = request.featuredImage?.startsWith("/src/")
     ? sourceDigest(root, request.featuredImage)
     : null;

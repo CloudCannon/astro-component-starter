@@ -14,8 +14,6 @@ const {
 
 const pathname = Astro.url.pathname;
 
-// Scopes radio buttons per navigation instance. Two navs on one page need
-// distinct `aria-label`s anyway, so the label is the stable scope.
 const navInstanceId = slugifyLabel(ariaLabel || "side");
 ---
 
@@ -135,9 +133,7 @@ const navInstanceId = slugifyLabel(ariaLabel || "side");
 
       bindToggleKeys(sideNav);
 
-      // Retire the no-animation flag only on panels that are currently closed.
-      // Clearing it on an open one hands it a live `grow-out` and it replays
-      // its expand under the pointer.
+      // Closed panels only: clearing an open one replays its `grow-out` under the pointer.
       sideNav.addEventListener("change", () => {
         sideNav.querySelectorAll(".nav-item-content[data-open-on-load]").forEach((panel) => {
           const toggle = panel.parentElement?.querySelector(":scope > .nav-item-toggle");
@@ -147,8 +143,7 @@ const navInstanceId = slugifyLabel(ariaLabel || "side");
         });
       });
 
-      // A label re-checks an already-checked radio, which is a no-op; collapse
-      // it by hand so a second click closes the panel.
+      // A label re-checking a checked radio is a no-op, so collapse by hand.
       sideNav
         .querySelectorAll(".nav-item-toggle-btn, .nav-item.has-children > .nav-item-trigger")
         .forEach((trigger) => {
@@ -184,12 +179,6 @@ const navInstanceId = slugifyLabel(ariaLabel || "side");
         position: relative;
       }
 
-      /*
-       * Row shell shared by direct links, static leaves and full-row label
-       * triggers. Split rows (link + chevron toggle) use `.nav-item-split`
-       * below. `min-height` + `padding-block` establish a consistent row
-       * height across all of them.
-       */
       .nav-item > a,
       .nav-item > .nav-item-static,
       .nav-item > .nav-item-trigger:not(.nav-item-toggle-btn) {
@@ -335,13 +324,10 @@ const navInstanceId = slugifyLabel(ariaLabel || "side");
         text-underline-offset: 3px;
       }
 
-      /* The radio drives expand/collapse via `:checked ~` selectors, and is
-         hidden by `.visually-hidden` so it stays focusable. */
       .nav-item-content {
         display: none;
       }
 
-      /* Draw the hidden control's focus ring on the trigger the user can see. */
       .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
       .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
         outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
@@ -353,9 +339,6 @@ const navInstanceId = slugifyLabel(ariaLabel || "side");
         display: block;
       }
 
-      /* Groups holding the current page are served open; expanding something
-         the visitor never asked for is not a transition. The flag is cleared
-         once the panel closes, so every later open animates. */
       .nav-item-toggle:checked ~ .nav-item-content[data-open-on-load] {
         animation: none;
       }

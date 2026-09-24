@@ -3,9 +3,7 @@ import seoData from "@data/seo.json";
 import type { APIRoute } from "astro";
 import { getBlogPostsSortedByDate } from "../utils/blog";
 
-// Posts are MDX and can embed any component in the library, so the feed carries
-// descriptions and links rather than rendered bodies — a full-content feed would
-// have to serialise carousels, videos and the like into markup no reader honours.
+// Descriptions, not rendered bodies: MDX posts can embed components no feed reader honours.
 const escapeXml = (value: string) =>
   value.replace(
     /[<>&'"]/g,
@@ -20,8 +18,7 @@ export const GET: APIRoute = async ({ site }) => {
     title: seoData.name,
     description: seoData.description,
     site: site ?? seoData.url,
-    // RSS 2.0 defines <author> as an email address, which trips feed
-    // validators on a plain name — dc:creator is the element for that.
+    // RSS <author> must be an email address; dc:creator takes a plain name.
     xmlns: { dc: "http://purl.org/dc/elements/1.1/" },
     items: posts.map((post) => ({
       title: post.data.title,

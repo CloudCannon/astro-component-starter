@@ -1,16 +1,6 @@
 /**
- * Scaffold a new component: the .astro file plus its co-located CloudCannon
- * YAML, so none of the create-component steps can be forgotten.
- *
- *   node scripts/scaffold/new-component.mjs <tier/path/kebab-name>
- *   node scripts/scaffold/new-component.mjs page-sections/explainers/feature-tabs
- *
- * Generates <PascalCase>.astro plus both CloudCannon YAML files into
- * src/components/<path>/. Page sections also get the section-wrapper `_inputs`
- * block, sliced from a real page section so it can't drift from the live shape.
- *
- * Templates live in ./templates. The .agents/skills/create-component skill is
- * the full playbook; this automates its file-creation steps and prints the rest.
+ * node scripts/scaffold/new-component.mjs <tier/path/kebab-name>
+ * Page sections get their section-wrapper inputs sliced from a live donor so they can't drift.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -21,9 +11,6 @@ const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const componentsDir = join(root, "src", "components");
 const templatesDir = join(root, "scripts", "scaffold", "templates");
 
-// The donor whose section-wrapper inputs are copied into new page sections
-// (create-component skill, step 5: "don't hand-type ~180 lines"), and the marker
-// line that begins that block in the donor file.
 const SECTION_INPUTS_DONOR = join(
   componentsDir,
   "page-sections/conversion/cta-center/cta-center.cloudcannon.inputs.yml"
@@ -97,23 +84,18 @@ const targetAbs = join(componentsDir, requested);
 
 if (existsSync(targetAbs)) die(`src/components/${requested}/ already exists.`);
 
-// Derive names via the shared componentKey module (never reimplement).
-
 const pascal = slug
   .split("-")
   .map((word) => word[0].toUpperCase() + word.slice(1))
   .join("");
 
-// Round-trip guard: the glob registries derive the key from the filename with
-// pascalToKebab, so the name must survive kebab -> Pascal -> kebab unchanged.
+// The registries derive the key from the filename, so the name must round-trip.
 if (pascalToKebab(pascal) !== slug)
   die(
     `"${slug}" is not derivable from a PascalCase filename ` +
       `("${pascal}.astro" would register as "${pascalToKebab(pascal)}"). Pick another name.`
   );
 
-// MDX addresses components by bare filename, so a duplicate would shadow the
-// existing one. Blog builds fail on this; refuse it here instead.
 const clash = (await glob(`**/${pascal}.astro`, { cwd: componentsDir }))[0];
 
 if (clash)
@@ -141,16 +123,7 @@ const render = (templateName) =>
     .replaceAll("__KEY__", componentKey)
     .replaceAll("__LABEL__", label);
 
-/**
- * Extract the section-wrapper inputs (verbatim text) from the donor's *inputs*
- * file — everything from the marker comment to the end of the file.
- *
- * The wrapper props live in `inputs.yml`, not in `structure-value.yml`: that is
- * where `_inputs_from_glob` already points, so both the structure value and the
- * MDX snippet pick them up from one place, and `lint:cms` can see them (it reads
- * inputs.yml and the structure-value `value:`, never an inline `_inputs:`).
- * The marker is an explicit boundary so reordering inputs can't shift the slice.
- */
+// Must stay in inputs.yml, not an inline `_inputs:`: `lint:cms` and the MDX snippet only read there.
 function sectionInputsBlock() {
   const lines = readFileSync(SECTION_INPUTS_DONOR, "utf8").split("\n");
   const start = lines.findIndex((line) => line === SECTION_INPUTS_MARKER);
@@ -179,8 +152,6 @@ for (const [name, content] of Object.entries(files)) {
   writeFileSync(join(targetAbs, name), content);
   console.log(`created  src/components/${requested}/${name}`);
 }
-
-// Remaining manual steps (the ones a script can't do for you).
 
 const isWrapper = requested.startsWith("building-blocks/wrappers/");
 

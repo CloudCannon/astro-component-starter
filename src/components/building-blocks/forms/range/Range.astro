@@ -34,8 +34,7 @@ const defaultValue = value ?? min;
 const initialPct = ((defaultValue - min) / (max - min || 1)) * 100;
 const displayValue = Number.isInteger(step) ? Math.round(defaultValue) : defaultValue;
 
-// Purely decorative scale markings — even divisions regardless of the actual
-// min/max/step, matching a ruler rather than tracking real snap points.
+// Decorative even divisions, deliberately not the real snap points.
 const showTicks = tickStyle !== "none";
 const ticks = showTicks
   ? Array.from({ length: tickCount }, (_, i) => {
@@ -148,8 +147,6 @@ const ticks = showTicks
 
       input.addEventListener("input", update);
 
-      // Native range inputs don't support a shift-for-bigger-step modifier, and
-      // browsers vary in how big a Page Up/Down jump is — make both exact.
       input.addEventListener("keydown", (e) => {
         const step = Number(input.step) || 1;
         let delta = 0;
@@ -187,8 +184,7 @@ const ticks = showTicks
       --range-tick-duration: 220ms;
       --thumb-size: 26px;
 
-      /* Slider, ticks and bounds are one stacked unit: the shell's row gap
-         would float them off the track. Spacing is per-part instead. */
+      /* The shell's row gap would float the ticks and bounds off the track. */
       gap: 0;
 
       .form-field-header {
@@ -242,8 +238,6 @@ const ticks = showTicks
         margin-block: 0 2px;
         margin-inline: 0;
         padding: 0;
-        /* Deliberately slower than the thumb's own 200ms: the track fill
-           settles just behind the handle. */
         transition: --range-pct var(--range-fill-duration) var(--range-ease);
         width: 100%;
 
@@ -390,8 +384,6 @@ const ticks = showTicks
         margin-top: var(--spacing-xs);
         width: calc(100% - var(--thumb-size));
 
-        /* Centre each label on its tick (the container's own edges) rather
-           than left/right-aligning the text against them. */
         span:first-child {
           transform: translateX(-50%);
         }

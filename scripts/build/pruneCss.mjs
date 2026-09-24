@@ -1,25 +1,9 @@
 /**
- * Per-page CSS pruning.
- *
- * Every page is served by the catch-all `[...slug].astro`, so Astro collects
- * one CSS union for the whole component library and inlines it into all 42
- * pages. This drops, per page, the component style blocks whose classes the
- * page's own markup never uses.
- *
- * Two invariants keep it from eating live styles:
- *
- *   1. It prunes whole `@layer components` / `@layer page-sections` blocks —
- *      one per component `<style is:global>` — never individual rules. A block
- *      survives if ANY rule in it could match, so variant and state rules for a
- *      component that IS on the page always come along.
- *   2. The full sheet is still written to `components-full.css`, and
- *      `BaseLayout.astro` imports it when `window.inEditorMode` is set. The
- *      CloudCannon editor renders components client-side that were never in the
- *      page's HTML, so the editor must see everything.
- *
- * A class only counts as "required" outside `:not()`/`:is()`/`:where()`/`:has()`
- * — inside those it is optional or negated, so requiring it would drop live
- * rules.
+ * Drops, per page, the component style blocks whose classes the page never uses.
+ *   1. Prunes whole `@layer components` / `page-sections` blocks, never single rules, so a
+ *      present component keeps all its variant and state rules.
+ *   2. The editor renders components absent from the HTML, so `BaseLayout.astro` loads the
+ *      full sheet (`components-full.css`) in editor mode.
  */
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
@@ -28,9 +12,7 @@ import { readFile, writeFile, readdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join, relative, sep } from "node:path";
 
-// `BaseLayout.astro` writes this path literally in its editor-mode bootstrap;
-// the emitted file is content-hashed and the reference rewritten below, so an
-// editor browser cannot serve a stale sheet after a rebuild.
+// `BaseLayout.astro` writes this path literally; it is rewritten below to the content-hashed file.
 const FULL_CSS_REF = "/_astro/components-full.css";
 
 const PRUNABLE_LAYERS = new Set(["components", "page-sections"]);
@@ -98,8 +80,7 @@ function containerIsLive(container, alts, present) {
     } else if (node.type === "rule") {
       if (containerIsLive(node, extendAlternatives(alts, node), present)) return true;
     } else if (node.type === "atrule") {
-      // Keyframes, @property and @font-face are referenced by name, not by
-      // selector, so no class test can prove them dead.
+      // Referenced by name, not selector, so no class test can prove them dead.
       if (node.name === "keyframes" || node.name === "property" || node.name === "font-face")
         return true;
       if (containerIsLive(node, alts, present)) return true;
@@ -117,9 +98,7 @@ function classesFromMarkup(html) {
   return present;
 }
 
-/** Quoted string literals, split on whitespace — covers `classList.add("a b")`.
- *  A class name assembled at runtime (`` `is-${state}` ``) would be invisible
- *  here and its rules would be pruned; nothing in the tree builds one. */
+/** A class assembled at runtime (`` `is-${state}` ``) is invisible here; its rules get pruned. */
 function classesFromScript(source, into) {
   for (const m of source.matchAll(/(["'`])((?:[^"'`\\\n]|\\.){1,200}?)\1/g)) {
     for (const token of m[2].split(/[\s.]+/)) {
@@ -128,13 +107,7 @@ function classesFromScript(source, into) {
   }
 }
 
-/**
- * `alwaysKeep` lists class names to treat as present on every page, for markup
- * this cannot see in the HTML: a component built at runtime from an assembled
- * class name, or one a third-party script injects. Naming a component's root
- * class is enough — the block is kept whole. `PRUNE_CSS=0` skips pruning
- * entirely, which is the baseline `test:css-parity` compares against.
- */
+/** `alwaysKeep`: classes treated as present on every page (runtime-built or third-party). */
 export default function pruneCss({
   enabled = process.env.PRUNE_CSS !== "0",
   alwaysKeep = [],
@@ -224,9 +197,7 @@ export default function pruneCss({
             });
           }
 
-          // Astro can inline the same component block twice on one page. Only the
-          // last copy of identical text in the same layer can win the cascade, so
-          // earlier copies are dropped; keeping the first instead would reorder it.
+          // Only the last of duplicate blocks wins the cascade; keeping the first would reorder it.
           const lastIndex = new Map();
 
           blocks.forEach(({ text }, i) => lastIndex.set(text, i));
@@ -244,10 +215,8 @@ export default function pruneCss({
 
           let tagIndex = 0;
 
-          // Re-serialize the whole root. Joining per-node `toString()` instead
-          // drops the terminating `;` of a childless at-rule — which silently
-          // deletes the `@layer a, b, c;` order statement, letting layers order by
-          // first appearance and inverting the entire cascade.
+          // Re-serialize the whole root: joining per-node `toString()` drops the `@layer a, b, c;`
+          // order statement and silently inverts the cascade.
           const rewritten = html.replace(STYLE_TAG, (whole, open, css, close) => {
             const parsed = parsedTags[tagIndex++];
 
@@ -279,9 +248,7 @@ export default function pruneCss({
           results.map(([page, html]) => writeFile(page, html.split(FULL_CSS_REF).join(fullHref)))
         );
 
-        // BaseLayout's editor bootstrap is an inline <script>, which Astro
-        // bundles out to its own JS asset — so the reference to rewrite is in
-        // there, not in the HTML.
+        // Astro bundles BaseLayout's inline editor bootstrap into a JS asset; rewrite it there.
         let rewrittenRefs = 0;
 
         for (const script of await filesWithExtension(root, ".js")) {

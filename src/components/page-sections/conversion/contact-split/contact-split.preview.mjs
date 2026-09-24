@@ -11,8 +11,7 @@ import {
 
 const B = band(960);
 
-// One bordered card: prose and icon-detail rows left, stacked form fields with
-// an ink submit right. The field outlines say "contact form", not a split.
+// The field outlines say "contact form", not a plain split.
 export default preview({
   width: B.w,
   draw: [

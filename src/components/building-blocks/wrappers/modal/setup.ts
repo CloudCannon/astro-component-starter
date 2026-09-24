@@ -1,16 +1,6 @@
 /**
- * Shared setup logic for modal popovers: any element carrying `data-modal`
- * (every `ModalShell.astro`, plus bespoke overlays like the gallery lightbox).
- * `data-modal` is behaviour only — the sheet look is `.modal-popover`, and
- * nothing here may key on that class.
- *
- * Used by:
- * - `Modal.astro`'s inline `<script>` on the live site
- * - `navigation/search`'s setup module (its popover is a ModalShell)
- * - `editor-live-sync.js` in the CloudCannon editor, because CC's
- *   editable-regions renderer uses `renderToStaticMarkup` and does
- *   not execute inline scripts, so we need to initialize modals
- *   from the live-sync script in that context.
+ * `data-modal` is behaviour only; the sheet look is `.modal-popover`, and nothing
+ * here may key on that class. Also run by `editor-live-sync.js`, where inline scripts don't execute.
  */
 import { getFocusableElements, trapFocus } from "@component-utils/focusTrap";
 
@@ -25,8 +15,7 @@ function updateModalScrollLock(): void {
   document.body.toggleAttribute("data-modal-scroll-lock", hasOpenModal);
 }
 
-/** The popover's opener: a `popovertarget` button outside the popover itself
- * (the close button inside also targets it, so filter that out). */
+/** Excludes the close button inside, which also targets the popover. */
 function findTrigger(popover: HTMLElement): HTMLElement | null {
   if (!popover.id) return null;
 
@@ -51,11 +40,8 @@ export function setupModalShell(popover: HTMLElement): void {
     updateModalScrollLock();
 
     if (newState === "open") {
-      // Captured before focus moves inside: several controls can target one
-      // modal, and focus has to return to the one that was actually used —
-      // `findTrigger` only ever reports the first. Anything else that had
-      // focus is not an invoker (Search opens on Ctrl+K with focus on the
-      // body), so fall back to the declared trigger.
+      // Several controls can target one modal and `findTrigger` reports only the
+      // first, so capture the real invoker before focus moves inside.
       const active = document.activeElement;
       const invoker =
         active instanceof HTMLElement && popover.id && !popover.contains(active)
@@ -64,8 +50,6 @@ export function setupModalShell(popover: HTMLElement): void {
 
       opener = invoker ?? trigger;
 
-      // The popover API leaves focus on the invoker when a popover opens,
-      // so move it to the first focusable element inside the modal.
       getFocusableElements(popover)[0]?.focus();
     }
 

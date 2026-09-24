@@ -52,14 +52,11 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   const plugins = [];
 
-  // Embla moves slides with JS, so the global reduced-motion CSS rule
-  // can't stop it; manual navigation still works without the plugins.
+  // Embla moves slides with JS, so the global reduced-motion CSS rule can't stop it.
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (inner.hasAttribute("data-autoplay") && !prefersReducedMotion) {
     const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
-    // With `stopOnInteraction: false`, `stopOnMouseEnter` pauses autoplay on
-    // mouseenter and resumes it on mouseleave (pause-on-hover behaviour).
     const pauseOnHover = inner.getAttribute("data-pause-on-hover") === "true";
 
     plugins.push(
@@ -102,8 +99,7 @@ export function setupCarousel(carousel: CarouselElement): void {
   carousel.setAttribute("data-embla-initialized", "true");
   carousel.__embla = embla;
 
-  // Consumers listen for this instead of reaching into Embla. Fired on
-  // init, selection, and reInit.
+  // Consumers listen for this instead of reaching into Embla.
   const emitSelect = () => {
     carousel.dispatchEvent(
       new CustomEvent("carousel:select", {
@@ -120,11 +116,8 @@ export function setupCarousel(carousel: CarouselElement): void {
   const prevButton = inner.querySelector<HTMLButtonElement>(".prev > .button-inner");
   const nextButton = inner.querySelector<HTMLButtonElement>(".next > .button-inner");
 
-  // Autoplay and auto-scroll emit `select` on their own; only a gesture should
-  // announce the fraction. Controls mark themselves below, and Embla's pointer
-  // drags mark via `pointerDown`. `updateFraction` consumes and clears the flag;
-  // the timeout covers a gesture that moves nothing, so it can't leak into the
-  // next autoplay tick.
+  // Only a gesture should announce the fraction. The timeout clears the flag after a
+  // gesture that moves nothing, so it can't leak into the next autoplay tick.
   let userDrivenNavigation = false;
   const markUserDrivenNavigation = () => {
     userDrivenNavigation = true;
@@ -161,7 +154,6 @@ export function setupCarousel(carousel: CarouselElement): void {
       indicatorsContainer.innerHTML = "";
 
       embla.scrollSnapList().forEach((_, index) => {
-        // A button, not a div: a dot is a control, and a div takes no focus.
         const dot = document.createElement("button");
         const selected = index === embla.selectedScrollSnap();
 
@@ -196,9 +188,7 @@ export function setupCarousel(carousel: CarouselElement): void {
   const motion = embla.plugins().autoplay ?? embla.plugins().autoScroll;
 
   if (motion && controlsWrapper) {
-    // WCAG 2.2.2: movement that starts on its own and runs past five seconds
-    // needs a control to stop it. Hover and focus only pause it while they
-    // last, so neither counts.
+    // WCAG 2.2.2 needs a stop control: hover and focus only pause, so neither counts.
     const pause = document.createElement("button");
     const setLabel = () => {
       const playing = motion.isPlaying();
@@ -219,9 +209,7 @@ export function setupCarousel(carousel: CarouselElement): void {
   }
 
   if (thumbnailsContainer) {
-    // One thumbnail per scroll snap, imaged from the snap's slide. Meaningful
-    // when each snap is one slide (the lightbox/product-gallery shape); a
-    // slide with no <img> falls back to a numbered button.
+    // A slide with no <img> falls back to a numbered button.
     const renderThumbnails = () => {
       thumbnailsContainer.innerHTML = "";
 
@@ -273,8 +261,6 @@ export function setupCarousel(carousel: CarouselElement): void {
       const current = embla.selectedScrollSnap() + 1;
       const safeTotal = Math.max(snaps, 1);
       const safeCurrent = Math.min(current, safeTotal);
-      // Announce only the update a gesture caused; autoplay and auto-scroll
-      // update the visible fraction without touching the live region.
       const announce = userDrivenNavigation;
 
       userDrivenNavigation = false;

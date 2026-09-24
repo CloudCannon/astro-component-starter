@@ -1,16 +1,4 @@
-/**
- * Reference-screenshot capture — an AUTHORING AID, not a build step.
- *
- *   node scripts/previews/screenshot.mjs [--skip-build] [--only <substring>] [--out <dir>]
- *
- * Builds the bare `preview-renders/*` pages (COMPONENT_PREVIEWS=true), serves
- * dist/, and screenshots each component's rendered output to a PNG. These PNGs
- * ground recipe authoring (`*.preview.mjs`) — they are never an input to the
- * committed SVGs, which are produced deterministically by `build.mjs`.
- *
- * Requires Chrome/Edge/Chromium (or CHROME_PATH). Output defaults to
- * `.preview-screenshots/` (git-ignored, regenerated on demand).
- */
+// An authoring aid only: these PNGs must never become an input to the committed SVGs.
 import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";

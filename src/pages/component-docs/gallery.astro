@@ -24,8 +24,7 @@ if (!isDisabled) {
     const { key, parts, title } = entry;
     const topCategory = parts[0];
 
-    // Same existence fallback as ComponentLayout: only link to a preview that
-    // actually exists on disk, otherwise the card shows a neutral placeholder.
+    // Only link a preview that exists on disk, as ComponentLayout does.
     const hasPreview = existsSync(
       join(process.cwd(), "public", "component-previews", `${key}.svg`)
     );

@@ -71,19 +71,10 @@ const getLocalImageAsset = (source: string) => {
   return imageKey ? imageFiles[imageKey] : null;
 };
 
-/**
- * How much larger than the biggest surviving step the native width has to be
- * before it earns its own variant. Within this margin the extra transform
- * buys a few percent of linear detail and isn't worth the bytes or build time.
- */
+/** The native width earns its own variant only when this much larger than the biggest step. */
 const NATIVE_WIDTH_TOLERANCE = 1.1;
 
-/**
- * Pair a requested width with the source's native height so Picture/img
- * keep the photo's own ratio. Callers often pass only `width` as a srcset
- * cap (Card Grid and Gallery Grid masonry both use `width={800}` with
- * `aspectRatio: none`)
- */
+/** The height that keeps the source's native ratio at `width`. */
 export const heightForWidth = (
   nativeWidth: number,
   nativeHeight: number,
@@ -119,15 +110,8 @@ export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
     return [nativeWidth];
   }
 
-  // The preset steps almost never land on an asset's own width, so filtering
-  // alone caps the srcset at the largest step *below* native and the detail in
-  // between becomes unreachable — a 1181px source served at 640w. Offering the
-  // native width too costs one variant and can't make smaller viewports
-  // download more, since the browser takes the smallest adequate candidate.
-  //
-  // Two cases stay out. Above every step, the cap is deliberate: it stops a
-  // 6000px camera upload from becoming a 6000px variant. Within the tolerance
-  // of the largest step, the gain doesn't justify the transform.
+  // Without the native width a 1181px source caps at 640w. Above every step the cap is
+  // deliberate: a 6000px upload must not become a 6000px variant.
   const largestCandidate = normalizedWidths[normalizedWidths.length - 1];
   const largestStep = filteredWidths[filteredWidths.length - 1];
   const fillsGapBetweenSteps =
@@ -280,8 +264,7 @@ export function prepareImageData({
         imageHeight = imageHeight || resolvedImage.height;
         shouldRenderOptimizedPicture = true;
 
-        // Width-only requests keep the source ratio unless a named crop
-        // (landscape, square, …) is about to replace both edges.
+        // Skipped when a named crop is about to replace both edges.
         if (
           (!aspectRatio || aspectRatio === "none") &&
           width &&

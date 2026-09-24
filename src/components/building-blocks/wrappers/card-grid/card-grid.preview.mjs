@@ -13,8 +13,7 @@ import {
 
 const B = band(960);
 
-// Three cover cards in a row — the open card (photo + badge + title) without
-// section heading chrome, so it reads as the wrapper, not Card Collection.
+// No section heading chrome, so it reads as the wrapper, not Card Collection.
 const card = (x) => [
   plate(x, 0, 304, 396),
   media(x, 0, 304, 176, { r: 0 }),

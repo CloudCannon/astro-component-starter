@@ -101,9 +101,8 @@
   --cyan-800: #155e75;
   --cyan-900: #164e63;
 
-  /* Chrome that sits on a photograph or video. Fixed, not themed: the media
-     underneath does not change when the visitor flips the site theme, so
-     these must not follow --color-text / --color-overlay, which do. */
+  /* For chrome on photos and video. Fixed, not themed: the media doesn't flip
+     with the site theme, so these must not follow --color-text. */
   --color-media-scrim: #0c0c0c;
   --color-text-on-media: var(--white);
   --color-text-on-media-muted: color-mix(in srgb, var(--white) 80%, transparent);

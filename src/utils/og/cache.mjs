@@ -12,22 +12,9 @@ import {
 import path from "node:path";
 
 /**
- * Content-addressed store for rendered share cards, so an unchanged page is a
- * file read rather than a render on the next build.
- *
- * Plain `.mjs` because both `render.ts` and the `prune-og-cache` Astro
- * integration import it, and the integration is loaded by Node from
- * `astro.config.mjs`, which cannot import TypeScript on this repo's minimum
- * Node.
- *
- * Lives under Astro's cache directory: gitignored, and the path to name in a
- * host's between-build cache (CloudCannon "Preserved Paths"). That cache is
- * opt-in and best-effort, so nothing here may assume a warm start.
- *
- * Freshness is tracked by mtime, not an in-memory set: the endpoint and the
- * integration run in different module graphs, so a shared module variable would
- * read as empty from the integration and prune the whole cache. A hit therefore
- * re-stamps its file, and `pruneCache` drops whatever the build never touched.
+ * Plain `.mjs`: `astro.config.mjs` imports it and cannot load TypeScript on the minimum Node.
+ * Freshness is mtime, not a module variable: the endpoint and the integration run in
+ * separate module graphs, so a shared set would read empty and prune everything.
  */
 
 const CACHE_DIR = path.join("node_modules", ".astro", "og-cache");
@@ -88,9 +75,7 @@ export function writeCache(root, key, data) {
 }
 
 /**
- * Drop entries untouched since `since`. Build-only: in dev the endpoint is hit
- * on demand, so most entries are legitimately untouched and pruning would throw
- * away live ones.
+ * Build-only: in dev most entries are legitimately untouched and would be pruned.
  *
  * @param {string} root
  * @param {number} since epoch ms

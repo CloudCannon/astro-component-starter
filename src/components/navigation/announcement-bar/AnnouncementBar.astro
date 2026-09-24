@@ -43,12 +43,7 @@ if (!enabled || !message) return;
   is:inline
   data-astro-rerun
 >
-  // is:inline so the dismissed check runs synchronously during parsing,
-  // before the bar can paint, and data-astro-rerun so the ClientRouter
-  // re-executes it when a client-side navigation swaps in a fresh bar.
-  // CloudCannon's editor strips inline scripts, which is the behaviour we
-  // want there: editors always see the bar, and the close button is inert
-  // instead of hiding the thing they're editing.
+  // is:inline so it runs before paint. Deliberately inert in the editor, which strips inline scripts.
   (function () {
     var bar = document.querySelector(".announcement-bar:not([data-announcement-initialized])");
 
@@ -59,10 +54,7 @@ if (!enabled || !message) return;
     var text = bar.querySelector(".announcement-bar-text");
     var message = (text && text.getAttribute("data-announcement")) || "";
 
-    // Dismissal stores the message itself, so publishing a different
-    // announcement makes the bar reappear for everyone.
-    // Reading storage throws outright in private mode and with site data
-    // blocked, which would leave the close button unwired.
+    // Stores the message itself, so a new announcement reappears. Storage can throw.
     var dismissed = null;
 
     try {
@@ -108,8 +100,7 @@ if (!enabled || !message) return;
       text-align: center;
 
       > .announcement-bar-text {
-        /* The base layer's `p { color: var(--color-text) }` matches this p
-           directly, so re-assert the on-brand color at higher layer priority. */
+        /* The base layer's `p` color would otherwise win over the inherited one. */
         color: var(--color-text-on-brand);
         margin: 0;
 

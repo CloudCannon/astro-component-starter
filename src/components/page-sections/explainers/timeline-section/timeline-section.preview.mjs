@@ -2,8 +2,6 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(760);
 
-// A split rail beneath section chrome keeps the section distinct from the
-// wrapper and makes the responsive alternate layout visible in the picker.
 export default preview({
   width: B.w,
   draw: [

@@ -94,12 +94,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
           column-gap: var(--spacing-em-lg);
           display: grid;
           grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
-          /* One row per tab, plus a filler row that absorbs the panel's extra
-             height so a tall panel doesn't stretch the tab rows. The count is
-             static because this element is the array region root: a value
-             derived from the item count would go stale the moment the editor
-             adds one. Empty `auto` rows collapse to zero, so overshooting is
-             free; past the 12th tab a tab falls back to auto placement. */
+          /* The count is static because this is the array region root: an item-count
+             value would go stale when the editor adds one. Empty `auto` rows collapse. */
           grid-template-rows: repeat(12, auto) 1fr;
 
           .content-selector-tablist {
@@ -116,10 +112,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
             }
           }
 
-          /* Items all overlay the same area, so a tab's row has to come from
-             its position in the DOM. Read off `:nth-of-type` rather than a
-             prop, so a reorder or a single-item re-render can't leave a stale
-             index behind. */
+          /* Row from `:nth-of-type`, not a prop, so a reorder or single-item re-render
+             can't leave a stale index. */
           .content-selector-item:nth-of-type(1) > .content-selector-tablist {
             grid-row: 1;
           }
@@ -178,11 +172,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
         &.nav-top {
           display: grid;
-          /* A flexible track on each side centers the tab columns without
-             `justify-content` — which repositions the whole track set,
-             including where line 1 falls. The panel below spans `1 / -1`
-             and needs line 1 to always be the container's true inline edge,
-             not wherever the tab group happens to start once centered. */
+          /* Flexible side tracks center the tabs; `justify-content` would move line 1,
+             which the `1 / -1` panel needs at the container's true edge. */
           grid-template-columns: minmax(0, 1fr) repeat(12, minmax(max-content, auto)) minmax(
               0,
               1fr
@@ -191,9 +182,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           overflow-x: auto;
           scroll-snap-type: x proximity;
 
-          /* No column-gap, so adjacent tabs' own underline segments (below)
-             already abut into one continuous line under the tab group; this
-             rail extends it to the container's true edges on both sides. */
+          /* No column-gap, so the tabs' underlines abut; this rail extends them to both edges. */
           &::before {
             align-self: end;
             background: var(--color-bg-muted);
@@ -260,12 +249,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
             &::before {
               background: var(--color-bg-muted);
               height: var(--content-selector-border-width);
-              /* `inset-block-end: 0`, not `inset-block: 100%` — the latter
-                 sits just below the tab's own box, a pixel under where the
-                 baseline rail (a plain grid item, flush with its row's own
-                 end edge) renders. Same edge here puts the active tab's
-                 indicator (painted after the rail, since it's positioned)
-                 visibly over the rail instead of as a second line beneath it. */
+              /* `inset-block-end: 0`, not `inset-block: 100%`, which renders a pixel below
+                 the rail instead of over it. */
               inset-block-end: 0;
               inset-inline-start: 0;
               width: 100%;
@@ -281,10 +266,8 @@ if (!_component && !hasItems && !hasSlotContent) return;
            * and letting its inner content (which has width: 100cqi and
            * position: sticky) render over the full visible container width.
            * This lets the tabs row size to its labels and scroll naturally.
-           * `contain: layout` is load-bearing, not defensive: without it,
-           * the engine's own track-sizing pass on the grid above still
-           * measures this item by its overflowing (100cqi) child despite
-           * `width: 0`, which throws off sizing for the whole row.
+            * `contain: layout` is load-bearing: without it, track sizing still measures
+            * this item by its 100cqi child despite `width: 0`.
            */
           .content-selector-panel {
             contain: layout;
@@ -312,15 +295,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
             overflow-x: visible;
             scroll-snap-type: none;
 
-            /* Stacked, not overlaid: the item is an ordinary block again and
-               takes its own clicks. */
+            /* Stacked, not overlaid: the item takes its own clicks again. */
             .content-selector-item {
               display: block;
               pointer-events: auto;
             }
 
-            /* The tab-strip baseline is a grid item; in this block layout it
-               would render as an inline box and add a line box of height. */
+            /* The baseline grid item would add a line box of height in block layout. */
             &::before {
               content: none;
             }

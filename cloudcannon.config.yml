@@ -1,5 +1,4 @@
-# Default for inputs without their own `options.paths`. Top level only — a
-# `paths:` block inside a collection is silently ignored.
+# Top level only: a `paths:` block inside a collection is silently ignored.
 paths:
   uploads: src/assets/images
 

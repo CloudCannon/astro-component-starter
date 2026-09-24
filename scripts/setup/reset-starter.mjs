@@ -1,19 +1,6 @@
 /**
- * Strip the demo content and make a fresh clone your own site.
- *
- * The starter ships a working demo — 14 blog posts, product pages (Why, Get
- * started, Contact), labeled example pages under /examples/, CloudCannon's
- * logos and a homepage that sells the starter itself. That content is deliberate:
- * astro-component-starter.cc builds from it, and it's what makes a clone look like
- * a real site on first `npm run dev`. But every one of those files is something a
- * new project has to find and delete, and the two URL placeholders
- * (astro.config.mjs `site`, seo.json `url`) break canonicals, the sitemap, RSS and
- * JSON-LD silently if missed. See scripts/check/placeholders.mjs.
- *
- *   npm run reset:starter               interactive
- *   npm run reset:starter -- --dry-run  print the plan, write nothing
- *
- * Deletes files. Guarded on a clean git tree so `git checkout .` is always an undo.
+ * Strips the demo content from a fresh clone. `--dry-run` prints the plan.
+ * Deletes files, so it requires a clean git tree: `git checkout .` is always the undo.
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
@@ -51,7 +38,7 @@ function remove(relativePath, recursive = false) {
   if (!dryRun) rmSync(abs(relativePath), { force: true, recursive });
 }
 
-/** YAML double-quoted scalar. JSON's string escaping is a valid subset. */
+/** JSON string escaping is a valid subset of a YAML double-quoted scalar. */
 function yaml(value) {
   return JSON.stringify(value);
 }
@@ -69,12 +56,7 @@ function isGitClean() {
   }
 }
 
-/**
- * Pull one line at a time. `rl.question()` drops input when stdin is a pipe —
- * readline drains the pipe and emits every line before the next question()
- * registers a listener. The async iterator pauses between reads, so piped input
- * (and `--dry-run` in a test) behaves the same as a person typing.
- */
+// Not `rl.question()`: it drops piped input, which readline emits before the next listener registers.
 const lines = rl[Symbol.asyncIterator]();
 
 async function prompt(text) {
@@ -203,7 +185,6 @@ const removeBlog = blogFiles.length
 const removePages = await confirm("Remove demo pages and reset the homepage?");
 const resetBranding = await confirm("Reset nav/footer/SEO branding?");
 
-// astro.config.mjs: the placeholder that breaks every absolute URL.
 const configPath = "astro.config.mjs";
 const config = readFileSync(abs(configPath), "utf8");
 const nextConfig = config.replace(/site: "https:\/\/example\.com",.*$/m, `site: ${yaml(siteUrl)},`);
@@ -213,8 +194,7 @@ if (nextConfig !== config) {
   record(`${configPath}   site → ${siteUrl}`);
 }
 
-// siteready.config.js: its `siteUrl` must match what seo.json now carries, or
-// the QA run grades the site's own absolute links as external.
+// `siteUrl` must match seo.json, or siteready grades the site's own links as external.
 const sitereadyPath = "siteready.config.js";
 const siteready = readFileSync(abs(sitereadyPath), "utf8");
 const nextSiteready = siteready
@@ -226,7 +206,6 @@ if (nextSiteready !== siteready) {
   record(`${sitereadyPath}   siteUrl → ${siteUrl}`);
 }
 
-// SEO defaults.
 const seo = readJson("src/data/seo.json");
 
 seo.name = siteName;
@@ -239,7 +218,6 @@ if (resetBranding) {
 writeJson("src/data/seo.json", seo);
 record(`src/data/seo.json  name, url, titleFormat${resetBranding ? ", description, logo" : ""}`);
 
-// Demo content.
 if (removeBlog) {
   for (const file of blogFiles) remove(`src/content/blog/${file}`);
   record(`removed ${blogFiles.length} demo blog post${blogFiles.length === 1 ? "" : "s"}`);

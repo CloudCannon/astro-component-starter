@@ -5,8 +5,7 @@ import Icon from "@core-elements/icon/Icon.astro";
 
 const {
   page,
-  // No stable child to carry data-space-before, so it rides the root: live
-  // edits to spaceBefore need a reload (see _flow.css).
+  // Rides the root (no stable child), so live spaceBefore edits need a reload.
   spaceBefore = "default",
   class: className,
   showArrows = false,
@@ -69,8 +68,7 @@ const getPageUrl = (pageNum: number) => {
   {gapBefore && <span aria-hidden="true">…</span>}
 
   {pages.map((pageNum) => {
-    // A bare `<span>` exposes no role that can carry an `aria-label`, so the
-    // context is given as visually hidden text instead.
+    // A bare `<span>` can't carry an `aria-label`, hence the visually hidden text.
     return pageNum === currentPage ? (
       <span
         class="current"

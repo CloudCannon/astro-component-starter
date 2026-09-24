@@ -1,14 +1,7 @@
 /**
- * Recipe compiler — turns co-located `*.preview.mjs` recipes into the committed
- * preview SVGs and wires them into each component's structure-value YAML.
- *
  *   node scripts/previews/build.mjs [--only <substring>] [--check]
  *
- *   --only <str>   Only build components whose key contains <str>.
- *   --check        Don't write; exit 1 if any output would change (CI drift).
- *
- * Deterministic and browser-free: same recipes → same SVGs. A component's key
- * is its directory path under `src/components/` (the `_component` string).
+ *   --check   Don't write; exit 1 if any output would change (CI drift).
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
@@ -25,8 +18,6 @@ const args = process.argv.slice(2);
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 const checkOnly = args.includes("--check");
 
-// A recipe lives beside its component; the component key is the recipe's
-// directory relative to src/components/ (POSIX-separated).
 function keyForRecipe(file) {
   return relative(componentsDir, dirname(join(root, file)))
     .split(sep)
@@ -75,7 +66,6 @@ for (const { file, key } of recipes) {
     }
 
     if (!checkOnly) {
-      // Wire the SVG path into the structure-value YAML.
       const structFile = join(root, file).replace(
         /\.preview\.mjs$/,
         ".cloudcannon.structure-value.yml"
@@ -87,8 +77,6 @@ for (const { file, key } of recipes) {
         if (wired === "written") wiredCount++;
       }
 
-      // Components that are also MDX snippets get the same thumbnail in the
-      // snippet picker. Only some components have a snippets file.
       const snippetFile = join(root, file).replace(/\.preview\.mjs$/, ".cloudcannon.snippets.yml");
 
       if (existsSync(snippetFile)) {

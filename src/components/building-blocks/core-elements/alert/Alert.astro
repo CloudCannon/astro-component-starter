@@ -6,8 +6,7 @@ import Icon from "@core-elements/icon/Icon.astro";
 
 const {
   variant = "info",
-  // A live-region alert (a form's success message) needs `status`/`alert`;
-  // Astro keeps the first `role` it sees, so a spread one never lands.
+  // A prop, not a spread attribute: Astro keeps the first `role`, so a spread one never lands.
   role = "note",
   title = "",
   text = "",
@@ -91,13 +90,10 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
       display: flex;
       gap: var(--spacing-md);
 
-      /* A full-width alert is unreadable — cap at prose width even inside a
-         wide section. */
       max-width: var(--content-width-lg);
       padding: var(--spacing-lg);
 
-      /* The variant class rides on `.alert-content` — a prop-driven class on a
-         region root goes stale in the editor — so `:has()` hoists it back. */
+      /* A prop-driven class on the root goes stale in the editor; `:has()` hoists it. */
       &:has(> .alert-content.variant-success) {
         --alert-accent: var(--color-success);
         --alert-bg: var(--color-success-bg-subtle);
@@ -122,9 +118,7 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
         --alert-border: var(--color-border);
       }
 
-      /* Center the icon on the first line of the adjacent text: half the
-         difference between that line's box and the icon's own 1em height.
-         Body-only alerts align to a body line; a title's line is taller. */
+      /* Centres the icon on the first text line; a title's line is taller than a body line. */
       > .icon {
         color: var(--alert-accent);
         flex-shrink: 0;
@@ -149,7 +143,7 @@ if (!_component && !hasText && !hasSlotContent && !isNonEmptyString(title)) retu
         color: var(--color-text);
       }
 
-      /* Body copy stays --color-text so it never drops below AA on the tint. */
+      /* Not the accent: that drops below AA on the tint. */
       .alert-text {
         color: var(--color-text);
 

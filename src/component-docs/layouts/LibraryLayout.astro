@@ -62,9 +62,7 @@ const contentSections = props.frontmatter?.contentSections || [];
     ) : null}
     <script>
       if (window.inEditorMode) {
-        // Pages ship only the component CSS their own markup uses (see
-        // `scripts/build/pruneCss.mjs`). The editor renders components that
-        // were never in the HTML, so it needs the whole sheet.
+        // The editor renders components the pruned page CSS never kept (scripts/build/pruneCss.mjs).
         const full = document.createElement("style");
         full.textContent = '@import url("/_astro/components-full.css");';
         document.head.append(full);

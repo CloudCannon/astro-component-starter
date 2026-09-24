@@ -80,9 +80,6 @@ const {
         )}
       </div>
       <div class="content-container">
-        {/* The same block editors can place on a page — it owns the nav/list
-            semantics, the 44px targets, and the new-tab rel attributes, so the
-            footer doesn't hand-roll a second social row. */}
         <SocialLinks
           class="footer-socials"
           links={socials}
@@ -101,8 +98,6 @@ const {
     .footer {
       container-type: inline-size;
 
-      /* Stacked footer: the socials centre under the legal line rather than
-         sitting hard against the edge. */
       .footer-socials {
         @container (max-width: 639px) {
           .social-links-list {

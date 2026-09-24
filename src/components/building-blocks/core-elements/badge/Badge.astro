@@ -122,8 +122,7 @@ if (!_component && !hasText && !hasIcon && !Astro.slots.has("default")) return;
           color: var(--color-danger);
         }
 
-        /* Opaque base surface — sits on tints and imagery, and follows the
-           active theme (white in light, near-black in dark). */
+        /* Opaque: sits on tints and imagery. */
         &.variant-plain {
           background-color: var(--color-bg-plain);
           border-color: var(--color-border-plain);
@@ -179,8 +178,7 @@ if (!_component && !hasText && !hasIcon && !Astro.slots.has("default")) return;
         color: var(--color-text-muted);
       }
 
-      /* The alignment class rides on the inner box — a prop-driven class on a
-         region root goes stale in the editor — so `:has()` hoists it back. */
+      /* A prop-driven class on a region root goes stale in the editor, hence `:has()`. */
       &:has(> .badge-inner.align-start) {
         display: block;
         text-align: start;

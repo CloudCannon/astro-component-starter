@@ -3,10 +3,7 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { getBlogPostsSortedByDate } from "../utils/blog";
 
-// Generated rather than a static `public/llms.txt` for the same reason as
-// robots.txt: a hand-maintained list falls behind the content the moment a page
-// is added, and nothing fails when it does — it just quietly under-reports the
-// site. `noindex` pages are omitted to match what the sitemap advertises.
+// `noindex` pages are omitted to match the sitemap.
 const line = (title: string, path: string, description?: string) =>
   description ? `- [${title}](${path}): ${description}` : `- [${title}](${path})`;
 

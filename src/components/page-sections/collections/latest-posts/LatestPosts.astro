@@ -34,11 +34,7 @@ const {
 
 const postCount = Math.max(1, Math.round(Number(count) || 3));
 
-// The first data-driven section in the library. The fetch is gated on SSR so
-// the CloudCannon Visual Editor's client-side render (live-editing.js bundles
-// every component for the browser) never sees `astro:content` — the branch is
-// compile-time dead there. In the editor `posts` stays empty and the
-// placeholder cards below render instead.
+// SSR-gated so the editor's browser bundle never sees `astro:content`; there `posts` stays empty.
 let posts: any[] = [];
 
 if (import.meta.env.SSR) {
@@ -113,9 +109,7 @@ const postCards = posts.map((post: any) =>
   })
 );
 
-// Placeholders are for the editor only, where the `astro:content` branch above
-// is compile-time dead. A published site with no matching posts must render no
-// grid at all, not fake cards.
+// Editor only: a published site with no matching posts renders no grid, not fake cards.
 const showingPlaceholders = !import.meta.env.SSR && postCards.length === 0;
 const cards = showingPlaceholders
   ? Array.from({ length: Math.min(postCount, 6) }, () =>

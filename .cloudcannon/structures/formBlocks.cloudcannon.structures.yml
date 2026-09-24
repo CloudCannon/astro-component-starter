@@ -1,14 +1,4 @@
-# formBlocks — the block picker for fields inside a form. It is consumed via
-# `_structures.formBlocks` by the `formBlocks` array inputs of
-# `building-blocks/forms/form` and `page-sections/conversion/cta-form`.
-#
-# The glob owns the list — any form component with a co-located
-# `*.cloudcannon.structure-value.yml` is offered automatically.
-#
-# Intentional exclusions (see docs/ARCHITECTURE.md, "Structured editing"):
-#   - form:     must not be nestable inside its own blocks array.
-#   - segments: hidden from the picker but still usable directly in content;
-#               delete the exclusion line to offer it to editors again.
+# Exclusions: `form` must not nest in itself; `segments` stays usable in content, just unpicked.
 formBlocks:
   id_key: _component
   style: modal

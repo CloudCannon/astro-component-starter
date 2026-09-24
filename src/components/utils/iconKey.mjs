@@ -1,18 +1,10 @@
-/**
- * Shared icon-id derivation, imported by `icons.ts` (the render-time registry)
- * and `scripts/icons/sync.mjs` (the CloudCannon picker + generated types).
- * Change it only here — a divergence silently breaks the picker.
- *
- * Keep this dependency-free ESM so it loads from Astro frontmatter and plain
- * `node` alike.
- */
+// Shared by `icons.ts` and `scripts/icons/sync.mjs`; a divergence silently breaks the picker.
+// Keep it dependency-free ESM so plain `node` can load it.
 
-/** Everything up to and including this prefix is stripped from a path. */
 const ICONS_DIR = "src/icons/";
 
 /**
- * Derive an icon id from a path to its SVG. Accepts a Vite glob key, an OS path
- * with backslashes, or a path already relative to `src/icons/`.
+ * Accepts a Vite glob key, a backslashed OS path, or a path relative to `src/icons/`.
  *
  * @param {string} path path to an SVG file.
  * @returns {string} the id used to reference the icon (e.g. "social/github").

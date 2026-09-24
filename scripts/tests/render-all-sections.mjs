@@ -1,14 +1,4 @@
-/**
- * Render-everything smoke test.
- *
- * Assembles a temporary page whose `pageSections` contains the default
- * `value` of every structure-value file (i.e. every component offered in the
- * CloudCannon page builder), then runs a production build. If any component
- * throws on its own advertised defaults — or a `_component` path points at a
- * component that no longer exists — the build fails and so does this script.
- *
- *   node scripts/tests/render-all-sections.mjs
- */
+// Builds one temporary page holding every structure-value default; fails if any throws.
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -18,9 +8,7 @@ import * as yaml from "js-yaml";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const fixturePath = join(root, "src/content/pages/kitchen-sink-render-test.md");
 
-// Form fields live inside `formBlocks` arrays, not `pageSections` (they have
-// inputs.yml but no structure-value.yml), so globbing structure-values gives
-// exactly the set of blocks a CloudCannon editor can place on a page.
+// Form fields have no structure-value.yml, so this glob is exactly the placeable set.
 const structureFiles = await glob("src/components/**/*.cloudcannon.structure-value.yml", {
   cwd: root,
 });

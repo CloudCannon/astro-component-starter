@@ -10,8 +10,7 @@ import {
 
 const B = band(960);
 
-// Four oversized number bars over small uppercase labels, split by hairline
-// rules — the size jump and rules distinguish it from feature-grid and steps.
+// The size jump and hairline rules distinguish it from feature-grid and steps.
 export default preview({
   width: B.w,
   draw: [

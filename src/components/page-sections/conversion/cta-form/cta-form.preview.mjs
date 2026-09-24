@@ -12,8 +12,7 @@ import {
 
 const B = band(960);
 
-// Copy plus a three-field contact form on the left, a tall photo on the right.
-// The form is what separates this from `cta-split`.
+// The form is what separates it from `cta-split`.
 const FIELDS = [
   { label: 88, y: 156, h: 44 },
   { label: 78, y: 242, h: 44 },

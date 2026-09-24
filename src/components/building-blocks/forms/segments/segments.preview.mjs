@@ -12,8 +12,6 @@ import {
 
 const B = band(960);
 
-// Three adjacent segments, the first one filled. Each carries an icon plus a
-// label so the active segment's contents invert to paper and stay legible.
 export default preview({
   width: B.w,
   draw: [

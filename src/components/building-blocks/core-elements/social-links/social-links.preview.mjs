@@ -1,7 +1,6 @@
 import { preview, box, glyph, ink, onInk } from "../../../../../scripts/previews/kit.mjs";
 
-// Four ghost glyph squares over four solid ink tiles — showing both variants
-// distinguishes this from button-group. Exempt from the width bands.
+// Exempt from the width bands.
 export default preview({
   width: 280,
   exempt: true,

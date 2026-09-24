@@ -1,7 +1,4 @@
-/** Which page numbers a pagination bar renders: a window around the current
- *  page, plus optional jumps to the first and last pages. Pages are 1-based;
- *  the window is trimmed so the whole bar never exceeds `maxVisiblePages`
- *  items, ellipses excluded. Pure, so it unit-tests. */
+/** Pages are 1-based; the bar never exceeds `maxVisiblePages` items, ellipses excluded. */
 export type PaginationWindow = {
   pages: number[];
   showFirst: boolean;
@@ -30,9 +27,7 @@ export function paginationWindow(
     endIndex - startIndex + 1 + (showFirst ? 1 : 0) + (endIndex < lastIndex ? 1 : 0);
 
   if (totalVisible > maxVisiblePages && (showFirst || endIndex < lastIndex)) {
-    // Trim the tail first, but never past the current page: on the last page
-    // that used to push it out of the window, so it rendered as a plain
-    // self-link with no `aria-current`. Any leftover comes off the head.
+    // Trim the tail first but never past the current page, or it renders without `aria-current`.
     const currentIndex = currentPage - 1;
     const excess = totalVisible - maxVisiblePages;
     const trimEnd = Math.min(excess, Math.max(0, endIndex - Math.max(startIndex, currentIndex)));

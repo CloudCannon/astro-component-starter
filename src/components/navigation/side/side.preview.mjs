@@ -12,9 +12,7 @@ import {
 
 const B = band(960);
 
-// A tinted sidebar with a section title, a rule, one active link and five
-// inactive ones — beside the page content it navigates. The content column is
-// what makes this read as a sidebar rather than a standalone menu.
+// The content column is what makes this read as a sidebar, not a standalone menu.
 const LINKS = [160, 210, 150, 180, 140];
 
 export default preview({

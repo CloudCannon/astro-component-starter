@@ -1,5 +1,3 @@
-/** Hosted-video consent hydration and autoplay repair for Video. */
-
 function hydrateHostedVideos(root: ParentNode = document): void {
   if (window.inEditorMode) return;
 
@@ -30,7 +28,6 @@ function hydrateHostedVideos(root: ParentNode = document): void {
 
 const facadeLoaded = { vimeo: false, youtube: false };
 
-/** A facade library registers its custom element on import, so load one only when a player needs it. */
 function loadFacade(facade: "vimeo" | "youtube"): void {
   if (facadeLoaded[facade]) return;
   facadeLoaded[facade] = true;
@@ -39,8 +36,7 @@ function loadFacade(facade: "vimeo" | "youtube"): void {
       ? import("@choctawnationofoklahoma/lite-vimeo")
       : import("@justinribeiro/lite-youtube")
   ).catch(() => {
-    // A failed fetch (offline, dropped chunk) must not permanently wedge the
-    // player: reset so the next mount retries and upgrades the element.
+    // Reset so a failed fetch doesn't wedge the player; the next mount retries.
     facadeLoaded[facade] = false;
   });
 }
@@ -69,9 +65,7 @@ function mountHostedVideo(
   }
 
   if (autoplay) {
-    // lite-youtube's autoload path pins autoplay=0 in the embed URL, and
-    // YouTube honours the first of a duplicated param, so an autoplaying
-    // YouTube video mounts a plain lazy iframe instead of the facade.
+    // Not the facade: lite-youtube pins autoplay=0 and YouTube honours the first duplicated param.
     const params = new URLSearchParams({ autoplay: "1", mute: "1", playsinline: "1" });
 
     if (loop) {
@@ -97,8 +91,7 @@ function mountHostedVideo(
   player.setAttribute("videoid", id);
   player.setAttribute("videotitle", title);
   player.setAttribute("nocookie", "");
-  // lite-youtube interpolates `params` into the embed URL unconditionally, so
-  // an absent attribute renders the literal string "null" in the query.
+  // Always set: an absent `params` puts the literal "null" in the embed URL.
   player.setAttribute("params", loop ? `loop=1&playlist=${id}` : "");
   container.replaceChildren(player);
 }

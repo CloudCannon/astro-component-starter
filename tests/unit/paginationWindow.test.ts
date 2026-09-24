@@ -34,8 +34,7 @@ describe("paginationWindow", () => {
 
     expect(pages).toEqual([7, 8, 9, 10]);
     expect(showFirst).toBe(true);
-    // Without the tail clamp, page 10 fell out of the window and rendered as a
-    // plain link to itself with no `aria-current`.
+    // Guards the tail clamp: otherwise page 10 renders as a link to itself.
     expect(showLast).toBe(false);
   });
 

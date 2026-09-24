@@ -2,9 +2,6 @@ import { preview, band, bar, field } from "../../../../../scripts/previews/kit.m
 
 const B = band(760);
 
-// A hidden field renders nothing on the page, so the preview stands in for what
-// it *is*: a key/value pair carried with the form. The dashed outline and the
-// half-opacity contents are the "not rendered" cue.
 export default preview({
   width: B.w,
   draw: [

@@ -20,16 +20,12 @@ const {
 const groupId = generateFieldId("segments", htmlAttributes.id, name || title);
 const inputType = multiple ? "checkbox" : "radio";
 
-// Native `required` on one checkbox of a group means "tick this box", not
-// "pick at least one" — only radio groups can express the group constraint.
+// Native `required` on a checkbox means "tick this box", not "pick at least one".
 const requireEachInput = required && !multiple;
 ---
 
-{/* A `<fieldset>` maps to `group`, which doesn't support `aria-required`;
-    only the radio case gets `radiogroup` (same shape as ChoiceGroup). The
-    checkbox case keeps the native `required` on the first input. The explicit
-    `aria-labelledby` exists because a `<legend>` does not reliably name a
-    fieldset whose role has been overridden. */}
+{/* `group` doesn't support `aria-required`, hence `radiogroup`; a `<legend>` doesn't
+    reliably name a fieldset whose role is overridden, hence `aria-labelledby`. */}
 <fieldset
   class:list={["segments", className]}
   role={multiple ? undefined : "radiogroup"}
@@ -56,8 +52,7 @@ const requireEachInput = required && !multiple;
   )}
   <div class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}>
     {
-      /* `aria-label` on the input for icon-only segments: they render no label
-         text and the icon is aria-hidden, so the control is otherwise unnamed. */
+      /* Icon-only segments render no label text, so the input needs `aria-label`. */
       options.map((option: SegmentOption, index: number) => (
         <label class="segments-option">
           <input
@@ -110,10 +105,7 @@ const requireEachInput = required && !multiple;
       }
 
       .segments-options {
-        /* A long set scrolls rather than overflowing the form: the joined-pill
-           look depends on the options staying on one row. The padding/negative
-           margin pair keeps the scroll box from clipping a segment's focus
-           ring, which sits outside the segment's own box. */
+        /* The padding/negative-margin pair stops the scroll box clipping focus rings. */
         --segments-focus-room: calc(var(--focus-ring-width) + 2px);
 
         display: flex;
@@ -128,9 +120,7 @@ const requireEachInput = required && !multiple;
         flex-shrink: 0;
         position: relative;
 
-        /* Visually hidden but focusable (same pattern as Toggle), so the
-           group stays keyboard-operable: arrow keys move between radios,
-           Space toggles checkboxes. */
+        /* Hidden but focusable, so arrow keys and Space still operate the group. */
         .segments-field {
           height: 1px;
           margin: 0;

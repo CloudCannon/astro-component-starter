@@ -13,8 +13,7 @@ import {
 
 const B = band(960);
 
-// Three plan cards under a centred header. The cues vs other "grid of things"
-// sections: a loud price bar, a bottom CTA pill, and the middle card's badge.
+// Cues vs other grid sections: the loud price bar, the CTA pill, the middle card's badge.
 const CARD_X = [160, 488, 816];
 
 export default preview({

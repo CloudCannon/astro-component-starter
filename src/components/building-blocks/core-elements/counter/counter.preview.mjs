@@ -1,7 +1,6 @@
 import { preview, box, glyph, subject } from "../../../../../scripts/previews/kit.mjs";
 
-// Three tall digit plates between a short prefix and suffix — the silhouette of
-// a big animated number. Exempt: a lone stat stretched to a band reads as bars.
+// Exempt: a lone stat stretched to a band reads as bars.
 export default preview({
   width: 302,
   exempt: true,

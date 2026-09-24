@@ -49,9 +49,6 @@ const {
   />
   {logos?.length > 0 &&
     (scrolling ? (
-      /* Marquee mode: the Carousel wrapper's auto-scroll does the work — it
-           already hides the arrows and indicators, and honors
-           prefers-reduced-motion (the strip then sits still, fully readable). */
       <Carousel
         class:list={["logo-cloud-marquee", grayscale && "grayscale"]}
         label={sectionLabel || heading || "Client logos"}
@@ -142,8 +139,6 @@ const {
         justify-content: center;
       }
 
-      /* Marquee mode: the carousel replaces the grid, so it inherits the
-         grid's top spacing and its slides carry the item centring. */
       .logo-cloud-marquee {
         .slide__content {
           display: flex;
@@ -154,8 +149,6 @@ const {
       .logo-cloud-logo {
         display: block;
 
-        /* Editor-uploaded logos come in arbitrary aspect ratios — constrain by
-           height so the strip keeps an even optical line. */
         img {
           height: var(--spacing-2xl);
           max-width: 100%;
@@ -164,16 +157,12 @@ const {
         }
       }
 
-      /* The grayscale class rides on the grid/marquee, the only elements that
-         carry it — a prop-driven class on a region root goes stale in the
-         editor. */
+      /* Not on the root: a prop-driven class on a region root goes stale in the editor. */
       .grayscale .logo-cloud-logo {
         filter: grayscale(1);
         opacity: 0.75;
       }
 
-      /* Link affordances only — static marks do not react. Grayscale
-         restores brand color; full-color logos scale up instead. */
       .grayscale a.logo-cloud-logo {
         transition:
           filter var(--animation-normal) var(--ease-in-out),

@@ -24,10 +24,7 @@ const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-// The component library's button pages are palettes of inert samples (a variant
-// or size with no destination), so the authored-content warning below only
-// makes sense on real pages — `/` and everything else. `Astro.url` is absent in
-// CloudCannon's editable-regions re-render, hence the optional chain.
+// `Astro.url` is absent in CloudCannon's editable-regions re-render.
 const isLibraryPage = Astro.url?.pathname?.startsWith("/component-docs") ?? false;
 
 if (
@@ -65,10 +62,8 @@ const tagKeys = new Set<string>([
   "tabIndex",
   "popovertarget",
   "popovertargetaction",
-  // Toggle-button state must sit on the real <button> to mean anything.
   "aria-pressed",
-  // Dialog trigger state: `aria-expanded` is server-rendered false and flipped
-  // by modal/setup.ts; `aria-haspopup` announces what opens.
+  // `aria-expanded` is flipped by modal/setup.ts.
   "aria-haspopup",
   "aria-expanded",
 ]);
@@ -183,9 +178,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           outline-offset: 2px;
         }
 
-        /* An icon-only button has no text to grow its hit area, so it carries
-           the `tap-target` utility (see styles/_utils.css) — the overlay needs
-           this positioning context. */
+        /* Positioning context for the `tap-target` overlay. */
         &.icon-only {
           padding: var(--spacing-em-xs);
           position: relative;
@@ -226,8 +219,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           border-color: var(--color-border-strong);
           color: var(--color-text-strong);
 
-          /* A tint of the text colour, not a surface token: it has to read on
-             any backing (page, dialog footer, inverse banner). */
+          /* Not a surface token: it has to read on any backing. */
           &:hover,
           &:focus {
             background-color: color-mix(in srgb, var(--color-text-strong) 12%, transparent);

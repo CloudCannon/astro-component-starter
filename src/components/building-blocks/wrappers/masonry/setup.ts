@@ -1,8 +1,4 @@
-/**
- * Masonry wrapper (`.masonry`) — technique lives in `utils/masonryEnhance`.
- * Used by `Masonry.astro`'s inline script and by `editor-live-sync.js`, where
- * inline scripts don't run.
- */
+/** Also run by `editor-live-sync.js`, where inline scripts don't run. */
 
 import { enhanceMasonryLayout } from "../../../utils/masonryEnhance";
 

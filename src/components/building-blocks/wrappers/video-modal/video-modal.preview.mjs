@@ -14,8 +14,6 @@ import {
 
 const B = band(760);
 
-// A trigger with a leading play dot, above the player. Close sits in a tile
-// above the video (lightbox chrome) rather than on the dialog plate.
 export default preview({
   width: B.w,
   draw: [

@@ -1,18 +1,6 @@
 /**
- * Nesting-context registration policy.
- *
- * `.cloudcannon/structures/*Sections.*.yml` decide which components the editor
- * offers inside each slot. The policy — two uniform tiers, and why exclusions
- * must be transitively closed — is in
- * `.agents/skills/create-component/cloudcannon-yaml.md`.
- *
- * Two checks:
- *   1. Every context in a tier lists that tier's exact set.
- *   2. No context excludes a component that is reachable anyway through a
- *      wrapper it does allow — such an exclusion restricts nothing and only
- *      makes the picker inconsistent.
- *
- *   node scripts/cms/lint-nesting.mjs
+ * Every `*Sections` context lists its tier's exact set, and no exclusion is reachable
+ * through an allowed wrapper. Policy: `.agents/skills/create-component/cloudcannon-yaml.md`.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -63,9 +51,7 @@ const NARROW = [
   "stepsItemSections",
 ];
 
-/** The context a component's own slot exposes. `null` = no slot, or a portal:
- *  a modal's panel renders in the top layer, so its contents are not nested
- *  inside whatever holds the modal. */
+/** `null` = no slot, or a portal (a modal's contents aren't nested inside its holder). */
 const CHILD_CONTEXT = {
   accordion: "accordionSections",
   "bento-box": "bentoBoxSections",
@@ -122,7 +108,6 @@ for (const [tier, names, expected] of [
   }
 }
 
-/** Components reachable from a context through the wrappers it allows. */
 function reachable(name) {
   const seen = new Set();
   const queue = [name];

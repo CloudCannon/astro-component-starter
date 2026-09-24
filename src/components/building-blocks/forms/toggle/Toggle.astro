@@ -3,7 +3,7 @@ import { generateFieldId } from "@component-utils/formField";
 
 const {
   label,
-  /** Text before the switch naming its off state ("Monthly" beside "Annual"). Hidden from assistive tech: the switch is named by `label` alone. */
+  /** Hidden from assistive tech: the switch is named by `label` alone. */
   offLabel,
   name,
   checked = false,
@@ -88,7 +88,6 @@ const fieldId = generateFieldId("toggle", customId, name || label);
         flex: 1;
       }
 
-      /* Two-sided: both labels hug the switch, and the unselected side mutes. */
       .toggle-container:has(.toggle-off-label) {
         width: auto;
 
@@ -132,8 +131,7 @@ const fieldId = generateFieldId("toggle", customId, name || label);
         background-color: var(--color-bg);
         border-radius: var(--radius-full);
         inset-block-end: 3px;
-        /* State-tinted knob halo (dark in light theme, light in dark theme via
-           --color-state-active) — intentionally not an elevation-scale shadow. */
+        /* Deliberately not an elevation shadow: tinted per theme via --color-state-active. */
         box-shadow: 0 2px 4px var(--color-state-active);
         content: "";
         height: 20px;

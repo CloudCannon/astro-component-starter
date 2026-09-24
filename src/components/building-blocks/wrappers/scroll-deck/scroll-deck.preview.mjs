@@ -16,10 +16,6 @@ const B = band(960);
 const STEP = 40;
 const RAIL_X = B.right - 7;
 
-// Three cards pinned one over the other: each card behind is inset and dropped
-// by one step, so both shoulders read as paper edges. Only the front card
-// carries content — the stack itself is the subject, and it has to survive
-// being seen at contact-sheet size next to a plain Card.
 export default preview({
   width: B.w,
   draw: [

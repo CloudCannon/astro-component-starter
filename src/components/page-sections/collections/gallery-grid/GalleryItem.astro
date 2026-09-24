@@ -1,12 +1,7 @@
 ---
 import Image from "@core-elements/image/Image.astro";
 
-/**
- * Private helper for GalleryGrid: one tile and its caption. Not a CloudCannon
- * component — no YAML siblings; GalleryGrid owns the `images` array binding.
- * The figure is masonryEnhance's measurement probe, so it must stay the
- * item's only child.
- */
+/** The figure is masonryEnhance's measurement probe, so it must stay the item's only child. */
 const {
   image,
   alt,

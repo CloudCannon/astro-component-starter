@@ -2,10 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import * as yaml from "js-yaml";
 
-/**
- * The single reader for `.cloudcannon/structures` — componentConfig and the
- * preview-renders routes must see the same set of files.
- */
+/** Single reader for `.cloudcannon/structures`: componentConfig and preview-renders must see the same files. */
 export function loadGlobalStructures(dir = ".cloudcannon/structures"): Record<string, unknown> {
   const merged: Record<string, unknown> = {};
 

@@ -11,9 +11,7 @@ import {
 
 const B = band(760);
 
-// Three portrait cards under a centred header, name and bio BELOW the photo —
-// that outside-the-frame text separates it from the generic `grid` wrapper.
-// Explicit column x values keep the built SVG diff-clean against the reference.
+// Text below the photo is what separates this from the `grid` wrapper's preview.
 const CARDS = [
   { x: B.left, text: 279 },
   { x: 524, text: 543 },

@@ -11,9 +11,6 @@ import { join } from "node:path";
 
 const { frontmatter, configData, examples = [], componentKey = "", slotDocs = [] } = Astro.props;
 
-// Docs entries are optional enrichment: a component with no hand-written docs
-// entry still gets a full page, falling back to the structure-value label and
-// a formatted version of its own key.
 const lastKeySegment = componentKey.split("/").pop() || componentKey;
 const title = frontmatter.title || configData?.label || formatDisplayName(lastKeySegment);
 const description = frontmatter.description || configData?.description || "";
@@ -23,14 +20,9 @@ const meta = {
   title,
 };
 
-// LibraryLayout only sees frontmatter, so give it the resolved title/description
-// too — otherwise a docs-less page would fall back to "Component Library".
+// LibraryLayout only sees frontmatter; without these a docs-less page is titled "Component Library".
 const layoutFrontmatter = { ...frontmatter, title, description };
 
-// Preview thumbnails are generated to public/component-previews/<componentKey>.svg
-// (see scripts/previews/). They build as static assets, so we can check the file
-// on disk in the frontmatter and only render the <img> when it actually exists —
-// avoiding a broken image for components without a generated preview.
 const previewSrc = componentKey ? `/component-previews/${componentKey}.svg` : "";
 const hasPreview =
   !!componentKey &&
@@ -44,10 +36,7 @@ let primaryExample = examples.find(
   (example: any) => example && example.id && example.id.includes("/primary")
 );
 
-// No hand-authored primary example on disk: synthesize one from the
-// structure-value default `value` so a docs-less component still gets a
-// working preview. Shape-compatible with what ComponentViewer reads
-// (example.id, example.data.title/blocks/spacing).
+// Must stay shape-compatible with what ComponentViewer reads.
 if (!primaryExample && configData?.value) {
   primaryExample = {
     id: `components/${componentKey}/examples/primary`,
@@ -93,10 +82,6 @@ if (frontmatterExamples.length > 0) {
     };
   });
 } else {
-  // No frontmatter-driven example groups (either no docs entry at all, or a
-  // docs entry that doesn't curate its examples). Fall back to one group per
-  // non-primary example found on disk, alphabetical by slug, so the examples
-  // still show up somewhere.
   const nonPrimaryExamples = examples.filter(
     (example: any) => !(example && example.id && example.id.includes("/primary"))
   );
@@ -234,19 +219,13 @@ if (frontmatterExamples.length > 0) {
 </LibraryLayout>
 
 <style>
-  /* Title/description on the left, preview thumbnail on the right. The preview
-     is a picker-scale mockup, so it is sized as a thumbnail rather than stretched
-     to the content width. Below 640px the thumbnail wraps under the text. */
   .component-hero {
     align-items: start;
     display: flex;
     flex-wrap: wrap;
-    /* Row gap only applies once the thumbnail wraps under the text, so no media
-       query is needed to keep it clear of the description. */
     gap: var(--spacing-lg) var(--spacing-xl);
     justify-content: space-between;
-    /* The h1's own top margin is moved here so the thumbnail aligns with the
-       title rather than floating above it. */
+    /* Replaces the h1's top margin so the thumbnail aligns with the title. */
     margin-block: var(--spacing-2xl) var(--spacing-lg);
   }
 

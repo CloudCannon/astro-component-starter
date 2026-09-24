@@ -2,18 +2,8 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { kebab } from "./fonts.js";
 
-/**
- * Which codepoints the registered card fonts can actually draw.
- *
- * Fontsource ships the coverage alongside the bytes: the aggregate per-weight
- * stylesheet (`@fontsource/inter/400.css`) carries a `unicode-range` per
- * `@font-face`, while the per-subset file (`latin-400.css`) does not. Reading it
- * keeps this check correct when a site changes subsets.
- *
- * Uncovered text renders as a "NO GLYPH" box, so this only warns — naming the
- * codepoints and the fix — rather than withholding the card, which would hide a
- * one-line problem.
- */
+// Reads `unicode-range` from the per-weight stylesheet (`400.css`); the per-subset
+// file (`latin-400.css`) has none.
 
 const require = createRequire(import.meta.url);
 
@@ -40,7 +30,6 @@ function parseUnicodeRange(value: string): Range[] {
       continue;
     }
 
-    // A `?` wildcard stands for a nibble, e.g. `U+04??`.
     if (cleaned.includes("?")) {
       const from = Number.parseInt(cleaned.replaceAll("?", "0"), 16);
       const to = Number.parseInt(cleaned.replaceAll("?", "F"), 16);
@@ -57,7 +46,6 @@ function parseUnicodeRange(value: string): Range[] {
   return ranges;
 }
 
-/** Ranges for one fontsource face, matched by the file the caller registered. */
 export function fontsourceCoverage(family: string, weight: number, subset = "latin"): Range[] {
   const slug = kebab(family);
   const wanted = `${slug}-${subset}-${weight}-normal.woff2`;
@@ -84,10 +72,7 @@ export function fontsourceCoverage(family: string, weight: number, subset = "lat
 const covers = (ranges: Range[], codepoint: number) =>
   ranges.some(({ from, to }) => codepoint >= from && codepoint <= to);
 
-/**
- * Emoji, symbols, and the joiners/selectors that bind them into sequences. The
- * vendored COLR font covers these, so they are never reported as uncovered.
- */
+// Covered by the vendored COLR font.
 function isEmojiOrSymbol(codepoint: number): boolean {
   return (
     (codepoint >= 0x1f000 && codepoint <= 0x1ffff) ||
@@ -101,15 +86,9 @@ function isEmojiOrSymbol(codepoint: number): boolean {
 }
 
 export interface CoverageReport {
-  /** Distinct characters no registered font covers, in first-seen order. */
   missing: string[];
 }
 
-/**
- * Report the characters in `texts` that no registered face covers. `ranges` is
- * the union of every text face's coverage; emoji and symbols are assumed
- * covered by the COLR font.
- */
 export function uncoveredCharacters(texts: string[], ranges: Range[]): CoverageReport {
   const missing = new Set<string>();
 

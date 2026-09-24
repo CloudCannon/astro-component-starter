@@ -1,24 +1,12 @@
 /**
- * Proves `scripts/build/pruneCss.mjs` removed nothing that renders.
- *
- * Serves an unpruned dist and the pruned dist side by side and compares, for
- * every element and its `::before`/`::after`/`::marker`/`::placeholder`, every
- * CSS property the component stylesheet declares anywhere — plus each element's
- * bounding box, which catches layout differences no property list can enumerate.
- * Run at three viewports, in both colour schemes, before and after clicking
- * every stateful control on the page.
- *
- * Computed styles rather than screenshots: a screenshot only sees what is
- * painted in the viewport at one moment, and animation timing makes it flaky.
+ * Proves `scripts/build/pruneCss.mjs` removed nothing that renders: compares the
+ * computed styles and boxes of every element and pseudo, unpruned vs pruned.
  *
  *   node scripts/tests/css-parity.mjs <baseline-dist> [pruned-dist]
  *
  * CSS_PARITY_LIMIT=n   compare only the first n pages.
- * CSS_PARITY_ONLY=str   compare only pages whose URL contains str.
- * CSS_PARITY_EDITOR=1  load `components-full.<hash>.css` into every pruned page,
- *                      which is what editor mode does. Proves the editor's
- *                      restored sheet computes the same as the unpruned build,
- *                      even though its block order is not any one route's.
+ * CSS_PARITY_ONLY=str  compare only pages whose URL contains str.
+ * CSS_PARITY_EDITOR=1  load `components-full.<hash>.css` into pruned pages, as editor mode does.
  */
 import { serveDist, launchBrowser } from "./lib/servedDist.mjs";
 import postcss from "postcss";
@@ -33,8 +21,7 @@ const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900 },
 ];
 
-/** Longhands a declared shorthand expands to are not in the CSS text, so add
- *  every enumerated property that lives under a declared one. */
+/** A declared shorthand's longhands aren't in the CSS text, so add them from the enumeration. */
 const expandProps = (declared) => {
   const enumerated = getComputedStyle(document.body);
   const all = new Set(declared);
@@ -86,8 +73,7 @@ const capture = ({ pseudos, props }) => {
 
       geo = "";
       for (const prop of props) s += `${cs.getPropertyValue(prop)};`;
-      // Both builds are served on different ephemeral ports, and url() computes
-      // to an absolute URL.
+      // The builds run on different ports, and url() computes to an absolute URL.
       s = s.split(location.origin).join("~");
       let h = 0x811c9dc5;
 
@@ -121,7 +107,6 @@ const detail = ({ index, pseudos, props }) => {
   return { path, pseudo, style };
 };
 
-/** Click everything that changes state, so state-only rules are compared too. */
 const drive = () => {
   for (const sel of [
     "details > summary",
@@ -143,14 +128,9 @@ const drive = () => {
   return document.querySelectorAll("[aria-expanded='true'], details[open], :popover-open").length;
 };
 
-/** Finish every non-repeating animation, and wait for images to decode, so
- *  neither a mid-flight transition nor an undecoded image can make the two
- *  builds differ by a few pixels of height. Driving the page clicks the theme
- *  toggle, which swaps in the alternate image — until that decodes it has no
- *  height. */
+// The theme toggle swaps images, and an undecoded image has no height.
 const settle = async () => {
-  // Bounded: `decode()` on a lazy image that has not started loading never
-  // settles, and most of a long page's images are below the fold.
+  // Bounded: `decode()` on a lazy image that hasn't started loading never settles.
   await Promise.race([
     Promise.all(
       [...document.images].filter((img) => !img.complete).map((img) => img.decode().catch(() => {}))
@@ -193,7 +173,6 @@ if (!baselineDir) {
   process.exit(2);
 }
 
-// The pruner content-hashes the editor sheet, so find it rather than guess.
 const fullSheetFile = (await readdir(join(prunedDir, "_astro"))).find((name) =>
   /^components-full\.[0-9a-f]+\.css$/.test(name)
 );
@@ -281,8 +260,7 @@ for (const viewport of VIEWPORTS) {
           failures.push({ ...tag, kind: "element count", left: ra.count, right: rb.count });
           continue;
         }
-        // Tolerate 1px: scrollHeight is an integer rounding of a fractional page
-        // height, and every element's own box is compared below anyway.
+        // scrollHeight rounds a fractional height; element boxes are compared exactly below.
         if (Math.abs(ra.scrollHeight - rb.scrollHeight) > 1) {
           failures.push({
             ...tag,

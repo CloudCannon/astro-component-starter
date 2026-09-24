@@ -10,9 +10,7 @@ import {
 
 const B = band(760);
 
-// The whole-form wrapper: three labelled fields of different heights (text,
-// select, textarea) plus a submit. The variety is the point — it distinguishes
-// this from any single field component.
+// The mix of field heights is what distinguishes this from a single field component.
 export default preview({
   width: B.w,
   draw: [

@@ -1,17 +1,5 @@
-/**
- * Shared setup logic for the Search component.
- *
- * Used by:
- * - `Search.astro`'s inline `<script>` on the live site
- * - `editor-live-sync.js` in the CloudCannon editor, where inline scripts
- *   don't run
- *
- * Importing `@pagefind/component-ui` registers the `<pagefind-*>` custom
- * elements. The search index under `/pagefind/` only exists on built sites
- * (`npm run build` runs the Pagefind CLI); in `astro dev` run
- * `npm run search:dev` to generate one, otherwise the modal shows its
- * index-unavailable notice instead of results.
- */
+// The `/pagefind/` index only exists on built sites; in `astro dev` run `npm run search:dev`
+// or the modal shows its index-unavailable notice.
 
 import { getInstanceManager } from "@pagefind/component-ui";
 import pagefindStylesUrl from "@pagefind/component-ui/css/pagefind-component-ui.css?url";
@@ -23,11 +11,7 @@ let keyboardShortcutBound = false;
 let errorHookBound = false;
 let countsHookBound = false;
 
-/** Pull in Pagefind's stylesheet the first time search is reached for. Injected
- * as an `@import ... layer(pagefind)` rather than a plain <link>: a <link> is
- * unlayered, which outranks every layer and would beat the overrides in
- * `Search.astro`. The layer order is declared up front in `BaseLayout.astro`,
- * so arriving late does not change where it sits. */
+// Layered `@import`, not a <link>: an unlayered sheet would beat the overrides in `Search.astro`.
 function loadPagefindStyles(): void {
   if (stylesRequested) return;
   stylesRequested = true;
@@ -42,9 +26,7 @@ function currentSearchPopover(): HTMLElement | null {
   return document.querySelector<HTMLElement>(".search .modal-popover");
 }
 
-/** Cmd/Ctrl+K toggles the search modal. Bound once at document level and
- * resolving the popover at event time, so Astro view transitions can't
- * accumulate listeners pointing at detached DOM. */
+// Bound once, resolving the popover at event time, so view transitions can't stack listeners on detached DOM.
 function bindKeyboardShortcut(): void {
   if (keyboardShortcutBound) return;
   keyboardShortcutBound = true;
@@ -79,9 +61,7 @@ type PagefindSearchResponse = {
   unfilteredTotalCount?: number;
 };
 
-/** Write per-type result counts into the tab pills — key "" is the All tab,
- * `null` empties them (CSS hides empty badges). Tabs are resolved at call
- * time so view transitions can't leave the hook holding detached DOM. */
+// Key "" is the All tab; `null` empties the badges (CSS hides empty ones).
 function applyTabCounts(counts: Record<string, number> | null): void {
   document.querySelectorAll<HTMLElement>("[data-search-tab]").forEach((tab) => {
     const inner = tab.querySelector(".button-inner") ?? tab;
@@ -97,9 +77,6 @@ function applyTabCounts(counts: Record<string, number> | null): void {
   });
 }
 
-/** Render each result by cloning the build-time `SearchResult.astro`
- * template and filling in the data. Pagefind calls this via the
- * `resultTemplate` property, which wins over its own string templates. */
 function bindResultTemplate(search: HTMLElement): void {
   const results = search.querySelector<
     HTMLElement & { resultTemplate?: (_result: PagefindResult) => Node | string }
@@ -129,13 +106,10 @@ function bindResultTemplate(search: HTMLElement): void {
     const image = media?.querySelector("img");
 
     if (media && image && meta.image) {
-      // The index stores built-site asset URLs (hashed /_astro/ paths); on
-      // the dev server those 404, so drop the thumbnail rather than show a
-      // broken image.
+      // Indexed /_astro/ URLs 404 on the dev server.
       image.addEventListener("error", () => media.remove(), { once: true });
 
       try {
-        // Pagefind image paths can be relative to the indexed page.
         image.src = new URL(meta.image, new URL(url, window.location.href)).toString();
       } catch {
         image.src = meta.image;
@@ -158,10 +132,7 @@ function bindResultTemplate(search: HTMLElement): void {
     const excerpt = item.querySelector(".search-result-excerpt");
 
     if (excerpt && result.excerpt) {
-      // Excerpts carry <mark> highlight markup from our own index.
-      // `innerHTML`, not `textContent`: Pagefind wraps the query terms in
-      // <mark>. Trusted because the index is built from this site's own pages
-      // at build time — never point Pagefind at third-party content.
+      // innerHTML keeps Pagefind's <mark>s; trusted only because the index is this site's own pages.
       (excerpt.querySelector(".simple-text-inner") ?? excerpt).innerHTML = result.excerpt;
     } else {
       excerpt?.remove();
@@ -182,11 +153,7 @@ export function setupSearch(search: HTMLElement): void {
   setupModalShell(popover);
   bindKeyboardShortcut();
 
-  // Escape closes the modal — and does nothing else. Pagefind's input binds
-  // its own target-phase Escape handler that clears the query, so swallow
-  // the event in the capture phase before it gets there. The browser's
-  // popover close watcher is neither propagation-based nor cancelable, so
-  // the modal still closes (and the query survives for reopening).
+  // Stops Pagefind's Escape handler clearing the query; the popover still closes (its close watcher ignores propagation).
   popover.addEventListener(
     "keydown",
     (e) => {
@@ -197,13 +164,9 @@ export function setupSearch(search: HTMLElement): void {
 
   const instance = getInstanceManager().getInstance("default");
 
-  // The instance survives Astro view transitions while the tab UI resets to
-  // "All", so clear any sticky filter state without triggering a search
-  // (a trigger* call would eagerly load the wasm bundle on every page view).
+  // Assign directly: a trigger* call would load the wasm bundle on every page view.
   instance.searchFilters = {};
 
-  // Registered once module-wide, resolving the search element at fire time,
-  // so view transitions can't stack callbacks holding detached DOM.
   if (!errorHookBound) {
     errorHookBound = true;
     instance.on("error", () => {
@@ -213,11 +176,7 @@ export function setupSearch(search: HTMLElement): void {
     });
   }
 
-  // Tab counts ride the results event: `totalFilters` counts each type for
-  // the current term ignoring the active tab (so other tabs don't zero out),
-  // and `unfilteredTotalCount` is the All figure. Clearing the query
-  // dispatches results with no totalFilters and an empty term — the
-  // searchTerm guard empties the badges rather than showing zeros.
+  // Clearing the query dispatches results with no totalFilters; empty the badges rather than show zeros.
   if (!countsHookBound) {
     countsHookBound = true;
     instance.on("results", (result) => {
@@ -235,9 +194,6 @@ export function setupSearch(search: HTMLElement): void {
     });
   }
 
-  // Load the index as soon as the modal opens so the first keystroke
-  // searches instantly — and so a missing index surfaces the unavailable
-  // notice before the user types.
   popover.addEventListener("toggle", (e) => {
     if ((e as ToggleEvent).newState === "open") {
       loadPagefindStyles();
@@ -245,16 +201,12 @@ export function setupSearch(search: HTMLElement): void {
     }
   });
 
-  // Warm the stylesheet before the click lands, so the panel is styled when it
-  // opens rather than a frame later.
   const trigger = search.querySelector<HTMLElement>(".search-trigger");
 
   trigger?.addEventListener("pointerenter", loadPagefindStyles, { once: true });
   trigger?.addEventListener("focusin", loadPagefindStyles, { once: true });
 
-  // Tabs are Button components: `data-search-tab` sits on the outer
-  // `.button` span (clicks bubble up from the inner <button>), while
-  // `aria-pressed` lives on the inner <button> where it has meaning.
+  // `data-search-tab` is on the outer `.button` span; `aria-pressed` belongs on the inner <button>.
   const tabs = Array.from(search.querySelectorAll<HTMLElement>("[data-search-tab]"));
 
   tabs.forEach((tab) => {

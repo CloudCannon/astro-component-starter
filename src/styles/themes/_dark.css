@@ -31,8 +31,7 @@
   --color-border-strong: var(--gray-300);
   --color-border-subtle: var(--gray-700);
 
-  /* Opaque "plain" set for chrome sitting on imagery or tints (e.g. the plain
-     Badge) — the theme's base surface, so it flips with light/dark. */
+  /* Opaque "plain" set for chrome on imagery or tints (the plain Badge). */
   --color-bg-plain: var(--gray-950);
   --color-border-plain: var(--gray-700);
   --color-text-plain: var(--gray-50);

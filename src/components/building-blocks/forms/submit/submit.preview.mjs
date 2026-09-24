@@ -1,7 +1,6 @@
 import { preview, pill } from "../../../../../scripts/previews/kit.mjs";
 
-// Just the submit control, big. Exempt: this is one button, and stretching it to
-// a band would make it indistinguishable from a filled section.
+// Exempt: stretched to a band, one button reads as a filled section.
 export default preview({
   width: 220,
   exempt: true,

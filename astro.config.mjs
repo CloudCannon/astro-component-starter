@@ -12,15 +12,8 @@ import { siteFonts } from "./site-fonts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// The dev server watches the whole project root, and Vite's defaults only skip
-// `.git`, `node_modules`, `test-results` and the cache dir. Everything below is
-// generated, rewritten wholesale by a build or test script, or a separate
-// checkout — `.claude/worktrees/` alone is another four copies of `src/` and
-// `dist/`, roughly eight times the file count of the real `src/`.
-//
-// Every entry is anchored to __dirname. A bare `**/.claude/**` matches every
-// file in an agent worktree, because the worktree's own path contains
-// `.claude/` — which silently switches HMR off for the whole checkout.
+// Anchored to __dirname: a bare `**/.claude/**` matches every file in an agent
+// worktree (its own path contains `.claude/`) and silently disables HMR.
 const watchIgnored = [
   ...[
     ".claude",
@@ -41,11 +34,7 @@ export default defineConfig({
   site: "https://example.com", // TODO: Update to your production URL
   fonts: siteFonts,
   build: {
-    // Kept "always" on measured evidence: serving the CSS as one shared,
-    // cacheable stylesheet cost ~190ms FCP and ~240ms LCP on a cold Slow-4G
-    // load, because a render-blocking request adds a round trip that inlined
-    // bytes do not. `pruneCss` shrinks what gets inlined instead, so the
-    // per-page waste goes away without adding a render-blocking request.
+    // A shared stylesheet measured ~190ms FCP / ~240ms LCP slower on cold Slow-4G.
     inlineStylesheets: "always",
   },
   devToolbar: {
@@ -60,10 +49,7 @@ export default defineConfig({
   integrations: [
     editableRegions(),
     pruneOgCache(),
-    // Drops each page's unused component CSS. Add a class name to `alwaysKeep`
-    // if a component's markup is built at runtime from an assembled class name
-    // or injected by a third-party script — this reads the built HTML, so it
-    // cannot see those. Verify with `npm run test:css-parity`.
+    // Reads built HTML: list runtime-assembled or third-party-injected classes in `alwaysKeep`.
     pruneCss({ alwaysKeep: [] }),
     sitemap({
       filter: (page) => {

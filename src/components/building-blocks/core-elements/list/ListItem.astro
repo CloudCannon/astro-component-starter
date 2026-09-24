@@ -37,9 +37,7 @@ const hasIcon = showIcon && iconName;
     />
   )}
   {
-    /* The text is a <span>, not a <p>: the non-link branch wraps it in a
-       <span>, and a <p> inside phrasing content is invalid. It was styled
-       back to `display: inline` anyway. */
+    /* A <span>, not a <p>: a <p> inside the non-link branch's <span> is invalid. */
     link ? (
       <a
         href={link}

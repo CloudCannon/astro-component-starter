@@ -10,8 +10,7 @@ import {
 
 const B = band(760);
 
-// Rich text: a heading, a paragraph, then a bulleted list. The mix is the point —
-// it is what separates this from `simple-text`.
+// The heading/paragraph/list mix separates this from `simple-text`.
 const BULLETS = [120, 140, 130, 110];
 
 export default preview({

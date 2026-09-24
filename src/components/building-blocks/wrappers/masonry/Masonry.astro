@@ -78,8 +78,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
     .masonry {
       --space-before: var(--space-before-loose);
 
-      /* Named container, not the viewport: a masonry in a narrow pane on a wide
-         screen was still reading the window and laying out three columns. */
+      /* Named container, not the viewport: a masonry in a narrow pane must not read the window. */
       container: masonry / inline-size;
       width: 100%;
 
@@ -93,15 +92,12 @@ if (!_component && !hasItems && !hasSlotContent) return;
           margin-bottom: var(--masonry-gap, var(--spacing-md));
         }
 
-        /* 640px: canonical mobile breakpoint — phones always get two columns. */
         @container masonry (width >= 640px) {
           columns: var(--masonry-columns, 3);
         }
       }
 
-      /* Layer 2 — JS enhancement: grid auto-placement packs source order into
-         the shortest column. `grid-auto-rows` must match ROW_UNIT in
-         masonryEnhance.ts; row spacing comes from the spans. */
+      /* JS enhancement: `grid-auto-rows` must match ROW_UNIT in masonryEnhance.ts. */
       &[data-masonry-enhanced] > .masonry-inner {
         column-gap: var(--masonry-gap, var(--spacing-md));
         columns: auto;
@@ -119,8 +115,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
       }
 
-      /* Layer 3 — native handoff; the util no-ops behind the same check. Kept
-         minimal: the companion-property syntax is still settling. */
+      /* Native handoff; the util no-ops behind the same check. */
       @supports (display: masonry) {
         > .masonry-inner,
         &[data-masonry-enhanced] > .masonry-inner {

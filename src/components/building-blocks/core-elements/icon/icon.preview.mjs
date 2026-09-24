@@ -1,7 +1,6 @@
 import { preview, box, poly, R, surface, subject } from "../../../../../scripts/previews/kit.mjs";
 
-// A generic glyph on a big rounded plate. Exempt: stretching a single 200px
-// icon to a 560 band would turn it into a wide slab.
+// Exempt: a single 200px icon stretched to a 560 band becomes a wide slab.
 export default preview({
   width: 200,
   exempt: true,

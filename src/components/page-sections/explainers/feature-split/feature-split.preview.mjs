@@ -12,8 +12,7 @@ import {
 
 const B = band(960);
 
-// Eyebrow, heading, copy and a side-by-side button pair on the left; a tall
-// portrait photo on the right. The eyebrow is what separates it from `cta-split`.
+// The eyebrow is what separates it from `cta-split`.
 export default preview({
   width: B.w,
   draw: [

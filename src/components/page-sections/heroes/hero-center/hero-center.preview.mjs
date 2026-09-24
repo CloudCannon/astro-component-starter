@@ -2,9 +2,7 @@ import { preview, band, bar, pill, glyph } from "../../../../../scripts/previews
 
 const B = band(760);
 
-// Everything centred: eyebrow, a display heading spanning most of the band, two
-// copy lines, one button. Wider band and a `label`-weight eyebrow are what set it
-// apart from `cta-center`.
+// The wider band and `label`-weight eyebrow are what separate it from `cta-center`.
 export default preview({
   width: B.w,
   draw: [

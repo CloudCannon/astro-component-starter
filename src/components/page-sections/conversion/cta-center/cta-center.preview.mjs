@@ -2,8 +2,6 @@ import { preview, band, bar, pill } from "../../../../../scripts/previews/kit.mj
 
 const B = band(560);
 
-// Centred heading, two centred copy lines, one button. The narrowest band in the
-// set — the tight measure is what makes it read as a focused CTA, not a hero.
 export default preview({
   width: B.w,
   draw: [

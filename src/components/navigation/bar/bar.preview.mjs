@@ -11,9 +11,7 @@ import {
 
 const B = band(760);
 
-// A link row with two open dropdowns beneath it — one filled panel, one bordered
-// with a nested submenu arrow. The open menus are the component: a bare row of
-// labels would be indistinguishable from `main-nav`, which has the logo and rule.
+// The open dropdowns are what separate it from `main-nav`; a bare link row would not.
 export default preview({
   width: B.w,
   draw: [

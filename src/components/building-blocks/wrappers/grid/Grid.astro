@@ -87,13 +87,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
             auto-fill,
             minmax(min(var(--min-item-width, 200px), 100%), var(--max-item-width, 1fr))
           );
-          /* Only visible when --max-item-width caps the tracks: a few capped
-             items sit centered (the old layout=center look), not left-hugged. */
+          /* Only visible when --max-item-width caps the tracks. */
           justify-content: center;
         }
 
-        /* Container-queried, so a Grid in a narrow pane on a wide screen
-           still collapses to one column. */
         &.columns-fixed {
           grid-template-columns: minmax(0, 1fr);
 

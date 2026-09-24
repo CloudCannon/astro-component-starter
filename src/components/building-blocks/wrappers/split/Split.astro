@@ -69,14 +69,10 @@ const finalDistributionMode = reverse
   ? getReversedDistributionMode(distributionMode)
   : distributionMode;
 
-// Keyed by what the emitted rule actually varies on, not by instance: two
-// splits with the same breakpoint share it, and the selector survives an
-// editor re-render that a per-instance id would not.
+// Not per-instance: a per-instance id would not survive an editor re-render.
 const splitId = `${minSplitWidth}${reverseOrderOnMobile ? "-reverse" : ""}`;
 ---
 
-{/* A <div>, not a <section>: this is a layout wrapper with no accessible
-    name, which maps to a generic container anyway. */}
 <div
   class:list={["split", "stackable", className]}
   {...htmlAttributes}

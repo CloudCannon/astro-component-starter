@@ -1,20 +1,7 @@
-# Three-level navigation item structures, shared by every nav component
-# (`bar`, `main-nav`, `mobile`, `side`). Must live here, not in a component's
-# inputs.yml — `_structures` is not a valid key in an `_inputs_from_glob` file,
-# and these names are global, so per-component copies silently collide.
-#
-# `path` is a `url` input with the file/email/telephone options suppressed, since
-# nav items point at site pages. Levels 1 and 2 nest via `children`; level 3 has
-# none.
-#
-# Two level-1 structures: `navItemLevel1` (plain items only) and
-# `navItemLevel1MegaMenu` (plain + mega). Only `bar` and `main-nav` render a mega
-# panel (`mobile` flattens one into a nested list when handed the same data), so
-# only they offer the variant — `side` would drop the authored panel silently. `structures:` takes a single reference, so the mega
-# variant re-includes the plain item via the `*plain-nav-item-l1` alias below.
-# (`navData.cloudcannon.structures.yml` carries an editor-flavored sibling of
-# the mega item for `mainNav.json` — previews and inline nesting — which
-# anchors can't reach across files; keep its inputs in step with this one.)
+# Must live here: `_structures` is invalid in an `_inputs_from_glob` file, and these
+# names are global, so per-component copies collide. `side` must not offer the mega
+# variant: it silently drops the panel. `navData.cloudcannon.structures.yml` copies the
+# mega item (anchors can't cross files); keep its inputs in step with this one.
 navItemLevel1:
   values:
     - &plain-nav-item-l1

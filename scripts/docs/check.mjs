@@ -1,21 +1,5 @@
-/**
- * Lint the docs-authoring layer under `src/component-docs/content/components`
- * against the components it documents.
- *
- *   node scripts/docs/check.mjs
- *
- * Docs pages auto-derive from `src/components/**` structure-value YAML —
- * `content/components/<key>/index.md` is OPTIONAL enrichment and
- * `examples/*.md` are hand-written example blocks (frontmatter: `title` +
- * optional `spacing` + `blocks`, a component prop tree keyed by
- * `_component`). Slot metadata is derived from `.astro` source; `slots:` in
- * an index.md is a per-slot override patch. None of that is validated
- * anywhere else, so drift here silently breaks the docs viewer or an
- * example's rendered output.
- *
- * Output is one `ok`/`FAIL`/`WARN` line per thing checked, mirroring
- * `scripts/cms/lint.mjs`. FAILs exit 1; WARNs never fail the build.
- */
+// Lint `src/component-docs/content/components` (index.md, examples/*.md, `slots:`
+// overrides) against the components it documents. FAILs exit 1; WARNs never fail.
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { glob } from "glob";
@@ -37,7 +21,6 @@ const { componentKeys, byKey } = await buildComponentIndex(root);
 const indexFiles = (await glob("**/index.md", { cwd: contentRoot })).sort();
 const exampleFiles = (await glob("**/examples/*.md", { cwd: contentRoot })).sort();
 
-/** Cache of parsed frontmatter, keyed by path relative to contentRoot. */
 const fmCache = new Map();
 
 function readFm(relToContent) {
@@ -48,12 +31,7 @@ function readFm(relToContent) {
   return fm;
 }
 
-// Check 1 — Orphan docs dirs (FAIL): any dir under content/components/ that
-// carries an index.md or an examples/ dir must mirror a real component — the
-// same relative path under src/components/ with a main .astro. Docs dirs are
-// otherwise unconstrained (many components have no docs dir at all — that's
-// the normal, undocumented-but-derived case), so this only catches the
-// opposite: leftover docs content for a component that no longer exists.
+// Check 1: every docs dir mirrors a main component at the same path under src/components/.
 
 const exampleDirs = (await glob("**/examples", { cwd: contentRoot })).filter((p) =>
   statSync(join(contentRoot, p)).isDirectory()
@@ -76,14 +54,9 @@ for (const docsRel of [...docsDirs].sort()) {
     );
 }
 
-// Checks 2 + 3 — Example frontmatter (FAIL) and prop drift (FAIL): every
-// examples/*.md must parse, declare a non-empty `title:` and a `blocks:`
-// tree, and every block in that tree must reference a real `_component` with
-// only props the component actually accepts.
+// Checks 2 + 3: every example has a `title:` and `blocks:`, and each block's props exist.
 
-// HTML passthrough: props a component never destructures by name but forwards
-// via a `...rest` spread onto the root element. Only allowed for components
-// whose destructure actually has a rest element (`allowedPropKeys().hasRest`).
+// Allowed only on components whose destructure has a `...rest`.
 const HTML_PASSTHROUGH = new Set([
   "style",
   "class",
@@ -97,7 +70,6 @@ const HTML_PASSTHROUGH = new Set([
 const isHtmlPassthrough = (key) =>
   HTML_PASSTHROUGH.has(key) || key.startsWith("aria-") || key.startsWith("data-");
 
-/** Walk a `blocks:` tree, collecting prop-drift problem strings for `problems`. */
 function walkBlocks(node, problems) {
   if (Array.isArray(node)) {
     for (const item of node) walkBlocks(item, problems);
@@ -149,7 +121,7 @@ for (const f of exampleFiles) {
 
   if (fmProblems.length) {
     fail(rel(abs), fmProblems.join("; "));
-    continue; // no blocks tree to walk.
+    continue;
   }
   ok(`example fm  ${rel(abs)}`);
 
@@ -160,16 +132,8 @@ for (const f of exampleFiles) {
   else ok(`prop drift  ${rel(abs)}`);
 }
 
-// Check 4 — Example wiring: an index.md that carries an `examples:` key at
-// all — even `examples: []`/`examples:` (null), both of which are
-// indistinguishable from a genuinely absent key once the docsComponentSchema
-// transform runs — is treated as the author having taken over curation for
-// that component. `slugs` entries with no matching examples/<slug>.md → FAIL
-// (dead reference). On-disk non-primary examples referenced by no group →
-// WARN: `primary.md` is always shown separately and never needs listing, but
-// every other file does — a docs dir with NO `examples:` key at all is the
-// only case where non-primary examples still auto-render (one group per
-// on-disk file, see ComponentLayout.astro's fallback branch).
+// Check 4: any `examples:` key, even empty or null, means curated: every slug must exist,
+// and a non-primary example no group lists is hidden (WARN). With no key, all auto-render.
 
 for (const f of indexFiles) {
   const docsRel = dirname(f);
@@ -213,11 +177,7 @@ for (const f of indexFiles) {
   }
 }
 
-// Check 5 — Slots overrides (FAIL): an index.md's `slots:` list is a patch
-// over derived slot metadata (see src/component-docs/shared/slotDerivation.ts).
-// `fallback_for` must name a prop the main component actually destructures;
-// `child_component.name` must resolve to a sibling .astro or a real
-// component key. Silently skipped when a docs dir has no `slots:` at all.
+// Check 5: `slots:` overrides name a real `fallback_for` prop and a resolvable child_component.
 
 for (const f of indexFiles) {
   const docsRel = dirname(f);

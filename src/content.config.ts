@@ -77,8 +77,7 @@ const docsComponentSchema = z.object({
     }),
 });
 
-// Hand-written docs examples. `title` is required — ComponentViewer reads it
-// unconditionally, so a missing one is a build error rather than a render crash.
+// `title` is required: ComponentViewer reads it unconditionally.
 const docsComponentExampleSchema = z.object({
   title: z.string(),
   spacing: z.string().optional().nullable(),

@@ -47,11 +47,7 @@ const subtextDataAttributes = effectiveSubtextProp
   class:list={["content-selector-item", className]}
   {...htmlAttributes}
 >
-  {/* The array-item root has to hold both the tab and its panel, but a
-      `tablist` may contain only tabs — so the tab gets its own `tablist`
-      wrapper here, a sibling of the panel. setup.ts reads the orientation
-      from this element and stamps `aria-posinset`/`aria-setsize` on every
-      tab, so the split lists still announce "2 of 5", not "1 of 1". */}
+  {/* One tablist per tab: a tablist may hold only tabs. setup.ts stamps aria-posinset/setsize. */}
   <div
     class="content-selector-tablist"
     role="tablist"
@@ -64,8 +60,7 @@ const subtextDataAttributes = effectiveSubtextProp
       controls={panelId}
       selected={selected}
     >
-      {/* `level="span"`, not a real heading: a tab label is not a section title,
-        and an h3 per tab injects the whole tab strip into the page outline. */}
+      {/* Not a real heading: an h3 per tab injects the tab strip into the page outline. */}
       <Heading
         text={title}
         level="span"
@@ -119,16 +114,8 @@ const subtextDataAttributes = effectiveSubtextProp
 
 <style is:global>
   @layer components {
-    /*
-     * Each item overlays the WHOLE items grid and re-exposes the parent's
-     * tracks with `subgrid`, so its tab and its panel land in different grid
-     * areas while the item itself stays one real box. It has to be a box: this
-     * is the array-item region root, and `display: contents` leaves the editor
-     * nothing to select or drag. Overlapping boxes would swallow each other's
-     * clicks, hence pointer-events passing through to the children.
-     * The tablist's own row/column comes from `:nth-of-type` in ContentSelector;
-     * the tab fills that box.
-     */
+    /* Not `display: contents`: this is the array-item region root and the editor needs a box.
+       Items overlap via subgrid, so pointer-events pass through to the children. */
     .content-selector-item {
       display: grid;
       grid-area: 1 / 1 / -1 / -1;

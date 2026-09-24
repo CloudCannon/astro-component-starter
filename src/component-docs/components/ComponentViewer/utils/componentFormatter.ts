@@ -79,11 +79,7 @@ export function formatComponentWithSlots(
   componentMetadata?: Map<string, ComponentMetadata>,
   nestedBlockProperties?: Set<string>
 ): string {
-  // A malformed/unexpected child (no `_component`, e.g. a plain data object
-  // that ended up somewhere a nested block tree was expected) can't be
-  // formatted — degrade gracefully by skipping just this one child instead
-  // of throwing, which previously took down the *entire* code sample (the
-  // caller in astroFormatter.ts wraps generation in a single try/catch).
+  // Skip, don't throw: astroFormatter.ts wraps the whole sample in one try/catch.
   if (!block || typeof block !== "object" || !block._component) {
     console.warn(
       "[componentFormatter] Skipping a block with no _component while generating an Astro code sample:",
@@ -114,16 +110,7 @@ export function formatComponentWithSlots(
   }
   const supportsSlots = metadata?.supportsSlots ?? false;
 
-  // Only slots with no `childComponent` hold arbitrary nested `_component`
-  // block trees (e.g. Card's before/default/after, Modal/CustomSection's
-  // contentSections). A slot WITH a childComponent (List's `items`,
-  // Accordion's `items`, Select's `options`, ...) holds plain prop-data
-  // objects that get spread onto a repeatable wrapper component further
-  // down — those objects have no `_component` of their own, so recursing
-  // into them here would crash. Keep them out of this "raw JSX children"
-  // path entirely; the dedicated branches below (`items && .../list`,
-  // `items && .../content-selector`, or the generic childComponent branch)
-  // already know how to render them correctly.
+  // A slot with a `childComponent` holds plain prop objects with no `_component`; recursing into them crashes.
   const rawContentSlots = metadata?.slots?.filter((slot) => !slot.childComponent) ?? [];
 
   const isTextComponent =
@@ -145,15 +132,7 @@ export function formatComponentWithSlots(
   if (supportsSlots) {
     if (nestedBlockProperties) {
       for (const prop of nestedBlockProperties) {
-        // `nestedBlockProperties` is a single global set of prop *names*
-        // shared across every component (built from every component's own
-        // fallbackFor in metadata.ts's getNestedBlockProperties). A name
-        // being in the set doesn't guarantee THIS component's value for it
-        // is block-shaped — e.g. Embed's own fallbackFor ("html", a string)
-        // lands in the same shared set, so without this check it would get
-        // stripped here from every component that happens to have an
-        // `html`-named prop, scalar or not. Same guard as below: only strip
-        // when there's actually block content to strip it in favor of.
+        // The set is global across components, so a name in it (Embed's scalar `html`) may not be block-shaped here.
         if (hasSlotBlocks(props[prop])) {
           delete props[prop];
         }
@@ -168,11 +147,7 @@ export function formatComponentWithSlots(
     delete props.slides;
     if (metadata?.slots) {
       for (const slot of metadata.slots) {
-        // Only strip the fallback prop when it will actually be rendered as
-        // slot children somewhere below — a scalar/string fallback (e.g.
-        // Embed's `html`) has no slot-children path to land in, so deleting
-        // it here would drop it from the generated snippet entirely instead
-        // of leaving it as a regular attribute.
+        // A scalar fallback (Embed's `html`) has no slot path; deleting it drops it from the snippet.
         if (hasSlotBlocks(block[slot.fallbackFor])) {
           delete props[slot.fallbackFor];
         }

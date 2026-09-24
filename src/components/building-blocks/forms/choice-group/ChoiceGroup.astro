@@ -22,8 +22,7 @@ const {
 const inputType = multiple ? "checkbox" : "radio";
 const inputName = multiple ? `${name}[]` : name;
 
-// Native `required` on one checkbox of a group means "tick this box", not
-// "pick at least one" — only radio groups can express the group constraint.
+// Native `required` on a checkbox means "tick this box", not "pick at least one".
 const requireEachInput = required && !multiple;
 
 const groupId = generateFieldId("choice-group", customId, name || title);

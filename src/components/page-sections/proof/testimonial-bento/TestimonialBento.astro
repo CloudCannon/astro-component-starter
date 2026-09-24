@@ -106,9 +106,8 @@ const columnCount = String(columns) === "4" ? "4" : "3";
           grid-template-columns: repeat(4, minmax(0, 1fr));
         }
 
-        /* Container widths, not viewport breakpoints: a bento in a narrow
-           column on a wide screen must still collapse. Each step is where a
-           standard cell drops below ~240px, too narrow for a quote and byline. */
+        /* Container, not viewport: a bento in a narrow column must still collapse.
+           Each step is where a cell drops below ~240px. */
         @container (width <= 1000px) {
           &[data-columns="4"] {
             grid-template-columns: repeat(3, minmax(0, 1fr));

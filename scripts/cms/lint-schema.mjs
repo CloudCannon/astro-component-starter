@@ -1,16 +1,4 @@
-/**
- * Validates the CloudCannon YAML against the official JSON Schemas from
- * `@cloudcannon/configuration-types` — invalid keys, out-of-enum values, wrong
- * input types.
- *
- *   node scripts/cms/lint-schema.mjs [--only <substring>]
- *
- * Complements `lint:cms`, which checks the same files against the *components*
- * (prop drift, `_component` resolution). Neither subsumes the other.
- *
- * Error formatting is delegated to the package's `loadValidator`: it suppresses
- * non-matching union-branch noise, which raw Ajv output drowns in.
- */
+// Uses the package's `loadValidator`, not raw Ajv, which drowns in union-branch noise.
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { glob } from "glob";
@@ -25,13 +13,8 @@ const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const args = process.argv.slice(2);
 const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 
-// Each glob is validated against the schema for the `*_from_glob` key that
-// loads it in cloudcannon.config.yml — the same names the schema package uses,
-// so this mapping stays auditable against the loader.
+// Each glob's schema must match the `*_from_glob` key that loads it in cloudcannon.config.yml.
 const TARGETS = [
-  // The root config itself. Easy to forget because it isn't glob-collected, but
-  // it holds the `data_config` datasets and collection `_inputs` that every
-  // component leans on — and a stray key here fails the same silent way.
   {
     schema: "global",
     pattern: "cloudcannon.config.yml",

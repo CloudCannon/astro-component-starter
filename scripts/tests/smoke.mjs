@@ -1,13 +1,5 @@
-/**
- * Smoke tests for the interactive components, run against a BUILT site.
- *
- * Requires `npm run build:with-library` first: the component-docs pages
- * render a live example of every component (ComponentViewer renders them
- * inline, so their client scripts run), and the main site pages carry the
- * navigation chrome (mobile nav, theme toggle).
- *
- *   node scripts/tests/smoke.mjs [--only <substring>]
- */
+// Runs against dist/ from `npm run build:with-library`.
+//   node scripts/tests/smoke.mjs [--only <substring>]
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { launchBrowser, serveDist } from "./lib/servedDist.mjs";
@@ -21,8 +13,7 @@ const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
 const DESKTOP = { width: 1280, height: 800 };
 const MOBILE = { width: 390, height: 844 };
 
-// Same list as src/components/utils/focusTrap.ts, so the test counts exactly
-// the elements the focus trap manages.
+// Must match src/components/utils/focusTrap.ts.
 const FOCUSABLE_SELECTOR = [
   "a[href]",
   "button:not([disabled])",
@@ -41,8 +32,6 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-// The primary example is the first ComponentViewer on a component-docs page,
-// so "first match in the document" targets it.
 const ACTIVE_PREVIEW = ".component-viewer .preview.active";
 
 const tests = [
@@ -80,8 +69,7 @@ const tests = [
         !(await response.text()).includes('class="button code-block-copy"'),
         "the copy button should not render before JavaScript runs"
       );
-      // The line-number gutter rides inside the code's own text flow (so a
-      // wrapped line keeps its number); the copied text leaves it out.
+      // The line-number gutter sits in the code's text flow; copied text must exclude it.
       const expected = await block
         .locator(".code-block-panel:not([hidden]) code")
         .evaluate((code) => {
@@ -140,15 +128,13 @@ const tests = [
     path: "/component-docs/components/building-blocks/wrappers/modal/",
     viewport: DESKTOP,
     async run(page) {
-      // The primary example's label is "Modal" -> popover id "modal-modal".
       const popoverSel = "#modal-modal";
       const trigger = page.locator(`.modal-trigger .button-inner[popovertarget="modal-modal"]`);
 
       await page.locator(popoverSel).waitFor({ state: "attached" });
       await trigger.click();
 
-      // Open + initial focus moved inside (setup.ts focuses the first
-      // focusable element on the popover's async "toggle" event).
+      // setup.ts moves focus on the popover's async "toggle" event.
       await page.waitForFunction((sel) => {
         const popover = document.querySelector(sel);
 
@@ -157,8 +143,6 @@ const tests = [
         );
       }, popoverSel);
 
-      // Focus the first focusable element, then Tab through a full cycle:
-      // focus must stay inside and wrap back to the first element.
       const focusableCount = await page.evaluate(
         ({ sel, focusable }) => {
           const popover = document.querySelector(sel);
@@ -199,7 +183,6 @@ const tests = [
 
       assert(wrappedToFirst, "Tab from the last focusable element did not wrap to the first");
 
-      // Shift+Tab from the first element wraps to the last.
       const wrappedToLast = await page.evaluate(
         ({ sel, focusable }) => {
           const popover = document.querySelector(sel);
@@ -230,7 +213,6 @@ const tests = [
 
       assert(onLast, "Shift+Tab from the first focusable element did not wrap to the last");
 
-      // Close via the close button; focus must return to the trigger.
       await page.locator(`${popoverSel} .modal-close .button-inner`).click();
       await page.waitForFunction((sel) => {
         const popover = document.querySelector(sel);
@@ -277,14 +259,12 @@ const tests = [
         .locator(".consent-actions .button-inner")
         .evaluateAll((buttons) => buttons.map((button) => button.className));
 
-      // Accepting and rejecting must weigh the same; Customize may be secondary.
       assert(
         choiceClasses[0] === choiceClasses[1],
         `accept and reject do not have equal prominence: ${JSON.stringify(choiceClasses)}`
       );
 
-      // A decision on the live instance must not decide the preview for the
-      // visitor: the manager's subscribers refresh every consent root on the page.
+      // A decision on the live instance must not decide the preview for the visitor.
       const storedAfterLiveChoice = await page.evaluate(() => {
         window.siteConsent.acceptAll();
         return localStorage.getItem("site-consent");
@@ -399,7 +379,6 @@ const tests = [
     path: "/component-docs/components/building-blocks/wrappers/video-modal/",
     viewport: DESKTOP,
     async run(page) {
-      // The primary example's label is "Astro in 100 Seconds".
       const popoverSel = "#modal-astro-in-100-seconds";
       const embedSel = `${popoverSel} .video-modal-embed`;
       const popover = page.locator(popoverSel);
@@ -414,9 +393,7 @@ const tests = [
         .locator(`.modal-trigger .button-inner[popovertarget="modal-astro-in-100-seconds"]`)
         .click();
 
-      // Component docs deliberately have no site consent manager. Opening a
-      // provider modal must therefore retain the contextual permission prompt
-      // rather than create a YouTube/Vimeo request.
+      // Docs have no consent manager, so a provider modal must keep the permission prompt.
       await page.waitForFunction(
         (sel) => document.querySelector(sel)?.querySelector("[data-external-media-enable]"),
         embedSel
@@ -427,11 +404,9 @@ const tests = [
         "expected no provider iframe before external-media permission"
       );
 
-      // The overlay fills the viewport, so light dismiss never fires — a click
-      // on the dark surround (inside the popover, outside .modal-body) closes.
+      // The overlay fills the viewport, so light dismiss never fires; the surround click closes.
       await popover.click({ position: { x: 4, y: 4 } });
 
-      // Closing leaves no provider iframe behind.
       await page.waitForFunction(
         ({ pop, embed }) =>
           !document.querySelector(pop).matches(":popover-open") &&
@@ -445,8 +420,6 @@ const tests = [
     path: "/component-docs/components/building-blocks/core-elements/video/",
     viewport: DESKTOP,
     async run(page) {
-      // Component docs carry no consent manager, so every hosted video stays a
-      // prompt and mounts no provider element of its own.
       const containers = page.locator("[data-hosted-video]");
 
       await containers.first().waitFor();
@@ -461,8 +434,6 @@ const tests = [
       );
 
       const mounted = await page.evaluate(async () => {
-        // Drop the page's own examples so the test makes no provider request,
-        // then mount one container per hosted shape the component renders.
         document.querySelectorAll("[data-hosted-video]").forEach((el) => el.remove());
 
         Object.defineProperty(window, "siteConsent", {
@@ -481,8 +452,6 @@ const tests = [
         document.body.append(host);
         window.dispatchEvent(new Event("site-consent-change"));
 
-        // The facade libraries load on demand, so poll until they have both
-        // defined their custom element and mounted into every container.
         const deadline = Date.now() + 5000;
 
         while (
@@ -523,8 +492,7 @@ const tests = [
         `expected a lite-vimeo facade, got ${mounted.vimeoTag}`
       );
       assert(mounted.vimeoId === "76979871", "the vimeo facade lost the video id");
-      // lite-youtube's autoload pins autoplay=0, so autoplaying YouTube cannot
-      // use the facade and mounts a lazy privacy-enhanced iframe instead.
+      // lite-youtube's autoload pins autoplay=0, so autoplaying YouTube mounts an iframe instead.
       assert(
         mounted.autoplayTag === "iframe",
         `expected autoplaying YouTube to mount an iframe, got ${mounted.autoplayTag}`
@@ -542,26 +510,20 @@ const tests = [
     },
   },
   {
-    // The video setup skips its scroll-triggered play path outright when the
-    // visitor prefers reduced motion, so this test opts out of the suite's
-    // reduced-motion context.
+    // Video setup skips its scroll-triggered play under reduced motion.
     name: "autoplay video starts playing when it scrolls into view",
     path: "/component-docs/components/building-blocks/core-elements/video/",
     viewport: DESKTOP,
     reducedMotion: "no-preference",
     async run(page) {
-      // "Autoplay & Loop" is the second example set on the docs page.
       const videoSel =
         '.component-viewer[data-viewer-id="autoplay-loop"] .preview.active video[autoplay]';
       const video = page.locator(videoSel);
 
       await video.waitFor();
 
-      // Chromium defers a muted autoplay video that loads off-screen and starts
-      // it by itself once it is visible, so scrolling alone would pass even
-      // with the component's intersection path missing. Pausing while the video
-      // is still below the fold leaves that path as the only thing that can
-      // start playback.
+      // Chromium starts a muted off-screen autoplay video itself once visible; pausing it
+      // first leaves the component's intersection path as the only thing that can play it.
       const belowFold = await video.evaluate(
         (el) => el.getBoundingClientRect().top > window.innerHeight
       );
@@ -805,13 +767,9 @@ const tests = [
       assert(before.dotCount >= 2, `expected >= 2 indicator dots, found ${before.dotCount}`);
       assert(before.selected === 0, `expected dot 0 selected initially, got ${before.selected}`);
 
-      // The docs page renders several carousel examples; interact with the
-      // same first-in-DOM carousel the evaluate calls read.
       await page.locator(carouselSel).first().locator(".next .button-inner").click();
 
-      // Embla fires "select" (updating the dots) at the start of its scroll
-      // animation, then moves the track over the following frames — wait for
-      // both the second dot and an actual track movement.
+      // Embla updates the dots at scroll start, then moves the track: wait for both.
       await page.waitForFunction(
         ({ sel, initialTransform }) => {
           const carousel = document.querySelector(sel);
@@ -912,8 +870,7 @@ const tests = [
     path: "/component-docs/components/navigation/bar/",
     viewport: DESKTOP,
     async run(page) {
-      // The focusable control is the hidden `<input role="button">`; the
-      // visible trigger is a `<label>`, which never receives a key event.
+      // The visible trigger is a `<label>`, which never receives a key event.
       const item = page.locator(".preview.active .bar .nav-item.has-children").first();
       const toggle = item.locator("> .nav-item-toggle");
 
@@ -950,8 +907,6 @@ const tests = [
         () => document.querySelector(".library-sidebar .side")?.dataset.sideInitialized === "true"
       );
 
-      // The group holding the current page is served expanded; expanding
-      // something the visitor never asked for is not a transition.
       const served = await page.evaluate(() => {
         const panel = document.querySelector(
           ".library-sidebar .side .nav-item-content[data-open-on-load]"
@@ -982,8 +937,7 @@ const tests = [
       await page.keyboard.press("Enter");
       await page.waitForFunction((id) => document.getElementById(id).checked === true, closedId);
 
-      // Checking one radio silently unchecks its sibling, so the group that
-      // was served open must have given its no-animation flag back.
+      // Checking a radio silently unchecks the served-open sibling, which must drop its no-animation flag.
       const stale = await page.evaluate(
         () =>
           [...document.querySelectorAll(".library-sidebar .side [data-open-on-load]")].filter(
@@ -1138,8 +1092,6 @@ const tests = [
         "expected the dismissed announcement to be stored in localStorage"
       );
 
-      // Dismissal is site-wide: navigate to another page and confirm the
-      // inline script removed the bar there too.
       await page.locator('.desktop-main-nav a[href="/why/"]').first().click();
       await page.waitForURL("**/why/", { waitUntil: "load" });
 
@@ -1195,8 +1147,6 @@ const tests = [
       await page.locator(popoverSel).waitFor({ state: "attached" });
       await page.keyboard.press("Control+k");
 
-      // Open + focus lands on Pagefind's input (the popover's first
-      // focusable element) once the custom element has upgraded.
       await page.waitForFunction((sel) => {
         const popover = document.querySelector(sel);
         const active = document.activeElement;
@@ -1206,9 +1156,7 @@ const tests = [
         );
       }, popoverSel);
 
-      // "component" appears in both site pages and blog articles, so both
-      // type tabs have results to show. Off-screen results stay as lazy
-      // skeletons, so assertions are href-based rather than count-based.
+      // Off-screen results stay lazy skeletons, so assert on hrefs, not counts.
       await page.keyboard.type("component");
       await page.locator(`${popoverSel} .search-result .search-result-link`).first().waitFor();
 
@@ -1222,7 +1170,6 @@ const tests = [
 
       assert(hadNonBlog, 'expected the unfiltered "component" results to include a non-blog page');
 
-      // The Articles tab narrows results to blog posts via the Type filter.
       await page.locator(`${popoverSel} [data-search-tab="Article"]`).click();
       await page.waitForFunction((sel) => {
         const links = [...document.querySelectorAll(`${sel} .search-result-link`)];
@@ -1232,8 +1179,6 @@ const tests = [
         );
       }, popoverSel);
 
-      // Escape closes the popover (native light dismiss) and focus returns
-      // to the nav trigger.
       await page.keyboard.press("Escape");
       await page.waitForFunction((sel) => {
         const popover = document.querySelector(sel);
@@ -1305,11 +1250,8 @@ const tests = [
 
       await page.waitForSelector(gallerySel);
 
-      // Click the SECOND tile: proves the lightbox opens on the clicked
-      // image, not just the first. Waiting for focus to land inside is
-      // load-bearing: the modal setup moves it on the async "toggle" event,
-      // and the ArrowRight below only reaches the popover's key listener
-      // once the active element is inside it.
+      // The second tile proves the lightbox opens on the clicked image. ArrowRight only
+      // reaches the popover's key listener once focus is inside, so wait for it.
       const secondTile = page.locator(`${gallerySel} button.gallery-tile`).nth(1);
 
       await secondTile.click();
@@ -1351,8 +1293,7 @@ const tests = [
         );
       }, popoverSel);
 
-      // A click on the photo itself must not close (the scrim is
-      // pointer-events: none, so the hit lands on the figure).
+      // The scrim is pointer-events: none, so this click lands on the figure.
       await page.evaluate((sel) => {
         const figure = document.querySelector(`${sel} .gallery-lightbox-figure`);
         const box = figure.getBoundingClientRect();
@@ -1370,7 +1311,6 @@ const tests = [
         popoverSel
       );
 
-      // Arrow key advances to the third image and the counter follows.
       await page.keyboard.press("ArrowRight");
       await page.waitForFunction((sel) => {
         const popover = document.querySelector(sel);
@@ -1382,7 +1322,6 @@ const tests = [
         );
       }, popoverSel);
 
-      // Escape closes and focus returns to the tile that opened the lightbox.
       await page.keyboard.press("Escape");
       await page.waitForFunction(
         ({ popover, gallery }) => {
@@ -1394,8 +1333,7 @@ const tests = [
         { popover: popoverSel, gallery: gallerySel }
       );
 
-      // Clicking the dark surround closes too (the overlay fills the
-      // viewport, so this is the component's own handler, not light dismiss).
+      // The overlay fills the viewport, so this is the component's handler, not light dismiss.
       await page.locator(`${gallerySel} button.gallery-tile`).first().click();
       await page.waitForFunction(
         (sel) => document.querySelector(sel)?.matches(":popover-open"),
@@ -1413,8 +1351,6 @@ const tests = [
     path: "/component-docs/components/page-sections/collections/gallery-grid/",
     viewport: DESKTOP,
     async run(page) {
-      // The thumbnails example is the third preview on the page; scope to the
-      // gallery that actually renders a strip rather than to a preview index.
       const gallerySel = `.gallery-grid:has(.gallery-lightbox-thumbs):has(.gallery-lightbox[data-gallery-initialized])`;
       const popoverSel = `${gallerySel} .gallery-lightbox`;
 
@@ -1430,7 +1366,6 @@ const tests = [
         );
       }, popoverSel);
 
-      // Clicking the third thumbnail jumps to that photo and the counter.
       await page.locator(`${popoverSel} .gallery-lightbox-thumb`).nth(2).click();
       await page.waitForFunction((sel) => {
         const popover = document.querySelector(sel);
@@ -1455,7 +1390,6 @@ const tests = [
 
       await page.waitForSelector(masonrySel);
 
-      // Every item gets a measured row span (the enhancement's whole job)…
       await page.waitForFunction((sel) => {
         const items = [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")];
 
@@ -1464,9 +1398,7 @@ const tests = [
         );
       }, masonrySel);
 
-      // …and the first three items sit in three distinct columns,
-      // left-to-right — source order preserved, unlike the columns fallback,
-      // which would stack items 1..N down the first column.
+      // Source order runs left-to-right; the columns fallback would stack them down column one.
       const xs = await page.evaluate(
         (sel) =>
           [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")]
@@ -1482,13 +1414,8 @@ const tests = [
     },
   },
   {
-    // Pins the fix for stale row spans after a CloudCannon region re-render.
-    // The probe `masonryEnhance` measures is the item's first child, which the
-    // re-render replaces; the swap itself self-heals (the detached probe
-    // reports 0x0, which fires a relayout), but the REPLACEMENT is only
-    // observed if the item's own childList is watched. So this swaps the child
-    // and then resizes the new one, which is an image load or another keypress
-    // in the editor.
+    // A region re-render replaces the item's first child (the measured probe); the
+    // replacement is only observed if the item's own childList is watched.
     name: "masonry re-measures an item after its contents are replaced",
     path: "/component-docs/components/building-blocks/wrappers/masonry/",
     viewport: DESKTOP,
@@ -1514,9 +1441,7 @@ const tests = [
         item.firstElementChild.replaceWith(item.firstElementChild.cloneNode(true));
       }, masonrySel);
 
-      // Let the relayout the swap queued actually run before growing the
-      // replacement. Otherwise that pending frame can measure the grown probe
-      // by luck, and the assertion below passes without anything observing it.
+      // Let the queued relayout run first, or it can measure the grown probe by luck.
       await page.evaluate(
         () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
       );
@@ -1587,8 +1512,7 @@ const tests = [
     async run(page) {
       await page.waitForSelector("form.form");
 
-      // Native validation is only handed over once the script has run; without
-      // it the browser blocks the submit and this test would pass on a bubble.
+      // Without the script the browser blocks the submit and this passes on a bubble.
       await page.waitForFunction(() => document.querySelector("form.form")?.noValidate === true);
 
       await page.click("form.form .submit button");
@@ -1629,9 +1553,7 @@ const tests = [
     },
   },
   {
-    // The count-up rewrites the number on first view. SSR has to have written
-    // the same grouped string, or the figure visibly reflows ("2500" ->
-    // "2,500") the moment the element scrolls into view.
+    // SSR must write the same grouped string as the count-up, or the figure reflows on view.
     name: "counter's server-rendered value survives the count-up unchanged",
     path: "/component-docs/components/building-blocks/core-elements/counter/",
     viewport: DESKTOP,
@@ -1680,8 +1602,6 @@ const tests = [
         "expected an external-media enable control"
       );
 
-      // Keep the run hermetic: the facade fetches provider posters, so abort
-      // every provider request instead of letting the test hit the network.
       await page.route(/(youtube-nocookie\.com|i\.ytimg\.com|vimeo\.com|vumbnail\.com)/, (route) =>
         route.abort()
       );
@@ -1699,8 +1619,6 @@ const tests = [
 
         if (!players.length) return false;
 
-        // Every YouTube player is privacy-enhanced, whether it mounted as the
-        // facade or as the autoplaying iframe.
         return (
           [...document.querySelectorAll("[data-hosted-video] lite-youtube")].every((el) =>
             el.hasAttribute("nocookie")
@@ -1770,9 +1688,7 @@ const tests = [
     },
   },
   {
-    // The card grid's stretched link covers the whole card, but a link inside
-    // the body must still be its own target — the z-index lift is the only
-    // thing keeping it clickable.
+    // The z-index lift is the only thing keeping a body link clickable over the stretched link.
     name: "card grid body click follows the card link, nested links stay their own target",
     path: "/component-docs/components/building-blocks/wrappers/card-grid/",
     viewport: DESKTOP,
@@ -1825,8 +1741,7 @@ const tests = [
         `expected ${Number(before) + 1}, got "${after}"`
       );
 
-      // The readout used to be replaced wholesale by `output.value`, which
-      // would have taken the unit with it.
+      // Guards `output.value` replacing the readout and dropping the unit.
       const unitCount = await page.locator(`${rangeSel} .range-value .range-unit`).count();
 
       assert(unitCount >= 0, "unreachable");
@@ -1948,8 +1863,6 @@ const tests = [
     },
   },
   {
-    // A locked section keeps its own colour scheme when the visitor toggles
-    // the site theme — that is the whole point of the lock.
     name: "a data-theme-lock section keeps its theme when the site theme flips",
     path: "/",
     viewport: DESKTOP,
@@ -2258,8 +2171,7 @@ const tests = [
         `the next card is visible before the first one has been scrolled: ${initialSpacing.secondTop} < ${initialSpacing.paneBottom}`
       );
 
-      // The docs viewer's preview pane is its own scroll container, so the
-      // deck scrolls in there, not in the window.
+      // The docs preview pane is the deck's scroll container, not the window.
       await page.evaluate((sel) => {
         const deck = document.querySelector(sel);
         const pane = deck.closest(".preview");
@@ -2268,8 +2180,7 @@ const tests = [
         pane.scrollTop += second.getBoundingClientRect().top - pane.getBoundingClientRect().top;
       }, deckSel);
 
-      // rAF-driven polling is throttled in headless Chrome and can pass a
-      // broken build, so poll on a timer.
+      // Poll on a timer: headless Chrome throttles rAF, which can pass a broken build.
       await page.waitForFunction(
         (sel) =>
           document
@@ -2370,8 +2281,6 @@ const tests = [
         `last card did not reach the vertical centre: ${finalCard.centreInPane} vs ${finalCard.paneCentre}`
       );
 
-      // As soon as the last card reaches centre, the complete deck must release
-      // as one stepped stack rather than locking the last card in place.
       await page.evaluate(
         ({ sel, height }) => {
           const deck = document.querySelector(sel);
@@ -2420,14 +2329,7 @@ const tests = [
     },
   },
   {
-    // Second environment: the deck scrolling with the window rather than
-    // inside the docs preview pane.
-    //
-    // NOT a regression test for the scrollport bug this was written for — the
-    // component-docs layout cannot reproduce it (its `body` is
-    // `overflow-y: visible`, and the injected rule below still is not enough).
-    // Catching that needs a real page in `dist/`, which the library does not
-    // currently have. Verified by hand against `/examples/*`-style markup.
+    // Not a regression test for the scrollport bug: the docs layout can't reproduce it.
     name: "scroll deck rail follows window scroll when no ancestor scrolls",
     path: "/component-docs/components/building-blocks/wrappers/scroll-deck/",
     viewport: DESKTOP,
@@ -2436,19 +2338,9 @@ const tests = [
         const apply = () => {
           const style = document.createElement("style");
 
-          // EVERY scroll container between the deck and the document has to
-          // go, not just the scrolling one: `.component-viewer` is
-          // `overflow: hidden` and `.component-docs` is `overflow-y: auto`
-          // without being scrollable, and either one left in place traps the
-          // sticky cards in a box that never scrolls, so they never pin. The
-          // precondition assertions below catch that rather than letting it
-          // surface as a timeout.
-          // `body { overflow-x: hidden }` is the site-wide rule from
-          // `_html-elements.css`, which the component-docs layout does not
-          // carry. It is load-bearing here: it computes `overflow-y: auto`, so
-          // a scrollport lookup that trusts the computed value picks body on
-          // every real page. Without it this test cannot tell the bug from the
-          // fix.
+          // Every scroll container between deck and document must go, or the cards never pin.
+          // `body { overflow-x: hidden }` (from _html-elements.css) computes `overflow-y: auto`,
+          // so a scrollport lookup trusting computed values picks body. Keep it.
           style.textContent =
             "body { overflow-x: hidden !important; }" +
             ".component-viewer, .component-viewer > .previews," +
@@ -2505,9 +2397,7 @@ const tests = [
         window.scrollTo(0, window.scrollY + second.getBoundingClientRect().top - 40);
       }, deckSel);
 
-      // Precondition, not the assertion under test: if any scroll container
-      // survived the override above, the cards never pin and everything after
-      // this measures a broken page rather than a broken component.
+      // Precondition: if a scroll container survived the override, the cards never pin.
       const pinned = await page.evaluate((sel) => {
         const first = document.querySelector(`${sel} .scroll-deck-card`);
 
@@ -2524,8 +2414,7 @@ const tests = [
         `sticky is not working in this test environment: card 1 top ${pinned.top}, sticky top ${pinned.stickyTop}`
       );
 
-      // rAF-driven polling is throttled in headless Chrome and can pass a
-      // broken build, so poll on a timer.
+      // Poll on a timer: headless Chrome throttles rAF, which can pass a broken build.
       await page.waitForFunction(
         (sel) =>
           document
@@ -2591,10 +2480,7 @@ try {
       viewport: test.viewport,
       deviceScaleFactor: 1,
       colorScheme: "light",
-      // Keeps CSS transitions/entrance animations and carousel autoplay from
-      // racing the assertions; Embla's manual navigation is JS-driven and
-      // unaffected (matches scripts/previews/screenshot.mjs). Tests that need
-      // motion in flight (video autoplay) opt back in per test.
+      // Keeps transitions and carousel autoplay from racing assertions; video tests opt back in.
       reducedMotion: test.reducedMotion ?? "reduce",
     });
 

@@ -11,8 +11,7 @@ import {
 
 const B = band(1120);
 
-// A page hint behind the bordered, bottom-pinned choice banner. The three
-// actions make this read as consent controls rather than a generic notice.
+// The three actions make this read as consent controls rather than a generic notice.
 export default preview({
   width: B.w,
   draw: [

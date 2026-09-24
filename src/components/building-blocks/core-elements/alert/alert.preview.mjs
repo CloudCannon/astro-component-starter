@@ -11,8 +11,7 @@ import {
 
 const B = band(760);
 
-// One tinted plate with a status disc, bold title, and two lines of prose —
-// the tint + leading disc are what say "callout" instead of "card".
+// The tint + leading disc are what say "callout" instead of "card".
 export default preview({
   width: B.w,
   draw: [

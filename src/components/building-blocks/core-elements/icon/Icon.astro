@@ -111,8 +111,7 @@ if (!icon) {
           --icon-accent-bg: var(--cyan-100);
         }
 
-        /* Explicit so the picker's "None" is a real choice, not a class that
-           happens to match no rule. */
+        /* Not dead: the picker's "None" option emits this class. */
         &.size-none {
           font-size: inherit;
         }

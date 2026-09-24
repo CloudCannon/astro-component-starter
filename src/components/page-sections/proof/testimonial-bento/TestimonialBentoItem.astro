@@ -1,11 +1,6 @@
 ---
 import Testimonial from "@core-elements/testimonial/Testimonial.astro";
 
-/**
- * One cell of TestimonialBento. Size and tone live on the inner Testimonial,
- * not this root: the root is an array-item region the editor keeps across
- * re-renders, so a prop-driven attribute here would go stale.
- */
 const {
   text = "",
   authorName = "",
@@ -62,8 +57,7 @@ const {
         grid-row: span 2;
       }
 
-      /* Two columns: a featured cell already fills the row, so it drops the
-         second row rather than becoming a tall full-width slab. */
+      /* At two columns a featured cell already fills the row, so it drops the second row. */
       @container (width <= 800px) {
         &:has(> [data-size="featured"]) {
           grid-row: span 1;

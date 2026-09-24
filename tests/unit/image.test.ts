@@ -7,10 +7,7 @@ import {
   resolveShareImage,
 } from "../../src/components/utils/image";
 
-// image.ts eagerly globs /src/assets/images/**/* and imports `astro:assets`
-// (stubbed via vitest.config.ts). These tests only exercise the pure,
-// non-local-asset code paths: remote/public sources never touch the asset
-// registry or Astro's image service.
+// Local-asset paths need Astro's image service (stubbed in vitest.config.ts); test only remote/public sources.
 
 describe("resolveImageSource", () => {
   it("returns non-/src/ sources unchanged", () => {
@@ -45,7 +42,6 @@ describe("resolveShareImage", () => {
 
 describe("heightForWidth", () => {
   it("scales native height to a srcset-cap width without stretching", () => {
-    // Card Grid masonry: castle.jpg is 1707×1280, covers pass width={800}.
     expect(heightForWidth(1707, 1280, 800)).toBe(600);
     expect(heightForWidth(1440, 1080, 800)).toBe(600);
   });
@@ -55,8 +51,6 @@ describe("heightForWidth", () => {
   });
 });
 
-// `prepareImageData` only passes a max width for optimized local assets, which
-// need Astro's image pipeline — so the capping branch is exercised directly.
 describe("getResponsiveWidths", () => {
   const PRESETS = [640, 1280, 2560];
 
@@ -65,19 +59,15 @@ describe("getResponsiveWidths", () => {
   });
 
   it("includes the native width when it falls between two steps", () => {
-    // The reported case: a 1181px source was filtered down to a lone 640w
-    // candidate, so browsers had nothing else to pick.
     expect(getResponsiveWidths(PRESETS, 1181)).toEqual([640, 1181]);
     expect(getResponsiveWidths(PRESETS, 1707)).toEqual([640, 1280, 1707]);
   });
 
   it("includes a cropped width, which rarely lands on a step", () => {
-    // A portrait crop of a 1707x1280 source: round(1280 * 0.75).
     expect(getResponsiveWidths(PRESETS, 960)).toEqual([640, 960]);
   });
 
   it("keeps the ceiling when the native width exceeds every step", () => {
-    // A 6000px camera upload must not produce a 6000px variant.
     expect(getResponsiveWidths(PRESETS, 6000)).toEqual([640, 1280, 2560]);
     expect(getResponsiveWidths(PRESETS, 2560)).toEqual([640, 1280, 2560]);
   });
@@ -122,7 +112,6 @@ describe("prepareImageData (non-local sources)", () => {
       widths: [1200, "400", 400, -5, 0, "not-a-number", 800.4],
     });
 
-    // Not optimized, so the widths are normalized but never capped by width.
     expect(data.filteredWidths).toEqual([400, 800, 1200]);
   });
 

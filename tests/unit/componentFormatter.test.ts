@@ -2,25 +2,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ComponentMetadata } from "../../src/component-docs/shared/metadata";
 import { formatComponentWithSlots } from "../../src/component-docs/components/ComponentViewer/utils/componentFormatter";
 
-/**
- * Regression tests for two bugs found while landing derivation-based slot
- * metadata (A4):
- *
- * 1. Once a component's metadata says `supportsSlots: true`, the formatter
- *    unconditionally deleted `props[slot.fallbackFor]` — including when the
- *    fallback value is a scalar (e.g. Embed's `html` string) that never gets
- *    rendered anywhere else. That silently dropped the prop from the
- *    generated code sample entirely.
- * 2. A slot WITH a `childComponent` (List's `items`, Accordion's `items`,
- *    Select's `options`, ...) holds plain prop-data objects with no
- *    `_component` of their own — they get spread onto a repeatable wrapper
- *    component by a dedicated branch further down. The formatter's
- *    `hasAnySlotContent` check didn't know about `childComponent` and
- *    treated any non-empty array as "raw nested block content", recursing
- *    into it with `formatComponentWithSlots` and crashing on
- *    `getComponentDisplayName(undefined)` since those items have no
- *    `_component`.
- */
+// Regressions: a scalar fallback prop (Embed's `html`) must survive into the sample, and
+// a `childComponent` slot's items (no `_component`) must not be recursed into.
 
 describe("formatComponentWithSlots", () => {
   it("keeps a scalar fallback prop as a regular attribute (Embed's html)", () => {
@@ -41,17 +24,12 @@ describe("formatComponentWithSlots", () => {
       aspectRatio: "landscape",
     };
 
-    // In production `nestedBlockProperties` is ONE global set shared across
-    // every component, built by folding every component's own fallbackFor
-    // into it (see metadata.ts's getNestedBlockProperties) — so it contains
-    // "html" here purely because Embed's own metadata declares it, not
-    // because this particular value is block-shaped. A name-only check
-    // (ignoring the actual value) would wrongly strip it.
+    // `nestedBlockProperties` is one global set, so "html" is in it by name alone;
+    // a name-only check would wrongly strip this scalar.
     const result = formatComponentWithSlots(block, 0, metadataMap, new Set(["html"]));
 
     expect(result).toContain('html="<iframe src="https://example.com"></iframe>"');
     expect(result).toContain('aspectRatio="landscape"');
-    // No slot-children markup should be emitted for a scalar fallback.
     expect(result).not.toContain("<Fragment");
     expect(result.trim().endsWith("/>")).toBe(true);
   });

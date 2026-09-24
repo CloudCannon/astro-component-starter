@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getIcon, iconNames, suggestIconNames } from "../../src/components/utils/icons";
 
-/**
- * The registry is exercised through Vite so `import.meta.glob` resolves, which
- * means these tests cover every SVG on disk — not just the handful a build
- * happens to render.
- */
 describe("icon registry", () => {
   it("discovers the icons on disk", () => {
     expect(iconNames.length).toBeGreaterThan(300);
@@ -41,8 +36,7 @@ describe("icon registry", () => {
   });
 
   it("leaves no icon without a paint source", () => {
-    // Either the root declares paint, or a child does. An icon with neither
-    // falls back to SVG's default black fill and ignores the text colour.
+    // An icon with no paint falls back to SVG's default black fill.
     const unpainted = iconNames.filter((name) => {
       const { attributes, body } = getIcon(name)!;
 
@@ -53,9 +47,6 @@ describe("icon registry", () => {
   });
 
   it("paints every icon with currentColor, never a literal colour", () => {
-    // A source that ships its own colour (the Bluesky brand asset arrived with
-    // a hardcoded black) renders the same wherever it is placed and ignores the
-    // surrounding text colour. None of the sources may pin one.
     const hardcoded = iconNames.filter((name) => {
       const { attributes, body } = getIcon(name)!;
 

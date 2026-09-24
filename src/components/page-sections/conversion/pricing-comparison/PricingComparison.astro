@@ -41,20 +41,13 @@ const {
 // would shift every later column's cells onto the wrong plan.
 const planList = (plans ?? []) as Plan[];
 
-// One cell per plan on every row, so a short row renders empty cells instead
-// of shifting the columns (same normalization rule as the Table block).
 const cellFor = (row: Row, index: number) => {
   const raw = row?.values?.[index];
 
   return raw == null ? "" : String(raw).trim();
 };
 
-// "yes"/"no" are the two marks; anything else is shown as text (e.g. "5 seats",
-// "Unlimited"). Case-insensitive so editors can type Yes or YES.
-//
-// An empty value is NOT "excluded": a row an editor has not filled in yet
-// would otherwise tell customers the feature is absent. Blank renders blank;
-// "no" or "-" is how you say excluded.
+// Blank is not "excluded": an unfilled cell must not tell customers a feature is absent.
 const markFor = (value: string) => {
   const token = value.toLowerCase();
 
@@ -117,9 +110,8 @@ const hasTable = planList.length > 0 && rows?.length > 0;
       >
         <table>
           <thead>
-            {/* The only place `plans` is bound — the body and footer cells
-                  are copies of the same items, and duplicate bindings compete
-                  for the same rows on the canvas. */}
+            {/* The only `plans` binding: duplicate bindings on the body and footer
+                  cells compete for the same rows on the canvas. */}
             <tr
               data-editable="array"
               data-prop="plans"
@@ -220,9 +212,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
 <style is:global>
   @layer page-sections {
     .pricing-comparison {
-      /* One transparent gray on even rows only. The same mix over --color-bg
-         is used on the sticky feature column so it matches on screen and
-         stays opaque when the table pans underneath. */
+      /* The solid twin keeps the sticky column opaque while the table pans. */
       --pricing-stripe: color-mix(in srgb, var(--gray-500) 10%, transparent);
       --pricing-stripe-solid: color-mix(in srgb, var(--gray-500) 10%, var(--color-bg));
       .pricing-comparison-frame {
@@ -304,8 +294,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
         opacity: 0.6;
       }
 
-      /* Highlighted plans are marked by the primary CTA, not a tinted column
-         — column fills read as a second zebra axis and fight the row stripe. */
+      /* Highlight a plan by its CTA, not a tinted column: it fights the row stripe. */
       .pricing-comparison-actions td {
         padding-top: var(--spacing-lg);
 
@@ -321,8 +310,6 @@ const hasTable = planList.length > 0 && rows?.length > 0;
         background-color: var(--pricing-stripe);
       }
 
-      /* 640px = canonical mobile breakpoint — pans with the feature column
-         pinned, matching the Table block. */
       @media (width < 640px) {
         .pricing-comparison-hint {
           display: block;

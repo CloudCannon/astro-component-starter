@@ -1,7 +1,6 @@
 import { preview, box, bar, ink, glyph, body } from "../../../../../scripts/previews/kit.mjs";
 
-// Four-and-a-half filled marks and a value bar — the half mark is the cue that
-// this is a rating, not a button row. Exempt from the width bands.
+// The half mark says rating, not a button row. Exempt from the width bands.
 export default preview({
   width: 320,
   exempt: true,

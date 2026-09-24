@@ -1,12 +1,9 @@
 /**
- * Build the site and serve the real CloudCannon editor against `dist/`.
- *
- *   npm run editor                  build, then serve
+ *   npm run editor                     build, then serve
  *   npm run editor -- --with-library   include /component-docs in the build
  *   npm run editor -- --no-build       serve the existing dist/ as-is
  *
- * `--no-app-sync` is not optional: app sync writes editor changes back to the
- * working tree without a Save, non-atomically, reflowing whole YAML files.
+ * `--no-app-sync` is required: app sync rewrites the working tree without a Save.
  */
 import { spawnSync } from "node:child_process";
 import { statSync } from "node:fs";

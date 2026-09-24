@@ -1,6 +1,5 @@
 :where(:root) {
-  /* Line height (unitless ratio). `none` collapses the line box for icon-only /
-     inline-SVG buttons; the heading ramp tightens as heading sizes grow. */
+  /* `none` collapses the line box, for icon-only / inline-SVG buttons. */
   --line-height-none: 0;
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;

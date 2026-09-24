@@ -53,18 +53,12 @@ export function navItemContainsCurrent(pathname: string, item: NavItem): boolean
   return Boolean(item.children?.some((child) => navItemContainsCurrent(pathname, child)));
 }
 
-/**
- * Per-render presentation state for one nav item, shared by the bar's
- * Dropdown/MegaPanel and the mobile menu. `groupName` names the
- * checkbox/radio group the item's own toggle joins; an item's children join
- * a group derived from its `parentGroupId`. Toggle ids are only minted for
- * items that render a toggle.
- */
+// `groupName` is the group this item's toggle joins; its children join one derived from `parentGroupId`.
 export interface NavItemData extends NavItem {
   hasChildren: boolean;
   hasSplitLink: boolean;
   isCurrent: boolean;
-  /** This item, or anything inside its submenu/panel, is the current page. */
+  /** Also true when anything inside its submenu/panel is the current page. */
   hasCurrent: boolean;
   groupName: string;
   parentGroupId: string;
@@ -72,7 +66,6 @@ export interface NavItemData extends NavItem {
   contentId?: string;
 }
 
-/** Stable per-item id fragment. Siblings sharing a name would collide. */
 function navItemKey(item: NavItem): string {
   return slugifyLabel(item.name || item.path || "") || "item";
 }

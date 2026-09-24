@@ -66,12 +66,7 @@ export function parseConsentRecord(
   }
 }
 
-/**
- * Strict opt-in: only an explicit grant allows a category, so an undecided one
- * is already denied. Global Privacy Control is honoured where it can still
- * change something — `ConsentManager` records the decline up front, so the
- * banner never asks a visitor who has signalled.
- */
+/** Strict opt-in: an undecided category is denied. */
 export function isConsentAllowed(
   record: ConsentRecord,
   category: ConsentCategory,
@@ -107,8 +102,6 @@ export class ConsentManager {
       if (event.key === CONSENT_STORAGE_KEY) this.sync();
     });
 
-    // A browser sending Global Privacy Control has already declined optional
-    // services; recording that up front keeps the banner from asking again.
     if (
       config.enabled &&
       config.honorGlobalPrivacyControl &&
@@ -167,8 +160,7 @@ export class ConsentManager {
       localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(this.#record));
       this.#channel?.postMessage("changed");
     } catch {
-      // Browser storage can be unavailable. The in-memory record still makes
-      // the current visit honour the visitor's choice.
+      // Storage can be unavailable; the in-memory record still covers this visit.
     }
   }
 

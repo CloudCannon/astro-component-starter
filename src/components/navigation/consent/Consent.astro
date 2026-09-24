@@ -8,9 +8,7 @@ import type { AnalyticsConfig, PrivacyConfig } from "../../../integrations/conse
 type Props = { privacy: PrivacyConfig; analytics: AnalyticsConfig; label?: string };
 const { privacy, analytics, label } = Astro.props as Props;
 const hasAnalytics = analytics.provider !== "none";
-// A page mounts one site-wide instance, but the component library's own example
-// renders a second one on the same page — each needs its own popover id, and the
-// label (which the "Customize" banner action targets) is how an instance is named.
+// The component library renders a second instance on one page, so the id comes from the label.
 const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
 ---
 
@@ -163,8 +161,6 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
 
 <style is:global>
   @layer components {
-    /* Inverse, not shadowed: data-theme="dark" gives a solid fill that
-       contrasts with the page, and the theme toggle flips it with the site. */
     .consent-banner {
       align-items: end;
       background-color: var(--color-bg);
@@ -217,8 +213,6 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
       gap: var(--spacing-xs);
     }
 
-    /* Component docs are a contained, non-persistent demonstration. Pin the
-       chrome to the preview frame instead of the browser viewport. */
     .component-viewer .consent-banner {
       position: absolute;
     }
@@ -279,8 +273,6 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
       }
     }
 
-    /* Toggle rows stack the label + switch over the description; the
-       necessary row keeps its side-by-side "Always on" layout above. */
     .consent-category:has(> .consent-category-toggle) {
       display: grid;
       gap: var(--spacing-xs);

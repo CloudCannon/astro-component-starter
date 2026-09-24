@@ -14,9 +14,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// The radio group name has to be unique per nav: two bars sharing an
-// `aria-label` would put both their panels in one group, so opening one closes
-// the other's.
+// Unique per nav: two bars sharing an `aria-label` would share one radio group.
 const navGroupName = uniqueId(
   Astro.request,
   `bar-nav-top-${slugifyLabel(ariaLabel || "navigation")}`
@@ -95,11 +93,7 @@ const pathname = Astro.url.pathname;
     clampOpenDropdowns(barNav);
   }
 
-  /**
-   * Nudge a centred dropdown back inside the viewport. A dropdown on the
-   * right-most nav item is centred on its trigger, so half of it hangs off the
-   * page; CSS alone cannot express "centred, but not past the edge".
-   */
+  /** CSS alone can't express "centred on the trigger, but not past the viewport edge". */
   function clampOpenDropdowns(barNav: Element) {
     barNav
       .querySelectorAll<HTMLElement>(".nav-item-toggle:checked ~ .nav-item-content")
@@ -168,9 +162,8 @@ const pathname = Astro.url.pathname;
           trigger.addEventListener("click", handleTriggerClick);
         });
 
-      // A press on a label or panel content moves focus to the nearest focusable
-      // ancestor, outside the nav. Closing on that focusout made the trigger's
-      // own click reopen the panel, so presses are left to the click handlers.
+      // A press moves focus outside the nav; closing on that focusout would make the
+      // trigger's own click reopen the panel, so presses are left to the click handlers.
       let pressedInside = false;
 
       barNav.addEventListener("pointerdown", () => {
@@ -178,9 +171,7 @@ const pathname = Astro.url.pathname;
       });
       window.addEventListener("pointerup", () => setTimeout(() => (pressedInside = false)));
 
-      // Tabbing out of an open dropdown leaves it hanging over the page; the
-      // document click handler only covers the mouse. `relatedTarget` is the
-      // element about to receive focus.
+      // Keyboard counterpart of the document click handler.
       barNav.addEventListener("focusout", (e) => {
         const next = (e as FocusEvent).relatedTarget;
 
@@ -189,7 +180,6 @@ const pathname = Astro.url.pathname;
         closeAll(barNav);
       });
 
-      // Clicks inside dropdown content must not reach the document handler, which closes dropdowns.
       barNav.querySelectorAll(".nav-item-content, .nav-item-nested").forEach((content) => {
         content.addEventListener("click", (e) => {
           const target = e.target as HTMLElement;
@@ -343,9 +333,7 @@ const pathname = Astro.url.pathname;
         transform: rotate(90deg);
       }
 
-      /* The input is hidden by `.visually-hidden`, not `display: none`, so it
-         stays in the tab order — which means drawing its focus ring on the
-         visible trigger, wrapped in `.nav-item-split` or not. */
+      /* The toggle is `.visually-hidden` so it stays tabbable; its ring is drawn on the trigger. */
       .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
       .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
         outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);

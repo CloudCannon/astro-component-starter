@@ -1,9 +1,5 @@
 import { pruneCache } from "../../src/utils/og/cache.mjs";
 
-/**
- * Drop generated share cards this build never used, so an edited title does not
- * leave its old card behind for good.
- */
 export default function pruneOgCache() {
   let startedAt = 0;
 

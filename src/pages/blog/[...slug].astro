@@ -18,8 +18,6 @@ const componentImports = {
   ...import.meta.glob("../../components/page-sections/**/*.astro", { eager: true }),
 };
 
-// MDX addresses components by bare filename, so two files sharing one name
-// would silently shadow each other. Page sections carry a `Section` suffix.
 const mdxComponents: Record<string, any> = {};
 const sourceByName: Record<string, string> = {};
 

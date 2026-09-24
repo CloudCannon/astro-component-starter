@@ -15,9 +15,8 @@ const {
   class:list={["__SLUG__", "stackable", className]}
   {...htmlAttributes}
 >
-  {/* On a direct child, never the root: CloudCannon's editable-regions
-      re-render keeps the root element, so a prop-driven attribute there goes
-      stale in the visual editor. Flow's :has() hoists it (see _flow.css). */}
+  {/* Never on the root: the editor's re-render keeps it, so the attribute goes stale.
+      _flow.css hoists it via :has(). */}
   <span
     class="__SLUG__-text"
     data-space-before={spaceBeforeAttr(spaceBefore)}
@@ -28,12 +27,9 @@ const {
 
 <style is:global>
   @layer components {
-    /* Consume design tokens only — never hardcode colors/spacing/shadows/breakpoints.
-       Primitive tokens: src/styles/variables/*  Semantic tokens: src/styles/themes/* */
+    /* Tokens only: src/styles/variables/* (primitive), src/styles/themes/* (semantic). */
     .__SLUG__ {
-      /* No root margin — sibling spacing comes from the flow system. Declare a
-         `--space-before` type default only if this block shouldn't fall back
-         to `--space-before-default` (Heading: loose, Text: tight). */
+      /* No root margin: sibling spacing comes from the flow system (`--space-before`). */
       /* TODO: replace with real styles for __PASCAL__. */
       color: var(--color-text);
     }

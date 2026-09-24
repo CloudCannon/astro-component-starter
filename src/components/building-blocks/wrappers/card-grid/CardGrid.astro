@@ -30,8 +30,6 @@ if (!htmlAttributes.id && label) {
 const masonry = layout === "masonry";
 const columnCount = Math.min(4, Math.max(2, Math.round(Number(columns) || 3)));
 
-// Masonry mode keeps each cover's own shape — a fixed crop there would make
-// every card the same height, which is the whole point of the grid layout.
 const cardRatio = masonry ? "none" : aspectRatio;
 const gapValue = gap === "none" ? "0px" : `var(--spacing-${gap})`;
 
@@ -63,15 +61,10 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 {masonry ? (
-  /* The Masonry wrapper brings its own order-preserving enhancement and
-       editor wiring, so masonry mode composes it rather than repeating the
-       layout JS here. */
   <div
     class:list={["card-grid", "stackable", className]}
     {...htmlAttributes}
   >
-    {/* data-space-before rides a child so flow's :has() hoist finds it — on
-          the region root a prop-driven attribute goes stale in the editor. */}
     <Masonry
       class="card-grid-masonry"
       data-space-before={spaceBeforeAttr(spaceBefore)}
@@ -80,10 +73,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
       data-children-prop={effectiveChildrenProp}
     >
       <slot>
-        {/* MasonryItem is the measurement probe for the JS enhancement.
-               CardGridItem can't be the grid child: it has overflow:hidden
-               and a flex column, so measuring it after the row-span is set
-               feeds back into an 8px-tall collapse. */}
+        {/* CardGridItem can't be the measured grid child: its overflow:hidden flex column collapses to 8px. */}
         {items?.map((item: ItemProps) => (
           <MasonryItem {...itemRegionAttributes}>
             <CardGridItem
@@ -135,7 +125,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
         grid-template-columns: minmax(0, 1fr);
         width: 100%;
 
-        /* 640px: canonical mobile breakpoint — one card per row below it. */
         @media (width >= 640px) {
           grid-template-columns: repeat(var(--card-grid-columns, 3), minmax(0, 1fr));
         }
@@ -145,7 +134,6 @@ if (!_component && !hasItems && !hasSlotContent) return;
         }
       }
 
-      /* Masonry owns its own inner spacing; Card Grid owns the outer offset. */
       > .masonry {
         margin-top: 0;
       }

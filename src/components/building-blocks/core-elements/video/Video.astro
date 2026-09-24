@@ -6,20 +6,16 @@ import type { VideoSource } from "@component-utils/discoverVideoSources";
 const {
   type,
   videoId,
-  // Interpolated into `videotitle`/`title` attributes, so an undefined value
-  // would render the literal string "undefined" as the frame's accessible name.
+  // Interpolated into attributes: undefined would render "undefined" as the accessible name.
   title = "",
   source,
   thumbnail,
   captions = "",
   captionsLanguage = "en",
   background = false,
-  // Background videos are decorative, so they default to an autoplaying
-  // loop; passing autoplay/loop explicitly still wins.
   autoplay = background,
   loop = background,
-  // The media elements are the roots, so data-space-before rides them: live
-  // edits to spaceBefore need a reload (see _flow.css).
+  // The media elements are the roots, so live spaceBefore edits need a reload (see _flow.css).
   spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -40,8 +36,7 @@ if (import.meta.env.DEV) {
   }
 }
 
-// An unknown type used to fall through to a <video> with no sources: a black
-// box with controls that can never play.
+// An unknown type must not fall through to a <video> with no sources.
 if (!_component && !VIDEO_TYPES.includes(type)) return;
 
 const captionsSrc = typeof captions === "string" ? captions.trim() : "";

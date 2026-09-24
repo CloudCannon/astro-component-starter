@@ -1,13 +1,4 @@
-/**
- * The full set of component docs pages, left-joining every component that
- * exists in `src/components` (via componentConfig.ts) against whatever
- * hand-written docs entry (if any) exists for it in the `docs-components`
- * collection.
- *
- * A component with no docs entry still gets a full index entry — its title
- * falls back to the structure-value `label`, then a formatted version of its
- * own key — so [...slug].astro can build a complete page either way.
- */
+/** Left-joins every component against the `docs-components` collection; a docs entry is optional. */
 import { getCollection, type CollectionEntry } from "astro:content";
 import { type ComponentConfig, listComponentKeys, loadComponentConfig } from "./componentConfig";
 
@@ -21,13 +12,11 @@ export type ComponentIndexEntry = {
   config: ComponentConfig | null;
 };
 
-/** Display-name overrides for keys/segments whose casing isn't a simple title-case. */
 const DISPLAY_NAME_OVERRIDES: Record<string, string> = {
   ctas: "CTAs",
   cta: "CTA",
 };
 
-/** Convert a kebab-case key segment into a display name (e.g. "hero-center" -> "Hero Center"). */
 export function formatDisplayName(value = ""): string {
   const lower = value.toLowerCase();
 
@@ -41,7 +30,7 @@ export function formatDisplayName(value = ""): string {
     .join(" ");
 }
 
-/** Derive a docs-components collection entry's component key, matching [...slug].astro. */
+/** Must match the key derivation in [...slug].astro. */
 function slugFromEntryId(id: string): string {
   return id
     .replace(/^components\//, "")

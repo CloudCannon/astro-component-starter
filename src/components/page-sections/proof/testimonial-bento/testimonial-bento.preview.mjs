@@ -14,9 +14,7 @@ import {
 
 const B = band(960);
 
-// A regular grid led by one 2 × 2 quote, with a filled inverse cell. The equal
-// rows and the big lead cell are what separate it from Testimonial Wall's
-// ragged masonry columns.
+// Equal rows and the 2 × 2 lead cell separate it from Testimonial Wall's masonry.
 const quote = (x, y, w, h, lines, o = {}) => [
   o.fill === ink ? box(x, y, w, h, { fill: ink }) : plate(x, y, w, h, { fill: o.fill }),
   ...lines.map((lw, i) =>

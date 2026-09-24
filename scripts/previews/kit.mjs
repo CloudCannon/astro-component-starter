@@ -1,55 +1,23 @@
 /**
- * Component-preview kit — the authoring API for `*.preview.mjs` recipe files.
- *
- * A recipe declares a content `width` and drawing primitives in absolute canvas
- * coordinates; `compile()` centres the bounding box on (640, 360) and asserts it
- * matches the declared width. Deterministic and browser-free, so CI rebuilds and
- * diffs to catch drift. Screenshots (`screenshot.mjs`) are an authoring reference
- * only, never an input.
- *
- * The five rules that keep 84 previews looking like one family:
- *
- *   1. NINE COLOUR ROLES, no raw hex — see the glossary below. Re-skin and
- *      dark-mode the whole set from one place.
- *   2. A FIVE-STEP TYPE SCALE (display/heading/label/body/micro). `bar()` takes
- *      a scale step, not a pixel height, so no recipe can add a sixth size.
- *   3. A THREE-STEP STROKE SCALE (control 2 / field 3 / active 4).
- *   4. FOUR CONTENT WIDTH BANDS (560 / 760 / 960 / 1120), asserted at build
- *      time. Components that would read as distorted set `exempt: true`.
- *   5. EVERYTHING CENTRES on (640, 360) — `compile()` emits the offset, so a
- *      picker grid stays even regardless of composition height.
- *
- * Geometry is integer throughout. Prefer the composites (`pill`, `field`,
- * `media`, `navButton`, …) over raw shapes: they carry the on-system weights,
- * radii and insets. Absolute y values are arbitrary; start at 0 and work down.
+ * Authoring API for `*.preview.mjs` recipes. Rules every preview obeys:
+ *   1. Nine colour roles, no raw hex.
+ *   2. Five type steps; `bar()` takes a step, not a pixel height.
+ *   3. Three stroke steps (control 2 / field 3 / active 4).
+ *   4. Content width is one of BANDS (or `exempt: true`), asserted by `compile()`.
+ *   5. `compile()` centres the drawing on (640, 360); recipes never offset it.
+ * Prefer the composites (`pill`, `field`, `media`, …): they carry the on-system
+ * weights, radii and insets. Geometry is integer.
  */
 
-// Canvas — 16:9, matching CloudCannon's structure-picker gallery
-// (`.c-card__preview` is ~286×160). `gallery.fit: cover` absorbs the leftover
-// sub-pixel when the card width isn't an exact 16:9.
+// 16:9 to match CloudCannon's structure-picker gallery.
 
 export const W = 1280;
 export const H = 720;
 export const CX = W / 2;
 export const CY = H / 2;
 
-// Colour roles. Nine variables cover every preview. Light values are inlined as
-// the `var()` fallback so a preview loaded as `<img>` — an isolated document
-// page CSS cannot reach into — still renders correctly. The dark values are
-// injected as an in-document `@media` block by `compile()`, which is the only
-// way an `<img>`-loaded SVG can follow the viewer's colour scheme.
-//
-//   paper    the page behind everything
-//   panel    a subtly-tinted panel (mobile menu, side nav, chevron chips)
-//   surface  a filled media / card surface, one step stronger than panel
-//   line     a faint hairline border or rule
-//   glyph    a placeholder mark: inactive control, dropdown copy, media glyph
-//   body     body-copy text bars
-//   subject  the component's SUBJECT — headings, active marks, nav labels.
-//            This role carries the visual hierarchy; use it for whatever the
-//            preview is actually about.
-//   ink      the brand primary (a dark neutral by default): filled buttons
-//   on-ink   a faint label bar drawn inside an `ink` fill
+// Light values are inlined as the `var()` fallback: an `<img>`-loaded SVG can't see page CSS.
+// `subject` carries the hierarchy (whatever the preview is about); `glyph` is a placeholder mark.
 
 const LIGHT = {
   paper: "#FFFFFF",
@@ -87,9 +55,6 @@ export const subject = role("subject");
 export const ink = role("ink");
 export const onInk = role("on-ink");
 
-// Scales
-
-/** Type scale. Text is a fully-rounded bar at one of these five heights. */
 export const TYPE = {
   display: 40,
   heading: 26,
@@ -98,7 +63,6 @@ export const TYPE = {
   micro: 8,
 };
 
-/** Default role per type step — body copy is quieter than a heading. */
 const TYPE_FILL = {
   display: subject,
   heading: subject,
@@ -107,37 +71,23 @@ const TYPE_FILL = {
   micro: onInk,
 };
 
-/** Stroke scale. `control` = button/segment outline, `field` = form input, `active` = selected. */
+/** `control` = button/segment outline, `field` = form input, `active` = selected. */
 export const STROKE = { control: 2, field: 3, active: 4 };
 
-/** Corner radii. `box` is the universal soft corner; `tile` is the big icon plate. */
 export const R = { box: 10, tile: 44 };
 
-/** The four content width bands. */
 export const BANDS = [560, 760, 960, 1120];
 
-/**
- * A content band: its width plus the canvas edges it centres to. Recipes read
- * `B.left` / `B.right` / `B.cx` instead of doing arithmetic.
- *
- * @param {number} w One of BANDS, or any width when the recipe is `exempt`.
- */
+/** @param {number} w One of BANDS, or any width when the recipe is `exempt`. */
 export function band(w) {
   const left = Math.round((W - w) / 2);
 
   return { w, left, right: left + w, cx: CX };
 }
 
-// Core primitives. Every one returns a plain element object (or an array of
-// them) in absolute canvas coordinates. Recipes nest arrays freely; `compile()`
-// flattens. Draw order is array order.
-
 const num = (v) => Math.round(v);
 
-/**
- * Rounded rectangle — the workhorse.
- * @param {object} [o] { fill, stroke, sw, r, dash, opacity }
- */
+/** @param {object} [o] { fill, stroke, sw, r, dash, opacity } */
 export function box(x, y, w, h, o = {}) {
   return {
     k: "rect",
@@ -155,7 +105,6 @@ export function box(x, y, w, h, o = {}) {
 }
 
 /**
- * A text bar: fully rounded, height from the type scale.
  * @param {"display"|"heading"|"label"|"body"|"micro"} size
  * @param {object} [o] { fill, opacity }
  */
@@ -171,7 +120,7 @@ export function bar(x, y, w, size = "body", o = {}) {
   });
 }
 
-/** Filled circle. @param {object} [o] { fill, opacity } */
+/** @param {object} [o] { fill, opacity } */
 export function dot(cx, cy, r, o = {}) {
   return {
     k: "circle",
@@ -186,12 +135,8 @@ export function dot(cx, cy, r, o = {}) {
 }
 
 /**
- * Polygon. @param {Array<[number, number]>} pts @param {object} [o] { fill, opacity, round }
- *
- * `round` is a corner radius: the shape is drawn with a round-joined stroke of
- * that radius, and the vertices are inset along their angle bisectors so the
- * stroked outline lands exactly on the given points — same footprint, soft
- * corners. Convex shapes only (all the kit's triangles are).
+ * @param {Array<[number, number]>} pts @param {object} [o] { fill, opacity, round }
+ * `round` softens corners without changing the footprint. Convex shapes only.
  */
 export function poly(pts, o = {}) {
   const round = o.round >= 1 ? Math.round(o.round) : null;
@@ -205,7 +150,6 @@ export function poly(pts, o = {}) {
   };
 }
 
-/** Move each vertex toward the polygon interior so a stroke of radius `r` restores the original outline. */
 function insetVertices(pts, r) {
   const n = pts.length;
 
@@ -228,14 +172,11 @@ function insetVertices(pts, r) {
   });
 }
 
-/** A hairline rule. */
 export function rule(x, y, w, o = {}) {
   return box(x, y, w, o.h ?? 2, { r: 1, fill: o.fill ?? line });
 }
 
-// Layout helpers — for composing without hand-computing every coordinate.
-
-/** Flatten arbitrarily-nested element arrays, dropping null/false/undefined. */
+/** Drops null/false/undefined, so recipes can draw conditionally. */
 export function flatten(els) {
   const out = [];
   const walk = (v) => {
@@ -248,7 +189,7 @@ export function flatten(els) {
   return out;
 }
 
-/** Translate a group of elements by (dx, dy). */
+/** Translate a group by (dx, dy). */
 export function at(dx, dy, els) {
   return flatten(els).map((e) => {
     if (e.k === "rect") return { ...e, x: e.x + num(dx), y: e.y + num(dy) };
@@ -257,12 +198,11 @@ export function at(dx, dy, els) {
   });
 }
 
-/** `repeat(3, i => …)` — build n groups, index-aware. */
 export function repeat(n, fn) {
   return Array.from({ length: n }, (_, i) => fn(i));
 }
 
-/** The bounding box of a group of elements (stroke-agnostic, matching how bands are measured). */
+/** Stroke-agnostic, matching how bands are measured. */
 export function bounds(els) {
   const list = flatten(els);
 
@@ -301,9 +241,6 @@ export function columns(x, count, pitch, fn) {
 }
 
 /**
- * A column of body-copy bars with explicit per-line widths — the ragged right
- * edge is what makes a text block read as prose rather than a table.
- *
  * @param {number[]} widths One entry per line.
  * @param {object} [o] { size = "body", gap = 12 (leading between bars), fill,
  *   align = "left"|"center", within }
@@ -320,16 +257,7 @@ export function lines(x, y, widths, o = {}) {
   });
 }
 
-// Composites. These carry the system's weights, radii and insets so a recipe
-// does not have to remember them.
-
-/**
- * A button. `ink` is the filled brand primary; `ghost` is an outlined control.
- * The inner label bar is centred automatically — `micro` in a short button,
- * `body` in a tall one, since an 8px bar disappears inside a 76px pill.
- *
- * @param {object} [o] { variant: "ink"|"ghost", label, labelSize, r }
- */
+/** @param {object} [o] { variant: "ink"|"ghost", label, labelSize, r } */
 export function pill(x, y, w, h, o = {}) {
   const variant = o.variant ?? "ink";
   const labelSize = o.labelSize ?? (h >= 56 ? "body" : "micro");
@@ -348,7 +276,6 @@ export function pill(x, y, w, h, o = {}) {
   ];
 }
 
-/** A form field: paper plate, `field`-weight glyph outline. */
 export function field(x, y, w, h, o = {}) {
   return box(x, y, w, h, {
     r: o.r ?? R.box,
@@ -359,7 +286,6 @@ export function field(x, y, w, h, o = {}) {
   });
 }
 
-/** A bordered content plate: paper with a `line` hairline. Accordion rows, modals, FAQ items. */
 export function plate(x, y, w, h, o = {}) {
   return box(x, y, w, h, {
     r: o.r ?? R.box,
@@ -369,17 +295,15 @@ export function plate(x, y, w, h, o = {}) {
   });
 }
 
-/** A filled media / card surface. No glyph — add `photoGlyph` or `playDisc` on top. */
 export function media(x, y, w, h, o = {}) {
   return box(x, y, w, h, { r: o.r ?? R.box, fill: o.fill ?? surface, stroke: o.stroke, sw: o.sw });
 }
 
-/** The sun disc of a photo placeholder. */
 export function sun(cx, cy, r, o = {}) {
   return dot(cx, cy, r, { fill: o.fill ?? glyph });
 }
 
-/** One mountain of a photo placeholder: base from x1..x2 at yBase, apex at (xApex, yApex). */
+/** Base from x1..x2 at yBase, apex at (xApex, yApex). */
 export function peak(x1, x2, xApex, yBase, yApex, o = {}) {
   return poly(
     [
@@ -391,11 +315,7 @@ export function peak(x1, x2, xApex, yBase, yApex, o = {}) {
   );
 }
 
-/**
- * The default photo placeholder glyph — sun plus two overlapping peaks, sized
- * proportionally to the media box. Use this when authoring a NEW preview; the
- * shipped set mostly carries hand-tuned `sun`/`peak` calls instead.
- */
+/** For new previews; the shipped set hand-tunes `sun`/`peak` calls instead. */
 export function photoGlyph(x, y, w, h, o = {}) {
   const fill = o.fill ?? glyph;
   const baseY = y + h * 0.78;
@@ -407,12 +327,7 @@ export function photoGlyph(x, y, w, h, o = {}) {
   ];
 }
 
-/**
- * A play button: filled disc with a paper triangle. `r` drives the triangle,
- * so the two always stay in proportion. The right-of-centre nudge is optical:
- * enough that the triangle doesn't read left-heavy, sized for the rounded tip
- * (which reaches ~0.11r short of the sharp point).
- */
+/** The triangle sits right of centre on purpose: optical balance for its rounded tip. */
 export function playDisc(cx, cy, r, o = {}) {
   const left = cx - (o.back ?? Math.round(r * 0.32));
   const half = o.half ?? Math.round(r * 0.5278);
@@ -431,7 +346,6 @@ export function playDisc(cx, cy, r, o = {}) {
   ];
 }
 
-/** A downward caret — the "this opens a menu" cue that separates select/date from a text input. */
 export function caret(x, y, w, o = {}) {
   const h = o.h ?? Math.round(w * 0.56);
 
@@ -445,7 +359,6 @@ export function caret(x, y, w, o = {}) {
   );
 }
 
-/** A sideways chevron. `dir` is "left" or "right". */
 export function chevron(x, y, w, h, dir = "right", o = {}) {
   const pts =
     dir === "right"
@@ -463,7 +376,6 @@ export function chevron(x, y, w, h, dir = "right", o = {}) {
   return poly(pts, { fill: o.fill ?? glyph });
 }
 
-/** A round carousel nav button: filled disc with a paper chevron. */
 export function navButton(cx, cy, dir, o = {}) {
   const r = o.r ?? 40;
   const half = o.half ?? 18;
@@ -488,15 +400,10 @@ export function navButton(cx, cy, dir, o = {}) {
   ];
 }
 
-/** A small square plate — icon tile, social button, avatar stand-in. */
 export function tile(x, y, d, o = {}) {
   return box(x, y, d, d, { r: o.r ?? R.box, fill: o.fill ?? surface, stroke: o.stroke, sw: o.sw });
 }
 
-/**
- * Four L-shaped crop marks inside a box — the cue that reads as "embedded
- * frame" rather than "photo", which a plain surface rect cannot do.
- */
 export function cropCorners(x, y, w, h, o = {}) {
   const inset = o.inset ?? 71;
   const insetY = o.insetY ?? 68;
@@ -524,11 +431,7 @@ export function cropCorners(x, y, w, h, o = {}) {
   ];
 }
 
-/**
- * Carousel position dots. The active one is an elongated bar rather than a
- * bigger circle — at thumbnail size a size difference between two small discs
- * is invisible, a shape difference is not.
- */
+/** The active dot is a bar, not a bigger disc: a size difference vanishes at thumbnail size. */
 export function dots(cx, cy, count, active = 0, o = {}) {
   const r = o.r ?? 5;
   const gap = o.gap ?? 20;
@@ -552,12 +455,10 @@ export function dots(cx, cy, count, active = 0, o = {}) {
   return out;
 }
 
-/** A checkbox / radio mark. `on` fills it with ink. */
 export function checkbox(x, y, d, on = false, o = {}) {
   return box(x, y, d, d, { r: o.r ?? 6, fill: on ? ink : (o.fill ?? glyph) });
 }
 
-/** A switch: ink track with a paper knob, knob side set by `on`. */
 export function toggle(x, y, w, h, on = true, o = {}) {
   const kr = o.knob ?? Math.round(h / 2 - 8);
   const pad = o.pad ?? 8;
@@ -569,17 +470,10 @@ export function toggle(x, y, w, h, on = true, o = {}) {
   ];
 }
 
-// preview() — the recipe wrapper.
-
 /**
- * Declare a preview.
- *
  * @param {object} spec
- * @param {number} spec.width  Content bounding-box width. Must be one of BANDS
- *   unless `exempt` is set. Asserted against the drawn geometry at build time,
- *   so an edit that drifts off-band fails loudly instead of silently.
- * @param {boolean} [spec.exempt] Opt out of the band check — for a single small
- *   control that would read as distorted stretched to 560.
+ * @param {number} spec.width  Content bounding-box width; one of BANDS unless `exempt`.
+ * @param {boolean} [spec.exempt] Opt out of the band check.
  * @param {string} [spec.title] Override the derived `<title>` text.
  * @param {Array} spec.draw Nested arrays of elements.
  */
@@ -647,21 +541,13 @@ function emit(e) {
   ])}/>`;
 }
 
-/** `hero-split` -> `Hero split`. */
 function titleCase(slug) {
   const words = slug.split("-").join(" ");
 
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-/**
- * The dark-mode block, injected INSIDE every SVG. An external stylesheet cannot
- * reach into an `<img>`-loaded SVG, and CloudCannon loads previews by URL — so
- * this is the only way the set follows the viewer's colour scheme.
- *
- * Scoped to `svg`, deliberately NOT `:root`: `:root` would match the host
- * `<html>` when the same file is inlined, leaking the overrides onto the page.
- */
+// Scoped to `svg`, not `:root`: `:root` would match the host `<html>` when the file is inlined.
 const DARK_BLOCK = [
   "  <style>",
   "    @media (prefers-color-scheme: dark) {",
@@ -673,8 +559,6 @@ const DARK_BLOCK = [
 ].join("\n");
 
 /**
- * Compile a recipe to an SVG string.
- *
  * @param {object} spec A `preview({...})` result.
  * @param {string} key  The component key, e.g. `page-sections/heroes/hero-split`.
  */
@@ -695,7 +579,6 @@ export function compile(spec, key = "preview") {
     );
   }
 
-  // Centre the drawn box on (640, 360) — recipes never do this arithmetic.
   const dx = Math.round(CX - (b.x0 + b.x1) / 2);
   const dy = Math.round(CY - (b.y0 + b.y1) / 2);
 
@@ -712,8 +595,7 @@ export function compile(spec, key = "preview") {
   const open = dx === 0 && dy === 0 ? "  <g>" : `  <g transform="translate(${dx} ${dy})">`;
 
   return [
-    // width/height alongside viewBox give the file an intrinsic size, so an
-    // <img> reserves the right box before it loads. CSS can still override.
+    // width/height give an `<img>` its intrinsic size before load.
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="${id}">`,
     `  <title id="${id}">${title}</title>`,
     DARK_BLOCK,

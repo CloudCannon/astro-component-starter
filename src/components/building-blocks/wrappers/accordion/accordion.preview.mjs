@@ -11,8 +11,7 @@ import {
 
 const B = band(760);
 
-// Three collapsed rows, each a header plus a round chevron chip. All collapsed
-// deliberately: an expanded row would make this read as the FAQ section instead.
+// All rows collapsed deliberately: an expanded one reads as the FAQ section.
 export default preview({
   width: B.w,
   draw: repeat(3, (i) => {

@@ -2,8 +2,7 @@ import { preview, band, bar, media, glyph } from "../../../../../scripts/preview
 
 const B = band(960);
 
-// A 3×2 wall of captioned photo tiles — repeated glyphs at equal size read as
-// "gallery", vs latest-posts (one cover + text per card) and logo-cloud.
+// Equal-size repeated photo glyphs read as "gallery", vs latest-posts and logo-cloud.
 export default preview({
   width: B.w,
   draw: [

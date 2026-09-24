@@ -7,11 +7,7 @@ export async function getBlogPostsSortedByDate() {
   return posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
-/**
- * Replace the heading of a listing's hero section. Every blog listing — the
- * index, its pages 2..n, and each tag archive — renders the same hero out of
- * `src/content/pages/blog.md`, so without this they all share one h1.
- */
+/** Every blog listing renders the hero from `blog.md`; without this they all share one h1. */
 export function withListingHeading(heroSections: any[], heading: string) {
   let replaced = false;
 
@@ -23,11 +19,7 @@ export function withListingHeading(heroSections: any[], heading: string) {
   });
 }
 
-/**
- * Drop the hero's breadcrumb trail. Tag archives render their own
- * Blog > Tag trail in the listing grid, so leaving the hero's on would put two
- * `<nav aria-label="Breadcrumb">` landmarks on the page.
- */
+/** Tag archives render their own trail; the hero's would make two Breadcrumb landmarks. */
 export function withoutHeroBreadcrumbs(heroSections: any[]) {
   return heroSections.map((section) =>
     section?.showBreadcrumbs ? { ...section, showBreadcrumbs: false } : section

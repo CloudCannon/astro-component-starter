@@ -39,8 +39,7 @@ const {
 
 const itemHeadingLevel = nextHeadingLevel(headingLevel);
 
-// A radio group's name must be unique per section on the page, so a section
-// with nothing to name it still needs a generated suffix.
+// Radio names must be unique per page, so an unnamed section still needs a generated suffix.
 const billingLabel = sectionLabel || heading;
 const billingName = `pricing-billing-${billingLabel ? slugifyLabel(billingLabel) : crypto.randomUUID()}`;
 const annualSelected = defaultInterval === "annual";

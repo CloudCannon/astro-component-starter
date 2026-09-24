@@ -121,11 +121,7 @@ function updateProgress(stepper: HTMLElement, scenes: HTMLElement[]): void {
   stepper.style.setProperty("--scroll-stepper-progress", String(progress));
 }
 
-// `getComputedStyle().getPropertyValue('--main-nav-height')` returns the custom
-// property's raw authored value ("5rem"), not a resolved length — unlike a real
-// property such as `top`, custom properties don't get resolved to px, so
-// `parseFloat` silently read "5" instead of 80. Applying the value to a real
-// property on a probe element makes the browser resolve it properly.
+// A custom property computes to its raw authored value ("5rem"), so it's resolved via a probe.
 function resolveNavHeight(stepper: HTMLElement): number {
   const probe = document.createElement("div");
 
@@ -155,12 +151,7 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
   const mediaHeight = media.getBoundingClientRect().height;
   const last = scenes[scenes.length - 1] ?? first;
   const lastStepHeight = last.getBoundingClientRect().height;
-  // Just enough trailing space for the last step to land where every other step
-  // landed, while the media is still sticky — anything more keeps the media frozen
-  // while that step travels on past, ending up against the top of the media instead
-  // of released to scroll away with the rest of the page. `height-content` steps
-  // start half a media-height down (`contentOffset` centres the first step on the
-  // media), so they need half the runway bottom-aligned `height-screen` steps do.
+  // Any more runway keeps the media stuck after the last step lands.
   const runway = track.classList.contains("height-content")
     ? Math.max((mediaHeight - lastStepHeight) / 2, 0)
     : Math.max(mediaHeight - lastStepHeight, 0);
@@ -184,9 +175,7 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
   stepper.style.setProperty("--scroll-stepper-content-offset", `${contentOffset}px`);
 
   if (track.classList.contains("height-content") && !stepper.__scrollStepperContentOffsetSettled) {
-    // The initial content offset settles over one or more frames. Do not retain a
-    // progress baseline from an intermediate position, or the progress bar will
-    // appear to begin partway through the first handoff.
+    // The offset settles over several frames; a baseline kept now starts the bar partway.
     stepper.__scrollStepperProgressStart = undefined;
 
     if (Math.abs(contentDelta) <= 1) {
@@ -199,12 +188,8 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
     }
   }
 
-  // A `top: 50%` + `translate: -50%` centering trick only centers the box once it's
-  // actually stuck — translate keeps applying while the box is still in normal flow
-  // (not yet scrolled up to its sticky offset), shifting it above its own container
-  // and overlapping whatever precedes the section. Computing a real pixel `top` here
-  // (mediaHeight is already known) centers it without a translate, so native sticky
-  // clamping keeps it from ever rising above its container.
+  // Not `top: 50%` + `translate: -50%`: before sticking, the translate lifts the media
+  // above its container over the previous section.
   const visibleAreaTop = port ? 0 : navHeight;
   const stickyTop = visibleAreaTop + Math.max(0, (viewportHeight - mediaHeight) / 2);
 
@@ -241,11 +226,7 @@ function showStaticGallery(stepper: HTMLElement): void {
     });
 }
 
-/**
- * A ClientRouter navigation discards the stepper but not the listeners it
- * registered on `document` and on its own MediaQueryList, which would keep
- * re-measuring detached DOM on every scroll for the rest of the session.
- */
+// ClientRouter navigation discards the stepper but not its `document`/MediaQueryList listeners.
 function teardownIfDetached(stepper: HTMLElement): boolean {
   if (stepper.isConnected) return false;
 

@@ -1,13 +1,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-/**
- * Card colours, read from the theme CSS so a rebrand reaches the share cards
- * without a second edit. Values must resolve to a literal colour: a token left
- * as `var()` all the way down, or set to something Takumi cannot parse
- * (`color-mix()`, a gradient), falls back and warns rather than failing the
- * build, because an off-palette card should not block a deploy.
- */
+/** A token that isn't a literal colour Takumi parses (`color-mix()`, gradients) falls back and
+ *  warns; never throw. */
 export type CardColorToken =
   "--color-bg" | "--color-text-strong" | "--color-text-muted" | "--color-brand";
 
@@ -37,12 +32,7 @@ const THEME_FILE: Record<CardTheme, string> = {
   dark: "src/styles/themes/_dark.css",
 };
 
-/**
- * The dark theme sets `--color-text-muted` to the same white as
- * `--color-text-strong`, which would flatten the card's title/description
- * hierarchy to size and weight alone. `--color-text` is the dark theme's
- * softer body colour, so it stands in for the description there.
- */
+/** Dark `--color-text-muted` equals `--color-text-strong`, which flattens card contrast. */
 const MUTED_SUBSTITUTE: Partial<Record<CardTheme, string>> = { dark: "--color-text" };
 
 const DECLARATION = /(--[\w-]+)\s*:\s*([^;}]+)/g;
@@ -65,9 +55,6 @@ function declaredProperties(root: string, theme: CardTheme): Map<string, string>
     try {
       css = readFileSync(path.join(root, source), "utf8");
     } catch {
-      // Moving or renaming a token file leaves every colour unresolved, which
-      // the caller reports as a warning. Throwing here would fail the build
-      // instead, which this module promises not to do.
       continue;
     }
 
@@ -79,10 +66,6 @@ function declaredProperties(root: string, theme: CardTheme): Map<string, string>
   return declared;
 }
 
-/**
- * One theme is baked into the image: no social platform renders a card
- * per-viewer, so `shareImageTheme` picks which set of tokens to read.
- */
 export function resolveCardColors(root: string, theme: CardTheme = "light"): ResolvedCardColors {
   const declared = declaredProperties(root, theme);
 

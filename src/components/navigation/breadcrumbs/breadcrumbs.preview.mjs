@@ -2,8 +2,6 @@ import { band, bar, chevron, glyph, preview, subject } from "../../../../scripts
 
 const B = band(560);
 
-// A single wayfinding row: two quiet ancestor links separated by chevrons, then
-// a stronger current-page bar running to the band edge — the clamped title.
 export default preview({
   width: B.w,
   draw: [

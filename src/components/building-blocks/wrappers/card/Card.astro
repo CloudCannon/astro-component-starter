@@ -20,8 +20,7 @@ const {
   backgroundColor,
   background,
   link,
-  // Purely for CloudCannon: gates whether the beforeContentSections/afterContentSections
-  // inputs are shown in the editor. Rendering itself is driven by content presence, below.
+  // Editor-only: gates the before/after inputs. Rendering follows content presence.
   showBeforeAfter: _showBeforeAfter = false,
   rounded = false,
   border = false,
@@ -223,15 +222,12 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         transform: scale(1.05);
       }
 
-      /* A transformed ancestor becomes the containing block for its
-         fixed-position children, which would cancel the parallax background
-         mid-hover — so linked cards with one skip the hover scale. */
+      /* A transform would become the fixed background's containing block. */
       > .card-inner.background-fixed:has(> .card-hit):hover {
         transform: none;
       }
 
-      /* The global reset only kills the transition, leaving the scale as an
-         instant jump — the movement itself has to go. */
+      /* The global reset only kills the transition, not the scale itself. */
       @media (prefers-reduced-motion: reduce) {
         > .card-inner:has(> .card-hit):hover {
           transform: none;
@@ -251,9 +247,8 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         z-index: var(--layer-0);
       }
 
-      /* The body's layers are stacking contexts painted over the hit, so clicks
-         pass through them to it, except on a nested control. Not in the editor,
-         where a click on the body has to reach its editable regions. */
+      /* Clicks pass through the body to the hit, except on nested controls. Not in
+         the editor, where clicks must reach the editable regions. */
       :root:not([data-in-editor]) & .card-inner:has(> .card-hit) {
         > :not(.card-hit) {
           pointer-events: none;
@@ -272,16 +267,12 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
         position: relative;
         text-decoration: none;
 
-        /* `inherit` above would keep the outer scheme's text colour inside a
-           card that switches scheme, so a themed card takes its own. */
+        /* `inherit` would keep the outer scheme's text colour in a themed card. */
         &[data-theme] {
           color: var(--color-text);
         }
 
-        /* Themed cards with a media background get a solid theme-colored
-           backing so text stays legible if the image/video fails to load or
-           is still buffering. The media is a child painted on top, so this is
-           invisible when it loads. */
+        /* Keeps text legible while the media loads or if it fails. */
         &[data-theme]:has(> .background-image),
         &[data-theme]:has(> .background-pattern),
         &[data-theme]:has(> .video.background) {
@@ -299,10 +290,7 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
           border: var(--border-width-sm) solid var(--color-border);
         }
 
-        /* Parallax: the background image is pinned to the viewport and the card
-           clips it with clip-path, because neither overflow nor border-radius
-           clips a fixed-position child. clip-path itself does not create a
-           containing block, so the image stays viewport-anchored. */
+        /* clip-path, because overflow and border-radius don't clip a fixed child. */
         &.background-fixed {
           clip-path: inset(0);
 
@@ -428,8 +416,6 @@ const usesAfterContentSections = !hasAfterSlot && afterContentSections;
       }
     }
 
-    /* Parallax scrolling is a common vestibular trigger — fall back to a
-       regular background image. */
     @media (prefers-reduced-motion: reduce) {
       .card > .card-inner.background-fixed > .background-image {
         position: absolute;

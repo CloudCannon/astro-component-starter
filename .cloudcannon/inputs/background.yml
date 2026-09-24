@@ -1,4 +1,3 @@
-# Shared by every page section with a background via a second _inputs_from_glob entry.
 # Each structure value lists exactly the keys its type reads: `remove_extra_inputs`
 # drops any other key when an editor switches `type`.
 background:

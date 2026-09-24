@@ -26,9 +26,8 @@ interface Props {
 const { page, emptyMessage, locale = "en-US", tagBreadcrumb } = Astro.props;
 ---
 
-{/* The leading gap stays an inline margin: whichever element comes first here
-    is the section's first flow child, and `.flow > * + *` never gives that one
-    a margin. Sibling gaps below do use `spaceBefore`. */}
+{/* An inline margin, not `spaceBefore`: the first flow child never gets a
+    `.flow > * + *` margin. */}
 
 {page.data.length > 0 ? (
   <>

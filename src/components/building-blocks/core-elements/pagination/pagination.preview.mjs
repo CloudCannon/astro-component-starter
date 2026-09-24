@@ -1,7 +1,6 @@
 import { preview, bar, box, dot, ink, glyph, onInk } from "../../../../../scripts/previews/kit.mjs";
 
-// Page numbers with the current page filled, then an ellipsis and a "last" link.
-// Exempt: a row of small number chips has no business filling a 560 band.
+// Exempt from the width bands: a row of small chips shouldn't fill a 560 band.
 export default preview({
   width: 440,
   exempt: true,

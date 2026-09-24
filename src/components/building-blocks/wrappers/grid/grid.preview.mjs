@@ -2,8 +2,7 @@ import { preview, band, bar, lines } from "../../../../../scripts/previews/kit.m
 
 const B = band(960);
 
-// Three even text columns. Explicit column x values rather than a computed pitch:
-// the reference set spaces these 330 / 331 so the outer edges land on the band.
+// Not a computed pitch: 330 / 331 spacing lands the outer edges on the band.
 const COLS = [
   { x: B.left, head: 198, last: 209 },
   { x: 490, head: 176, last: 165 },

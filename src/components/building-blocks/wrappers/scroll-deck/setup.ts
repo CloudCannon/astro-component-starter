@@ -1,22 +1,9 @@
-/**
- * Rail scroll-spy and depth cue for the Scroll Deck. Used by
- * `ScrollDeck.astro`'s inline script and by `editor-live-sync.js`, where
- * inline scripts don't run. The rail is a list of real anchors, so it
- * navigates without this; the deck still stacks, just without the dimming.
- *
- * The depth cue is JS rather than a `view()` scroll-driven animation because a
- * view progress timeline measures the subject's STUCK position: a pinned card
- * never enters its own exit range, so the timeline sits at negative progress
- * forever.
- */
+// Not a `view()` timeline: it measures a pinned card's stuck position, so it never progresses.
 
-/** Cards dim and shrink one step per card covering them, up to this many. */
 const MAX_DEPTH = 3;
 
 export function setupScrollDeck(deck: HTMLElement): void {
-  // Keyed on the layout, not the `.scroll-deck` root: the root survives an
-  // editor re-render while its contents are replaced, so a flag on the root
-  // would skip the new cards and leave the observers on discarded nodes.
+  // Flag the layout, not the root: the root survives an editor re-render that replaces the cards.
   const layout = deck.querySelector<HTMLElement>(".scroll-deck-layout");
 
   if (!layout || layout.hasAttribute("data-scroll-deck-initialized")) return;
@@ -27,18 +14,12 @@ export function setupScrollDeck(deck: HTMLElement): void {
   const rail = deck.querySelector<HTMLElement>(".scroll-deck-rail");
 
   if (!cards.length) {
-    // In the CloudCannon editor the subtree can be briefly incomplete while
-    // content loads; the live-sync observer re-runs setup once it lands.
     if (import.meta.env.DEV) {
       console.debug("ScrollDeck: skipping setup, required elements missing", deck);
     }
     return;
   }
 
-  // A block flow gives every card one shared sticky containing block. That is
-  // what lets the complete stepped stack release together at the end. Measure
-  // the tallest natural card so this flow keeps the equal-height card chrome
-  // that the grid layout previously provided.
   const syncCardHeight = () => {
     deck.style.removeProperty("--deck-card-height");
 
@@ -67,15 +48,8 @@ export function setupScrollDeck(deck: HTMLElement): void {
     contentObserver.observe(card, { childList: true, subtree: true, characterData: true });
   });
 
-  // A card's sticky `top` is resolved against its scrollport, which is the
-  // viewport on a real page but the preview pane in the component docs.
-  // Comparing viewport coordinates would be wrong there.
-  //
-  // Resolved on every read, never cached: the answer changes with layout, and a
-  // stale one silently stops the rail. `body` must be excluded and the element
-  // must ACTUALLY scroll — the site sets `overflow-x: hidden` on body, which
-  // computes `overflow-y: auto`, so testing the computed value alone picks body
-  // on every real page.
+  // Never cache (a stale port silently stops the rail). Body is excluded: its `overflow-x: hidden`
+  // computes `overflow-y: auto`, so the computed value alone would pick body on every page.
   const scrollportTop = (): number => {
     let el = deck.parentElement;
 
@@ -110,9 +84,6 @@ export function setupScrollDeck(deck: HTMLElement): void {
     });
   };
 
-  // The card on top is the highest-indexed one that has reached its own sticky
-  // top. Reading the computed `top` keeps this in step with the CSS rather
-  // than re-deriving the peek offsets here.
   const update = () => {
     const portTop = scrollportTop();
     let top = 0;
@@ -133,23 +104,15 @@ export function setupScrollDeck(deck: HTMLElement): void {
     apply(top);
   };
 
-  // Rooted at the viewport in every environment. A nested scrollport moves its
-  // contents through the viewport too, so this still fires there, whereas an
-  // observer rooted at an element that later stops scrolling goes quiet. A
-  // callback only arrives on a threshold crossing, so the ladder has to be fine
-  // enough to keep up with a card sliding over a pinned one.
+  // Viewport-rooted on purpose: an element root goes quiet once it stops scrolling.
   const observer = new IntersectionObserver(update, {
     threshold: Array.from({ length: 21 }, (_, i) => i / 20),
   });
 
   cards.forEach((card) => observer.observe(card));
 
-  // Intersection thresholds are enough for the handoff between cards, but a
-  // final card can remain fully intersecting while it travels through its
-  // trailing runway. Capture sees both document and nested preview scrollports.
+  // The last card stays fully intersecting through its runway, so thresholds alone miss its release.
   const onScroll = () => {
-    // The root outlives an editor re-render, so the layout is what says whether
-    // these observers still point at live nodes.
     if (!layout.isConnected) {
       observer.disconnect();
       resizeObserver.disconnect();

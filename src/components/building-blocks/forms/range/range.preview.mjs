@@ -2,8 +2,6 @@ import { preview, band, bar, dot, glyph, ink } from "../../../../../scripts/prev
 
 const B = band(960);
 
-// Filled track up to the knob, empty after it, with min/max ticks below. Drawn
-// as one track split in two rather than a single bar so the fill reads as value.
 export default preview({
   width: B.w,
   draw: [

@@ -12,9 +12,7 @@ describe("pascalToKebab", () => {
   });
 
   it("splits every capital, including consecutive capitals", () => {
-    // Current contract: each capital opens a new segment, so acronyms are
-    // split letter-by-letter. If this ever changes, every registry key
-    // derived from an acronym filename changes with it.
+    // Changing this changes every registry key derived from an acronym filename.
     expect(pascalToKebab("FAQList")).toBe("f-a-q-list");
     expect(pascalToKebab("CTABanner")).toBe("c-t-a-banner");
   });

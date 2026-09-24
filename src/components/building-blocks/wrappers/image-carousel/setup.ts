@@ -64,9 +64,6 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
 
       btn.setAttribute("data-selected", isSelected.toString());
 
-      // `data-selected` drives the styling; `aria-current` is what tells a
-      // screen-reader user which thumbnail is showing. Removed rather than set
-      // to "false" so only one thumb is ever current.
       if (isSelected) {
         btn.setAttribute("aria-current", "true");
       } else {

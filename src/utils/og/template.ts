@@ -1,10 +1,8 @@
 import type { CardColors } from "./theme.js";
 
 /**
- * Path to this file, hashed into the cache key by `render.ts` so a visual edit
- * invalidates every cached card on its own. Root-relative because Vite bundles
- * this module into `dist/.prerender/`, where `import.meta.url` no longer points
- * at the source. Must track this file's real location.
+ * Hashed into `render.ts`'s cache key. Must track this file's real location:
+ * the bundled module's `import.meta.url` no longer points at the source.
  */
 export const TEMPLATE_SOURCE_PATH = "src/utils/og/template.ts";
 
@@ -29,13 +27,7 @@ export interface CardInput {
   titleLines?: string[];
 }
 
-/**
- * A photo card's plate inverts the card theme, so it always contrasts with the
- * site's own ground: light gives a black plate with white text, dark gives a
- * white plate with black text. Both values are theme tokens, so a rebrand
- * carries. The logo has to follow the plate rather than the theme — `render.ts`
- * picks it.
- */
+/** Inverts the card theme; `render.ts` picks the logo to match the plate, not the theme. */
 export const platePaint = (colors: CardColors) => ({
   ground: colors["--color-text-strong"],
   ink: colors["--color-bg"],
@@ -45,20 +37,13 @@ export const PHOTO_TITLE_MAX_LINES = 3;
 export const PHOTO_CARD_PADDING = 64;
 export const PHOTO_PLATE_PADDING_X = 16;
 
-/** Width a title line may occupy before it wraps, inside plate and card padding. */
 export const photoTitleWidth = () =>
   CARD_WIDTH - PHOTO_CARD_PADDING * 2 - PHOTO_PLATE_PADDING_X * 2;
 
 export const photoTitleFontSize = (title: string) =>
   title.length > 90 ? 48 : title.length > 55 ? 54 : 62;
 
-/**
- * The photo layout: the featured image full-bleed, with every run of text on
- * its own solid plate. The plate is the point — it keeps the text legible over
- * any photo, so a card never depends on the image being dark, calm, or cropped
- * a particular way. Each line gets its own plate rather than one block behind
- * all of them, which is why `render.ts` measures the wrap first.
- */
+/** Each title line gets its own plate, which is why `render.ts` measures the wrap first. */
 function photoCardHtml({
   titleLines,
   siteName,
@@ -128,11 +113,7 @@ export const escapeHtml = (value: string) =>
 /** Long titles step down so `TITLE_LINES` always fits the band. */
 const titleFontSize = (title: string) => (title.length > 72 ? 52 : title.length > 40 ? 60 : 68);
 
-/**
- * Truncated here rather than by the CSS clamp, which cuts mid-word and gives no
- * ellipsis. The clamp still runs as the backstop for text that wraps wider than
- * expected.
- */
+/** The CSS clamp cuts mid-word with no ellipsis, so truncate here; the clamp is only a backstop. */
 export function truncate(text: string, limit = DESCRIPTION_LIMIT): string {
   const collapsed = text.replace(/\s+/g, " ").trim();
 

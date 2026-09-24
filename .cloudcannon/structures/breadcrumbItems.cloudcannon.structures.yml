@@ -1,6 +1,3 @@
-# Breadcrumb trail items, used by the `breadcrumbs` component's `items` array
-# input.
-#
 # Must live here, not in the component's inputs.yml — `_structures` is not a
 # valid key in an `_inputs_from_glob` file.
 breadcrumbItems:

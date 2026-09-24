@@ -12,9 +12,7 @@ import {
 
 const B = band(960);
 
-// A photo slide with arrows, plus a thumbnail strip below with the first thumb
-// ringed at `active` stroke weight. The strip is what separates this from the
-// plain carousel; the photo glyph is what separates it from the content one.
+// The thumbnail strip separates it from the plain carousel, the photo glyph from the content one.
 export default preview({
   width: B.w,
   draw: [

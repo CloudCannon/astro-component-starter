@@ -1,30 +1,14 @@
-/**
- * Reusable component-model primitives shared by scripts that need to reason
- * about the Astro component library and its co-located CloudCannon YAML —
- * currently `scripts/cms/lint.mjs`, `scripts/docs/check.mjs`, and
- * `scripts/docs/catalog.mjs`.
- *
- * Component-key derivation itself is NOT reimplemented here — it is imported
- * from `src/components/utils/componentKey.mjs`, the single source of truth
- * shared with the render registry and the Visual Editor.
- */
+// Component-key derivation is imported, never reimplemented: componentKey.mjs is
+// shared with the render registry and the Visual Editor.
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { glob } from "glob";
 import * as yaml from "js-yaml";
 import { componentKeyFromPath, pascalToKebab } from "../../src/components/utils/componentKey.mjs";
 
-// Destructure parser: pull the prop names out of `const { ... } = Astro.props`.
-// Handles renames (`class: className`), quoted keys (`'data-prop': x`), aliased
-// with defaults (`useDefaultEditableBinding: _x = false`), plain-with-default
-// (`size = "md"`), multi-line, nested-brace defaults (`imageElementAttributes = {}`),
-// and the rest element (`...htmlAttributes`).
-
 /**
  * @returns {{ props: Set<string>, hasRest: boolean, defaults: Map<string, string> } | null}
- *   props = the concrete property names the component reads; defaults = the raw
- *   default expression per prop that has one; null if no `Astro.props`
- *   destructure was found (component takes no props).
+ *   `defaults` holds raw default expressions; null if there is no `Astro.props` destructure.
  */
 export function parseDestructure(source) {
   const marker = "= Astro.props";
@@ -32,7 +16,6 @@ export function parseDestructure(source) {
 
   if (markerIdx === -1) return null;
 
-  // Walk back from the `}` before the marker to its matching `{`.
   const closeIdx = source.lastIndexOf("}", markerIdx);
 
   if (closeIdx === -1) return null;
@@ -54,8 +37,6 @@ export function parseDestructure(source) {
   }
   if (openIdx === -1) return null;
 
-  // Strip JS comments — destructures carry doc comments (`/** ... */`) whose
-  // punctuation (backticks, `=`, `:`) would otherwise corrupt key extraction.
   const inner = stripComments(source.slice(openIdx + 1, closeIdx));
   const parts = splitTopLevel(inner);
 
@@ -71,7 +52,6 @@ export function parseDestructure(source) {
       hasRest = true;
       continue;
     }
-    // Key is the text before the first top-level `:` (rename) or `=` (default).
     let key = part;
     const cut = firstTopLevel(part, ":=");
 
@@ -95,10 +75,8 @@ export function parseDestructure(source) {
   return { props, hasRest, defaults };
 }
 
-/** Split a destructure body on top-level `sep` (default `,`), ignoring nested
- *  brackets/strings. Shared with `scripts/cms/lint-roots.mjs`. A separate .ts
- *  copy lives in `src/component-docs/shared/slotDerivation.ts` (the Astro side
- *  cannot import this .mjs) — keep the two in step. */
+/** Split on top-level `sep`, ignoring nested brackets/strings. A .ts copy lives in
+ *  `src/component-docs/shared/slotDerivation.ts` — keep the two in step. */
 export function splitTopLevel(text, sep = ",") {
   const out = [];
   let depth = 0;
@@ -124,8 +102,7 @@ export function splitTopLevel(text, sep = ",") {
   return out;
 }
 
-/** Index of the first top-level character from `chars` in a single destructure
- *  entry, or -1. */
+/** Index of the first top-level character from `chars`, or -1. */
 export function firstTopLevel(text, chars) {
   let depth = 0;
   let quote = null;
@@ -145,16 +122,11 @@ export function firstTopLevel(text, chars) {
   return -1;
 }
 
-/** Drop block and line comments from a destructure body. Applied before
- *  splitting: prose is not code — an apostrophe in a comment
- *  ("VideoModal's poster") would otherwise open a string literal that never
- *  closes and swallow every prop after it. Mirrors the same strip in
- *  `src/component-docs/shared/slotDerivation.ts`. */
+/** Run before splitting: an apostrophe in a comment would open a never-closed
+ *  string and swallow every prop after it. Mirrored in `slotDerivation.ts`. */
 export function stripComments(source) {
   return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
 }
-
-// Shared helpers
 
 export function loadYaml(absPath) {
   return yaml.load(readFileSync(absPath, "utf8"));
@@ -193,15 +165,9 @@ export function isMainComponentFile(astroAbsPath) {
   return pascalToKebab(base) === dir.split("/").pop();
 }
 
-// Meta keys that appear at the top level of a `value:` block or an inputs file
-// but are not component props. `_component` is special-cased where relevant.
 export const NON_PROP_KEY = (key) => key.startsWith("_");
 
 /**
- * Build an index of every component under `src/components/`: its registry
- * key, whether it's a directory's *main* component, its parsed destructure,
- * and the paths of its co-located CloudCannon YAML (if present).
- *
  * @param {string} root repo root (the directory containing `src/`).
  * @returns {Promise<{
  *   componentKeys: Set<string>,
@@ -247,10 +213,7 @@ export async function buildComponentIndex(root) {
 }
 
 /**
- * The full set of prop-shaped keys a component's editor config is allowed to
- * use: its destructured `Astro.props` names, its `inputs.yml` top-level keys
- * (dotted keys collapsed to their first segment, mirroring CloudCannon's own
- * nested-input addressing), and its `structure-value.yml` `value:` keys.
+ * Destructured props, `inputs.yml` keys (dotted ones cut to the first segment), `value:` keys.
  *
  * @param {{
  *   parsed: { props: Set<string>, hasRest: boolean } | null,

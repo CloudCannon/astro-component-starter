@@ -43,7 +43,6 @@ const hasEntries = entries?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
 const isHorizontal = layout === "horizontal";
 const isSplit = layout === "split";
-// Grouped entries sit under the year heading, so they take the level below it.
 const YearTag = "h3";
 const entryHeadingLevel = nextHeadingLevel(YearTag);
 
@@ -182,8 +181,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
       min-width: 0;
 
-      /* Every `<ol>` carrying these classes also carries `role="list"`:
-         `list-style: none` drops the list role in Safari's a11y tree. */
+      /* These `<ol>`s carry `role="list"`: `list-style: none` drops the role in Safari. */
       .timeline-list,
       .timeline-group-list {
         list-style: none;
@@ -223,18 +221,9 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         text-wrap: pretty;
       }
 
-      /* Layout is read off the rendered shape, never a class on this root: a
-         prop-driven class on a region root goes stale in the editor. The
-         horizontal branch renders a `.timeline-scroller`, the grouped one a
-         `.timeline-group`, the split one a `.timeline-split`; the vertical
-         default is what's left. Split's `<ol>` also carries `.timeline-list`
-         (for the shared list reset below), so it matches this selector too —
-         and its extra `:not()` clauses make it MORE specific than the split
-         rule further down, so without this exclusion it wins the cascade and
-         clobbers split's grid-template-columns instead of losing to it.
-         Last-item overlay is :last-of-type, not an is-last class: CloudCannon
-         inserts array items without re-rendering the parent, so a class
-         baked in at SSR would stick to the original last item. */
+      /* Split's `<ol>` is also `.timeline-list`; without the split exclusion this more
+         specific rule clobbers split's columns. :last-of-type, not an is-last class:
+         CloudCannon inserts array items without re-rendering the parent. */
       &:has(> .timeline-list):not(:has(.timeline-group)):not(:has(> .timeline-split)) {
         .timeline-list {
           display: grid;
@@ -296,8 +285,6 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           z-index: var(--layer-2);
         }
 
-        /* 640px: canonical mobile breakpoint — the date moves above the title;
-           the rail stays. */
         @media (width < 640px) {
           .timeline-entry {
             grid-template-columns: 1fr;
@@ -305,8 +292,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         }
       }
 
-      /* Year-grouped: same continuous rail as ungrouped. Groups abut; each
-         group's padding-block-end carries the space so the line does not break. */
+      /* Groups abut and padding-block-end carries the space, so the rail doesn't break. */
       &:has(.timeline-group) {
         --timeline-year-line: calc(var(--font-size-lg) * var(--line-height-heading-sm));
 
@@ -332,10 +318,8 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           margin: 0;
         }
 
-        /* Explicit column, not auto-placement order: a group with no year (an
-           empty `year` on its first entry) renders no `.timeline-year`
-           sibling, and with only one grid item, auto-placement fills column 1
-           — the narrow date column — instead of leaving it for column 2. */
+        /* Explicit column: a group with no year renders no `.timeline-year`, and
+           auto-placement would put the list in the date column. */
         .timeline-group-list {
           border-inline-start: var(--border-width-sm) solid var(--color-border);
           display: grid;
@@ -398,9 +382,6 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         }
       }
 
-      /* Split is a separate rendered branch rather than a class on the editor
-         region root. Entries remain one chronological list; CSS alternates the
-         visual side and collapses to one rail without changing DOM order. */
       &:has(> .timeline-split) {
         --timeline-split-marker: 2.75rem;
 
@@ -512,7 +493,6 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         }
       }
 
-      /* Horizontal: unbounded phases scroll rather than wrap. */
       &:has(> .timeline-scroller) {
         .timeline-scroller {
           margin-inline-end: calc(-1 * var(--timeline-gutter, 0px));

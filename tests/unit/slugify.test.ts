@@ -21,8 +21,7 @@ describe("slugifyLabel", () => {
   });
 
   it("returns an empty string when nothing survives", () => {
-    // Callers that build ids from this must supply their own fallback —
-    // navState's `navItemKey` does exactly that.
+    // Callers must supply their own fallback (see navState's `navItemKey`).
     expect(slugifyLabel("!!!")).toBe("");
     expect(slugifyLabel("")).toBe("");
     expect(slugifyLabel("日本語")).toBe("");

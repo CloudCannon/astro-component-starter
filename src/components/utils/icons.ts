@@ -1,10 +1,3 @@
-/**
- * The render-time icon registry: every SVG under `src/icons/`, keyed by id.
- *
- * The glob runs at build time only — nothing here ships to the browser. Ids come
- * from `iconKey.mjs`, shared with `scripts/icons/sync.mjs` so this registry and
- * the CloudCannon picker cannot disagree about what exists.
- */
 import { iconKeyFromPath } from "./iconKey.mjs";
 import { normalizeIconSvg, type NormalizedIcon } from "./iconSvg";
 
@@ -18,18 +11,12 @@ const sourcesById = new Map<string, string>(
   Object.entries(sources).map(([path, source]) => [iconKeyFromPath(path), source])
 );
 
-/** Every available icon id, sorted — the same list the picker is generated from. */
 export const iconNames: string[] = [...sourcesById.keys()].sort();
 
-/** Parsing is deferred so one malformed icon only breaks pages that use it. */
+// Parsed lazily so one malformed icon only breaks pages that use it.
 const normalized = new Map<string, NormalizedIcon>();
 
-/**
- * Look up and normalize an icon.
- *
- * @returns the icon, or `null` when no SVG matches — an id can come from content
- *   an editor typed, so callers decide how loudly to fail.
- */
+/** @returns `null` when no SVG matches; ids come from editor-typed content, so callers decide how loudly to fail. */
 export function getIcon(name: string): NormalizedIcon | null {
   const id = name.trim();
   const cached = normalized.get(id);
@@ -47,7 +34,6 @@ export function getIcon(name: string): NormalizedIcon | null {
   return icon;
 }
 
-/** Levenshtein distance, two-row DP — the icon set is small and the ids short. */
 function editDistance(a: string, b: string): number {
   let previous = Array.from({ length: b.length + 1 }, (_, index) => index);
 
@@ -68,16 +54,10 @@ function editDistance(a: string, b: string): number {
   return previous[b.length];
 }
 
-/**
- * Ids closest to `name`, for turning a typo into an actionable dev warning.
- * Ranked by edit distance, not shared prefix — the set is full of near siblings
- * like `chevron-down` and `chevron-double-down`.
- */
+// Edit distance, not shared prefix: the set is full of near siblings like `chevron-down`/`chevron-double-down`.
 export function suggestIconNames(name: string, limit = 3): string[] {
   const target = name.trim();
 
-  // Scaled to length, so a long id tolerates a bigger slip and something
-  // unrelated matches nothing.
   const tolerance = Math.max(2, Math.ceil(target.length / 4));
 
   return iconNames

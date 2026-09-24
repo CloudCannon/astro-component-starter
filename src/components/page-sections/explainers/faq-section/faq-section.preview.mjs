@@ -10,8 +10,7 @@ import {
 
 const B = band(960);
 
-// A heading over four collapsed question rows with the `accordion` chevron chip.
-// Four rows on the 960 band is the tell against the block itself (three on 760).
+// Four rows on the 960 band distinguish it from the accordion block (three on 760).
 const QUESTIONS = [265, 332, 288, 310];
 
 export default preview({

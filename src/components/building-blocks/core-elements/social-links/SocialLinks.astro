@@ -20,8 +20,7 @@ const {
 
 if (!_component && !links?.length) return;
 
-// Every link opens in a new tab, so the announcement belongs on all of them,
-// author-supplied labels included.
+// Author-supplied labels still need the new-tab announcement.
 const linkLabel = (social: SocialLink) =>
   `${social.label || `Visit our ${social.icon?.replace(/^.*\//, "")} page`} (opens in a new tab)`;
 
@@ -99,11 +98,9 @@ const arrayDataAttributes = effectiveChildrenProp
         }
       }
 
-      /* The variant/size/alignment classes ride on the list, not the root — a
-         prop-driven class on a region root goes stale in the editor. */
+      /* Variant classes ride on the list: a prop-driven class on a region root goes stale. */
 
-      /* md is the 44px touch-target minimum; sm is for footers where the row
-         sits inline with legal text. */
+      /* md is the 44px touch-target minimum. */
       > .social-links-list.size-md .social-link {
         font-size: var(--font-size-lg);
         height: 2.75rem;

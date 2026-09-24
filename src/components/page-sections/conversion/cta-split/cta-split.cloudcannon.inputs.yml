@@ -47,9 +47,7 @@ reverse:
   comment: Flips the columns so the image comes before the copy.
 
 # --- section wrapper inputs (CustomSection) ---
-# Configures the CustomSection wrapper, not this section's own content. Inline
-# per component so a project can trim the size/padding lists in place.
-# `new:component` slices from this marker down — keep the marker line verbatim.
+# `new:component` and `docs:catalog` match the marker line above verbatim; keep it.
 sectionLabel:
   type: text
   comment: Names the section in the editor and sets its anchor id.

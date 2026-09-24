@@ -10,8 +10,7 @@ import {
 
 const B = band(760);
 
-// Square subject markers, generously spaced — a bulleted list at a glance. The
-// marker shape (square, not a dot) is what separates this from `text`'s bullets.
+// Square markers, not dots, are what separate this from `text`'s bullets.
 const WIDTHS = [650, 711, 569];
 
 export default preview({

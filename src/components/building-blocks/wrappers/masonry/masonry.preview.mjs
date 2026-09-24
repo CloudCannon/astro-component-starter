@@ -2,8 +2,7 @@ import { preview, band, plate, bar, glyph } from "../../../../../scripts/preview
 
 const B = band(960);
 
-// Three columns of unequal plates with staggered, ragged bottoms — the
-// stagger is what says "masonry" next to Grid's evenly-bottomed tiles.
+// The ragged bottoms are what separate it from Grid's even tiles.
 export default preview({
   width: B.w,
   draw: [

@@ -10,9 +10,7 @@ import {
 
 const B = band(760);
 
-// Three short segments (dd / mm / yyyy) plus a trailing calendar tile. Both cues
-// matter: the segments say "date", and the tile is a different affordance from
-// `select`'s chevron so the two thumbnails aren't twins.
+// The calendar tile keeps it from twinning `select`'s chevron thumbnail.
 export default preview({
   width: B.w,
   draw: [

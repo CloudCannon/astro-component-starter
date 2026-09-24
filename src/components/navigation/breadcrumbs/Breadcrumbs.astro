@@ -3,25 +3,17 @@ import { breadcrumbListJsonLd } from "@component-utils/breadcrumbTrail";
 import Icon from "@core-elements/icon/Icon.astro";
 import breadcrumbsData from "@data/breadcrumbs.json";
 
-/**
- * `items` is the trail after the leading Home crumb, in order. The last item is
- * the current page; items with a `url` render as links, the rest as text.
- */
 const { items = [], class: className, ...htmlAttributes } = Astro.props;
 
 const homeLabel = String(breadcrumbsData.homeLabel ?? "").trim() || "Home";
 const trail = [{ label: homeLabel, url: "/" }, ...items];
 
-// Nearest linkable ancestor — the target of the mobile back-link.
 const backTarget = trail
   .slice(0, -1)
   .reverse()
   .find((item) => item.url);
 
-// `new URL(path, base)` throws without an absolute base, and both `Astro.site`
-// and `Astro.url` are undefined in CloudCannon's in-browser re-render — where
-// throwing would blank the entire section. A build always has one, so the
-// shipped page keeps its structured data.
+// Both are undefined in CloudCannon's re-render, where `new URL` throwing would blank the section.
 const base = Astro.site ?? Astro.url;
 const structuredData = base ? breadcrumbListJsonLd(items, { homeLabel, base }) : null;
 ---
@@ -109,8 +101,7 @@ const structuredData = base ? breadcrumbListJsonLd(items, { homeLabel, base }) :
       min-width: 0;
     }
 
-    /* Only the current crumb gives up width; ancestors shrinking squeezes
-       their nowrap links under the separators. */
+    /* A shrinking ancestor squeezes its nowrap link under the separator. */
     .breadcrumbs .breadcrumbs-item:not(:last-child) {
       flex-shrink: 0;
     }
@@ -134,7 +125,6 @@ const structuredData = base ? breadcrumbListJsonLd(items, { homeLabel, base }) :
       text-decoration-thickness: 2px;
     }
 
-    /* Long post titles clamp so the trail stays on one line. */
     .breadcrumbs .breadcrumbs-current {
       color: var(--color-text-strong);
       overflow: hidden;
@@ -158,7 +148,6 @@ const structuredData = base ? breadcrumbListJsonLd(items, { homeLabel, base }) :
       text-decoration-thickness: 2px;
     }
 
-    /* On small screens the trail collapses to a back-link to the parent. */
     @media (max-width: 639px) {
       .breadcrumbs .breadcrumbs-trail {
         display: none;

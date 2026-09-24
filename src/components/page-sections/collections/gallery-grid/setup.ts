@@ -1,11 +1,3 @@
-/**
- * Lightbox for GalleryGrid (`.gallery-grid`). Used by
- * `GalleryGrid.astro`'s inline script and by `editor-live-sync.js`, where
- * inline scripts don't run. The masonry layout belongs to the `<Masonry>`
- * wrapper; the lightbox is a `.modal-popover`, so focus trapping and scroll
- * locking come from the shared modal setup.
- */
-
 import { setupModalShell } from "../../../building-blocks/wrappers/modal/setup";
 
 const SWIPE_THRESHOLD_PX = 40;
@@ -13,11 +5,9 @@ const SWIPE_THRESHOLD_PX = 40;
 export function setupGallery(root: HTMLElement): void {
   const popover = root.querySelector<HTMLElement>(".gallery-lightbox");
 
-  if (!popover) return; // lightbox turned off — tiles are static figures
+  if (!popover) return;
 
-  // Keyed on the lightbox, not the `.gallery-grid` root: the root survives an
-  // editor re-render while its contents are replaced, so a flag on the root
-  // would skip the new tiles and leave the lightbox unopenable.
+  // Flag the lightbox, not the root: the root survives an editor re-render that replaces the tiles.
   if (popover.hasAttribute("data-gallery-initialized")) return;
   popover.setAttribute("data-gallery-initialized", "");
 
@@ -123,11 +113,7 @@ export function setupGallery(root: HTMLElement): void {
     if (e.key === "ArrowRight") step(1);
   });
 
-  // Horizontal swipe on the photo (no extra dependency — the repo has no
-  // standalone gesture helper now that the lightbox no longer wraps Carousel).
   if (figure && total > 1) {
-    // A pinch-zoomed viewport needs horizontal drags to pan the photo, not
-    // to change it.
     const isZoomed = () => (window.visualViewport?.scale ?? 1) > 1.01;
 
     window.visualViewport?.addEventListener("resize", () => {
@@ -158,10 +144,7 @@ export function setupGallery(root: HTMLElement): void {
     });
   }
 
-  // The overlay fills the viewport, so the popover API's light dismiss never
-  // fires — a click on the dark surround closes instead. Clicks on the photo
-  // (including through the pointer-events: none scrim), its controls, or
-  // the thumbnail strip stay inside the frame.
+  // The overlay fills the viewport, so the popover's light dismiss never fires.
   popover.addEventListener("click", (e) => {
     if (didSwipe) {
       didSwipe = false;
@@ -180,8 +163,7 @@ export function setupGallery(root: HTMLElement): void {
     .querySelector<HTMLElement>(".gallery-lightbox-close")
     ?.addEventListener("click", () => popover.hidePopover());
 
-  // With no outside `popovertarget` trigger, the shell's toggle handler has
-  // nowhere to restore focus to — this one returns it to the clicked tile.
+  // No `popovertarget` trigger, so the shell has nowhere to return focus.
   popover.addEventListener("toggle", (e) => {
     if ((e as ToggleEvent).newState === "closed") openedFrom?.focus();
   });

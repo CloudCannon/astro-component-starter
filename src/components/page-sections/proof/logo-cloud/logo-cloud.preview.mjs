@@ -2,8 +2,7 @@ import { preview, band, bar, box, glyph, surface } from "../../../../../scripts/
 
 const B = band(960);
 
-// A shallow strip (unlike every full-height section): a muted lead bar over one
-// even row of logo tiles — the cue against a stats or feature row.
+// Deliberately shallow: the single even row of tiles is the cue against a stats or feature row.
 export default preview({
   width: B.w,
   draw: [

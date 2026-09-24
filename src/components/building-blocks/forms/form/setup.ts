@@ -1,16 +1,6 @@
 /**
- * Shared setup logic for Form: inline validation messages, and the success
- * state a redirecting endpoint sends the visitor back to.
- *
- * Validation is a progressive enhancement. Without JS the browser's own
- * constraint validation still blocks an invalid submit and shows its bubble;
- * `noValidate` is set here, once, so the bubble is only replaced when there is
- * something to replace it with.
- *
- * Used by:
- * - `Form.astro`'s inline `<script>` on the live site
- * - `editor-live-sync.js` in the CloudCannon editor, where CC's
- *   editable-regions renderer strips inline scripts
+ * `noValidate` is set here, once, so the native bubble is only replaced when JS
+ * can replace it. Also run by editor-live-sync.js, where inline scripts don't run.
  */
 
 /** Roots that own a field's error slot, in the order they should be searched. */

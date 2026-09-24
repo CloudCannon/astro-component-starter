@@ -12,9 +12,7 @@ type AstroComponent = (_props: Record<string, unknown>) => unknown;
 type ComponentLoader = () => Promise<Record<string, AstroComponent>>;
 
 const loaders: Record<string, ComponentLoader> = {};
-// `utils/` holds composition helpers, not placeable components — without the
-// exclusion they show up as registry keys (`utils/avatar`, …) in the
-// "Available components" warning and read as authorable.
+// `utils/` holds helpers, not placeable components.
 const componentImports = import.meta.glob(["../**/*.{jsx,astro}", "!../utils/**"]);
 
 Object.entries(componentImports).forEach(([path, loader]) => {

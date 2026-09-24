@@ -1,23 +1,4 @@
-/**
- * Fast component-preview coverage check (no browser, no build).
- *
- * Previews are authored as co-located `*.preview.mjs` recipes and compiled to
- * SVGs by `previews:build` (deterministic, browser-free). This check is the
- * cheap coherence gate: it only reads files and asserts the preview set lines up.
- *
- *   node scripts/previews/check.mjs
- *
- * Fails (exit 1) if:
- *   - a component (any `*.cloudcannon.structure-value.yml` with a
- *     `value._component`) has no sibling `*.preview.mjs` recipe;
- *   - a component has no `public/component-previews/<_component>.svg`;
- *   - an SVG under `public/component-previews/` matches no component (orphan);
- *   - a component's structure YAML is missing the
- *     `image: public/component-previews/<_component>.svg` wiring.
- *
- * The "are the committed SVGs in sync with their recipes?" drift guard is
- * `previews:build --check`, run alongside this in `previews:check`.
- */
+// Coverage and wiring only; SVG-vs-recipe drift is `previews:build --check`.
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, sep } from "node:path";
 import { glob, globSync } from "glob";
@@ -27,13 +8,11 @@ import { previewImagePath, snippetWantsPreviewImage } from "./wire-yaml.mjs";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
 
-// 1. Discover components — exactly the set build.mjs previews.
-
+// Must discover exactly the set build.mjs previews.
 const structureFiles = await glob("src/components/**/*.cloudcannon.structure-value.yml", {
   cwd: root,
 });
 
-// component key -> the structure-value file it came from.
 const componentFile = new Map();
 
 for (const file of structureFiles) {
@@ -49,8 +28,6 @@ if (!components.length) {
   process.exit(1);
 }
 
-// 2a. Recipe presence: every component has a sibling `*.preview.mjs`.
-
 const recipeless = [];
 
 for (const component of components) {
@@ -61,22 +38,16 @@ for (const component of components) {
   }
 }
 
-// 2b. Coverage: every component has a built SVG.
-
 const expectedSvgs = new Set(components.map((component) => `${component}.svg`));
 const missing = components.filter(
   (component) => !existsSync(join(previewsDir, `${component}.svg`))
 );
-
-// 3. Orphans: every SVG maps back to a component.
 
 const svgFiles = globSync("**/*.svg", {
   cwd: previewsDir,
 }).map((file) => file.split(sep).join("/"));
 
 const orphans = svgFiles.filter((svg) => !expectedSvgs.has(svg)).sort();
-
-// 4. Wiring: every component references its SVG in its structure YAML.
 
 const unwired = [];
 
@@ -90,8 +61,6 @@ for (const component of components) {
     unwired.push({ component, file });
   }
 
-  // Components that are also MDX snippets carry the same thumbnail in their
-  // snippets YAML, so the snippet picker matches the structure picker.
   const snippetFile = file.replace(
     /\.cloudcannon\.structure-value\.yml$/,
     ".cloudcannon.snippets.yml"
@@ -108,8 +77,6 @@ for (const component of components) {
     }
   }
 }
-
-// 5. Report.
 
 if (!recipeless.length && !missing.length && !orphans.length && !unwired.length) {
   console.log(`ok     ${components.length} components, ${svgFiles.length} previews in sync`);

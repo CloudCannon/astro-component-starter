@@ -1,8 +1,6 @@
 import { preview, bar, box, caret, tile, panel, line } from "../../../../scripts/previews/kit.mjs";
 
-// An open drawer: a tinted portrait panel with a close tile and big tappable menu
-// rows, two of them expandable. Exempt from the bands — the whole point is that
-// this is narrow, and stretching it to 560 would destroy the phone proportion.
+// Exempt from the width bands: stretching it would destroy the phone proportion.
 const MENU = [150, 190, 160, 200, 130];
 
 export default preview({

@@ -1,16 +1,5 @@
 ---
-/**
- * Headless modal shell: the popover element, backdrop, open/close animation,
- * and sizing — shared by `Modal.astro` (CMS-facing wrapper) and site-chrome
- * modals like `navigation/search`. Consumers provide all interior markup via
- * the default slot and their own trigger via `popovertarget={popoverId}`;
- * focus trapping and scroll locking come from `setup.ts` (`setupModalShell`),
- * which targets `[data-modal]` — `.modal-popover` is styling only, and
- * `sheet={false}` drops it for a consumer that draws its own overlay.
- *
- * Not a page-builder block: no CloudCannon YAML, never referenced by
- * `_component`.
- */
+// `setup.ts` targets `[data-modal]`; `.modal-popover` is styling only, dropped by `sheet={false}`.
 const {
   popoverId,
   size = "md",
@@ -50,9 +39,7 @@ const {
       border-radius: var(--radius-xs);
       box-shadow: var(--shadow-lg);
       color: var(--color-text);
-      /* Centring: the top layer's containing block is the viewport, so the auto
-         margins split the leftover space. A real margin here breaks it
-         (ARCHITECTURE.md § Popovers and the top layer). */
+      /* Auto margins centre in the top layer; a real margin breaks it (see ARCHITECTURE.md). */
       inset: 0;
       margin: auto;
       max-height: 85vh;

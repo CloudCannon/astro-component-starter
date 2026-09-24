@@ -1,18 +1,11 @@
 /**
- * Surgically wire `image: public/component-previews/<component>.svg` into a
- * component's structure-value YAML, under both `preview:` and `picker_preview:`
- * — as the top-level `image:` and as `gallery.image` (the large picker-card
- * slot). CloudCannon resolves these against the source tree, the same way the
- * icon picker uses `src/icons/{id}.svg`. A site URL (`/component-previews/...`)
- * does not exist as a file and the picker shows "No preview available".
- *
- * Formatting-preserving and idempotent: an already-correct line is left
- * byte-identical, so re-running the build produces no spurious diffs.
+ * Preview `image:` must be a source-tree path: a site URL (`/component-previews/...`) is not a
+ * file to CloudCannon and the picker shows "No preview available". Edits are
+ * idempotent; an already-correct line stays byte-identical.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 
 /**
- * Source-tree path CloudCannon can load for a component's preview SVG.
  * @param {string} component  kebab `_component` path
  * @returns {string}
  */
@@ -21,9 +14,6 @@ export function previewImagePath(component) {
 }
 
 /**
- * Locate a YAML block (`preview:` / `picker_preview:`) and return its span
- * plus the indentation of its direct children.
- *
  * @param {string[]} lines
  * @param {string} blockName
  * @param {string} indent
@@ -53,7 +43,6 @@ function findBlock(lines, blockName, indent) {
 }
 
 /**
- * True when `line` is a direct child key of a block at `childIndent`.
  * @param {string} line
  * @param {string} childIndent
  * @param {string} key
@@ -65,12 +54,7 @@ function isDirectChild(line, childIndent, key) {
 }
 
 /**
- * Ensure `image: <imagePath>` exists under a YAML block (`preview:` /
- * `picker_preview:`), preserving existing formatting.
- *
- * `indent` is the block header's own indentation — `""` for the top-level
- * blocks in a structure-value file, `"  "` for the blocks nested under a
- * snippet name in a snippets file.
+ * `indent` is the block header's own indentation: `""` in a structure-value file, `"  "` in a snippets file.
  * @param {string[]} lines
  * @param {string} blockName
  * @param {string} imagePath
@@ -81,8 +65,6 @@ export function ensureImageLine(lines, blockName, imagePath, indent = "") {
   const block = findBlock(lines, blockName, indent);
 
   if (!block) {
-    // Block is missing — create a minimal one before the first `_`-prefixed
-    // meta key (`_inputs_from_glob:`, `_structures:`, …), else at the end.
     const insertAt = lines.findIndex((line) => new RegExp(`^${indent}_[a-z]`).test(line));
     const created = [`${indent}${blockName}:`, `${indent}  image: ${imagePath}`];
     const at = insertAt === -1 ? lines.length : insertAt;
@@ -93,16 +75,14 @@ export function ensureImageLine(lines, blockName, imagePath, indent = "") {
   const { start, end, childIndent } = block;
   const newLine = `${childIndent}image: ${imagePath}`;
 
-  // Only ever match a *direct* child of the block. A deeper `image:` belongs to
-  // a nested sub-block (`gallery:` uses one) and must be left alone here —
-  // `ensureGalleryImage` owns that line.
+  // Direct children only: the nested `gallery.image` is owned by ensureGalleryImage.
   const imageIdx = lines.findIndex(
     (line, i) => i > start && i < end && isDirectChild(line, childIndent, "image")
   );
 
   if (imageIdx !== -1) {
     if (lines[imageIdx].replace(/^\s+image:\s*/, "").trim() === imagePath) {
-      return lines; // Already correct — leave byte-identical.
+      return lines;
     }
     const next = [...lines];
 
@@ -110,7 +90,6 @@ export function ensureImageLine(lines, blockName, imagePath, indent = "") {
     return next;
   }
 
-  // Insert before the existing `icon:` fallback if present, else at block end.
   const iconIdx = lines.findIndex(
     (line, i) => i > start && i < end && isDirectChild(line, childIndent, "icon")
   );
@@ -120,14 +99,8 @@ export function ensureImageLine(lines, blockName, imagePath, indent = "") {
 }
 
 /**
- * Ensure `gallery.image` + `gallery.fit: cover` exist under a preview block.
- * The structure-picker modal uses this gallery slot for the large card image;
- * `cover` fills CloudCannon's card frame instead of pillarboxing the 16:9 SVG
- * inside the default `padded` fit.
- *
- * Leaves a gallery that already binds a content key (`image: { key: ... }` or
- * a list) alone — those show the author's own image, which beats a thumbnail.
- *
+ * `fit: cover` stops the default `padded` fit pillarboxing the 16:9 SVG. A gallery
+ * that binds a content key (`image: { key: ... }` or a list) is the author's image; leave it.
  * @param {string[]} lines
  * @param {string} blockName
  * @param {string} imagePath
@@ -169,7 +142,6 @@ export function ensureGalleryImage(lines, blockName, imagePath, indent = "") {
   if (imageIdx !== -1) {
     const current = lines[imageIdx].replace(/^\s+image:\s*/, "").trim();
 
-    // A `key:` / list-style gallery is the author's content image — do not replace.
     if (current === "" || current.startsWith("-") || current.includes("key:")) {
       return lines;
     }
@@ -204,7 +176,6 @@ export function ensureGalleryImage(lines, blockName, imagePath, indent = "") {
 }
 
 /**
- * Wire the preview image into a component's structure-value YAML.
  * @param {string} component  kebab `_component` path
  * @param {string} absFile    absolute path to the structure-value YAML
  * @returns {"written" | "unchanged"}
@@ -228,32 +199,17 @@ export function wirePreviewImage(component, absFile) {
 }
 
 /**
- * Whether a snippets file should get the static component thumbnail.
- *
- * A snippet whose preview defines a `gallery:` block already renders an image
- * pulled from the author's own content (`Image` uses `gallery.image: key:
- * source`). That is strictly more informative than a generic component
- * thumbnail, so those snippets opt out.
- *
- * Shared by the wiring (build.mjs) and the drift guard (check.mjs) so the two
- * cannot disagree about which files are expected to carry the line.
+ * False only when a gallery binds the author's image (`image: key:`); a gallery we
+ * wired (`image: public/component-previews/...`) must stay updatable.
  * @param {string} source  contents of the snippets YAML
  * @returns {boolean}
  */
 export function snippetWantsPreviewImage(source) {
-  // Opt out only when gallery already shows the author's own image
-  // (`image: { key: ... }` / a key cascade). A gallery we wired ourselves
-  // (`image: public/component-previews/...`) must stay updatable.
   return !/gallery:\s*\n\s+image:\s*\n\s+-?\s*key:/m.test(source);
 }
 
 /**
- * Wire the preview image into a component's snippets YAML.
- *
- * A snippets file nests its blocks one level under the snippet name, so the
- * `preview:` block sits at indent 2. Only `preview:` is wired — a snippet's
- * `picker_preview` uses `preview` as its base, so the image is inherited by the
- * snippet picker without a second block.
+ * Only `preview:` is wired: a snippet's `picker_preview` inherits the image from it.
  * @param {string} component  kebab `_component` path
  * @param {string} absFile    absolute path to the snippets YAML
  * @returns {"written" | "unchanged" | "skipped"}

@@ -1,19 +1,3 @@
-/**
- * Montage generator — a single labelled PNG contact sheet of every built preview.
- *
- *   node scripts/previews/montage.mjs [out.png]
- *
- * Rasterizes every SVG in public/component-previews/ into one labelled grid so
- * the whole set can be eyeballed at once. `previews:check` guards existence,
- * wiring and staleness — it cannot judge whether a preview is *legible*, which
- * is what this is for. Reviewing tiles side by side is the only way to catch a
- * component whose thumbnail is too faint or too similar to its siblings.
- *
- * PNG rather than HTML deliberately: rendering it needs no browser, matching
- * the rest of the preview pipeline.
- *
- * Output is a scratch review artifact and is gitignored.
- */
 import { globSync } from "glob";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -24,7 +8,6 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const previewsDir = join(root, "public", "component-previews");
 const out = process.argv[2] || join(root, ".preview-montage.png");
 
-// Grid geometry. Tiles keep the previews' native 16:9; each gets a label strip.
 const COLS = 7;
 const TILE_W = 224;
 const TILE_H = 126;
@@ -48,7 +31,6 @@ const escapeXml = (value) =>
     (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&apos;" })[char]
   );
 
-/** `forms/input.svg` -> `forms / input` — enough context to find the file. */
 function label(file) {
   const parts = file.replace(/\.svg$/, "").split("/");
 
@@ -88,7 +70,6 @@ await sharp({
     width: COLS * CELL_W,
     height: rows * CELL_H,
     channels: 3,
-    // Mid grey gutters so white tiles read as distinct panels.
     background: "#8f8f8f",
   },
 })

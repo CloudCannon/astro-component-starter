@@ -10,7 +10,6 @@ import {
 
 const B = band(760);
 
-// A solid "choose file" block inside the field, with the filename beside it.
 export default preview({
   width: B.w,
   draw: [

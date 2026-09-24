@@ -2,8 +2,6 @@ import { preview, band, bar, dot, lines } from "../../../../../scripts/previews/
 
 const B = band(760);
 
-// The quote is `label`-weight subject across the full band — pulled up to the
-// subject role because the quote, not the attribution, is the component.
 export default preview({
   width: B.w,
   draw: [

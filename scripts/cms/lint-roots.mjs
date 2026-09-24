@@ -1,28 +1,8 @@
 /**
- * Prop-driven attributes on component roots.
- *
- * CloudCannon's editable-regions re-render keeps a region's root element and
- * swaps only its contents, so an attribute on the root whose value comes from a
- * prop goes stale in the Visual Editor until a full reload. The rule and the
- * fix (put it on a direct child, hoist with `:has()` where CSS needs it) are in
- * `.agents/skills/editable-regions/SKILL.md`; `editor-live-sync.js` records why.
- *
- * This flags `class`/`class:list`/`style`/`data-*`/`aria-*`/`role` on the first
- * element of a component template when the value references a destructured
- * prop. Region wiring (`data-editable` and friends), `aria-*`, and the
- * exceptions listed in ALLOWED below are skipped.
- *
- * It also flags two things on that first element regardless of prop values: a
- * *literal* `data-editable`, which collides with the region attribute
- * CloudCannon stamps there, and a spread rest over a classed root in a component
- * that never destructures `class`, which lets a caller replace the hook class.
- *
- * Only components CloudCannon can make a region root are checked — those with
- * CloudCannon YAML, i.e. a placeable block, an array item, or a form field.
- * Everything else is composed inside one of those and re-rendered with it, so
- * its attributes are never left behind.
- *
- *   node scripts/cms/lint-roots.mjs
+ * CloudCannon's re-render keeps a region's root element, so a prop-driven attribute on
+ * the root goes stale. Checks only region roots (components with YAML or named in a
+ * `data-id`); also flags a literal root `data-editable` and a classed root that spreads
+ * a rest without destructuring `class`. See `.agents/skills/editable-regions/SKILL.md`.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
@@ -46,8 +26,7 @@ const REGION_ATTRS = new Set([
 ]);
 
 const ALLOWED = [
-  // `id` from `label`/`sectionLabel` is a documented exception: it is an anchor
-  // target, and a stale anchor id is harmless until the next reload.
+  // A stale anchor id is harmless until the next reload.
   { attr: "id" },
   // `_flow.css` documents the roots with no child to carry the attribute.
   { attr: "data-space-before", components: ["Video", "Pagination"] },
@@ -55,16 +34,11 @@ const ALLOWED = [
   { attr: "style", components: ["BentoBoxItem"] },
 ];
 
-/**
- * An accessible name or ARIA state has to sit on the element that carries the
- * role, so it can't move to a child. A stale one affects the editor's own
- * preview only — nothing renders or scripts off it — so these are exempt.
- */
+// ARIA must sit on the element with the role; a stale one only affects the editor preview.
 const ALLOWED_ARIA = /^aria-/;
 
 const WATCHED = /^(class|class:list|style|role|data-|aria-)/;
 
-/** The tag name plus raw attribute text of the first element in the template. */
 function firstElement(source) {
   const fence = source.indexOf("\n---", 3);
   const body = source.startsWith("---") && fence !== -1 ? source.slice(fence + 4) : source;
@@ -77,7 +51,6 @@ function firstElement(source) {
 
     const next = body[open + 1];
 
-    // Comments, closing tags, doctype: not an element open.
     if (next === "!" || next === "/") {
       index = open + 1;
       continue;
@@ -87,7 +60,6 @@ function firstElement(source) {
       continue;
     }
 
-    // Scan to the matching `>`, skipping over `{...}` expressions and strings.
     let depth = 0;
     let quote = null;
 
@@ -115,7 +87,6 @@ function firstElement(source) {
   return null;
 }
 
-/** Split an attribute list into `{ name, value }`, keeping `{...}` intact. */
 function parseAttrs(text) {
   const attrs = [];
   let i = 0;
@@ -191,19 +162,14 @@ function parseAttrs(text) {
   return attrs;
 }
 
-/**
- * Local names in scope for the template that could carry a prop's value: the
- * destructure's own bindings (after any rename) plus every frontmatter
- * `const`/`let`, since those are usually derived from props.
- */
+/** Destructured bindings plus every frontmatter `const`/`let`, since those usually derive from props. */
 function propDerivedNames(source) {
   const names = new Set();
   const marker = source.indexOf("= Astro.props");
 
   if (marker !== -1) {
     const close = source.lastIndexOf("}", marker);
-    // Walk back to the matching brace: a `= {}` default would otherwise be
-    // mistaken for the destructure's own opening brace.
+    // Brace-match backwards: a `= {}` default would otherwise pass for the opening brace.
     let depth = 0;
     let open = -1;
 
@@ -245,11 +211,7 @@ function propDerivedNames(source) {
   return [...names];
 }
 
-/**
- * Drop string content from an expression so a class name can't be mistaken for
- * a prop of the same word (`class:list={["text", …]}` does not read `text`).
- * Template literals keep their `${…}` interpolations.
- */
+/** So `class:list={["text"]}` isn't read as the prop `text`; template literals keep `${…}`. */
 function stripStrings(text) {
   return text
     .replace(/`(?:[^`\\]|\\.)*`/g, (literal) =>
@@ -269,8 +231,7 @@ const kebabOf = (file) =>
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
     .toLowerCase();
 
-// Item components have no YAML of their own — the parent names them in a
-// `data-id`, and CloudCannon renders them into the array-item region root.
+// Item components have no YAML; the parent names them in a `data-id`.
 const itemComponents = new Set();
 
 for (const file of files) {
@@ -281,7 +242,6 @@ for (const file of files) {
   }
 }
 
-/** Whether CloudCannon can render this component as a region root. */
 function isRegionRoot(file) {
   const dir = join(root, dirname(file));
   const kebab = kebabOf(file);
@@ -293,10 +253,7 @@ function isRegionRoot(file) {
   );
 }
 
-// A hand-written `data-editable` on the root collides with the one CloudCannon
-// stamps there when it makes the component a region — the item disappears from
-// the array editor. Arriving through `{...htmlAttributes}` is how it is *meant*
-// to get there, so only a literal value is a finding.
+// A spread-in `data-editable` is the intended path; only a literal one collides.
 const rootRegions = [];
 const clobberable = [];
 
@@ -316,9 +273,7 @@ for (const file of files) {
     }
   }
 
-  // A spread `class` beats both `class` and `class:list`, so a component that
-  // spreads a rest onto a classed root without destructuring `class` lets a
-  // caller replace the hook class its own CSS and setup.ts key on.
+  // A spread `class` beats both `class` and `class:list`.
   const parsed = parseDestructure(source);
   const spreadsRest = /\{\s*\.\.\.[A-Za-z_$]/.test(element.attrs);
   const hasRootClass = attrs.some(({ name }) => name === "class" || name === "class:list");

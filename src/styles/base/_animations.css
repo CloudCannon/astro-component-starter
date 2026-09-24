@@ -11,9 +11,8 @@
     }
   }
 
-  /* `--bar-dropdown-shift` is the viewport clamp Bar.astro sets on an open
-     dropdown. The animation runs `forwards`, so leaving it out here would pin
-     the panel back to dead-centre once the animation finished. */
+  /* Must include Bar.astro's `--bar-dropdown-shift`: the animation runs `forwards`,
+     so without it the panel snaps back to centre. */
   @keyframes grow-out-centered {
     0% {
       opacity: 0.3;

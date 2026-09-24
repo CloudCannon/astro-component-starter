@@ -120,9 +120,7 @@
       }
     }
 
-    /* Stay in the grid (visibility, not display) so the frame is always as
-       tall as the tallest variant. Toggling display:none is what made the
-       page jump when the example select changed. */
+    /* visibility, not display, so the frame stays as tall as the tallest variant. */
     > .preview.active {
       pointer-events: auto;
       visibility: visible;
@@ -159,8 +157,7 @@
             text-align: right;
             user-select: none;
 
-            /* Fixed width so 9 → 10 doesn't grow the gutter and shift that
-               line's YAML one space right of its siblings. */
+            /* Fixed width so 9 → 10 doesn't shift that line's YAML right of its siblings. */
             width: 2em;
           }
         }

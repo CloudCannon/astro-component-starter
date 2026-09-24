@@ -10,8 +10,6 @@ import {
   body,
 } from "../../../../../scripts/previews/kit.mjs";
 
-// Two small pills — tinted outline with a status dot, and a brand fill — so it
-// reads as "labels", not a shrunken Button. Exempt from the width bands.
 export default preview({
   width: 320,
   exempt: true,

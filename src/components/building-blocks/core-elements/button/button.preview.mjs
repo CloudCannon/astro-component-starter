@@ -1,6 +1,5 @@
 import { preview, box, bar, ink, onInk } from "../../../../../scripts/previews/kit.mjs";
 
-// A single filled button, big enough to show the optional leading icon slot.
 // Exempt from the width bands: one control stretched to 560 reads as distorted.
 export default preview({
   width: 280,

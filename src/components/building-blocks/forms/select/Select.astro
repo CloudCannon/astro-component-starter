@@ -38,8 +38,7 @@ const { controlAttributes, shellAttributes } = formFieldParts({
 });
 const hasLeadingIcon = isNonEmptyString(iconName);
 
-// A disabled placeholder that isn't `selected` never shows — the browser falls
-// through to the first enabled option, and `required` is satisfied on load.
+// An unselected disabled placeholder never shows: the browser falls through to the first option.
 const placeholderSelected = !options?.some((option: SelectOptionData) => option.value === value);
 ---
 

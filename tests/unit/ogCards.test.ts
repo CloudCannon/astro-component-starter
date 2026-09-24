@@ -100,8 +100,6 @@ describe("resolveCardColors", () => {
   });
 
   it("keeps the description distinct from the title in both themes", () => {
-    // The dark theme sets --color-text-muted to the same white as
-    // --color-text-strong, so the card substitutes --color-text there.
     for (const theme of ["light", "dark"] as const) {
       const { colors } = resolveCardColors(ROOT, theme);
 

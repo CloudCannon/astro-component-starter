@@ -130,8 +130,7 @@ const {
         }
       }
 
-      /* The number reads first; the <dt> label stays first in source order
-         for assistive tech. */
+      /* Keep the <dt> first in source for assistive tech; the number reads first visually. */
       .stat-label {
         font-size: var(--font-size-sm);
         font-weight: var(--font-weight-semibold);
@@ -170,7 +169,6 @@ const {
         }
       }
 
-      /* 640px = canonical mobile/stacking breakpoint. */
       @media (width < 640px) {
         .stats-grid.dividers > .stat {
           border-inline-start: none;

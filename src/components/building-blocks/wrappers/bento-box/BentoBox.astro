@@ -120,8 +120,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           min-width: 0;
         }
 
-        /* Grid-density step, intentionally non-canonical: dense 3–4 column
-           grids must collapse to 2 columns before the 640px mobile switch. */
+        /* Intentionally non-canonical: 3-4 columns must collapse before 640px. */
         @container (width <= 700px) {
           &.columns-3,
           &.columns-4 {
@@ -150,8 +149,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
           }
         }
 
-        /* Grid-density step, intentionally non-canonical: below ~450px even
-           two columns don't fit, so everything collapses to a single column. */
+        /* Intentionally non-canonical. */
         @container (width <= 450px) {
           &.columns-2,
           &.columns-3,

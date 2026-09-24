@@ -1,14 +1,4 @@
-/**
- * Generate the tool-specific agent directories from the canonical `.agents/` tree.
- *
- *   .agents/skills/<skill>/**   ->  .claude/skills/<skill>/**   (byte copy; Cursor reads the source)
- *   .agents/rules/<name>.md     ->  .cursor/rules/<name>.mdc    (byte copy; Claude Code imports the source from CLAUDE.md)
- *
- * Never hand-edit a target — it is deleted and rebuilt on every run.
- *
- *   node scripts/agents/sync.mjs           regenerate every target
- *   node scripts/agents/sync.mjs --check   verify targets match the source (CI)
- */
+// Targets (.claude/skills, .cursor/rules) are deleted and rebuilt from `.agents/` on every run; never hand-edit them.
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 

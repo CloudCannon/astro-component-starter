@@ -2,8 +2,7 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(560);
 
-// One unbroken rail from the first marker to the last — no stubs, no tail
-// past the final disc. That is what separates this from a gapped tick list.
+// One unbroken rail, no tail past the last disc, separates this from a tick list.
 export default preview({
   width: B.w,
   draw: [

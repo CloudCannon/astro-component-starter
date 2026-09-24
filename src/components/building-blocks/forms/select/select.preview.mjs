@@ -2,8 +2,7 @@ import { preview, band, bar, field, caret, glyph } from "../../../../../scripts/
 
 const B = band(760);
 
-// The caret is the cue that reads as "opens a menu". Without it a select is the
-// same silhouette as a text input, so it is drawn large and in `subject`.
+// Without a large `subject` caret a select has the same silhouette as a text input.
 export default preview({
   width: B.w,
   draw: [

@@ -12,11 +12,8 @@ const {
   pauseOnHover = false,
   autoScroll = false,
   showIndicators = true,
-  /** `"dots"` (default), `"fraction"` (e.g. `1/3`), or `"thumbnails"`. */
   indicatorStyle = "dots",
   showArrows = true,
-  /** Slide shown first. Used by consumers that open the carousel at a chosen
-   * item rather than always at snap 0. */
   startIndex = 0,
   loop = true,
   alignmentHorizontal = "center",
@@ -67,9 +64,7 @@ const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
 
-// A consumer's `class` must merge, not replace — a spread `class` attribute
-// beats `class:list`, which would drop the `carousel` hook that setup.ts and
-// every style rule key on. (ImageCarousel does the same.)
+// A spread `class` beats `class:list` and would drop the `carousel` hook, so merge it.
 const slideGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
 
 const carouselStyles = `
@@ -131,9 +126,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         )}
 
         {effectiveShowIndicators && indicatorStyle === "fraction" && (
-          /* The visible fraction is aria-hidden; a dedicated announcer (always
-             `polite`, so screen readers register it at load) speaks only
-             gesture-driven changes. Autoplay writes nothing to it. */
+          /* Always `polite` so screen readers register it at load; autoplay never writes to it. */
           <>
             <div
               class="carousel-fraction"
@@ -164,9 +157,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
     )}
 
     {
-      /* Thumbnails are a full-width strip under the controls rather than an
-         item between the arrows — a row of images can't share that flex line.
-         setup.ts fills it from each snap's own <img>. */
+      /* setup.ts fills this from each snap's own <img>. */
       effectiveShowIndicators && indicatorStyle === "thumbnails" && (
         <div class="carousel-thumbnails" />
       )
@@ -225,8 +216,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           flex-wrap: nowrap;
           margin-inline-start: calc(var(--slide-gap) * -1);
 
-          /* Sizing lives in CarouselSlide, which owns the element; the track
-             only contributes the gap. */
+          /* Slide sizing lives in CarouselSlide. */
           > .slide {
             padding-inline-start: var(--slide-gap);
             width: 100%;

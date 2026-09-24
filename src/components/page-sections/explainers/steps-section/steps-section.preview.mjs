@@ -2,8 +2,7 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(960);
 
-// Four columns, each with its own rail from the marker to the column edge —
-// nothing crosses the gap, so this does not read as a Timeline.
+// No rail crosses the column gap, so this does not read as a Timeline.
 export default preview({
   width: B.w,
   draw: [

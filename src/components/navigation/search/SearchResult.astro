@@ -1,14 +1,7 @@
 ---
 /**
- * The search result card, composed from the starter's own components.
- *
- * Results render in the browser at search time, so this partial is rendered
- * once into an inert `<template>` (see `Search.astro`) and `setup.ts` clones
- * it per result, replacing the placeholder text below with the real data.
- *
- * The thumbnail stays a plain `<img>`: the Image component runs sources
- * through Astro's build-time asset pipeline, which can't process URLs that
- * only exist at search time.
+ * Rendered once into an inert `<template>` and cloned per result by setup.ts. The
+ * thumbnail stays a plain `<img>`: search-time URLs can't go through Astro's asset pipeline.
  */
 import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
@@ -24,9 +17,7 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
   </div>
   <div class="search-result-content">
     <a class="search-result-link">
-      {/* Not a heading: a result list inside a modal is not part of the page's
-          outline, and the h3s would land under whatever heading precedes the
-          nav. The link itself is the accessible name. */}
+      {/* Not a heading: results in a modal aren't part of the page outline. */}
       <Heading
         text="Result title"
         level="span"

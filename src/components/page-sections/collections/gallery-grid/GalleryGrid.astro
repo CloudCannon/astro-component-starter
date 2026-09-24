@@ -38,9 +38,7 @@ const {
 const items = (images || []).filter((item: any) => item?.image);
 const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
 
-// Masonry keeps each image's own ratio; the <Masonry> wrapper owns the
-// layout. `aspectRatio: natural` is the pre-`layout` spelling of the same
-// thing — honored so old content keeps rendering.
+// `aspectRatio: natural` is the pre-`layout` spelling of masonry, honored for old content.
 const masonry = layout === "masonry" || aspectRatio === "natural";
 const tileRatio = masonry ? "none" : aspectRatio;
 
@@ -123,9 +121,8 @@ const itemsAttributes = masonry
       aria-modal="true"
       aria-label={lightboxLabel}
     >
-      {/* Frame shrink-wraps the photo so optional thumbnails sit under it
-            without becoming a viewport-width band. Controls stay inside the
-            figure — never on this frame or the overlay. */}
+      {/* Frame shrink-wraps the photo so thumbnails don't become a viewport-width band.
+         Controls stay in the figure, never on this frame or the overlay. */}
       <div class="gallery-lightbox-frame">
         <figure class="gallery-lightbox-figure">
           {items.map((item: any, index: number) => (
@@ -264,7 +261,6 @@ const itemsAttributes = masonry
         gap: var(--gallery-gap, var(--spacing-md));
         grid-template-columns: repeat(2, minmax(0, 1fr));
 
-        /* 640px: canonical mobile breakpoint — the columns knob applies from here up. */
         @media (width >= 640px) {
           grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
         }
@@ -309,16 +305,13 @@ const itemsAttributes = masonry
       .gallery-caption {
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
-        /* Body line-height, stated: it used to arrive from the base `ul` rule
-           through the list markup this section no longer uses. */
         line-height: var(--line-height-relaxed);
         margin: var(--spacing-sm) 0 0;
         text-align: center;
       }
 
-      /* Lightbox is one object: the photograph. Every control is positioned
-         against the figure (which shrink-wraps the photo), never the
-         viewport, so nothing drifts onto the page behind. */
+      /* Controls are positioned against the figure, never the viewport, so nothing
+         drifts onto the page behind. */
       .gallery-lightbox {
         background: var(--color-overlay-media-opaque);
         border: 0;
@@ -356,12 +349,8 @@ const itemsAttributes = masonry
       }
 
       .gallery-lightbox-figure {
-        /* Definite vw/vh width — not fit-content / max-width: 100%. A
-           shrink-to-fit figure plus Image's `sizes: auto` (and the reset's
-           img { max-width: 100% }) collapses to Chrome's ~300px default
-           box, which is why the photo looked tiny. --gallery-photo-aspect
-           is the current photo's width/height (set in setup.ts) so a
-           height-capped portrait gets narrower and the arrows stay on it. */
+        /* Definite vw/vh width: a shrink-to-fit figure with Image's `sizes: auto`
+           collapses to Chrome's ~300px default box. setup.ts sets the aspect. */
         --gallery-photo-aspect: 1.5;
 
         aspect-ratio: var(--gallery-photo-aspect);
@@ -569,8 +558,6 @@ const itemsAttributes = masonry
         }
       }
 
-      /* 640px: canonical mobile breakpoint — tighten figure insets; controls
-         stay 2.75rem. Caption uses the sm step (md already scales down). */
       @media (width < 640px) {
         .gallery-lightbox-chrome {
           inset-inline: var(--spacing-sm);

@@ -2,8 +2,7 @@ import { preview, band, media, cropCorners } from "../../../../../scripts/previe
 
 const B = band(960);
 
-// Crop marks rather than a photo glyph — that is what separates "embedded
-// third-party frame" from the plain image component at thumbnail size.
+// Crop marks, not a photo glyph: that is what separates it from the image preview.
 export default preview({
   width: B.w,
   draw: [media(B.left, 140, 960, 520), cropCorners(B.left, 140, 960, 520)],

@@ -12,8 +12,6 @@ import {
 
 const B = band(960);
 
-// The archetype: eyebrow, display heading, three copy lines and a button pair on
-// the left, a landscape photo on the right.
 export default preview({
   width: B.w,
   draw: [

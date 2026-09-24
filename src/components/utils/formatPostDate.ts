@@ -1,5 +1,4 @@
-/** The long date format every blog surface shares. An unparseable date renders
- *  empty rather than the literal "Invalid Date". Pure, so it unit-tests. */
+/** An unparseable date renders empty, not the literal "Invalid Date". */
 export function formatPostDate(
   date: Date | string | number | null | undefined,
   locale = "en-US"

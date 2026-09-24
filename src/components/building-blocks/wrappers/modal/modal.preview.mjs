@@ -12,8 +12,7 @@ import {
 
 const B = band(560);
 
-// The trigger button above the dialog it opens. Showing both is the only way a
-// static thumbnail can say "modal" rather than "card".
+// Showing the trigger with its dialog is what says "modal" rather than "card".
 export default preview({
   width: B.w,
   draw: [

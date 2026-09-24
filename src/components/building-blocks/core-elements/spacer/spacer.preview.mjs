@@ -2,7 +2,6 @@ import { preview, band, box, lines, glyph } from "../../../../../scripts/preview
 
 const B = band(760);
 
-// The gap itself is the subject: a solid block held between two text blocks.
 export default preview({
   width: B.w,
   draw: [

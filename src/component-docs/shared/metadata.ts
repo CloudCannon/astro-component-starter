@@ -3,8 +3,7 @@ import * as yaml from "js-yaml";
 import { findStructureValueFiles } from "./structureFiles";
 import { deriveSlotsForComponent, type DerivedSlot } from "./slotDerivation";
 
-// Lazy: a static import would drag `astro:content` into vitest, where it
-// cannot resolve outside Astro's Vite pipeline.
+// Lazy: a static `astro:content` import cannot resolve under vitest.
 async function loadComponentIndex() {
   const { getComponentIndex } = await import("./componentIndex");
 
@@ -29,7 +28,6 @@ export type ComponentMetadata = {
   slots?: SlotInfo[];
 };
 
-/** Declared `slots:` frontmatter entry (docs-components collection schema). */
 export type SlotFrontmatter = {
   title: string;
   description?: string;
@@ -37,8 +35,6 @@ export type SlotFrontmatter = {
   child_component?: { name?: string; props?: string[] } | null;
 };
 
-/** A single merged slot — everything the docs page's Slots section needs,
- *  including entries with no resolvable fallback prop. */
 export type SlotDoc = {
   title: string;
   description?: string;
@@ -58,9 +54,7 @@ export type SlotMergeResult = {
   needsOverride: string[];
 };
 
-/** `child_component.name` is derivable; `.props` never is (it documents which
- *  of the *child* component's own props are themselves slot-like) — so a
- *  declared override always wins for props, while name falls back to derivation. */
+/** `.props` is never derivable, so a declared override always wins; name falls back to derivation. */
 function mergeChildComponent(
   declared: SlotFrontmatter["child_component"],
   derived: DerivedSlot["childComponent"]
@@ -73,17 +67,8 @@ function mergeChildComponent(
 }
 
 /**
- * Pure merge of derived (source-of-truth) slots against declared frontmatter
- * overrides. No filesystem/Astro access — safe to unit test directly against
- * real on-disk fixtures.
- *
- * Iteration follows the DECLARED array's order (frontmatter authoring order)
- * for slots that have a declared entry, since the top-level fallbackFor/
- * childComponent selection below is order-dependent and must keep picking the
- * same "first" slot it always did (e.g. Card's before/default/after are
- * authored in a different order than they appear in the template). Any
- * derived-only slot with no declared counterpart is appended afterwards in
- * template-scan order.
+ * Iterates in DECLARED order: the fallbackFor/childComponent pick below is
+ * order-dependent. Derived-only slots are appended in template order.
  */
 export function mergeSlotMetadata(
   derived: DerivedSlot[],
@@ -137,8 +122,6 @@ export function mergeSlotMetadata(
       slotInfos.push({ name, fallbackFor: resolvedFallback, childComponent: resolvedChild });
     }
 
-    // The first slot with both a child component and a fallback prop wins;
-    // failing that, the first slot with any fallback prop.
     if (resolvedChild && resolvedFallback && !childComponent) {
       childComponent = resolvedChild;
       fallbackFor = resolvedFallback;
@@ -165,10 +148,6 @@ function toDeclaredSlots(docsData: { slots?: SlotFrontmatter[] } | undefined): S
 let metadataCache: Map<string, ComponentMetadata> | null = null;
 let nestedBlockPropertiesCache: Set<string> | null = null;
 
-/**
- * Loads and caches component metadata, derived from each component's `.astro`
- * source and patched by any declared `slots:` frontmatter overrides.
- */
 export async function getComponentMetadataMap(): Promise<Map<string, ComponentMetadata>> {
   if (metadataCache) {
     return metadataCache;
@@ -209,10 +188,6 @@ export async function getComponentMetadataMap(): Promise<Map<string, ComponentMe
   return metadataCache;
 }
 
-/** All merged slots (declared overrides patched onto derived slots) for a
- *  single component's docs page, including entries with no resolvable
- *  fallback prop — used by the Slots section, which documents every `<slot>`
- *  regardless of whether it has one. */
 export async function getMergedSlotDocs(componentKey: string): Promise<SlotDoc[]> {
   const index = await loadComponentIndex();
   const entry = index.find((candidate) => candidate.key === componentKey);

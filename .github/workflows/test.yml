@@ -51,9 +51,8 @@ jobs:
       - name: Unit tests
         run: npm run test:unit
 
-  # Blocking on purpose: the 2.0 release re-resolved the lockfile to clear eight
-  # advisories by hand, so a re-acquisition has to turn this job red rather than
-  # scroll past in a log.
+  # Blocking on purpose: the lockfile was re-resolved to clear eight advisories,
+  # so a regression must fail the job.
   audit:
     name: Audit dependencies
     runs-on: ubuntu-24.04
@@ -95,10 +94,7 @@ jobs:
       - name: Render every component's structure defaults
         run: npm run test:render
 
-  # Proves the per-page CSS pruning in scripts/build/pruneCss.mjs dropped nothing
-  # that renders: the baseline and the pruned build are served side by side and
-  # every computed style compared. It builds the site twice, so it gets its own
-  # job rather than slowing the lint or smoke jobs down.
+  # Builds twice, so it gets its own job.
   css-parity:
     name: CSS pruning parity
     runs-on: ubuntu-24.04
@@ -124,9 +120,7 @@ jobs:
       - name: Compare unpruned and pruned builds
         run: npm run test:css-parity
 
-  # Interactive smoke tests against the full library build (the component-docs
-  # pages render a live example of every component). This script locates Chrome
-  # via Playwright's Chromium, so installing it is enough here.
+  # The script finds Chrome via Playwright's Chromium, so installing it is enough.
   browser-tests:
     name: Smoke tests
     runs-on: ubuntu-24.04

@@ -27,12 +27,8 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// The trail comes from the page's own URL — nested paths become linked
-// ancestors, and the heading names the current page. CloudCannon re-renders a
-// component region by running this file in the browser, where there is no
-// request and `Astro.url` is undefined; the shells stamp the path onto
-// `<html data-pathname>` so the trail survives that render instead of
-// disappearing for the whole editing session.
+// CloudCannon re-renders this in the browser, where `Astro.url` is undefined; the
+// shells stamp `<html data-pathname>` so the trail survives that render.
 const pathname =
   Astro.url?.pathname ??
   (typeof document === "undefined" ? "" : (document.documentElement.dataset.pathname ?? ""));

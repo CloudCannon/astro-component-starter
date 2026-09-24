@@ -14,8 +14,6 @@ import {
 
 const B = band(960);
 
-// A matrix: a feature label column, three plan columns of tick/dash marks, one
-// tinted for the recommended plan. The marks separate it from Pricing Tiers.
 const COLS = [520, 680, 840];
 const ROWS = [140, 196, 252, 308, 364];
 

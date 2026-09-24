@@ -14,8 +14,7 @@ import {
 
 const B = band(1120);
 
-// Logo left, links and a search tile right, a full-width rule, then two open
-// dropdowns. The logo plus the rule are what separate this from `bar`.
+// The logo plus the full-width rule are what separate this from `bar`.
 export default preview({
   width: B.w,
   draw: [

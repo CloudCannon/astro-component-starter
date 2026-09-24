@@ -1,21 +1,5 @@
-/**
- * Dead `margin-top` detector for the `@layer page-sections` layer.
- *
- * `BaseLayout.astro` orders the layers `components, page-sections, utils`, and
- * `styles/utils/_flow.css` sets `margin-block-start` on `.flow > * + *`. So any
- * top margin a page section declares for one of its own flow children loses,
- * silently, whatever its specificity — the section renders at the flow rhythm
- * and the declaration is dead code. Spacing between flow siblings is set with
- * the `spaceBefore` prop or a `--space-before` custom property instead.
- *
- * A static lint can't tell a flow child from a flex/grid child, so this walks
- * the real CSSOM of the built site: for every `@layer page-sections` rule that
- * declares a top margin, it resolves the nested selector, keeps the matched
- * elements that are non-first children of a `.flow`/`.prose` parent, and fails
- * if any exist. `auto` is exempt (a flex push, not rhythm).
- *
- *   npm run build:with-library && node scripts/tests/flow-margins.mjs
- */
+// `@layer utils` `.flow > * + *` beats any page-sections top margin on a flow child; this finds
+// those dead declarations in the real CSSOM. `auto` is exempt (a flex push).
 import { execSync } from "node:child_process";
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
@@ -46,8 +30,7 @@ for (const path of pages) {
   const found = await page.evaluate(() => {
     const results = [];
 
-    // Nested rules report a relative selectorText (`& .foo`, or `.foo` with an
-    // implied `&`), which matches the wrong elements at document scope.
+    // Nested rules report a relative selectorText, which matches wrongly at document scope.
     const resolve = (selector, parent) =>
       selector
         .split(",")
@@ -131,7 +114,7 @@ for (const path of pages) {
       try {
         walk(sheet.cssRules, null, null);
       } catch {
-        // Cross-origin sheets have no readable cssRules; the site has none.
+        // Cross-origin sheets have no readable cssRules.
       }
     }
 

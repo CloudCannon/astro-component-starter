@@ -19,8 +19,7 @@ const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
 
-// A span wider than the grid is not an error the editor can see: the cell just
-// silently takes the whole row. Clamping keeps the authored number honest.
+// An over-wide span silently takes the whole row, so clamp it to the grid.
 const columnCount = Math.max(1, Math.round(Number(columns) || 3));
 const span = Math.min(Math.max(1, Math.round(Number(colSpan) || 1)), columnCount);
 

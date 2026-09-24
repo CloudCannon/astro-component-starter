@@ -2,9 +2,6 @@ import { preview, band, box, bar, poly, ink, onInk } from "../../../../scripts/p
 
 const B = band(1120);
 
-// The full-width ink strip with a centred message, trailing link and dismiss X
-// is the component; the muted heading/body bars beneath hint at the page it
-// sits above.
 export default preview({
   width: B.w,
   draw: [

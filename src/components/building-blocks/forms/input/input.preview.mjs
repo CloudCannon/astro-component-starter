@@ -2,9 +2,6 @@ import { preview, band, bar, dot, field, glyph } from "../../../../../scripts/pr
 
 const B = band(760);
 
-// The baseline single-line field. The dot after the label is the required marker;
-// otherwise this is deliberately the plainest control in the set, and everything
-// else in `forms/` differs from it by exactly one added affordance.
 export default preview({
   width: B.w,
   draw: [

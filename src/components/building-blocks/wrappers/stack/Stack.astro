@@ -83,8 +83,6 @@ if (!_component && !hasSections && !hasSlotContent) return;
         flex-direction: column;
         gap: var(--stack-gap, var(--spacing-md));
 
-        /* Children keep no flow margins here — gap is the only number. */
-
         &.direction-row {
           flex-direction: row;
           flex-wrap: wrap;
@@ -93,10 +91,7 @@ if (!_component && !hasSections && !hasSlotContent) return;
             flex-wrap: nowrap;
           }
 
-          /* Equal distribution: children whose width is container-driven
-             (Card's content area is an inline-size container, so its
-             intrinsic width is 0) need to be GIVEN width in a flex row.
-             Equal columns share one line, so wrap is moot here. */
+          /* Inline-size containers (Card's content) have zero intrinsic width, so must be given one. */
           &.distribute-equal {
             flex-wrap: nowrap;
 
@@ -163,8 +158,6 @@ if (!_component && !hasSections && !hasSlotContent) return;
       }
     }
 
-    /* Container, not viewport: a Stack in a narrow pane on a wide screen
-       should still collapse. 640px is the canonical switch either way. */
     @container (width < 640px) {
       .stack > .stack-inner.direction-row.stack-on-mobile {
         flex-direction: column;

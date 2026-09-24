@@ -75,7 +75,7 @@ const titleDataAttributes = effectiveTitleProp
         font-weight: var(--font-weight-bold);
         justify-content: space-between;
 
-        /* Hides the disclosure marker in Firefox (summary is display: list-item) */
+        /* Firefox's disclosure marker (summary is display: list-item). */
         list-style-type: none;
         padding: var(--spacing-md);
         transition: background-color var(--animation-normal) var(--ease-out);
@@ -112,9 +112,7 @@ const titleDataAttributes = effectiveTitleProp
     }
 
     @supports (interpolate-size: allow-keywords) and selector(::details-content) {
-      /* Scoped here, not on :root — `interpolate-size` is inherited, and
-         `::details-content` inherits from its originating element, so this is
-         all the height-to-auto transition below needs. */
+      /* Not on :root: `interpolate-size` is inherited, so scoping it here is enough. */
       .accordion-item {
         interpolate-size: allow-keywords;
       }

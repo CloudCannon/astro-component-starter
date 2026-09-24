@@ -8,9 +8,8 @@
  *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
- *      (e.g. Carousel / ImageCarousel Embla setup, Modal focus trap,
- *      Video's consent-gated hosted-player hydration)
- *      never initialise in the editor, so we initialise them here instead.
+ *      (e.g. Carousel / ImageCarousel Embla setup) never initialise in
+ *      the editor, so we initialise them here instead.
  *   3. Astro's ClientRouter swaps pages in place, which hides navigation
  *      from CloudCannon, so it is switched off here.
  *
@@ -150,11 +149,8 @@ const queueImageCarouselReset = makeResetScheduler({
   label: "image-carousel",
 });
 
-/**
- * The re-render keeps `.masonry` but replaces its items and strips the
- * attributes the enhancement set on it — so the layout CSS switches off while
- * observers stay bound to items that no longer exist. Rebuild it from scratch.
- */
+// The re-render strips masonry's own attributes and replaces its items; patching
+// leaves observers on dead nodes, so rebuild from scratch.
 const queueMasonryReset = makeResetScheduler({
   destroy: destroyMasonry,
   init: setupMasonry,
@@ -295,9 +291,8 @@ function initNewComponents(root) {
   setupAllScrollSteppers(root);
 }
 
-// CloudCannon tracks the page through real navigations; ClientRouter's in-place
-// swaps hide them. The router skips `data-astro-reload` elements, and without
-// its meta tag back/forward reload normally.
+// CloudCannon only sees real navigations. The router skips `data-astro-reload`
+// elements, and without its meta tag back/forward reload normally.
 function disableClientRouter() {
   document.querySelector('meta[name="astro-view-transitions-enabled"]')?.remove();
   document.addEventListener(

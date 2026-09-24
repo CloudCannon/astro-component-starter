@@ -61,9 +61,8 @@ const authorImageDataAttributes = effectiveAuthorImageProp
   class:list={["testimonial", "stackable", className]}
   {...htmlAttributes}
 >
-  {/* The <figure> is the inner box, not the root: <figcaption> has to be a
-      direct child of its <figure>, and the root has to stay a plain wrapper the
-      alignment class can be hoisted off. */}
+  {/* Not the root: <figcaption> must be a direct child of its <figure>, and the
+      root must stay a plain wrapper the alignment class is hoisted off. */}
   <figure
     class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}

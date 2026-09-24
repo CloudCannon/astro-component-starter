@@ -1,24 +1,6 @@
 /**
- * Derives `<slot>` metadata directly from a component's `.astro` source,
- * replacing hand-written `slots:` frontmatter as the source of truth.
- *
- * The dominant pattern this recognizes: a slot's fallback content renders
- * exactly one destructured prop, either directly (`<slot>{text}</slot>`),
- * gated behind a condition (`<slot>{items?.map(...)}</slot>`,
- * `<slot>{contentSections && <X .../>}</slot>`), or through a one-level local
- * alias (`const markdownContent = renderMarkdown(text); ... {markdownContent}`).
- *
- * Anything that doesn't reduce to a single unambiguous prop (a slot name
- * reused across a branch with two different *resolved* props, a self-closing
- * `<slot />` with the relationship expressed outside the slot, etc.) comes
- * back `ambiguous: true` with no `fallbackFor` — callers are expected to patch
- * those via a declared override (see metadata.ts's `mergeSlotMetadata`).
- * A branch that maps a computed grouping of the same data (Timeline's
- * `groups`) does not wipe a sibling branch that maps the authoring prop.
- *
- * Pure string-in/slots-out (no filesystem access) so it's cheap to unit test
- * against inline fixtures; `deriveSlotsForComponent` is the disk-reading,
- * cached entry point used by the rest of the app.
+ * A slot's `fallbackFor` is the one prop its fallback renders (directly, gated, or via a one-level
+ * alias). Anything else comes back `ambiguous`; patch it in metadata.ts's `mergeSlotMetadata`.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { toPascalCase } from "./caseUtils";
@@ -31,7 +13,6 @@ export type DerivedSlot = {
 };
 
 type PropsInfo = {
-  /** Original Astro.props keys, e.g. "class", "data-prop", "contentSections". */
   propNames: Set<string>;
   /** Local variable name (post-rename) -> original prop key. */
   localToProp: Map<string, string>;
@@ -56,19 +37,14 @@ const JS_RESERVED = new Set([
   "void",
 ]);
 
-/** Drop block and line comments. Applied to the destructure before splitting:
- *  prose is not code, and an apostrophe in a comment ("VideoModal's poster")
- *  would otherwise open a string literal that never closes, swallowing every
- *  prop after it. Mirrors the same strip in `scripts/lib/componentModel.mjs`. */
+/** Run before splitting: an apostrophe in a comment would open a never-closed
+ *  string and swallow every prop after it. Mirrored in `componentModel.mjs`. */
 function stripComments(str: string): string {
   return str.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
 }
 
-/** Split a string on a single-character separator, ignoring separators that
- *  appear inside (), [], {}, or string/template literals. Mirrors
- *  `splitTopLevel` in `scripts/lib/componentModel.mjs` — a deliberate .ts copy,
- *  since this module is bundled by Astro and cannot import the scripts/ .mjs.
- *  Keep the two in step. */
+/** A .ts copy of `splitTopLevel` in `scripts/lib/componentModel.mjs` (Astro can't
+ *  import the scripts/ .mjs) — keep the two in step. */
 function splitTopLevel(str: string, sep: string): string[] {
   const result: string[] = [];
   let depth = 0;
@@ -94,9 +70,6 @@ function splitTopLevel(str: string, sep: string): string[] {
     if (c === ")" || c === "]" || c === "}") depth--;
 
     if (c === sep && depth === 0) {
-      // Guard the '=' separator against '==', '===', '=>', and comparisons
-      // like '<=' / '>=' / '!=' — none of these show up as defaults in
-      // practice, but the guard is cheap insurance.
       if (sep === "=") {
         const next = str[i + 1];
         const prev = str[i - 1];
@@ -127,7 +100,6 @@ function splitTopLevel(str: string, sep: string): string[] {
   return result;
 }
 
-/** Strip matching leading/trailing quotes from a destructure key. */
 function stripQuotes(raw: string): string {
   const trimmed = raw.trim();
 
@@ -142,7 +114,6 @@ function stripQuotes(raw: string): string {
   return trimmed;
 }
 
-/** Locate and parse the `const { ... } = Astro.props;` destructure. */
 function extractPropsInfo(script: string): PropsInfo {
   const propNames = new Set<string>();
   const localToProp = new Map<string, string>();
@@ -193,8 +164,6 @@ function extractPropsInfo(script: string): PropsInfo {
 
     if (!originalKey) continue;
 
-    // A bare colon-split part that isn't a simple identifier/rename (e.g. a
-    // TypeScript type annotation slipping through) is skipped defensively.
     const localVar = colonParts.length > 1 ? stripQuotes(colonParts[1]) : originalKey;
 
     propNames.add(originalKey);
@@ -204,8 +173,6 @@ function extractPropsInfo(script: string): PropsInfo {
   return { propNames, localToProp };
 }
 
-/** Build a one-level `const X = expr;` / `let X = expr;` alias map, resolving
- *  each alias to the set of destructured props referenced in its expression. */
 function extractAliasMap(script: string, propsInfo: PropsInfo): Map<string, Set<string>> {
   const aliasMap = new Map<string, Set<string>>();
   const declRegex = /\b(?:const|let)\s+([A-Za-z_$][\w$]*)\s*(?::[^=]+)?=\s*([^;]+);/g;
@@ -223,8 +190,6 @@ function extractAliasMap(script: string, propsInfo: PropsInfo): Map<string, Set<
   return aliasMap;
 }
 
-/** Every prop referenced by identifier in `expr` (ignoring anything that
- *  isn't a known destructured prop). */
 function resolveIdentifiers(expr: string, propsInfo: PropsInfo): Set<string> {
   const found = new Set<string>();
   const identifierRegex = /\b[A-Za-z_$][\w$]*\b/g;
@@ -242,8 +207,6 @@ function resolveIdentifiers(expr: string, propsInfo: PropsInfo): Set<string> {
   return found;
 }
 
-/** Resolve a single identifier (as found by a gate/bare-identifier match)
- *  through the local-var and one-level alias maps down to underlying props. */
 function resolveCandidate(
   identifier: string,
   propsInfo: PropsInfo,
@@ -256,8 +219,6 @@ function resolveCandidate(
   return aliasMap.get(identifier) ?? new Set();
 }
 
-/** Find every `<slot ...>` tag in the template, including self-closing ones,
- *  pairing non-self-closing ones with their `</slot>` and inner content. */
 function findRawSlots(template: string): RawSlot[] {
   const slots: RawSlot[] = [];
   const slotTagRegex = /<slot\b([^>]*)>/g;
@@ -294,11 +255,8 @@ function findRawSlots(template: string): RawSlot[] {
   return slots;
 }
 
-/** Leading `IDENT && `, `IDENT?.map(`, `IDENT.map(` — the discriminating prop
- *  that gates a slot's fallback content — whichever appears first. */
 const GATE_REGEX = /\b([A-Za-z_$][\w$]*)\b\s*(?:\?\.\s*map\(|\.\s*map\(|&&(?!=))/;
 
-/** `{ident}` or `ident` with nothing else — the bare pass-through case. */
 function tryBareIdentifier(content: string): string | null {
   let inner = content.trim();
 
@@ -311,7 +269,6 @@ function tryBareIdentifier(content: string): string | null {
   return m ? m[1] : null;
 }
 
-/** Resolve a slot's single fallback prop (if any) and whether it's ambiguous. */
 function resolveFallback(
   content: string,
   propsInfo: PropsInfo,
@@ -333,9 +290,6 @@ function resolveFallback(
   } else if (bareIdentifier) {
     candidates = resolveCandidate(bareIdentifier, propsInfo, aliasMap);
   } else {
-    // No clear gate/bare pattern: fall back to scanning every identifier in
-    // the content. Only reached for slots that don't match the dominant
-    // shapes (e.g. a bare `<Fragment set:html={html} />` with no `&&` gate).
     candidates = resolveIdentifiers(trimmed, propsInfo);
   }
 
@@ -346,8 +300,6 @@ function resolveFallback(
   return { ambiguous: true };
 }
 
-/** First PascalCase JSX tag inside a `.map(` callback, i.e. the repeatable
- *  child component a slot's array fallback renders. */
 function findChildComponent(content: string): { name: string } | undefined {
   const mapIdx = content.search(/\.\s*map\(/);
 
@@ -359,14 +311,8 @@ function findChildComponent(content: string): { name: string } | undefined {
   return tagMatch ? { name: tagMatch[1] } : undefined;
 }
 
-/** Merge two derivations of the same slot name (a slot name can appear more
- *  than once in source, e.g. Split's `reverse` ternary swapping "first"/"second").
- *
- *  A branched template often has one clean fallback (`entries.map(<Item>)`)
- *  and one computed view of the same data (`groups.map(...)`). Prefer the
- *  resolved derivation so the docs preview still finds the authoring prop
- *  instead of collapsing the whole slot to ambiguous. Two *resolved*
- *  fallbacks that disagree (Split) still count as ambiguous. */
+/** A resolved branch beats an ambiguous one (Timeline's computed `groups`), so the docs
+ *  preview keeps the authoring prop; two resolved branches that disagree (Split) are ambiguous. */
 function mergeSameNameSlot(a: DerivedSlot, b: DerivedSlot): DerivedSlot {
   const aResolved = !a.ambiguous && !!a.fallbackFor;
   const bResolved = !b.ambiguous && !!b.fallbackFor;
@@ -414,8 +360,6 @@ function splitFrontmatter(source: string): { script: string; template: string } 
   };
 }
 
-/** Derive every `<slot>`'s name/fallback-prop/child-component from a raw
- *  `.astro` source string. Pure — no filesystem access. */
 export function deriveSlotsFromSource(source: string): DerivedSlot[] {
   try {
     const { script, template } = splitFrontmatter(source);
@@ -455,8 +399,6 @@ export function deriveSlotsFromSource(source: string): DerivedSlot[] {
 
 const derivedSlotsCache = new Map<string, DerivedSlot[]>();
 
-/** Reads the component's main `.astro` file from disk and derives its slots,
- *  caching the result for the lifetime of the process. */
 export function deriveSlotsForComponent(componentKey: string): DerivedSlot[] {
   if (derivedSlotsCache.has(componentKey)) {
     return derivedSlotsCache.get(componentKey) as DerivedSlot[];

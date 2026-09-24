@@ -13,8 +13,7 @@ import {
 
 const B = band(960);
 
-// Three cards, each a cover photo over a badge / title / description stack. The
-// cover + badge separate it from Feature Grid (icons) and Team Grid (portraits).
+// Cover + badge separate it from Feature Grid (icons) and Team Grid (portraits).
 const card = (x) => [
   plate(x, 120, 304, 396),
   media(x, 120, 304, 176, { r: 0 }),

@@ -11,8 +11,7 @@ import {
 
 const B = band(960);
 
-// Copy left with the button pair beneath, photo right. No eyebrow — that is
-// what keeps it tighter than `hero-split`, otherwise the same shape.
+// No eyebrow: that is what separates it from `hero-split`, otherwise the same shape.
 export default preview({
   width: B.w,
   draw: [

@@ -4,10 +4,6 @@ import {
   deriveSlotsFromSource,
 } from "../../src/component-docs/shared/slotDerivation";
 
-// Fixtures modeled on the real components they're named after — trimmed down
-// to just the frontmatter destructure + the bit of template that matters,
-// since deriveSlotsFromSource only cares about those two things.
-
 const CARD_LIKE = `---
 const {
   contentSections,
@@ -67,9 +63,7 @@ const { items, openFirst, singleOpen = false } = Astro.props;
 </div>
 `;
 
-// Modeled on Split.astro: the same slot *name* is used for opposite props
-// depending on `reverse`, via one-level local aliases that themselves
-// reference two different props — genuinely ambiguous.
+// Split: the same slot name maps to opposite props via `reverse`, genuinely ambiguous.
 const SPLIT_LIKE = `---
 const {
   firstColumnContentSections,
@@ -110,8 +104,7 @@ const secondSplitBlocks = reverse ? firstColumnContentSections : secondColumnCon
 </div>
 `;
 
-// Modeled on Select.astro: inverted relationship — the array is rendered
-// *instead of* the slot, so the slot itself carries no information at all.
+// Select: the array renders instead of the slot, so the slot carries no information.
 const SELECT_LIKE = `---
 const { options = [], value } = Astro.props;
 ---
@@ -146,9 +139,7 @@ const { text, class: className } = Astro.props;
 <div class:list={["text", className]}>{text}</div>
 `;
 
-// Modeled on Timeline.astro: the same default slot appears in each layout
-// branch. Two map `entries`; one maps a computed `groups` view of those
-// entries. Merge must keep the resolved `entries` + TimelineItem derivation.
+// Timeline: the slot repeats per layout branch; merge must keep `entries` + TimelineItem.
 const TIMELINE_LIKE = `---
 const { entries = [], layout = "vertical" } = Astro.props;
 const groups = [];
@@ -265,9 +256,7 @@ describe("deriveSlotsFromSource", () => {
   });
 
   it("ignores comments in the destructure, including apostrophes in prose", () => {
-    // Regression fixture: an apostrophe inside a JSDoc comment used to open a
-    // string literal that never closed, so every prop declared after the
-    // comment vanished from the parse and the fallback resolved to nothing.
+    // An apostrophe inside a JSDoc comment must not open a string literal.
     const COMMENTED_LIKE = `---
 const {
   /** Override the id. VideoModal's poster needs it up front. */
@@ -285,10 +274,7 @@ const {
   });
 
   it("ignores unrelated identifiers referenced inside a .map() child (e.g. forwarded props)", () => {
-    // Regression fixture for a real bug caught while building this: List.astro
-    // forwards `showIcon={showIcons}` inside the same .map() callback that
-    // renders ListItem. A naive "scan every identifier" approach would see
-    // two candidate props (items, showIcons) and wrongly call this ambiguous.
+    // List forwards `showIcon={showIcons}` inside the .map(); that must not read as ambiguous.
     const LIST_LIKE = `---
 const { items, showIcons } = Astro.props;
 ---

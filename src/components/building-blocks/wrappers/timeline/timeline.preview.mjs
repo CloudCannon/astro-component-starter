@@ -2,8 +2,6 @@ import { preview, band, bar, box, ink, line } from "../../../../../scripts/previ
 
 const B = band(560);
 
-// Alternating milestones and a centre rail make this read as a timeline,
-// rather than the one-sided numbered Steps component.
 export default preview({
   width: B.w,
   draw: [

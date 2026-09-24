@@ -30,9 +30,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
   const darkQuery = matchMedia("(prefers-color-scheme: dark)");
   let systemThemeBound = false;
 
-  // Kept in step with the inline pre-paint copy in ThemeToggleScript.astro —
-  // that script runs before paint and cannot import, so the two implementations
-  // must agree on flipTheme, this selector, and data-default-theme handling.
+  // Keep in step with the pre-paint copy in ThemeToggleScript.astro, which cannot import.
   const themedSelector =
     '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])';
 
@@ -98,8 +96,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
       });
     });
 
-    // Bound once: `initThemeToggle` runs again after every view transition,
-    // and the listener outlives the buttons it was registered alongside.
+    // Bound once: init re-runs after every view transition.
     if (!systemThemeBound) {
       systemThemeBound = true;
       darkQuery.addEventListener("change", (e) => {
@@ -133,7 +130,6 @@ const { class: className, ...htmlAttributes } = Astro.props;
       justify-content: center;
       line-height: var(--line-height-none);
       padding: var(--spacing-em-xs);
-      /* Positioning context for the `tap-target` overlay. */
       position: relative;
       transition-duration: var(--animation-normal);
       transition-property: background-color, color;
@@ -159,8 +155,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
       line-height: var(--line-height-none);
     }
 
-    /* Scoped to the root: a toggle inside a section with its own `data-theme`
-       would otherwise show that section's icon, not the site's. */
+    /* Scoped to `html`, or a themed section would pick the icon instead of the site. */
     html[data-theme="light"] .theme-toggle-moon {
       display: block;
     }

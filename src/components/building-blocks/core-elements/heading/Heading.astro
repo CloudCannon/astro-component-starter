@@ -21,9 +21,6 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// h2/h3 without an id cannot be cited as `#section`. Prefer `text`; most page
-// sections pass the title as the default slot instead. h1 (heroes, posts) is left
-// alone. Duplicate titles on the same page get a numeric suffix.
 function plainTextFromHtml(html: string): string {
   return html
     .replace(/<[^>]+>/g, " ")
@@ -37,8 +34,7 @@ function plainTextFromHtml(html: string): string {
     .trim();
 }
 
-// CloudCannon's editable-regions re-render has no Astro.locals — use a
-// one-shot Set so this heading still gets an id, without sharing de-dupe.
+// The editor's re-render has no Astro.locals.
 const usedHeadingIds: Set<string> = Astro.locals
   ? (Astro.locals.headingIds ??= new Set())
   : new Set();

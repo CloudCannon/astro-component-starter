@@ -15,7 +15,6 @@ export interface Props {
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
-  /** Generated card for this page. Defaults to the site-wide card. */
   generatedImage?: string | null;
   canonical?: string | null;
   type?: "website" | "article";
@@ -29,8 +28,6 @@ export interface Props {
 }
 
 const props = Astro.props;
-// Every route without an entry of its own — listings, tag archives, 404, docs —
-// lands on the site card rather than enumerating a card per paginated URL.
 const generatedImage = props.generatedImage ?? ogCardPath("site");
 ---
 
@@ -56,9 +53,7 @@ const generatedImage = props.generatedImage ?? ogCardPath("site");
       content={Astro.generator}
     />
     <style is:inline>
-      /* `pagefind` sits below `components` so component styles win over the
-         Pagefind Component UI stylesheet (imported into that layer by the
-         search component) without specificity fights or !important. */
+      /* `pagefind` must stay below `components` so component styles win over Pagefind's UI. */
       @layer reset, base, pagefind, components, page-sections, utils, overrides;
     </style>
 
@@ -75,9 +70,7 @@ const generatedImage = props.generatedImage ?? ogCardPath("site");
       if (window.inEditorMode) {
         document.documentElement.dataset.inEditor = "";
 
-        // Pages ship only the component CSS their own markup uses (see
-        // `scripts/build/pruneCss.mjs`). The editor renders components that
-        // were never in the HTML, so it needs the whole sheet.
+        // Pages ship pruned CSS; the editor renders components the page never had.
         const full = document.createElement("style");
         full.textContent = '@import url("/_astro/components-full.css");';
         document.head.append(full);

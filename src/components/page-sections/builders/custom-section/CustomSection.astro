@@ -142,8 +142,7 @@ const arrayDataAttributes =
     }
 
     .custom-section {
-      /* Re-declared per section so a nested section never inherits an
-         ancestor's mask. */
+      /* Re-declared so a nested section never inherits an ancestor's mask. */
       --bg-mask: none;
 
       > .outer-content {
@@ -151,8 +150,7 @@ const arrayDataAttributes =
         height: 100%;
         position: relative;
 
-        /* clip, not hidden — hidden makes a scroll container and kills sticky
-           descendants. */
+        /* clip, not hidden: hidden makes a scroll container and kills sticky descendants. */
         &:has([data-bleed]) {
           overflow-x: clip;
         }
@@ -323,8 +321,6 @@ const arrayDataAttributes =
           z-index: var(--layer-1);
         }
 
-        /* Each variant below only sets --bg-mask; this is the one rule that
-           applies it to the media layers. */
         > :is(.background-image, .background-pattern, .background-overlay, .video.background) {
           -webkit-mask-image: var(--bg-mask, none);
           mask-image: var(--bg-mask, none);
@@ -376,8 +372,6 @@ const arrayDataAttributes =
       }
     }
 
-    /* Parallax scrolling is a common vestibular trigger — fall back to a
-       regular background image. */
     @media (prefers-reduced-motion: reduce) {
       .custom-section > .outer-content.background-fixed > .background-image {
         position: absolute;

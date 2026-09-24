@@ -41,9 +41,8 @@ const arrayDataAttributes = effectiveChildrenProp
     .masonry-item {
       container-type: inline-size;
 
-      /* The content div is the measurement probe for the JS enhancement —
-         its height must stay content-driven (never 100%), or measuring it
-         would feed back into the span it produces. */
+      /* The content div is the JS enhancement's measurement probe: its height must stay
+         content-driven (never 100%), or measuring it feeds back into its span. */
     }
   }
 </style>

@@ -11,8 +11,7 @@ import {
 
 const B = band(960);
 
-// Three post cards (cover, tag pill, title, meta, excerpt) and a ghost view-all
-// button. Covers + tag pills say "blog", vs pricing (bars) or features (icons).
+// Covers + tag pills say "blog", vs pricing (bars) or features (icons).
 export default preview({
   width: B.w,
   draw: [

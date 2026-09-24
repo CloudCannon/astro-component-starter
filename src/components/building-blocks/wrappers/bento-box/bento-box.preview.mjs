@@ -2,8 +2,7 @@ import { preview, band, bar, lines, media, glyph } from "../../../../../scripts/
 
 const B = band(760);
 
-// Four panels at three different sizes — one wide, one tall, two square. The
-// asymmetry is the whole component; an even grid would just be `grid`.
+// The asymmetry is the whole component; an even grid would read as `grid`.
 export default preview({
   width: B.w,
   draw: [

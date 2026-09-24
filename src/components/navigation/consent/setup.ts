@@ -12,11 +12,7 @@ import { getConsentManager, type ConsentCategory } from "../../../integrations/c
 let initialized = false;
 let controlsBound = false;
 
-/**
- * Keep the component-docs example interactive without sharing the live site's
- * consent singleton, browser storage, or analytics loader. The example always
- * starts at the banner and resets on a page reload.
- */
+// The docs example must not touch the live consent singleton, storage, or analytics loader.
 function setupPreview(root: HTMLElement): void {
   if (root.hasAttribute("data-consent-preview-initialized")) return;
 
@@ -85,11 +81,7 @@ function refresh(root: HTMLElement, privacy: PrivacyConfig): void {
   if (!privacy.enabled) lockExternalMedia();
 }
 
-/**
- * With the workflow off, optional services are denied for good — so the
- * placeholder's enable button is a control that writes a decision, re-renders
- * the same placeholder and changes nothing a visitor can see.
- */
+// With the workflow off, the enable button would write a decision that changes nothing.
 function lockExternalMedia(): void {
   document.querySelectorAll<HTMLElement>("[data-external-media-enable]").forEach((button) => {
     const message = button.previousElementSibling;
@@ -226,10 +218,7 @@ function bind(root: HTMLElement, privacy: PrivacyConfig): void {
   if (root.hasAttribute("data-consent-initialized")) return;
   root.setAttribute("data-consent-initialized", "");
 
-  // Every opener ends up here, including the banner's Customize button, which
-  // uses `popovertarget` and so never reaches a click handler. Closing with
-  // Escape or the X leaves the boxes as the visitor last ticked them, which
-  // would otherwise read as a saved choice next time the dialog opens.
+  // Not a click handler: Customize opens via `popovertarget`. Resets boxes left ticked by an unsaved close.
   root.querySelector<HTMLElement>(".consent-popover")?.addEventListener("beforetoggle", (event) => {
     if ((event as ToggleEvent).newState === "open") refresh(root, privacy);
   });
@@ -281,8 +270,6 @@ export function setupAllConsent(): void {
 
       manager.subscribe(() => {
         document.querySelectorAll<HTMLElement>(".consent").forEach((activeRoot) => {
-          // The docs example runs on its own state; refreshing it from the live
-          // record would decide it on the visitor's behalf.
           if (activeRoot.closest(".component-viewer")) return;
           refresh(activeRoot, config.privacy);
         });

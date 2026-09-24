@@ -14,7 +14,6 @@ const B = band(1120);
 
 const STEPS_X = 640;
 
-// A pinned media panel and progress bar sit beside three scrolling messages.
 export default preview({
   width: B.w,
   draw: [

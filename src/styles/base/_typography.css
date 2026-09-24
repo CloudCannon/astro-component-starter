@@ -94,7 +94,6 @@
       overflow-wrap: break-word;
     }
 
-    /* Without this, code falls through to the browser's UA-default monospace. */
     code,
     kbd,
     samp,
@@ -136,8 +135,6 @@
     color: var(--color-text-muted);
   }
 
-  /* One measure for a section's lead paragraph. Six page sections each carried
-     their own copy of these two declarations. */
   .section-subtext {
     margin-inline: auto;
     max-width: 42rem;

@@ -2,7 +2,6 @@ import { preview, band, bar, rule, tile, repeat } from "../../../../scripts/prev
 
 const B = band(1120);
 
-// Brand and top links, a full-width rule, then the legal line and social tiles.
 // The rule spanning the whole 1120 band is what makes this read as a footer.
 export default preview({
   width: B.w,

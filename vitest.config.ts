@@ -5,14 +5,9 @@ export default defineConfig({
     environment: "node",
     include: ["tests/unit/**/*.test.ts"],
     alias: {
-      // `src/components/utils/image.ts` imports the `astro:assets` virtual
-      // module, which only exists inside Astro's Vite pipeline. Stub it so the
-      // pure parts of that util can be unit-tested.
+      // `astro:assets` only exists inside Astro's Vite pipeline.
       "astro:assets": new URL("./tests/unit/stubs/astro-assets.ts", import.meta.url).pathname,
-      // Fallback aliases for the util unit tests. This map intentionally
-      // mirrors only the tsconfig `paths` the unit suite needs, not all fifteen:
-      // a util that imports a sibling by alias is otherwise unresolvable
-      // outside Astro's Vite pipeline.
+      // Only the tsconfig `paths` the unit suite needs, not all of them.
       "@component-utils": new URL("./src/components/utils", import.meta.url).pathname,
       "@components": new URL("./src/components", import.meta.url).pathname,
     },

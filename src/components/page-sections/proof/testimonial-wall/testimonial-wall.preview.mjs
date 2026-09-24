@@ -10,8 +10,7 @@ import {
 
 const B = band(960);
 
-// Three columns of quote cards with ragged bottoms under a header. The stagger
-// says "masonry wall" (vs Team Grid); avatar dots + attribution say "quotes".
+// The ragged stagger is what separates this from Team Grid's preview.
 const card = (x, y, h, lines) => [
   plate(x, y, 304, h),
   ...lines.map((w, i) => bar(x + 24, y + 28 + i * 26, w, "micro", { fill: glyph })),

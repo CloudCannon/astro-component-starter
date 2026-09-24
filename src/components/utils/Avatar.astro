@@ -1,11 +1,7 @@
 ---
 /**
- * Internal headshot util — deliberately not an editor-facing block (no
- * CloudCannon YAML, not in any picker; FormField is the precedent). Renders a
- * round (or radius-md) image at a fixed size, falling back to initials on a
- * muted background when there is no image. Consumers may override the exact
- * size with `--avatar-size` (e.g. Testimonial's 80px headshot). Pass
- * `displaySize` in CSS pixels when you override so the srcset matches.
+ * Internal util, deliberately with no CloudCannon YAML. When overriding
+ * `--avatar-size`, pass `displaySize` in CSS pixels so the srcset matches.
  */
 import Image from "@core-elements/image/Image.astro";
 import { isNonEmptyString } from "@component-utils/isNonEmptyString";
@@ -23,9 +19,8 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// CSS display size (1x). Image's default srcset is 640/1280/2560 and
-// getResponsiveWidths drops every step above `width`, so a small width
-// used to emit a single ~88px variant — sharp on 1x, blurry on retina.
+// CSS display size (1x): getResponsiveWidths drops srcset steps above `width`,
+// so passing a small pixel width would leave retina one blurry variant.
 const TOKEN_DISPLAY_PX: Record<string, number> = { sm: 32, md: 44, lg: 64 };
 const TOKEN_SIZES: Record<string, string> = { sm: "2rem", md: "2.75rem", lg: "4rem" };
 const hasDisplaySize = Number(displaySize) > 0;
@@ -69,9 +64,8 @@ const initials = String(alt || "")
       data-prop-alt={dataPropAlt}
     />
   ) : (
-    /* With no alt the initials are decorative — the person's name is
-         rendered beside them. `role="img"` without a name is announced as an
-         unlabelled image, so drop the role rather than leave it nameless. */
+    /* No alt: the initials are decorative (the name is beside them), and a
+       nameless role="img" is announced as an unlabelled image. */
     <span
       class="avatar-initials"
       role={alt ? "img" : undefined}
@@ -118,9 +112,8 @@ const initials = String(alt || "")
         border: var(--border-width-sm) solid var(--color-border);
       }
 
-      /* Image.astro adds a content-block top margin and `height: auto` on
-         the img. Both would shift or clip a headshot inside this fixed circle,
-         so the fill rules here have to win on specificity. */
+      /* Must out-specify Image.astro's top margin and `height: auto`, which would
+         shift or clip the headshot. */
       .image,
       .image-inner,
       picture,

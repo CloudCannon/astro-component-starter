@@ -40,9 +40,6 @@ const siteHref = siteBase.href;
 const pageUrl = canonical || Astro.url.href;
 const pageDescription = description || site.description;
 
-// Entities are linked by `@id` rather than repeated inline, so a crawler reading
-// any one page can tell that its WebPage, the site, and the publisher are the
-// same entities it saw elsewhere.
 const organizationId = `${siteHref}#organization`;
 const websiteId = `${siteHref}#website`;
 const logoId = `${siteHref}#logo`;
@@ -100,8 +97,7 @@ if (pageType === "article") {
     mainEntityOfPage: { "@id": pageUrl },
     publisher: { "@id": organizationId },
     ...(article?.publishedTime ? { datePublished: article.publishedTime } : {}),
-    // Google treats a missing dateModified as "never updated"; publish date is
-    // the honest stand-in when a post has no separate modified timestamp.
+    // Google reads a missing dateModified as "never updated".
     dateModified: article?.modifiedTime || article?.publishedTime || undefined,
     ...(authors.length > 0 ? { author: authors.map((name) => ({ "@type": "Person", name })) } : {}),
     ...(tags.length > 0 ? { keywords: tags } : {}),

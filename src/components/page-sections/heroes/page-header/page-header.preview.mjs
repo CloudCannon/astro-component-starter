@@ -2,8 +2,7 @@ import { preview, band, bar, dot, glyph, subject } from "../../../../../scripts/
 
 const B = band(760);
 
-// A breadcrumb line, then a big left-aligned title and one intro line. The left
-// alignment and crumb row separate it from Hero Center's centred stack.
+// The left alignment and crumb row separate it from Hero Center.
 export default preview({
   width: B.w,
   draw: [

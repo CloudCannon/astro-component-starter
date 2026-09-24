@@ -47,8 +47,7 @@ const mobileNavData = [
   useDefaultEditableBinding={false}
 >
   {
-    /* No logo means no link: an <a> wrapping nothing is an unnamed link, and
-       Image early-returns on an empty source. */
+    /* An <a> wrapping nothing is an unnamed link (Image renders nothing for an empty source). */
     logoSource && (
       <a
         href="/"
@@ -106,7 +105,6 @@ const mobileNavData = [
     }
 
     .main-nav {
-      /* is-stuck is toggled by setup.ts once the bar pins. */
       transition: box-shadow var(--animation-normal) var(--ease-in-out);
 
       &.is-stuck {

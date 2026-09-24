@@ -23,9 +23,6 @@ if (!htmlAttributes.id && label) {
 }
 
 // The exclusive-group name must be unique per accordion on the page.
-// Unlabelled accordions fall back to their first item's title — two on one
-// page opening on the same title would share a group — and slot-only ones to
-// a generated id.
 const firstTitle = (items as ItemProps[])?.[0]?.title;
 const accordionName = singleOpen
   ? `accordion-${htmlAttributes.id || (firstTitle && slugifyLabel(String(firstTitle))) || crypto.randomUUID()}`

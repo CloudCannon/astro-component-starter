@@ -14,8 +14,6 @@ const {
   triggerVariant = "primary",
   triggerSize = "md",
   triggerIconName,
-  /** Override the derived popover id. Consumers that render their own trigger
-   * (VideoModal's poster) need to know the id up front to point at it. */
   popoverId: providedPopoverId,
   size = "md",
   sheet = true,
@@ -30,9 +28,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// The trigger's `popovertarget` points here, so the id has to exist and be
-// unique on the page — two modals sharing a heading or trigger text derive the
-// same base, so the second takes a numbered suffix rather than colliding.
+// Must be unique: two modals sharing a heading or trigger text derive the same base.
 const HeadingTag = headingLevel;
 const derivedLabel = label || heading || triggerText;
 const popoverId =
@@ -66,15 +62,8 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
   {...htmlAttributes}
 >
   {
-    /* A consumer-supplied trigger has to render INSIDE this root: outside it
-       the trigger falls out of the array-item region and picks up its own
-       flow margin (see VideoModal's poster).
-
-       Branch on the trigger props, not `Astro.slots.has("trigger")`: a slot
-       passed as a falsy conditional (`{usePoster && <button slot="trigger">}`)
-       still reports as present, so testing the slot rendered nothing at all
-       for a button-triggered VideoModal. A consumer wanting the slot passes
-       no `triggerText`/`triggerIconName`. */
+    /* Branch on the trigger props, not `Astro.slots.has`: a falsy conditional slot still
+       reports present. A slotted trigger must render inside this root or it leaves the array item. */
     hasTrigger ? (
       <Button
         text={triggerText}

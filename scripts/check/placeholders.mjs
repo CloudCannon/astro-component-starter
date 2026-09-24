@@ -1,23 +1,7 @@
-/**
- * Report starter placeholders that survive into a real site.
- *
- * These fail silently, which is why they need a check. `site` in astro.config.mjs
- * is the base for every absolute URL Astro generates — canonicals, the sitemap,
- * RSS links and the JSON-LD `@id` graph. Left at example.com the build succeeds,
- * the pages look right, and every one of those URLs points at a domain the site
- * doesn't own. Nothing in `astro check`, the linters or the tests notices.
- *
- * The branding items are lower stakes but the same class of problem: ship them
- * and the site serves CloudCannon's logo and title as its own.
- *
- *   node scripts/check/placeholders.mjs            warn, exit 0
- *   node scripts/check/placeholders.mjs --strict   exit 1 if anything is unset
- *
- * Warn is the default so this repo — which legitimately holds the placeholders,
- * since the demo site builds from them — keeps a green CI. A site built from the
- * starter should switch it to --strict, or just run `npm run reset:starter`,
- * which sets every value below.
- */
+// `site` left at example.com fails silently: every canonical, sitemap and RSS URL
+// points at a domain the site doesn't own. Warns by default because this repo
+// holds the placeholders; a real site should use --strict.
+//   node scripts/check/placeholders.mjs [--strict]
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,11 +13,7 @@ const PLACEHOLDER_URL = "https://example.com";
 const STARTER_NAME = "Astro Component Starter";
 const STARTER_LOGO = "acs-logo";
 
-/**
- * A missing file is tolerated — some checks probe optional paths — but one that
- * exists and cannot be read or parsed must fail loudly. Returning null for both
- * skipped every downstream check, so a malformed data file printed success.
- */
+// A missing file is tolerated; one that exists but can't be read or parsed must fail loudly.
 function fatal(relativePath, reason) {
   console.error(`✖ Cannot read ${relativePath}: ${reason}`);
   console.error(

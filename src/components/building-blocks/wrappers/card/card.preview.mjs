@@ -2,8 +2,6 @@ import { preview, band, bar, lines, media } from "../../../../../scripts/preview
 
 const B = band(560);
 
-// A filled, square-cornered surface holding a heading and copy. Square corners
-// and the full-bleed fill are what read as "one grouped block" at thumb size.
 export default preview({
   width: B.w,
   draw: [

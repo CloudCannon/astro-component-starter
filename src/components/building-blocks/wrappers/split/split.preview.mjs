@@ -2,8 +2,7 @@ import { preview, band, bar, lines } from "../../../../../scripts/previews/kit.m
 
 const B = band(960);
 
-// Two equal text columns with a wide gutter. Deliberately no media on either
-// side — this wrapper splits whatever you put in it, so neither half is special.
+// Deliberately no media: the wrapper splits whatever you put in it.
 const COLS = [
   { x: B.left, head: 267, last: 271 },
   { x: 669, head: 236, last: 361 },

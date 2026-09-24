@@ -15,15 +15,12 @@ const {
 
 const parsedTarget = Number(number);
 const target = Number.isFinite(parsedTarget) ? parsedTarget : 0;
-// 20% of the target, except 0 — that would start at 0 and never move, so
-// count down from a small integer instead.
+// A target of 0 would start at 0 and never move.
 const startNumber = target === 0 ? 20 : Math.floor(target * 0.2);
 const duration = 500;
 
-// Animate at the target's own precision, so "99.95" doesn't get floored.
 const decimals = (String(number).split(".")[1] || "").length;
-// The SSR text has to be grouped the same way the script groups it, or the
-// number reflows the moment the first frame runs ("1000" -> "1,000").
+// Must group like the script does, or the number reflows on the first frame.
 const formattedTarget = target.toLocaleString(undefined, {
   minimumFractionDigits: decimals,
   maximumFractionDigits: decimals,
@@ -90,8 +87,7 @@ const formattedTarget = target.toLocaleString(undefined, {
           maximumFractionDigits: decimals,
         });
 
-      // requestAnimationFrame is invisible to the global reduced-motion CSS
-      // reset, so the count-up has to opt out here.
+      // rAF is invisible to the global reduced-motion CSS reset.
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         element.textContent = format(target);
 

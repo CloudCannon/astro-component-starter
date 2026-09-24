@@ -2,8 +2,7 @@ import { preview, band, box, lines, subject } from "../../../../../scripts/previ
 
 const B = band(760);
 
-// Copy, rule, copy. The rule is `subject` and sits in a wide gap on both sides —
-// it has to be the loudest thing here or this reads as a plain text block.
+// The rule must be the loudest thing here or this reads as a plain text block.
 export default preview({
   width: B.w,
   draw: [

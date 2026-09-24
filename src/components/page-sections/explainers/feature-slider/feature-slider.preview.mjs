@@ -15,8 +15,6 @@ import {
 
 const B = band(1120);
 
-// One slide (copy two-thirds, portrait photo one-third) over a control row of
-// arrows flanking position dots. Controls are drawn quieter than the content.
 export default preview({
   width: B.w,
   draw: [

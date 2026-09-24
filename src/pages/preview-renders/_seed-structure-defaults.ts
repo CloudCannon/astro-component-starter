@@ -1,18 +1,5 @@
-/**
- * Preview-render helper: many structure-value defaults ship with empty arrays
- * (`features: []`, `faqItems: []`, …) because editors add their own items.
- * A skeleton preview of an empty grid is useless, so before rendering we fill
- * each empty array with a few copies of its structure's first default value.
- *
- * Also builds the flat structure registry so nested container arrays (a grid
- * item's content, a card inside it, …) resolve during recursion. These loaders
- * live here (an imported module) rather than in the page's frontmatter because
- * Astro runs `getStaticPaths` in isolation — only imported bindings are in
- * scope, not sibling frontmatter functions.
- *
- * The loaders use Node built-ins and are only ever called from
- * `getStaticPaths` (build time, `COMPONENT_PREVIEWS=true`).
- */
+// These loaders must live in an imported module: Astro runs `getStaticPaths` in
+// isolation, so sibling frontmatter functions are out of scope.
 import { globSync } from "glob";
 import * as yaml from "js-yaml";
 import { existsSync, readFileSync } from "node:fs";
@@ -35,18 +22,14 @@ export interface StructureDefs {
   [name: string]: { values?: StructureTemplate[] } | undefined;
 }
 
-// Items at the top level get a fuller count; nested containers get fewer so a
-// deeply nested tree (card-in-grid-in-split) doesn't explode combinatorially.
+// Nested containers get fewer items so deep trees don't explode combinatorially.
 export const SEED_COUNT = 3;
 const SEED_COUNT_NESTED = 2;
 
-// Structure defaults often leave label-like fields blank (`name: ""` / `null`)
-// for the editor to fill in. The skeleton derives text-bar widths from rendered
-// text, so blank labels would render nothing — give them placeholder copy.
+// Skeleton bar widths come from rendered text, so blank labels would render nothing.
 const TEXT_FIELD_KEYS =
   /^(name|title|text|label|heading|question|answer|subtext|description|eyebrow|caption|placeholder|triggerText)$/;
 
-// Longer, varied copy so seeded items don't all collapse to the same bar width.
 const PLACEHOLDER_BY_KEY: Record<string, string> = {
   heading: "Section heading placeholder",
   title: "Item title placeholder",
@@ -78,8 +61,6 @@ export function seedEmptyArrays(
 ): void {
   if (depth > 4) return;
 
-  // Fill this level's own blank label-like fields (form placeholders, headings,
-  // etc.) so leaf components render visible content, not just empty boxes.
   fillEmptyTextFields(value);
 
   for (const [key, entry] of Object.entries(value)) {
@@ -105,9 +86,6 @@ export function seedEmptyArrays(
 
       value[key] = items;
 
-      // Seeded items can themselves be containers with empty arrays (a card in a
-      // grid in a split) — resolve those recursively against the item
-      // structure's own inputs, plus every structure known globally.
       for (const item of items) {
         seedEmptyArrays(item, { ...inputs, ...template._inputs }, structures, "", depth + 1);
       }
@@ -116,8 +94,6 @@ export function seedEmptyArrays(
     }
   }
 }
-
-// Structure registry loading
 
 export interface StructureValueDoc {
   value?: Record<string, unknown> & { _component?: string };
@@ -131,11 +107,6 @@ interface StructureDefRaw {
   values_from_glob?: string[];
 }
 
-/**
- * Resolve a structure-value doc's full input map (inline `_inputs` merged with
- * everything pulled in via `_inputs_from_glob`), plus any `_structures` those
- * inputs files declare.
- */
 export function resolveDocInputs(
   file: string,
   doc: StructureValueDoc
@@ -166,17 +137,7 @@ export function resolveDocInputs(
 
 let cachedGlobalStructures: StructureDefs | null = null;
 
-/**
- * Build one flat registry of every structure the page builder knows about, so
- * nested container arrays (a grid item's `contentSections`, a card inside that,
- * …) can resolve their default item during recursive seeding. Two sources:
- *   1. Every component's own inline `_structures` (select options, grid items,
- *      accordion items, …), keyed by their globally-unique names.
- *   2. `.cloudcannon/structures/*.cloudcannon.structures.yml` — some inline
- *      (`values:`), most assembled from component files (`values_from_glob:`).
- * Each glob-resolved value carries its source component's `_inputs` so seeding
- * can descend into it. Cached — runs once per preview build.
- */
+/** Flat registry of every structure, so nested container arrays resolve their default item. */
 export function loadGlobalStructures(): StructureDefs {
   if (cachedGlobalStructures) return cachedGlobalStructures;
 
@@ -213,8 +174,7 @@ export function loadGlobalStructures(): StructureDefs {
         else includes.push(pattern.replace(/^\//, ""));
       }
 
-      // Expand each include in declared order (explicit files before wildcards)
-      // so the first resolved value is the intended default item.
+      // Declared order matters: the first resolved value becomes the default item.
       const matched: string[] = [];
 
       for (const include of includes) {

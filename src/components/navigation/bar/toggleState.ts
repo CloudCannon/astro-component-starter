@@ -1,10 +1,6 @@
 /**
- * Mirror every nav toggle's `checked` state onto `aria-expanded`. Called after
- * any change rather than per input: checking one radio never fires `change` on
- * the radio it unchecked.
- *
- * Checkboxes only — ARIA does not support `aria-expanded` on `radio`, so
- * setting it here would put back the attribute the markup deliberately omits.
+ * Checkboxes only: ARIA doesn't allow `aria-expanded` on `radio`. Call after any change,
+ * since checking one radio fires no `change` on the radio it unchecked.
  */
 export function syncExpanded(root: ParentNode): void {
   root.querySelectorAll<HTMLInputElement>(".nav-item-toggle[type='checkbox']").forEach((toggle) => {
@@ -13,13 +9,8 @@ export function syncExpanded(root: ParentNode): void {
 }
 
 /**
- * Make Enter and Space work on every nav toggle.
- *
- * The focusable control is the hidden `<input role="button">`, but the visible
- * trigger is a `<label>`, which takes no focus — so a handler bound to the
- * label never sees a key. A checkbox also ignores Enter natively, and a checked
- * radio (a level-2 panel) has no native way back to unchecked, leaving that
- * panel mouse-only. Binding here covers Bar, Side and Mobile in one place.
+ * Binds to the hidden input, not the `<label>`, which takes no focus. A checked radio
+ * has no native way back to unchecked, so without this its panel is mouse-only.
  */
 export function bindToggleKeys(root: ParentNode): void {
   root.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {

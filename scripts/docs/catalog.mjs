@@ -1,24 +1,8 @@
 /**
- * Generate the component catalog tables in
- * `.agents/skills/page-content-authoring/component-catalog.md` from the
- * co-located CloudCannon YAML (and, for child-item footnotes, the sibling
- * `.astro` destructures) of every component under `src/components/`.
- *
- * The catalog file has two marker-delimited regions — one under the "Page
- * sections" H2, one under "Building blocks" — rewritten in full on every run.
- * Everything else (intro prose, H2 preambles) is hand-written and untouched.
- *
- *   node scripts/docs/catalog.mjs           regenerate both regions
- *   node scripts/docs/catalog.mjs --check   verify the file matches (CI)
- *
- * "Use for" comes from the co-located `*.cloudcannon.structure-value.yml`
- * `description:` — one source of truth instead of hand-duplicated prose.
- * Content-prop columns come from the co-located `*.cloudcannon.inputs.yml`
- * keys (dotted keys collapsed to their first segment, `_`-prefixed skipped).
- * For page sections only the keys ABOVE the
- * `# --- section wrapper inputs (CustomSection) ---` marker count — the
- * shell props below it are common to every page section and documented once
- * in SKILL.md, not repeated per row.
+ * Generates the marker-delimited regions of
+ * `.agents/skills/page-content-authoring/component-catalog.md` from component YAML;
+ * everything outside the markers is hand-written. `--check` verifies instead of writing.
+ * "Use for" is the structure-value `description:`; page-section props stop at SECTION_MARKER.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
@@ -40,13 +24,10 @@ const catalogPath = join(
 const catalogLabel = rel(catalogPath);
 
 const SECTION_MARKER = "# --- section wrapper inputs (CustomSection) ---";
-// Shared input files that document content props; `space-before.yml` is flow
-// spacing on every block, so listing it would repeat it in every row.
+// `space-before.yml` is omitted: it is on every block, so it would repeat in every row.
 const SHARED_CONTENT_INPUTS = ["/.cloudcannon/inputs/background.yml"];
 
-// Editorial grouping order, preserved from the hand-authored catalog. Unknown
-// groups (a new top-level dir under a tier that isn't listed here) are
-// appended alphabetically rather than silently dropped.
+// Unlisted groups are appended alphabetically.
 const GROUP_ORDER = {
   "page-sections": ["heroes", "features", "ctas", "info-blocks", "people", "builders"],
   "building-blocks": ["core-elements", "wrappers", "forms"],
@@ -64,18 +45,12 @@ const GROUP_TITLES = {
   forms: "Forms",
 };
 
-// Short editorial intro shown once under a building-blocks H3, above its
-// table. Stable, category-level prose — not derived from any single
-// component's YAML, so it lives here rather than being reverse-engineered.
 const GROUP_INTRO = {
   wrappers:
     "Containers that hold other building blocks (their child items are themselves `_component` blocks).",
   forms: "Compose these inside a `form` (or a page section's `formBlocks[]`, as in `cta-form`).",
 };
 
-// Hand-maintained editorial nuance that can't be derived from YAML — keep short.
-// Rendered as an extra footnote bullet under that component's group table.
-// Keyed by full `_component` key.
 const EDITORIAL_NOTES = {
   "page-sections/explainers/feature-slider":
     "No section-level heading — each slide carries its own text.",
@@ -98,7 +73,6 @@ function groupTitle(slug) {
   return GROUP_TITLES[slug] || titleize(slug);
 }
 
-/** Order a set of group names: known groups in their editorial order, then unknown groups alphabetically. */
 function orderGroups(groupNames, order) {
   const known = order.filter((g) => groupNames.has(g));
   const rest = [...groupNames].filter((g) => !order.includes(g)).sort();
@@ -106,29 +80,12 @@ function orderGroups(groupNames, order) {
   return [...known, ...rest];
 }
 
-// Props every component destructures (or lists in its inputs.yml) for
-// wiring/editor plumbing, not content an author sets — skipped everywhere:
-// the main props column, child-item footnotes, and structure-derived
-// footnotes. `data-*` (quoted, aliased data attributes like
-// `data-children-prop`) is matched by prefix. This set must stay universal —
-// a name here is dropped from *every* component, so it only holds names that
-// are never legitimate authored content anywhere in the library.
+// Dropped from every component's docs, so only names that are never authored content anywhere.
 const INFRA_PROPS = new Set(["class", "style", "useDefaultEditableBinding", "_component", "index"]);
 const isInfraProp = (key) => INFRA_PROPS.has(key) || key.startsWith("data-");
 
-// Wiring props specific to the fixed set of *child-item* components a parent
-// wrapper passes state into — `isOpen`/`accordionName` (AccordionItem),
-// `checked`/`groupName`/`tablistLabel` (ContentSelectorPanel), `imageAspectRatio`
-// (StepsItem), `showAnnualPricing` (PricingTiersItem), `aspectRatio`/
-// `lightbox` (CardGridItem, GalleryItem). These names collide
-// with genuine content props elsewhere
-// (`toggle`'s own `checked`, the parent Steps wrapper's own `imageAspectRatio`,
-// the Card wrapper's own `colorScheme`),
-// so — unlike INFRA_PROPS — this set is scoped to exactly one call site:
-// filtering a sibling `.astro`'s own destructure for a child-item footnote.
-// Never apply it to a main component's props column or to structure-derived
-// footnotes. `navigationPosition` stays out of both sets — it's a real
-// content prop on the main `content-selector` component too.
+// Parent-to-child wiring props. These names are real content props elsewhere (`toggle`'s
+// `checked`), so apply only to child-item footnotes, never to a main component's props.
 const CHILD_WIRING_PROPS = new Set([
   "isOpen",
   "accordionName",
@@ -144,11 +101,6 @@ const CHILD_WIRING_PROPS = new Set([
   "cardColorScheme",
 ]);
 
-/**
- * The inputs.yml doc for a component, restricted (for page sections) to the
- * keys above the CustomSection shell-props marker. Components with no marker
- * (building blocks) get every key.
- */
 function contentInputsDoc(inputsPath, tier, structureValue = {}) {
   if (!inputsPath) return {};
   const raw = readFileSync(inputsPath, "utf8");
@@ -163,7 +115,6 @@ function contentInputsDoc(inputsPath, tier, structureValue = {}) {
   return Object.assign(yaml.load(raw) || {}, ...shared);
 }
 
-/** Format one inputs.yml key for a "Key content props" cell. */
 function formatProp(key, cfg) {
   const label = cfg?.type === "array" ? `\`${key}[]\`` : `\`${key}\``;
   const structures = cfg?.type === "object" ? cfg.options?.structures : undefined;
@@ -181,8 +132,6 @@ function formatProp(key, cfg) {
 
   if (cfg?.type === "markdown") return `${label} (markdown)`;
   if (cfg?.type === "select" && Array.isArray(cfg.options?.values)) {
-    // `options.values` is either a list of `{ id, name }` objects or, for
-    // simple enums, bare scalars (strings/numbers) used as their own id.
     const ids = cfg.options.values.map((v) => `\`${typeof v === "object" ? v.id : v}\``).join("/");
 
     return `${label} (${ids})`;
@@ -190,7 +139,6 @@ function formatProp(key, cfg) {
   return label;
 }
 
-/** The "Key content props" cell for a component: ordered, deduped, formatted. */
 function propsCell(doc) {
   const seen = new Set();
   const cells = [];
@@ -206,24 +154,13 @@ function propsCell(doc) {
   return cells.join(", ");
 }
 
-/** The single array-type top-level input in a doc, if there is exactly one — used to
- * label a child-item footnote ("`grid` item (`items[]`): ..."). */
 function soleArrayProp(doc) {
   const arrayKeys = Object.keys(doc).filter((k) => !k.includes(".") && doc[k]?.type === "array");
 
   return arrayKeys.length === 1 ? arrayKeys[0] : null;
 }
 
-/**
- * The content-prop keys of a `_structures.<name>` block's first entry, for
- * array inputs whose item shape has no sibling `.astro` (e.g. `faq-section`'s
- * `items[]` — a bespoke `{ title, contentSections }` object, not a component).
- * Only bespoke shapes qualify: an entry whose value carries a `_component`
- * key is a real, already-catalogued component (every shared
- * `.cloudcannon/structures/*.yml` block is exactly this — `values_from_glob`
- * pointing at full component structure-value files), so it is skipped rather
- * than double-documented.
- */
+/** Item keys of a bespoke `_structures.<name>` shape; entries with a `_component` are already catalogued, so null. */
 function structureItemKeys(arrayCfg, structureValueDoc, sharedStructures) {
   const ref = arrayCfg?.options?.structures;
 
@@ -238,8 +175,6 @@ function structureItemKeys(arrayCfg, structureValueDoc, sharedStructures) {
       : null;
   };
 
-  // Prefer the component's own local `_structures.<name>` block; fall back to
-  // a shared `.cloudcannon/structures/<name>.cloudcannon.structures.yml`.
   const value =
     firstBespokeValue(structureValueDoc?._structures?.[name]) ||
     firstBespokeValue(sharedStructures.get(name));
@@ -249,9 +184,7 @@ function structureItemKeys(arrayCfg, structureValueDoc, sharedStructures) {
   return Object.keys(value).filter((k) => !NON_PROP_KEY(k) && !isInfraProp(k));
 }
 
-/** A markdown table, padded exactly the way `prettier` formats GFM tables:
- * every column padded to its widest cell (header included), single space
- * either side of each pipe, separator dashes filling the same width. */
+/** Must match prettier's GFM table padding byte-for-byte, or `--check` fails after a format. */
 function renderTable(headers, rows) {
   const widths = headers.map((h, i) => Math.max(h.length, 3, ...rows.map((r) => r[i].length)));
   const line = (cells) => `| ${cells.map((c, i) => c.padEnd(widths[i])).join(" | ")} |`;
@@ -272,7 +205,6 @@ if (!mains.length) {
   process.exit(1);
 }
 
-// Non-main siblings, grouped by their directory, for child-item footnotes.
 const siblingsByDir = new Map();
 
 for (const entry of byKey.values()) {
@@ -281,9 +213,6 @@ for (const entry of byKey.values()) {
   siblingsByDir.get(entry.dirAbs).push(entry);
 }
 
-// Shared `.cloudcannon/structures/*.cloudcannon.structures.yml`, keyed by
-// their top-level name (e.g. "buttonSections") — the fallback source for
-// child-item footnotes when a component has no sibling `.astro`.
 const sharedStructures = new Map();
 
 for (const file of await glob("*.cloudcannon.structures.yml", {
@@ -311,8 +240,6 @@ function footnotesFor(entry, slug, structureValueDoc) {
     });
   }
 
-  // No sibling component — the item may still be a bespoke shape documented
-  // only via its `_structures.<name>` block (e.g. faq-section's `items[]`).
   if (arrayProp) {
     const keys = structureItemKeys(doc[arrayProp], structureValueDoc, sharedStructures);
 
@@ -378,8 +305,6 @@ const generated = {
   "building-blocks": buildTier("building-blocks", "`<slug>`"),
 };
 
-// Splice into the catalog file between its markers.
-
 const original = readFileSync(catalogPath, "utf8");
 let updated = original;
 const regions = ["page-sections", "building-blocks"];
@@ -399,8 +324,7 @@ for (const region of regions) {
   const before = updated.slice(0, startIdx + start.length);
   const after = updated.slice(endIdx);
 
-  // Prettier treats an HTML comment as its own block and requires a blank
-  // line separating it from adjacent markdown content on both sides.
+  // Prettier requires a blank line either side of an HTML comment.
   updated = `${before}\n\n${generated[region]}\n\n${after}`;
 }
 
@@ -422,7 +346,6 @@ if (mode === "write") {
   process.exit(0);
 }
 
-// --check: report per-row drift rather than just "file differs".
 if (updated === original) {
   console.log(`ok     ${catalogLabel} (${mains.length} components)`);
   process.exit(0);

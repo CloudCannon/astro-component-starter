@@ -1,12 +1,4 @@
-/**
- * Serving the built site (dist/) to a headless browser: the static file server
- * and the launch order shared by the browser-driven scripts
- * (`scripts/previews/screenshot.mjs` and the test helpers in
- * `scripts/tests/lib/servedDist.mjs`).
- *
- * The preview screenshots and the test suite must serve the same MIME types —
- * a missing one silently breaks `<img>`/font loading in one and not the other.
- */
+// A missing MIME type silently breaks `<img>`/font loading in the browser scripts that share this.
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, sep } from "node:path";
@@ -32,7 +24,6 @@ const MIME = {
   ".webm": "video/webm",
 };
 
-/** A static file server for `distDir`. The caller listens and closes it. */
 export function createDistServer(distDir) {
   return createServer((req, res) => {
     try {
@@ -63,10 +54,7 @@ export function createDistServer(distDir) {
   });
 }
 
-/**
- * Serve `distDir` on an ephemeral port. Returns `{ server, baseUrl }`;
- * callers must `server.close()` when done.
- */
+/** Callers must `server.close()` when done. */
 export async function serveDist(distDir) {
   const server = createDistServer(distDir);
 
@@ -77,11 +65,7 @@ export async function serveDist(distDir) {
   return { server, baseUrl: `http://127.0.0.1:${port}` };
 }
 
-/**
- * Launch headless Chrome: CHROME_PATH override first, then system Chrome, then
- * Edge, then Playwright's own Chromium (installed in CI via
- * `npx playwright-core install --with-deps chromium`).
- */
+// The last attempt is Playwright's own Chromium, installed in CI via `npx playwright-core install --with-deps chromium`.
 export async function launchBrowser(
   message = "Could not launch a browser. Install Chrome or set CHROME_PATH."
 ) {

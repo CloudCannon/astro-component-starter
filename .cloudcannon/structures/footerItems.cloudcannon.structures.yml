@@ -1,11 +1,4 @@
-# Footer link and social-icon structures, used by the `footer` component's
-# `links` and `socials` array inputs.
-#
-# Must live here, not in the component's inputs.yml — `_structures` is not a
-# valid key in an `_inputs_from_glob` file.
-#
-# Distinct from the field-name-matched `links` / `socials` structures used by the
-# data files in `src/data/` — same idea, different consumers.
+# Not in the footer's inputs.yml: `_structures` is not a valid key in an `_inputs_from_glob` file.
 linkItems:
   values:
     - label: Navigation Link

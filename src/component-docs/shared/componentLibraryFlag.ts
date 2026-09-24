@@ -1,11 +1,5 @@
-/**
- * Strict reader for the DISABLE_COMPONENT_LIBRARY env var.
- *
- * `npm run build` sets it to "true" to exclude /component-docs from production
- * builds; `npm run build:with-library` leaves it unset. Only "true", "false",
- * or unset are accepted — anything else (e.g. a typo like "ture") throws at
- * build time instead of silently including the library in a production build.
- */
+// Throws on anything but "true", "false" or unset, so a typo can't silently ship the
+// component library in a production build.
 let logged = false;
 
 export function isComponentLibraryDisabled(): boolean {

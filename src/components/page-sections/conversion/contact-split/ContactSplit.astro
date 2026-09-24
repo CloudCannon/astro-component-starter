@@ -33,8 +33,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// Every instance shipped the literal "Map", which names four different maps
-// identically for a screen reader moving between pages.
+// Not a literal "Map": every map would get the same accessible name.
 const addressDetail = details?.find((detail: DetailProps) =>
   /address|location|map/i.test(`${detail.label ?? ""} ${detail.icon ?? ""}`)
 );

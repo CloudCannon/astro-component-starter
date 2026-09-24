@@ -1,34 +1,21 @@
 /*
- * Flow + prose: space BETWEEN document siblings, read from the child's
- * `--space-before` (component type defaults / inline `spaceBefore` prop),
- * falling back to `--space-before-default`. First children get no margin,
- * so flow parents need no first-child strips.
- *
- * `.flow` — on the element that directly holds authored children
- * (a `contentSections` parent). Never on a prose container: this layer
- * would override prose em margins wholesale.
- * `.prose` — on markdown bodies (blog `.post`). Only components
- * (`.stackable` roots) space themselves; prose keeps its em margins.
- *
- * A container uses `gap` OR `.flow`, never both. Children must generate
- * boxes — a `display: contents` root silently loses its margin.
+ * Space between siblings comes from the child's `--space-before`; first children get none.
+ * `.flow` goes on a `contentSections` parent, never a prose container (it would override
+ * prose em margins). `.prose` goes on markdown bodies; only `.stackable` roots space there.
+ * Use `gap` OR `.flow`, never both. A `display: contents` child silently loses its margin.
  */
 @layer utils {
-  /* Custom properties inherit: without this a Grid's `loose` or a Card's
-     `none` leaks into nested children that have no default of their own. */
+  /* Stops a parent's `--space-before` inheriting into nested children. */
   .flow,
   .prose {
     --space-before: initial;
   }
 
-  /* A popover is a DOM sibling but lives in the top layer, where a real margin
-     replaces one of the `margin: auto` halves that centre it (ARCHITECTURE.md
-     § Popovers and the top layer). */
+  /* A margin on a popover breaks its `margin: auto` top-layer centring. */
   .flow > * + *:not([popover]) {
     margin-block-start: var(--space-before, var(--space-before-default));
   }
 
-  /* Spacer replaces the gap — its `size` is the whole gap. */
   .flow > .spacer,
   .flow > .spacer + * {
     margin-block-start: 0;
@@ -52,18 +39,8 @@
     --space-before: var(--space-before-default);
   }
 
-  /* The spaceBefore prop, carried as a data attribute so the `style`
-     attribute stays free for consumers (a spread `style` would clobber an
-     inline custom property). The attribute goes on a DIRECT CHILD of the
-     stackable root — never the root itself: CloudCannon's editable-regions
-     re-render preserves the region's root element, so a prop-driven attribute
-     there goes stale in the visual editor (see editor-live-sync.js). :has()
-     hoists it back to the root. The bare-attribute selectors stay as the
-     fallback for roots with no child to carry it (Video's media-element
-     roots, Pagination) — those render correctly but
-     don't live-update when spaceBefore itself is edited. Beats
-     component-layer type defaults (utils layers over components) and the
-     zero-specificity kicker above. */
+  /* The attribute sits on a direct child, since a prop-driven attribute on the root goes
+     stale in the editor. Bare selectors serve roots with no child (Video, Pagination). */
   [data-space-before="none"],
   .stackable:has(> [data-space-before="none"]) {
     --space-before: var(--space-before-none);

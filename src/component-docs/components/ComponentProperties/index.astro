@@ -163,8 +163,7 @@ type ArrayItemVariant = {
   properties: PropertyMeta[];
 };
 
-/** Input configs are matched by short key name at any depth — CloudCannon's
- *  own matching rule. */
+/** Input configs match by short key name at any depth, as CloudCannon does. */
 function propsFromValueShape(
   valueObj: Record<string, unknown>,
   itemInputs: Record<string, any>,
@@ -248,11 +247,6 @@ type PropertyGroup = {
   properties: PropertyMeta[];
 };
 
-/**
- * Mirror CloudCannon's `groups` block so page-section shell props sit in a
- * collapsed "Section settings" disclosure instead of mixing with content.
- * Building blocks have no groups and stay a flat list.
- */
 function groupProperties(properties: PropertyMeta[], configData: any): PropertyGroup[] {
   const groups = configData?.groups as InputGroup[] | undefined;
 
@@ -518,9 +512,7 @@ const propertyGroups: PropertyGroup[] = groupProperties(properties, configData);
       border-top: 1px solid var(--color-border-subtle);
       padding-block: var(--spacing-md);
 
-      /* Flex rather than relying on whitespace between the two spans: the
-         compiler strips whitespace-only nodes between adjacent elements, so a
-         source newline is not a space. */
+      /* The compiler strips whitespace-only nodes, so a source newline is no space. */
       h3 {
         align-items: baseline;
         display: flex;

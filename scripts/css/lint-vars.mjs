@@ -1,14 +1,4 @@
-/**
- * Every `var(--x)` in `src/` must resolve to a declared custom property.
- *
- *   node scripts/css/lint-vars.mjs [--list]
- *
- * An unresolved `var()` is invalid at computed-value time, so the property
- * silently inherits — no error in review, the build, or usually the page.
- *
- * Unused tokens are deliberately not flagged: the token layer is the starter's
- * public theming API, so a token no brand happens to use is not a bug.
- */
+// Unused tokens are deliberately not flagged: the token layer is the public theming API.
 import { readFileSync } from "node:fs";
 import { glob } from "glob";
 
@@ -27,8 +17,7 @@ function externallyInjected() {
 // Optional quote matches the `style={{ "--name": … }}` form in .astro templates.
 const DECL = /(--[a-zA-Z0-9-]+)["']?\s*:/g;
 
-// Trailing delimiter classifies the reference: `)` must resolve, `,` has a
-// fallback, anything else is a built name (`var(--spacing-${gap})`).
+// Trailing `)` must resolve; `,` has a fallback; anything else is a built name.
 const REF = /var\(\s*(--[a-zA-Z0-9-]+)\s*([,)]?)/g;
 
 function levenshtein(a, b) {
@@ -63,7 +52,6 @@ function closest(name, candidates) {
     }
   }
 
-  // Past roughly a third of the name being wrong it stops being a useful hint.
   return bestScore <= Math.max(3, Math.ceil(name.length / 3)) ? best : null;
 }
 
