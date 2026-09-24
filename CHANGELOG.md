@@ -46,6 +46,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Scroll Stepper's step media works in the Visual Editor. Each image rendered as an editable array item with no array region around it, so CloudCannon replaced every one with a "Failed to render array item" card. The media is now wired to each step's `mediaSections`, in both the desktop and mobile layouts, so the images render and can be selected on the canvas.
+- Following a link or going back inside CloudCannon's Visual Editor does a real page load instead of an Astro view-transition swap, so the editor knows which page is open. The live site keeps its view transitions.
 - The Mobile nav examples in the component library open inside their preview instead of covering the whole docs page. On a real site the panel still covers the page. All Mobile examples use the largest preview size, like Main Nav's.
 - Breadcrumbs with a long current title truncate only the title. The ancestor crumbs used to shrink along with it, which squeezed their links under the separators so the trail looked broken.
 - Nav bar dropdowns close on a second click of their trigger instead of closing and immediately reopening, and clicking an item with children inside a dropdown opens it instead of closing the whole menu. Both happened when the bar sat inside a focusable element, such as a component library preview: the press moved focus there, and the tab-out handler treated that as focus leaving the nav.

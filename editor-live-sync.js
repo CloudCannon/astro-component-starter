@@ -11,6 +11,8 @@
  *      (e.g. Carousel / ImageCarousel Embla setup, Modal focus trap,
  *      Video's consent-gated hosted-player hydration)
  *      never initialise in the editor, so we initialise them here instead.
+ *   3. Astro's ClientRouter swaps pages in place, which hides navigation
+ *      from CloudCannon, so it is switched off here.
  *
  * Logs editor mutations to the console in dev; silent in production.
  */
@@ -303,6 +305,31 @@ function initNewComponents(root) {
   setupAllScrollSteppers(root);
 }
 
+// CloudCannon tracks the page through real navigations; ClientRouter's in-place
+// swaps hide them. The router skips `data-astro-reload` elements, and without
+// its meta tag back/forward reload normally.
+function disableClientRouter() {
+  document.querySelector('meta[name="astro-view-transitions-enabled"]')?.remove();
+  document.addEventListener(
+    "click",
+    (event) => {
+      if (event.target instanceof Element) {
+        event.target.closest("a, area")?.setAttribute("data-astro-reload", "");
+      }
+    },
+    true
+  );
+  document.addEventListener(
+    "submit",
+    (event) => {
+      if (event.target instanceof HTMLFormElement) {
+        event.target.setAttribute("data-astro-reload", "");
+      }
+    },
+    true
+  );
+}
+
 const observer = new MutationObserver((mutations) => {
   for (const mutation of mutations) {
     const { type, target, attributeName } = mutation;
@@ -378,6 +405,7 @@ observer.observe(document.body, {
   subtree: true,
 });
 
+disableClientRouter();
 setupAllCarousels();
 setupAllImageCarousels();
 setupAllMainNavs();

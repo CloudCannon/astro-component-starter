@@ -43,6 +43,8 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const mediaDataAttributes = (prop: string) =>
+  effectiveChildrenProp ? { "data-editable": "array", "data-prop": prop } : {};
 const hasSteps = stepList.length > 0;
 
 if (!_component && !hasSteps) return;
@@ -70,8 +72,14 @@ if (!_component && !hasSteps) return;
               class="scroll-stepper-media-panel"
               data-index={index}
             >
-              <div class="scroll-stepper-media-content flow">
-                <Component contentSections={sectionBlocks(step.mediaSections)} />
+              <div
+                class="scroll-stepper-media-content flow"
+                {...mediaDataAttributes(`${effectiveChildrenProp}.${index}.mediaSections`)}
+              >
+                <Component
+                  contentSections={sectionBlocks(step.mediaSections)}
+                  useDefaultEditableBinding={!!effectiveChildrenProp}
+                />
               </div>
             </div>
           ))}
@@ -126,8 +134,14 @@ if (!_component && !hasSteps) return;
           data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
         >
           <div class="scroll-stepper-mobile-media flow">
-            <div class="scroll-stepper-media-content">
-              <Component contentSections={sectionBlocks(step.mediaSections)} />
+            <div
+              class="scroll-stepper-media-content"
+              {...mediaDataAttributes("mediaSections")}
+            >
+              <Component
+                contentSections={sectionBlocks(step.mediaSections)}
+                useDefaultEditableBinding={!!effectiveChildrenProp}
+              />
             </div>
           </div>
           <ScrollStepperStep
