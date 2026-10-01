@@ -409,7 +409,7 @@ const pathname = Astro.url.pathname;
     }
 
     /* Matches MainNav hiding the hamburger, or Tab lands on a control with no visible label. */
-    @container (width >= 768px) {
+    @container (width >= 960px) {
       .nav-toggle {
         display: none;
       }
@@ -457,9 +457,9 @@ const pathname = Astro.url.pathname;
         .mobile-logo {
           align-items: center;
           display: flex;
-          flex: 0 1 min(11rem, 100%);
+          flex: 0 1 min(13rem, 100%);
           min-width: 0;
-          width: min(11rem, 100%);
+          width: min(13rem, 100%);
         }
 
         .mobile-header-actions {
