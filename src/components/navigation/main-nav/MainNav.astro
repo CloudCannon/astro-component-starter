@@ -117,13 +117,13 @@ const mobileNavData = [
 
       .desktop-main-nav,
       .desktop-button-group.button-group {
-        @container (width < 768px) {
+        @container (width < 960px) {
           display: none;
         }
       }
 
       .nav-hamburger.mobile-button {
-        @container (width >= 768px) {
+        @container (width >= 960px) {
           display: none;
         }
       }
@@ -136,12 +136,17 @@ const mobileNavData = [
         gap: var(--spacing-md);
         height: var(--main-nav-height);
 
+        /* CustomSection makes this a `.flow`, whose top margin would offset every item after the logo. */
+        > * {
+          --space-before: var(--space-before-none);
+        }
+
         > .main-nav-logo-link {
           align-items: center;
           display: flex;
-          flex: 0 1 min(11rem, 100%);
+          flex: 0 1 min(13rem, 100%);
           min-width: 0;
-          width: min(11rem, 100%);
+          width: min(13rem, 100%);
         }
 
         > .main-nav-logo-link > .main-nav-logo {

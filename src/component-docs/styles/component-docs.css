@@ -51,10 +51,12 @@
       z-index: var(--layer-2);
 
       > .sidebar-logo {
-        height: auto;
         margin-top: 0;
-        max-width: 130px;
-        width: 100%;
+
+        img {
+          height: 2rem;
+          width: auto;
+        }
       }
 
       > .library-mobile-nav-actions {
@@ -62,6 +64,12 @@
         display: flex;
         gap: var(--spacing-md);
       }
+    }
+
+    & .component-docs-mobile-logo img {
+      display: block;
+      height: 2rem;
+      width: auto;
     }
 
     & .privacy-settings-toggle {

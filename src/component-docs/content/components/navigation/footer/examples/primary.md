@@ -3,7 +3,7 @@ title: 'Footer'
 spacing: 'top'
 blocks:
   _component: 'navigation/footer'
-  logoSource: /src/assets/images/component-docs/acs-logo.svg
+  logoSource: /src/assets/images/brand/astro-component-starter-logo.svg
   logoAlt: Logo
   links:
     - name: 'Home'

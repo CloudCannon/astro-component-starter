@@ -44,8 +44,8 @@ Real excerpt (`src/data/mainNav.json`):
 
 ```json
 {
-  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
-  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoSource": "/src/assets/images/brand/astro-component-starter-logo.svg",
+  "logoAlternateSource": "/src/assets/images/brand/astro-component-starter-logo-reversed.svg",
   "logoAlt": "Astro Component Starter",
   "themeToggle": true,
   "search": true,
@@ -142,8 +142,8 @@ Real excerpt (`src/data/footer.json`):
 
 ```json
 {
-  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
-  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoSource": "/src/assets/images/brand/astro-component-starter-logo.svg",
+  "logoAlternateSource": "/src/assets/images/brand/astro-component-starter-logo-reversed.svg",
   "logoAlt": "Astro Component Starter",
   "links": [
     { "name": "Home", "path": "/" },
@@ -190,8 +190,8 @@ Real content of `src/data/seo.json`:
   "name": "Astro Component Starter",
   "url": "https://example.com",
   "description": "Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.",
-  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
-  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoSource": "/src/assets/images/brand/astro-component-starter-logo.svg",
+  "logoAlternateSource": "/src/assets/images/brand/astro-component-starter-logo-reversed.svg",
   "shareImage": "",
   "shareImageGeneration": "all",
   "shareImageTheme": "light",
