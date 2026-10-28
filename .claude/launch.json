@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 4321
+    },
+    {
+      "name": "cloudcannon-editor",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "editor", "--", "--no-build"],
+      "port": 10101
     }
   ]
 }

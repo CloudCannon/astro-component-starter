@@ -118,7 +118,7 @@ quietly broken in the editor.
 
 #### Framework and dependencies
 
-- Upgraded to **Astro 7**, with every dependency on its latest release except `prettier-plugin-astro` (pinned to `1.0.0`, as `1.0.1` never converges under `prettier --check`) and TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`).
+- Upgraded to **Astro 7**, with every dependency on its latest release except TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`).
 - Node `engines` is `^22.12.0 || ^24.0.0 || ^26.0.0`, and `.nvmrc` pins `24.18.0`.
 - Icons are built in instead of coming from the unmaintained `astro-icon` package. A mistyped icon name warns instead of failing the build.
 - The icon and autocomplete lists are CloudCannon datasets under `.cloudcannon/data/`, which takes `cloudcannon.config.yml` from 951 lines to 216.

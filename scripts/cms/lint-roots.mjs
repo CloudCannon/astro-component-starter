@@ -32,6 +32,8 @@ const ALLOWED = [
   { attr: "data-space-before", components: ["Video", "Pagination"] },
   // Synced up from an inner node by editor-live-sync.js.
   { attr: "style", components: ["BentoBoxItem"] },
+  // Only Form sets it; not an editor input, so no edit can leave it stale.
+  { attr: "role", components: ["Alert"] },
 ];
 
 // ARIA must sit on the element with the role; a stale one only affects the editor preview.
