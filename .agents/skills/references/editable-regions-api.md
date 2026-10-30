@@ -1,8 +1,9 @@
 <!--
-Vendored from CloudCannon/agent-skills @ b70076b102b0f1e20d05c4e3328d822f2298e115
+Vendored from CloudCannon/agent-skills @ 7a8e02e02422b0fb671157d9ca1fcf12e3b382cb
 Upstream paths:
   - skills/cloudcannon-visual-editing/editable-regions.md
   - skills/cloudcannon-visual-editing/editable-regions-internals.md
+  - skills/cloudcannon-visual-editing/visual-editing-reference.md (§ Data-prop paths, image guards, ENV_CLIENT)
 Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
 See .agents/skills/STYLE.md § "This starter overrides generic CloudCannon docs".
@@ -37,7 +38,7 @@ When `data-type` is omitted, CloudCannon defaults to `block`/`text` for Source E
 
 ### EditableImage
 
-Image editing via CloudCannon's data panel. The region **host** is either (1) an `<img>` with `data-editable="image"` and path attributes on that same element, or (2) a non-`img` host (`<div data-editable="image">`, layout wrapper, etc.) that contains a descendant `<img>`. The resolved `<img>` is what gets live `src` / `alt` / `title` updates — each facet can be bound independently via `data-prop-src`, `data-prop-alt`, `data-prop-title`, or together via `data-prop` (for object image fields).
+Image editing via CloudCannon's data panel. The region **host** is either (1) an `<img>` with `data-editable="image"` and path attributes on that same element, or (2) a non-`img` host (`<div data-editable="image">`, layout wrapper, etc.) that contains a descendant `<img>`. The resolved `<img>` is what gets live `src` / `alt` / `title` updates — each facet can be bound independently via `data-prop-src`, `data-prop-alt`, `data-prop-title`, or together via `data-prop` (for object image fields whose only keys are `src`, `alt` and `title`; any other key makes the region reject the value).
 
 > **In this starter:** the `<editable-image>` custom-element host is **banned** (see the web-components callout below). Use a plain HTML element (`<img data-editable="image">` or a `<div data-editable="image">` wrapper). The `Image` building block already emits the right attributes from `data-prop-src` / `data-prop-alt`.
 
@@ -79,25 +80,27 @@ Primitive editables update their own DOM slice but can't re-render the surroundi
 
 ## Quick Attribute Reference
 
-| Attribute                 | Values                                                        | Purpose                                                                                                                                                                                                                          |
-| ------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data-editable`           | `text`, `image`, `array`, `array-item`, `component`, `source` | Declares the region type                                                                                                                                                                                                         |
-| `data-prop`               | Path string                                                   | Data path for the editable value. `@content` is the reserved token for the file's markdown body — frontmatter is reached via normal field paths, so the body has no path other than `@content`                                   |
-| `data-prop-*`             | Path string                                                   | Per-attribute binding: the suffix after `data-prop-` names the attribute/logical field being edited; path rules match `data-prop`. On **image** regions the usual cases are `data-prop-src`, `data-prop-alt`, `data-prop-title`. |
-| `data-type`               | `span`, `text`, `block`                                       | Text editor mode. `span` = plain (no toolbar); `text` = paragraph rich text; `block` = multi-paragraph rich text. Omitted → `block`/`text` for Source regions, `@content`, Rich Text Inputs; `span` otherwise                    |
-| `data-component`          | Component key                                                 | Component identifier for re-rendering lookup                                                                                                                                                                                     |
-| `data-id-key`             | Key name                                                      | On the **array wrapper**: which data field uniquely identifies each item. Defaults to `data-component-key` value when omitted (Dec 2025)                                                                                         |
-| `data-component-key`      | Key name                                                      | On the **array wrapper**: which data field identifies the component type for each item                                                                                                                                           |
-| `data-id`                 | ID value                                                      | On each **array item**: the resolved identity value for this specific item. Defaults to `data-component` when omitted                                                                                                            |
-| `data-path`               | File path                                                     | Source file path (for `EditableSource`)                                                                                                                                                                                          |
-| `data-key`                | Unique key                                                    | Identifier within a source file                                                                                                                                                                                                  |
-| `data-defer-mount`        | _(presence)_                                                  | Lazy initialization — editor mounts on first click                                                                                                                                                                               |
-| `data-cloudcannon-ignore` | _(presence)_                                                  | Exclude element from scanning                                                                                                                                                                                                    |
+| Attribute                 | Values                                                        | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `data-editable`           | `text`, `image`, `array`, `array-item`, `component`, `source` | Declares the region type                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `data-prop`               | Path string                                                   | Data path for the editable value. `@content` is the reserved token for the file's markdown body — frontmatter is reached via normal field paths, so the body has no path other than `@content`                                                                                                                                                                                                                                                       |
+| `data-prop-*`             | Path string                                                   | Per-attribute binding: the suffix after `data-prop-` names the attribute/logical field being edited; path rules match `data-prop`. On **image** regions the usual cases are `data-prop-src`, `data-prop-alt`, `data-prop-title`. The suffix is lowercased and hyphens are dropped (`data-prop-imagePath` and `data-prop-image-path` both read `imagepath`), so a camelCase field can't be bound this way. The same applies to `data-literal-prop-*`. |
+| `data-type`               | `span`, `text`, `block`                                       | Text editor mode. `span` = plain (no toolbar); `text` = paragraph rich text; `block` = multi-paragraph rich text. Omitted → `block`/`text` for Source regions, `@content`, Rich Text Inputs; `span` otherwise                                                                                                                                                                                                                                        |
+| `data-component`          | Component key                                                 | Component identifier for re-rendering lookup. On an **array wrapper**, the component for any item that has no `data-component` of its own and no value under `data-component-key`                                                                                                                                                                                                                                                                    |
+| `data-direction`          | `row`, `column`, `row-reverse`, `column-reverse`              | On the **array wrapper**: the direction items are laid out in, so item controls and drag-and-drop point the right way. Inferred from `flex-direction` only when the wrapper is `display: flex`; otherwise `column`. Set `row` on grid and inline-block rows                                                                                                                                                                                          |
+| `data-literal-prop-*`     | Literal value                                                 | Passes a literal value to the region under the suffix's name, instead of a path. Values that parse as JSON are passed as structured values, the rest as strings                                                                                                                                                                                                                                                                                      |
+| `data-id-key`             | Key name                                                      | On the **array wrapper**: which data field uniquely identifies each item. Defaults to `data-component-key` value when omitted (Dec 2025)                                                                                                                                                                                                                                                                                                             |
+| `data-component-key`      | Key name                                                      | On the **array wrapper**: which data field identifies the component type for each item                                                                                                                                                                                                                                                                                                                                                               |
+| `data-id`                 | ID value                                                      | On each **array item**: the resolved identity value for this specific item. Defaults to `data-component` when omitted                                                                                                                                                                                                                                                                                                                                |
+| `data-path`               | File path                                                     | Source file path (for `EditableSource`)                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `data-key`                | Unique key                                                    | Identifier within a source file                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `data-defer-mount`        | _(presence)_                                                  | Lazy initialization — editor mounts on first click                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `data-cloudcannon-ignore` | _(presence)_                                                  | Exclude element from scanning                                                                                                                                                                                                                                                                                                                                                                                                                        |
 
 **Use `data-prop-*`** when the main `data-prop` value would be the wrong shape (string path for `src` while `alt` lives in another field) or when only one facet of a composite value should be wired to data.
 **Use `data-prop`** when the stored value is already one object the editor understands.
 
-> **In this starter:** paths use **camelCase** field names matching the component's `.astro` destructure (`data-prop="logoSource"`, not `data-prop="logo_source"`). And you rarely write these attributes directly — building blocks take `data-children-prop` (→ `array`), `data-prop` (→ `text`), and `data-prop-src`/`data-prop-alt` (→ `image`). The `editable-regions` skill owns that mapping table.
+> **In this starter:** paths use **camelCase** field names matching the component's `.astro` destructure (`data-prop="logoSource"`, not `data-prop="logo_source"`). Because `data-prop-*` lowercases its suffix, never bind a camelCase field through a `data-prop-<field>` attribute: `data-prop-logoSource` looks for `logosource`. Keep the field name in the attribute's value, as the building blocks do (`data-prop-src="logoSource"`). And you rarely write these attributes directly — building blocks take `data-children-prop` (→ `array`), `data-prop` (→ `text`), and `data-prop-src`/`data-prop-alt` (→ `image`). The `editable-regions` skill owns that mapping table.
 
 ### Complex array attributes (wrapper vs item)
 
@@ -111,6 +114,25 @@ These attributes wire **complex** arrays (e.g. page builders) so the Visual Edit
 CloudCannon uses **`data-id` / `data-id-key`**, not a separate `data-component-id` attribute.
 
 > **In this starter:** `data-component-key` is **`_component`** (see `.cloudcannon/structures/*.cloudcannon.structures.yml`, many of which set `id_key: _component`). The resolved `data-id` on each row is stamped by `renderBlock.astro` as `data-id={block._component}`. Upstream examples using `_type` → map to `_component` here.
+
+### Region value types
+
+A region shows an error card when its resolved value has the wrong type:
+
+| Region                       | Accepts                                                          |
+| ---------------------------- | ---------------------------------------------------------------- |
+| `text`                       | A string, or `null`                                              |
+| `array`                      | An array, `null`, or a collection or dataset object from the API |
+| `image` with `data-prop`     | An object whose only keys are `src`, `alt` and `title`           |
+| `image` with `data-prop-src` | A string path                                                    |
+
+**MUST:** quote YAML numbers that a text region displays (`count: "40"`, not `count: 40`), and pin the input with `type: text`. A bare YAML number reaches the region as a number, which a text region rejects.
+
+**MUST** guard every image render on its source (`image?.src &&`, or `isNonEmptyString(source)`), not on the object. On re-render the Visual Editor passes empty image objects (`{ src: null, alt: null }`) through intact, even where the build path stripped or defaulted them.
+
+### Rich text region contents are editor-owned
+
+A rich text region (`source`, or `text` with `data-type="text"`/`"block"`) has its contents parsed into CloudCannon's editor schema and re-serialized on save. That schema covers block structure and inline marks, not arbitrary attributes, so an attribute on markup **inside** a region can't survive editing, and CloudCannon marks that markup uneditable. Attributes on the region **host** are untouched. Put analytics hooks, test ids and translation keys on the host or on a component that renders the markup.
 
 ### Custom Element Equivalents — BANNED in this starter
 
@@ -175,7 +197,7 @@ User types → `onChange` → `dispatchSet()` → bubbling `cloudcannon-api` Cus
 | -------------------------------- | ----------------- | --------------------------------------------------------------------------------- |
 | `.cms-editor-active` on `<body>` | CSS               | Overriding styles (animations, visibility). Most reliable for initial page load   |
 | `window.inEditorMode`            | Runtime JS        | Inline `<script>` logic, conditional imports                                      |
-| `import.meta.env.ENV_CLIENT`     | Build-time (Vite) | Astro component template expressions (only in the editable-regions client bundle) |
+| `ENV_CLIENT` (bare global)       | Build-time (Vite) | Astro component template expressions (only in the editable-regions client bundle) |
 
 **Connecting**
 
@@ -225,15 +247,13 @@ Slug paths use `.` as the separator: `"hero.title"` for `{ hero: { title: "X" } 
 ```typescript
 interface Dataset {
   items(): Promise<File | File[]>;
-  addEventListener(event: 'change' | 'delete', listener: () => void): void;
 }
 interface Collection {
   items(): Promise<File[]>;
-  addEventListener(event: 'change' | 'delete', listener: () => void): void;
 }
 ```
 
-`dataset.items()` can return a single `File` or `File[]` — always handle both.
+`dataset.items()` can return a single `File` or `File[]` — always handle both. Listen for `change`/`delete` on the files that `items()` returns: upstream reports, from live testing, that listeners on a dataset or collection handle receive nothing, and that Clear/Discard emits `delete` on the file.
 
 **Editor creation**
 
@@ -257,26 +277,28 @@ interface Collection {
 | ------------------------------------ | -------------------------------------------------- |
 | Slug separator is `.` not `/`        | `"hero.title"` for `{ hero: { title: "X" } }`      |
 | `dataset.items()` return type varies | Can return `File` or `File[]` — always handle both |
+| Events fire on the `File` only       | Attach to each file from `items()`, not the handle |
 | `change` events are coarse           | Doesn't say which key changed — re-read all keys   |
 | `change` fires for own writes        | Guard against echo loops                           |
 
 **DOM and content**
 
-| Quirk                             | Detail                                                           |
-| --------------------------------- | ---------------------------------------------------------------- |
-| Values often contain HTML         | Use `innerHTML` not `textContent`                                |
-| `<editable-text>` replacement tag | Replace with `<span>` (inline) or `<div>` (block) when stripping |
-| MutationObserver timing           | Process cloned DOM trees while detached                          |
+| Quirk                             | Detail                                                                                                                                   |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Values often contain HTML         | Use `innerHTML` not `textContent`                                                                                                        |
+| `<editable-text>` replacement tag | Replace with `<span>` (inline) or `<div>` (block) when stripping                                                                         |
+| MutationObserver timing           | Process cloned DOM trees while detached                                                                                                  |
+| Tight lists reflow on mount       | The editor wraps list items in `<p>`; zero it with `:is(li, dd, dt) > p { margin-block: 0 }` in the editor subtree, without `!important` |
 
 **Events**
 
-| Event                              | Fired On                  | When                                |
-| ---------------------------------- | ------------------------- | ----------------------------------- |
-| `cloudcannon:load`                 | `document`                | CloudCannon API is ready            |
-| `change`                           | File, Collection, Dataset | Data changed (including own writes) |
-| `delete`                           | File, Collection, Dataset | Data deleted                        |
-| `cloudcannon-api`                  | DOM elements (bubbles)    | Internal editable regions event bus |
-| `editable:focus` / `editable:blur` | DOM elements (bubbles)    | Focus state changes                 |
+| Event                              | Fired On               | When                                |
+| ---------------------------------- | ---------------------- | ----------------------------------- |
+| `cloudcannon:load`                 | `document`             | CloudCannon API is ready            |
+| `change`                           | File                   | Data changed (including own writes) |
+| `delete`                           | File                   | Data deleted (incl. Clear/Discard)  |
+| `cloudcannon-api`                  | DOM elements (bubbles) | Internal editable regions event bus |
+| `editable:focus` / `editable:blur` | DOM elements (bubbles) | Focus state changes                 |
 
 **Global state**
 
@@ -287,4 +309,4 @@ interface Collection {
 | `window.cc_components`  | Component renderer registry                 |
 | `window.cc_snippets`    | Snippet renderer registry                   |
 
-> **In this starter:** interactive components must work in the editor, where inline `<script>`s don't run. Put setup logic in an importable module and register it in `editor-live-sync.js` (see `carousel/setup.ts`). Path resolution is duplicated between `renderBlock.astro` and `live-editing.js` — change both or components vanish from the editor. See CLAUDE.md.
+> **In this starter:** interactive components must work in the editor, where inline `<script>`s don't run. Put setup logic in an importable module and register it in `editor-live-sync.js` (see `carousel/setup.ts`). Component-key derivation is shared: `renderBlock.astro`, `live-editing.js` and `scripts/cms/lint.mjs` all import `src/components/utils/componentKey.mjs`. Change it only there, or components vanish from the editor. See CLAUDE.md.

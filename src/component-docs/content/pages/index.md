@@ -1,14 +1,14 @@
 ---
 title: Astro Component Starter
 description: >-
-  Documentation for the Astro Component Starter: browse 84 components, learn the CloudCannon
+  Documentation for the Astro Component Starter: browse 85 components, learn the CloudCannon
   editing workflow, and follow guides from first clone to custom page sections.
 contentSections: []
 ---
 
 # Astro Component Starter
 
-This is your starter template: 84 Astro components, each built for visual editing in CloudCannon. Every component is your source code. Modify anything, delete what you don't need, and build on what's here.
+This is your starter template: 85 Astro components, each built for visual editing in CloudCannon. Every component is your source code. Modify anything, delete what you don't need, and build on what's here.
 
 The design is intentionally unbranded so it can become any brand. Components are built on web fundamentals (vanilla CSS, semantic HTML, minimal JS) and are fast and accessible out of the box.
 
@@ -18,17 +18,17 @@ These docs help you explore what ships with the starter, understand how the piec
 
 New here? Follow these guides in order to go from first clone to building your own visually editable components:
 
-1. **[Project Tour](/component-docs/project-tour/)**: Understand the directory structure, how components are organized, and the three-file pattern that makes everything visually editable.
+1. **[Project Tour](/component-docs/project-tour/)**: The directory structure, how components are organized, and the files that make each one visually editable.
 
-2. **[Editing a Page](/component-docs/editing-a-page/)**: Make changes to a page in code, then see the same edit in CloudCannon's visual editor.
+2. **[Editing a Page](/component-docs/editing-a-page/)**: Change and create pages in code, then make the same edits in CloudCannon's visual editor.
 
-3. **[Editing the Blog](/component-docs/editing-the-blog/)**: Create and manage blog posts, customize the blog index page, and embed components in your articles using MDX.
+3. **[Customizing Your Brand](/component-docs/customizing-your-brand/)**: Change colors, fonts, and spacing across the whole site with design tokens.
 
-4. **[Customizing Your Brand](/component-docs/customizing-your-brand/)**: Update colors, fonts, and spacing across your entire site using design tokens. Learn how CSS Cascade Layers keep styles predictable.
+4. **[Building a Page Section](/component-docs/building-a-page-section/)**: Build a component from scratch, style it, and make it visually editable.
 
-5. **[Building a Page Section](/component-docs/building-a-page-section/)**: Create a new component from scratch: the Astro file, the CloudCannon config, everything. This is where the architecture clicks.
+5. **[Editing the Blog](/component-docs/editing-the-blog/)**: Reference for posts, the listing page, and components inside posts.
 
-6. **[Visually Edit Components](/component-docs/visually-edit-components/)**: Wire up editable regions so content editors can click, type, and drag directly on the live preview.
+6. **[Going Live](/component-docs/going-live/)**: Remove the demo content, set your URL and site details, and deploy.
 
 ## Browse components
 

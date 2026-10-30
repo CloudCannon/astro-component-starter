@@ -17,7 +17,7 @@ subtext:
   comment: One or two lines introducing the page.
 showBreadcrumbs:
   type: switch
-  comment: Shows a breadcrumb trail above the title, built from the URL. Hidden on the home page.
+  comment: Shows a breadcrumb trail above the title, built from the URL. Only on pages below the top level, since a top-level trail would just repeat the title.
 alignmentHorizontal:
   type: select
   comment: Alignment for the heading and supporting text.

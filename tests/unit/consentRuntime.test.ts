@@ -23,6 +23,7 @@ const config: PrivacyConfig = {
   externalMediaLabel: "External media",
   externalMediaDescription: "Load third-party content.",
   honorGlobalPrivacyControl: true,
+  externalMediaRequiresConsent: true,
 };
 
 const record = (overrides: Partial<ConsentRecord> = {}): ConsentRecord => ({
@@ -72,6 +73,14 @@ describe("consent runtime", () => {
     expect(isConsentAllowed(record(), "analytics", config)).toBe(true);
     expect(isConsentAllowed(record(), "externalMedia", config)).toBe(false);
     expect(isConsentAllowed(record(), "analytics", { ...config, enabled: false })).toBe(false);
+  });
+
+  it("loads external media without a decision unless the config requires consent", () => {
+    const open = { ...config, externalMediaRequiresConsent: false };
+
+    expect(isConsentAllowed(record(), "externalMedia", open)).toBe(true);
+    expect(isConsentAllowed(record(), "externalMedia", { ...open, enabled: false })).toBe(true);
+    expect(isConsentAllowed(record(), "analytics", { ...open, enabled: false })).toBe(false);
   });
 
   it("retains the current-visit choice when browser storage is unavailable", () => {

@@ -10,7 +10,7 @@ value:
   authorImage: /src/assets/images/component-docs/profile.jpg
   maxContentWidth: xl
   paddingHorizontal: lg
-  paddingVertical: sm
+  paddingVertical: 4xl
   colorScheme: inherit
   lockColorScheme: false
   backgroundColor: surface

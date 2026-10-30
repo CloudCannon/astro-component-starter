@@ -27,14 +27,14 @@ Open `src/styles/themes/_light.css`. This is where you define the look of your s
   --color-bg-accent: #d5fdff;
   --color-bg-highlight: #fff9d6;
 
-  --color-border: var(--gray-300);
+  --color-border: var(--gray-500);
   /* ... */
 }
 ```
 
 These are **semantic** color variables. They describe purpose, not specific colors. Every component in the starter references these variables, so changes here propagate everywhere automatically.
 
-**Try it now:** Change `--color-brand` to a blue (`var(--blue-500)`) or drop in your own hex value. Save, and watch buttons, headings, and accents shift across your entire site.
+**Try it now:** Change `--color-brand` to a blue (`var(--blue-500)`) or drop in your own hex value. Save, and watch buttons and other brand accents shift across your entire site. (Headings use `--color-text-strong`, so they stay neutral unless you change that too.)
 
 The key variables to update first:
 
@@ -46,15 +46,15 @@ The dark theme lives in `src/styles/themes/_dark.css` and uses the same variable
 
 ## Light/dark mode toggle
 
-The starter includes an optional theme toggle that lets visitors switch between light and dark mode. Enable it in `src/data/mainNav.json`:
+The starter includes a theme toggle that lets visitors switch between light and dark mode. It's on by default; turn it off with `themeToggle` in `src/data/mainNav.json`:
 
 ```json
 {
-  "themeToggle": true
+  "themeToggle": false
 }
 ```
 
-When enabled, a sun/moon toggle appears in the main navigation, mobile menu, and component docs sidebar. The toggle:
+When it's on, a sun/moon toggle appears in the main navigation, mobile menu, and component docs sidebar. The toggle:
 
 - **Respects system preference** — if the visitor hasn't made a choice, their OS setting is used
 - **Persists to localStorage** — once toggled, the choice sticks across page loads
@@ -98,7 +98,7 @@ This is why both theme files are important. Even if your site is primarily light
 
 **Families and loading:** install the font locally with `npm install @fontsource/<font-name>`, then edit `site-fonts.mjs` at the project root. That file is the single source of truth for [Astro’s Fonts config](https://docs.astro.build/en/guides/fonts/) and for which families get `<Font />` tags via `src/layouts/SiteFonts.astro`. Change `name`, `weights`, and `cssVariable` there. The default provider is `fontProviders.fontsource()` which resolves from the installed `@fontsource` packages. For proprietary fonts not on Fontsource, use `fontProviders.local()` with `.woff2` files in `src/assets/fonts/`. Keep `cssVariable` aligned with how you use tokens in CSS: defaults are `--font-body` and `--font-headings`.
 
-**Sizes and weights:** open `src/styles/variables/_fonts.css` for the size scale (`--font-size-xs` through `--font-size-4xl`, plus the heading scale) and `--font-weight-*` tokens—not for the font family names.
+**Sizes and weights:** open `src/styles/variables/_fonts.css` for the size scale (`--font-size-xs` through `--font-size-5xl`, plus a heading scale to `--font-size-heading-5xl`) and `--font-weight-*` tokens—not for the font family names.
 
 ## The base color palette
 
@@ -129,36 +129,14 @@ Additional styling tokens live in `src/styles/variables/` if you need to go deep
 
 These are less likely to need changes early on, but they're there when you need them.
 
-## CSS Cascade Layers
+## Check your token names
 
-When you start customizing component styles or writing new CSS, it helps to know how the layers work.
+Token names are easy to guess wrong, and a wrong one fails silently: `var(--spacing-2xs)` or `var(--font-weight-medium)` looks plausible, doesn't exist, and the property just falls back to its inherited value with no error. Two checks catch this, and both run in `npm run check`:
 
-Styles are organized into six layers, in order of precedence:
+- `npm run lint:css-vars` fails on any `var(--…)` that no file declares. `npm run lint:css-vars -- --list` prints every token there is.
+- `npm run lint:css-literals` fails on a raw value (a hex colour, a border width, `9999px`) in component CSS where a token already covers it.
 
-1. **`reset`**: Normalizes browser defaults
-2. **`base`**: Typography, form elements, HTML element styles
-3. **`components`**: Building block component styles (buttons, cards, navigation)
-4. **`page-sections`**: Page section component styles (heroes, explainers, conversion sections)
-5. **`utils`**: Utility classes (e.g., `.visually-hidden`)
-6. **`overrides`**: Custom overrides and page-specific styles
-
-Later layers always win over earlier layers, **regardless of CSS specificity**. This means you don't have to fight specificity battles when customizing.
-
-When building or modifying components, use the matching layer:
-
-- **Building block components** → `@layer components`
-- **Page section components** → `@layer page-sections`
-- **Custom overrides** → `@layer overrides`
-
-## Customizing individual components
-
-Every component in this starter is yours to extend. The HTML, CSS, and JavaScript all live together in a single `.astro` file, so everything you need to customize is in one place.
-
-Open any component and you'll find the markup at the top, scoped styles in a `<style>` tag, and optional interactivity in a `<script>` tag. Change the HTML structure, tweak the styles, add behavior, make it your own.
-
-If a component is close to what you need, don't feel boxed in by the defaults. Reshape it to match your brand and product requirements.
-
-When editing styles, keep using and extend the design tokens (like `var(--color-brand)` and spacing variables) so your changes stay consistent with the rest of the system.
+Changing how an individual component looks, and how its CSS layers fit together, is covered in [Building a Page Section](/component-docs/building-a-page-section/#styling-a-component).
 
 ## Next up
 

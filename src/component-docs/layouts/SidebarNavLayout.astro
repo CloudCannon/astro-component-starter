@@ -5,12 +5,18 @@ import Button from "@core-elements/button/Button.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
 import navData from "../data/nav.json";
+import analyticsData from "@data/analytics.json";
 import privacyData from "@data/privacy.json";
-import { parsePrivacyConfig } from "../../integrations/consent/config";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../integrations/consent/config";
 import { generateNavData } from "../utils/navGenerator.js";
 
 const sideNavData = await generateNavData(navData);
 const privacy = parsePrivacyConfig(privacyData);
+const showPrivacySettings = hasOptionalServices(privacy, parseAnalyticsConfig(analyticsData));
 ---
 
 <div class="library-sidebar">
@@ -33,7 +39,7 @@ const privacy = parsePrivacyConfig(privacyData);
   <Side navData={sideNavData} />
   <div class="sidebar-footer">
     <ThemeToggle />
-    {privacy.enabled && (
+    {showPrivacySettings && (
       <button
         type="button"
         class="privacy-settings-toggle tap-target"

@@ -37,6 +37,42 @@ const TARGETS = [
   },
 ];
 
+// The schema types `preview`/`picker_preview` icons as any string, so it never checks them.
+const iconNames = new Set(
+  JSON.parse(
+    readFileSync(
+      join(
+        root,
+        "node_modules/@cloudcannon/configuration-types/dist/cloudcannon-config.latest.schema.json"
+      ),
+      "utf8"
+    )
+  ).definitions.icon.enum
+);
+
+function previewIconProblems(node, path = [], inPreview = false, out = []) {
+  if (Array.isArray(node)) {
+    node.forEach((item, index) => previewIconProblems(item, [...path, index], inPreview, out));
+    return out;
+  }
+  if (!node || typeof node !== "object") return out;
+
+  for (const [key, value] of Object.entries(node)) {
+    const here = [...path, key];
+    const preview = inPreview || key === "preview" || key === "picker_preview";
+
+    if (preview && key === "icon") {
+      for (const name of [value].flat()) {
+        if (typeof name === "string" && !iconNames.has(name)) {
+          out.push(`${here.join(".")} — "${name}" is not a Material Symbols icon name`);
+        }
+      }
+    }
+    previewIconProblems(value, here, preview, out);
+  }
+  return out;
+}
+
 let checked = 0;
 const failures = [];
 
@@ -59,17 +95,14 @@ for (const { schema, pattern } of TARGETS) {
       continue;
     }
 
-    const errors = validate(data);
+    const problems = [
+      ...validate(data).map(
+        ({ error, message }) => `${formatInstancePath(error.instancePath, data)} — ${message}`
+      ),
+      ...previewIconProblems(data),
+    ];
 
-    if (errors.length) {
-      failures.push({
-        file,
-        schema,
-        problems: errors.map(
-          ({ error, message }) => `${formatInstancePath(error.instancePath, data)} — ${message}`
-        ),
-      });
-    }
+    if (problems.length) failures.push({ file, schema, problems });
   }
 }
 

@@ -43,6 +43,10 @@ export default defineConfig({
   server: {
     port: 4321,
   },
+  redirects: {
+    "/component-docs/visually-edit-components":
+      "/component-docs/building-a-page-section/#how-visual-editing-works",
+  },
   image: {
     domains: [],
   },

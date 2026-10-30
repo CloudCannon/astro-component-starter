@@ -10,6 +10,18 @@ import { statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
+// Pinned: an unpinned `npx` reuses whichever version it cached first.
+const CLI = "@cloudcannon/cli@0.0.20";
+const CLI_MIN_NODE = 24;
+
+if (Number(process.versions.node.split(".")[0]) < CLI_MIN_NODE) {
+  console.error(
+    `\n${CLI} needs Node ${CLI_MIN_NODE} or newer; this is Node ${process.versions.node}.\n` +
+      "Run `nvm use` (see .nvmrc).\n"
+  );
+  process.exit(1);
+}
+
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const args = process.argv.slice(2);
 const port = args.find((a) => a.startsWith("--port="))?.split("=")[1] ?? "10101";
@@ -38,9 +50,11 @@ console.log(
   [
     "",
     `  Serving dist/ built ${builtAt.toLocaleString()}`,
-    "  The editor reads dist/, not the dev server — rerun this after every change.",
+    "  The editor reads dist/, not the dev server. Run `npm run build` in another terminal",
+    "  after a change; the open preview picks it up without restarting this.",
+    "  Open pages by file path (/about/index.html): folder URLs like /about/ return a 500.",
     "",
   ].join("\n")
 );
 
-run("npx", ["-y", "@cloudcannon/cli", "dev", "dist", "--no-app-sync", "--port", port]);
+run("npx", ["-y", CLI, "dev", "dist", "--no-app-sync", "--port", port]);

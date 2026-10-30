@@ -16,10 +16,6 @@
         "path": "/component-docs/editing-a-page/"
       },
       {
-        "name": "Editing the Blog",
-        "path": "/component-docs/editing-the-blog/"
-      },
-      {
         "name": "Customizing Your Brand",
         "path": "/component-docs/customizing-your-brand/"
       },
@@ -28,8 +24,12 @@
         "path": "/component-docs/building-a-page-section/"
       },
       {
-        "name": "How Visual Editing Works",
-        "path": "/component-docs/visually-edit-components/"
+        "name": "Editing the Blog",
+        "path": "/component-docs/editing-the-blog/"
+      },
+      {
+        "name": "Going Live",
+        "path": "/component-docs/going-live/"
       }
     ]
   },
@@ -39,7 +39,7 @@
   },
   {
     "group": "Page Sections",
-    "subcategoryOrder": ["heroes", "features", "info-blocks", "people", "ctas", "builders"]
+    "subcategoryOrder": ["heroes", "explainers", "proof", "conversion", "collections", "builders"]
   },
   {
     "group": "Navigation"

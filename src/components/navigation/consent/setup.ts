@@ -74,6 +74,10 @@ function refresh(root: HTMLElement, privacy: PrivacyConfig): void {
     const category = input.dataset.consentCategory as ConsentCategory;
 
     input.checked = manager.isAllowed(category);
+    if (category === "externalMedia") {
+      input.closest<HTMLElement>(".consent-category")!.hidden =
+        !privacy.externalMediaRequiresConsent;
+    }
   });
 
   hydrateExternalMedia();
@@ -94,60 +98,54 @@ function lockExternalMedia(): void {
   });
 }
 
+function externalMediaHosts(): HTMLElement[] {
+  const templateHosts = Array.from(
+    document.querySelectorAll<HTMLTemplateElement>("template[data-unsafe-external-media]")
+  ).map((template) => template.nextElementSibling);
+
+  return [
+    ...document.querySelectorAll<HTMLElement>("[data-external-media-src]"),
+    ...templateHosts.filter((host): host is HTMLElement => host instanceof HTMLElement),
+  ];
+}
+
 function hydrateExternalMedia(): void {
-  const manager = window.siteConsent;
-
-  if (!manager?.isAllowed("externalMedia")) {
-    document
-      .querySelectorAll<HTMLElement>("[data-external-media-src][data-external-media-mounted]")
-      .forEach((placeholder) => {
-        placeholder.replaceChildren(
-          externalMediaFallback("Allow external media across this site to view this content.")
-        );
-        placeholder.removeAttribute("data-external-media-mounted");
-      });
-    document
-      .querySelectorAll<HTMLTemplateElement>("template[data-unsafe-external-media]")
-      .forEach((template) => {
-        const host = template.nextElementSibling;
-
-        if (!(host instanceof HTMLElement) || !host.hasAttribute("data-external-media-mounted"))
-          return;
-        host.replaceChildren(
-          externalMediaFallback("Allow external media across this site to view this content.")
-        );
-        host.removeAttribute("data-external-media-mounted");
-      });
+  if (!window.siteConsent?.isAllowed("externalMedia")) {
+    externalMediaHosts().forEach((host) => {
+      if (host.hasAttribute("data-external-media-prompt")) return;
+      host.replaceChildren(
+        externalMediaFallback("Allow external media across this site to view this content.")
+      );
+      host.removeAttribute("data-external-media-mounted");
+      host.setAttribute("data-external-media-prompt", "");
+    });
     return;
   }
 
-  document.querySelectorAll<HTMLElement>("[data-external-media-src]").forEach((placeholder) => {
-    if (placeholder.hasAttribute("data-external-media-mounted")) return;
-    const src = placeholder.dataset.externalMediaSrc;
+  externalMediaHosts().forEach((host) => {
+    if (host.hasAttribute("data-external-media-mounted")) return;
 
-    if (!src || !isAllowedExternalMediaUrl(src)) return;
+    if (host.matches("[data-external-media-src]")) {
+      const src = host.dataset.externalMediaSrc;
 
-    const iframe = document.createElement("iframe");
+      if (!src || !isAllowedExternalMediaUrl(src)) return;
 
-    iframe.src = src;
-    iframe.title = placeholder.dataset.externalMediaTitle || "External content";
-    iframe.loading = "lazy";
-    iframe.referrerPolicy = "strict-origin-when-cross-origin";
-    iframe.allowFullscreen = true;
-    placeholder.replaceChildren(iframe);
-    placeholder.setAttribute("data-external-media-mounted", "");
+      const iframe = document.createElement("iframe");
+
+      iframe.src = src;
+      iframe.title = host.dataset.externalMediaTitle || "External content";
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+      host.replaceChildren(iframe);
+    } else {
+      host.replaceChildren(
+        sanitizedEmbedContent(host.previousElementSibling as HTMLTemplateElement)
+      );
+    }
+    host.setAttribute("data-external-media-mounted", "");
+    host.removeAttribute("data-external-media-prompt");
   });
-
-  document
-    .querySelectorAll<HTMLTemplateElement>("template[data-unsafe-external-media]")
-    .forEach((template) => {
-      const host = template.nextElementSibling;
-
-      if (!(host instanceof HTMLElement) || host.hasAttribute("data-external-media-mounted"))
-        return;
-      host.replaceChildren(sanitizedEmbedContent(template));
-      host.setAttribute("data-external-media-mounted", "");
-    });
 }
 
 function sanitizedEmbedContent(template: HTMLTemplateElement): DocumentFragment {
@@ -234,6 +232,7 @@ function bind(root: HTMLElement, privacy: PrivacyConfig): void {
       }
       if (action === "save") {
         root.querySelectorAll<HTMLInputElement>("[data-consent-category]").forEach((input) => {
+          if (input.closest<HTMLElement>(".consent-category")?.hidden) return;
           manager.setDecision(
             input.dataset.consentCategory as ConsentCategory,
             input.checked ? "granted" : "denied"

@@ -1,27 +1,34 @@
 # Privacy, consent, and analytics
 
-The starter ships with a strict, no-configuration default: `src/data/analytics.json` has
-`provider: "none"`, so it loads no analytics provider. `src/data/privacy.json` enables the
-privacy control, records only a small local preference, and uses global strict opt-in.
+The starter ships with a no-configuration default: `src/data/analytics.json` has
+`provider: "none"`, so it loads no analytics provider, and `src/data/privacy.json` has
+`externalMediaRequiresConsent: false`, so YouTube, Vimeo, maps and embeds load straight away.
+With both at their defaults there is nothing to consent to, so no banner or Privacy settings
+control appears. Configure analytics, or turn `externalMediaRequiresConsent` on, and the
+workflow applies strict opt-in to that category. Sites with EU or UK visitors should turn
+`externalMediaRequiresConsent` on: an embed sends the visitor's request to the provider.
 
 Edit both files in CloudCannon's **Data** editor, or in the repository. Configuration is
 validated during the Astro build:
 
-- **Privacy & Consent** controls the policy revision, the expiry period, banner copy, and Global
-  Privacy Control behaviour. The same strict opt-in policy applies to every visitor.
+- **Privacy & Consent** controls the policy revision, the expiry period, banner copy, Global
+  Privacy Control behaviour, and whether external media asks first. The same policy applies to
+  every visitor.
 - **Analytics** currently supports `none` and `plausible-hosted`. Choose `none` until a
   Plausible site has been configured and you have copied its site-specific script URL.
 
 The visitor can separately allow analytics and external media. **Accept All** grants both,
 **Reject All** denies both, and **Customize** opens the granular controls; the banner gives those
 three choices equal visual prominence. The settings dialog identifies the small necessary
-preference record as **Always on** and repeats both bulk actions. Choices are versioned in
+preference record as **Always on**, shows external media only when it requires consent, and
+repeats both bulk actions. The footer's Privacy settings control appears only when there is a
+category to choose. Choices are versioned in
 `localStorage`, synchronized across tabs, and re-requested when the configured policy revision
 changes or the expiry period passes. The first-visit banner appears only when analytics is
 configured; external media is requested where the visitor chooses to use it.
 
-Turning **Privacy & Consent** off fails closed: analytics and external media remain disabled.
-It does not provide a shortcut for loading optional services without consent. When Global
+Turning **Privacy & Consent** off fails closed for analytics, which stays disabled; external
+media follows `externalMediaRequiresConsent` alone, so with that on it stays blocked. When Global
 Privacy Control is enabled in the configuration, an unset choice remains denied; a later,
 explicit choice made in this site's privacy settings is authoritative.
 
@@ -35,11 +42,13 @@ true, and `policyUrl` in `privacy.json` pointing at it, is the site owner's job.
 
 ## External media
 
-Hosted YouTube and Vimeo videos, Contact Split maps, and raw Embed content stay inert until
-external-media permission is effective. YouTube players are then created with
+Hosted YouTube and Vimeo videos, Contact Split maps, and raw Embed content render an empty,
+inert placeholder. With `externalMediaRequiresConsent` off they mount on page load; with it on,
+the placeholder becomes a permission prompt and the content mounts only once external-media
+permission is effective. YouTube players are created with
 `youtube-nocookie.com` (Privacy Enhanced Mode). That reduces YouTube's use of cookies before a
-playback interaction; it does not make YouTube a first-party service or remove the need for
-external-media permission.
+playback interaction; it does not make YouTube a first-party service, so it is not a reason to
+leave `externalMediaRequiresConsent` off where consent law applies.
 
 `Embed` is a trusted-developer escape hatch, not a general script loader. Its raw HTML remains
 inert until approval; `script`, `style`, `link`, `object`, and `embed` elements plus inline event

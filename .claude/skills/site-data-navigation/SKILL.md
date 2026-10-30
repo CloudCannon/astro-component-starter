@@ -232,7 +232,7 @@ Per-page overrides (`description`, `image`, `canonical`, `noindex`, `article`) c
 
 Keep `_schema: privacy` and `_schema: analytics`; those discriminators select the dedicated CloudCannon forms and are required by the build-time Zod schemas.
 
-`privacy.json` owns whether controls render, `policyRevision`, `expiryDays`, the site-relative `policyUrl`, banner/settings/category wording, and `honorGlobalPrivacyControl`. The necessary row describes the small preference record and is always on; analytics and external media are optional. `enabled: false` hides the interface and fails closed, so it never enables optional services without consent.
+`privacy.json` owns whether controls render, `policyRevision`, `expiryDays`, the site-relative `policyUrl`, banner/settings/category wording, `honorGlobalPrivacyControl`, and `externalMediaRequiresConsent` (default `false`: embeds load without asking). The necessary row describes the small preference record and is always on; analytics and external media are optional. `enabled: false` hides the interface and fails closed for analytics; it never loosens external media.
 
 `analytics.json` supports:
 
@@ -296,5 +296,5 @@ Verified against `cloudcannon.config.yml`:
 - Run `npm run check`. Expect exit 0 — no lint/format/type errors, no skills drift.
 - Run `npm run dev`, load any page, and confirm the header nav / mobile menu / footer reflect your JSON change (dropdown behavior if you changed nesting, split-row behavior if you changed a parent `path`).
 - If you edited `seo.json`, view source (or the dev tools Elements panel `<head>`) and confirm `<title>`, `og:*` meta tags, and the `application/ld+json` script reflect the new values.
-- If you edited privacy or analytics, verify the policy link, banner/settings wording, strict opt-in behavior, and production network traffic before and after each choice. Optional requests must be absent before permission.
+- If you edited privacy or analytics, verify the policy link, banner/settings wording, opt-in behavior for each category that requires it, and production network traffic before and after each choice. Optional requests must be absent before permission.
 - In the CloudCannon Visual Editor, open Data → mainNav / footer / seo / Privacy & Consent / Analytics and confirm each file renders with the expected form. An unlabeled raw JSON field usually means a schema, structure, or discriminator no longer matches the data.

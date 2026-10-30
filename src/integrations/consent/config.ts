@@ -29,6 +29,7 @@ export const privacyConfigSchema = z.object({
   externalMediaLabel: z.string().min(1),
   externalMediaDescription: z.string().min(1),
   honorGlobalPrivacyControl: z.boolean().default(true),
+  externalMediaRequiresConsent: z.boolean().default(false),
 });
 
 export type PrivacyConfig = z.infer<typeof privacyConfigSchema>;
@@ -57,6 +58,11 @@ export const analyticsConfigSchema = z.discriminatedUnion("provider", [
 ]);
 
 export type AnalyticsConfig = z.infer<typeof analyticsConfigSchema>;
+
+/** Whether the site has any category a visitor can choose, so the settings control is worth showing. */
+export function hasOptionalServices(privacy: PrivacyConfig, analytics: AnalyticsConfig): boolean {
+  return privacy.enabled && (analytics.provider !== "none" || privacy.externalMediaRequiresConsent);
+}
 
 export function parsePrivacyConfig(value: unknown): PrivacyConfig {
   return privacyConfigSchema.parse(value);

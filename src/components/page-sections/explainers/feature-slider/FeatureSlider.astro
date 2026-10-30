@@ -16,6 +16,7 @@ const {
   background,
   class: className,
   slides = [],
+  imageAspectRatio = "portrait",
   useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -36,6 +37,7 @@ const {
   {...htmlAttributes}
 >
   <Carousel
+    class:list={[`feature-slider-ratio-${imageAspectRatio}`]}
     label={sectionLabel || "Feature slider"}
     slideWidthPercent={100}
     minSlideWidth={0}
@@ -54,3 +56,16 @@ const {
     ))}
   </Carousel>
 </CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    /* Slides keep their portrait default: the editor re-renders one slide without these props. */
+    .feature-slider-ratio-square .feature-slider-item .image-inner {
+      aspect-ratio: var(--ratio-square);
+    }
+
+    .feature-slider-ratio-landscape .feature-slider-item .image-inner {
+      aspect-ratio: var(--ratio-landscape);
+    }
+  }
+</style>

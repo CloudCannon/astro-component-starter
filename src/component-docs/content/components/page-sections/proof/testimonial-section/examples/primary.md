@@ -7,6 +7,5 @@ blocks:
   authorName: Richard Johnson
   authorDescription: CEO, Tech Innovations
   authorImage: /src/assets/images/component-docs/profile.jpg
-  paddingVertical: sm
   backgroundColor: surface
 ---

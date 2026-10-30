@@ -33,6 +33,8 @@ const pathname =
   Astro.url?.pathname ??
   (typeof document === "undefined" ? "" : (document.documentElement.dataset.pathname ?? ""));
 const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading) : [];
+// A one-step trail is "Home › <this heading>", which only repeats the title below it.
+const hasTrail = trail.length > 1;
 ---
 
 <CustomSection
@@ -48,7 +50,7 @@ const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading)
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
-  {showBreadcrumbs && trail.length > 0 && (
+  {hasTrail && (
     <Breadcrumbs
       class:list={["page-header-breadcrumbs", `align-${alignmentHorizontal}`]}
       items={trail}
@@ -64,7 +66,7 @@ const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading)
   <Heading
     class="page-header-heading"
     level={headingLevel}
-    size="lg"
+    size="xl"
     alignmentHorizontal={alignmentHorizontal}
     data-prop="heading"
   >
@@ -81,8 +83,9 @@ const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading)
 <style is:global>
   @layer page-sections {
     .page-header {
-      .page-header-breadcrumbs {
-        margin-bottom: var(--spacing-md);
+      /* `~`, not `+`: the breadcrumbs' JSON-LD script is the next sibling. */
+      .page-header-breadcrumbs ~ :is(.eyebrow, .page-header-heading) {
+        --space-before: var(--spacing-md);
       }
 
       .page-header-subtext {

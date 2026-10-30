@@ -137,7 +137,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
                 <TimelineItem
                   layout={layout}
                   grouped={true}
-                  headingLevel={entryHeadingLevel}
+                  headingLevel={group.year ? entryHeadingLevel : YearTag}
                   useDefaultEditableBinding={!!effectiveChildrenProp}
                   data-editable="array-item"
                   data-id="building-blocks/wrappers/timeline/timeline-item"
@@ -200,12 +200,14 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
       .timeline-title {
         font-size: var(--font-size-heading-xs);
+        font-weight: var(--font-weight-bold);
         line-height: var(--line-height-heading-xs);
         margin: 0;
       }
 
       .timeline-title .heading-inner {
         font-size: inherit;
+        font-weight: inherit;
         line-height: inherit;
         margin: 0;
       }

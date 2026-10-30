@@ -20,7 +20,7 @@ This site is operated by **[organisation name]**. For privacy questions, contact
 
 ## Your privacy choices
 
-Optional analytics and external media are off until you allow them. You can accept or reject each category separately and reopen **Privacy settings** from the footer at any time. Withdrawing a choice stops future optional requests; it cannot undo a request that a third-party service already received.
+Optional analytics **[and external media]** are off until you allow them. **[If external media loads without asking, say so here and in the External media section.]** You can accept or reject each category separately and reopen **Privacy settings** from the footer at any time. Withdrawing a choice stops future optional requests; it cannot undo a request that a third-party service already received.
 
 The site stores your choices, the policy revision, and the time of your decision in your browser's `localStorage`. This record is used only to remember your settings. It expires after the period configured by the site owner and is replaced when the policy revision changes.
 

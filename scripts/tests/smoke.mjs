@@ -230,6 +230,7 @@ const tests = [
   },
   {
     name: "consent docs preview demonstrates choices without persisting or loading analytics",
+    requireMediaConsent: true,
     path: "/component-docs/components/navigation/consent/",
     viewport: DESKTOP,
     async run(page) {
@@ -343,6 +344,7 @@ const tests = [
   },
   {
     name: "embed example loads its map only after external-media permission",
+    requireMediaConsent: true,
     path: "/component-docs/components/building-blocks/core-elements/embed/",
     viewport: DESKTOP,
     async run(page) {
@@ -376,6 +378,7 @@ const tests = [
   },
   {
     name: "video modal keeps its provider frame inert until external-media permission",
+    requireMediaConsent: true,
     path: "/component-docs/components/building-blocks/wrappers/video-modal/",
     viewport: DESKTOP,
     async run(page) {
@@ -417,6 +420,7 @@ const tests = [
   },
   {
     name: "hosted video picks the right provider player per hosted type after consent",
+    requireMediaConsent: true,
     path: "/component-docs/components/building-blocks/core-elements/video/",
     viewport: DESKTOP,
     async run(page) {
@@ -550,12 +554,13 @@ const tests = [
     },
   },
   {
-    name: "privacy settings default to strict opt-in and synchronize decisions across tabs",
+    name: "strict privacy settings start opted out and synchronize decisions across tabs",
+    requireMediaConsent: true,
     path: "/",
     viewport: DESKTOP,
     async run(page) {
       await page.waitForFunction(() => Boolean(window.siteConsent));
-      await page.locator("[data-consent-open]").click();
+      await page.evaluate(() => document.querySelector("#privacy-settings").showPopover());
       const popover = page.locator("#privacy-settings");
       const externalMedia = popover.locator('[data-consent-category="externalMedia"]');
 
@@ -595,7 +600,7 @@ const tests = [
       );
       await other.close();
 
-      await page.locator("[data-consent-open]").click();
+      await page.evaluate(() => document.querySelector("#privacy-settings").showPopover());
       await page.waitForFunction(() =>
         document.querySelector("#privacy-settings")?.matches(":popover-open")
       );
@@ -683,7 +688,27 @@ const tests = [
     },
   },
   {
+    name: "external media loads without a prompt and no privacy control shows by default",
+    path: "/component-docs/components/building-blocks/core-elements/embed/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForFunction(
+        (sel) => Boolean(document.querySelector(sel)?.querySelector("iframe")),
+        `${ACTIVE_PREVIEW} .embed-content`
+      );
+      assert(
+        (await page.locator("[data-external-media-enable]").count()) === 0,
+        "an external-media prompt rendered although the site does not require consent"
+      );
+      assert(
+        (await page.locator("[data-consent-open]").count()) === 0,
+        "a privacy settings control rendered with no optional service to choose"
+      );
+    },
+  },
+  {
     name: "maps and raw embeds stay inert until site-wide external-media approval",
+    requireMediaConsent: true,
     path: "/",
     viewport: DESKTOP,
     async run(page) {
@@ -1517,9 +1542,14 @@ const tests = [
 
       await page.click("form.form .submit button");
 
-      await page.waitForFunction(
-        () => document.querySelectorAll("form.form .form-field-error:not([hidden])").length === 3
-      );
+      await page.waitForFunction(() => {
+        const required = document.querySelectorAll("form.form [required]").length;
+
+        return (
+          required > 0 &&
+          document.querySelectorAll("form.form .form-field-error:not([hidden])").length === required
+        );
+      });
 
       const state = await page.evaluate(() => {
         const field = document.querySelector("form.form .form-field.input");
@@ -1586,6 +1616,7 @@ const tests = [
   },
   {
     name: "hosted video stays inert before consent, then mounts no-cookie and tears down on revocation",
+    requireMediaConsent: true,
     path: "/component-docs/components/building-blocks/core-elements/video/",
     viewport: DESKTOP,
     async run(page) {
@@ -2468,6 +2499,17 @@ if (!selected.length) {
   process.exit(1);
 }
 
+// The built site loads external media freely; strict-mode tests switch the setting on at runtime.
+function requireMediaConsent() {
+  const parse = JSON.parse;
+
+  JSON.parse = function (...args) {
+    const value = parse.apply(this, args);
+
+    return value?._schema === "privacy" ? { ...value, externalMediaRequiresConsent: true } : value;
+  };
+}
+
 const { server, baseUrl } = await serveDist(distDir);
 const browser = await launchBrowser();
 const failures = [];
@@ -2487,6 +2529,7 @@ try {
     try {
       const page = await context.newPage();
 
+      if (test.requireMediaConsent) await page.addInitScript(requireMediaConsent);
       page.setDefaultTimeout(10000);
       await page.goto(`${baseUrl}${test.path}`, { waitUntil: "load", timeout: 15000 });
       await test.run(page);

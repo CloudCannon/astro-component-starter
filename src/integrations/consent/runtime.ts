@@ -66,12 +66,13 @@ export function parseConsentRecord(
   }
 }
 
-/** Strict opt-in: an undecided category is denied. */
+/** Strict opt-in: an undecided category is denied. External media is exempt unless the config requires consent for it. */
 export function isConsentAllowed(
   record: ConsentRecord,
   category: ConsentCategory,
   config: PrivacyConfig
 ): boolean {
+  if (category === "externalMedia" && !config.externalMediaRequiresConsent) return true;
   if (!config.enabled) return false;
 
   return record.decisions[category] === "granted";

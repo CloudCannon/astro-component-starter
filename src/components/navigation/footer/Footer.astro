@@ -6,10 +6,16 @@ import Image from "@core-elements/image/Image.astro";
 import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import Text from "@core-elements/text/Text.astro";
 import type { SocialLink } from "../../../types";
+import analyticsData from "@data/analytics.json";
 import privacyData from "@data/privacy.json";
-import { parsePrivacyConfig } from "../../../integrations/consent/config";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../../integrations/consent/config";
 
 const privacy = parsePrivacyConfig(privacyData);
+const showPrivacySettings = hasOptionalServices(privacy, parseAnalyticsConfig(analyticsData));
 const {
   links = [],
   socials = [] as SocialLink[],
@@ -69,7 +75,7 @@ const {
           text={footerText || ""}
           useDefaultEditableBinding={false}
         />
-        {privacy.enabled && (
+        {showPrivacySettings && (
           <button
             type="button"
             class="footer-privacy-settings"

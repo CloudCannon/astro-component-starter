@@ -31,6 +31,8 @@ const {
 } = Astro.props;
 
 const itemHeadingLevel = nextHeadingLevel(headingLevel);
+// Three columns would strand the fourth item on a row of its own.
+const columns = features?.length === 4 ? 2 : 3;
 ---
 
 <CustomSection
@@ -69,7 +71,7 @@ const itemHeadingLevel = nextHeadingLevel(headingLevel);
   />
   <Grid
     gap="lg"
-    columns={3}
+    columns={columns}
     class="feature-grid-grid"
     data-children-prop="features"
   >

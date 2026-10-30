@@ -5,7 +5,7 @@ description: Use when configuring, extending, or debugging the starter's site-wi
 
 # Privacy, consent, and analytics
 
-The starter applies one strict opt-in policy globally. Necessary preference storage is always available; the optional categories are `analytics` and `externalMedia`. No optional provider request may happen until its category is effectively granted. Read `docs/PRIVACY.md` before changing the policy or adding a service.
+The starter applies one strict opt-in policy globally. Necessary preference storage is always available; the optional categories are `analytics` and `externalMedia`. No analytics request may happen until analytics is granted. External media is exempt by default: with `externalMediaRequiresConsent: false` in `privacy.json` (the shipped value) embeds load straight away, and with it `true` no provider request may happen until external media is granted. Read `docs/PRIVACY.md` before changing the policy or adding a service.
 
 ## When to use
 
@@ -40,19 +40,19 @@ The starter applies one strict opt-in policy globally. Necessary preference stor
 ## Configure a site
 
 1. Replace every bracketed prompt in `src/content/pages/privacy.md` and make the text describe the site's actual owner, purposes, services, recipients, retention, and visitor rights.
-2. Set the site-relative `policyUrl`, final labels, `expiryDays`, and `honorGlobalPrivacyControl` in `privacy.json`.
+2. Set the site-relative `policyUrl`, final labels, `expiryDays`, `honorGlobalPrivacyControl`, and `externalMediaRequiresConsent` in `privacy.json`. Turn the last one on for any site with EU or UK visitors.
 3. Keep analytics at `provider: "none"` unless it is intentionally configured. For hosted Plausible, use the site-specific `https://plausible.io/js/pa-….js` URL; the schema rejects the legacy shared script and other hosts.
 4. Increase `policyRevision` after a material change that should invalidate saved choices. Do not increase it for wording-only edits that do not change the services or purposes disclosed.
 5. Run `npm run check:placeholders -- --strict`, then perform the production network checks below.
 
-Turning `enabled` off hides the UI and fails closed. It is not a way to bypass consent: analytics and external media remain denied.
+Turning `enabled` off hides the UI and fails closed for analytics. External media follows `externalMediaRequiresConsent` alone; `enabled: false` never loosens it.
 
 ## Visitor behavior to preserve
 
 - With analytics configured and no analytics decision, the banner presents equal-prominence **Accept All**, **Reject All**, and **Customize** actions.
-- The settings dialog identifies the necessary preference record as **Always on**, exposes analytics only when configured, always exposes external media, and allows bulk or granular changes.
-- When analytics is off, there is no first-visit banner. External media asks contextually where a visitor tries to use it.
-- The footer's **Privacy settings** control reopens settings after a decision.
+- The settings dialog identifies the necessary preference record as **Always on**, exposes analytics only when configured, exposes external media only when `externalMediaRequiresConsent` is on, and allows bulk or granular changes.
+- When analytics is off, there is no first-visit banner. External media that requires consent asks contextually where a visitor tries to use it.
+- The footer's **Privacy settings** control reopens settings after a decision. It renders only when there is a category to choose (`hasOptionalServices` in `config.ts`).
 - Choices expire after `expiryDays`, reset on a `policyRevision` mismatch, and synchronize through `BroadcastChannel` plus the storage event.
 - Effective permission is false for unset or denied categories. GPC keeps an unset choice denied, while a later explicit grant on this site is authoritative.
 - If browser storage is unavailable, the in-memory decision still governs the current visit.
@@ -74,9 +74,9 @@ When adding a host or path:
 1. Confirm it belongs in `externalMedia` and update the real privacy policy before shipping it.
 2. Add the narrowest HTTPS hostname and pathname rule to `externalMedia.ts`; do not allow arbitrary subdomains, paths, ports, credentials, or schemes.
 3. Keep the component's initial HTML inert. Use `data-external-media-src` for one allowed iframe or `template[data-unsafe-external-media]` plus an adjacent host for trusted HTML. Never emit a provider iframe, thumbnail, preconnect, SDK, or script before permission.
-4. Provide a useful fallback with `data-external-media-enable`. That action grants external media across the site, not only for one item.
+4. Render the permission prompt at runtime, not in the component HTML, so a site with `externalMediaRequiresConsent` off never shows it. The prompt's `data-external-media-enable` action grants external media across the site, not only for one item.
 5. Hydrate on the existing consent lifecycle and remove mounted content when permission is revoked. A hidden iframe can keep sending data or playing audio, so hiding is insufficient.
-6. Add allowlist unit tests and smoke coverage for no pre-consent request, successful hydration, and revocation teardown. Update the component docs, catalog, examples, and default policy text if the provider changes what sites must disclose.
+6. Add allowlist unit tests and smoke coverage for no pre-consent request, successful hydration, and revocation teardown. The built site loads media freely, so strict-mode smoke tests set `requireMediaConsent: true` to switch the setting on at runtime. Update the component docs, catalog, examples, and default policy text if the provider changes what sites must disclose.
 
 ## Add analytics or a consent category
 

@@ -2,12 +2,16 @@
 
 const MAX_DEPTH = 3;
 
+const teardowns = new WeakMap<HTMLElement, () => void>();
+
 export function setupScrollDeck(deck: HTMLElement): void {
   // Flag the layout, not the root: the root survives an editor re-render that replaces the cards.
   const layout = deck.querySelector<HTMLElement>(".scroll-deck-layout");
 
   if (!layout || layout.hasAttribute("data-scroll-deck-initialized")) return;
   layout.setAttribute("data-scroll-deck-initialized", "");
+  // The editor can strip that flag from a kept layout, so wiring from an earlier run may be live.
+  teardowns.get(deck)?.();
 
   const cards = Array.from(deck.querySelectorAll<HTMLElement>(".scroll-deck-card"));
   const links = Array.from(deck.querySelectorAll<HTMLAnchorElement>(".scroll-deck-rail-link"));
@@ -19,6 +23,14 @@ export function setupScrollDeck(deck: HTMLElement): void {
     }
     return;
   }
+
+  // The editor keeps each card across a re-render and clones one for a duplicate, so a card's
+  // server-rendered id goes stale; the rail is re-rendered, so its hrefs are the source.
+  cards.forEach((card, index) => {
+    const target = links[index]?.getAttribute("href")?.slice(1);
+
+    if (target) card.id = target;
+  });
 
   const syncCardHeight = () => {
     deck.style.removeProperty("--deck-card-height");
@@ -111,13 +123,17 @@ export function setupScrollDeck(deck: HTMLElement): void {
 
   cards.forEach((card) => observer.observe(card));
 
+  const teardown = () => {
+    observer.disconnect();
+    resizeObserver.disconnect();
+    contentObserver.disconnect();
+    document.removeEventListener("scroll", onScroll, true);
+  };
+
   // The last card stays fully intersecting through its runway, so thresholds alone miss its release.
   const onScroll = () => {
     if (!layout.isConnected) {
-      observer.disconnect();
-      resizeObserver.disconnect();
-      contentObserver.disconnect();
-      document.removeEventListener("scroll", onScroll, true);
+      teardown();
       return;
     }
 
@@ -125,7 +141,14 @@ export function setupScrollDeck(deck: HTMLElement): void {
   };
 
   document.addEventListener("scroll", onScroll, { capture: true, passive: true });
+  teardowns.set(deck, teardown);
   update();
+}
+
+export function destroyScrollDeck(deck: HTMLElement): void {
+  teardowns.get(deck)?.();
+  teardowns.delete(deck);
+  deck.querySelector(".scroll-deck-layout")?.removeAttribute("data-scroll-deck-initialized");
 }
 
 export function setupAllScrollDecks(root: ParentNode = document): void {

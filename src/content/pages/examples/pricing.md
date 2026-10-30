@@ -1,180 +1,202 @@
 ---
 _schema: default
 title: Pricing
-description: Example pricing page with plan cards, a comparison table, and billing FAQ.
+description: >-
+  Example pricing page for a web studio's care plans: plan cards with a
+  monthly/annual switch, a comparison table, client quotes, and billing FAQ.
 pageSections:
   - _component: page-sections/conversion/pricing-tiers
     headingLevel: h1
-    eyebrow: Plans
-    heading: Simple pricing that scales with you
-    subtext: Every plan includes hosting, SSL, and visual editing for your team.
+    eyebrow: Care plans
+    heading: Keep your site sharp after launch
+    subtext: >-
+      A set number of studio hours each month, plus updates, fixes, and people
+      who already know your site. New builds are quoted separately.
     showAnnualPricing: true
     monthlyLabel: Monthly
     annualLabel: Annual
-    annualBadge: Save 20%
+    annualBadge: Two months free
     defaultInterval: monthly
     tiers:
-      - name: Starter
-        price: $19
+      - name: Essentials
+        price: $290
         priceSuffix: /month
-        annualPrice: $190
+        annualPrice: $2,900
         annualPriceSuffix: /year
-        description: For a single marketing site.
+        description: For a site that mostly needs to stay current.
         features:
-          - text: 1 site
+          - text: Security and dependency updates
             included: true
-          - text: 1 seat
+          - text: A monthly health check
             included: true
-          - text: CDN + SSL
+          - text: 2 hours of design and development
             included: true
-          - text: Form endpoints
+          - text: Fixes within two working days
+            included: true
+          - text: New sections each quarter
             included: false
-          - text: Staging environment
+          - text: Performance reviews
             included: false
-        buttonText: Get started
-        buttonLink: /examples/services/
+        buttonText: Choose Essentials
+        buttonLink: /examples/contact/
         highlight: false
         badgeText: ''
-      - name: Studio
-        price: $59
+      - name: Growth
+        price: $790
         priceSuffix: /month
-        annualPrice: $590
+        annualPrice: $7,900
         annualPriceSuffix: /year
-        description: For small teams shipping several sites.
+        description: For teams that publish every week.
         features:
-          - text: 10 sites
+          - text: Everything in Essentials
             included: true
-          - text: 5 seats
+          - text: 8 hours of design and development
             included: true
-          - text: Form endpoints
+          - text: A new section each quarter
             included: true
-          - text: Staging environment
+          - text: Quarterly performance reviews
             included: true
-          - text: SSO
+          - text: Fixes by the next working day
+            included: true
+          - text: A named lead at the studio
             included: false
-        buttonText: Get started
-        buttonLink: /examples/services/
+        buttonText: Choose Growth
+        buttonLink: /examples/contact/
         highlight: true
         badgeText: Most popular
-      - name: Agency
-        price: $149
+      - name: Partner
+        price: $1,900
         priceSuffix: /month
-        annualPrice: $1,490
+        annualPrice: $19,000
         annualPriceSuffix: /year
-        description: For agencies running client fleets.
+        description: For organizations running several sites.
         features:
-          - text: Unlimited sites
+          - text: Everything in Growth
             included: true
-          - text: SSO + audit log
+          - text: Covers up to 5 sites
             included: true
-          - text: Named support contact
+          - text: 24 hours of design and development
             included: true
-          - text: 99.95% uptime SLA
+          - text: New sections on request
+            included: true
+          - text: Urgent fixes within four hours
+            included: true
+          - text: A named lead at the studio
             included: true
         buttonText: Talk to us
-        buttonLink: /examples/services/
+        buttonLink: /examples/contact/
         highlight: false
         badgeText: ''
     colorScheme: inherit
     backgroundColor: base
   - _component: page-sections/conversion/pricing-comparison
     eyebrow: Compare
-    heading: Feature by feature
+    heading: Plan by plan
     subtext: ''
     plans:
-      - name: Starter
-        price: $19/mo
+      - name: Essentials
+        price: $290/mo
         highlight: false
-        buttonText: Choose Starter
-        buttonLink: /examples/services/
-      - name: Studio
-        price: $59/mo
+        buttonText: Choose Essentials
+        buttonLink: /examples/contact/
+      - name: Growth
+        price: $790/mo
         highlight: true
-        buttonText: Choose Studio
-        buttonLink: /examples/services/
-      - name: Agency
-        price: $149/mo
+        buttonText: Choose Growth
+        buttonLink: /examples/contact/
+      - name: Partner
+        price: $1,900/mo
         highlight: false
         buttonText: Talk to us
-        buttonLink: /examples/services/
+        buttonLink: /examples/contact/
     rows:
-      - feature: Sites
+      - feature: Sites covered
         values:
           - '1'
-          - '10'
-          - Unlimited
-      - feature: Seats
-        values:
           - '1'
-          - '5'
-          - Unlimited
-      - feature: Visual editing
+          - Up to 5
+      - feature: Design and development hours a month
+        values:
+          - '2'
+          - '8'
+          - '24'
+      - feature: Security and dependency updates
         values:
           - 'yes'
           - 'yes'
           - 'yes'
-      - feature: Form endpoints
+      - feature: Monthly health check
+        values:
+          - 'yes'
+          - 'yes'
+          - 'yes'
+      - feature: New sections
         values:
           - 'no'
-          - 'yes'
-          - 'yes'
-      - feature: Staging
+          - One a quarter
+          - On request
+      - feature: Performance reviews
         values:
           - 'no'
-          - 'yes'
-          - 'yes'
-      - feature: SSO and audit log
+          - Quarterly
+          - Monthly
+      - feature: Fix response time
+        values:
+          - Two working days
+          - Next working day
+          - Four hours
+      - feature: Named studio lead
         values:
           - 'no'
           - 'no'
           - 'yes'
-      - feature: Support
-        values:
-          - Email
-          - Priority email
-          - Named contact
     striped: true
     colorScheme: inherit
     backgroundColor: surface
   - _component: page-sections/proof/testimonial-bento
-    eyebrow: Customers
-    heading: Teams that switched, in their words
+    eyebrow: Clients
+    heading: Why they stayed on a plan
     headingLevel: h2
     subtext: ''
     testimonials:
-      - text: We moved twelve client sites onto Studio in a quarter. The per-seat pricing meant we could bring every editor along without a budget conversation.
+      - text: >-
+          Growth pays for itself in the hours we don't spend chasing developers.
+          The new section each quarter means the site keeps up with whatever
+          marketing wants to try next.
         authorName: Priya Raman
-        authorDescription: Head of Marketing, Northwind
+        authorDescription: Head of Marketing, Northwind Coastal Trust
         authorImage: /src/assets/images/component-docs/profile1.jpg
         size: featured
         tone: surface
-      - text: Starter covered our launch. Upgrading later took one click.
-        authorName: Dana Whitfield
-        authorDescription: Engineering Lead, Cascade
-        authorImage: /src/assets/images/component-docs/profile3.jpg
+      - text: Essentials covered our first year. Upgrading took one email.
+        authorName: Tom Alvarez
+        authorDescription: Founder, Vertex Growers
+        authorImage: /src/assets/images/component-docs/profile.jpg
         size: standard
         tone: base
-      - text: Annual billing paid for our staging environment.
-        authorName: Tom Alvarez
-        authorDescription: Founder, Fieldnote
-        authorImage: /src/assets/images/component-docs/profile2.jpg
+      - text: Annual billing paid for our festival microsite.
+        authorName: Dana Whitfield
+        authorDescription: Program Director, Solstice Festival
+        authorImage: ''
         size: standard
         tone: inverse
-      - text: The SLA on Agency is the reason our procurement team said yes. Everything else was already there.
-        authorName: Sam Okafor
-        authorDescription: Design Director, Loam Studio
-        authorImage: /src/assets/images/component-docs/profile4.jpg
+      - text: >-
+          The four-hour fix window on Partner is what got our procurement team to
+          sign. Everything else was already there.
+        authorName: Jordan Hale
+        authorDescription: Brand Lead, Globex Travel
+        authorImage: ''
         size: wide
         tone: base
       - text: No surprise invoices, ever.
-        authorName: Richard Johnson
-        authorDescription: CEO, Tech Innovations
-        authorImage: /src/assets/images/component-docs/profile.jpg
+        authorName: Sam Okafor
+        authorDescription: Marketing Manager, Umbra Stays
+        authorImage: /src/assets/images/component-docs/profile2.jpg
         size: standard
         tone: accent
     columns: '3'
-    colorScheme: inherit
-    backgroundColor: base
+    colorScheme: dark
+    backgroundColor: surface
   - _component: page-sections/explainers/faq-section
     heading: Billing questions
     items:
@@ -182,44 +204,44 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Yes. Upgrade or downgrade at the end of the billing period. Unused
-              time on the old plan is credited.
-            size: md
-      - title: What happens if we go over the site limit?
+              Yes. Move up or down at the end of any billing period, and unused
+              time on the old plan is credited to the new one.
+      - title: What can we use our hours for?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              We'll prompt you to move up a plan before a new site can go live.
-              Existing sites keep serving.
-            size: md
+              Any design or development work: a new layout, an integration, a
+              performance fix, or a change that runs across the whole site.
+      - title: Do unused hours roll over?
+        contentSections:
+          - _component: building-blocks/core-elements/text
+            text: >-
+              For one month. Save them up for a bigger change, or let them go in
+              a quiet month.
       - title: Do you offer annual billing?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Yes, use the monthly/annual switch on the plans above. Annual
-              billing is two months free.
-            size: md
+              Yes, use the monthly and annual switch on the plans above. Paying
+              annually gets you two months free.
       - title: Is there a contract?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Month to month on Starter and Studio. Agency can be monthly or a
-              twelve-month term if you want the SLA in writing.
-            size: md
+              Essentials and Growth are month to month. Partner can be monthly or
+              a twelve-month term if you want the response times in writing.
     maxContentWidth: xl
     colorScheme: inherit
-    backgroundColor: base
+    backgroundColor: surface
   - _component: page-sections/conversion/cta-center
-    heading: Not sure which plan?
-    subtext: Tell us how many sites and editors you have. We'll point you at the right one.
+    heading: Not sure which plan fits?
+    subtext: >-
+      Tell us what your site needs from month to month. We'll point you at the
+      right plan.
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Talk to us
-        hideText: false
-        link: /examples/services/
-        iconName: ''
-        iconColor: default
-        iconPosition: before
+        link: /examples/contact/
         variant: primary
         size: md
     colorScheme: dark

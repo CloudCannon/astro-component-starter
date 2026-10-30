@@ -106,7 +106,10 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
           </span>
         </div>
       )}
-      <div class="consent-category">
+      <div
+        class="consent-category"
+        hidden={!privacy.externalMediaRequiresConsent}
+      >
         <Toggle
           class="consent-category-toggle"
           id={`${popoverId}-external-media`}
@@ -290,6 +293,10 @@ const popoverId = slugifyLabel(label ?? "") || "privacy-settings";
         color: var(--color-text-muted);
         font-size: var(--font-size-sm);
       }
+    }
+
+    .consent-category[hidden] {
+      display: none;
     }
 
     .consent-category-necessary {

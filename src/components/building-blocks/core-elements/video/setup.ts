@@ -1,17 +1,19 @@
+function hostedVideos(root: ParentNode): HTMLElement[] {
+  return [
+    ...(root instanceof HTMLElement && root.matches("[data-hosted-video]") ? [root] : []),
+    ...Array.from(root.querySelectorAll<HTMLElement>("[data-hosted-video]")),
+  ];
+}
+
 function hydrateHostedVideos(root: ParentNode = document): void {
   if (window.inEditorMode) return;
 
   if (!window.siteConsent?.isAllowed("externalMedia")) {
-    resetHostedVideos(root);
+    promptHostedVideos(root);
     return;
   }
 
-  const hosted = [
-    ...(root instanceof HTMLElement && root.matches("[data-hosted-video]") ? [root] : []),
-    ...Array.from(root.querySelectorAll<HTMLElement>("[data-hosted-video]")),
-  ];
-
-  hosted.forEach((container) => {
+  hostedVideos(root).forEach((container) => {
     if (container.hasAttribute("data-hosted-video-mounted")) return;
     const type = container.dataset.videoType;
     const id = container.dataset.videoId;
@@ -23,6 +25,7 @@ function hydrateHostedVideos(root: ParentNode = document): void {
 
     mountHostedVideo(container, type, id, container.dataset.videoTitle || "Video", autoplay, loop);
     container.setAttribute("data-hosted-video-mounted", "");
+    container.removeAttribute("data-external-media-prompt");
   });
 }
 
@@ -96,14 +99,9 @@ function mountHostedVideo(
   container.replaceChildren(player);
 }
 
-function resetHostedVideos(root: ParentNode = document): void {
-  const hosted = [
-    ...(root instanceof HTMLElement && root.matches("[data-hosted-video]") ? [root] : []),
-    ...Array.from(root.querySelectorAll<HTMLElement>("[data-hosted-video]")),
-  ];
-
-  hosted.forEach((container) => {
-    if (!container.hasAttribute("data-hosted-video-mounted")) return;
+function promptHostedVideos(root: ParentNode = document): void {
+  hostedVideos(root).forEach((container) => {
+    if (container.hasAttribute("data-external-media-prompt")) return;
     const message = document.createElement("p");
     const button = document.createElement("button");
     const link = document.createElement("a");
@@ -119,6 +117,7 @@ function resetHostedVideos(root: ParentNode = document): void {
     link.textContent = `Watch on ${type === "youtube" ? "YouTube" : "Vimeo"}`;
     container.replaceChildren(message, button, link);
     container.removeAttribute("data-hosted-video-mounted");
+    container.setAttribute("data-external-media-prompt", "");
   });
 }
 

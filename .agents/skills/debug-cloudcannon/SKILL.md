@@ -25,12 +25,13 @@ A symptom → diagnosis → fix playbook for CloudCannon visual editing in this 
 
 Diagnose from a real signal, not a guess. Each surface shows different failures.
 
-| Surface                       | How to open                                                | Shows                                                                                                                                                    |
-| ----------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Dev-server terminal           | the terminal running `npm run dev`                         | `renderBlock`'s `Component not found` warning on a normal page render (the component renders server-side), plus Astro build/type errors.                 |
-| Browser console in the editor | open the CloudCannon Visual Editor, then browser dev tools | the same `Component not found` warning when the editor re-renders a block; `[editor-live-sync]` logs (DEV only); `Carousel: skipping setup` debug lines. |
-| `npm run check` output        | run it in the terminal                                     | `DRIFT`/`MISSING` lines for previews and skills sync; lint, format, and `astro check` type errors.                                                       |
-| CloudCannon build logs        | the site's build output in the CloudCannon app             | structure and snippet parse errors, invalid config keys.                                                                                                 |
+| Surface                       | How to open                                                | Shows                                                                                                                                                                                                         |
+| ----------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dev-server terminal           | the terminal running `npm run dev`                         | `renderBlock`'s `Component not found` warning on a normal page render (the component renders server-side), plus Astro build/type errors.                                                                      |
+| Browser console in the editor | open the CloudCannon Visual Editor, then browser dev tools | the same `Component not found` warning when the editor re-renders a block; `[editor-live-sync]` logs (DEV only); `Carousel: skipping setup` debug lines.                                                      |
+| `npm run check` output        | run it in the terminal                                     | `DRIFT`/`MISSING` lines for previews and skills sync; lint, format, and `astro check` type errors.                                                                                                            |
+| CloudCannon build logs        | the site's build output in the CloudCannon app             | structure and snippet parse errors, invalid config keys.                                                                                                                                                      |
+| Local editor                  | `npm run editor`, then a page by file path                 | the real Visual Editor against `dist/` as of the last `npm run build`. A folder URL (`/about/`) is a 500 from the CLI, not your site: open `/about/index.html`. The built homepage is `/__output/index.html`. |
 
 ## Symptom index
 
@@ -40,6 +41,7 @@ Diagnose from a real signal, not a guess. Each surface shows different failures.
 | New component absent from the editor "Add" menu                       | [Missing from the Add menu](#missing-from-the-add-menu)   |
 | Interactive component works live, dead in the editor                  | [Dead interactive component](#dead-interactive-component) |
 | Click does nothing / sidebar edit doesn't update the preview          | [Editable binding dead](#editable-binding-dead)           |
+| Red "Failed to render" card, only in the editor                       | [Editor-only render error](#editor-only-render-error)     |
 | CloudCannon build error, invalid/ignored config key                   | [Config build errors](#config-build-errors)               |
 | Wrong icon in the Add menu, or `npm run check` fails on `lint:schema` | [Config build errors](#config-build-errors)               |
 | `npm run check` fails: `DRIFT .claude/skills`                         | [Skills drift](#skills-drift)                             |
@@ -106,8 +108,21 @@ The attribute reference (`data-prop`, `data-children-prop`, `data-prop-src`/`-al
 | `data-children-prop` on the wrong element                         | It goes on the array **wrapper** (`Grid`, `ButtonGroup`, …), not on an item or a text node.                                                                                                                                                           |
 | Component rendered outside `renderBlock` without the binding flag | `renderBlock` sets `useDefaultEditableBinding={true}`; render another way and you must pass it (or explicit bindings).                                                                                                                                |
 | `data-editable` set on the component's **root**                   | Remove it. `renderBlock` injects `data-editable="array-item"` on the root; a second one collides. Only mark inner elements.                                                                                                                           |
+| `data-prop-<field>` attribute with a camelCase field              | `data-prop-*` lowercases its suffix (`data-prop-logoSource` reads `logosource`). Keep the field in the value: `data-prop-src="logoSource"`.                                                                                                           |
+| Bracketed index in a path (`sections[0].title`)                   | Paths use dots: `sections.0.title`. A bracketed index mounts nothing, without an error.                                                                                                                                                               |
 | `display: contents` on the root of an array item                  | Replace with `display: flex`/`grid`. CloudCannon needs a real DOM box to attach the array-item region.                                                                                                                                                |
 | A prop edit renders stale until reload (layout/spacing/data-attr) | The prop drives an attribute on the component's **root**. The re-render keeps the root element, so move the attribute to a direct child and hoist with CSS (`data-space-before` + `:has()` in `_flow.css`) or JS (`editor-live-sync.js` bento spans). |
+
+## Editor-only render error
+
+**Symptom:** a block renders on the built page but shows a red "Failed to render" card in the Visual Editor.
+
+The editor re-renders a block in the browser, where some build-time values don't exist.
+
+| Likely cause                                          | Fix                                                                                                                                           |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| The component reads `Astro.url` or `Astro.locals`     | Both are undefined in the editor re-render; only props and slots survive. Fall back to `<html data-pathname>` as `PageHeader.astro` does.     |
+| An image renders from an object guarded on the object | The editor passes empty image objects (`{ src: null, alt: null }`) through. Guard on the source (`isNonEmptyString(source)`), not the object. |
 
 ## Config build errors
 
@@ -141,7 +156,7 @@ The invalid-key list, the quote-numeric-values rule, select-vs-text field config
 
 **Symptom:** a page section doesn't appear in the MDX/content editor's snippet picker.
 
-Snippets are collected by `cloudcannon.config.yml`'s `_snippets_from_glob: /**/*.cloudcannon.snippets.yml`, with `_snippets_imports.mdx: true`.
+Snippets are collected by `cloudcannon.config.yml`'s `_snippets_from_glob: /**/*.cloudcannon.snippets.yml`. `_snippets_imports.mdx: true` only adds CloudCannon's catch-all fallbacks for unrecognized MDX; a component's own snippet doesn't depend on it.
 
 | Likely cause                                        | Fix                                                                                          |
 | --------------------------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -151,7 +166,7 @@ Snippets are collected by `cloudcannon.config.yml`'s `_snippets_from_glob: /**/*
 
 ## Verify your work
 
-| Command                       | When                                             | Look for                                                                                  |
-| ----------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| `npm run check`               | Always after a fix.                              | Exit 0 — no lint/type errors, no skills `DRIFT`.                                          |
-| `npm run dev` + Visual Editor | You fixed rendering, registration, or a binding. | Block resolves, appears in the Add menu, and field edits live-update; no console warning. |
+| Command                          | When                                             | Look for                                                                                  |
+| -------------------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| `npm run check`                  | Always after a fix.                              | Exit 0 — no lint/type errors, no skills `DRIFT`.                                          |
+| `npm run editor` (Visual Editor) | You fixed rendering, registration, or a binding. | Block resolves, appears in the Add menu, and field edits live-update; no console warning. |

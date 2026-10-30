@@ -4,13 +4,19 @@ import Image from "@core-elements/image/Image.astro";
 import Mobile from "@navigation/mobile/Mobile.astro";
 import ThemeToggle from "@navigation/theme-toggle/ThemeToggle.astro";
 import navData from "../data/nav.json";
+import analyticsData from "@data/analytics.json";
 import privacyData from "@data/privacy.json";
-import { parsePrivacyConfig } from "../../integrations/consent/config";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../integrations/consent/config";
 import { generateNavData } from "../utils/navGenerator.js";
 
 const generatedNavData = await generateNavData(navData);
 const mobileNavData = [{ name: "← Back to site", path: "/", children: [] }, ...generatedNavData];
 const privacy = parsePrivacyConfig(privacyData);
+const showPrivacySettings = hasOptionalServices(privacy, parseAnalyticsConfig(analyticsData));
 ---
 
 <div class="library-mobile-nav">
@@ -22,7 +28,7 @@ const privacy = parsePrivacyConfig(privacyData);
   />
   <div class="library-mobile-nav-actions">
     <ThemeToggle />
-    {privacy.enabled && (
+    {showPrivacySettings && (
       <button
         type="button"
         class="privacy-settings-toggle tap-target"

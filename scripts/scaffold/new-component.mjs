@@ -179,6 +179,7 @@ Next steps:
      Compiles the preview SVG this component's YAML already points at
      (public/component-previews/${componentKey}.svg). Until it exists,
      "npm run previews:check" (part of npm run check) fails on the missing recipe/SVG.
+     The recipe is meant to be written by an AI agent: see the create-component skill.
   3. Docs page auto-derives from the two YAML files above — nothing to
      create. Optional enrichment: src/component-docs/content/components/
      ${componentKey}/index.md (overview prose, curated \`examples:\` groups,

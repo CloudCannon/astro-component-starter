@@ -1,6 +1,6 @@
 # Astro Component Starter
 
-A starter template with 84 Astro components, each built for visual editing in
+A starter template with 85 Astro components, each built for visual editing in
 [CloudCannon](https://cloudcannon.com/). You clone it, you own it. Every component is your
 source code to modify, extend, or delete.
 
@@ -54,7 +54,7 @@ errors. `npm run check` warns until it's set.
 - **Components are born CMS-editable.** Every component ships its editor schema beside it. There's
   no second project to "make it editable" — add a component and it appears in the editor's Add
   menu with a preview.
-- **Design lives in tokens, not components.** The same 84 components render as a law firm, a SaaS
+- **Design lives in tokens, not components.** The same 85 components render as a law firm, a SaaS
   product, or a university department by swapping token files. No component CSS to fight.
 - **It's built to be operated by AI.** Eleven skills in `.agents/skills/` encode the workflows —
   create a component, turn a screenshot into one, migrate an existing site, retheme — as
@@ -64,7 +64,7 @@ errors. `npm run check` warns until it's set.
 
 ## Components
 
-84 components across three tiers — 25 page sections, 51 building blocks, and 8 navigation
+85 components across three tiers — 26 page sections, 51 building blocks, and 8 navigation
 components — plus 343 icons.
 
 [![Every component in the library](docs/images/components.png)](https://astro-component-starter.cc/component-docs/)
@@ -91,7 +91,7 @@ npm run new:component building-blocks/core-elements/my-thing
 
 ```
 src/
-├── components/          # All 84 components (yours to edit)
+├── components/          # All 85 components (yours to edit)
 │   ├── building-blocks/ # Core UI: buttons, headings, forms, layout wrappers
 │   ├── page-sections/   # Full-width sections: heroes, features, CTAs
 │   └── navigation/      # Header, footer, mobile nav, consent
@@ -139,13 +139,12 @@ component and its editor config, which nothing else will.
 
 See **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**. The repository ships CloudCannon's build
 settings, so connecting it is a few clicks — and component schemas are picked up automatically.
-For the blanket strict opt-in consent workflow, see
+For privacy, consent, and when embeds ask first, see
 **[docs/PRIVACY.md](docs/PRIVACY.md)**.
 
 ## Prerequisites
 
-- **Node.js `^22.12.0 || ^24.0.0 || ^26.0.0`** (see `engines` in `package.json`). The repo pins
-  `24.18.0` in `.nvmrc`, which is the version CI uses.
+- **Node.js 24 or later.** The repo pins `24.18.0` in `.nvmrc`, which is the version CI uses.
 
 ## Updating Dependencies
 

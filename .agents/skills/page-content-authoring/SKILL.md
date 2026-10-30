@@ -169,8 +169,8 @@ The dev-server console logs `Component not found: <_component>. Available compon
 
 ## Verify your work
 
-| Command                       | What to look for                                                        |
-| ----------------------------- | ----------------------------------------------------------------------- |
-| `npm run check`               | Exit 0 — schema validates, no lint/type errors.                         |
-| `npm run dev`                 | The page renders; no "Component not found" console warning.             |
-| `npm run dev` + Visual Editor | Sections appear and field edits live-update in the CloudCannon preview. |
+| Command                          | What to look for                                                        |
+| -------------------------------- | ----------------------------------------------------------------------- |
+| `npm run check`                  | Exit 0 — schema validates, no lint/type errors.                         |
+| `npm run dev`                    | The page renders; no "Component not found" console warning.             |
+| `npm run editor` (Visual Editor) | Sections appear and field edits live-update in the CloudCannon preview. |

@@ -42,8 +42,7 @@ const { page, emptyMessage, locale = "en-US", tagBreadcrumb } = Astro.props;
     )}
     <Grid
       gap="lg"
-      minItemWidth="320"
-      maxItemWidth="400"
+      columns={3}
       spaceBefore="default"
       style={tagBreadcrumb ? undefined : "margin-top: var(--space-before-loose);"}
     >

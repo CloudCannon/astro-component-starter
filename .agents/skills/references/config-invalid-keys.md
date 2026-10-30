@@ -1,8 +1,10 @@
 <!--
-Vendored from CloudCannon/agent-skills @ b70076b102b0f1e20d05c4e3328d822f2298e115
+Vendored from CloudCannon/agent-skills @ 7a8e02e02422b0fb671157d9ca1fcf12e3b382cb
 Upstream paths:
-  - skills/cloudcannon-configuration/SKILL.md (§ Common invalid keys, § Symptom-driven gotchas)
-  - skills/cloudcannon-configuration/astro/configuration-gotchas.md (validation-related sections)
+  - skills/cloudcannon-configuration/SKILL.md (§ Invalid keys)
+  - skills/cloudcannon-configuration/troubleshooting.md (symptom table)
+  - skills/cloudcannon-configuration/configuration-gotchas.md (Inputs, Select inputs, Rich text toolbars, Structures and previews)
+  - skills/cloudcannon-configuration/json-schemas.md (what the schema does and doesn't validate)
 Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
 CLI config-generation flows from upstream are dropped. Validation is kept but rebuilt on the
@@ -62,6 +64,8 @@ Observed LLM hallucinations — not exhaustive. Each row gives the real key.
 | `text`       | `TextEditable`  | yes               | no                                   | no                | no                 |
 | `image`      | `ImageEditable` | n/a               | n/a                                  | n/a               | image options only |
 | `link`       | `LinkEditable`  | n/a               | n/a                                  | n/a               | n/a                |
+
+**Set a region's toolbar on its input, not in `_editables`.** When a `text` or `block` region edits a field, give that field a `markdown` (or `html`) input with its own `options`: a region uses its input's `options`, and `_editables.text` / `.block` are only a fallback for inputs with none. The fallback reaches the region but not the sidebar input for the same field, so the two offer different toolbars.
 
 **`_editables.text` is inline-only.** It does NOT have `bulletedlist`, `numberedlist`, `blockquote`, `format`, `table`, or any block-level option — only inline formatting (`bold`, `italic`, `link`, `strike`, `subscript`, `superscript`, `underline`, `undo`, `redo`, `removeformat`, `copyformatting`, `remove_custom_markup`, `allow_custom_markup`). For block-level controls, use `_editables.content` or `_editables.block`.
 
@@ -128,11 +132,13 @@ Leave `allow_create: false` (default) for component-API enums — typing an unre
 
 ## Array item previews — `[*]` vs structure value
 
+**MUST:** give an array of objects a structure, and set the item `preview` on its structure value. A structure labels the Add button and keeps the item shape once the array is emptied; without one, Add copies the previous item, and an emptied array forgets what its items look like. `[*]` is only for the item type of an array of primitives (`features[*]: { type: text }`).
+
 Where the preview lives depends on whether the array has `structures:`.
 
 | Array shape                                                                     | Preview location                                                                    |
 | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Plain array — no `structures:`                                                  | `arrayName[*]` in `_inputs`                                                         |
+| Array of primitives — no `structures:`                                          | `arrayName[*]` in `_inputs` (item type and preview)                                 |
 | Structured array — `structures: _structures._foo` OR inline `structures: {...}` | Inside the structure value itself, alongside `label` / `icon` / `value` / `_inputs` |
 
 `[*]` previews on a structured array validate clean and silently do nothing. If you see arrays with `structures:` and a matching `[*]` preview block, the `[*]` is dead weight — delete it and move the config onto the structure value. See [structures.md § Previews](structures.md#previews).
@@ -140,16 +146,12 @@ Where the preview lives depends on whether the array has `structures:`.
 Do **not** add `type: object` to `arrayName[*]` for snippet array items — the repeating parser already defines the item shape.
 
 ```yaml
-# ✓ Plain array — [*] preview is correct here
+# ✓ Array of strings — [*] sets the item type
 _inputs:
-  tab_items:
+  features:
     type: array
-  tab_items[*]:
-    options:
-      preview:
-        text:
-          - key: name
-        icon: tab
+  features[*]:
+    type: text
 ```
 
 ## Data inputs must follow the JSON, not a template

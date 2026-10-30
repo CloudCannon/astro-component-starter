@@ -254,9 +254,12 @@ const contentFiles = (await glob("src/content/**/*.{md,mdx}", { cwd: root })).ma
 );
 
 for (const abs of contentFiles) {
-  const fm = frontmatter(readFileSync(abs, "utf8"));
+  const source = readFileSync(abs, "utf8");
+  const fm = frontmatter(source);
 
   if (fm) refSources.push([abs, collectComponentRefs(fm)]);
+  // `frontmatter()` returns null for unparseable YAML too, which every later check skips.
+  else if (/^---\r?\n[\s\S]*?\r?\n---/.test(source)) fail(abs, "frontmatter is not valid YAML");
 }
 
 for (const [abs, refs] of refSources) {
@@ -633,6 +636,40 @@ for (const relToComponents of astroPaths) {
 }
 
 for (const label of oks) console.log(`ok     ${label}`);
+// Check 10: every component tag in an MDX body has a snippet. The blog route exposes every
+// component to MDX, but the content editor can only edit a tag that a snippet's
+// `definitions.component_name` claims; any other tag is a locked block.
+
+const snippetNames = new Set();
+
+for (const path of await glob("src/components/**/*.cloudcannon.snippets.yml", { cwd: root })) {
+  for (const snippet of Object.values(loadYaml(join(root, path)) ?? {})) {
+    const name = snippet?.definitions?.component_name;
+
+    if (name) snippetNames.add(name);
+  }
+}
+
+for (const path of (await glob("src/content/**/*.mdx", { cwd: root })).sort()) {
+  const body = readFileSync(join(root, path), "utf8")
+    .replace(/^---\r?\n[\s\S]*?\r?\n---/, "")
+    .replace(/^(`{3,}|~{3,})[^\n]*\n[\s\S]*?^\1[^\n]*$/gm, "")
+    .replace(/`[^`\n]*`/g, "");
+  const tags = new Set([...body.matchAll(/<([A-Z][A-Za-z0-9]*)[\s/>]/g)].map((m) => m[1]));
+  const missing = [...tags].filter((tag) => !snippetNames.has(tag)).sort();
+
+  if (missing.length) {
+    fail(
+      path,
+      `MDX uses ${missing.map((tag) => `<${tag}>`).join(", ")} with no snippet, so the content ` +
+        `editor shows it as a locked block. Add a *.cloudcannon.snippets.yml beside the component ` +
+        `whose definitions.component_name is that tag.`
+    );
+  } else {
+    ok(`mdx-snippets ${path}`);
+  }
+}
+
 for (const { file, reason } of warns) console.warn(`WARN   ${file}\n   ${reason}`);
 for (const { file, reason } of fails) console.error(`FAIL   ${file}\n   ${reason}`);
 

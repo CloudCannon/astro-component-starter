@@ -1,6 +1,9 @@
 <!--
-Vendored from CloudCannon/agent-skills @ b70076b102b0f1e20d05c4e3328d822f2298e115
-Upstream path: skills/cloudcannon-configuration/structures.md
+Vendored from CloudCannon/agent-skills @ 7a8e02e02422b0fb671157d9ca1fcf12e3b382cb
+Upstream paths:
+  - skills/cloudcannon-configuration/structures.md
+  - skills/cloudcannon-configuration/inputs.md (input entries per field)
+  - skills/cloudcannon-configuration/json-schemas.md (what the schema validates)
 Adapted for this starter (astro-component-starter) — resync by diffing against upstream.
 "In this starter:" callouts mark where generic CloudCannon guidance is overridden here.
 CLI-config-generation flows from upstream are dropped — this repo does not generate config.
@@ -37,7 +40,7 @@ After creating or editing content files, cross-reference every block against its
 
 ### Optional fields — common mistake
 
-Don't leave an optional field out of the structure `value` because "only some items use it." Every field that appears on any item must be in the value template with a sensible default (`""`, `false`, `0`, `[]`). Omitting it means:
+Don't leave an optional field out of the structure `value` because "only some items use it." Every field that appears on any item must be in the value template with a sensible default (`""`, `false`, `[]`, or the component's own default). Don't seed `0` for an optional number: nothing tells a placeholder `0` from a real zero. Omitting it means:
 
 - CloudCannon can't match an existing item that _does_ have the field to the structure
 - Editors can't add the field to new items from the sidebar
@@ -116,14 +119,14 @@ buttonSections:
 
 This repo uses **two unrelated icon vocabularies**, and confusing them is silent:
 
-| Key                                                           | Vocabulary                                                              | Where                                    |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------- |
-| `icon:` on a structure value, `preview`, or `picker_preview`  | **Material Symbols**, a fixed 3,584-name enum in the CloudCannon schema | Editor chrome — Add menu, cards, pickers |
-| an `iconName` / `icon` **input value** (`values: data.icons`) | **Heroicons**, SVGs in `src/icons/`                                     | Rendered on the page by the component    |
+| Key                                                           | Vocabulary                                    | Where                                    |
+| ------------------------------------------------------------- | --------------------------------------------- | ---------------------------------------- |
+| `icon:` on a structure value, `preview`, or `picker_preview`  | **Material Symbols**, a fixed 3,584-name list | Editor chrome — Add menu, cards, pickers |
+| an `iconName` / `icon` **input value** (`values: data.icons`) | **Heroicons**, SVGs in `src/icons/`           | Rendered on the page by the component    |
 
 The `icons` dataset (`.cloudcannon/data/icons.yml`) is **generated** — add or remove an SVG under `src/icons/` and run `npm run icons:sync` rather than editing the list by hand; `npm run icons:check` fails the build on drift.
 
-An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Heroicons names are kebab-case (`eye-slash`, `device-phone-mobile`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` now catches these.
+An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Heroicons names are kebab-case (`eye-slash`, `device-phone-mobile`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` catches a bad `icon:` anywhere: the schema validates a structure value's own `icon:`, and the script separately checks every literal icon under `preview` or `picker_preview`, which the schema types as any string.
 
 To find a valid name, query the enum rather than guessing — the schema is the only authority, and levenshtein "closest" suggestions are unhelpful at this enum size (`hero` → `eco`):
 
@@ -271,7 +274,7 @@ Every structure value must include a discriminator key so CloudCannon can match 
 
 ### Scoped `_inputs`
 
-Field-type config in a structure-value's `*.inputs.yml` is scoped to that component. Only include fields that need non-default types — strings, arrays, and objects work without explicit configuration.
+Field-type config in a structure-value's `*.inputs.yml` is scoped to that component. Give every field in the value an entry: type inference from the value is only a fallback, and an inferred type can't carry a comment, options or a label. An input key that names no field is ignored without error, so keep the inputs keys in step with the value keys; `npm run lint:cms` checks both against the `.astro` destructure.
 
 **Nested object inputs need preview icons too.** Object fields (e.g. `image`) show a generic icon in the data editor without explicit `type: object` + `options.preview.icon`:
 
@@ -293,13 +296,13 @@ _inputs:
 
 ### Field-to-YAML mapping
 
-| Prop type | YAML default                                     | Notes                                                                                                                                                                                          |
-| --------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| String    | bare key (`title:`)                              | Parses as `null`. Closed value sets (variants, sizes, alignment) → `type: select` (see [config-invalid-keys.md](config-invalid-keys.md#configure-variant--enum-like-fields-as-select-inputs)). |
-| Boolean   | `false`                                          |                                                                                                                                                                                                |
-| Number    | `0` or the component default (e.g. `columns: 3`) | Input must be `type: number`. If input is `type: text`, quote as string (`price: "29"`).                                                                                                       |
-| Array     | `[]`                                             |                                                                                                                                                                                                |
-| Object    | nested shape with empty fields                   | E.g. `image:\n  src:\n  alt:`. Gives CC the object's field structure.                                                                                                                          |
+| Prop type | YAML default                              | Notes                                                                                                                                                                                                                                                |
+| --------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| String    | bare key (`title:`)                       | Parses as `null`. Closed value sets (variants, sizes, alignment) → `type: select` (see [config-invalid-keys.md](config-invalid-keys.md#configure-variant--enum-like-fields-as-select-inputs)).                                                       |
+| Boolean   | `false`                                   |                                                                                                                                                                                                                                                      |
+| Number    | the component default (e.g. `columns: 3`) | Input must be `type: number`. If input is `type: text`, quote as string (`price: "29"`). For a genuinely optional number, omit the default rather than seeding `0`.                                                                                  |
+| Array     | `[]`                                      | An array of strings needs `items: { type: array }` plus `items[*]: { type: text }`, or a `multiselect` with `values: data.<name>`. Never `values: []`. An array of objects needs a structure (see [config-invalid-keys.md](config-invalid-keys.md)). |
+| Object    | nested shape with empty fields            | E.g. `image:\n  src:\n  alt:`. Gives CC the object's field structure.                                                                                                                                                                                |
 
 ### Fields to include vs exclude
 

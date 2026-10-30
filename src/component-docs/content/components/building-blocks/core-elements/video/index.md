@@ -1,6 +1,6 @@
 ---
 title: Video
-overview: A YouTube, Vimeo, or local video. YouTube and Vimeo load only after the visitor allows external media.
+overview: A YouTube, Vimeo, or local video. YouTube and Vimeo wait for the visitor's permission only if the site [asks before loading external media](/component-docs/components/navigation/consent/).
 
 examples:
   - slugs:

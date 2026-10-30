@@ -176,7 +176,7 @@ collections_config:
         _inputs:
           enabled:
             type: switch
-            comment: Enable the site-wide privacy settings control and consent workflow. When off, optional services remain blocked.
+            comment: Enable the site-wide privacy settings control and consent workflow. When off, analytics stays blocked.
           policyRevision:
             type: number
             comment: Increase this after a material change to optional services or this policy.
@@ -197,6 +197,10 @@ collections_config:
           honorGlobalPrivacyControl:
             type: switch
             comment: Respect a visitor's Global Privacy Control signal unless they explicitly grant a category.
+          externalMediaRequiresConsent:
+            type: switch
+            label: Ask before loading external media
+            comment: Ask before loading YouTube, Vimeo, maps, and other embeds. When off, they load straight away.
       analytics:
         name: Analytics
         path: .cloudcannon/schemas/analytics.json
@@ -292,6 +296,10 @@ data_config:
 
 _structures_from_glob:
   - /.cloudcannon/structures/*.cloudcannon.structures.yml
+markdown:
+  engine: commonmark
+  options:
+    escape_snippets_in_code_blocks: true
 _snippets_imports:
   mdx: true
 _snippets_from_glob:

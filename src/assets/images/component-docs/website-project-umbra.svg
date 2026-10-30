@@ -1,0 +1,73 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="umBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5ebe0"/>
+      <stop offset="1" stop-color="#fdf8f3"/>
+    </linearGradient>
+    <linearGradient id="umRoom" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e7c9a9"/>
+      <stop offset="1" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="umWindow" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bae6fd"/>
+      <stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+    <pattern id="umDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#e7d3bf" opacity=".7"/>
+    </pattern>
+    <clipPath id="umClip"><path d="m40 76h720v468a16 16 0 0 1 -16 16h-688a16 16 0 0 1 -16-16z"/></clipPath>
+    <clipPath id="umRoomClip"><rect x="420" y="130" width="300" height="260" rx="14"/></clipPath>
+    <filter id="umShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#431407" flood-opacity=".15"/>
+    </filter>
+    <filter id="umBar" x="-10%" y="-40%" width="120%" height="180%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#431407" flood-opacity=".14"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#umBg)"/>
+  <rect width="800" height="600" fill="url(#umDots)"/>
+
+  <g filter="url(#umShadow)"><rect x="40" y="40" width="720" height="520" rx="16" fill="#fff"/></g>
+  <circle cx="66" cy="58" r="5.5" fill="#f87171"/>
+  <circle cx="84" cy="58" r="5.5" fill="#facc15"/>
+  <circle cx="102" cy="58" r="5.5" fill="#4ade80"/>
+  <rect x="290" y="48" width="220" height="20" rx="10" fill="#f6f1ec"/>
+
+  <g clip-path="url(#umClip)">
+    <rect x="40" y="76" width="720" height="484" fill="#fdf8f3"/>
+    <path d="m72 98h20v18h-20z" fill="none" stroke="#7c2d12" stroke-width="3"/>
+    <rect x="100" y="102" width="70" height="10" rx="5" fill="#431407"/>
+    <rect x="530" y="103" width="44" height="8" rx="4" fill="#a8a29e"/>
+    <rect x="586" y="103" width="44" height="8" rx="4" fill="#a8a29e"/>
+    <rect x="644" y="94" width="84" height="26" rx="4" fill="#7c2d12"/>
+    <rect x="662" y="103" width="48" height="8" rx="4" fill="#fdf8f3"/>
+
+    <rect x="80" y="160" width="90" height="9" rx="4.5" fill="#c2410c" opacity=".7"/>
+    <rect x="80" y="182" width="300" height="30" rx="4" fill="#431407"/>
+    <rect x="80" y="222" width="240" height="30" rx="4" fill="#431407"/>
+    <rect x="80" y="270" width="290" height="10" rx="5" fill="#d6c4b4"/>
+    <rect x="80" y="290" width="250" height="10" rx="5" fill="#d6c4b4"/>
+    <rect x="80" y="318" width="130" height="12" rx="6" fill="#7c2d12" opacity=".2"/>
+    <path d="m80 334h130" stroke="#7c2d12" stroke-width="2"/>
+
+    <rect x="420" y="130" width="300" height="260" rx="14" fill="url(#umRoom)"/>
+    <g clip-path="url(#umRoomClip)">
+      <rect x="470" y="160" width="120" height="140" rx="60" fill="url(#umWindow)"/>
+      <path d="m530 160v140m-60-70h120" stroke="#fdf8f3" stroke-width="4"/>
+      <rect x="440" y="320" width="260" height="70" rx="10" fill="#fdf8f3" opacity=".9"/>
+      <rect x="460" y="300" width="80" height="34" rx="10" fill="#fff"/>
+      <rect x="560" y="300" width="80" height="34" rx="10" fill="#fff"/>
+      <circle cx="680" cy="200" r="22" fill="#fef3c7" opacity=".9"/>
+    </g>
+
+    <g filter="url(#umBar)"><rect x="80" y="420" width="640" height="80" rx="12" fill="#fff"/></g>
+    <rect x="100" y="440" width="50" height="8" rx="4" fill="#a8a29e"/>
+    <rect x="100" y="456" width="130" height="24" rx="6" fill="#fdf8f3" stroke="#e7d3bf"/>
+    <rect x="250" y="440" width="50" height="8" rx="4" fill="#a8a29e"/>
+    <rect x="250" y="456" width="130" height="24" rx="6" fill="#fdf8f3" stroke="#e7d3bf"/>
+    <rect x="400" y="440" width="50" height="8" rx="4" fill="#a8a29e"/>
+    <rect x="400" y="456" width="130" height="24" rx="6" fill="#fdf8f3" stroke="#e7d3bf"/>
+    <rect x="556" y="440" width="144" height="40" rx="6" fill="#7c2d12"/>
+    <rect x="590" y="456" width="76" height="9" rx="4.5" fill="#fdf8f3"/>
+  </g>
+</svg>

@@ -5,212 +5,115 @@ contentSections: []
 
 # Editing the Blog
 
-The starter ships with a fully working blog: a paginated index page, individual post pages, and tag filtering. Blog posts are MDX files, which means you get standard Markdown plus the ability to embed any component from the starter directly in your content.
+> **Reference.** Read this when you're working on the blog. If your site has no blog, skip ahead to [Going Live](/component-docs/going-live/).
 
-## Blog structure overview
+The starter ships a working blog: a paginated listing, a page per post, and a page per tag. Posts are MDX files, so you write Markdown and can drop in components where a post needs one.
+
+## Where things live
 
 ```
 src/
 ├── content/
-│   ├── blog/                        # Blog posts (MDX files)
-│   │   ├── 2025-10-15-my-post.mdx
-│   │   └── 2025-12-31-another-post.mdx
+│   ├── blog/                        # Posts, one MDX file each
 │   └── pages/
-│       └── blog.md                  # Shared blog content (hero, title, description)
+│       └── blog.md                  # The listing's heading and metadata
 └── pages/blog/
-    ├── [...page].astro              # Blog index page template
-    ├── [...slug].astro              # Individual post page template
-    └── tag/[tag]/[...page].astro    # Tag filter page template
+    ├── [...page].astro              # Listing template
+    ├── [...slug].astro              # Post template
+    └── tag/[tag]/[...page].astro    # Tag listing template
 ```
 
-There are three things you might want to edit:
+## The listing page
 
-1. **Blog content** (`src/content/pages/blog.md`) — the hero section and metadata shared across the blog index and tag pages
-2. **Individual blog posts** (`src/content/blog/`) — the MDX files that become articles
-3. **Page templates** (`src/pages/blog/`) — the Astro files that control the layout and structure of the blog index, post pages, and tag pages
-
-## Editing the blog content
-
-The blog content file at `src/content/pages/blog.md` controls the hero and metadata shown above the post grid. This content is shared across both the blog index page (`/blog/`) and the tag filter pages (`/blog/tag/{tag}/`).
+`src/content/pages/blog.md` sets what appears above the post grid, on `/blog/` and on every tag page:
 
 ```yaml
 ---
 _schema: default
 title: Blog
-description: Read our latest articles and insights.
+description: Articles on web development, design, and shipping sites.
 pageSections:
-  - _component: page-sections/heroes/hero-center
-    heading: All posts
-    subtext: >-
-      Description text for the blog index.
-    buttonSections: []
-    colorScheme: inherit
-    backgroundColor: base
+  - _component: page-sections/heroes/page-header
+    eyebrow: Example
+    heading: Blog
+    subtext: Example listing page. Copy it as a starting point.
+    showBreadcrumbs: true
+    alignmentHorizontal: center
 ---
 ```
 
-### What you can change
+`title` and `description` become the page's `<title>` and meta description. `pageSections` works like any other page: swap the header for a hero, or add sections above the grid. The grid itself comes after your sections, 12 posts to a page. In CloudCannon, open **Pages → Blog**.
 
-- **Title and description**: Used for the page's `<title>` tag and meta description.
-- **Hero section**: Swap `hero-center` for `hero-split` or any other hero component. Change the heading, subtext, color scheme, or add buttons.
-- **Add more sections**: Add additional entries to `pageSections` to place content above the post grid. Any page section component works here (CTAs, feature blocks, etc.).
+To change the grid, the post layout or the tag pages, edit the templates in `src/pages/blog/`. They're ordinary Astro files.
 
-The post grid itself is rendered automatically below your `pageSections`. It shows 9 posts per page with pagination.
+## Creating a post
 
-### In CloudCannon
-
-Open **Pages → Blog** in CloudCannon to edit the blog content visually. You can click the hero heading to edit it inline, change section settings in the sidebar, or add new sections above the post grid.
-
-## Customizing the blog page templates
-
-The content in `blog.md` controls what appears above the post grid, but the actual page layout and structure is defined in Astro template files. To change how the post list or individual posts are rendered, edit these files directly:
-
-| Template                                   | URL pattern                | What it controls                                            |
-| ------------------------------------------ | -------------------------- | ----------------------------------------------------------- |
-| `src/pages/blog/[...page].astro`           | `/blog/`, `/blog/2/`, etc. | Blog index page layout, post grid, pagination               |
-| `src/pages/blog/[...slug].astro`           | `/blog/my-post/`           | Individual post page layout (title, metadata, content area) |
-| `src/pages/blog/tag/[tag]/[...page].astro` | `/blog/tag/design/`        | Tag filter pages                                            |
-
-These are standard Astro components, so you can use any of the starter's components inside them. For example, you could add a `CustomSection` wrapper, change the post metadata layout, or add a sidebar.
-
-## Creating a blog post
-
-Create a new `.mdx` file in `src/content/blog/`. The filename becomes the URL slug:
-
-| File                        | URL                            |
-| --------------------------- | ------------------------------ |
-| `my-first-post.mdx`         | `/blog/my-first-post/`         |
-| `2025-10-15-launch-day.mdx` | `/blog/2025-10-15-launch-day/` |
-
-### Frontmatter
-
-Every post starts with frontmatter that defines its metadata:
+Add an `.mdx` file to `src/content/blog/`. Its filename is its URL: `launch-day.mdx` becomes `/blog/launch-day/`.
 
 ```yaml
 ---
 _schema: default
 title: Your Post Title
-description: A brief summary shown on the blog index cards.
-date: 2025-10-15T00:00:00Z
+description: A short summary for the listing card and search engines.
+date: 2026-10-15
 author: Your Name
 image: /src/assets/images/blog/featured-image.jpg
 tags:
   - Design
-  - Development
 ---
 ```
 
-| Field         | Required | What it does                                                                           |
-| ------------- | -------- | -------------------------------------------------------------------------------------- |
-| `title`       | Yes      | Post title, shown as an h1 on the post page and as the card heading on the blog index. |
-| `description` | Yes      | Summary text shown below the title and on blog index cards.                            |
-| `date`        | Yes      | Publication date. Posts are sorted newest-first. Use ISO format or `YYYY-MM-DD`.       |
-| `author`      | No       | Author name displayed next to the date. Defaults to "Anonymous".                       |
-| `image`       | No       | Featured image shown at the top of the post and on the blog index card.                |
-| `tags`        | No       | Array of tags. Each tag gets its own filtered page at `/blog/tag/{tag-slug}/`.         |
+| Field         | Required | What it does                                                           |
+| ------------- | -------- | ---------------------------------------------------------------------- |
+| `title`       | Yes      | The post's heading, and the card heading on the listing.               |
+| `description` | Yes      | Summary under the title and on the card.                               |
+| `date`        | Yes      | Publication date. Posts are listed newest first.                       |
+| `author`      | No       | Shown next to the date. Defaults to "Anonymous".                       |
+| `image`       | No       | Featured image at the top of the post and on its card.                 |
+| `tags`        | No       | Each tag gets a listing at `/blog/tag/{tag}/` and links from the post. |
+| `keywords`    | No       | Extra search-engine keywords.                                          |
 
-### In CloudCannon
+In CloudCannon, use **Add New Blog Post** in the blog collection.
 
-Click **Add New Blog Post** in the blog collection to create a post from the schema template. CloudCannon will prompt you for the filename and populate the frontmatter fields with an editing interface.
+## Components in a post
 
-## Writing post content
-
-After the frontmatter, write standard Markdown:
-
-```markdown
-This is a paragraph with **bold** and _italic_ text.
-
-## A Heading
-
-Another paragraph with a [link](/about/).
-
-- List item one
-- List item two
-
-> A blockquote
-```
-
-### Using components in posts
-
-This is what makes MDX powerful: you can embed any building block or page section component directly in your post content. Components are available by their PascalCase filename — no imports needed.
-
-**Important:** Each component must be written on a single line.
+After the frontmatter, write Markdown. Where a post needs more, use a component by its filename, with no import:
 
 ```mdx
-Here's a testimonial in the middle of a blog post:
+Here's what a client said:
 
 <TestimonialSection
   text="This starter is exactly what we needed."
   authorName="Jane Doe"
   authorDescription="CEO, Company"
-  authorImage="/src/assets/images/team/jane.jpg"
-  paddingVertical="sm"
   class="wide"
 />
-
-And a call-to-action section:
 
 <CtaCenter
   heading="Ready to start?"
   subtext="Take the next step today."
   buttonSections={[
-    {
-      _component: 'building-blocks/core-elements/button',
-      text: 'Get Started',
-      variant: 'primary',
-      size: 'md',
-      link: '/',
-    },
+    { _component: 'building-blocks/core-elements/button', text: 'Get started', link: '/start/' },
   ]}
   colorScheme="dark"
-  backgroundColor="base"
-  rounded={true}
   class="wide"
 />
 ```
 
-The component name matches the `.astro` filename: `TestimonialSection.astro` becomes `<TestimonialSection />`, `CtaCenter.astro` becomes `<CtaCenter />`, `Image.astro` becomes `<Image />`.
+Props use JSX syntax: `heading="Hello"` for text, `columns={3}` for numbers, `{true}` or `{false}` for booleans, and `{[...]}` for arrays.
 
-### Full-width components
+Use only components that have a **snippet**, so editors can change them in CloudCannon's content editor (the **+** button in the toolbar opens a form for each). These ship with one: Alert, Code Block, CTA Center, CTA Form, CTA Split, Embed, FAQ Section, Feature Grid, Feature Slider, Feature Split, Form, Image, Team Grid, Testimonial Section and Video. Any other component shows up as a locked block in the editor, and `npm run lint:cms` fails on it. To add one, see the blog-mdx-content skill in `.agents/skills/`.
 
-Blog content is centered in a `70ch` column. To make a component span the full width of the article (the area beside the table of contents, when it's showing), add `class="wide"`:
+### Wide components
+
+Post text sits in a `70ch` column. Add `class="wide"` to let a component use the full width of the article:
 
 ```mdx
 <Image source="/src/assets/images/banner.jpg" alt="Banner" class="wide" />
 ```
 
-Code blocks (`<pre>`), images (`.image`), and videos (`.video`) are automatically full-width.
-
-### Prop syntax
-
-MDX uses JSX syntax for component props:
-
-| Type         | Syntax                           | Example                                                   |
-| ------------ | -------------------------------- | --------------------------------------------------------- |
-| String       | `prop="value"`                   | `heading="Hello"`                                         |
-| Boolean      | `prop={true}` or just `prop`     | `rounded={true}` or `rounded`                             |
-| Number       | `prop={42}`                      | `columns={3}`                                             |
-| Array/Object | `prop={[...]}` or `prop={{...}}` | `buttonSections={[{ _component: '...', text: 'Click' }]}` |
-
-### In CloudCannon
-
-When editing a blog post in CloudCannon's content editor, you can insert components using the **snippet picker** (the "+" button in the toolbar). This gives you a visual form for each component's props without needing to write JSX. The snippet system converts back and forth between the visual form and the MDX code automatically.
-
-## Post card display
-
-Each post appears on the blog index as a card showing:
-
-- Featured image (if set)
-- Date and author
-- Title
-- Description
-
-To control how a post looks on the index, update its `title`, `description`, `image`, and `date` frontmatter fields.
-
-## Tags
-
-Tags create filtered views of your posts. If a post has `tags: ["Design", "Development"]`, it will appear on both `/blog/tag/design/` and `/blog/tag/development/`. Tags are also displayed on the individual post page and link to their filtered view.
+Code blocks, images and videos are wide automatically.
 
 ## Next up
 
-Now that you know how the blog works, let's make the starter look like your brand. Head to [Customizing Your Brand](/component-docs/customizing-your-brand/) to update colors, fonts, and spacing across your entire site.
+Head to [Going Live](/component-docs/going-live/) to deploy the site, point it at your domain, and clear out the demo content.

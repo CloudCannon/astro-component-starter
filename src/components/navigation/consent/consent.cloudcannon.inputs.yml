@@ -9,7 +9,7 @@ privacy._schema:
   comment: Internal schema discriminator. Keep this set to privacy.
 privacy.enabled:
   type: switch
-  comment: Enable the privacy controls. Optional services remain blocked when this is off.
+  comment: Enable the privacy controls. Analytics stays blocked when this is off.
 privacy.policyRevision:
   type: number
   comment: Increase after a material change so visitors are asked to choose again.
@@ -49,6 +49,10 @@ privacy.externalMediaDescription:
 privacy.honorGlobalPrivacyControl:
   type: switch
   comment: Treats a browser Global Privacy Control signal as a decline.
+privacy.externalMediaRequiresConsent:
+  type: switch
+  label: Ask before loading external media
+  comment: Ask before loading third-party videos, maps, and embeds. When off, they load straight away.
 analytics:
   type: object
   comment: Analytics integration. Real pages use the site's Analytics settings.

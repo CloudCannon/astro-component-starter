@@ -77,11 +77,11 @@ description: <when-to-use trigger — used for skill matching, so lead with the 
 
 **Why:** "looks right" is not done. The starter has real validators — a skill that doesn't point the agent at them ships broken config.
 
-| Command                       | Include when                                                          | What to look for                                                   |
-| ----------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| `npm run check`               | Always. Runs lint + format + `astro check` + previews & skills drift. | Exit 0. No lint/type errors, no skills drift.                      |
-| `npm run previews:build`      | The skill adds or changes a component's `*.preview.mjs` recipe.       | New/updated SVG in `public/component-previews/`, no build errors.  |
-| `npm run dev` + Visual Editor | The skill wires editable regions or structures.                       | Field edits live-update; no "Component not found" console warning. |
+| Command                          | Include when                                                          | What to look for                                                   |
+| -------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `npm run check`                  | Always. Runs lint + format + `astro check` + previews & skills drift. | Exit 0. No lint/type errors, no skills drift.                      |
+| `npm run previews:build`         | The skill adds or changes a component's `*.preview.mjs` recipe.       | New/updated SVG in `public/component-previews/`, no build errors.  |
+| `npm run editor` (Visual Editor) | The skill wires editable regions or structures.                       | Field edits live-update; no "Component not found" console warning. |
 
 Give exact commands, not "run the checks." Name the file or output the agent should inspect.
 

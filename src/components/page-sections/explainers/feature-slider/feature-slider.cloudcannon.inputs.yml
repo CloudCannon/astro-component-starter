@@ -4,6 +4,18 @@ slides:
   comment: Structured feature slides rendered inside the carousel.
   options:
     structures: _structures.featureSlides
+imageAspectRatio:
+  type: select
+  label: Image aspect ratio
+  comment: Shape of every slide's image. Use landscape for screenshots and wide artwork.
+  options:
+    values:
+      - id: portrait
+        name: Portrait
+      - id: square
+        name: Square
+      - id: landscape
+        name: Landscape
 
 # --- section wrapper inputs (CustomSection) ---
 # `new:component` and `docs:catalog` match the marker line above verbatim; keep it.

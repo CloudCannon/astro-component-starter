@@ -179,7 +179,7 @@ Follow the [debug-cloudcannon playbook](../debug-cloudcannon/SKILL.md) for the f
 
 ## Verify your work
 
-| Command                       | What to look for                                                                                                                        |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run check`               | Exit 0 — no lint/type errors, no skills drift.                                                                                          |
-| `npm run dev` + Visual Editor | The element is selectable; editing it live-updates the field; array items add/remove/reorder; no "Component not found" console warning. |
+| Command                          | What to look for                                                                                                                        |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run check`                  | Exit 0 — no lint/type errors, no skills drift.                                                                                          |
+| `npm run editor` (Visual Editor) | The element is selectable; editing it live-updates the field; array items add/remove/reorder; no "Component not found" console warning. |

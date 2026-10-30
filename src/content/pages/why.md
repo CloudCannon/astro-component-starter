@@ -5,19 +5,9 @@ description: >-
   Why this Astro component starter was built, and how it helps teams ship fast,
   editable static sites.
 pageSections:
-  - _component: page-sections/heroes/page-header
-    eyebrow: ''
-    heading: Why this starter exists
-    subtext: >-
-      Foundations for Astro components that output static HTML and CSS — unbranded,
-      adaptable, and ready for visual editing.
-    showBreadcrumbs: true
-    alignmentHorizontal: start
-    colorScheme: inherit
-    backgroundColor: base
   - _component: page-sections/heroes/hero-split
-    headingLevel: h2
-    eyebrow: Built at CloudCannon
+    headingLevel: h1
+    eyebrow: Why this starter exists
     heading: For teams who ship real client sites
     subtext: >-
       At CloudCannon, we're big fans of the static web. And we love what the
@@ -26,7 +16,7 @@ pageSections:
 
       As more [partner agencies](https://cloudcannon.com/partner-program/)
       build client sites with CloudCannon, we wanted foundations for Astro
-      components that output static HTML and CSS — the fastest delivery
+      components that output static HTML and CSS for the fastest delivery
       possible, all unbranded and adaptable for any project.
     imageSource: /src/assets/images/component-docs/sunset.jpg
     imageAlt: Coastal cliffs at dusk
@@ -101,27 +91,33 @@ pageSections:
     subtext: The public releases, not a fictional company story.
     layout: vertical
     entries:
-      - year: ''
-        date: '2025'
+      - year: '2025'
+        date: October
         title: First public starter
         body: >-
           CloudCannon published an Astro component starter for partner agencies
-          building client sites — unbranded, static, and visually editable.
+          building client sites: unbranded, static, and visually editable.
       - year: '2026'
         date: March
-        title: '1.0'
+        title: 1.0 and 1.0.1
         body: >-
-          Theme toggle, blog tags, shared section chrome, and the component
-          patterns the 1.x sites still run on.
+          The first versioned release: the component library, its CloudCannon
+          editing setup, and docs for every component. 1.0.1 followed the same
+          month with Bento Box, Modal, and font setup in a single file.
       - year: '2026'
-        date: August
+        date: April
+        title: 1.0.2
+        body: >-
+          Light and dark themes, blog tags, page transitions, Video Modal, Image
+          Carousel, and a custom 404 page.
+      - year: '2026'
+        date: October
         title: '2.0'
         body: >-
-          A browsable reference for every component, a gallery and builder, and
-          a much larger library of page sections — stats, steps, pricing,
-          galleries, and more.
+          A browsable reference for every component, site search, privacy and
+          consent, share cards, and a much larger library of page sections.
     colorScheme: inherit
-    backgroundColor: surface
+    backgroundColor: base
   - _component: page-sections/builders/custom-section
     label: Scroll stepper demo
     contentSections:
@@ -131,8 +127,10 @@ pageSections:
           - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
             mediaSections:
               - _component: building-blocks/core-elements/image
-                source: /src/assets/images/component-docs/castle.jpg
-                alt: A stone castle on a hillside
+                source: /src/assets/images/component-docs/website-step-build.svg
+                alt: >-
+                  A page open in the editor, with its heading being edited in place
+                  under a formatting toolbar and a slot below for adding a section
                 rounded: true
                 aspectRatio: landscape
             contentSections:
@@ -148,8 +146,11 @@ pageSections:
           - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
             mediaSections:
               - _component: building-blocks/core-elements/image
-                source: /src/assets/images/component-docs/dunedin-cliff.jpg
-                alt: Sea cliffs above a bay
+                source: /src/assets/images/component-docs/website-step-brand.svg
+                alt: >-
+                  A theme panel with brand colors, a typeface, and corner radius
+                  beside a page preview in the new purple brand, shared with three
+                  reviewers
                 rounded: true
                 aspectRatio: landscape
             contentSections:
@@ -165,8 +166,10 @@ pageSections:
           - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
             mediaSections:
               - _component: building-blocks/core-elements/image
-                source: /src/assets/images/component-docs/sheep.jpg
-                alt: Sheep grazing on a green hillside
+                source: /src/assets/images/component-docs/website-step-publish.svg
+                alt: >-
+                  The live site in a browser beside an approved review, with a
+                  confirmation that the page is published
                 rounded: true
                 aspectRatio: landscape
             contentSections:
@@ -190,7 +193,7 @@ pageSections:
     paddingHorizontal: lg
     paddingVertical: 4xl
     colorScheme: inherit
-    backgroundColor: base
+    backgroundColor: surface
     rounded: false
   - _component: page-sections/builders/custom-section
     label: ''
@@ -207,109 +210,78 @@ pageSections:
         text: Four pieces. Nothing hiding behind a private package.
         alignmentHorizontal: center
         size: md
-      - _component: building-blocks/wrappers/bento-box
+      - _component: building-blocks/wrappers/card-grid
         label: ''
-        columns: '2'
-        minRowHeight: 150
-        gap: md
+        layout: grid
+        columns: 2
+        gap: lg
+        aspectRatio: none
         items:
-          - colSpan: '1'
-            rowSpan: '1'
+          - image: ''
+            imageAlt: ''
+            link: ''
             contentSections:
-              - _component: building-blocks/core-elements/icon
-                name: pencil
-                size: lg
-                color: purple
-                background: true
-                alignmentHorizontal: start
               - _component: building-blocks/core-elements/heading
                 text: Visual editing
                 level: h3
-                size: xs
-                alignmentHorizontal: start
-                iconName:
-                iconColor: default
+                size: md
+                iconName: pencil
+                iconColor: purple
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text
                 text: >-
-                  Every component ships its CloudCannon schema beside it. Add a
-                  section and it appears in the editor.
-                alignmentHorizontal: start
-                size: sm
-          - colSpan: '1'
-            rowSpan: '1'
+                  Every component ships its CloudCannon schema beside it. Add a section and it appears in the editor.
+                size: md
+          - image: ''
+            imageAlt: ''
+            link: ''
             contentSections:
-              - _component: building-blocks/core-elements/icon
-                name: paint-brush
-                size: lg
-                color: pink
-                background: true
-                alignmentHorizontal: start
               - _component: building-blocks/core-elements/heading
                 text: Design tokens
                 level: h3
-                size: xs
-                alignmentHorizontal: start
-                iconName:
-                iconColor: default
+                size: md
+                iconName: paint-brush
+                iconColor: pink
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text
                 text: >-
-                  Colors, type, spacing, and radius live in token files. Rebrand
-                  without fighting component CSS.
-                alignmentHorizontal: start
-                size: sm
-          - colSpan: '1'
-            rowSpan: '1'
+                  Colors, type, spacing, and radius live in token files. Rebrand without fighting component CSS.
+                size: md
+          - image: ''
+            imageAlt: ''
+            link: ''
             contentSections:
-              - _component: building-blocks/core-elements/icon
-                name: bolt
-                size: lg
-                color: yellow
-                background: true
-                alignmentHorizontal: start
               - _component: building-blocks/core-elements/heading
                 text: Static output
                 level: h3
-                size: xs
-                alignmentHorizontal: start
-                iconName:
-                iconColor: default
+                size: md
+                iconName: bolt
+                iconColor: yellow
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text
                 text: >-
-                  Pages render to HTML and CSS. JavaScript only when CSS can't
-                  do the job.
-                alignmentHorizontal: start
-                size: sm
-          - colSpan: '1'
-            rowSpan: '1'
+                  Pages render to HTML and CSS. JavaScript only when CSS can't do the job.
+                size: md
+          - image: ''
+            imageAlt: ''
+            link: ''
             contentSections:
-              - _component: building-blocks/core-elements/icon
-                name: cube
-                size: lg
-                color: blue
-                background: true
-                alignmentHorizontal: start
               - _component: building-blocks/core-elements/heading
                 text: Agent skills
                 level: h3
-                size: xs
-                alignmentHorizontal: start
-                iconName:
-                iconColor: default
+                size: md
+                iconName: cube
+                iconColor: blue
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text
                 text: >-
-                  Playbooks in `.agents/skills/` for creating components,
-                  retheming, and migrating a site.
-                alignmentHorizontal: start
-                size: sm
+                  Playbooks in `.agents/skills/` for creating components, retheming, and migrating a site.
+                size: md
     maxContentWidth: 2xl
     paddingHorizontal: lg
     paddingVertical: 4xl
-    colorScheme: inherit
-    backgroundColor: base
+    colorScheme: dark
+    backgroundColor: surface
     rounded: false
   - _component: page-sections/explainers/faq-section
     heading: Frequently asked questions
@@ -327,7 +299,7 @@ pageSections:
           - _component: building-blocks/core-elements/text
             text: >-
               No. The site is plain Astro. CloudCannon is how editors work
-              visually — every component is born with that schema, so you don't
+              visually. Every component is born with that schema, so you don't
               add it later.
             size: md
       - title: Can I delete components I don't need?

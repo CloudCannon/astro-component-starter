@@ -1,0 +1,87 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vxBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dcfce7"/>
+      <stop offset="1" stop-color="#f7fee7"/>
+    </linearGradient>
+    <linearGradient id="vxMap" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ecfccb"/>
+      <stop offset="1" stop-color="#d9f99d"/>
+    </linearGradient>
+    <pattern id="vxDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#bbf7d0" opacity=".7"/>
+    </pattern>
+    <clipPath id="vxClip"><path d="m40 76h720v468a16 16 0 0 1 -16 16h-688a16 16 0 0 1 -16-16z"/></clipPath>
+    <clipPath id="vxMapClip"><rect x="380" y="186" width="348" height="346" rx="12"/></clipPath>
+    <filter id="vxShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#14532d" flood-opacity=".15"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#vxBg)"/>
+  <rect width="800" height="600" fill="url(#vxDots)"/>
+
+  <g filter="url(#vxShadow)"><rect x="40" y="40" width="720" height="520" rx="16" fill="#fff"/></g>
+  <circle cx="66" cy="58" r="5.5" fill="#f87171"/>
+  <circle cx="84" cy="58" r="5.5" fill="#facc15"/>
+  <circle cx="102" cy="58" r="5.5" fill="#4ade80"/>
+  <rect x="290" y="48" width="220" height="20" rx="10" fill="#f2f7f2"/>
+
+  <g clip-path="url(#vxClip)">
+    <rect x="40" y="76" width="720" height="484" fill="#fff"/>
+    <path d="m72 116 12-20 12 20z" fill="#16a34a"/>
+    <rect x="104" y="102" width="80" height="10" rx="5" fill="#14532d"/>
+    <rect x="540" y="103" width="44" height="8" rx="4" fill="#86a08e"/>
+    <rect x="596" y="103" width="44" height="8" rx="4" fill="#86a08e"/>
+    <rect x="652" y="94" width="76" height="26" rx="13" fill="#16a34a"/>
+    <rect x="668" y="103" width="44" height="8" rx="4" fill="#fff"/>
+
+    <rect x="72" y="138" width="656" height="34" rx="17" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="2"/>
+    <circle cx="96" cy="155" r="7" fill="none" stroke="#16a34a" stroke-width="2.4"/>
+    <path d="m101 160 5 5" stroke="#16a34a" stroke-width="2.4" stroke-linecap="round"/>
+    <rect x="116" y="151" width="180" height="8" rx="4" fill="#86a08e"/>
+
+    <rect x="72" y="186" width="60" height="22" rx="11" fill="#16a34a"/>
+    <rect x="140" y="186" width="70" height="22" rx="11" fill="#fff" stroke="#bbf7d0" stroke-width="2"/>
+    <rect x="218" y="186" width="56" height="22" rx="11" fill="#fff" stroke="#bbf7d0" stroke-width="2"/>
+    <rect x="282" y="186" width="74" height="22" rx="11" fill="#fff" stroke="#bbf7d0" stroke-width="2"/>
+
+    <g>
+      <rect x="72" y="224" width="284" height="92" rx="12" fill="#fff" stroke="#dcfce7" stroke-width="2"/>
+      <circle cx="108" cy="270" r="22" fill="#bbf7d0"/>
+      <path d="m98 276c4-14 16-14 20 0" fill="#16a34a"/>
+      <rect x="142" y="250" width="140" height="10" rx="5" fill="#14532d"/>
+      <rect x="142" y="268" width="96" height="8" rx="4" fill="#86a08e"/>
+      <rect x="142" y="286" width="56" height="16" rx="8" fill="#f0fdf4"/>
+      <rect x="72" y="328" width="284" height="92" rx="12" fill="#fff" stroke="#dcfce7" stroke-width="2"/>
+      <circle cx="108" cy="374" r="22" fill="#fef08a"/>
+      <path d="m98 380c4-14 16-14 20 0" fill="#ca8a04"/>
+      <rect x="142" y="354" width="120" height="10" rx="5" fill="#14532d"/>
+      <rect x="142" y="372" width="110" height="8" rx="4" fill="#86a08e"/>
+      <rect x="142" y="390" width="56" height="16" rx="8" fill="#f0fdf4"/>
+      <rect x="72" y="432" width="284" height="92" rx="12" fill="#fff" stroke="#dcfce7" stroke-width="2"/>
+      <circle cx="108" cy="478" r="22" fill="#fed7aa"/>
+      <path d="m98 484c4-14 16-14 20 0" fill="#ea580c"/>
+      <rect x="142" y="458" width="150" height="10" rx="5" fill="#14532d"/>
+      <rect x="142" y="476" width="80" height="8" rx="4" fill="#86a08e"/>
+      <rect x="142" y="494" width="56" height="16" rx="8" fill="#f0fdf4"/>
+    </g>
+
+    <rect x="380" y="186" width="348" height="346" rx="12" fill="url(#vxMap)"/>
+    <g clip-path="url(#vxMapClip)">
+      <path d="m380 300c60-30 110 20 170-10s120-60 178-20v60c-60-30-110 10-170 30s-120 10-178-20z" fill="#bef264" opacity=".8"/>
+      <path d="m380 440c70-40 140 0 200-20s100-30 148-10v130h-348z" fill="#a3e635" opacity=".6"/>
+      <path d="m460 186c10 80-30 160 10 240s-10 80 0 106" stroke="#fff" stroke-width="6" fill="none" opacity=".8"/>
+      <path d="m380 380c100 10 200-30 348 0" stroke="#fff" stroke-width="5" fill="none" opacity=".7"/>
+    </g>
+    <g>
+      <path d="m520 262a14 14 0 1 1 28 0c0 12-14 24-14 24s-14-12-14-24z" fill="#16a34a"/>
+      <circle cx="534" cy="262" r="5" fill="#fff"/>
+      <path d="m620 346a14 14 0 1 1 28 0c0 12-14 24-14 24s-14-12-14-24z" fill="#ca8a04"/>
+      <circle cx="634" cy="346" r="5" fill="#fff"/>
+      <path d="m470 420a14 14 0 1 1 28 0c0 12-14 24-14 24s-14-12-14-24z" fill="#ea580c"/>
+      <circle cx="484" cy="420" r="5" fill="#fff"/>
+      <path d="m650 452a14 14 0 1 1 28 0c0 12-14 24-14 24s-14-12-14-24z" fill="#16a34a"/>
+      <circle cx="664" cy="452" r="5" fill="#fff"/>
+    </g>
+  </g>
+</svg>

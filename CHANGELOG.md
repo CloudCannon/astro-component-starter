@@ -20,12 +20,13 @@ change how things look, and every page section moves to a new path.
 - `npm run reset:starter` clears the demo content out of a fresh copy and sets your site name and URL. `--dry-run` shows the plan first, and it only runs on a clean git tree.
 - `npm run check:placeholders` warns when starter placeholders are still in place, most importantly the `example.com` URL.
 - Guides: `docs/DEPLOYMENT.md` for going live on CloudCannon, and `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and `docs/ARCHITECTURE.md` for people and AI agents working on the project.
+- The Getting Started guides follow the order you'd build a site in: Project Tour, Editing a Page, Customizing Your Brand, Building a Page Section, Editing the Blog, and a new **Going Live** guide. How Visual Editing Works is now part of Building a Page Section, and its old URL redirects there. The Get Started page matches, with a section on working with an AI agent.
 - A `LICENSE` file (MIT), and recorded provenance for the icon set in `src/icons/README.md`.
 
 #### Privacy and consent
 
-- A site-wide privacy and consent workflow, edited in CloudCannon's **Privacy & Consent** and **Analytics** data panels. It is strict opt-in: analytics and external media stay off until the visitor allows them, and stay off when the workflow is disabled. The banner gives Accept All, Reject All and Customize equal weight, the settings dialog has a switch per optional category and opens fullscreen on phones, and the footer's **Privacy settings** link reopens it. A browser's Global Privacy Control signal counts as a decline.
-- Hosted video, maps and embeds wait for external-media approval, provider URLs are limited to known embed paths, and YouTube uses Privacy Enhanced Mode.
+- A site-wide privacy and consent workflow, edited in CloudCannon's **Privacy & Consent** and **Analytics** data panels. Analytics is strict opt-in: it stays off until the visitor allows it, and stays off when the workflow is disabled. The banner gives Accept All, Reject All and Customize equal weight, the settings dialog has a switch per optional category and opens fullscreen on phones, and the footer's **Privacy settings** link reopens it whenever there is a category to choose. A browser's Global Privacy Control signal counts as a decline.
+- Hosted video, maps and embeds load straight away by default. Turn on **Ask before loading external media** (`externalMediaRequiresConsent` in `privacy.json`) and they wait for the visitor's approval instead; sites with EU or UK visitors should. Provider URLs are limited to known embed paths, and YouTube uses Privacy Enhanced Mode.
 - A default privacy policy at `src/content/pages/privacy.md`, a plain markdown page to rewrite for your site, and a Plausible analytics integration.
 
 #### A reference site for every component
@@ -47,23 +48,23 @@ change how things look, and every page section moves to a new path.
 Most of these catch problems that used to build cleanly while leaving the site
 quietly broken in the editor.
 
-- `npm run lint:cms` checks the editor configuration and page content against the components: renamed or missing props, missing files, and scripted components that would be dead in the editor.
+- `npm run lint:cms` checks the editor configuration and page content against the components: renamed or missing props, missing files, scripted components that would be dead in the editor, page frontmatter that isn't valid YAML, and blog posts that use a component with no snippet (which the content editor can't edit).
 - `npm run lint:roots` fails on prop-driven attributes on a component's root element, which go stale when the editor re-renders.
-- `npm run lint:schema` checks the editor configuration against CloudCannon's own schema.
+- `npm run lint:schema` checks the editor configuration against CloudCannon's own schema, plus the Add-menu preview icons the schema itself doesn't check.
 - `npm run lint:css-vars` checks that every design token you use exists. A mistyped token fails silently otherwise.
 - `npm run icons:sync` and `icons:check` keep the icon picker in step with the icon files.
 - `npm run previews:check` catches a missing or stale preview thumbnail, and `npm run previews:montage` renders them all on one sheet.
 - `npm run docs:check` checks the documentation against the components.
 - Tests: `test:unit`, `test:render` (every component builds), `test:smoke` (a real browser over the built site) and `test:css-parity` (per-page CSS pruning changes no computed style).
 - `npm run check:quick` runs the three fastest, most useful checks while you work. `npm run check` is what a finished change has to pass.
-- `npm run editor` serves the real CloudCannon editor locally against `dist/`, and `npm run new:component` scaffolds a new component.
+- `npm run editor` serves the real CloudCannon editor locally against `dist/` (it pins the CloudCannon CLI and stops early on Node below 24, which the CLI needs), and `npm run new:component` scaffolds a new component.
 - A build fails if two components share a filename, since MDX addresses components by bare filename.
 - VS Code autocomplete for the CloudCannon config and the design tokens.
 - CI runs every check, including CSS parity and a blocking `npm audit`. Actions are pinned to commit SHAs, the workflow token is read-only, and Dependabot opens grouped weekly updates.
 
 #### New page sections
 
-- **Page Header:** a slim title block for inner pages, with an optional eyebrow, intro and a breadcrumb trail from the URL.
+- **Page Header:** a slim title block for inner pages, with an optional eyebrow, intro and, on nested pages, a breadcrumb trail from the URL.
 - **Stats:** a row of count-up numbers with labels.
 - **Steps Section** and **Timeline Section:** full-width versions of the new Steps and Timeline blocks.
 - **Logo Cloud:** a "trusted by" strip of client logos, optionally greyscale or scrolling as a marquee.
@@ -100,6 +101,7 @@ quietly broken in the editor.
 - `imageBleed` on Feature Split and Hero Split runs the image to the page edge.
 - A `spaceBefore` control on every stackable block, for the space above it.
 - Carousel: pause-on-hover, a starting slide, a thumbnail indicator and a slide-change event.
+- Feature Slider: an **Image aspect ratio** (portrait, square or landscape) for every slide, so screenshots and wide artwork aren't cropped to portrait.
 - Toggle: an `offLabel` for a two-sided switch ("Monthly [switch] Annual"), and `inputAttributes` for attributes on the input itself.
 - Cards can lock their colour scheme against the visitor's theme toggle, as Custom Section already could.
 - Image `decorative`, Button `aria-pressed`, Textarea **Rows**, Testimonial **Avatar size**, Hero Split **Rounded image**, and Social Links **Landmark name**.
@@ -119,7 +121,7 @@ quietly broken in the editor.
 #### Framework and dependencies
 
 - Upgraded to **Astro 7**, with every dependency on its latest release except TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`).
-- Node `engines` is `^22.12.0 || ^24.0.0 || ^26.0.0`, and `.nvmrc` pins `24.18.0`.
+- **Heads-up:** the starter needs Node 24 or later (`engines` is `>=24.0.0`), and `.nvmrc` pins `24.18.0`. The project scaffolder and the local editor already required it.
 - Icons are built in instead of coming from the unmaintained `astro-icon` package. A mistyped icon name warns instead of failing the build.
 - The icon and autocomplete lists are CloudCannon datasets under `.cloudcannon/data/`, which takes `cloudcannon.config.yml` from 951 lines to 216.
 - Accessibility, SEO, link and performance checks moved to a separate tool outside this repository. Nothing in this repo or its CI catches accessibility regressions any more.
@@ -138,11 +140,14 @@ quietly broken in the editor.
 - Video Modal's close control sits above the player, the player is centred, and clicking the overlay closes it. It defaults to extra-large.
 - The sticky main nav casts a subtle shadow once it pins, and publishes its height as `--main-nav-height` for anything else that sticks.
 - Blog posts open with a back link, title, subtitle and one line for category, date and author, with a 16:9 image, content in one centred column, and tags at the end. Blog listing headings name the list you're looking at.
+- The blog listing and tag pages show posts three to a row on wide screens.
 - Code in blog posts uses the theme's monospace font, and inline code renders as a subtle pill on any background.
 - Fonts are served from your own site instead of fetched from Google at build time.
 - The placeholder image is a photo glyph on a warm grey field, so it still reads as a stand-in when cropped.
 - Component descriptions, docs overviews and prop comments are shorter and worded consistently, in the component library and the editor.
-- Demo content is a small product site (home, why, get started), example pages under `/examples/` and a demo blog, with every page section in use on a real page.
+- Demo content is a small product site (home, why, get started), a demo blog, and example pages under `/examples/` written as one fictional web studio (services, portfolio, care-plan pricing, about and contact), with every page section in use on a real page.
+- Testimonial Section has the same vertical padding as other page sections, so its card no longer sits tight against the edges of its band.
+- Feature Grid lays out four features as two rows of two instead of three and one.
 - The README leads with the live demo and screenshots, and documents the tooling and deployment.
 
 #### Performance
@@ -163,6 +168,7 @@ quietly broken in the editor.
 - Generated ids come from whatever names the thing they belong to instead of a fresh UUID, so builds are reproducible and ids survive an editor re-render.
 - A page title drops the site-name suffix rather than running past the length search engines display.
 - Hosted YouTube and Vimeo videos load a click-to-play facade, so the full player is fetched only when someone presses play.
+- In the content editor, component syntax inside a code block stays code instead of being read as a snippet, so a post can show an example.
 - A linked Card uses a stretched link instead of wrapping its contents, so buttons, forms and links inside it stay clickable.
 - Modal behaviour (focus trap, scroll lock) attaches to any popover with `data-modal`, and `.modal-popover` is styling only. `ModalShell` and `Modal` take `sheet={false}` for a custom full-screen overlay.
 - Grid's numbered columns respond to their container's width, not the viewport.
@@ -195,6 +201,7 @@ quietly broken in the editor.
 - Range announces its unit with the value ("60 kg").
 - Icons are hidden from screen readers, which were announcing thousands of unlabelled graphics.
 - The footer's social links are a labelled list, toggles without a visible label fall back to their name, and cards with a background image get a solid backing in case the image fails.
+- A Timeline entry with no year is no longer an `h4` under no `h3`, which skipped a heading level.
 
 #### Images
 
@@ -229,6 +236,7 @@ unusable or wrong.
 - Passing a `class` to Carousel, Accordion, Footer or a Content Selector panel no longer strips the component's own class.
 - A Card with its own colour scheme uses that scheme's text colour instead of the surrounding page's.
 - Split and Image Carousel survive the editor's re-render, and Image, List and Range no longer put prop-driven attributes on their root element.
+- Adding, duplicating, moving or deleting a Carousel slide, Image Carousel image, Feature Slider slide, Scroll Stepper step or Scroll Deck card keeps every item's "2 of 4" label in order. A new Scroll Deck card also gets its own anchor for the rail and stacks with the rest.
 - The add-section menu shows each component's preview thumbnail and correct icon, and uploads go to `src/assets/images`.
 - The move handle on the first page section is reachable again.
 - A Button's text stays visible when "Hide text" is on, since it is the icon-only button's accessible name.
@@ -248,6 +256,7 @@ unusable or wrong.
 - Testimonial quote marks sit outside the quote, even when it starts or ends with formatting.
 - Heading icons have their gap back, and Hero Center's subtext size no longer leaks into Hero Split and Feature Split.
 - A Bento Box cell's column span is clamped to the grid's column count.
+- Content Selector's side tabs span the full width of the tab column, so the hover and selected backgrounds no longer stop at the end of the label.
 - Switching examples in the component library no longer jumps the page, and nested content no longer prints `[object Object]`.
 - Font weights are tokens, and 19 references to tokens that don't exist are fixed.
 - Content blocks with no component set log a warning instead of disappearing.

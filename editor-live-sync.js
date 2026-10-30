@@ -4,7 +4,7 @@
  * This works around two editor-only quirks:
  *
  *   1. CloudCannon cannot re-render props on a component's root element
- *      (handled via direct style sync, e.g. bento-box spans).
+ *      (handled via direct sync, e.g. bento-box spans, "N of M" item labels).
  *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
@@ -52,6 +52,7 @@ import {
   setupMasonry,
 } from "./src/components/building-blocks/wrappers/masonry/setup";
 import {
+  destroyScrollDeck,
   setupAllScrollDecks,
   setupScrollDeck,
 } from "./src/components/building-blocks/wrappers/scroll-deck/setup";
@@ -75,6 +76,19 @@ function syncBentoBoxSpans(target) {
 }
 
 const BENTO_BOX_ATTRS = ["data-col-span", "data-row-span"];
+
+// "Slide 2 of 3"-style labels sit on array items, which the editor keeps across an add, delete or move.
+const POSITION_LABEL = /^(.+) \d+ of \d+$/;
+
+function syncPositionLabels(array) {
+  const items = [...array.children].filter((el) => el.dataset.editable === "array-item");
+
+  items.forEach((item, index) => {
+    const match = POSITION_LABEL.exec(item.getAttribute("aria-label") ?? "");
+
+    if (match) item.setAttribute("aria-label", `${match[1]} ${index + 1} of ${items.length}`);
+  });
+}
 
 /**
  * Carousel config is read from attributes on `.carousel-inner` at
@@ -155,6 +169,12 @@ const queueMasonryReset = makeResetScheduler({
   destroy: destroyMasonry,
   init: setupMasonry,
   label: "masonry",
+});
+
+const queueScrollDeckReset = makeResetScheduler({
+  destroy: destroyScrollDeck,
+  init: setupScrollDeck,
+  label: "scroll deck",
 });
 
 function initNewComponents(root) {
@@ -363,6 +383,14 @@ const observer = new MutationObserver((mutations) => {
 
         if (masonryRoot) {
           queueMasonryReset(masonryRoot, "items changed");
+        }
+
+        if (target.dataset.editable === "array") {
+          syncPositionLabels(target);
+        }
+
+        if (target.matches(".scroll-deck-track, .scroll-deck-rail")) {
+          queueScrollDeckReset(target.closest(".scroll-deck"), "cards changed");
         }
       }
 

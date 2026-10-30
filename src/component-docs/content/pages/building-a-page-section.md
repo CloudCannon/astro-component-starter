@@ -5,15 +5,17 @@ contentSections: []
 
 # Building a Page Section
 
-Let's build a page section from scratch. We'll create the simplest possible component: a centered heading with supporting text. We'll make it visually editable.
+Let's build a page section from scratch: a centred heading with supporting text that editors can change in CloudCannon's visual editor. Then we'll style it, look at how the visual editing works, and decide how much control to give editors.
 
-Three files. That's all it takes.
+> **Shortcut:** `npm run new:component page-sections/explainers/section-intro` creates the component and its two CloudCannon files with the right names, paths and section settings, then lists what's left to do. This guide builds the files by hand so you see what each one does. From your second component on, use the shortcut.
 
-> **Shortcut:** `npm run new:component page-sections/explainers/section-intro` scaffolds all three files with the correct names, keys, and wiring, then prints the remaining steps. This guide builds them by hand so you understand what each file does — but for your second component onward, use the scaffolder.
+## The four files
 
-## File 1: The Astro component
+A component is a folder of four files. Ours lives in `src/components/page-sections/explainers/section-intro/`.
 
-Create `src/components/page-sections/explainers/section-intro/SectionIntro.astro`:
+### 1. The Astro component
+
+`SectionIntro.astro`:
 
 ```astro
 ---
@@ -21,25 +23,26 @@ import CustomSection from '@builders/custom-section/CustomSection.astro';
 import Heading from '@core-elements/heading/Heading.astro';
 import Text from '@core-elements/text/Text.astro';
 
-const { heading = '', subtext = '', _component, ...htmlAttributes } = Astro.props;
+const { heading = '', subtext = '', class: className, _component, ...htmlAttributes } = Astro.props;
 ---
 
 <CustomSection
+  class:list={['section-intro', className]}
   maxContentWidth="xl"
   paddingHorizontal="lg"
   paddingVertical="4xl"
   {...htmlAttributes}
 >
-  <Heading level="h1" size="2xl" alignmentHorizontal="center" data-prop="heading" text={heading} />
+  <Heading level="h2" size="2xl" alignmentHorizontal="center" data-prop="heading" text={heading} />
   <Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
 </CustomSection>
 ```
 
-That's it. `CustomSection` handles padding and width. `Heading` and `Text` are existing building blocks. The `data-prop` attributes tell CloudCannon which prop each element edits.
+`CustomSection` handles width, padding and background. `Heading` and `Text` are existing building blocks. The `data-prop` attributes tell CloudCannon which prop each element edits.
 
-## File 2: The inputs config
+### 2. The inputs
 
-Create `section-intro.cloudcannon.inputs.yml` in the same folder:
+`section-intro.cloudcannon.inputs.yml` sets the field editors see for each prop:
 
 ```yaml
 heading:
@@ -50,16 +53,16 @@ subtext:
   comment: Supporting text beneath the headline.
 ```
 
-Each key matches a prop from the component. The `type` controls what kind of input editors see: `text` gives a single-line field. (Other types include `markdown`, `select`, `switch`, `url`, and `image`.)
+Each key matches a prop in the component. `text` is a single-line field; other types include `markdown`, `select`, `switch`, `url` and `image`. The `comment` shows under the field in the editor and in these docs.
 
-## File 3: The structure-value config
+### 3. The structure value
 
-Create `section-intro.cloudcannon.structure-value.yml` in the same folder:
+`section-intro.cloudcannon.structure-value.yml` sets how the component appears in the **Add Page Section** menu and the content it starts with:
 
 ```yaml
 label: Section Intro
 icon: info
-description: Centered section with a headline and supporting text.
+description: Centred section with a headline and supporting text.
 value:
   _component: page-sections/explainers/section-intro
   heading: Your heading here
@@ -72,25 +75,38 @@ preview:
   icon: info
 picker_preview:
   text: Section Intro
-  subtext: Centered section with a headline and supporting text.
+  subtext: Centred section with a headline and supporting text.
 _inputs_from_glob:
   - /src/components/page-sections/explainers/section-intro/section-intro.cloudcannon.inputs.yml
+groups:
+  - heading: Content
+    inputs:
+      - heading
+      - subtext
 ```
 
-The `value` block defines the defaults when an editor adds this component. The `_component` path must match where the component lives. The `_inputs_from_glob` points to your inputs file.
+`value` holds the defaults when an editor adds the section, and its `_component` must match the folder path. `_inputs_from_glob` points at the inputs file. `groups` sorts the fields in the sidebar; once a section has groups, every prop in `value` must be in one. `icon` is a [Material Symbols](https://fonts.google.com/icons) name in snake_case.
+
+### 4. The preview thumbnail
+
+`section-intro.preview.mjs` draws the thumbnail editors see in the Add menu and the component gallery. Recipes are meant to be written by an AI agent rather than by hand: ask your agent to use the create-component skill, which has it read your component and the preview kit's rules and draw a matching thumbnail. A recipe looks like this:
+
+```js
+import { preview, band, bar } from '../../../../../scripts/previews/kit.mjs';
+
+const B = band(560);
+
+export default preview({
+  width: B.w,
+  draw: [bar(410, 330, 460, 'heading'), bar(B.left, 378, 560, 'body')],
+});
+```
+
+`npm run previews:build` turns it into an SVG and wires it into the structure value. `npm run check` fails until the recipe and its SVG exist. To tweak one yourself, the header of `scripts/previews/kit.mjs` explains the shapes and sizes.
 
 ## Use it
 
-That's three files:
-
-```
-src/components/page-sections/explainers/section-intro/
-├── SectionIntro.astro
-├── section-intro.cloudcannon.inputs.yml
-└── section-intro.cloudcannon.structure-value.yml
-```
-
-Open `src/content/pages/index.md` and add the component under the `pageSections` array:
+Add the section to a page's `pageSections` array:
 
 ```yaml
 pageSections:
@@ -99,32 +115,81 @@ pageSections:
     subtext: Everything you need is right here.
 ```
 
-Or add it in CloudCannon by clicking "Add Page Section" and picking "Section Intro" from the list.
+Or, in CloudCannon, click **Add Page Section** and pick **Section Intro**.
 
-## You already have documentation
+Its documentation already exists too. Check the sidebar under Explainers: Section Intro has a page with its description, a props table built from your inputs file, and a live example from your `value` defaults. To add an overview and hand-picked examples, create `src/component-docs/content/components/page-sections/explainers/section-intro/index.md`.
 
-As soon as those three files exist, this docs site generates a page for your component — check the sidebar under Explainers and you'll find Section Intro with its title, description, a full props table (types, defaults, and the `comment` text from your inputs file), and a live example rendered from your `value:` defaults. The gallery and sidebar pick it up too. Nothing to write, nothing to keep in sync: improve a `comment` or a default in the YAML and the docs update with it.
+Run `npm run check` before you call it done. It compares the YAML with the component's props, checks the preview, and validates the CloudCannon files against CloudCannon's own schemas.
 
-Two optional extras when you want more:
+## Styling a component
 
-- **A preview thumbnail** for the gallery and CloudCannon picker: add a `section-intro.preview.mjs` recipe next to the component and run `npm run previews:build` (see any existing component for an example recipe).
-- **Richer docs**: add `src/component-docs/content/components/page-sections/explainers/section-intro/index.md` with an `overview:` and hand-picked examples in an `examples/` folder. This is enrichment, not a requirement — the page exists either way.
-
-`npm run check` validates all of it — prop names in the YAML against the component, example files against real props — so drift shows up in CI, not in production.
-
-## Choosing how much control editors get
-
-The SectionIntro above is a **structured component** — it has a fixed layout with specific props. That's one end of a spectrum. At the other end is giving editors complete freedom to build their own layouts. Most real projects use a mix of both, and there's a useful middle ground too.
-
-### Structured components: developer controls the layout
-
-This is the pattern you just built. The developer decides the layout, picks the building blocks, and chooses which props to expose. Editors fill in the content but can't change the structure.
-
-CTA Center is a good example:
+Put a component's CSS in a global style block, wrapped in its cascade layer:
 
 ```astro
-<CustomSection maxContentWidth="lg" paddingVertical={paddingVertical} {...htmlAttributes}>
-  <Heading level="h2" size="xl" alignmentHorizontal="center" data-prop="heading" text={heading} />
+<style is:global>
+  @layer page-sections {
+    .section-intro {
+      text-wrap: balance;
+    }
+  }
+</style>
+```
+
+Use `@layer page-sections` in a page section and `@layer components` in a building block. Don't use Astro's scoped `<style>`: scoped CSS sits outside every layer, so it would beat the layered rules it's meant to fit in with.
+
+The site declares seven layers. A later layer wins over an earlier one whatever the selector specificity:
+
+1. `reset`: a minimal CSS reset
+2. `base`: typography and element defaults
+3. `pagefind`: search styles
+4. `components`: building blocks
+5. `page-sections`: page sections
+6. `utils`: utilities, including the spacing between blocks
+7. `overrides`: empty, for site-specific fixes that must win
+
+Use tokens for every colour, size, radius and shadow (`var(--color-text-muted)`, `var(--spacing-md)`). `npm run lint:css-vars` fails on a token name that doesn't exist, and `npm run lint:css-literals` on a raw value where a token already fits. For a number only this component uses, name it as a custom property on the component's root (`--section-intro-gap: 3rem`) rather than reaching for a token.
+
+## How visual editing works
+
+The visual editor needs to know which data produced each element on the page. Editable regions supply that: `data-*` attributes that say "this element is this prop". See [CloudCannon's editable regions documentation](https://cloudcannon.com/documentation/developer-articles/what-are-editable-regions/) for the full picture. In this starter, the building blocks write those attributes for you; you tell them which prop to use.
+
+**Text.** Pass `data-prop` to `Heading` or `Text`:
+
+```astro
+<Heading level="h2" data-prop="heading" text={heading} />
+```
+
+On its own, a `Heading` inside your section isn't editable. `data-prop="heading"` makes it editable and binds it to your section's `heading` prop. Blocks that editors add directly to a page or to a content area bind to their own `text` prop automatically.
+
+**Images.** Bind the source and the alt text:
+
+```astro
+<Image source={imageSource} alt={imageAlt} data-prop-src="imageSource" data-prop-alt="imageAlt" />
+```
+
+Clicking the image opens CloudCannon's picker and writes the chosen file to `imageSource`.
+
+**Arrays.** Wrappers like `ButtonGroup`, `Grid` and `Accordion` take `data-children-prop`, which lets editors add, remove and reorder items on the page:
+
+```astro
+<ButtonGroup buttonSections={buttonSections} data-children-prop="buttonSections" />
+```
+
+[CTA Center](/component-docs/components/page-sections/conversion/cta-center/) uses all of these:
+
+```astro
+<CustomSection
+  maxContentWidth={maxContentWidth}
+  paddingVertical={paddingVertical}
+  {...htmlAttributes}
+>
+  <Heading
+    level={headingLevel}
+    size="xl"
+    alignmentHorizontal="center"
+    data-prop="heading"
+    text={heading}
+  />
   <Text alignmentHorizontal="center" data-prop="subtext" text={subtext} />
   <ButtonGroup
     buttonSections={buttonSections}
@@ -134,37 +199,34 @@ CTA Center is a good example:
 </CustomSection>
 ```
 
-The heading is always centered, always `h2`, always above the subtext. Editors can change the text and add buttons, but the layout is locked. This is the right choice when you want consistency — a CTA should always look like a CTA.
+Three things to know before your component gets more involved:
 
-### Custom Section: editor builds everything
+- **Keep prop-driven attributes off the root element.** When a prop changes, the editor keeps the component's outer element and replaces only what's inside it, so a class or `data-*` attribute on the root that depends on a prop goes stale. Put it on a direct child and style the root with `:has()`. `npm run lint:roots` catches this.
+- **Scripts need a setup module.** Inline `<script>`s don't run in the editor. Put the setup code in a `setup.ts` next to the component and register it in `editor-live-sync.js`, as the carousel does. `npm run lint:cms` fails on a script that isn't registered.
+- **Test it in the editor.** `npm run editor` serves CloudCannon's real Visual Editor on your machine against the last build.
 
-At the other end of the spectrum is `CustomSection` used directly as a page section. Instead of a fixed layout, it exposes a `contentSections` array where editors can add any building block they want — text, images, grids, accordions, carousels, forms, and more.
+## How much control editors get
+
+Section Intro is a **structured** component. You decide the layout and editors fill in the content. That's one end of a range.
+
+**Structured components** suit sections that should always look the same, such as CTAs, heroes, pricing and testimonials. CTA Center always has a centred heading above its text and buttons. Editors can change the words, the buttons and the heading level, but not the layout.
+
+**[Custom Section](/component-docs/components/page-sections/builders/custom-section/)** is the other end. Added directly as a page section, it has a `contentSections` array where editors place any building block they like:
 
 ```yaml
 - _component: page-sections/builders/custom-section
-  label: My custom layout
   contentSections:
     - _component: building-blocks/core-elements/heading
       text: Build it your way
       level: h2
-      size: lg
     - _component: building-blocks/wrappers/split
-      # ... two-column layout with whatever they put inside
+      # ...a two-column layout with whatever goes inside
   maxContentWidth: 2xl
-  paddingVertical: md
-  colorScheme: inherit
-  backgroundColor: base
 ```
 
-There's no predefined structure. Editors have full access to all available building blocks and combine them freely. This is powerful for one-off layouts, landing pages, or teams with design-savvy editors who want maximum flexibility.
+It's the right tool for one-off layouts and for trying a design before you turn it into a structured component. The cost is consistency: every Custom Section can look different.
 
-The trade-off is less consistency. Every instance of a Custom Section can look completely different, and editors need to understand the building blocks well enough to combine them effectively.
-
-### The middle ground: structure with flexible content areas
-
-Many components land between these extremes. They have a fixed outer structure — a heading, some wrapper layout — but contain an array where editors can add components.
-
-FAQ Section is a good example. The developer defines the overall section with a heading and an accordion wrapper. Each accordion item has a title (structured) and a `contentSections` array (flexible):
+**In between**, a section has a fixed frame with a flexible area inside. [FAQ Section](/component-docs/components/page-sections/explainers/faq-section/) always has a heading above an accordion, and each answer is a `contentSections` array:
 
 ```yaml
 - _component: page-sections/explainers/faq-section
@@ -173,30 +235,17 @@ FAQ Section is a good example. The developer defines the overall section with a 
     - title: How does this work?
       contentSections:
         - _component: building-blocks/core-elements/text
-          text: Editors can add any content they want inside each FAQ item.
+          text: Editors add content blocks inside each answer.
 ```
 
-The section always looks like an FAQ — heading on top, accordion below, consistent spacing. But inside each accordion item, editors can add whatever blocks they need. They're not limited to plain text; they could drop in images, code blocks, or nested grids if the content calls for it.
+An answer takes content blocks such as text, images, lists and code blocks, but not layouts like grids or splits. The project decides which blocks fit where; see the nesting rules in the create-component skill (`.agents/skills/create-component/cloudcannon-yaml.md`).
 
-### Which approach to use
+Most sites use all three.
 
-There's no single right answer. Most projects use all three:
+## Making a building block
 
-- **Structured components** for sections that should always look consistent — CTAs, heroes, pricing tables, testimonials. The developer makes the design decisions once and editors stay within those guardrails.
-- **Custom Section** for pages where editors need full creative control, or as a quick way to prototype layouts before committing to a structured component.
-- **Hybrid components** for sections that need a recognizable structure but flexible content within it — FAQs, tabbed content, forms.
-
-## Going further
-
-You can push this much further, allowing editors to control any prop or setting you'd like. The existing page sections show how:
-
-- **[CTA Center](/component-docs/components/page-sections/conversion/cta-center/)** adds buttons, color schemes, and background options
-- **[FAQ Section](/component-docs/components/page-sections/explainers/faq-section/)** uses accordion items with expand/collapse behavior
-
-Each follows the same three-file pattern, just with more props and building blocks combined.
-
-If you add your own _building block_ (rather than a page section), make it join the flow spacing system — that's how blocks space themselves against their siblings without hand-managed margins. Mark the root `stackable`, emit `data-space-before` on a direct child of the root (never on the root itself — the visual editor's re-render keeps root attributes, so the control would go stale), and pull in the shared `space-before.yml` input. `npm run new:component` scaffolds all of this; skip it and your block gets no space in flowing content and no **Space above** field in the editor.
+A building block (rather than a page section) has one more job: joining the automatic spacing between blocks. `npm run new:component building-blocks/core-elements/my-block` sets that up for you. It marks the root `stackable`, adds a **Space Before** field, and puts the `data-space-before` attribute on a direct child of the root. Without it, your block gets no space above it.
 
 ## Next up
 
-Your component is already visually editable — editors can click on the heading and subtext to edit them inline. Head to [How Visual Editing Works](/component-docs/visually-edit-components/) to understand the mechanism and learn how to handle images and arrays too.
+Head to [Editing the Blog](/component-docs/editing-the-blog/) to see how posts work and how to put components inside them.

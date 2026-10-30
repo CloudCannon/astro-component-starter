@@ -69,28 +69,28 @@ pageSections:
     heading: Big library. Tiny payload.
     subtext: Every component renders to static HTML and CSS.
     stats:
-      - number: 24
+      - number: 26
         prefix: ''
         suffix: ''
         label: Page sections
-        sublabel: Heroes to pricing tables
-      - number: 47
+        sublabel: ''
+      - number: 51
         prefix: ''
         suffix: ''
         label: Building blocks
-        sublabel: Buttons to bento boxes
+        sublabel: ''
       - number: 343
         prefix: ''
         suffix: ''
-        label: Icons
-        sublabel: Ready in the picker
+        label: Icons in the picker
+        sublabel: ''
       - number: 0
         prefix: ''
         suffix: ' KB'
-        label: Runtime JavaScript
-        sublabel: On most sections
+        label: JS on most sections
+        sublabel: ''
     dividers: true
-    colorScheme: inherit
+    colorScheme: dark
     backgroundColor: surface
     background:
       type: pattern
@@ -140,7 +140,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Plan cards, a comparison table, and billing FAQ.
+            text: Care plans, a comparison table, and billing FAQ.
             size: sm
       - image: /src/assets/images/component-docs/website-example-about.svg
         imageAlt: An about page with a hero, a timeline, and a team card
@@ -151,7 +151,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Story, timeline, team, and latest posts from the demo blog.
+            text: Story, values, timeline, team, and posts from the demo blog.
             size: sm
       - image: /src/assets/images/component-docs/website-example-services.svg
         imageAlt: Service cards above process steps and a customer quote
@@ -162,7 +162,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Service cards, a process, client marks, and a wall of quotes.
+            text: Services, tabbed engagement detail, a process, and an FAQ.
             size: sm
       - image: /src/assets/images/component-docs/website-example-portfolio.svg
         imageAlt: A masonry image gallery with a featured tile and caption
@@ -173,7 +173,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/simple-text
-            text: Image gallery, featured-project slider, and a contact split.
+            text: A case study, client sites, results, and a photo gallery.
             size: sm
     layout: grid
     columns: 4

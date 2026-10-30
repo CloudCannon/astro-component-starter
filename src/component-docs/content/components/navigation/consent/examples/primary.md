@@ -20,6 +20,7 @@ blocks:
     externalMediaLabel: External media
     externalMediaDescription: Lets us load videos, maps, and other content hosted by third parties.
     honorGlobalPrivacyControl: true
+    externalMediaRequiresConsent: true
   analytics:
     _schema: analytics
     provider: plausible-hosted

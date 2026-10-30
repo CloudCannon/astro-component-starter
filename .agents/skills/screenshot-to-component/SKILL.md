@@ -67,7 +67,7 @@ Use this to translate what you see. For the authoritative prop list of each bloc
 | Tabbed content              | `ContentSelector`             |
 | Embedded video / map        | `Video` / `Embed`             |
 
-When the design contains hosted video, a map, or another third-party iframe, account for the blocked state as part of the design. `Video`, `VideoModal`, `ContactSplit`, and `Embed` make no provider request until site-wide external-media permission; Embed accepts only the provider paths documented in [privacy-consent](../privacy-consent/SKILL.md). Do not reproduce a screenshot by inserting an unsupported iframe or a provider script directly.
+When the design contains hosted video, a map, or another third-party iframe, account for the blocked state as part of the design. `Video`, `VideoModal`, `ContactSplit`, and `Embed` render an empty placeholder until they mount, and when `externalMediaRequiresConsent` is on they make no provider request until site-wide external-media permission; Embed accepts only the provider paths documented in [privacy-consent](../privacy-consent/SKILL.md). Do not reproduce a screenshot by inserting an unsupported iframe or a provider script directly.
 
 The section itself always wraps in `CustomSection` (`@builders/custom-section/CustomSection.astro`) — it provides `maxContentWidth`, `paddingHorizontal`/`paddingVertical`, `colorScheme`, `backgroundColor`, `background`, and `label`. Page section wrappers forward `label` as `sectionLabel`.
 
@@ -141,8 +141,8 @@ When the image is a whole page or a long scroll:
 
 ## Verify your work
 
-| Command                       | What to look for                                                                                   |
-| ----------------------------- | -------------------------------------------------------------------------------------------------- |
-| `npm run check`               | Exit 0 — no lint/type errors, no skills drift.                                                     |
-| `npm run previews:build`      | A new SVG appears in `public/component-previews/` for the new section, no build errors.            |
-| `npm run dev` + Visual Editor | Section matches the screenshot; no "Component not found" console warning; field edits live-update. |
+| Command                          | What to look for                                                                                   |
+| -------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `npm run check`                  | Exit 0 — no lint/type errors, no skills drift.                                                     |
+| `npm run previews:build`         | A new SVG appears in `public/component-previews/` for the new section, no build errors.            |
+| `npm run editor` (Visual Editor) | Section matches the screenshot; no "Component not found" console warning; field edits live-update. |

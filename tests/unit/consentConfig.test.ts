@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { parseAnalyticsConfig, parsePrivacyConfig } from "../../src/integrations/consent/config";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../src/integrations/consent/config";
 
 describe("consent configuration", () => {
   it("accepts the strict, analytics-disabled starter defaults", () => {
@@ -22,6 +26,30 @@ describe("consent configuration", () => {
     expect(
       parseAnalyticsConfig({ _schema: "analytics", provider: "none", scriptUrl: "" }).provider
     ).toBe("none");
+  });
+
+  it("loads external media freely by default and shows settings only when there is a choice", () => {
+    const privacy = parsePrivacyConfig({
+      _schema: "privacy",
+      policyRevision: 1,
+      policyUrl: "/privacy/",
+      bannerHeading: "Privacy",
+      bannerText: "Choose.",
+      settingsLabel: "Settings",
+      necessaryLabel: "Necessary",
+      necessaryDescription: "Remember privacy choices.",
+      analyticsLabel: "Analytics",
+      analyticsDescription: "Measure site use.",
+      externalMediaLabel: "External media",
+      externalMediaDescription: "Load hosted content.",
+    });
+    const none = parseAnalyticsConfig({ _schema: "analytics", provider: "none", scriptUrl: "" });
+
+    expect(privacy.externalMediaRequiresConsent).toBe(false);
+    expect(hasOptionalServices(privacy, none)).toBe(false);
+    expect(hasOptionalServices({ ...privacy, externalMediaRequiresConsent: true }, none)).toBe(
+      true
+    );
   });
 
   it("accepts only Plausible's site-specific hosted script URL", () => {

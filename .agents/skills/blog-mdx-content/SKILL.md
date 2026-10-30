@@ -43,7 +43,7 @@ Source of truth: `blogPostSchema` in `src/content.config.ts`.
 
 **Note:** the blog schema has no `canonical` field — that exists on the `pages` collection (`pageSchema`) but not `blog`.
 
-CloudCannon reads an additional `_schema: default` frontmatter key (every real post has it) to pick the editor schema at `.cloudcannon/schemas/blog-post.mdx`. It is not part of `blogPostSchema` — zod's default object mode strips unrecognized keys, so it is harmless to Astro but required for the CloudCannon editor to apply the right field set.
+CloudCannon reads an additional `_schema: default` frontmatter key (every real post has it) to pick the editor schema at `.cloudcannon/schemas/blog-post.mdx`. It is not part of `blogPostSchema` — zod's default object mode strips unrecognized keys, so it is harmless to Astro. It is also optional: a file with no `_schema` uses the collection's `default` schema.
 
 ```yaml
 ---
@@ -97,7 +97,7 @@ keywords: []
 
 ## Components with a CloudCannon snippet
 
-A `*.cloudcannon.snippets.yml` next to a component lets an editor insert it into a post's body from the CloudCannon content editor's snippet picker, instead of hand-writing JSX. Snippet files are auto-discovered — `cloudcannon.config.yml` collects them via `_snippets_from_glob: /**/*.cloudcannon.snippets.yml` and enables MDX output with `_snippets_imports: { mdx: true }`. The blog collection's `_editables.content.snippet: true` turns on the picker button for the `blog` collection specifically.
+A `*.cloudcannon.snippets.yml` next to a component lets an editor insert it into a post's body from the CloudCannon content editor's snippet picker, instead of hand-writing JSX. Snippet files are auto-discovered — `cloudcannon.config.yml` collects them via `_snippets_from_glob: /**/*.cloudcannon.snippets.yml`, and a component's own snippet needs nothing else. `_snippets_imports: { mdx: true }` adds CloudCannon's catch-all MDX snippets, which keep JSX that has no snippet (plus imports and `{expressions}`) as uneditable blocks instead of breaking the editor; they can also match content you didn't intend. Root `markdown.options.escape_snippets_in_code_blocks: true` keeps component tags inside a code fence as code, so a post can show snippet syntax as an example. The blog collection's `_editables.content.snippet: true` turns on the picker button for the `blog` collection specifically.
 
 Components with a snippet today (15 total):
 
@@ -149,7 +149,7 @@ Each post card (`src/components/utils/BlogPostListingGrid.astro`) shows the imag
 
 ## Verify your work
 
-| Command         | What to look for                                                                                                                                           |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run check` | Exit 0 — no lint/type errors; `astro check` catches a malformed MDX body or a schema violation.                                                            |
-| `npm run dev`   | Visit `/blog/{slug}/` — the post renders, embedded components display correctly, and it appears on `/blog/` and any `/blog/tag/{tag}/` pages for its tags. |
+| Command         | What to look for                                                                                                                                                |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run check` | Exit 0 — no lint/type errors; `astro check` catches a malformed MDX body or a schema violation; `lint:cms` fails if a component tag in the body has no snippet. |
+| `npm run dev`   | Visit `/blog/{slug}/` — the post renders, embedded components display correctly, and it appears on `/blog/` and any `/blog/tag/{tag}/` pages for its tags.      |
