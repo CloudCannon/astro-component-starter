@@ -74,6 +74,6 @@ _structures:
               values: data.icons
               preview:
                 text:
-                  - key: iconName
+                  - key: name
                 image:
-                  - template: src/icons/{iconName}.svg
+                  - template: src/icons/{id}.svg

@@ -321,6 +321,7 @@ const itemsAttributes = masonry
         opacity: 0;
         overflow: hidden;
         padding: var(--spacing-xl);
+        place-items: center;
         position: fixed;
         transition:
           opacity var(--animation-normal) var(--ease-out),
@@ -332,7 +333,6 @@ const itemsAttributes = masonry
         &:popover-open {
           display: grid;
           opacity: 1;
-          place-items: center;
 
           @starting-style {
             opacity: 0;

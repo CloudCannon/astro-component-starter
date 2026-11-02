@@ -142,7 +142,7 @@ console.log(icons.filter(n=>/nav/.test(n)).join(', '))"
 
 ### Where a named `_structures` block may live
 
-A named `_structures:` block belongs in `.cloudcannon/structures/*.cloudcannon.structures.yml` (collected by the root `_structures_from_glob`), or inside a `structure-value.yml` / `snippets.yml` for structures private to that one component.
+A named `_structures:` block belongs in `.cloudcannon/structures/*.cloudcannon.structures.yml` (collected by the root `_structures_from_glob`), or inside a `structure-value.yml` / `snippets.yml` for structures private to that one component. A local block does reach the editor — the structure value's `_structures` cascade into its own inputs (verified in the local editor: a Feature Grid item gets the block's labels, comments and selects, and Add seeds from its `value`). Don't move one to `.cloudcannon/structures/` to "fix" an unmatched item; run `npm run lint:cms`, which fails an item key the structure doesn't declare.
 
 **Never in a `*.cloudcannon.inputs.yml`.** That file is loaded via `_inputs_from_glob` and read as a map of input-name → input-config, so an `_structures:` key there parses as an input literally named `_structures` — `lint:schema` rejects it. Worse, every such file lands in one shared namespace, so two components declaring the same structure name silently collide and load order picks the winner.
 

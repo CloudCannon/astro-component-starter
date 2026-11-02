@@ -112,6 +112,7 @@ _structures:
           iconColor:
             type: select
             comment: Color accent applied to the icon.
+            hidden: "!iconName"
             options:
               values:
                 - id: default
@@ -135,6 +136,7 @@ _structures:
           iconBackground:
             type: switch
             comment: Draw a tinted plate behind the icon.
+            hidden: "!iconName"
 groups:
   - heading: Content
     inputs:

@@ -81,6 +81,18 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   const startIndex = Number(inner.getAttribute("data-start-index")) || 0;
 
+  // Slides carry the gap as leading padding and the track's negative margin takes the first one back.
+  const rowOverflows = (nodes: HTMLElement[]) => {
+    const total = nodes.reduce((sum, node) => sum + node.getBoundingClientRect().width, 0);
+    const lead = Number.parseFloat(getComputedStyle(track).marginInlineStart) || 0;
+
+    return total + lead - viewport.clientWidth > 1;
+  };
+
+  // Trimmed snaps never centre the end slides; untrimmed ones push a row that fits off-centre.
+  const containScrollFor = (nodes: HTMLElement[]) =>
+    align === "center" && rowOverflows(nodes) ? false : ("trimSnaps" as const);
+
   const embla = EmblaCarousel(
     viewport,
     {
@@ -88,6 +100,7 @@ export function setupCarousel(carousel: CarouselElement): void {
       slidesToScroll,
       align,
       watchDrag,
+      containScroll: containScrollFor([...slides]),
       duration: 20,
       startIndex,
       skipSnaps: false,
@@ -98,6 +111,14 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   carousel.setAttribute("data-embla-initialized", "true");
   carousel.__embla = embla;
+
+  embla.on("reInit", () => {
+    const containScroll = containScrollFor(embla.slideNodes());
+
+    if (embla.internalEngine().options.containScroll !== containScroll) {
+      embla.reInit({ containScroll });
+    }
+  });
 
   // Consumers listen for this instead of reaching into Embla.
   const emitSelect = () => {
@@ -131,22 +152,39 @@ export function setupCarousel(carousel: CarouselElement): void {
   if (prevButton) prevButton.style.borderRadius = "var(--radius-full)";
   if (nextButton) nextButton.style.borderRadius = "var(--radius-full)";
 
-  const updateButtons = () => {
-    if (prevButton) prevButton.disabled = !embla.canScrollPrev();
-    if (nextButton) nextButton.disabled = !embla.canScrollNext();
+  // Embla silently drops `loop` when the row overruns by less than a slide, so the arrows wrap instead.
+  const wrapsByHand = () => loop && !embla.internalEngine().options.loop;
+
+  const updateControls = () => {
+    const wrapping = wrapsByHand();
+    const idle = embla.slideNodes().length < 2 || !rowOverflows(embla.slideNodes());
+
+    if (prevButton) prevButton.disabled = !wrapping && !embla.canScrollPrev();
+    if (nextButton) nextButton.disabled = !wrapping && !embla.canScrollNext();
+    if (controlsWrapper) controlsWrapper.hidden = idle;
+    if (thumbnailsContainer) thumbnailsContainer.hidden = idle;
   };
 
-  updateButtons();
-  embla.on("select", updateButtons);
+  updateControls();
+  embla.on("select", updateControls);
+  embla.on("reInit", updateControls);
   if (prevButton)
     prevButton.addEventListener("click", () => {
       markUserDrivenNavigation();
-      embla.scrollPrev();
+      if (wrapsByHand() && !embla.canScrollPrev()) {
+        embla.scrollTo(embla.scrollSnapList().length - 1);
+      } else {
+        embla.scrollPrev();
+      }
     });
   if (nextButton)
     nextButton.addEventListener("click", () => {
       markUserDrivenNavigation();
-      embla.scrollNext();
+      if (wrapsByHand() && !embla.canScrollNext()) {
+        embla.scrollTo(0);
+      } else {
+        embla.scrollNext();
+      }
     });
 
   if (indicatorsContainer) {
@@ -292,5 +330,8 @@ export function destroyCarousel(carousel: CarouselElement): void {
     delete carousel.__embla;
   }
 
+  carousel
+    .querySelector(":scope > .carousel-inner > .controls-wrapper > .carousel-pause")
+    ?.remove();
   carousel.removeAttribute("data-embla-initialized");
 }

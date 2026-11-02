@@ -175,7 +175,8 @@ if (!_component && width === 0) return;
 
         tbody tr:nth-child(2n) th,
         tbody tr:nth-child(2n) td {
-          background-color: var(--color-bg-surface);
+          /* A tint of the text, not a named surface: a surface stripe vanishes on a surface band. */
+          background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
         }
       }
 

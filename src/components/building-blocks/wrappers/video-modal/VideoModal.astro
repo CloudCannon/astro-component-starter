@@ -178,11 +178,15 @@ const embedSrc =
         )
       );
 
+      align-items: center;
       background: var(--color-overlay);
       border: 0;
       color: var(--color-text);
+      flex-direction: column;
+      gap: var(--spacing-md);
       height: 100%;
       inset: 0;
+      justify-content: center;
       margin: 0;
       opacity: 0;
       overflow: hidden;
@@ -194,11 +198,7 @@ const embedSrc =
       width: 100%;
 
       &:popover-open {
-        align-items: center;
         display: flex;
-        flex-direction: column;
-        gap: var(--spacing-md);
-        justify-content: center;
         opacity: 1;
 
         @starting-style {

@@ -49,6 +49,8 @@ const {
 
       opacity: 0;
       transform: translateY(16px);
+      /* Layout stays out of `:popover-open`: a close holds only `display` through the fade. */
+      flex-direction: column;
       transition:
         opacity var(--animation-normal) var(--ease-out),
         transform var(--animation-normal) var(--ease-out),
@@ -57,7 +59,6 @@ const {
 
       &:popover-open {
         display: flex;
-        flex-direction: column;
         opacity: 1;
         transform: translateY(0);
 

@@ -56,6 +56,11 @@ _structures:
             type: select
             options:
               values: data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
           iconColor:
             type: select
             comment: The color of the icon.

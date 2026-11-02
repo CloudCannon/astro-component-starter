@@ -34,6 +34,10 @@ function plainTextFromHtml(html: string): string {
     .trim();
 }
 
+// `Astro.slots.has` is true for a slot passed `""`; only the rendered output tells them apart.
+const slotHtml =
+  !isNonEmptyString(text) && Astro.slots.has("default") ? await Astro.slots.render("default") : "";
+
 // The editor's re-render has no Astro.locals.
 const usedHeadingIds: Set<string> = Astro.locals
   ? (Astro.locals.headingIds ??= new Set())
@@ -42,11 +46,7 @@ const usedHeadingIds: Set<string> = Astro.locals
 if (htmlAttributes.id) {
   usedHeadingIds.add(String(htmlAttributes.id));
 } else if (level === "h2" || level === "h3") {
-  let slugSource = isNonEmptyString(text) ? text : "";
-
-  if (!slugSource && Astro.slots.has("default")) {
-    slugSource = plainTextFromHtml(await Astro.slots.render("default"));
-  }
+  const slugSource = isNonEmptyString(text) ? text : plainTextFromHtml(slotHtml);
 
   const slug = slugSource ? slugifyLabel(slugSource) : "";
 
@@ -74,7 +74,7 @@ MarkdownText = MarkdownText.replace(/\n/g, "<br />");
 const Tag = level;
 
 const hasText = isNonEmptyString(text);
-const hasSlotContent = Astro.slots.has("default");
+const hasSlotContent = slotHtml.trim().length > 0;
 
 if (!_component && !hasText && !hasSlotContent) return;
 ---

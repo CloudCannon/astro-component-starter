@@ -63,6 +63,12 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const slideRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array-item",
+      "data-id": "building-blocks/wrappers/carousel/carousel-slide",
+    }
+  : {};
 
 // A spread `class` beats `class:list` and would drop the `carousel` hook, so merge it.
 const slideGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
@@ -101,8 +107,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           {slides?.map((slide: SlideProps, index: number) => (
             <CarouselSlide
               {...slide}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/carousel/carousel-slide"
+              {...slideRegionAttributes}
               useDefaultEditableBinding={!!effectiveChildrenProp}
               aria-label={`Slide ${index + 1} of ${slides.length}`}
             />
@@ -235,6 +240,11 @@ if (!_component && !hasSlides && !hasSlotContent) return;
             width: var(--carousel-arrow-icon-size);
             height: var(--carousel-arrow-icon-size);
           }
+        }
+
+        > .controls-wrapper[hidden],
+        > .carousel-thumbnails[hidden] {
+          display: none;
         }
 
         > .controls-wrapper > .prev > .button-inner,

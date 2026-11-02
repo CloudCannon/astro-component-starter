@@ -244,6 +244,9 @@ unusable or wrong.
 - The Embed and Icon pickers offer only what the component accepts, and Definition List items have one editable region per field.
 - Authoring warnings for an unknown Video type, an Image with no alt text, a hosted video with no title and a Button with no link.
 - Production builds no longer link to component-library guide pages that only exist in development.
+- An autoplaying Carousel no longer gains an extra Pause button each time it is edited.
+- Timeline, Timeline Section and Content Selector icon dropdowns show each icon's glyph and name instead of raw ids.
+- Heading's Icon Position, and Feature Grid's item Icon Color and Icon Background, stay hidden until an icon is chosen.
 
 #### Visual and content
 
@@ -264,6 +267,12 @@ unusable or wrong.
 - An invalid `DISABLE_COMPONENT_LIBRARY` value fails the build.
 - Nested page files at `src/content/pages/<section>/index.md` resolve to `/<section>/`.
 - Stale documentation and counts are corrected.
+- A heading left empty no longer renders an empty heading element that adds stray space.
+- Search opens styled after moving between pages, not only on the first page.
+- Closing a modal, video modal or gallery lightbox keeps its layout for the whole fade.
+- The Scroll Stepper stops trying to centre its first step when it can't, instead of re-laying out the page every frame.
+- Carousel arrows stay correct after a resize, wrap round when the row is too short for looping, and hide with the dots when every slide fits. A centred Carousel centres its first and last slides.
+- Table stripes stay visible on surface and other coloured section backgrounds.
 
 ### Security
 

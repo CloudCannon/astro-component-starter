@@ -92,9 +92,23 @@ iconName:
   comment: Icon to display.
   options:
     values: data.icons # shared vocabulary, a dataset under .cloudcannon/data/
+    preview: # resolves against each option, so only `id`/`name` — never the input's own key
+      text:
+        - key: name
+      image:
+        - template: src/icons/{id}.svg
+iconPosition:
+  type: select
+  hidden: '!iconName'
+  options:
+    values:
+      - id: before
+        name: Before
+      - id: after
+        name: After
 ```
 
-Field types in use: `text`, `textarea`, `markdown`, `select`, `switch`, `array`, `object`, `image`, `file`, `url`, `range`, `number`. Visibility: `hidden: true` (always) or `hidden: "!someField"` / `hidden: "field !== 'x'"` (conditional). For shared enums (colorScheme, spacing, icons) reference `data.*` rather than copy-pasting option lists.
+Field types in use: `text`, `textarea`, `markdown`, `select`, `switch`, `array`, `object`, `image`, `file`, `url`, `range`, `number`. Visibility: `hidden: true` (always), or a sibling key's truthiness — `hidden: someField` / `hidden: "!someField"`. Comparisons like `"field !== 'x'"` are not evaluated and leave the input visible. Every setting that only applies with an icon (`iconColor`, `iconPosition`, `iconBackground`) takes `hidden: "!iconName"`; `npm run lint:cms` fails a `data.icons` select whose `icon*` siblings lack it, or whose `options.preview` reads anything but `id`/`name`. For shared enums (colorScheme, spacing, icons) reference `data.*` rather than copy-pasting option lists.
 
 ## Page sections: the section-wrapper `_inputs` block
 

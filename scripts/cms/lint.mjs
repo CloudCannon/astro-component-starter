@@ -635,6 +635,55 @@ for (const relToComponents of astroPaths) {
   }
 }
 
+// Check 11: a `values: data.icons` select previews each option from the option itself, so its
+// `options.preview` may only read `id`/`name`; and its `icon*` siblings hide while it is empty.
+
+const ICON_OPTION_KEYS = new Set(["id", "name"]);
+
+for (const [abs, maps] of arraySources) {
+  const problems = [];
+
+  for (const map of maps) {
+    for (const [name, cfg] of Object.entries(map)) {
+      if (cfg?.options?.values !== "data.icons") continue;
+
+      const preview = cfg.options.preview;
+      const refs = [];
+
+      for (const entries of Object.values(preview ?? {})) {
+        for (const entry of [entries].flat()) {
+          if (entry?.key) refs.push(entry.key);
+          for (const [, ref] of String(entry?.template ?? "").matchAll(/\{([^}|]+)/g))
+            refs.push(ref.trim());
+        }
+      }
+
+      const bad = refs.filter((ref) => !ICON_OPTION_KEYS.has(ref));
+
+      if (!preview?.image) {
+        problems.push(
+          `${name}: no options.preview.image, so the picker lists bare ids with no glyph — use text: [{key: name}], image: [{template: "src/icons/{id}.svg"}]`
+        );
+      } else if (bad.length) {
+        problems.push(
+          `${name}: options.preview reads ${bad.join(", ")}, but it resolves against each option, which only has id/name`
+        );
+      }
+
+      const prefix = name.replace(/Name$/, "");
+
+      for (const [sibling, siblingCfg] of Object.entries(map)) {
+        if (sibling === name || !sibling.startsWith(prefix) || !siblingCfg) continue;
+        if (typeof siblingCfg !== "object" || siblingCfg.hidden === true) continue;
+        if (String(siblingCfg.hidden ?? "").includes(name)) continue;
+        problems.push(`${sibling}: only applies when ${name} is set — add \`hidden: "!${name}"\``);
+      }
+    }
+  }
+
+  if (problems.length) fail(rel(abs), `icon input(s):\n   ${problems.join("\n   ")}`);
+}
+
 for (const label of oks) console.log(`ok     ${label}`);
 // Check 10: every component tag in an MDX body has a snippet. The blog route exposes every
 // component to MDX, but the content editor can only edit a tag that a snippet's

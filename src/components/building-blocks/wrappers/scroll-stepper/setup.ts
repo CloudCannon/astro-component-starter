@@ -1,4 +1,6 @@
 const desktopQuery = "(min-width: 768px)";
+// Centring that has not converged by now is chasing a gap it cannot close (e.g. an empty media).
+const MAX_CENTRING_PASSES = 24;
 
 function isStacked(stepper: HTMLElement): boolean {
   const layout = stepper.querySelector<HTMLElement>(".scroll-stepper-layout");
@@ -178,8 +180,20 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
     // The offset settles over several frames; a baseline kept now starts the bar partway.
     stepper.__scrollStepperProgressStart = undefined;
 
+    const passes = (stepper.__scrollStepperCentringPasses ?? 0) + 1;
+    const previousDelta = stepper.__scrollStepperContentDelta;
+    const closing =
+      previousDelta === undefined || Math.abs(contentDelta) < Math.abs(previousDelta) - 0.5;
+
+    stepper.__scrollStepperCentringPasses = passes;
+    stepper.__scrollStepperContentDelta = contentDelta;
+
     if (Math.abs(contentDelta) <= 1) {
       stepper.__scrollStepperContentOffsetSettled = true;
+    } else if (!closing || passes >= MAX_CENTRING_PASSES) {
+      stepper.__scrollStepperContentOffsetSettled = true;
+      stepper.__scrollStepperContentOffset = 0;
+      stepper.style.setProperty("--scroll-stepper-content-offset", "0px");
     } else if (!stepper.__scrollStepperContentOffsetFrame) {
       stepper.__scrollStepperContentOffsetFrame = requestAnimationFrame(() => {
         stepper.__scrollStepperContentOffsetFrame = undefined;
@@ -212,6 +226,8 @@ function showStaticGallery(stepper: HTMLElement): void {
   stepper.style.removeProperty("--scroll-stepper-sticky-translate");
   stepper.__scrollStepperContentOffset = undefined;
   stepper.__scrollStepperContentOffsetSettled = undefined;
+  stepper.__scrollStepperCentringPasses = undefined;
+  stepper.__scrollStepperContentDelta = undefined;
   if (stepper.__scrollStepperContentOffsetFrame) {
     cancelAnimationFrame(stepper.__scrollStepperContentOffsetFrame);
     stepper.__scrollStepperContentOffsetFrame = undefined;
@@ -326,5 +342,7 @@ declare global {
     __scrollStepperContentOffset?: number;
     __scrollStepperContentOffsetSettled?: boolean;
     __scrollStepperContentOffsetFrame?: number;
+    __scrollStepperCentringPasses?: number;
+    __scrollStepperContentDelta?: number;
   }
 }

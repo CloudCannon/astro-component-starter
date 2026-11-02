@@ -6,18 +6,19 @@ import pagefindStylesUrl from "@pagefind/component-ui/css/pagefind-component-ui.
 
 import { setupModalShell } from "../../building-blocks/wrappers/modal/setup";
 
-let stylesRequested = false;
+const PAGEFIND_STYLE_ID = "pagefind-component-ui";
 let keyboardShortcutBound = false;
 let errorHookBound = false;
 let countsHookBound = false;
 
 // Layered `@import`, not a <link>: an unlayered sheet would beat the overrides in `Search.astro`.
+// Checked by id, not a module flag: the client router swaps `<head>` and drops this style.
 function loadPagefindStyles(): void {
-  if (stylesRequested) return;
-  stylesRequested = true;
+  if (document.getElementById(PAGEFIND_STYLE_ID)) return;
 
   const style = document.createElement("style");
 
+  style.id = PAGEFIND_STYLE_ID;
   style.textContent = `@import url("${pagefindStylesUrl}") layer(pagefind);`;
   document.head.appendChild(style);
 }
