@@ -47,8 +47,8 @@ const isEditable =
 const dataAttributes = isEditable
   ? {
       "data-editable": "image",
-      "data-prop-src": customDataPropSrc || "source",
-      "data-prop-alt": customDataPropAlt || "alt",
+      "data-prop-src": customDataPropSrc || (useDefaultEditableBinding ? "source" : undefined),
+      "data-prop-alt": customDataPropAlt || (useDefaultEditableBinding ? "alt" : undefined),
     }
   : {};
 

@@ -110,7 +110,7 @@ Pass **both** src and alt bindings:
 ```
 
 **MUST:** pass `data-prop-src` and `data-prop-alt` together when the prop names differ from the `source` / `alt` defaults.
-**Why:** passing only `data-prop-src` still makes the image editable, but alt falls back to the default key `alt`; if the data uses `imageAlt`, CloudCannon writes alt text to a nonexistent field. (`isEditable` is true if _either_ is set.)
+**Why:** passing only `data-prop-src` still makes the image editable, but with no alt binding at all; the default keys `source`/`alt` apply only under `useDefaultEditableBinding`. (`isEditable` is true if _either_ is set.)
 
 ### Array (repeating items)
 
@@ -154,11 +154,11 @@ Three shapes, depending on how children are rendered. Prefer A, then B; C is the
 
 ## Array-item wiring rules
 
-| Attribute                           | Goes on             | Value                                                                                                                                                                                         |
-| ----------------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` (shapes A/B). **Written by hand** for shape C.                                                                                               |
-| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for shapes B and C.                                                                                                          |
-| `data-id`                           | each **item** root  | Shape B: the child's kebab component path (`.astro` PascalCase collapsed to kebab), e.g. `.../accordion/accordion-item`. Shape A: `renderBlock` sets it to `block._component`. Shape C: omit. |
+| Attribute                           | Goes on             | Value                                                                                                                                                                                                                                                        |
+| ----------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` (shapes A/B). **Written by hand** for shape C.                                                                                                                                                              |
+| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for shapes B and C.                                                                                                                                                                         |
+| `data-id`                           | each **item** root  | Shape B: the child's kebab component path (`.astro` PascalCase collapsed to kebab), e.g. `.../accordion/accordion-item`. Shape A: `renderBlock` sets it to `block._component`, and never adds `data-component` (see editable-regions-api.md). Shape C: omit. |
 
 **MUST NOT:** put `data-editable="array-item"` on the array container, or `data-editable="array"` on an item — the editor needs the container/item split to CRUD rows.
 

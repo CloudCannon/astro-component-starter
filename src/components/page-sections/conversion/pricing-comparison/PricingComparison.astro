@@ -121,7 +121,6 @@ const hasTable = planList.length > 0 && rows?.length > 0;
               {planList.map((plan) => (
                 <th
                   scope="col"
-                  class:list={[plan.highlight && "highlight"]}
                   data-editable="array-item"
                 >
                   <span
@@ -162,7 +161,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
                   const mark = markFor(value);
 
                   return (
-                    <td class:list={[plan.highlight && "highlight", `mark-${mark}`]}>
+                    <td class:list={[`mark-${mark}`]}>
                       {mark === "text" ? (
                         value
                       ) : (
@@ -189,7 +188,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
               <tr class="pricing-comparison-actions">
                 <td />
                 {planList.map((plan) => (
-                  <td class:list={[plan.highlight && "highlight"]}>
+                  <td>
                     {plan.buttonText && (
                       <Button
                         text={plan.buttonText}

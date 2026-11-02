@@ -2,6 +2,8 @@
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
 import Page from "@layouts/Page.astro";
+import { hasCodeFence } from "@component-utils/markdown";
+import ProseCodeCopy from "@component-utils/prose-code-copy/ProseCodeCopy.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
 import { ogCardPath } from "../utils/og/paths";
 import { getCollection, render, type CollectionEntry } from "astro:content";
@@ -47,6 +49,7 @@ const hasBody = Boolean(page.body?.trim());
       <div class="prose">
         <Content />
       </div>
+      {hasCodeFence(page.body) && <ProseCodeCopy />}
     </CustomSection>
   )}
 </Page>

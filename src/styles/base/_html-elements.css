@@ -45,6 +45,14 @@
       }
     }
 
+    .astro-code-themes {
+      background-color: var(--color-bg);
+      border: var(--border-width-sm) solid var(--color-border);
+      color: var(--color-text);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+    }
+
     p,
     ul,
     ol,
@@ -77,5 +85,15 @@
     main > :first-child.card {
       margin-top: 0;
     }
+  }
+
+  /* Fence tokens carry only `--shiki-*` (`defaultColor: false`). Kept outside `:where(:root)`,
+     whose descendant selector would miss the `data-theme` on the root itself. */
+  [data-theme="light"] .astro-code-themes span {
+    color: color-mix(in srgb, var(--shiki-light, var(--color-text)) 82%, var(--color-text-muted));
+  }
+
+  [data-theme="dark"] .astro-code-themes span {
+    color: var(--shiki-dark, currentcolor);
   }
 }

@@ -110,10 +110,11 @@ const priceRows = [
       >
         {features?.map((feature: TierFeature) => (
           <li
-            class:list={["pricing-tier-feature", feature.included === false && "excluded"]}
+            class="pricing-tier-feature"
             data-editable="array-item"
           >
             <Icon
+              class:list={[feature.included === false && "is-excluded"]}
               name={feature.included === false ? "minus" : "check"}
               size="sm"
             />
@@ -216,7 +217,7 @@ const priceRows = [
             margin-top: var(--spacing-xs);
           }
 
-          &.excluded {
+          &:has(> .icon.is-excluded) {
             color: var(--color-text-muted);
           }
         }

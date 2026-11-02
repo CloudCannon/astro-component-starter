@@ -38,6 +38,9 @@ const arrayDataAttributes = effectiveChildrenProp
       "data-direction": layout === "horizontal" ? "row" : "column",
     }
   : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? { "data-id": "building-blocks/wrappers/timeline/timeline-item", "data-editable": "array-item" }
+  : {};
 
 const hasEntries = entries?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
@@ -51,20 +54,10 @@ const isGrouped =
   !isSplit &&
   entries?.some((entry: EntryProps) => isNonEmptyString(toText(entry.year)));
 
-type YearGroup = { year: string; entries: EntryProps[] };
-
-const groups: YearGroup[] = [];
-
-if (isGrouped) {
-  for (let i = 0; i < entries.length; i += 1) {
-    const entry = entries[i] as EntryProps;
-    const year = toText(entry.year);
-    const last = groups[groups.length - 1];
-
-    if (last && last.year === year) last.entries.push(entry);
-    else groups.push({ year, entries: [entry] });
-  }
-}
+const groupStarts = (entries ?? []).map(
+  (entry: EntryProps, index: number) =>
+    index === 0 || toText(entry.year) !== toText((entries[index - 1] as EntryProps).year)
+);
 
 if (!_component && !hasEntries && !hasSlotContent) return;
 ---
@@ -91,8 +84,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
             <TimelineItem
               layout={layout}
               useDefaultEditableBinding={!!effectiveChildrenProp}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/timeline/timeline-item"
+              {...itemRegionAttributes}
               {...entry}
             />
           ))}
@@ -111,8 +103,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           <TimelineItem
             layout={layout}
             useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/timeline/timeline-item"
+            {...itemRegionAttributes}
             {...entry}
           />
         ))}
@@ -121,31 +112,22 @@ if (!_component && !hasEntries && !hasSlotContent) return;
   ) : isGrouped ? (
     <ol
       role="list"
-      class="timeline-list"
+      class="timeline-list timeline-grouped"
       data-space-before={spaceBeforeAttr(spaceBefore)}
       {...arrayDataAttributes}
     >
       <slot>
-        {groups.map((group) => (
-          <li class="timeline-group">
-            {group.year && <YearTag class="timeline-year">{group.year}</YearTag>}
-            <ol
-              role="list"
-              class="timeline-group-list"
-            >
-              {group.entries.map((entry) => (
-                <TimelineItem
-                  layout={layout}
-                  grouped={true}
-                  headingLevel={group.year ? entryHeadingLevel : YearTag}
-                  useDefaultEditableBinding={!!effectiveChildrenProp}
-                  data-editable="array-item"
-                  data-id="building-blocks/wrappers/timeline/timeline-item"
-                  {...entry}
-                />
-              ))}
-            </ol>
-          </li>
+        {entries.map((entry: EntryProps, index: number) => (
+          <TimelineItem
+            layout={layout}
+            grouped={true}
+            groupStart={groupStarts[index]}
+            yearTag={YearTag}
+            headingLevel={isNonEmptyString(toText(entry.year)) ? entryHeadingLevel : YearTag}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...itemRegionAttributes}
+            {...entry}
+          />
         ))}
       </slot>
     </ol>
@@ -161,8 +143,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           <TimelineItem
             layout={layout}
             useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/timeline/timeline-item"
+            {...itemRegionAttributes}
             {...entry}
           />
         ))}
@@ -181,9 +162,8 @@ if (!_component && !hasEntries && !hasSlotContent) return;
 
       min-width: 0;
 
-      /* These `<ol>`s carry `role="list"`: `list-style: none` drops the role in Safari. */
-      .timeline-list,
-      .timeline-group-list {
+      /* This `<ol>` carries `role="list"`: `list-style: none` drops the role in Safari. */
+      .timeline-list {
         list-style: none;
         margin: 0;
         padding: 0;
@@ -226,7 +206,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
       /* Split's `<ol>` is also `.timeline-list`; without the split exclusion this more
          specific rule clobbers split's columns. :last-of-type, not an is-last class:
          CloudCannon inserts array items without re-rendering the parent. */
-      &:has(> .timeline-list):not(:has(.timeline-group)):not(:has(> .timeline-split)) {
+      &:has(> .timeline-list):not(:has(> .timeline-grouped)):not(:has(> .timeline-split)) {
         .timeline-list {
           display: grid;
           gap: 0;
@@ -294,8 +274,10 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         }
       }
 
-      /* Groups abut and padding-block-end carries the space, so the rail doesn't break. */
-      &:has(.timeline-group) {
+      /* Entries abut and the rail's padding-block-end carries the space, so the rail doesn't
+         break. A year shows only on its group's first entry; `editor-live-sync.js` re-marks
+         that after the editor adds, moves or retitles an entry without re-rendering the list. */
+      &:has(> .timeline-grouped) {
         --timeline-year-line: calc(var(--font-size-lg) * var(--line-height-heading-sm));
 
         .timeline-list {
@@ -303,9 +285,10 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           gap: 0;
         }
 
-        .timeline-group {
+        > .timeline-grouped > .timeline-entry {
+          align-items: start;
+          column-gap: var(--spacing-xl);
           display: grid;
-          gap: var(--spacing-xl);
           grid-template-columns: var(--timeline-date-col) 1fr;
         }
 
@@ -316,26 +299,28 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           font-variant-numeric: lining-nums;
           font-weight: var(--font-weight-bold);
           grid-column: 1;
+          grid-row: 1;
           line-height: var(--timeline-year-line);
           margin: 0;
         }
 
-        /* Explicit column: a group with no year renders no `.timeline-year`, and
-           auto-placement would put the list in the date column. */
-        .timeline-group-list {
+        .timeline-group-rail {
           border-inline-start: var(--border-width-sm) solid var(--color-border);
-          display: grid;
-          gap: var(--spacing-xl);
           grid-column: 2;
-          padding-block-end: var(--spacing-2xl);
+          grid-row: 1;
+          padding-block-end: var(--spacing-xl);
           padding-inline-start: var(--spacing-xl);
         }
 
-        .timeline-group:last-of-type .timeline-group-list {
+        .timeline-entry:has(+ .timeline-entry > .timeline-year:not([hidden])) .timeline-group-rail {
+          padding-block-end: var(--spacing-2xl);
+        }
+
+        .timeline-entry:last-of-type .timeline-group-rail {
           padding-block-end: 0;
         }
 
-        .timeline-entry {
+        .timeline-group-entry {
           position: relative;
         }
 
@@ -348,7 +333,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           position: absolute;
         }
 
-        .timeline-group:last-of-type .timeline-entry:last-of-type::after {
+        .timeline-entry:last-of-type .timeline-group-entry::after {
           background-color: var(--color-bg);
           content: "";
           inset-block-end: 0;
@@ -359,7 +344,7 @@ if (!_component && !hasEntries && !hasSlotContent) return;
           z-index: var(--layer-1);
         }
 
-        .timeline-group:last-of-type .timeline-entry:last-of-type .timeline-dot {
+        .timeline-entry:last-of-type .timeline-dot {
           z-index: var(--layer-2);
         }
 
@@ -373,13 +358,15 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         }
 
         @media (width < 640px) {
-          .timeline-group {
+          > .timeline-grouped > .timeline-entry {
             grid-template-columns: 1fr;
+            row-gap: var(--spacing-xl);
           }
 
           .timeline-year,
-          .timeline-group-list {
+          .timeline-group-rail {
             grid-column: 1;
+            grid-row: auto;
           }
         }
       }

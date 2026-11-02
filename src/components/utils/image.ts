@@ -5,6 +5,8 @@ const VIDEO_POSTER_MAX_WIDTH = 1920;
 const VIDEO_POSTER_MAX_HEIGHT = 1080;
 const OG_IMAGE_WIDTH = 1200;
 const OG_IMAGE_HEIGHT = 630;
+const SEARCH_THUMBNAIL_WIDTH = 224;
+const SEARCH_THUMBNAIL_HEIGHT = 160;
 
 type ImageModule = string | ImageMetadata;
 
@@ -183,6 +185,23 @@ export async function resolveOpenGraphImage(source: string): Promise<{
   }
 
   return { src: share.src, width: share.width, height: share.height };
+}
+
+/** Small cover crop for the search result slot; `null` for SVGs, which read as glyphs, not pictures. */
+export async function resolveSearchThumbnail(source: string): Promise<string | null> {
+  const share = resolveShareImage(source);
+
+  if (share.isSvg) return null;
+  if (!share.metadata) return share.src;
+
+  const { src } = await getImage({
+    src: share.metadata,
+    width: SEARCH_THUMBNAIL_WIDTH,
+    height: SEARCH_THUMBNAIL_HEIGHT,
+    fit: "cover",
+  });
+
+  return src;
 }
 
 export async function resolveVideoPosterSource(source: string): Promise<string> {

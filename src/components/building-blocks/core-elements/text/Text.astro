@@ -35,9 +35,13 @@ if (!_component && !hasText && !hasSlotContent) return;
   <div
     class:list={["text-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}
     data-space-before={spaceBeforeAttr(spaceBefore)}
-    {...textDataAttributes}
   >
-    <slot>{text && <Fragment set:html={markdownContent} />}</slot>
+    <div
+      class="text-body"
+      {...textDataAttributes}
+    >
+      <slot>{text && <Fragment set:html={markdownContent} />}</slot>
+    </div>
   </div>
 </div>
 
@@ -72,24 +76,26 @@ if (!_component && !hasText && !hasSlotContent) return;
           --text-size: var(--font-size-4xl);
         }
 
-        > p {
-          font-size: var(--text-size, inherit);
-        }
+        > .text-body {
+          > p {
+            font-size: var(--text-size, inherit);
+          }
 
-        > ul {
-          font-size: var(--text-size, inherit);
-        }
+          > ul {
+            font-size: var(--text-size, inherit);
+          }
 
-        > ol {
-          font-size: var(--text-size, inherit);
-        }
+          > ol {
+            font-size: var(--text-size, inherit);
+          }
 
-        > *:first-child {
-          margin-top: 0 !important;
-        }
+          > *:first-child {
+            margin-top: 0 !important;
+          }
 
-        > *:last-child {
-          margin-bottom: 0 !important;
+          > *:last-child {
+            margin-bottom: 0 !important;
+          }
         }
 
         &.align-start {

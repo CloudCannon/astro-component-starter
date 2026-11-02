@@ -12,6 +12,8 @@ import CustomSection from "@page-sections/builders/custom-section/CustomSection.
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { loadBlogPageContext } from "../../utils/blog";
 import { formatPostDate } from "@component-utils/formatPostDate";
+import { hasCodeFence } from "@component-utils/markdown";
+import ProseCodeCopy from "@component-utils/prose-code-copy/ProseCodeCopy.astro";
 
 const componentImports = {
   ...import.meta.glob("../../components/building-blocks/**/*.astro", { eager: true }),
@@ -81,6 +83,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
   generatedImage={ogCardPath("blog", post)}
   type="article"
   article={article}
+  pagefindType="Article"
 >
   <script
     type="application/ld+json"
@@ -93,7 +96,6 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
     colorScheme="inherit"
     backgroundColor="base"
     class="post-container"
-    data-pagefind-filter="Type:Article"
   >
     <div>
       <header class="post-header">
@@ -179,9 +181,6 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
           class="post-image"
           aspectRatio="widescreen"
           positionVertical="center"
-          imageElementAttributes={{
-            "data-pagefind-meta": "image[src], image_alt[alt]",
-          }}
         />
       )}
 
@@ -192,6 +191,7 @@ const breadcrumbJsonLd = breadcrumbListJsonLd(
       >
         <Content components={mdxComponents} />
       </div>
+      {hasCodeFence(post.body) && <ProseCodeCopy />}
       {post.data.tags.length > 0 && (
         <div
           class="post-tags"

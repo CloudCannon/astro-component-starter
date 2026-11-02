@@ -50,6 +50,13 @@ export default defineConfig({
   image: {
     domains: [],
   },
+  markdown: {
+    // Same pair as CodeBlock.astro; `_html-elements.css` picks the theme from `data-theme`.
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark" },
+      defaultColor: false,
+    },
+  },
   integrations: [
     editableRegions(),
     pruneOgCache(),

@@ -1,8 +1,10 @@
 /**
  * CloudCannon's re-render keeps a region's root element, so a prop-driven attribute on
- * the root goes stale. Checks only region roots (components with YAML or named in a
- * `data-id`); also flags a literal root `data-editable` and a classed root that spreads
- * a rest without destructuring `class`. See `.agents/skills/editable-regions/SKILL.md`.
+ * the root goes stale. Checks component roots (components with YAML or named in a
+ * `data-id`) and every `array-item` element a template stamps, literal or spread in; text,
+ * array and image regions are exempt because the parent's re-render rewrites their attributes.
+ * Also flags a literal root `data-editable` and a classed root that spreads a rest without
+ * destructuring `class`. See `.agents/skills/editable-regions/SKILL.md`.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
@@ -23,6 +25,7 @@ const REGION_ATTRS = new Set([
   "data-children-prop",
   "data-direction",
   "data-id",
+  "data-component",
 ]);
 
 const ALLOWED = [
@@ -41,22 +44,24 @@ const ALLOWED_ARIA = /^aria-/;
 
 const WATCHED = /^(class|class:list|style|role|data-|aria-)/;
 
-function firstElement(source) {
+function templateBody(source) {
   const fence = source.indexOf("\n---", 3);
   const body = source.startsWith("---") && fence !== -1 ? source.slice(fence + 4) : source;
+
+  return body.replace(/<(script|style)\b[\s\S]*?<\/\1>/g, (block) => " ".repeat(block.length));
+}
+
+function* elements(source) {
+  const body = templateBody(source);
   let index = 0;
 
   while (index < body.length) {
     const open = body.indexOf("<", index);
 
-    if (open === -1) return null;
+    if (open === -1) return;
 
     const next = body[open + 1];
 
-    if (next === "!" || next === "/") {
-      index = open + 1;
-      continue;
-    }
     if (!/[A-Za-z]/.test(next ?? "")) {
       index = open + 1;
       continue;
@@ -64,6 +69,7 @@ function firstElement(source) {
 
     let depth = 0;
     let quote = null;
+    let close = -1;
 
     for (let i = open + 1; i < body.length; i += 1) {
       const char = body[i];
@@ -76,17 +82,23 @@ function firstElement(source) {
       else if (char === "{") depth += 1;
       else if (char === "}") depth -= 1;
       else if (char === ">" && depth === 0) {
-        const raw = body.slice(open + 1, i);
-        const tag = /^[A-Za-z][\w:.-]*/.exec(raw)?.[0] ?? "";
-
-        return { tag, attrs: raw.slice(tag.length) };
+        close = i;
+        break;
       }
     }
 
-    return null;
-  }
+    if (close === -1) return;
 
-  return null;
+    const raw = body.slice(open + 1, close);
+    const tag = /^[A-Za-z][\w:.-]*/.exec(raw)?.[0] ?? "";
+
+    yield { tag, attrs: raw.slice(tag.length) };
+    index = open + 1;
+  }
+}
+
+function firstElement(source) {
+  return elements(source).next().value ?? null;
 }
 
 function parseAttrs(text) {
@@ -223,6 +235,66 @@ function stripStrings(text) {
     .replace(/'(?:[^'\\]|\\.)*'/g, " ");
 }
 
+/** Frontmatter names whose initializer stamps a region, mapped to its type (`arrayDataAttributes` → `array`). */
+function regionSpreads(source) {
+  const fence = source.indexOf("\n---", 3);
+  const frontmatter = fence === -1 ? "" : source.slice(0, fence);
+  const kinds = new Map();
+
+  for (const match of frontmatter.matchAll(
+    /(?:^|\n)\s*(?:const|let)\s+([A-Za-z_$][\w$]*)\s*=([\s\S]*?)(?=\n[A-Za-z/]|$)/g
+  )) {
+    const kind = /["']data-editable["']\s*:\s*["']([\w-]+)["']/.exec(match[2])?.[1];
+
+    if (kind) kinds.set(match[1], kind);
+  }
+
+  return kinds;
+}
+
+/** The region type an element carries, literal or spread in; null when it carries none. */
+function regionKind(element, spreads) {
+  for (const { name, value } of parseAttrs(element.attrs)) {
+    if (name !== "data-editable") continue;
+
+    return /["']([\w-]+)["']/.exec(value)?.[1] ?? value;
+  }
+
+  for (const match of element.attrs.matchAll(/\{\s*\.\.\.\s*([A-Za-z_$][\w$]*)/g)) {
+    if (spreads.has(match[1])) return spreads.get(match[1]);
+  }
+
+  return null;
+}
+
+/**
+ * The item parameter of every `.map()` callback in the template. Not the index: a component's
+ * arrays carry no id key, so the editor keeps rows in place and an index-derived attribute stays true.
+ */
+function loopNames(source) {
+  const names = new Set();
+
+  for (const match of templateBody(source).matchAll(
+    /\.map\(\s*(?:\(([^)]*)\)|([A-Za-z_$][\w$]*))\s*=>/g
+  )) {
+    const param = splitTopLevel(match[1] ?? match[2])[0]?.trim() ?? "";
+
+    if (param.startsWith("{")) {
+      for (const inner of splitTopLevel(param.slice(1, param.lastIndexOf("}")))) {
+        const local = /([A-Za-z_$][\w$]*)\s*(?:=.*)?$/.exec(inner.split(":").pop().trim());
+
+        if (local) names.add(local[1]);
+      }
+    } else {
+      const local = /^[A-Za-z_$][\w$]*/.exec(param)?.[0];
+
+      if (local) names.add(local);
+    }
+  }
+
+  return names;
+}
+
 const files = (
   await glob("src/components/**/*.astro", { cwd: root, ignore: ["**/utils/**"] })
 ).sort();
@@ -314,22 +386,8 @@ if (clobberable.length) {
 
 if (rootRegions.length || clobberable.length) process.exit(1);
 
-for (const file of files) {
-  if (!isRegionRoot(file)) continue;
-
-  const source = readFileSync(join(root, file), "utf8");
-  const props = propDerivedNames(source);
-
-  if (!props.length) continue;
-
-  const element = firstElement(source);
-
-  if (!element) continue;
-
-  const componentName = file
-    .split("/")
-    .pop()
-    .replace(/\.astro$/, "");
+function attrFindings(file, element, props, where) {
+  const componentName = basename(file, ".astro");
 
   for (const { name, value } of parseAttrs(element.attrs)) {
     if (!WATCHED.test(name)) continue;
@@ -338,7 +396,9 @@ for (const file of files) {
     if (
       ALLOWED.some(
         (rule) =>
-          rule.attr === name && (!rule.components || rule.components.includes(componentName))
+          rule.attr === name &&
+          (!rule.components || rule.components.includes(componentName)) &&
+          (!rule.where || rule.where === where)
       )
     ) {
       continue;
@@ -357,7 +417,28 @@ for (const file of files) {
       tag: element.tag,
       attr: name,
       props: referenced,
+      where,
     });
+  }
+}
+
+for (const file of files) {
+  const source = readFileSync(join(root, file), "utf8");
+  const props = propDerivedNames(source);
+
+  if (isRegionRoot(file) && props.length) {
+    const element = firstElement(source);
+
+    if (element) attrFindings(file, element, props, "component root");
+  }
+
+  const spreads = regionSpreads(source);
+  const scoped = [...new Set([...props, ...loopNames(source)])];
+
+  for (const element of elements(source)) {
+    const kind = regionKind(element, spreads);
+
+    if (kind === "array-item") attrFindings(file, element, scoped, "array item");
   }
 }
 
@@ -367,14 +448,16 @@ if (findings.length === 0) {
 }
 
 console.error(
-  `lint:roots: ${findings.length} prop-driven attribute(s) on component roots.\n` +
+  `lint:roots: ${findings.length} prop-driven attribute(s) on region roots.\n` +
     "These go stale in the CloudCannon editor — move them to a direct child\n" +
     "(see .agents/skills/editable-regions/SKILL.md).\n"
 );
 
 for (const finding of findings) {
   console.error(`  ${finding.file}`);
-  console.error(`    <${finding.tag} ${finding.attr}> reads ${finding.props.join(", ")}\n`);
+  console.error(
+    `    <${finding.tag} ${finding.attr}> (${finding.where}) reads ${finding.props.join(", ")}\n`
+  );
 }
 
 process.exit(1);

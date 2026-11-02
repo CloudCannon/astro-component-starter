@@ -173,7 +173,7 @@ Containers that hold other building blocks (their child items are themselves `_c
 - `scroll-stepper` item (`steps[]`): `mediaSections`, `contentSections`.
 - **`scroll-stepper`**: Each scene pairs arbitrary sticky media with arbitrary content. On mobile, media stays before its paired content.
 - `steps` item (`items[]`): `image`, `imageAlt`, `contentSections`.
-- `timeline` item (`entries[]`): `year`, `date`, `title`, `body`, `iconName`, `headingLevel`.
+- `timeline` item (`entries[]`): `year`, `date`, `title`, `body`, `iconName`, `groupStart`, `yearTag`, `headingLevel`.
 
 ### Forms — `building-blocks/forms/<slug>`
 

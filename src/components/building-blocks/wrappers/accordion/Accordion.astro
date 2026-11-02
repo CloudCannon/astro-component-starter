@@ -32,6 +32,12 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/accordion/accordion-item",
+      "data-editable": "array-item",
+    }
+  : {};
 
 const hasItems = items?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
@@ -56,8 +62,7 @@ if (!_component && !hasItems && !hasSlotContent) return;
             isOpen={isFirst}
             accordionName={accordionName}
             useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/accordion/accordion-item"
+            {...itemRegionAttributes}
             {...item}
           />
         );

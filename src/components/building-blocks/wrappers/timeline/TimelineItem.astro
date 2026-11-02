@@ -6,13 +6,15 @@ import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import { toText } from "@component-utils/toText";
 
 const {
-  year: _year,
+  year: rawYear,
   date: rawDate,
   title: rawTitle,
   body: rawBody,
   iconName = "",
   layout = "vertical",
   grouped = false,
+  groupStart = true,
+  yearTag = "h3",
   headingLevel = "h3",
   useDefaultEditableBinding = false,
   class: className,
@@ -20,6 +22,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
+const year = toText(rawYear);
 const date = toText(rawDate);
 const title = toText(rawTitle);
 const body = toText(rawBody);
@@ -30,6 +33,10 @@ const hasDate = isNonEmptyString(date);
 const isHorizontal = layout === "horizontal";
 const isSplit = layout === "split";
 
+const YearTag = yearTag;
+const yearBinding = useDefaultEditableBinding
+  ? { "data-editable": "text", "data-prop": "year" }
+  : {};
 const dateBinding =
   useDefaultEditableBinding && hasDate ? { "data-editable": "text", "data-prop": "date" } : {};
 ---
@@ -93,18 +100,47 @@ const dateBinding =
     )
   ) : grouped ? (
     <>
-      {hasDate && (
-        <span
-          class="timeline-month"
-          {...dateBinding}
-        >
-          {date}
-        </span>
-      )}
-      <span
-        class="timeline-dot"
-        aria-hidden="true"
-      />
+      <YearTag
+        class="timeline-year"
+        hidden={!groupStart || !isNonEmptyString(year)}
+        {...yearBinding}
+      >
+        {year}
+      </YearTag>
+      <div class="timeline-group-rail">
+        <div class="timeline-group-entry">
+          {hasDate && (
+            <span
+              class="timeline-month"
+              {...dateBinding}
+            >
+              {date}
+            </span>
+          )}
+          <span
+            class="timeline-dot"
+            aria-hidden="true"
+          />
+          {hasTitle && (
+            <Heading
+              class="timeline-title"
+              level={headingLevel}
+              size="xs"
+              data-prop={useDefaultEditableBinding ? "title" : undefined}
+            >
+              {title}
+            </Heading>
+          )}
+          {hasBody && (
+            <SimpleText
+              class="timeline-body"
+              size="sm"
+              data-prop={useDefaultEditableBinding ? "body" : undefined}
+              text={body}
+            />
+          )}
+        </div>
+      </div>
     </>
   ) : (
     <span
@@ -150,7 +186,7 @@ const dateBinding =
       </div>
     )
   )}
-  {!isSplit && (isHorizontal || grouped) && hasTitle && (
+  {isHorizontal && hasTitle && (
     <Heading
       class="timeline-title"
       level={headingLevel}
@@ -160,7 +196,7 @@ const dateBinding =
       {title}
     </Heading>
   )}
-  {!isSplit && (isHorizontal || grouped) && hasBody && (
+  {isHorizontal && hasBody && (
     <SimpleText
       class="timeline-body"
       size="sm"

@@ -53,6 +53,8 @@ const resolved = await Promise.all(
   // Array-level editable attributes are owned by the caller's container element.
   resolved.map(({ block, Component }) =>
     Component ? (
+      // No `data-component`: the editor would re-render the item from its bare data, dropping
+      // `useDefaultEditableBinding` and stripping every nested region at page load.
       <Component
         data-editable={useDefaultEditableBinding ? "array-item" : undefined}
         data-id={block._component}

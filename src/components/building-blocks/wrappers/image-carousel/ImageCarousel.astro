@@ -35,6 +35,12 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/image-carousel/image-carousel-item",
+      "data-editable": "array-item",
+    }
+  : {};
 
 const hasImages = images?.length > 0;
 
@@ -77,8 +83,7 @@ if (!_component && !hasImages) return;
             role="group"
             aria-roledescription="slide"
             aria-label={`Image ${index + 1} of ${images.length}`}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/image-carousel/image-carousel-item"
+            {...itemRegionAttributes}
           >
             <Image
               source={img.source}

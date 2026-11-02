@@ -109,6 +109,7 @@ quietly broken in the editor.
 - Tag pages show a Home › Blog › tag breadcrumb trail.
 - Every page has a "Skip to main content" link.
 - Warning status colour tokens, and thin and medium border-width tokens.
+- Code fences in blog posts and page bodies have a copy button.
 
 ### Changed
 
@@ -244,9 +245,15 @@ unusable or wrong.
 - The Embed and Icon pickers offer only what the component accepts, and Definition List items have one editable region per field.
 - Authoring warnings for an unknown Video type, an Image with no alt text, a hosted video with no title and a Button with no link.
 - Production builds no longer link to component-library guide pages that only exist in development.
+- Text and List size, alignment and layout changes show in the editor straight away instead of after a reload.
+- An Image bound only to its source no longer shows an error card for a missing alt field.
+- Wrappers rendered without an editable binding no longer mark their items as editable array items, which the editor rejected outside an array.
 - An autoplaying Carousel no longer gains an extra Pause button each time it is edited.
 - Timeline, Timeline Section and Content Selector icon dropdowns show each icon's glyph and name instead of raw ids.
 - Heading's Icon Position, and Feature Grid's item Icon Color and Icon Background, stay hidden until an icon is chosen.
+- A Code Block's code is editable on the canvas again: it was bound to a field that doesn't exist, so the editor drew an error card over every Code Block.
+- A year-grouped Timeline keeps its grouping in the editor when entries are added, moved or given a new year, and each year can be edited on the canvas. The year groups were extra markup inside the entries list, which the editor never updated.
+- A Pricing Tiers feature switched to not included turns muted in the editor straight away instead of after a reload.
 
 #### Visual and content
 
@@ -269,10 +276,14 @@ unusable or wrong.
 - Stale documentation and counts are corrected.
 - A heading left empty no longer renders an empty heading element that adds stray space.
 - Search opens styled after moving between pages, not only on the first page.
+- Site search counts each page once with exactly one type, so the type filters add up to All, and noindex pages stay out of search.
+- Search results use the page's share or hero image as the thumbnail instead of the first image on the page.
 - Closing a modal, video modal or gallery lightbox keeps its layout for the whole fade.
 - The Scroll Stepper stops trying to centre its first step when it can't, instead of re-laying out the page every frame.
 - Carousel arrows stay correct after a resize, wrap round when the row is too short for looping, and hide with the dots when every slide fits. A centred Carousel centres its first and last slides.
+- The Scroll Deck rail can jump back to earlier cards.
 - Table stripes stay visible on surface and other coloured section backgrounds.
+- Code fences in Markdown and MDX follow the light/dark theme, matching the Code Block component.
 
 ### Security
 

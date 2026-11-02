@@ -90,6 +90,23 @@ function syncPositionLabels(array) {
   });
 }
 
+// A grouped Timeline shows each year only on its group's first entry, and the editor adds,
+// moves and retitles entries without re-rendering the list.
+function syncTimelineGroups(list) {
+  let previousYear = null;
+
+  for (const entry of list.children) {
+    const year = entry.querySelector(":scope > .timeline-year");
+
+    if (!year) continue;
+
+    const text = year.textContent.trim();
+
+    year.hidden = !text || text === previousYear;
+    previousYear = text;
+  }
+}
+
 /**
  * Carousel config is read from attributes on `.carousel-inner` at
  * Embla init time, so any change to those attributes, the inline
@@ -388,6 +405,10 @@ const observer = new MutationObserver((mutations) => {
         if (target.dataset.editable === "array") {
           syncPositionLabels(target);
         }
+
+        const groupedTimeline = target.closest(".timeline-grouped");
+
+        if (groupedTimeline) syncTimelineGroups(groupedTimeline);
 
         if (target.matches(".scroll-deck-track, .scroll-deck-rail")) {
           queueScrollDeckReset(target.closest(".scroll-deck"), "cards changed");

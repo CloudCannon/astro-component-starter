@@ -599,6 +599,8 @@ const EDITOR_INERT = {
   "building-blocks/forms/range/Range.astro":
     "the slider still drags, only the live number readout stops tracking",
   "utils/VideoElements.astro": "calls core-elements/video/setup, which is registered",
+  "utils/prose-code-copy/ProseCodeCopy.astro":
+    "intentional: the blog body is an editable text region, so a copy button would be saved into it",
 };
 
 function hasExecutableScript(source) {

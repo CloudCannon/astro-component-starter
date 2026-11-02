@@ -4,6 +4,7 @@ import Footer from "@navigation/footer/Footer.astro";
 import MainNavigation from "@navigation/main-nav/MainNav.astro";
 import ThemeToggleScript from "@navigation/theme-toggle/ThemeToggleScript.astro";
 import MainComponent from "@component-utils/MainComponent.astro";
+import { resolveSearchThumbnail } from "@component-utils/image";
 import announcementBarData from "@data/announcementBar.json";
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
@@ -43,6 +44,8 @@ type Props = {
   noindex?: boolean;
   generatedImage?: string | null;
   disablePagefind?: boolean;
+  /** The search's `Type` filter value; the tabs in `Search.astro` must name it. */
+  pagefindType?: string;
   mainNav?: Record<string, unknown>;
   footer?: Record<string, unknown>;
   announcementBar?: Record<string, unknown>;
@@ -60,6 +63,7 @@ const {
   noindex: noindexProp,
   generatedImage,
   disablePagefind = false,
+  pagefindType = "Page",
   mainNav = mainNavData,
   footer = footerData,
   announcementBar = announcementBarData,
@@ -74,6 +78,18 @@ const type = frontmatter?.type ?? typeProp;
 const article = frontmatter?.article ?? articleProp;
 const noindex = frontmatter?.noindex ?? noindexProp ?? false;
 const sections = frontmatter?.pageSections ?? [];
+const indexed = !disablePagefind && !noindex;
+
+// Unnamed, Pagefind thumbnails the first <img> in the body, decorative or not.
+const heroWithImage = sections.find(
+  (section: any) =>
+    String(section?._component ?? "").startsWith("page-sections/heroes/") &&
+    typeof section?.imageSource === "string" &&
+    section.imageSource.trim()
+) as { imageSource: string; imageAlt?: string } | undefined;
+const thumbnailSource = image || heroWithImage?.imageSource;
+const thumbnail = indexed && thumbnailSource ? await resolveSearchThumbnail(thumbnailSource) : null;
+const thumbnailAlt = (image ? title : heroWithImage?.imageAlt) || title;
 
 const primaryHeading = sections.find(
   (section: any) => typeof section?.heading === "string" && section.heading.trim()
@@ -104,12 +120,12 @@ const primaryHeading = sections.find(
 
   <main
     id="main-content"
-    {...(disablePagefind ? { "data-pagefind-ignore": "all" } : {})}
+    {...(indexed
+      ? { "data-pagefind-body": true, "data-pagefind-filter": `Type:${pagefindType}` }
+      : { "data-pagefind-ignore": "all" })}
   >
     {sections.length > 0 && (
       <div
-        data-pagefind-body
-        data-pagefind-filter="Type:Page"
         data-editable="component"
         data-component="utils/main-component"
         data-prop-sections="pageSections"
@@ -117,9 +133,17 @@ const primaryHeading = sections.find(
         <MainComponent sections={sections} />
       </div>
     )}
-    <div {...(disablePagefind ? {} : { "data-pagefind-body": true })}>
+    <div>
       <slot />
     </div>
+    {indexed && (
+      <span
+        hidden
+        data-pagefind-meta={thumbnail ? "image[data-src], image_alt[data-alt]" : "image:"}
+        data-src={thumbnail}
+        data-alt={thumbnail ? thumbnailAlt : undefined}
+      />
+    )}
   </main>
   <Footer {...footer} />
 </Layout>

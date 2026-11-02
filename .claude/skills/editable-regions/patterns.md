@@ -42,17 +42,18 @@ To make a file's Markdown body editable (blog posts, MDX pages), wrap the render
 
 ## Page-level array region (layout only)
 
-`src/layouts/Page.astro` renders `<MainComponent sections={sections} />`, and `MainComponent.astro` carries the one region that makes a page's sections editable:
+`src/layouts/Page.astro` wraps `<MainComponent sections={sections} />` in a component region (`data-editable="component" data-component="utils/main-component" data-prop-sections="pageSections"`), and `MainComponent.astro` carries the array region inside it:
 
 ```astro
-<div data-editable="array" data-prop="pageSections" data-component-key="_component">
+<div data-editable="array" data-prop="sections" data-component-key="_component">
   <Components contentSections={sections} />
 </div>
 ```
 
-`data-prop` is the **frontmatter key** (`pageSections`), not the component's own prop name (`sections`) — the region writes to the file, not to the template. `renderBlock` then stamps each row with `data-editable="array-item"`.
+**MUST:** keep `data-prop="sections"` — the component's own prop, not the frontmatter key.
+**Why:** paths inside a component region resolve against that component's props; the shell's `data-prop-sections="pageSections"` maps `sections` back to the file. Writing `pageSections` here resolves to `undefined` and the editor replaces the whole page with an "expected an array" error card. `renderBlock` then stamps each row with `data-editable="array-item"`.
 
-This is wired once at the layout level — **page-section and building-block authors never write it.** There is no `data-editable="component"` wrapper around the array: component registration for every component is globbed in `live-editing.js` (`registerAstroComponent`), and the array region alone is enough for the editor to re-render a changed row. See [EditableComponent in the reference](../references/editable-regions-api.md#editablecomponent) for when a component region is the right tool.
+This is wired once at the layout level — **page-section and building-block authors never write it.** The component region is what re-renders an edit through Astro SSR, cascading `useDefaultEditableBinding` to every nested `renderBlock`; it must stay in the shell, not inside `MainComponent.astro`, or each re-render nests a second copy of it. Component registration for every component is globbed in `live-editing.js` (`registerAstroComponent`). See [EditableComponent in the reference](../references/editable-regions-api.md#editablecomponent) for when a component region is the right tool.
 
 ## Mixed-type arrays
 

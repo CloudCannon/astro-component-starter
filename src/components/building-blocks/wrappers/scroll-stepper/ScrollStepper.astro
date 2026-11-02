@@ -43,6 +43,12 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/scroll-stepper/scroll-stepper-step",
+      "data-editable": "array-item",
+    }
+  : {};
 const mediaDataAttributes = (prop: string) =>
   effectiveChildrenProp ? { "data-editable": "array", "data-prop": prop } : {};
 const hasSteps = stepList.length > 0;
@@ -116,8 +122,7 @@ if (!_component && !hasSteps) return;
             contentSections={stepContent(step, index)}
             aria-label={`Step ${index + 1} of ${stepList.length}`}
             data-index={index}
-            data-editable="array-item"
-            data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
+            {...itemRegionAttributes}
             useDefaultEditableBinding={!!effectiveChildrenProp}
           />
         ))}
@@ -130,8 +135,7 @@ if (!_component && !hasSteps) return;
       {stepList.map((step: StepProps, index: number) => (
         <div
           class="scroll-stepper-mobile-step"
-          data-editable="array-item"
-          data-id="building-blocks/wrappers/scroll-stepper/scroll-stepper-step"
+          {...itemRegionAttributes}
         >
           <div class="scroll-stepper-mobile-media flow">
             <div

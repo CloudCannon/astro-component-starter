@@ -139,8 +139,9 @@ function renderCodeLines(html: string, numbered: boolean): string {
       </header>
     )}
     {tabs.map((tab, index) => {
+      // Panels sit outside the tabs array's items, so the path must name the item itself.
       const codeAttributes = effectiveTabsDataProp
-        ? { "data-editable": "text", "data-prop": "code" }
+        ? { "data-editable": "text", "data-prop": `${effectiveTabsDataProp}.${index}.code` }
         : {};
       const lines = (tab.code || "").split("\n");
 

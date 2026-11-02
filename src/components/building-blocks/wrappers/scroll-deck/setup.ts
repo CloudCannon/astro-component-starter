@@ -62,19 +62,21 @@ export function setupScrollDeck(deck: HTMLElement): void {
 
   // Never cache (a stale port silently stops the rail). Body is excluded: its `overflow-x: hidden`
   // computes `overflow-y: auto`, so the computed value alone would pick body on every page.
-  const scrollportTop = (): number => {
+  const scrollport = (): HTMLElement | null => {
     let el = deck.parentElement;
 
     while (el && el !== document.body && el !== document.documentElement) {
       const overflowY = getComputedStyle(el).overflowY;
 
       if ((overflowY === "auto" || overflowY === "scroll") && el.scrollHeight > el.clientHeight) {
-        return el.getBoundingClientRect().top;
+        return el;
       }
       el = el.parentElement;
     }
-    return 0;
+    return null;
   };
+
+  const scrollportTop = (): number => scrollport()?.getBoundingClientRect().top ?? 0;
 
   let active = -1;
 
@@ -123,10 +125,56 @@ export function setupScrollDeck(deck: HTMLElement): void {
 
   cards.forEach((card) => observer.observe(card));
 
+  // Pinned cards all sit at their sticky top, so an anchor jump to an earlier card scrolls
+  // nowhere; unstick them for one synchronous read to find where each one pins.
+  const scrollTargetFor = (index: number): number | undefined => {
+    const card = cards[index];
+
+    if (!card) return undefined;
+
+    const port = scrollport();
+    const position = card.style.position;
+
+    card.style.position = "static";
+
+    const naturalTop = card.getBoundingClientRect().top;
+
+    card.style.position = position;
+
+    const stickyTop = parseFloat(getComputedStyle(card).top);
+    const scrolled = port ? port.scrollTop : window.scrollY;
+
+    return naturalTop - scrollportTop() + scrolled - (Number.isNaN(stickyTop) ? 0 : stickyTop) + 1;
+  };
+
+  const clicks = new AbortController();
+
+  links.forEach((link, index) => {
+    link.addEventListener(
+      "click",
+      (event) => {
+        if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+
+        const top = scrollTargetFor(index);
+
+        if (top === undefined) return;
+        event.preventDefault();
+        (scrollport() ?? window).scrollTo({
+          top,
+          behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+        });
+        // Keep the router's state: ClientRouter stores its scroll restore in `history.state`.
+        history.replaceState(history.state, "", link.getAttribute("href"));
+      },
+      { signal: clicks.signal }
+    );
+  });
+
   const teardown = () => {
     observer.disconnect();
     resizeObserver.disconnect();
     contentObserver.disconnect();
+    clicks.abort();
     document.removeEventListener("scroll", onScroll, true);
   };
 
