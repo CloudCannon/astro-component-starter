@@ -240,7 +240,7 @@ pageSections:
                 text: Design tokens
                 level: h3
                 size: md
-                iconName: paint-brush
+                iconName: paintbrush
                 iconColor: pink
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text
@@ -255,7 +255,7 @@ pageSections:
                 text: Static output
                 level: h3
                 size: md
-                iconName: bolt
+                iconName: zap
                 iconColor: yellow
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text
@@ -270,7 +270,7 @@ pageSections:
                 text: Agent skills
                 level: h3
                 size: md
-                iconName: cube
+                iconName: box
                 iconColor: blue
                 iconPosition: before
               - _component: building-blocks/core-elements/simple-text

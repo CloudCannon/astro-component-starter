@@ -41,19 +41,19 @@ pageSections:
         description: >-
           A component library and token set your team can extend without
           another redesign.
-        iconName: swatch
+        iconName: swatch-book
         iconColor: purple
       - title: Build and migration
         description: >-
           Your content moved across page by page, with every redirect mapped and
           your search rankings kept.
-        iconName: code-bracket
+        iconName: code
         iconColor: green
       - title: Care
         description: >-
           Updates, fixes, and a few hours a month for new sections, on a plan
           that fits how often you publish.
-        iconName: lifebuoy
+        iconName: life-buoy
         iconColor: orange
     colorScheme: inherit
     backgroundColor: surface
@@ -114,7 +114,7 @@ pageSections:
                         size: sm
           - title: Design systems
             subtext: Four to six weeks
-            iconName: swatch
+            iconName: swatch-book
             iconColor: purple
             contentSections:
               - _component: building-blocks/wrappers/split
@@ -152,7 +152,7 @@ pageSections:
                 gap: xl
           - title: Build and migration
             subtext: Six to ten weeks
-            iconName: code-bracket
+            iconName: code
             iconColor: green
             contentSections:
               - _component: building-blocks/core-elements/text
@@ -185,7 +185,7 @@ pageSections:
                 compact: false
           - title: Care
             subtext: Monthly
-            iconName: lifebuoy
+            iconName: life-buoy
             iconColor: orange
             contentSections:
               - _component: building-blocks/core-elements/text

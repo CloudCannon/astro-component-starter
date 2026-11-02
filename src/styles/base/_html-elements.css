@@ -27,6 +27,10 @@
       width: 100%;
     }
 
+    svg[data-icon][stroke] {
+      stroke-width: var(--icon-stroke-width);
+    }
+
     code[class*="language-"],
     pre[class*="language-"] {
       border-radius: var(--radius-sm);

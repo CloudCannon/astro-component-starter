@@ -10,7 +10,7 @@ blocks:
     - date: June 2022
       title: Opened the doors
       body: Two of us, one room, and a handful of local clients.
-      iconName: rocket-launch
+      iconName: rocket
     - date: '2023'
       title: A bigger team
       body: Three hires and the first year-long retainer.
@@ -18,5 +18,5 @@ blocks:
     - date: '2024'
       title: A place of our own
       body: Moved into a studio on the main street.
-      iconName: puzzle-piece
+      iconName: puzzle
 ---

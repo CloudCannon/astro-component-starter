@@ -52,7 +52,7 @@ quietly broken in the editor.
 - `npm run lint:roots` fails on prop-driven attributes on a component's root element, which go stale when the editor re-renders.
 - `npm run lint:schema` checks the editor configuration against CloudCannon's own schema, plus the Add-menu preview icons the schema itself doesn't check.
 - `npm run lint:css-vars` checks that every design token you use exists. A mistyped token fails silently otherwise.
-- `npm run icons:sync` and `icons:check` keep the icon picker in step with the icon files.
+- `npm run icons:sync` and `icons:check` keep the icon picker in step with the icon files, and `icons:check` fails on an icon id in content or code that names no icon, which would render nothing.
 - `npm run previews:check` catches a missing or stale preview thumbnail, and `npm run previews:montage` renders them all on one sheet.
 - `npm run docs:check` checks the documentation against the components.
 - Tests: `test:unit`, `test:render` (every component builds), `test:smoke` (a real browser over the built site) and `test:css-parity` (per-page CSS pruning changes no computed style).
@@ -123,6 +123,7 @@ quietly broken in the editor.
 - Upgraded to **Astro 7**, with every dependency on its latest release except TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`).
 - **Heads-up:** the starter needs Node 24 or later (`engines` is `>=24.0.0`), and `.nvmrc` pins `24.18.0`. The project scaffolder and the local editor already required it.
 - Icons are built in instead of coming from the unmaintained `astro-icon` package. A mistyped icon name warns instead of failing the build.
+- **Heads-up:** the icon set is [Lucide](https://lucide.dev/icons/) instead of Heroicons: 1,879 icons in place of 324, so the picker has icons for most trades rather than just app controls. A new `--icon-stroke-width` token (1.5) keeps the current line weight. Many ids changed, e.g. `x-mark` is `x`, `check-circle` is `circle-check`, `envelope` is `mail`, `magnifying-glass` is `search` and `bolt` is `zap` (Lucide's `bolt` is a hex nut). An unknown id renders nothing, so run `npm run icons:check`, which lists every id in your content that no longer exists. `npm run icons:lucide -- <version>` upgrades the set.
 - The icon and autocomplete lists are CloudCannon datasets under `.cloudcannon/data/`, which takes `cloudcannon.config.yml` from 951 lines to 216.
 - Accessibility, SEO, link and performance checks moved to a separate tool outside this repository. Nothing in this repo or its CI catches accessibility regressions any more.
 - Agent instructions live in `.agents/skills/`, copied to `.claude/` for Claude Code.

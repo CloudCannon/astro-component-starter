@@ -18,7 +18,7 @@ blocks:
       text: 'Now hiring'
     - _component: 'building-blocks/core-elements/badge'
       variant: plain
-      iconName: rocket-launch
+      iconName: rocket
       text: 'Read the launch post'
       link: '/blog/'
       showArrow: true

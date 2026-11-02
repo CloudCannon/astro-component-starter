@@ -1,6 +1,6 @@
 name:
   type: select
-  comment: Icon to display, from [Heroicons](https://heroicons.com/).
+  comment: Icon to display, from [Lucide](https://lucide.dev/icons/).
   options:
     values: data.icons
     preview:

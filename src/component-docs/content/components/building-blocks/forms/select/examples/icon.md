@@ -5,7 +5,7 @@ blocks:
   _component: 'building-blocks/forms/select'
   label: 'Sort By'
   name: 'sort'
-  iconName: 'arrows-up-down'
+  iconName: 'arrow-up-down'
   options:
     - value: 'most_recent'
       label: 'Most Recent'

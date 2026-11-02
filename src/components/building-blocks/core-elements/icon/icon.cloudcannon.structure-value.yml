@@ -3,7 +3,7 @@ icon: star
 description: Icon from the icon library.
 value:
   _component: building-blocks/core-elements/icon
-  name: bolt
+  name: zap
   size: lg
   color: default
   background: false

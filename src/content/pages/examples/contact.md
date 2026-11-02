@@ -21,7 +21,7 @@ pageSections:
       - _component: building-blocks/core-elements/button
         text: hello@example.com
         link: mailto:hello@example.com
-        iconName: envelope
+        iconName: mail
         iconPosition: before
         variant: secondary
         size: md
@@ -37,13 +37,13 @@ pageSections:
         description: >-
           Use the enquiry form below. It takes about two minutes, and a lead from
           the studio reads it.
-        iconName: rocket-launch
+        iconName: rocket
         iconColor: blue
       - title: Already a client
         description: >-
           Email support@example.com. Care plan clients hear back within their
           plan's response time.
-        iconName: lifebuoy
+        iconName: life-buoy
         iconColor: orange
       - title: Press and speaking
         description: >-
@@ -65,7 +65,7 @@ pageSections:
         label: Studio
         value: 12 Vogel Street, Dunedin 9016, New Zealand
         url: ''
-      - icon: envelope
+      - icon: mail
         label: Email
         value: hello@example.com
         url: mailto:hello@example.com

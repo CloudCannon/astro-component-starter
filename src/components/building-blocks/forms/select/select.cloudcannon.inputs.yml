@@ -40,7 +40,7 @@ autocomplete:
   comment: Autofill hint for browsers. Leave blank to derive it from the field's type and name.
 iconName:
   type: select
-  comment: Leading icon, from [Heroicons](https://heroicons.com/).
+  comment: Leading icon, from [Lucide](https://lucide.dev/icons/).
   options:
     values: data.icons
     preview:

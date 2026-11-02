@@ -31,7 +31,7 @@ blocks:
             items:
               - name: 'Developers'
                 description: 'Your stack + editing'
-                icon: 'code-bracket'
+                icon: 'code'
                 path: '#'
               - name: 'Content editors'
                 description: 'Draft. Edit. Publish.'
@@ -41,7 +41,7 @@ blocks:
             items:
               - name: 'Enterprise solutions'
                 description: 'Built for how large teams actually work'
-                icon: 'building-office'
+                icon: 'building'
                 path: '#'
     - name: 'Pricing'
       path: '#'

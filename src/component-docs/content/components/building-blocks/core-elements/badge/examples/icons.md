@@ -14,10 +14,10 @@ blocks:
       text: 'New'
     - _component: 'building-blocks/core-elements/badge'
       variant: success
-      iconName: check-circle
+      iconName: circle-check
       text: 'Shipped'
     - _component: 'building-blocks/core-elements/badge'
       variant: warning
-      iconName: exclamation-triangle
+      iconName: triangle-alert
       text: 'Deprecated'
 ---

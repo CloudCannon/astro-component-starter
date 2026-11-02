@@ -13,7 +13,7 @@ value:
     text: Watch video
     variant: primary
     size: md
-    iconName: play-circle
+    iconName: circle-play
   size: xl
 preview:
   text:

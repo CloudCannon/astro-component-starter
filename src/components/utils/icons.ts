@@ -54,7 +54,7 @@ function editDistance(a: string, b: string): number {
   return previous[b.length];
 }
 
-// Edit distance, not shared prefix: the set is full of near siblings like `chevron-down`/`chevron-double-down`.
+// Edit distance, not shared prefix: the set is full of near siblings like `chevron-down`/`chevrons-down`.
 export function suggestIconNames(name: string, limit = 3): string[] {
   const target = name.trim();
 

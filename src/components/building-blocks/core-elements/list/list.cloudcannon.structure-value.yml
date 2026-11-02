@@ -9,7 +9,7 @@ value:
       iconColor: default
       link:
     - text: List item 2
-      iconName: lock-closed
+      iconName: lock
       iconColor: default
       link:
     - text: List item 3
@@ -73,7 +73,7 @@ _structures:
               removeformat: true
           iconName:
             type: select
-            comment: Icon lists only. The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
+            comment: Icon lists only. The name of the icon to display. Sourced from [Lucide](https://lucide.dev/icons/).
             options:
               values: data.icons
               preview:

@@ -233,19 +233,19 @@ pageSections:
           - _component: building-blocks/core-elements/list
             items:
               - text: Create a component, or turn a screenshot into one
-                iconName: squares-plus
+                iconName: grid-2x2-plus
                 iconColor: default
                 link:
               - text: Migrate an existing site
-                iconName: arrow-right-end-on-rectangle
+                iconName: log-in
                 iconColor: default
                 link:
               - text: Retheme the whole site
-                iconName: paint-brush
+                iconName: paintbrush
                 iconColor: default
                 link:
               - text: Debug the visual editor
-                iconName: wrench-screwdriver
+                iconName: wrench
                 iconColor: default
                 link:
             direction: vertical

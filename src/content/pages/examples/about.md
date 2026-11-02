@@ -68,13 +68,13 @@ pageSections:
         description: >-
           We design the editing experience alongside the pages. If your marketing
           team can't change it, it isn't finished.
-        iconName: pencil-square
+        iconName: square-pen
         iconColor: blue
       - title: Plain, fast pages
         description: >-
           Static HTML, small stylesheets, and JavaScript only where a component
           needs it. Fast on a phone in a field, not just on our laptops.
-        iconName: bolt
+        iconName: zap
         iconColor: yellow
       - title: Handoffs, not hostages
         description: >-
@@ -94,7 +94,7 @@ pageSections:
         date: '2014'
         title: Opened the studio
         body: Two of us, a spare room, and a handful of brochure sites for local shops.
-        iconName: rocket-launch
+        iconName: rocket
       - year: ''
         date: '2018'
         title: First full-time hires
@@ -106,7 +106,7 @@ pageSections:
         date: '2022'
         title: A studio of our own
         body: Out of the spare room and into a shopfront on Vogel Street.
-        iconName: building-storefront
+        iconName: store
       - year: ''
         date: '2026'
         title: Still shipping

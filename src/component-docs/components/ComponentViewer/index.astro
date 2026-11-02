@@ -101,7 +101,7 @@ const formattedCodeCache = await Promise.all(
                 variant="primary"
                 text="Copy Astro Code"
                 size="lg"
-                iconName="document-duplicate"
+                iconName="copy"
                 data-action="copy-code"
                 hideText={true}
                 data-code={formattedCode.astro}
@@ -127,7 +127,7 @@ const formattedCodeCache = await Promise.all(
                 variant="primary"
                 text="Copy YAML"
                 size="lg"
-                iconName="document-duplicate"
+                iconName="copy"
                 data-action="copy-code"
                 hideText={true}
                 data-code={formattedCode.yaml}
@@ -191,19 +191,19 @@ const formattedCodeCache = await Promise.all(
               {
                 value: "desktop",
                 label: "Desktop",
-                icon: "computer-desktop",
+                icon: "monitor",
                 checked: true,
               },
               {
                 value: "tablet",
                 label: "Tablet",
-                icon: "device-tablet",
+                icon: "tablet",
                 checked: false,
               },
               {
                 value: "mobile",
                 label: "Mobile",
-                icon: "device-phone-mobile",
+                icon: "smartphone",
                 checked: false,
               },
             ]}
@@ -239,19 +239,19 @@ const formattedCodeCache = await Promise.all(
             {
               value: "component",
               label: "Preview",
-              icon: "cube",
+              icon: "box",
               checked: true,
             },
             {
               value: "yaml",
               label: "YAML Code",
-              icon: "bars-4",
+              icon: "text-align-justify",
               checked: false,
             },
             {
               value: "astro",
               label: "Astro Code",
-              icon: "code-bracket",
+              icon: "code",
               checked: false,
             },
           ]}

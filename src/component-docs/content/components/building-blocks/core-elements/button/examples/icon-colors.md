@@ -5,7 +5,7 @@ blocks:
   _component: 'building-blocks/wrappers/button-group'
   buttonSections:
     - _component: 'building-blocks/core-elements/button'
-      iconName: hand-thumb-up
+      iconName: thumbs-up
       iconColor: default
       text: 'Default'
       variant: tertiary
@@ -15,22 +15,22 @@ blocks:
       text: 'Blue'
       variant: tertiary
     - _component: 'building-blocks/core-elements/button'
-      iconName: swatch
+      iconName: swatch-book
       iconColor: cyan
       text: 'Cyan'
       variant: tertiary
     - _component: 'building-blocks/core-elements/button'
-      iconName: check-circle
+      iconName: circle-check
       iconColor: green
       text: 'Green'
       variant: tertiary
     - _component: 'building-blocks/core-elements/button'
-      iconName: bolt
+      iconName: zap
       iconColor: yellow
       text: 'Yellow'
       variant: tertiary
     - _component: 'building-blocks/core-elements/button'
-      iconName: fire
+      iconName: flame
       iconColor: orange
       text: 'Orange'
       variant: tertiary

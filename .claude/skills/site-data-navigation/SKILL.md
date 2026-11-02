@@ -117,7 +117,7 @@ A top-level `navData` item can open a full-width panel instead of a dropdown by 
 
 - A `megaMenu` object **wins over `children`** — the two are exclusive; a mega item's `children` are ignored. An empty `megaMenu` (no columns, no feature) still opens an empty panel, so a freshly added "Mega Menu Item" is visible in the editor before its first column.
 - `feature` is optional (omit it, or leave `heading` and `image` empty, to render columns only). Each column's `heading` is an optional eyebrow label; the link array is named `items`, not `links` — `links` is a global structure key (footer) that CloudCannon matches by field name.
-- `icon` is a kebab-case Heroicons id from the `icons` dataset (same picker as list items); `highlight: true` gives a link a surface background.
+- `icon` is a kebab-case Lucide id from the `icons` dataset (same picker as list items); `highlight: true` gives a link a surface background.
 - `path` on the mega item itself keeps the split-row semantics above: a real path renders link + separate chevron toggle, `""`/`#` makes the whole row the toggle.
 - Rendering: `Bar.astro` dispatches mega items to `MegaPanel.astro` (a private helper next to `Dropdown.astro`, neither is a CloudCannon component). The panel is absolutely positioned against main-nav's `.content` (its `container-type` makes it the containing block) so it spans the full header width. `Mobile.astro` flattens the panel into the accordion: column headings become group labels, links render as icon + name, the feature card is dropped. `Side.astro` ignores `megaMenu` entirely.
 - The toggle is the same CSS-only hidden checkbox as regular dropdowns, so the panel opens in the CloudCannon Visual Editor where inline scripts don't run.

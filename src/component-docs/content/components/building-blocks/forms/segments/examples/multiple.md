@@ -9,7 +9,7 @@ blocks:
   options:
     - value: 'analytics'
       label: 'Analytics'
-      icon: 'chart-bar'
+      icon: 'chart-column'
       checked: true
     - value: 'notifications'
       label: 'Notifications'
@@ -17,10 +17,10 @@ blocks:
       checked: false
     - value: 'api'
       label: 'API Access'
-      icon: 'code-bracket'
+      icon: 'code'
       checked: true
     - value: 'support'
       label: 'Support'
-      icon: 'lifebuoy'
+      icon: 'life-buoy'
       checked: false
 ---

@@ -12,7 +12,7 @@ blocks:
     text: 'Watch on YouTube'
     variant: 'primary'
     size: 'md'
-    iconName: 'play-circle'
+    iconName: 'circle-play'
   title: 'Astro in 100 Seconds'
   size: 'xl'
 ---

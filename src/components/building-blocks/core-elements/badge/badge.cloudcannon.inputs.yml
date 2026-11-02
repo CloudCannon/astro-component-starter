@@ -3,7 +3,7 @@ text:
   comment: Text displayed inside the badge.
 iconName:
   type: select
-  comment: Leading icon, from [Heroicons](https://heroicons.com/).
+  comment: Leading icon, from [Lucide](https://lucide.dev/icons/).
   options:
     values: data.icons
     preview:

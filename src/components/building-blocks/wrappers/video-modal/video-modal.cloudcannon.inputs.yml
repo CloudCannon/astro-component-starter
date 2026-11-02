@@ -83,7 +83,7 @@ trigger:
             text: Watch video
             variant: primary
             size: md
-            iconName: play-circle
+            iconName: circle-play
         - label: Poster image
           icon: image
           value:

@@ -22,7 +22,7 @@ socials:
       _inputs:
         icon:
           type: select
-          comment: Icon to display for the social media link. Sourced from [Heroicons](https://heroicons.com/).
+          comment: Icon to display for the social media link. Pick a `social/` mark from the icon library.
           options:
             values: data.icons
             preview:

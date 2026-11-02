@@ -47,7 +47,7 @@ alignmentHorizontal:
       - id: end
         name: End
 iconName:
-  comment: Icon to display, from [Heroicons](https://heroicons.com/).
+  comment: Icon to display, from [Lucide](https://lucide.dev/icons/).
   type: select
   options:
     values: data.icons

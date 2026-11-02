@@ -12,6 +12,7 @@ description: Use when adding, replacing, or removing a selectable icon in `src/i
 - Adding an icon editors can pick — a brand mark, a UI glyph, a direction icon.
 - Replacing an icon's artwork (brands redraw their logos; X and Medium did in 2024).
 - Removing an icon, or renaming one.
+- Upgrading the Lucide set to a newer release.
 - `npm run icons:check` or `npm run icons:licenses:check` is failing.
 
 ## When not to use
@@ -24,7 +25,7 @@ description: Use when adding, replacing, or removing a selectable icon in `src/i
 
 ## Record the license in the file
 
-**MUST:** every icon that isn't a Heroicon opens with a `Source`/`License` comment above its root `<svg>`.
+**MUST:** every icon that isn't a Lucide icon opens with a `Source`/`License` comment above its root `<svg>`.
 **MUST NOT:** commit a third-party icon before that header exists.
 
 ```svg
@@ -42,7 +43,7 @@ Rules for the header:
 | `License` | A single **SPDX identifier** — `CC0-1.0`, `MIT`, `Apache-2.0`. Free text fails the check.                                |
 | Position  | The first thing in the file, immediately above `<svg>`. A comment after `<svg>` is not a header; the check won't see it. |
 
-Heroicons files need no header: they are covered as a set by `LICENSE-heroicons.txt`, and the check recognises them by their Heroicons v2 signature (`data-slot="icon"`). Delete that attribute from a Heroicon and it becomes an unrecorded icon.
+Lucide files need no header of ours: they are covered as a set by `LICENSE-lucide.txt`, and the check recognises them by the `<!-- @license lucide-static … -->` line every Lucide file opens with. Delete that line and the icon becomes unrecorded.
 
 ## Where to get icons
 
@@ -50,7 +51,7 @@ Prefer a source whose license needs no judgement call. All of these permit comme
 
 | Source                                                          | License | Use for                                          |
 | --------------------------------------------------------------- | ------- | ------------------------------------------------ |
-| [Heroicons](https://heroicons.com/)                             | MIT     | UI glyphs (the majority of the registry)         |
+| [Lucide](https://lucide.dev/icons/)                             | ISC     | UI glyphs (the majority of the registry)         |
 | [Simple Icons](https://simpleicons.org/)                        | CC0-1.0 | Brand marks — 3,700+ brands, no attribution      |
 | [Instructure UI](https://github.com/instructure/instructure-ui) | MIT     | Direction/utility icons (InstUI)                 |
 | [Fontisto](https://github.com/kenangundogan/fontisto)           | MIT     | Only where it already is — see `social/yelp.svg` |
@@ -65,21 +66,25 @@ Brand marks are **trademarks** regardless of the artwork's license. Recording `L
 1. Save the artwork as `src/icons/<id>.svg` — `social/<name>.svg` for a brand mark, top level for a UI glyph. The `<id>` is the path under `src/icons/` minus `.svg`, and it is what content references (`icon: social/github`).
 2. Keep a `viewBox` and drop any `width`/`height`. A file with neither `viewBox` nor numeric dimensions throws at render time.
 3. Strip fills and strokes from the artwork (`fill="none"` is fine) so `Icon.astro` can paint it in the current text colour. A hardcoded colour ignores the surrounding text; `tests/unit/icons.test.ts` fails on one.
-4. Prepend the `Source`/`License` header (skip for Heroicons).
+4. Prepend the `Source`/`License` header.
 5. Run `npm run icons:sync`.
 
 ## Remove, rename, or replace an icon
 
 1. Delete/rename/replace the `.svg`.
-2. If the source changed, update the header. If it became a Heroicon, delete the header.
-3. Run `npm run icons:sync` — this also refuses to leave a picker entry with no SVG.
+2. If the source changed, update the header.
+3. Run `npm run icons:sync`, then `npm run icons:check`: it fails on any content, seed or component that still names the old id, because an unknown id renders nothing.
+
+## Upgrade Lucide
+
+Don't add Lucide icons by hand. Run `npm run icons:lucide -- <version>` with an exact `lucide-static` release; it copies only canonical names (the package also ships every deprecated alias as a duplicate file) and prints any id the new release dropped. Then run `npm run icons:sync`, fix what `npm run icons:check` reports, and update the version in `src/icons/README.md`.
 
 ## Verify your work
 
 | Command                        | Passing result                                                      |
 | ------------------------------ | ------------------------------------------------------------------- |
 | `npm run icons:sync`           | Rewrites `.cloudcannon/data/icons.yml` with no error.               |
-| `npm run icons:check`          | `ok .cloudcannon/data/icons.yml (<N> icons)` — no drift.            |
+| `npm run icons:check`          | No dataset drift, and every icon id in content and code resolves.   |
 | `npm run icons:licenses:check` | `ok src/icons/ (<N> third-party icons, all recorded)`.              |
 | `npm run test:unit`            | `tests/unit/icons.test.ts` passes — every SVG normalizes.           |
 | `npm run check`                | Exit 0 — includes both icon checks.                                 |

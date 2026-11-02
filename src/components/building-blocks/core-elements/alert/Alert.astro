@@ -21,11 +21,11 @@ const {
 } = Astro.props;
 
 const DEFAULT_ICONS: Record<string, string> = {
-  info: "information-circle",
-  success: "check-circle",
-  warning: "exclamation-triangle",
-  danger: "exclamation-circle",
-  note: "pencil-square",
+  info: "info",
+  success: "circle-check",
+  warning: "triangle-alert",
+  danger: "circle-alert",
+  note: "square-pen",
 };
 
 const effectiveIcon = iconName || DEFAULT_ICONS[variant] || DEFAULT_ICONS.info;

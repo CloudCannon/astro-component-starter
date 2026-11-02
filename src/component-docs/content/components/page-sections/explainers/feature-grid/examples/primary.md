@@ -15,7 +15,7 @@ blocks:
       iconBackground: true
     - title: 'Dashboards'
       description: 'Pull status from every project into a single adaptive view for leadership.'
-      iconName: 'chart-bar-square'
+      iconName: 'chart-column-big'
       iconColor: blue
       iconBackground: true
     - title: 'Permissions'

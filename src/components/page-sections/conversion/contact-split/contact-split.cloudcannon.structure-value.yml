@@ -17,7 +17,7 @@ value:
       label: Phone
       value: +64 3 555 0142
       url: "tel:+6435550142"
-    - icon: envelope
+    - icon: mail
       label: Email
       value: hello@example.com
       url: "mailto:hello@example.com"
@@ -102,7 +102,7 @@ _structures:
         _inputs:
           icon:
             type: select
-            comment: Small icon beside the detail. Sourced from [Heroicons](https://heroicons.com/).
+            comment: Small icon beside the detail. Sourced from [Lucide](https://lucide.dev/icons/).
             options:
               values: data.icons
               preview:

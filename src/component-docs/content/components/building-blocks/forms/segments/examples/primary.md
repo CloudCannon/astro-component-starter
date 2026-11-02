@@ -16,6 +16,6 @@ blocks:
       checked: false
     - value: 'auto'
       label: 'Auto'
-      icon: 'computer-desktop'
+      icon: 'monitor'
       checked: false
 ---

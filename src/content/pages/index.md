@@ -190,19 +190,19 @@ pageSections:
         description: >-
           Semantic HTML, lean CSS, and JavaScript only when it's needed.
           Boring by design, which is exactly why it works.
-        iconName: cube
+        iconName: box
         iconColor: blue
       - title: Built for speed
         description: >-
           Static-rendered, minimal payloads, zero waste. Built to be extremely
           fast from the first byte.
-        iconName: bolt
+        iconName: zap
         iconColor: yellow
       - title: Everything just fits
         description: >-
           Small, predictable components that snap together cleanly, so bigger
           pieces never become a maintenance mess.
-        iconName: puzzle-piece
+        iconName: puzzle
         iconColor: green
       - title: Controlled editing
         description: >-
@@ -214,7 +214,7 @@ pageSections:
         description: >-
           Deliberately plain styling that takes on your design without a
           fight.
-        iconName: paint-brush
+        iconName: paintbrush
         iconColor: pink
       - title: AI ready
         description: >-

@@ -122,11 +122,13 @@ This repo uses **two unrelated icon vocabularies**, and confusing them is silent
 | Key                                                           | Vocabulary                                    | Where                                    |
 | ------------------------------------------------------------- | --------------------------------------------- | ---------------------------------------- |
 | `icon:` on a structure value, `preview`, or `picker_preview`  | **Material Symbols**, a fixed 3,584-name list | Editor chrome — Add menu, cards, pickers |
-| an `iconName` / `icon` **input value** (`values: data.icons`) | **Heroicons**, SVGs in `src/icons/`           | Rendered on the page by the component    |
+| an `iconName` / `icon` **input value** (`values: data.icons`) | **Lucide**, SVGs in `src/icons/`              | Rendered on the page by the component    |
 
 The `icons` dataset (`.cloudcannon/data/icons.yml`) is **generated** — add or remove an SVG under `src/icons/` and run `npm run icons:sync` rather than editing the list by hand; `npm run icons:check` fails the build on drift.
 
-An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Heroicons names are kebab-case (`eye-slash`, `device-phone-mobile`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` catches a bad `icon:` anywhere: the schema validates a structure value's own `icon:`, and the script separately checks every literal icon under `preview` or `picker_preview`, which the schema types as any string.
+A `values: data.icons` select's `options.preview` resolves against each **option**, which has only `id` and `name`: use `text: [{key: name}]` and `image: [{template: src/icons/{id}.svg}]`. A reference to the input's own key (`{iconName}`) matches nothing, so the picker lists bare ids with no glyph. `npm run lint:cms` enforces this.
+
+An invalid Material Symbols name doesn't error — it silently falls back, so the Add menu just shows the wrong icon. Icon ids are kebab-case (`eye-off`, `smartphone`) and Material Symbols are snake_case (`visibility_off`, `smartphone`), which is the tell: **a kebab-case `icon:` is always wrong.** `npm run lint:schema` catches a bad `icon:` anywhere: the schema validates a structure value's own `icon:`, and the script separately checks every literal icon under `preview` or `picker_preview`, which the schema types as any string.
 
 To find a valid name, query the enum rather than guessing — the schema is the only authority, and levenshtein "closest" suggestions are unhelpful at this enum size (`hero` → `eco`):
 

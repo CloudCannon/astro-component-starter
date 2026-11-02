@@ -26,7 +26,7 @@ Model on `card.cloudcannon.structure-value.yml`.
 
 ```yaml
 label: My Component
-icon: crop_square # Material Symbols, snake_case — NOT a Heroicons name (see structures.md § Two icon systems)
+icon: crop_square # Material Symbols, snake_case — NOT an icon id from src/icons/ (see structures.md § Two icon systems)
 description: Short description of what the component does.
 value:
   _component: building-blocks/wrappers/my-wrapper # kebab dir path — must match the component location

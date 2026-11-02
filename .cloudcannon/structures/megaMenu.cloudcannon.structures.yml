@@ -61,7 +61,7 @@ megaMenuLinks:
           comment: Optional short description shown under the link name.
         icon:
           type: select
-          comment: Optional icon shown beside the link. Sourced from [Heroicons](https://heroicons.com/).
+          comment: Optional icon shown beside the link. Sourced from [Lucide](https://lucide.dev/icons/).
           options:
             values: data.icons
             preview:

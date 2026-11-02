@@ -17,7 +17,7 @@ blocks:
       variant: tertiary
     - _component: 'building-blocks/forms/submit'
       text: 'Send'
-      iconName: 'paper-airplane'
+      iconName: 'send'
       iconColor: 'blue'
       iconPosition: 'after'
       variant: tertiary

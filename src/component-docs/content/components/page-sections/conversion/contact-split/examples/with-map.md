@@ -11,7 +11,7 @@ blocks:
       label: Address
       value: '12 Vogel Street, Dunedin 9016, New Zealand'
       url: ''
-    - icon: envelope
+    - icon: mail
       label: Email
       value: 'hello@example.com'
       url: 'mailto:hello@example.com'

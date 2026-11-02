@@ -1,6 +1,6 @@
 ---
 title: Icon
-overview: An icon for buttons, headings, and other components, from [Heroicons](https://heroicons.com/) or your own SVGs in `src/icons/`.
+overview: An icon for buttons, headings, and other components, from [Lucide](https://lucide.dev/icons/) or your own SVGs in `src/icons/`.
 examples:
   - title: Sizes
     slugs:

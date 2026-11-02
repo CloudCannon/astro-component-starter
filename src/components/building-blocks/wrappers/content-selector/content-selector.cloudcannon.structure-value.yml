@@ -52,7 +52,7 @@ _structures:
             type: text
             comment: Optional supporting text shown beneath the item heading.
           iconName:
-            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
+            comment: The name of the icon to display. Sourced from [Lucide](https://lucide.dev/icons/).
             type: select
             options:
               values: data.icons

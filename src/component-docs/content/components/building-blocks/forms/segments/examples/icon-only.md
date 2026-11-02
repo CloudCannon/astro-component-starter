@@ -9,18 +9,18 @@ blocks:
   options:
     - value: 'grid'
       label: 'Grid View'
-      icon: 'squares-2x2'
+      icon: 'layout-grid'
       checked: true
     - value: 'list'
       label: 'List View'
-      icon: 'list-bullet'
+      icon: 'list'
       checked: false
     - value: 'card'
       label: 'Card View'
-      icon: 'rectangle-stack'
+      icon: 'layers'
       checked: false
     - value: 'table'
       label: 'Table View'
-      icon: 'table-cells'
+      icon: 'table'
       checked: false
 ---

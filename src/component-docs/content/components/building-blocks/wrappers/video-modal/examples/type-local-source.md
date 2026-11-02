@@ -12,7 +12,7 @@ blocks:
     text: 'Watch local video'
     variant: 'primary'
     size: 'md'
-    iconName: 'play-circle'
+    iconName: 'circle-play'
   title: 'Glass Pour'
   size: 'lg'
 ---

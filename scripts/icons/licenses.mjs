@@ -1,5 +1,5 @@
 /**
- * Heroicons (`data-slot="icon"`) are covered by `LICENSE-heroicons.txt`; every other SVG
+ * Lucide icons (`@license lucide-static`) are covered by `LICENSE-lucide.txt`; every other SVG
  * in `src/icons/` must open with its own record:
  *   <!-- Source: Simple Icons (https://simpleicons.org) | License: CC0-1.0 -->
  */
@@ -9,7 +9,7 @@ import { dirname, join, relative, sep } from "node:path";
 const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
 const iconsDir = join(root, "src", "icons");
 
-const HEROICONS_SIGNATURE = 'data-slot="icon"';
+const LUCIDE_SIGNATURE = "@license lucide-static";
 
 const HEADER = /^\s*<!--\s*Source:\s*([^|]+?)\s*\|\s*License:\s*(.+?)\s*-->\s*<svg\b/;
 
@@ -35,7 +35,7 @@ let recorded = 0;
 for (const path of listSvgs(iconsDir)) {
   const source = readFileSync(join(iconsDir, path), "utf8");
 
-  if (source.includes(HEROICONS_SIGNATURE)) continue;
+  if (source.includes(LUCIDE_SIGNATURE)) continue;
 
   const header = HEADER.exec(source);
 

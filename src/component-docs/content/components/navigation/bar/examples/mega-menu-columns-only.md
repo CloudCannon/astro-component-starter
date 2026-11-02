@@ -15,11 +15,11 @@ blocks:
             items:
               - name: 'Page sections'
                 description: 'Full-width blocks for assembling pages'
-                icon: 'rectangle-group'
+                icon: 'layout-dashboard'
                 path: '#'
               - name: 'Building blocks'
                 description: 'Small elements composed inside sections'
-                icon: 'cube'
+                icon: 'box'
                 path: '#'
           - heading: 'Learn'
             items:

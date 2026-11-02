@@ -28,7 +28,7 @@ socialItems:
       _inputs:
         icon:
           type: select
-          comment: "Icon for the social media platform. Sourced from [Heroicons](https://heroicons.com/)."
+          comment: "Icon for the social media platform. Pick a `social/` mark from the icon library."
           options:
             values: data.icons
             preview:

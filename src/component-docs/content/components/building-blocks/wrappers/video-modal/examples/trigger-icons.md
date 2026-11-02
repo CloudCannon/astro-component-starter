@@ -18,7 +18,7 @@ blocks:
         text: 'Play circle'
         variant: 'secondary'
         size: 'md'
-        iconName: 'play-circle'
+        iconName: 'circle-play'
       title: 'Astro in 100 Seconds'
       size: 'xl'
     - _component: 'building-blocks/wrappers/video-modal'

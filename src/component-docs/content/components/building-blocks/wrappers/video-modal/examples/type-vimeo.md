@@ -12,7 +12,7 @@ blocks:
     text: 'Watch on Vimeo'
     variant: 'primary'
     size: 'md'
-    iconName: 'play-circle'
+    iconName: 'circle-play'
   title: 'Dunedin Tourism'
   size: 'xl'
 ---

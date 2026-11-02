@@ -33,7 +33,7 @@ text:
     numberedlist: true
 iconName:
   type: select
-  comment: Replaces the variant's default icon, from [Heroicons](https://heroicons.com/).
+  comment: Replaces the variant's default icon, from [Lucide](https://lucide.dev/icons/).
   options:
     values: data.icons
     preview:

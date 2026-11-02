@@ -44,7 +44,7 @@ _structures:
           value: null
           label: Item
           checked: null
-          icon: bolt
+          icon: zap
         preview:
           icon: radio_button_partial
           image:
@@ -67,7 +67,7 @@ _structures:
             comment: Whether the field is checked by default.
           icon:
             type: select
-            comment: Icon next to the segment option. Sourced from [Heroicons](https://heroicons.com/).
+            comment: Icon next to the segment option. Sourced from [Lucide](https://lucide.dev/icons/).
             options:
               values: data.icons
               preview:
