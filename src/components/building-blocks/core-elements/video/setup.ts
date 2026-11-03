@@ -1,14 +1,18 @@
 function hostedVideos(root: ParentNode): HTMLElement[] {
+  // The editor re-renders a video's contents under its kept container, so `root` can sit inside one.
+  const owner = root instanceof Element ? root.closest<HTMLElement>("[data-hosted-video]") : null;
+
   return [
-    ...(root instanceof HTMLElement && root.matches("[data-hosted-video]") ? [root] : []),
+    ...(owner ? [owner] : []),
     ...Array.from(root.querySelectorAll<HTMLElement>("[data-hosted-video]")),
   ];
 }
 
 function hydrateHostedVideos(root: ParentNode = document): void {
-  if (window.inEditorMode) return;
+  // Consent is the visitor's; the editor mounts the facade without it but never autoplays.
+  const inEditor = Boolean(window.inEditorMode);
 
-  if (!window.siteConsent?.isAllowed("externalMedia")) {
+  if (!inEditor && !window.siteConsent?.isAllowed("externalMedia")) {
     promptHostedVideos(root);
     return;
   }
@@ -20,7 +24,7 @@ function hydrateHostedVideos(root: ParentNode = document): void {
 
     if (!id || (type !== "youtube" && type !== "vimeo")) return;
 
-    const autoplay = container.dataset.videoAutoplay === "true";
+    const autoplay = !inEditor && container.dataset.videoAutoplay === "true";
     const loop = container.dataset.videoLoop === "true";
 
     mountHostedVideo(container, type, id, container.dataset.videoTitle || "Video", autoplay, loop);

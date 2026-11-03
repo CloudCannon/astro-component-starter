@@ -31,6 +31,7 @@ const arrayDataAttributes = effectiveChildrenProp
   ? {
       "data-editable": "array",
       "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
       ...(direction === "row" ? { "data-direction": "row" } : {}),
     }
   : {};

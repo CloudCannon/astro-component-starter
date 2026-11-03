@@ -44,11 +44,11 @@ const firstPaneEditable = !!firstPropName && !firstPaneUsesSlot;
 const secondPaneEditable = !!secondPropName && !secondPaneUsesSlot;
 
 const arrayDataAttributesFirst = firstPropName
-  ? { "data-editable": "array", "data-prop": firstPropName }
+  ? { "data-editable": "array", "data-prop": firstPropName, "data-component-key": "_component" }
   : {};
 
 const arrayDataAttributesSecond = secondPropName
-  ? { "data-editable": "array", "data-prop": secondPropName }
+  ? { "data-editable": "array", "data-prop": secondPropName, "data-component-key": "_component" }
   : {};
 
 const getReversedDistributionMode = (mode: string) => {

@@ -51,7 +51,11 @@ const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes =
   effectiveChildrenProp && hasContentSections
-    ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+    ? {
+        "data-editable": "array",
+        "data-prop": effectiveChildrenProp,
+        "data-component-key": "_component",
+      }
     : {};
 ---
 

@@ -142,10 +142,6 @@ function renderCodeLines(html: string, numbered: boolean): string {
       </header>
     )}
     {tabs.map((tab, index) => {
-      // Panels sit outside the tabs array's items, so the path must name the item itself.
-      const codeAttributes = effectiveTabsDataProp
-        ? { "data-editable": "text", "data-prop": `${effectiveTabsDataProp}.${index}.code` }
-        : {};
       const lines = (tab.code || "").split("\n");
 
       return (
@@ -161,10 +157,7 @@ function renderCodeLines(html: string, numbered: boolean): string {
             style={lineNumbers ? `--code-number-digits: ${String(lines.length).length}` : undefined}
           >
             <pre>
-                <code
-                  {...codeAttributes}
-                  set:html={renderedCodes[index]}
-                />
+                <code set:html={renderedCodes[index]} />
               </pre>
           </div>
           {(tab.filename || tab.description) && (

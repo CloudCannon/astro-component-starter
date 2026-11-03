@@ -51,18 +51,22 @@ playback interaction; it does not make YouTube a first-party service, so it is n
 leave `externalMediaRequiresConsent` off where consent law applies.
 
 `Embed` is a trusted-developer escape hatch, not a general script loader. Its raw HTML remains
-inert until approval; `script`, `style`, `link`, `object`, and `embed` elements plus inline event
-handlers are removed. Iframes must match the built-in YouTube embed, Vimeo player, Google Maps
-embed, or OpenStreetMap export paths before mounting, and allowed frames are sandboxed. Contact
-Split maps use the same allowlist. Authors must use `Video` or `VideoModal` for YouTube and Vimeo
-rather than pasting video iframe code into `Embed`; the video hosts remain recognized only for
-trusted compatibility paths. Prefer `ContactSplit` when its typed map layout fits. A contextual
+inert until it mounts; `script`, `style`, `link`, `object`, and `embed` elements plus inline event
+handlers are removed. Its iframes may load any HTTPS page and are sandboxed. YouTube's own share
+code (`www.youtube.com/embed/…`) is moved to `www.youtube-nocookie.com` and loses its `si`
+tracking parameter. An iframe with any other scheme, a port, or credentials in its URL is removed
+with a console warning, and the editor says so in the Embed's place. Every site an Embed loads is a
+third party the privacy policy must name. Contact Split maps are narrower: their URL must match the
+Google Maps embed or OpenStreetMap export paths. Prefer `Video` or `VideoModal` for
+YouTube and Vimeo, which give a click-to-play facade, and `ContactSplit` when its typed map
+layout fits. A contextual
 **Allow all external media** action grants this category across the site, not only for that one
 video or map.
 
 ## Extending the workflow
 
-Adding a provider is not only an allowlist edit. Update the real privacy policy first, then keep
+Adding a provider to a typed component (Video, Video Modal, Contact Split) is not only an
+allowlist edit. Update the real privacy policy first, then keep
 the initial component HTML inert, add the narrowest HTTPS hostname/path rule in
 `src/integrations/consent/externalMedia.ts`, hydrate only after effective permission, tear mounted
 content down on revocation, and add unit plus browser coverage for all three states. Never emit a

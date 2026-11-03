@@ -721,6 +721,124 @@ for (const path of (await glob("src/content/**/*.mdx", { cwd: root })).sort()) {
   }
 }
 
+// Check 12: an array region whose items come from renderBlock declares `data-component-key`.
+// Without it the editor matches items by position, so a block inserted above another is drawn
+// inside its neighbour's root element, or as the neighbour's component.
+
+const TRANSPARENT_TAGS = new Set(["slot", "Fragment"]);
+
+function astNodes(node, visit, ancestors = []) {
+  if (!node || typeof node !== "object") return;
+  if (Array.isArray(node)) {
+    node.forEach((child) => astNodes(child, visit, ancestors));
+    return;
+  }
+  visit(node, ancestors);
+  const next = node.type === "JSXElement" ? [...ancestors, node] : ancestors;
+
+  for (const [key, value] of Object.entries(node)) {
+    if (key !== "openingElement" && key !== "closingElement") astNodes(value, visit, next);
+  }
+}
+
+const tagName = (element) => element.openingElement.name.name;
+const propertyKey = (property) => property.key?.value ?? property.key?.name;
+
+function arrayRegionObjects(node, out = []) {
+  astNodes(node, (child) => {
+    if (
+      child.type === "ObjectExpression" &&
+      child.properties.some((p) => propertyKey(p) === "data-editable" && p.value?.value === "array")
+    ) {
+      out.push(child);
+    }
+  });
+  return out;
+}
+
+function frontmatterBinding(program, name) {
+  let found = null;
+
+  astNodes(program, (node) => {
+    if (found) return;
+    if (node.type === "VariableDeclarator" && node.id?.name === name) found = node.init;
+    if (node.type === "FunctionDeclaration" && node.id?.name === name) found = node.body;
+  });
+  return found;
+}
+
+function regionDeclaresKey(element, program) {
+  const objects = [];
+  let literalRegion = false;
+  let literalKey = false;
+
+  for (const attribute of element.openingElement.attributes) {
+    if (attribute.type === "JSXAttribute") {
+      const name = attribute.name.name;
+
+      if (name === "data-editable" && attribute.value?.value === "array") literalRegion = true;
+      if (name === "data-component-key") literalKey = true;
+      continue;
+    }
+    const argument = attribute.argument;
+    const name = argument?.type === "CallExpression" ? argument.callee?.name : argument?.name;
+
+    arrayRegionObjects(name ? frontmatterBinding(program, name) : argument, objects);
+  }
+
+  if (literalRegion) return literalKey;
+  if (!objects.length) return null;
+  return objects.every((object) =>
+    object.properties.some((p) => propertyKey(p) === "data-component-key")
+  );
+}
+
+const { parse: parseAstro } = await import("@astrojs/compiler-rs");
+
+for (const relToComponents of astroPaths) {
+  const astroAbs = join(componentsDir, relToComponents);
+  const source = readFileSync(astroAbs, "utf8");
+
+  if (!source.includes("renderBlock.astro")) continue;
+
+  const parsedAst = parseAstro(source).ast;
+  const ast = typeof parsedAst === "string" ? JSON.parse(parsedAst) : parsedAst;
+  const program = ast.frontmatter?.program;
+  let renderBlockName = null;
+
+  astNodes(program, (node) => {
+    if (node.type === "ImportDeclaration" && /renderBlock\.astro$/.test(node.source.value)) {
+      renderBlockName = node.specifiers[0]?.local.name ?? null;
+    }
+  });
+  if (!renderBlockName) continue;
+
+  const missing = new Set();
+
+  astNodes(ast.body, (node, ancestors) => {
+    if (node.type !== "JSXElement" || tagName(node) !== renderBlockName) return;
+    const holder = ancestors.findLast((element) => !TRANSPARENT_TAGS.has(tagName(element)));
+
+    if (!holder || !/^[a-z]/.test(tagName(holder))) return;
+    if (regionDeclaresKey(holder, program) === false) {
+      missing.add(
+        `<${tagName(holder)}> on line ${source.slice(0, holder.start).split("\n").length}`
+      );
+    }
+  });
+
+  if (missing.size) {
+    fail(
+      rel(astroAbs),
+      `array region of rendered blocks has no "data-component-key": "_component" ` +
+        `(${[...missing].join(", ")}). Without it the editor matches blocks by position, so a ` +
+        `block inserted above another is drawn inside its neighbour's element.`
+    );
+  } else {
+    ok(`block-array ${rel(astroAbs)}`);
+  }
+}
+
 for (const { file, reason } of warns) console.warn(`WARN   ${file}\n   ${reason}`);
 for (const { file, reason } of fails) console.error(`FAIL   ${file}\n   ${reason}`);
 

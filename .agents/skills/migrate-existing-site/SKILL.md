@@ -124,7 +124,7 @@ Content rules specific to migration:
 
 Follow [site-data-navigation](../site-data-navigation/SKILL.md) to populate `src/data/mainNav.json`, `src/data/footer.json`, and `src/data/seo.json` from the phase-1 capture, and update `site` in `astro.config.mjs` to the production URL. Logo files (light + dark variant) go in `src/assets/images/` and are referenced from all three data files via `logoSource` / `logoAlternateSource`.
 
-Then follow [privacy-consent](../privacy-consent/SKILL.md): configure `src/data/privacy.json` and `src/data/analytics.json`, rewrite the default `/privacy/` markdown page with the migrated site's real owner/services/purposes/retention/rights, and map every retained third party to the existing analytics or external-media category. Unsupported providers require an intentional allowlist/adapter change; never paste their script or iframe directly into migrated content.
+Then follow [privacy-consent](../privacy-consent/SKILL.md): configure `src/data/privacy.json` and `src/data/analytics.json`, rewrite the default `/privacy/` markdown page with the migrated site's real owner/services/purposes/retention/rights, and map every retained third party to the existing analytics or external-media category. A provider's HTTPS iframe can go in an `Embed`, and the policy must name it. Scripts need an intentional adapter change; never paste a provider's script into migrated content.
 
 **Done-check:** header/footer/SEO are site-specific; the privacy page and labels match the retained services; `npm run check:placeholders -- --strict` passes; and production-like Network inspection shows no optional request before its category is granted.
 

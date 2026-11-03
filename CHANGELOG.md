@@ -26,7 +26,7 @@ change how things look, and every page section moves to a new path.
 #### Privacy and consent
 
 - A site-wide privacy and consent workflow, edited in CloudCannon's **Privacy & Consent** and **Analytics** data panels. Analytics is strict opt-in: it stays off until the visitor allows it, and stays off when the workflow is disabled. The banner gives Accept All, Reject All and Customize equal weight, the settings dialog has a switch per optional category and opens fullscreen on phones, and the footer's **Privacy settings** link reopens it whenever there is a category to choose. A browser's Global Privacy Control signal counts as a decline.
-- Hosted video, maps and embeds load straight away by default. Turn on **Ask before loading external media** (`externalMediaRequiresConsent` in `privacy.json`) and they wait for the visitor's approval instead; sites with EU or UK visitors should. Provider URLs are limited to known embed paths, and YouTube uses Privacy Enhanced Mode.
+- Hosted video, maps and embeds load straight away by default. Turn on **Ask before loading external media** (`externalMediaRequiresConsent` in `privacy.json`) and they wait for the visitor's approval instead; sites with EU or UK visitors should. Video and Contact Split maps accept only their providers' embed URLs. An Embed loads iframes from any HTTPS address, sandboxed and with scripts removed. YouTube uses Privacy Enhanced Mode, including YouTube share code pasted into an Embed.
 - A default privacy policy at `src/content/pages/privacy.md`, a plain markdown page to rewrite for your site, and a Plausible analytics integration.
 
 #### A reference site for every component
@@ -48,7 +48,7 @@ change how things look, and every page section moves to a new path.
 Most of these catch problems that used to build cleanly while leaving the site
 quietly broken in the editor.
 
-- `npm run lint:cms` checks the editor configuration and page content against the components: renamed or missing props, missing files, scripted components that would be dead in the editor, page frontmatter that isn't valid YAML, and blog posts that use a component with no snippet (which the content editor can't edit).
+- `npm run lint:cms` checks the editor configuration and page content against the components: renamed or missing props, missing files, scripted components that would be dead in the editor, block arrays the editor can't tell apart, page frontmatter that isn't valid YAML, and blog posts that use a component with no snippet (which the content editor can't edit).
 - `npm run lint:roots` fails on prop-driven attributes on a component's root element, which go stale when the editor re-renders.
 - `npm run lint:schema` checks the editor configuration against CloudCannon's own schema, plus the Add-menu preview icons the schema itself doesn't check.
 - `npm run lint:css-vars` checks that every design token you use exists. A mistyped token fails silently otherwise.
@@ -101,6 +101,7 @@ quietly broken in the editor.
 - `imageBleed` on Feature Split and Hero Split runs the image to the page edge.
 - A `spaceBefore` control on every stackable block, for the space above it.
 - Carousel: pause-on-hover, a starting slide, a thumbnail indicator and a slide-change event.
+- Divider: a **Line style** of solid, dashed or dotted.
 - Feature Slider: an **Image aspect ratio** (portrait, square or landscape) for every slide, so screenshots and wide artwork aren't cropped to portrait.
 - Toggle: an `offLabel` for a two-sided switch ("Monthly [switch] Annual"), and `inputAttributes` for attributes on the input itself.
 - Cards can lock their colour scheme against the visitor's theme toggle, as Custom Section already could.
@@ -249,6 +250,8 @@ unusable or wrong.
 - Wrappers rendered without an editable binding no longer mark their items as editable array items, which the editor rejected outside an array.
 - Content Selector's icon dropdown shows each icon's glyph and name instead of raw ids.
 - Heading's Icon Position, and Feature Grid's item Icon Color and Icon Background, stay hidden until an icon is chosen.
+- Embeds and Contact Split maps show in the editor as a label naming what they'll load, instead of an empty box, and an Embed says when it removed an iframe it can't load.
+- A block added above another in the editor keeps its own markup. The editor matched content blocks by position and reused the neighbouring block's element, so Social Links lost its styling anywhere but last.
 - A section added in the editor has its editable regions straight away. The editor drew it without them, so a Custom Section had nowhere to add blocks, and a heading added to it could show a "Failed to render text editable region" card.
 
 #### Visual and content

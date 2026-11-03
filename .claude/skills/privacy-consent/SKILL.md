@@ -63,13 +63,13 @@ Prefer the existing typed paths:
 
 - `Video` and `VideoModal` for YouTube or Vimeo.
 - `ContactSplit` for Google Maps or OpenStreetMap.
-- `Embed` only for trusted developer-authored HTML that does not fit a typed component.
+- `Embed` for trusted HTML that does not fit a typed component, such as a form, calendar or podcast player.
 
 **MUST:** use `Video` or `VideoModal` for YouTube and Vimeo; do not paste their iframe code into `Embed`. **Why:** the typed components own provider URLs, titles, autoplay/loop behavior, fallback links, consent hydration, and revocation teardown.
 
-The shared compatibility allowlist remains intentionally narrow: YouTube Privacy Enhanced Mode (`www.youtube-nocookie.com/embed/...`), Vimeo (`player.vimeo.com/video/...`), Google Maps embed paths, and OpenStreetMap exports. `Embed` removes `script`, `style`, `link`, `object`, and `embed` elements plus inline event handlers, rejects other iframe URLs, and sandboxes allowed iframes.
+The typed components' allowlist (`allowedExternalMediaUrl`) is intentionally narrow: YouTube Privacy Enhanced Mode (`www.youtube-nocookie.com/embed/...`, which `www.youtube.com/embed/...` share code is rewritten to), Vimeo (`player.vimeo.com/video/...`), Google Maps embed paths, and OpenStreetMap exports. `Embed` is not limited to it: it removes `script`, `style`, `link`, `object`, and `embed` elements plus inline event handlers, removes iframes whose URL isn't plain HTTPS (`embedIframeUrl`), and sandboxes the rest. Every host an Embed loads is a third party the site's privacy policy must name.
 
-When adding a host or path:
+When adding a host or path to a typed component:
 
 1. Confirm it belongs in `externalMedia` and update the real privacy policy before shipping it.
 2. Add the narrowest HTTPS hostname and pathname rule to `externalMedia.ts`; do not allow arbitrary subdomains, paths, ports, credentials, or schemes.

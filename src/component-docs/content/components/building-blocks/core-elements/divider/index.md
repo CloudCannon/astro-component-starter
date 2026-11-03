@@ -1,7 +1,11 @@
 ---
 title: Divider
-overview: A horizontal line that separates content. Set the space above and below.
+overview: A horizontal line that separates content, solid, dashed or dotted. Set the space above and below.
 examples:
-  - slugs:
+  - title: 'Line styles'
+    slugs:
+      - line-styles
+  - title: 'Padding'
+    slugs:
       - padding
 ---

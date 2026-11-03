@@ -62,4 +62,4 @@ When one array holds items of **different** component types, the container decla
 - `data-component-key="_component"` on the array container — the field naming each item's component.
 - `data-id` on each item — its resolved identity (kebab component path).
 
-In this starter `renderBlock` already resolves items by `_component`, so you rarely wire this by hand; `MainComponent.astro` is the one place it appears (`data-component-key="_component"`). Full attribute semantics: [complex-array attributes in the reference](../references/editable-regions-api.md#complex-array-attributes-wrapper-vs-item).
+In this starter every array whose items come from `renderBlock` carries it: `MainComponent.astro` and each wrapper's content arrays (`contentSections`, a Split's columns, a Card's slots). Add it to any new one; without it an insert above an item reuses that item's root element. Full attribute semantics: [complex-array attributes in the reference](../references/editable-regions-api.md#complex-array-attributes-wrapper-vs-item).

@@ -44,10 +44,10 @@ export function setupCodeBlock(block: HTMLElement): void {
 }
 
 export function setupAllCodeBlocks(root: ParentNode = document): void {
-  const blocks = [
-    ...(root instanceof HTMLElement && root.matches(".code-block") ? [root] : []),
-    ...Array.from(root.querySelectorAll<HTMLElement>(".code-block")),
-  ];
+  const blocks = new Set<HTMLElement>(root.querySelectorAll<HTMLElement>(".code-block"));
+  // The editor re-renders a block's contents under its kept root, so `root` can sit inside one.
+  const owner = root instanceof Element ? root.closest<HTMLElement>(".code-block") : null;
 
+  if (owner) blocks.add(owner);
   blocks.forEach(setupCodeBlock);
 }

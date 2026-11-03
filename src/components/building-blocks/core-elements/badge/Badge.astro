@@ -174,10 +174,6 @@ if (!_component && !hasText && !hasIcon && !Astro.slots.has("default")) return;
         width: var(--spacing-sm);
       }
 
-      .badge-arrow {
-        color: var(--color-text-muted);
-      }
-
       /* A prop-driven class on a region root goes stale in the editor, hence `:has()`. */
       &:has(> .badge-inner.align-start) {
         display: block;

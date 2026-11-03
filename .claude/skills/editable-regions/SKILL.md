@@ -162,7 +162,7 @@ Three shapes, depending on how children are rendered. Prefer A, then B; C is the
 
 **MUST NOT:** put `data-editable="array-item"` on the array container, or `data-editable="array"` on an item — the editor needs the container/item split to CRUD rows.
 
-For mixed-type arrays (items of different components in one list), the container also needs `data-component-key` — this is rare in the starter because `renderBlock` resolves by `_component`. See [patterns.md](patterns.md#mixed-type-arrays) and the [complex-array attributes in the reference](../references/editable-regions-api.md#complex-array-attributes-wrapper-vs-item).
+For mixed-type arrays (items of different components in one list), the container also needs `data-component-key="_component"`. Every wrapper that renders content blocks through `renderBlock` is one. Without it the editor matches items by position, and inserting a block above another reuses that block's root element, so the new block keeps the old one's classes and loses its own styling. `npm run lint:cms` fails on a block array without it. See [patterns.md](patterns.md#mixed-type-arrays) and the [complex-array attributes in the reference](../references/editable-regions-api.md#complex-array-attributes-wrapper-vs-item).
 
 ## Debugging a binding that does not update
 

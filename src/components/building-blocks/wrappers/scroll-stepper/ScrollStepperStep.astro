@@ -13,7 +13,7 @@ const {
 
 const contentBlocks: ContentBlock[] = Array.isArray(contentSections) ? contentSections : [];
 const contentDataAttributes = useDefaultEditableBinding
-  ? { "data-editable": "array", "data-prop": "contentSections" }
+  ? { "data-editable": "array", "data-prop": "contentSections", "data-component-key": "_component" }
   : {};
 ---
 

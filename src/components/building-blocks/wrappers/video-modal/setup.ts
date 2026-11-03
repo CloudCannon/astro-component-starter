@@ -11,7 +11,7 @@ function openVideo(popover: HTMLElement): void {
   const embedSrc = body?.dataset.videoEmbedSrc;
 
   if (!embedContainer || !embedSrc) return;
-  if (!window.siteConsent?.isAllowed("externalMedia")) {
+  if (!window.inEditorMode && !window.siteConsent?.isAllowed("externalMedia")) {
     renderConsentPrompt(embedContainer);
     return;
   }

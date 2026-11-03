@@ -40,6 +40,7 @@ import { setupAllVideos } from "./src/components/building-blocks/core-elements/v
 import { setupAllCodeBlocks } from "./src/components/building-blocks/core-elements/code-block/setup";
 import { setupAllScrollSteppers } from "./src/components/building-blocks/wrappers/scroll-stepper/setup";
 import { setupAllTabs } from "./src/components/utils/tabs/setup";
+import { previewExternalMedia } from "./src/integrations/consent/editorPreview";
 import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
 import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
 import {
@@ -326,6 +327,7 @@ function initNewComponents(root) {
   setupAllTabs(root);
   setupAllCodeBlocks(root);
   setupAllScrollSteppers(root);
+  previewExternalMedia(root.parentElement ?? root);
 }
 
 // CloudCannon only sees real navigations. The router skips `data-astro-reload`
@@ -454,6 +456,7 @@ setupAllTabs();
 setupAllCodeBlocks();
 setupAllScrollSteppers();
 setupAllForms();
+previewExternalMedia();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,

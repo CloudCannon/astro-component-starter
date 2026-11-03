@@ -6,7 +6,10 @@ import {
   type AnalyticsConfig,
   type PrivacyConfig,
 } from "../../../integrations/consent/config";
-import { isAllowedExternalMediaUrl } from "../../../integrations/consent/externalMedia";
+import {
+  allowedExternalMediaUrl,
+  sanitizeEmbed,
+} from "../../../integrations/consent/externalMedia";
 import { getConsentManager, type ConsentCategory } from "../../../integrations/consent/runtime";
 
 let initialized = false;
@@ -126,9 +129,9 @@ function hydrateExternalMedia(): void {
     if (host.hasAttribute("data-external-media-mounted")) return;
 
     if (host.matches("[data-external-media-src]")) {
-      const src = host.dataset.externalMediaSrc;
+      const src = allowedExternalMediaUrl(host.dataset.externalMediaSrc ?? "");
 
-      if (!src || !isAllowedExternalMediaUrl(src)) return;
+      if (!src) return;
 
       const iframe = document.createElement("iframe");
 
@@ -139,42 +142,16 @@ function hydrateExternalMedia(): void {
       iframe.allowFullscreen = true;
       host.replaceChildren(iframe);
     } else {
-      host.replaceChildren(
-        sanitizedEmbedContent(host.previousElementSibling as HTMLTemplateElement)
+      const { content, rejected } = sanitizeEmbed(
+        host.previousElementSibling as HTMLTemplateElement
       );
+
+      if (rejected.length) console.warn(`Embed: removed iframe(s) from ${rejected.join(", ")}`);
+      host.replaceChildren(content);
     }
     host.setAttribute("data-external-media-mounted", "");
     host.removeAttribute("data-external-media-prompt");
   });
-}
-
-function sanitizedEmbedContent(template: HTMLTemplateElement): DocumentFragment {
-  const content = template.content.cloneNode(true) as DocumentFragment;
-
-  content
-    .querySelectorAll("script, style, link, object, embed")
-    .forEach((element) => element.remove());
-
-  content.querySelectorAll<HTMLElement>("*").forEach((element) => {
-    [...element.attributes]
-      .filter((attribute) => attribute.name.toLowerCase().startsWith("on"))
-      .forEach((attribute) => element.removeAttribute(attribute.name));
-  });
-
-  content.querySelectorAll<HTMLIFrameElement>("iframe").forEach((iframe) => {
-    if (!iframe.src || !isAllowedExternalMediaUrl(iframe.src)) {
-      iframe.remove();
-      return;
-    }
-
-    iframe.setAttribute(
-      "sandbox",
-      "allow-scripts allow-popups allow-presentation allow-same-origin"
-    );
-    iframe.referrerPolicy = "strict-origin-when-cross-origin";
-  });
-
-  return content;
 }
 
 function externalMediaFallback(message: string): DocumentFragment {

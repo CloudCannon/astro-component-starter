@@ -6,7 +6,8 @@ import SimpleText from "@core-elements/simple-text/SimpleText.astro";
 import Text from "@core-elements/text/Text.astro";
 import Form from "@forms/form/Form.astro";
 import Split from "@wrappers/split/Split.astro";
-import { isAllowedExternalMediaUrl } from "../../../../integrations/consent/externalMedia";
+import { allowedExternalMediaUrl } from "../../../../integrations/consent/externalMedia";
+import { mapPreviewText } from "../../../../integrations/consent/editorPreview";
 
 type DetailProps = { icon?: string; label?: string; value?: string; url?: string };
 
@@ -38,7 +39,7 @@ const addressDetail = details?.find((detail: DetailProps) =>
   /address|location|map/i.test(`${detail.label ?? ""} ${detail.icon ?? ""}`)
 );
 const mapTitle = addressDetail?.value ? `Map of ${addressDetail.value}` : "Map";
-const allowedMapEmbedUrl = isAllowedExternalMediaUrl(mapEmbedUrl) ? mapEmbedUrl : "";
+const allowedMapEmbedUrl = allowedExternalMediaUrl(mapEmbedUrl) ?? "";
 ---
 
 <CustomSection
@@ -136,7 +137,10 @@ const allowedMapEmbedUrl = isAllowedExternalMediaUrl(mapEmbedUrl) ? mapEmbedUrl 
         class="contact-split-map external-media-placeholder"
         data-external-media-src={allowedMapEmbedUrl}
         data-external-media-title={mapTitle}
-      />
+        {...(typeof window === "undefined" ? {} : { "data-external-media-preview": "" })}
+      >
+        {typeof window !== "undefined" && <p>{mapPreviewText(allowedMapEmbedUrl)}</p>}
+      </div>
     )}
   </div>
 </CustomSection>

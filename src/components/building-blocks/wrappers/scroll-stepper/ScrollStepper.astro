@@ -50,7 +50,9 @@ const itemRegionAttributes = effectiveChildrenProp
     }
   : {};
 const mediaDataAttributes = (prop: string) =>
-  effectiveChildrenProp ? { "data-editable": "array", "data-prop": prop } : {};
+  effectiveChildrenProp
+    ? { "data-editable": "array", "data-prop": prop, "data-component-key": "_component" }
+    : {};
 const hasSteps = stepList.length > 0;
 
 if (!_component && !hasSteps) return;
