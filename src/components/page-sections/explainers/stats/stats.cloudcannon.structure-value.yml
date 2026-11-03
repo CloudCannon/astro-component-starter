@@ -13,22 +13,18 @@ value:
       prefix: ""
       suffix: k+
       label: Customers
-      sublabel: ""
     - number: 99.95
       prefix: ""
       suffix: "%"
       label: Uptime
-      sublabel: Last 12 months
     - number: 1.4
       prefix: ""
       suffix: s
       label: Median build
-      sublabel: ""
     - number: 4.9
       prefix: ""
       suffix: ""
       label: Support score
-      sublabel: Out of 5
   dividers: true
   maxContentWidth: 2xl
   paddingHorizontal: lg
@@ -76,7 +72,6 @@ _structures:
           prefix: ""
           suffix: ""
           label: Label
-          sublabel: ""
         preview:
           text:
             - key: label
@@ -96,9 +91,6 @@ _structures:
           label:
             type: text
             comment: What the number measures.
-          sublabel:
-            type: text
-            comment: Optional smaller line under the label.
 groups:
   - heading: Content
     inputs:

@@ -15,7 +15,6 @@ const {
   headingLevel = "h2",
   subtext = "",
   images = [],
-  layout = "grid",
   columns = 3,
   gap = "md",
   aspectRatio = "square",
@@ -38,8 +37,7 @@ const {
 const items = (images || []).filter((item: any) => item?.image);
 const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
 
-// `aspectRatio: natural` is the pre-`layout` spelling of masonry, honored for old content.
-const masonry = layout === "masonry" || aspectRatio === "natural";
+const masonry = aspectRatio === "natural";
 const tileRatio = masonry ? "none" : aspectRatio;
 
 const derivedLabel = sectionLabel || heading;

@@ -123,22 +123,18 @@ pageSections:
         prefix: ''
         suffix: ''
         label: Pages
-        sublabel: ''
       - number: 41
         prefix: ''
         suffix: ''
         label: Components in use
-        sublabel: ''
       - number: 24
         prefix: ''
         suffix: ''
         label: Page sections
-        sublabel: ''
       - number: 0
         prefix: ''
         suffix: ''
         label: Lines of custom CSS
-        sublabel: ''
     dividers: true
     colorScheme: dark
     backgroundColor: surface

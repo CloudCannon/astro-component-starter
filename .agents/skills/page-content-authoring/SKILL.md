@@ -86,7 +86,6 @@ pageSections:
       - number: 0
         suffix: KB
         label: Runtime JS
-        sublabel: On most sections
     dividers: true
     colorScheme: inherit
     backgroundColor: surface

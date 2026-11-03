@@ -10,7 +10,6 @@ type StatProps = {
   prefix?: string;
   suffix?: string;
   label?: string;
-  sublabel?: string;
 };
 
 const {
@@ -96,15 +95,6 @@ const {
               alignmentHorizontal="center"
             />
           </dd>
-          {stat.sublabel && (
-            <dd
-              class="stat-sublabel"
-              data-editable="text"
-              data-prop="sublabel"
-            >
-              {stat.sublabel}
-            </dd>
-          )}
         </div>
       ))}
     </dl>
@@ -152,13 +142,6 @@ const {
             line-height: var(--line-height-tight);
           }
         }
-      }
-
-      .stat-sublabel {
-        color: var(--color-text-muted);
-        font-size: var(--font-size-sm);
-        margin: var(--spacing-xs) 0 0;
-        order: 3;
       }
 
       .stats-grid.dividers > .stat {

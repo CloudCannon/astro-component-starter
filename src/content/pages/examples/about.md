@@ -39,22 +39,18 @@ pageSections:
         prefix: ''
         suffix: +
         label: Sites shipped since 2014
-        sublabel: ''
       - number: 6
         prefix: ''
         suffix: ''
         label: People on the team
-        sublabel: ''
       - number: 3
         prefix: ''
         suffix: ' days'
         label: To a client's first solo page
-        sublabel: ''
       - number: 98
         prefix: ''
         suffix: ''
         label: Median Lighthouse score
-        sublabel: ''
     dividers: true
     colorScheme: dark
     backgroundColor: surface

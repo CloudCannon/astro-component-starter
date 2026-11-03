@@ -145,22 +145,18 @@ pageSections:
         prefix: ''
         suffix: ''
         label: Pages Globex built itself
-        sublabel: ''
       - number: 3
         prefix: ''
         suffix: ' days'
         label: Brief to live at Umbra
-        sublabel: ''
       - number: 100
         prefix: ''
         suffix: ''
         label: Lighthouse at Northwind
-        sublabel: ''
       - number: 0
         prefix: ''
         suffix: ''
         label: Solstice developer tickets
-        sublabel: ''
     dividers: true
     colorScheme: dark
     backgroundColor: surface
@@ -189,7 +185,6 @@ pageSections:
       - image: /src/assets/images/component-docs/video-placeholder.jpg
         alt: Water poured into a glass tumbler on a dark stone counter
         caption: 'Umbra Stays: room details'
-    layout: grid
     columns: 3
     gap: md
     aspectRatio: square

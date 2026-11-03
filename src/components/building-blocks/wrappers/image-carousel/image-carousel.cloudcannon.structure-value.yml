@@ -4,7 +4,19 @@ description: Image carousel with a thumbnail strip.
 value:
   _component: building-blocks/wrappers/image-carousel
   label: ""
-  images: []
+  images:
+    - source: /src/assets/images/placeholder.jpg
+      alt: ""
+      positionVertical: center
+      positionHorizontal: center
+    - source: /src/assets/images/placeholder.jpg
+      alt: ""
+      positionVertical: center
+      positionHorizontal: center
+    - source: /src/assets/images/placeholder.jpg
+      alt: ""
+      positionVertical: center
+      positionHorizontal: center
   showArrows: true
   loop: true
   aspectRatio: landscape

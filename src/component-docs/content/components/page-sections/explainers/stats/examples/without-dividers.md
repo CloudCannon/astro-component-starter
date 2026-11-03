@@ -10,15 +10,12 @@ blocks:
       prefix: '$'
       suffix: M
       label: 'Client revenue'
-      sublabel: ''
     - number: 380
       prefix: ''
       suffix: '+'
       label: 'Sites launched'
-      sublabel: ''
     - number: 12
       prefix: ''
       suffix: ''
       label: 'Team members'
-      sublabel: 'Across 4 time zones'
 ---

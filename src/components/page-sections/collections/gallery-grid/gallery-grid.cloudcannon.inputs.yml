@@ -21,15 +21,6 @@ images:
   comment: The photos in the grid, in display order.
   options:
     structures: _structures.galleryImages
-layout:
-  type: select
-  comment: Grid crops every tile to one shape. Masonry keeps each photo's own shape.
-  options:
-    values:
-      - id: grid
-        name: Grid
-      - id: masonry
-        name: Masonry
 columns:
   type: range
   comment: Number of columns on screens 640px and up (small screens always show two).
@@ -60,7 +51,7 @@ gap:
         name: 3xl
 aspectRatio:
   type: select
-  comment: Crops every tile. Only applies when Layout is Grid.
+  comment: Crops every tile to one shape. Natural keeps each photo's own shape and stacks them in columns (masonry).
   options:
     values:
       - id: square
@@ -71,6 +62,8 @@ aspectRatio:
         name: Portrait (3:4)
       - id: widescreen
         name: Widescreen (16:9)
+      - id: natural
+        name: Natural (masonry)
 lightbox:
   type: switch
   comment: Opens images full size in an overlay when a tile is clicked.

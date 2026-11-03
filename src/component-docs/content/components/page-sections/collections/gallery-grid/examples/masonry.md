@@ -5,10 +5,10 @@ blocks:
   _component: 'page-sections/collections/gallery-grid'
   eyebrow: 'Gallery'
   heading: 'Around the peninsula'
-  layout: masonry
+  aspectRatio: natural
   images:
-    - image: /src/assets/images/component-docs/castle.jpg
-      alt: 'Ruined stone castle under a starry night sky'
+    - image: /src/assets/images/component-docs/castle-tower.jpg
+      alt: 'Stone tower of a ruined castle under a starry night sky'
       caption: "Cargill's Castle at night"
     - image: /src/assets/images/component-docs/dunedin-cliff.jpg
       alt: 'Sea cliffs above a turquoise bay, gorse flowering in the foreground'
@@ -19,7 +19,7 @@ blocks:
     - image: /src/assets/images/component-docs/sheep.jpg
       alt: 'Two sheep grazing on a headland high above the ocean'
       caption: 'Grazing above the break'
-    - image: /src/assets/images/component-docs/quiet-street.jpg
+    - image: /src/assets/images/component-docs/quiet-street-portrait.jpg
       alt: 'Quiet hillside street with flowering rhododendrons and a no-exit sign'
       caption: 'Spring in the suburbs'
 ---

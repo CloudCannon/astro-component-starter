@@ -73,22 +73,18 @@ pageSections:
         prefix: ''
         suffix: ''
         label: Page sections
-        sublabel: ''
       - number: 51
         prefix: ''
         suffix: ''
         label: Building blocks
-        sublabel: ''
       - number: 343
         prefix: ''
         suffix: ''
         label: Icons in the picker
-        sublabel: ''
       - number: 0
         prefix: ''
         suffix: ' KB'
         label: JS on most sections
-        sublabel: ''
     dividers: true
     colorScheme: dark
     backgroundColor: surface

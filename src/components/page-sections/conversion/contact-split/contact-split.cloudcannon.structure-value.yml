@@ -118,7 +118,7 @@ _structures:
             comment: The detail itself, as shown.
           url:
             type: text
-            comment: Optional link — use tel:… for phone numbers and mailto:… for email addresses.
+            comment: "Where clicking the detail goes, if anywhere. For a phone number, type tel: then the number without spaces (tel:+6435550142). For an email, type mailto: then the address (mailto:hello@example.com)."
 groups:
   - heading: Content
     inputs:
