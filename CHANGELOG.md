@@ -249,6 +249,7 @@ unusable or wrong.
 - Wrappers rendered without an editable binding no longer mark their items as editable array items, which the editor rejected outside an array.
 - Content Selector's icon dropdown shows each icon's glyph and name instead of raw ids.
 - Heading's Icon Position, and Feature Grid's item Icon Color and Icon Background, stay hidden until an icon is chosen.
+- A section added in the editor has its editable regions straight away. The editor drew it without them, so a Custom Section had nowhere to add blocks, and a heading added to it could show a "Failed to render text editable region" card.
 
 #### Visual and content
 
