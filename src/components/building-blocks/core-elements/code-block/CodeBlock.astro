@@ -1,5 +1,7 @@
 ---
+import { slugifyLabel } from "@component-utils/slugify";
 import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { uniqueId } from "@component-utils/uniqueId";
 import Tab from "@component-utils/tabs/Tab.astro";
 import TabPanel from "@component-utils/tabs/TabPanel.astro";
 import Tabs from "@component-utils/tabs/Tabs.astro";
@@ -30,7 +32,8 @@ const tabs = rawTabs as CodeTab[];
 const copyLabel = "Copy";
 const copiedLabel = "Copied";
 const copyFailedLabel = "Copy failed";
-const codeBlockId = crypto.randomUUID();
+const codeBlockName = slugifyLabel(tabs[0]?.filename || tabs[0]?.label || "");
+const codeBlockId = uniqueId(Astro.request, `code-${codeBlockName || "block"}`);
 
 const hasTabs = tabs.length > 0;
 const effectiveTabsDataProp = childrenDataProp ?? (useDefaultEditableBinding ? "tabs" : null);

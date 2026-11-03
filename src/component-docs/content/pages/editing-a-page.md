@@ -90,10 +90,11 @@ The exact same page you just edited in code can also be edited visually in Cloud
 npm run editor
 ```
 
-This builds the site and serves CloudCannon's real Visual Editor against it at [localhost:10101](http://localhost:10101), with no account needed. Two things to know:
+This builds the site and serves CloudCannon's real Visual Editor against it at [localhost:10101](http://localhost:10101), with no account needed. Three things to know:
 
 - It shows the last build, not the dev server. After a change, run `npm run build` in another terminal; the open editor picks it up.
 - Open pages by their file path (`/about/index.html`). Folder-style URLs like `/about/` return an error in the local editor only.
+- Component thumbnails all show a CloudCannon logo. The local editor doesn't load preview images; your hosted site shows the real ones.
 
 Edits you make here aren't written back to your files, so it's a safe place to explore.
 

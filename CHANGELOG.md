@@ -31,7 +31,7 @@ change how things look, and every page section moves to a new path.
 
 #### A reference site for every component
 
-- Every component gets its own documentation page automatically, with a live example, a table of its options and a YAML snippet you can paste into a page. Longer notes and extra examples can be added on top, and a gallery at `/component-docs/` browses the whole library.
+- Every component gets its own documentation page automatically, with a live example, a table of its options and a YAML snippet you can paste into a page. Longer notes and extra examples can be added on top, and a gallery at `/component-docs/gallery/` browses the whole library.
 - Preview thumbnails for every component in CloudCannon's Add menu, in light and dark.
 - The component catalog has a guide to choosing between Grid, Stack, Card Grid, Bento Box and Masonry, and authoring recipes for integration directories, trust metrics and product comparisons.
 
@@ -57,7 +57,7 @@ quietly broken in the editor.
 - `npm run docs:check` checks the documentation against the components.
 - Tests: `test:unit`, `test:render` (every component builds), `test:smoke` (a real browser over the built site) and `test:css-parity` (per-page CSS pruning changes no computed style).
 - `npm run check:quick` runs the three fastest, most useful checks while you work. `npm run check` is what a finished change has to pass.
-- `npm run editor` serves the real CloudCannon editor locally against `dist/` (it pins the CloudCannon CLI and stops early on Node below 24, which the CLI needs), and `npm run new:component` scaffolds a new component.
+- `npm run editor` serves the real CloudCannon editor locally against `dist/`, with the CloudCannon CLI pinned, and `npm run new:component` scaffolds a new component.
 - A build fails if two components share a filename, since MDX addresses components by bare filename.
 - VS Code autocomplete for the CloudCannon config and the design tokens.
 - CI runs every check, including CSS parity and a blocking `npm audit`. Actions are pinned to commit SHAs, the workflow token is read-only, and Dependabot opens grouped weekly updates.
@@ -126,8 +126,8 @@ quietly broken in the editor.
 - Icons are built in instead of coming from the unmaintained `astro-icon` package. A mistyped icon name warns instead of failing the build.
 - **Heads-up:** the icon set is [Lucide](https://lucide.dev/icons/) instead of Heroicons: 1,879 icons in place of 324, so the picker has icons for most trades rather than just app controls. A new `--icon-stroke-width` token (1.5) keeps the current line weight. Many ids changed, e.g. `x-mark` is `x`, `check-circle` is `circle-check`, `envelope` is `mail`, `magnifying-glass` is `search` and `bolt` is `zap` (Lucide's `bolt` is a hex nut). An unknown id renders nothing, so run `npm run icons:check`, which lists every id in your content that no longer exists. `npm run icons:lucide -- <version>` upgrades the set.
 - The icon and autocomplete lists are CloudCannon datasets under `.cloudcannon/data/`, which takes `cloudcannon.config.yml` from 951 lines to 216.
-- Accessibility, SEO, link and performance checks moved to a separate tool outside this repository. Nothing in this repo or its CI catches accessibility regressions any more.
-- Agent instructions live in `.agents/skills/`, copied to `.claude/` for Claude Code.
+- Accessibility, SEO, link and performance checks on the built site moved to a separate tool outside this repository, so this repository's CI no longer runs them.
+- Agent instructions live in `.agents/`, and `npm run agents:sync` copies them to `.claude/skills/` for Claude Code and `.cursor/rules/` for Cursor.
 
 #### Look and feel
 
@@ -150,11 +150,15 @@ quietly broken in the editor.
 - Demo content is a small product site (home, why, get started), a demo blog, and example pages under `/examples/` written as one fictional web studio (services, portfolio, care-plan pricing, about and contact), with every page section in use on a real page.
 - Testimonial Section has the same vertical padding as other page sections, so its card no longer sits tight against the edges of its band.
 - Feature Grid lays out four features as two rows of two instead of three and one.
+- Grid's numbered columns respond to their container's width, not the viewport.
+- A linked Card uses a stretched link instead of wrapping its contents, so buttons, forms and links inside it stay clickable.
+- A page title drops the site-name suffix rather than running past the length search engines display.
 - The README leads with the live demo and screenshots, and documents the tooling and deployment.
 
 #### Performance
 
 - Each page ships only the component CSS its own markup uses, once. Inline CSS is 64% smaller on the homepage and 66% site-wide, and total HTML 57% smaller, which takes about 1.2s off first and largest contentful paint on a cold Slow 4G load.
+- Hosted YouTube and Vimeo videos load a click-to-play facade, so the full player is fetched only when someone presses play.
 
 #### Authoring and the editor
 
@@ -164,24 +168,20 @@ quietly broken in the editor.
 - **Heads-up:** Range no longer takes `required`, which never did anything. Remove it from any content that sets it.
 - **Heads-up:** a List item's text is a `<span class="item-text">` rather than an invalid `<p>`. Nothing renders differently.
 - **Heads-up:** Hero Split's root class is `hero-split` (was `hero`).
+- **Heads-up:** Submit no longer takes `disabled`. Remove it from any content that sets it; `npm run lint:cms` lists them.
 - The editor shows only the fields that apply: a background shows its chosen type's fields, Video and Video Modal their source's, and a List item its icon colour once it has an icon.
 - Every slot is either wide (section content, split, stack, carousel slide, content selector panel), which takes everything, or narrow (card, grid item, modal body, accordion panel, step), which takes content blocks only. `npm run lint:nesting` keeps it consistent.
 - A freshly inserted block starts in the same state as a composed one, with plausible copy and working links instead of "Heading text" and an empty button.
 - Generated ids come from whatever names the thing they belong to instead of a fresh UUID, so builds are reproducible and ids survive an editor re-render.
-- A page title drops the site-name suffix rather than running past the length search engines display.
-- Hosted YouTube and Vimeo videos load a click-to-play facade, so the full player is fetched only when someone presses play.
 - In the content editor, component syntax inside a code block stays code instead of being read as a snippet, so a post can show an example.
-- A linked Card uses a stretched link instead of wrapping its contents, so buttons, forms and links inside it stay clickable.
 - Modal behaviour (focus trap, scroll lock) attaches to any popover with `data-modal`, and `.modal-popover` is styling only. `ModalShell` and `Modal` take `sheet={false}` for a custom full-screen overlay.
-- Grid's numbered columns respond to their container's width, not the viewport.
 - The Text block's toolbar no longer offers `h1`. Use the section's **Heading level** instead.
 - Team Grid's supporting copy and the footer's legal text accept markdown, the mobile menu's logo is an image picker, and the main nav and footer logos link home.
-- Submit no longer offers a "Disabled" switch.
 
 ### Removed
 
 - The Component Builder at `/component-docs/component-builder/`. `npm run new:component` scaffolds a new section instead.
-- Unused dependencies (`@astrojs/node`, `ajv`, `jszip`, `shiki`, the `@rollup/rollup-*` pins), `ConsentManager.acceptAnalytics()` and `rejectOptional()`, and the legacy `href` nav-button fallback.
+- Unused dependencies (`@astrojs/node`, `ajv`, `jszip`, `shiki`, the `@rollup/rollup-*` pins), and the legacy `href` nav-button fallback.
 
 ### Fixed
 
@@ -203,7 +203,6 @@ quietly broken in the editor.
 - Range announces its unit with the value ("60 kg").
 - Icons are hidden from screen readers, which were announcing thousands of unlabelled graphics.
 - The footer's social links are a labelled list, toggles without a visible label fall back to their name, and cards with a background image get a solid backing in case the image fails.
-- A Timeline entry with no year is no longer an `h4` under no `h3`, which skipped a heading level.
 
 #### Images
 
@@ -231,14 +230,14 @@ unusable or wrong.
 - Controls that only appeared after saving (alternate-theme logos, grid alignment) show up on a freshly added block.
 - A component whose list was emptied in the editor renders instead of failing the build.
 - Following a link inside the Visual Editor does a full page load, so the editor knows which page is open.
-- Carousels, modals, tabs, galleries and code blocks work in the component library inside the Visual Editor.
+- Carousels, modals and tabs work in the component library inside the Visual Editor.
 - Content Selector items can be selected and dragged on the canvas, top tabs are centred, and a new tab shows its subtext and icon inputs.
 - More is editable on the canvas: Accordion item titles, Content Selector titles and subtext, and a Modal's trigger text.
 - A Video Modal with the default button trigger renders something to click, and plays in the editor.
 - Passing a `class` to Carousel, Accordion, Footer or a Content Selector panel no longer strips the component's own class.
 - A Card with its own colour scheme uses that scheme's text colour instead of the surrounding page's.
 - Split and Image Carousel survive the editor's re-render, and Image, List and Range no longer put prop-driven attributes on their root element.
-- Adding, duplicating, moving or deleting a Carousel slide, Image Carousel image, Feature Slider slide, Scroll Stepper step or Scroll Deck card keeps every item's "2 of 4" label in order. A new Scroll Deck card also gets its own anchor for the rail and stacks with the rest.
+- Adding, duplicating, moving or deleting a Carousel slide, Image Carousel image or Feature Slider slide keeps every item's "2 of 4" label in order.
 - The add-section menu shows each component's preview thumbnail and correct icon, and uploads go to `src/assets/images`.
 - The move handle on the first page section is reachable again.
 - A Button's text stays visible when "Hide text" is on, since it is the icon-only button's accessible name.
@@ -248,12 +247,8 @@ unusable or wrong.
 - Text and List size, alignment and layout changes show in the editor straight away instead of after a reload.
 - An Image bound only to its source no longer shows an error card for a missing alt field.
 - Wrappers rendered without an editable binding no longer mark their items as editable array items, which the editor rejected outside an array.
-- An autoplaying Carousel no longer gains an extra Pause button each time it is edited.
-- Timeline, Timeline Section and Content Selector icon dropdowns show each icon's glyph and name instead of raw ids.
+- Content Selector's icon dropdown shows each icon's glyph and name instead of raw ids.
 - Heading's Icon Position, and Feature Grid's item Icon Color and Icon Background, stay hidden until an icon is chosen.
-- A Code Block's code is editable on the canvas again: it was bound to a field that doesn't exist, so the editor drew an error card over every Code Block.
-- A year-grouped Timeline keeps its grouping in the editor when entries are added, moved or given a new year, and each year can be edited on the canvas. The year groups were extra markup inside the entries list, which the editor never updated.
-- A Pricing Tiers feature switched to not included turns muted in the editor straight away instead of after a reload.
 
 #### Visual and content
 
@@ -275,14 +270,8 @@ unusable or wrong.
 - Nested page files at `src/content/pages/<section>/index.md` resolve to `/<section>/`.
 - Stale documentation and counts are corrected.
 - A heading left empty no longer renders an empty heading element that adds stray space.
-- Search opens styled after moving between pages, not only on the first page.
-- Site search counts each page once with exactly one type, so the type filters add up to All, and noindex pages stay out of search.
-- Search results use the page's share or hero image as the thumbnail instead of the first image on the page.
-- Closing a modal, video modal or gallery lightbox keeps its layout for the whole fade.
-- The Scroll Stepper stops trying to centre its first step when it can't, instead of re-laying out the page every frame.
+- Closing a modal or video modal keeps its layout for the whole fade.
 - Carousel arrows stay correct after a resize, wrap round when the row is too short for looping, and hide with the dots when every slide fits. A centred Carousel centres its first and last slides.
-- The Scroll Deck rail can jump back to earlier cards.
-- Table stripes stay visible on surface and other coloured section backgrounds.
 - Code fences in Markdown and MDX follow the light/dark theme, matching the Code Block component.
 
 ### Security

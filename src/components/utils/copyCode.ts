@@ -23,16 +23,12 @@ function copyFallback(text: string): boolean {
 }
 
 export async function copyText(text: string): Promise<boolean> {
-  try {
-    if (navigator.clipboard?.writeText) {
-      await navigator.clipboard.writeText(text);
-      return true;
-    }
-  } catch {
-    // Clipboard access may be unavailable outside a secure context.
-  }
+  if (!navigator.clipboard?.writeText) return copyFallback(text);
 
-  return copyFallback(text);
+  return navigator.clipboard.writeText(text).then(
+    () => true,
+    () => copyFallback(text)
+  );
 }
 
 /** Wires a Button-markup copy control: copies `read()`, flashes the outcome on its label, announces it in `status`. */

@@ -1,10 +1,7 @@
 /**
  * Fails on an icon id that names no SVG in `src/icons/`. Icon renders nothing for an unknown id
  * and only warns in dev, so a typo or a renamed icon otherwise ships as an empty element.
- *
- * Reads icon props in content frontmatter, `src/data/*.json`, the `value:` seeds of every
- * structure YAML (the `icon:` beside them is a Material Symbol, not ours), and literal
- * `iconName`/`name`/`getIcon()` ids in `.astro` and `.mdx` source.
+ * A structure YAML's own `icon:` is a Material Symbol, not ours, so only its `value:` is read.
  */
 import { readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";

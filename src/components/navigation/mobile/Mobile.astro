@@ -30,7 +30,7 @@ const toggleId = uniqueId(Astro.request, `mobile-toggle-${navInstanceId}`);
 const pathname = Astro.url.pathname;
 ---
 
-<!-- Name the checkbox, not the labels: ARIA discards a name set on a `<label for>`. -->
+{/* Name the checkbox, not the labels: ARIA discards a name set on a `<label for>`. */}
 <input
   type="checkbox"
   id={toggleId}

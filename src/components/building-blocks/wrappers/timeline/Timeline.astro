@@ -274,9 +274,8 @@ if (!_component && !hasEntries && !hasSlotContent) return;
         }
       }
 
-      /* Entries abut and the rail's padding-block-end carries the space, so the rail doesn't
-         break. A year shows only on its group's first entry; `editor-live-sync.js` re-marks
-         that after the editor adds, moves or retitles an entry without re-rendering the list. */
+      /* Entries abut so the rail doesn't break. Only a group's first year shows, and
+         `editor-live-sync.js` re-marks it: the editor changes entries without re-rendering. */
       &:has(> .timeline-grouped) {
         --timeline-year-line: calc(var(--font-size-lg) * var(--line-height-heading-sm));
 

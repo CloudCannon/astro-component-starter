@@ -4,7 +4,7 @@ import Components from "@component-utils/renderBlock.astro";
 const { sections } = Astro.props;
 ---
 
-<!-- The shell's `data-editable="component"` wrapper can't live here: the editor's re-render would nest a second copy. -->
+{/* The shell's `data-editable="component"` wrapper can't live here: the editor's re-render would nest a second copy. */}
 <div
   data-editable="array"
   data-prop="sections"

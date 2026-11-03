@@ -34,6 +34,7 @@ const isHorizontal = layout === "horizontal";
 const isSplit = layout === "split";
 
 const YearTag = yearTag;
+const yearHidden = !groupStart || !isNonEmptyString(year);
 const yearBinding = useDefaultEditableBinding
   ? { "data-editable": "text", "data-prop": "year" }
   : {};
@@ -102,7 +103,8 @@ const dateBinding =
     <>
       <YearTag
         class="timeline-year"
-        hidden={!groupStart || !isNonEmptyString(year)}
+        hidden={yearHidden}
+        {...(yearHidden ? { "data-pagefind-ignore": "" } : {})}
         {...yearBinding}
       >
         {year}

@@ -267,10 +267,7 @@ function regionKind(element, spreads) {
   return null;
 }
 
-/**
- * The item parameter of every `.map()` callback in the template. Not the index: a component's
- * arrays carry no id key, so the editor keeps rows in place and an index-derived attribute stays true.
- */
+/** Each template `.map()`'s item parameter; not its index, which stays true as the editor keeps unkeyed rows in place. */
 function loopNames(source) {
   const names = new Set();
 
