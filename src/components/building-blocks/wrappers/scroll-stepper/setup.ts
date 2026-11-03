@@ -1,6 +1,4 @@
 const desktopQuery = "(min-width: 768px)";
-// Centring that has not converged by now is chasing a gap it cannot close (e.g. an empty media).
-const MAX_CENTRING_PASSES = 24;
 
 function isStacked(stepper: HTMLElement): boolean {
   const layout = stepper.querySelector<HTMLElement>(".scroll-stepper-layout");
@@ -157,56 +155,36 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
   const runway = track.classList.contains("height-content")
     ? Math.max((mediaHeight - lastStepHeight) / 2, 0)
     : Math.max(mediaHeight - lastStepHeight, 0);
-  const content = first.querySelector<HTMLElement>(".scroll-stepper-step-content");
-  const contentDelta =
-    track.classList.contains("height-content") && content
-      ? media.getBoundingClientRect().top +
-        mediaHeight / 2 -
-        (content.getBoundingClientRect().top + content.getBoundingClientRect().height / 2)
-      : 0;
-  const contentOffset = track.classList.contains("height-content")
-    ? Math.max(
-        0,
-        (stepper.__scrollStepperContentOffset ?? 0) +
-          (stepper.__scrollStepperContentOffsetSettled ? 0 : contentDelta)
-      )
-    : 0;
-
-  stepper.__scrollStepperContentOffset = contentOffset;
-  stepper.style.setProperty("--scroll-stepper-trailing-runway", `${runway}px`);
-  stepper.style.setProperty("--scroll-stepper-content-offset", `${contentOffset}px`);
-
-  if (track.classList.contains("height-content") && !stepper.__scrollStepperContentOffsetSettled) {
-    // The offset settles over several frames; a baseline kept now starts the bar partway.
-    stepper.__scrollStepperProgressStart = undefined;
-
-    const passes = (stepper.__scrollStepperCentringPasses ?? 0) + 1;
-    const previousDelta = stepper.__scrollStepperContentDelta;
-    const closing =
-      previousDelta === undefined || Math.abs(contentDelta) < Math.abs(previousDelta) - 0.5;
-
-    stepper.__scrollStepperCentringPasses = passes;
-    stepper.__scrollStepperContentDelta = contentDelta;
-
-    if (Math.abs(contentDelta) <= 1) {
-      stepper.__scrollStepperContentOffsetSettled = true;
-    } else if (!closing || passes >= MAX_CENTRING_PASSES) {
-      stepper.__scrollStepperContentOffsetSettled = true;
-      stepper.__scrollStepperContentOffset = 0;
-      stepper.style.setProperty("--scroll-stepper-content-offset", "0px");
-    } else if (!stepper.__scrollStepperContentOffsetFrame) {
-      stepper.__scrollStepperContentOffsetFrame = requestAnimationFrame(() => {
-        stepper.__scrollStepperContentOffsetFrame = undefined;
-        setupScrollStepper(stepper);
-      });
-    }
-  }
-
   // Not `top: 50%` + `translate: -50%`: before sticking, the translate lifts the media
   // above its container over the previous section.
   const visibleAreaTop = port ? 0 : navHeight;
   const stickyTop = visibleAreaTop + Math.max(0, (viewportHeight - mediaHeight) / 2);
+  const content = first.querySelector<HTMLElement>(".scroll-stepper-step-content");
+  let contentOffset = 0;
 
+  // Measured against the track at scroll 0, not the media on screen: once the media sticks, its
+  // position no longer follows the content, so an on-screen measure depends on the scroll.
+  if (track.classList.contains("height-content") && content) {
+    const contentBounds = content.getBoundingClientRect();
+    const trackBounds = track.getBoundingClientRect();
+    const appliedOffset = Number.parseFloat(getComputedStyle(track).paddingBlockStart) || 0;
+    const contentCentre =
+      contentBounds.top - trackBounds.top - appliedOffset + contentBounds.height / 2;
+    const trackTopAtScrollStart = port
+      ? trackBounds.top - port.getBoundingClientRect().top + port.scrollTop
+      : trackBounds.top + window.scrollY;
+    // Near the top of the page the media is already stuck, below its natural place, at scroll 0.
+    const mediaStartPush = Math.max(0, stickyTop - trackTopAtScrollStart);
+
+    contentOffset = Math.max(0, mediaHeight / 2 + mediaStartPush - contentCentre);
+  }
+
+  if (contentOffset !== stepper.__scrollStepperContentOffset) {
+    stepper.__scrollStepperProgressStart = undefined;
+  }
+  stepper.__scrollStepperContentOffset = contentOffset;
+  stepper.style.setProperty("--scroll-stepper-trailing-runway", `${runway}px`);
+  stepper.style.setProperty("--scroll-stepper-content-offset", `${contentOffset}px`);
   stepper.style.setProperty("--scroll-stepper-sticky-top", `${stickyTop}px`);
   stepper.style.setProperty("--scroll-stepper-sticky-translate", "none");
 }
@@ -225,13 +203,6 @@ function showStaticGallery(stepper: HTMLElement): void {
   stepper.style.removeProperty("--scroll-stepper-sticky-top");
   stepper.style.removeProperty("--scroll-stepper-sticky-translate");
   stepper.__scrollStepperContentOffset = undefined;
-  stepper.__scrollStepperContentOffsetSettled = undefined;
-  stepper.__scrollStepperCentringPasses = undefined;
-  stepper.__scrollStepperContentDelta = undefined;
-  if (stepper.__scrollStepperContentOffsetFrame) {
-    cancelAnimationFrame(stepper.__scrollStepperContentOffsetFrame);
-    stepper.__scrollStepperContentOffsetFrame = undefined;
-  }
   stepper
     .querySelectorAll(
       ".scroll-stepper-media-panel, .scroll-stepper-steps > .scroll-stepper-step, .scroll-stepper-progress-dot"
@@ -340,9 +311,5 @@ declare global {
     __scrollStepperResizeObserver?: ResizeObserver;
     __scrollStepperProgressStart?: number;
     __scrollStepperContentOffset?: number;
-    __scrollStepperContentOffsetSettled?: boolean;
-    __scrollStepperContentOffsetFrame?: number;
-    __scrollStepperCentringPasses?: number;
-    __scrollStepperContentDelta?: number;
   }
 }
