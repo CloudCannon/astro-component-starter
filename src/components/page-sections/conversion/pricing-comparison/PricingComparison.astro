@@ -156,7 +156,7 @@ const hasTable = planList.length > 0 && rows?.length > 0;
                 >
                   {row?.feature}
                 </th>
-                {planList.map((plan, index) => {
+                {planList.map((_plan, index) => {
                   const value = cellFor(row, index);
                   const mark = markFor(value);
 
