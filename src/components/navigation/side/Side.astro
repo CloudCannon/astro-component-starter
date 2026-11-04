@@ -1,4 +1,5 @@
 ---
+import { currentPathname } from "@component-utils/currentPathname";
 import NavItemTrigger from "@navigation/bar/NavItemTrigger.astro";
 import { createNavItemData, isCurrentPage, type NavItem } from "@navigation/bar/navState";
 import { slugifyLabel } from "@component-utils/slugify";
@@ -12,7 +13,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const pathname = Astro.url.pathname;
+const pathname = currentPathname(Astro.url);
 
 const navInstanceId = slugifyLabel(ariaLabel || "side");
 ---

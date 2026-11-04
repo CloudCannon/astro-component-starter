@@ -1,4 +1,5 @@
 ---
+import { currentPathname } from "@component-utils/currentPathname";
 import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
 import NavItemTrigger from "./NavItemTrigger.astro";
@@ -7,11 +8,10 @@ import { createNavItemData, isCurrentPage, type MegaMenuColumn, type NavItem } f
 interface Props {
   item: NavItem;
   groupName: string;
-  "data-editable"?: string;
 }
 
-const { item, groupName, "data-editable": dataEditable } = Astro.props;
-const pathname = Astro.url.pathname;
+const { item, groupName } = Astro.props;
+const pathname = currentPathname(Astro.url);
 
 const itemData = createNavItemData(pathname, item, groupName);
 
@@ -23,10 +23,7 @@ const featureLinkLabel = feature?.imageAlt || item.name || "Featured";
 const columns: MegaMenuColumn[] = item.megaMenu?.columns ?? [];
 ---
 
-<li
-  class="nav-item has-children has-mega"
-  data-editable={dataEditable}
->
+<li class="nav-item has-children has-mega">
   <NavItemTrigger
     item={itemData}
     inputType="checkbox"

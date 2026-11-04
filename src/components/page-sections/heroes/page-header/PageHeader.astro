@@ -1,4 +1,5 @@
 ---
+import { currentPathname } from "@component-utils/currentPathname";
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
@@ -27,11 +28,7 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-// CloudCannon re-renders this in the browser, where `Astro.url` is undefined; the
-// shells stamp `<html data-pathname>` so the trail survives that render.
-const pathname =
-  Astro.url?.pathname ??
-  (typeof document === "undefined" ? "" : (document.documentElement.dataset.pathname ?? ""));
+const pathname = currentPathname(Astro.url);
 const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading) : [];
 // A one-step trail is "Home › <this heading>", which only repeats the title below it.
 const hasTrail = trail.length > 1;

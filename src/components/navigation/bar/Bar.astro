@@ -1,4 +1,5 @@
 ---
+import { currentPathname } from "@component-utils/currentPathname";
 import Dropdown from "./Dropdown.astro";
 import MegaPanel from "./MegaPanel.astro";
 import { isCurrentPage, itemHasMegaMenu, type NavItem } from "./navState";
@@ -9,7 +10,6 @@ const {
   navData = [],
   class: className,
   "aria-label": ariaLabel = "Navigation",
-  "data-children-prop": childrenDataProp,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -20,13 +20,7 @@ const navGroupName = uniqueId(
   Astro.request,
   `bar-nav-top-${slugifyLabel(ariaLabel || "navigation")}`
 );
-const pathname = Astro.url.pathname;
-
-const arrayDataAttributes = childrenDataProp
-  ? { "data-editable": "array", "data-prop": childrenDataProp, "data-direction": "row" }
-  : {};
-const itemDataAttributes = childrenDataProp ? { "data-editable": "array-item" } : {};
-const nameDataAttributes = childrenDataProp ? { "data-editable": "text", "data-prop": "name" } : {};
+const pathname = currentPathname(Astro.url);
 ---
 
 <nav
@@ -34,31 +28,23 @@ const nameDataAttributes = childrenDataProp ? { "data-editable": "text", "data-p
   class:list={["bar", className]}
   {...htmlAttributes}
 >
-  <ul
-    class="bar-list"
-    {...arrayDataAttributes}
-  >
+  <ul class="bar-list">
     {navData?.map((item: NavItem) => {
       if (itemHasMegaMenu(item)) {
         return (
           <MegaPanel
             item={item}
             groupName={navGroupName}
-            {...itemDataAttributes}
           />
         );
       }
 
       if (!item.children?.length) {
         return (
-          <li
-            class="nav-item"
-            {...itemDataAttributes}
-          >
+          <li class="nav-item">
             <a
               href={item.path}
               aria-current={isCurrentPage(pathname, item) ? "page" : undefined}
-              {...nameDataAttributes}
             >
               {item.name}
             </a>
@@ -70,7 +56,6 @@ const nameDataAttributes = childrenDataProp ? { "data-editable": "text", "data-p
         <Dropdown
           item={item}
           groupName={navGroupName}
-          {...itemDataAttributes}
         />
       );
     })}

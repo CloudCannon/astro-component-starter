@@ -145,8 +145,15 @@ const primaryHeading = sections.find(
       />
     )}
   </main>
-  <Footer
-    {...footer}
-    data-prop={footer === footerData ? "@file[/src/data/footer.json]" : undefined}
-  />
+  {footer === footerData ? (
+    <div
+      data-editable="component"
+      data-component="navigation/footer"
+      data-prop="@file[/src/data/footer.json]"
+    >
+      <Footer {...footer} />
+    </div>
+  ) : (
+    <Footer {...footer} />
+  )}
 </Layout>

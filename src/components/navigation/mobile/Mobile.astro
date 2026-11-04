@@ -1,4 +1,5 @@
 ---
+import { currentPathname } from "@component-utils/currentPathname";
 import Button from "@core-elements/button/Button.astro";
 import { slugifyLabel } from "@component-utils/slugify";
 import { uniqueId } from "@component-utils/uniqueId";
@@ -27,7 +28,7 @@ const {
 const navInstanceId = slugifyLabel(ariaLabel || "mobile");
 // Must be unique: two navs sharing an `aria-label` would leave the second unopenable.
 const toggleId = uniqueId(Astro.request, `mobile-toggle-${navInstanceId}`);
-const pathname = Astro.url.pathname;
+const pathname = currentPathname(Astro.url);
 ---
 
 {/* Name the checkbox, not the labels: ARIA discards a name set on a `<label for>`. */}

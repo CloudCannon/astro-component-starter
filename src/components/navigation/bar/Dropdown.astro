@@ -1,4 +1,5 @@
 ---
+import { currentPathname } from "@component-utils/currentPathname";
 import NavItemTrigger from "./NavItemTrigger.astro";
 import { createNavItemData, isCurrentPage, type NavItem } from "./navState";
 
@@ -6,19 +7,15 @@ import { createNavItemData, isCurrentPage, type NavItem } from "./navState";
 interface Props {
   item: NavItem;
   groupName: string;
-  "data-editable"?: string;
 }
 
-const { item, groupName, "data-editable": dataEditable } = Astro.props;
-const pathname = Astro.url.pathname;
+const { item, groupName } = Astro.props;
+const pathname = currentPathname(Astro.url);
 
 const itemData = createNavItemData(pathname, item, groupName);
 ---
 
-<li
-  class="nav-item has-children"
-  data-editable={dataEditable}
->
+<li class="nav-item has-children">
   <NavItemTrigger
     item={itemData}
     inputType="checkbox"

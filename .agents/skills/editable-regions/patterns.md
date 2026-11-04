@@ -66,9 +66,12 @@ In this starter every array whose items come from `renderBlock` carries it: `Mai
 
 ## Binding to a data file (`@file`)
 
-A region outside any page's frontmatter (the site footer) can bind to another file with an absolute path: `data-prop="@file[/src/data/footer.json].footerText"`. Children of an array region bound this way stay relative (`data-prop="name"`). `@data[key]` works the same for a file registered in `data_config`.
+A region outside any page's frontmatter can bind to another file with an absolute path. `Page.astro` wraps the site footer in one component region, `data-editable="component" data-component="navigation/footer" data-prop="@file[/src/data/footer.json]"`: its edit button opens every field of `footer.json` in one panel (array add, remove and reorder included) and re-renders the footer as it changes. `@data[key]` works the same for a file registered in `data_config`.
 
 **MUST:** start the path with `/`.
-**Why:** the editor API resolves `@file[src/data/footer.json]` to `undefined`, and every region renders an error card.
+**Why:** the editor API resolves `@file[src/data/footer.json]` to `undefined`, and the region renders an error card.
 
-`Footer.astro` takes the `@file[...]` prefix as its own `data-prop` from `Page.astro` and joins it onto each region's key, so the same component binds to its own props when placed as a block. The file's input config comes from its collection, not the component's `inputs.yml`, so a field needing a rich text editor (`footerText`) needs its input under that collection.
+**MUST:** read the pathname with `currentPathname(Astro.url)` (`@component-utils/currentPathname`) in any component the editor can re-render.
+**Why:** `Astro.url` is undefined in the in-browser re-render, so `Astro.url.pathname` throws and the region shows "Failed to render component".
+
+The panel's inputs come from the file's collection, not the component's `inputs.yml`, so a field needing a rich text editor (`footerText`) needs its input under that collection.

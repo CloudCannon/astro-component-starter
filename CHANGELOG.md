@@ -93,7 +93,7 @@ quietly broken in the editor.
 #### New options
 
 - An announcement bar above the navigation on every page, edited in `src/data/announcementBar.json`. A dismissal lasts until the message changes.
-- The footer is editable on the page in the Visual Editor. Click its legal text, a link, a social icon or the logo on any page to edit `src/data/footer.json`, and add, remove or reorder its links and social icons on the canvas. Its legal text gets a rich text editor in the Data panel too.
+- The footer is editable from any page in the Visual Editor: its edit button opens all of `src/data/footer.json` (logo, links, social icons and legal text) in one panel, and the footer updates as you type. The legal text gets a rich text editor.
 - Mega menus in the main navigation: a `megaMenu` on a top-level item renders a full-width panel on desktop and grouped links on mobile.
 - Backgrounds on Card, Custom Section and every page section can be a tiled pattern as well as an image or video, and a `mask` fades part of the background into the background colour. Card and Custom Section backgrounds can stay fixed while the page scrolls.
 - Video: autoplay, loop, and WebVTT captions for self-hosted video. Video Modal can open from a poster image.

@@ -178,7 +178,7 @@ Real excerpt (`src/data/footer.json`):
 - Bottom row: `footerText` (via `Text`) + `socials` as ghost icon-only `Button`s, each `target="_blank" rel="noopener noreferrer"`.
 - When `privacy.json` has `enabled: true`, a separate underlined button using `settingsLabel` reopens the global privacy dialog. It is controlled by privacy data, not `footer.json`.
 
-`Page.astro` passes `data-prop="@file[/src/data/footer.json]"`, and `Footer.astro` prefixes every editable region with it, so clicking the footer in the Visual Editor edits `footer.json` from any page. The leading slash is required: the editor API resolves `src/data/footer.json` without it to nothing, and every region shows an error card. Placed as a block instead (`_component: navigation/footer`), the footer binds to its own props.
+`Page.astro` wraps the footer in one component region bound to `@file[/src/data/footer.json]`, so on any page in the Visual Editor the footer's edit button opens all of `footer.json` in one panel and the footer re-renders as it changes. The leading slash is required: the editor API resolves `src/data/footer.json` without it to nothing, and the region shows an error card.
 
 ---
 
