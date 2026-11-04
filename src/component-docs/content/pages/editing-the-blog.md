@@ -102,7 +102,7 @@ Here's what a client said:
 
 Props use JSX syntax: `heading="Hello"` for text, `columns={3}` for numbers, `{true}` or `{false}` for booleans, and `{[...]}` for arrays.
 
-Use only components that have a **snippet**, so editors can change them in CloudCannon's content editor (the **+** button in the toolbar opens a form for each). These ship with one: Alert, Code Block, CTA Center, CTA Form, CTA Split, Embed, FAQ Section, Feature Grid, Feature Slider, Feature Split, Form, Image, Team Grid, Testimonial Section and Video. Any other component shows up as a locked block in the editor, and `npm run lint:cms` fails on it. To add one, see the blog-mdx-content skill in `.agents/skills/`.
+Use only components that have a **snippet**, so editors can change them in CloudCannon's content editor (the snippet button in the toolbar, the small document icon, opens a form for each). These ship with one: Alert, Code Block, CTA Center, CTA Form, CTA Split, Embed, FAQ Section, Feature Grid, Feature Slider, Feature Split, Form, Image, Team Grid, Testimonial Section and Video. Any other component shows up as a locked block in the editor, and `npm run lint:cms` fails on it. To add one to a component of your own, see [Creating Snippets](/component-docs/creating-snippets/).
 
 ### Wide components
 
@@ -116,4 +116,4 @@ Code blocks, images and videos are wide automatically.
 
 ## Next up
 
-Head to [Going Live](/component-docs/going-live/) to deploy the site, point it at your domain, and clear out the demo content.
+To make a component of your own insertable in posts, head to [Creating Snippets](/component-docs/creating-snippets/). Otherwise, [Going Live](/component-docs/going-live/) covers deploying the site, pointing it at your domain, and clearing out the demo content.

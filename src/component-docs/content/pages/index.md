@@ -28,7 +28,9 @@ New here? Follow these guides in order to go from first clone to building your o
 
 5. **[Editing the Blog](/component-docs/editing-the-blog/)**: Reference for posts, the listing page, and components inside posts.
 
-6. **[Going Live](/component-docs/going-live/)**: Remove the demo content, set your URL and site details, and deploy.
+6. **[Creating Snippets](/component-docs/creating-snippets/)**: Let editors insert your own components inside blog posts through CloudCannon's snippet picker.
+
+7. **[Going Live](/component-docs/going-live/)**: Remove the demo content, set your URL and site details, and deploy.
 
 ## Browse components
 

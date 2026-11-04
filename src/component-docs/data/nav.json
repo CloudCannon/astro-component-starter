@@ -28,6 +28,10 @@
         "path": "/component-docs/editing-the-blog/"
       },
       {
+        "name": "Creating Snippets",
+        "path": "/component-docs/creating-snippets/"
+      },
+      {
         "name": "Going Live",
         "path": "/component-docs/going-live/"
       }
