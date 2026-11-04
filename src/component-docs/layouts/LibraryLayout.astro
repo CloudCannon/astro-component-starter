@@ -1,6 +1,6 @@
 ---
 import "@component-docs/styles/component-docs.css";
-import VideoElements from "@components/utils/VideoElements.astro";
+import VideoElements from "@component-utils/VideoElements.astro";
 import SiteFonts from "@layouts/SiteFonts.astro";
 import "@styles/style.css";
 import { ClientRouter, fade } from "astro:transitions";
@@ -19,8 +19,9 @@ const libraryLayoutSchema = z.object({
 import CustomSection from "@builders/custom-section/CustomSection.astro";
 import MobileNavLayout from "@component-docs/layouts/MobileNavLayout.astro";
 import SidebarNavLayout from "@component-docs/layouts/SidebarNavLayout.astro";
-import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
-import RenderBlock from "@components/utils/renderBlock.astro";
+import SiteConsent from "@component-utils/SiteConsent.astro";
+import ThemeToggleScript from "@navigation/theme-toggle/ThemeToggleScript.astro";
+import MainComponent from "@component-utils/MainComponent.astro";
 const props = libraryLayoutSchema.parse(Astro.props);
 const pageTitle = props.frontmatter?.title || "Component Library";
 const pageDescription = props.frontmatter?.description;
@@ -31,12 +32,18 @@ const contentSections = props.frontmatter?.contentSections || [];
 <html
   lang="en"
   data-theme="light"
+  data-pathname={Astro.url.pathname}
 >
   <head>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width"
+    />
+    <link
+      rel="icon"
+      href="/favicon.ico"
+      sizes="32x32"
     />
     <link
       rel="icon"
@@ -52,27 +59,34 @@ const contentSections = props.frontmatter?.contentSections || [];
       @layer reset, base, components, page-sections, utils, overrides;
     </style>
     <SiteFonts />
-    {
-      import.meta.env.DEV ? (
-        <script
-          type="module"
-          src="/@vite/client"
-        />
-      ) : null
-    }
+    {import.meta.env.DEV ? (
+      <script
+        type="module"
+        src="/@vite/client"
+      ></script>
+    ) : null}
+    <script>
+      if (window.inEditorMode) {
+        // The editor renders components the pruned page CSS never kept (scripts/build/pruneCss.mjs).
+        const full = document.createElement("style");
+        full.textContent = '@import url("/_astro/components-full.css");';
+        document.head.append(full);
+
+        import("../../../live-editing");
+        import("../../../editor-live-sync");
+      }
+    </script>
     <title>{pageTitle}</title>
     <meta
       name="robots"
       content="noindex"
     />
-    {
-      pageDescription ? (
-        <meta
-          name="description"
-          content={pageDescription}
-        />
-      ) : null
-    }
+    {pageDescription ? (
+      <meta
+        name="description"
+        content={pageDescription}
+      />
+    ) : null}
     <slot name="head" />
     <ClientRouter />
   </head>
@@ -91,15 +105,17 @@ const contentSections = props.frontmatter?.contentSections || [];
         <SidebarNavLayout />
         <main class="main">
           <div
-            data-editable="array"
-            data-children-prop="contentSections"
+            data-editable="component"
+            data-component="utils/main-component"
+            data-prop-sections="contentSections"
           >
-            <RenderBlock contentSections={contentSections} />
+            <MainComponent sections={contentSections} />
           </div>
           <slot />
         </main>
       </CustomSection>
       <VideoElements />
+      <SiteConsent />
     </div>
   </body>
 </html>

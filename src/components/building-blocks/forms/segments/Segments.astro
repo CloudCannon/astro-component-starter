@@ -1,5 +1,6 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import { generateFieldId } from "@component-utils/formField";
 import type { SegmentOption } from "../../../../types";
 
 const {
@@ -16,56 +17,56 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const groupId = htmlAttributes.id || `segments-${crypto.randomUUID()}`;
+const groupId = generateFieldId("segments", htmlAttributes.id, name || title);
 const inputType = multiple ? "checkbox" : "radio";
+
+// Native `required` on a checkbox means "tick this box", not "pick at least one".
+const requireEachInput = required && !multiple;
 ---
 
+{/* `group` doesn't support `aria-required`, hence `radiogroup`; a `<legend>` doesn't
+    reliably name a fieldset whose role is overridden, hence `aria-labelledby`. */}
 <fieldset
   class:list={["segments", className]}
-  role={multiple ? "group" : "radiogroup"}
+  role={multiple ? undefined : "radiogroup"}
   aria-labelledby={title ? `${groupId}-legend` : undefined}
+  aria-label={title ? undefined : name || undefined}
+  aria-required={!multiple && required ? "true" : undefined}
   {...htmlAttributes}
 >
-  {
-    title && (
-      <legend
-        id={`${groupId}-legend`}
-        class="legend"
-      >
-        {title}
-        {required && (
-          <span
-            class="segments-required"
-            aria-label="required"
-          >
-            *
-          </span>
-        )}
-      </legend>
-    )
-  }
-  <div
-    class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}
-    role="presentation"
-  >
+  {title && (
+    <legend
+      id={`${groupId}-legend`}
+      class="legend"
+    >
+      {title}
+      {required && (
+        <span
+          class="segments-required"
+          aria-hidden="true"
+        >
+          *
+        </span>
+      )}
+    </legend>
+  )}
+  <div class:list={["segments-options", iconOnly && "icon-only", multiple && "multiple"]}>
     {
-      options.map((option, index: number) => (
+      /* Icon-only segments render no label text, so the input needs `aria-label`. */
+      options.map((option: SegmentOption, index: number) => (
         <label class="segments-option">
           <input
             type={inputType}
             name={multiple ? `${name}[]` : name}
             value={option.value}
             checked={option.checked ? "checked" : undefined}
-            data-checked={option.checked}
-            required={required && index === 0}
-            aria-required={required && index === 0}
+            required={requireEachInput && index === 0}
             autocomplete={keepStateOnRefresh ? "on" : "off"}
             class="segments-field"
+            aria-label={iconOnly ? option.label || undefined : undefined}
           />
           <span
             class="segment"
-            role="button"
-            tabindex="-1"
             title={iconOnly && option.label ? option.label : undefined}
           >
             {option.icon && (
@@ -104,7 +105,13 @@ const inputType = multiple ? "checkbox" : "radio";
       }
 
       .segments-options {
+        /* The padding/negative-margin pair stops the scroll box clipping focus rings. */
+        --segments-focus-room: calc(var(--focus-ring-width) + 2px);
+
         display: flex;
+        margin: calc(var(--segments-focus-room) * -1);
+        overflow-x: auto;
+        padding: var(--segments-focus-room);
       }
 
       .segments-option {
@@ -113,14 +120,20 @@ const inputType = multiple ? "checkbox" : "radio";
         flex-shrink: 0;
         position: relative;
 
+        /* Hidden but focusable, so arrow keys and Space still operate the group. */
         .segments-field {
-          display: none;
+          height: 1px;
+          margin: 0;
+          opacity: 0;
+          pointer-events: none;
+          position: absolute;
+          width: 1px;
         }
 
         .segment {
           align-items: center;
           background-color: var(--color-bg-surface);
-          border: 1px solid var(--color-border);
+          border: var(--border-width-sm) solid var(--color-border);
           color: var(--color-text-muted);
           cursor: pointer;
           display: inline-flex;
@@ -129,7 +142,7 @@ const inputType = multiple ? "checkbox" : "radio";
           justify-content: center;
           padding: var(--spacing-xs) var(--spacing-sm);
           position: relative;
-          transition: background-color var(--animation-normal) ease;
+          transition: background-color var(--animation-normal) var(--ease-default);
           vertical-align: middle;
 
           &:hover {
@@ -160,7 +173,7 @@ const inputType = multiple ? "checkbox" : "radio";
           &,
           &:hover {
             background-color: var(--color-bg);
-            border: 1px solid var(--color-brand);
+            border: var(--border-width-sm) solid var(--color-brand);
             color: var(--color-text-strong);
             z-index: 1;
           }
@@ -170,8 +183,8 @@ const inputType = multiple ? "checkbox" : "radio";
           }
         }
 
-        .segments-field:focus + .segment {
-          outline: 2px solid var(--color-focus-ring);
+        .segments-field:focus-visible + .segment {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
           outline-offset: 2px;
         }
       }

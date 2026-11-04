@@ -1,18 +1,20 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import Button from "@core-elements/button/Button.astro";
 import CarouselSlide from "./CarouselSlide.astro";
-import { slugifyLabel } from "@components/utils/slugify";
+import { slugifyLabel } from "@component-utils/slugify";
 
 type SlideProps = Record<string, unknown>;
 
 const {
   slides = [],
   autoPlay = false,
+  pauseOnHover = false,
   autoScroll = false,
   showIndicators = true,
-  /** `"dots"` (default) or `"fraction"` (e.g. `1/3`). */
   indicatorStyle = "dots",
   showArrows = true,
+  startIndex = 0,
   loop = true,
   alignmentHorizontal = "center",
   slidesToScroll = "auto",
@@ -20,6 +22,8 @@ const {
   minSlideWidth = 0,
   gap = "none",
   style = "",
+  spaceBefore = "default",
+  class: className,
   label,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
@@ -41,9 +45,14 @@ dataAttributes["data-show-arrows"] = String(effectiveShowArrows);
 dataAttributes["data-loop"] = String(loop);
 dataAttributes["data-align"] = String(alignmentHorizontal);
 dataAttributes["data-slides-to-scroll"] = String(slidesToScroll);
+dataAttributes["data-start-index"] = String(Number(startIndex) || 0);
 
 if (autoPlay) {
   dataAttributes["data-autoplay"] = "3";
+
+  if (pauseOnHover) {
+    dataAttributes["data-pause-on-hover"] = "true";
+  }
 }
 
 if (autoScroll) {
@@ -54,12 +63,16 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const slideRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array-item",
+      "data-id": "building-blocks/wrappers/carousel/carousel-slide",
+    }
+  : {};
 
-const carouselClasses = "carousel";
-
+// A spread `class` beats `class:list` and would drop the `carousel` hook, so merge it.
 const slideGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
 
-// Build the style attribute, merging custom styles with CSS variables
 const carouselStyles = `
   --slide-width: ${slideWidthPercent}%;
   --min-slide-width: ${minSlideWidth}px;
@@ -74,13 +87,14 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 ---
 
 <section
-  class:list={carouselClasses}
-  role="region"
+  class:list={["carousel", "stackable", className]}
+  aria-roledescription="carousel"
   aria-label={label || "Carousel"}
   {...htmlAttributes}
 >
   <div
     class="carousel-inner"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     style={carouselStyles}
     {...dataAttributes}
   >
@@ -90,59 +104,67 @@ if (!_component && !hasSlides && !hasSlotContent) return;
         {...arrayDataAttributes}
       >
         <slot>
-          {
-            slides?.map((slide: SlideProps, index: number) => (
-              <CarouselSlide
-                {...slide}
-                data-editable="array-item"
-                data-id="building-blocks/wrappers/carousel/carousel-slide"
-                useDefaultEditableBinding={!!effectiveChildrenProp}
-                aria-label={`Slide ${index + 1} of ${slides.length}`}
-              />
-            ))
-          }
+          {slides?.map((slide: SlideProps, index: number) => (
+            <CarouselSlide
+              {...slide}
+              {...slideRegionAttributes}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              aria-label={`Slide ${index + 1} of ${slides.length}`}
+            />
+          ))}
         </slot>
       </div>
     </div>
 
+    {(effectiveShowArrows || effectiveShowIndicators) && (
+      <div class="controls-wrapper">
+        {effectiveShowArrows && (
+          <Button
+            iconName="chevron-left"
+            size="none"
+            variant="tertiary"
+            hideText={true}
+            aria-label="Previous slide"
+            class="prev"
+            element="button"
+          />
+        )}
+
+        {effectiveShowIndicators && indicatorStyle === "fraction" && (
+          /* Always `polite` so screen readers register it at load; autoplay never writes to it. */
+          <>
+            <div
+              class="carousel-fraction"
+              aria-hidden="true"
+            />
+            <span
+              class="carousel-fraction-announcer visually-hidden"
+              aria-live="polite"
+              aria-atomic="true"
+            />
+          </>
+        )}
+
+        {effectiveShowIndicators && indicatorStyle === "dots" && <div class="indicators" />}
+
+        {effectiveShowArrows && (
+          <Button
+            iconName="chevron-right"
+            size="none"
+            variant="tertiary"
+            hideText={true}
+            aria-label="Next slide"
+            class="next"
+            element="button"
+          />
+        )}
+      </div>
+    )}
+
     {
-      (effectiveShowArrows || effectiveShowIndicators) && (
-        <div class="controls-wrapper">
-          {effectiveShowArrows && (
-            <Button
-              iconName="chevron-left"
-              size="none"
-              variant="tertiary"
-              hideText={true}
-              aria-label="Previous slide"
-              class="prev"
-              element="button"
-            />
-          )}
-
-          {effectiveShowIndicators &&
-            (indicatorStyle === "fraction" ? (
-              <div
-                class="carousel-fraction"
-                aria-live="polite"
-                aria-atomic="true"
-              />
-            ) : (
-              <div class="indicators" />
-            ))}
-
-          {effectiveShowArrows && (
-            <Button
-              iconName="chevron-right"
-              size="none"
-              variant="tertiary"
-              hideText={true}
-              aria-label="Next slide"
-              class="next"
-              element="button"
-            />
-          )}
-        </div>
+      /* setup.ts fills this from each snap's own <img>. */
+      effectiveShowIndicators && indicatorStyle === "thumbnails" && (
+        <div class="carousel-thumbnails" />
       )
     }
   </div>
@@ -158,7 +180,11 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 <style is:global>
   @layer components {
     .carousel {
-      margin-top: var(--spacing-lg);
+      --carousel-arrow-icon-size: 18px;
+      --carousel-dot-size: 8px;
+      --carousel-thumb-width: 4rem;
+      --carousel-thumb-height: 3rem;
+
       width: 100%;
 
       > .carousel-inner {
@@ -173,14 +199,30 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           width: 100%;
         }
 
+        &[data-autoscroll] > .viewport {
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black var(--spacing-sm),
+            black calc(100% - var(--spacing-sm)),
+            transparent
+          );
+          mask-image: linear-gradient(
+            to right,
+            transparent,
+            black var(--spacing-sm),
+            black calc(100% - var(--spacing-sm)),
+            transparent
+          );
+        }
+
         > .viewport > .track {
           display: flex;
           flex-wrap: nowrap;
           margin-inline-start: calc(var(--slide-gap) * -1);
 
+          /* Slide sizing lives in CarouselSlide. */
           > .slide {
-            flex-basis: calc(max(var(--slide-width, 100%), var(--min-slide-width, 0px)));
-            flex-shrink: 0;
             padding-inline-start: var(--slide-gap);
             width: 100%;
           }
@@ -195,15 +237,20 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           margin-top: var(--spacing-sm);
 
           svg {
-            width: 18px;
-            height: 18px;
+            width: var(--carousel-arrow-icon-size);
+            height: var(--carousel-arrow-icon-size);
           }
+        }
+
+        > .controls-wrapper[hidden],
+        > .carousel-thumbnails[hidden] {
+          display: none;
         }
 
         > .controls-wrapper > .prev > .button-inner,
         > .controls-wrapper > .next > .button-inner {
           background-color: var(--color-bg);
-          border-radius: 9999px;
+          border-radius: var(--radius-full);
           flex-shrink: 0;
           pointer-events: auto;
 
@@ -218,6 +265,22 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           justify-content: center;
         }
 
+        > .controls-wrapper > .carousel-pause {
+          background: none;
+          border: none;
+          color: var(--color-text-muted);
+          cursor: pointer;
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-semibold);
+          letter-spacing: 0.08em;
+          padding: 0;
+          text-transform: uppercase;
+
+          &:hover {
+            color: var(--color-text);
+          }
+        }
+
         > .controls-wrapper > .indicators > .indicator {
           aspect-ratio: 1/1;
           background-color: var(--color-border);
@@ -228,9 +291,14 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           min-width: 0;
           padding: 0;
           transition:
-            transform var(--animation-normal) ease,
-            background-color var(--animation-normal) ease;
-          width: 8px;
+            transform var(--animation-normal) var(--ease-default),
+            background-color var(--animation-normal) var(--ease-default);
+          width: var(--carousel-dot-size);
+
+          &:focus-visible {
+            outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+            outline-offset: 2px;
+          }
 
           &[data-selected="true"] {
             background-color: var(--color-brand-muted);
@@ -240,8 +308,54 @@ if (!_component && !hasSlides && !hasSlotContent) return;
 
         &[data-show-indicators="false"] {
           > .controls-wrapper > .indicators,
-          > .controls-wrapper > .carousel-fraction {
+          > .controls-wrapper > .carousel-fraction,
+          > .carousel-thumbnails {
             display: none;
+          }
+        }
+
+        > .carousel-thumbnails {
+          display: flex;
+          gap: var(--spacing-sm);
+          justify-content: center;
+          margin-top: var(--spacing-sm);
+          overflow-x: auto;
+          padding-bottom: var(--spacing-xs);
+
+          > .carousel-thumbnail {
+            background: none;
+            border: var(--border-width-sm) solid var(--color-border);
+            border-radius: var(--radius-xs);
+            color: var(--color-text-muted);
+            cursor: pointer;
+            flex: none;
+            font-size: var(--font-size-xs);
+            height: var(--carousel-thumb-height);
+            overflow: hidden;
+            padding: 0;
+            transition:
+              border-color var(--animation-fast) var(--ease-out),
+              opacity var(--animation-fast) var(--ease-out);
+            width: var(--carousel-thumb-width);
+
+            > img {
+              display: block;
+              height: 100%;
+              object-fit: cover;
+              width: 100%;
+            }
+
+            &[data-selected="false"] {
+              opacity: 0.6;
+            }
+
+            &[data-selected="true"] {
+              border-color: var(--color-border-strong);
+            }
+
+            &:hover {
+              opacity: 1;
+            }
           }
         }
 
@@ -250,7 +364,7 @@ if (!_component && !hasSlides && !hasSlotContent) return;
           flex-shrink: 0;
           font-size: var(--font-size-sm);
           font-variant-numeric: tabular-nums;
-          line-height: 1.2;
+          line-height: var(--line-height-tight);
           min-width: 3ch;
           text-align: center;
         }

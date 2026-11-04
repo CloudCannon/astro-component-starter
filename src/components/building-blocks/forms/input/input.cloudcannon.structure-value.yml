@@ -1,6 +1,6 @@
 label: Input
 icon: rectangle
-description: Single text input form field.
+description: Single-line text field.
 value:
   _component: building-blocks/forms/input
   label: My input
@@ -12,14 +12,24 @@ value:
   iconName: null
   iconColor: default
   iconPosition: before
+  hint: null
+  autocomplete: null
 preview:
   text:
     - template: Input - {type}
   subtext:
     - key: name
+  image: public/component-previews/building-blocks/forms/input.svg
   icon: rectangle
+  gallery:
+    image: public/component-previews/building-blocks/forms/input.svg
+    fit: cover
 picker_preview:
   text: Input
   subtext: Single text input form field.
+  image: public/component-previews/building-blocks/forms/input.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/input.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/input/input.cloudcannon.inputs.yml

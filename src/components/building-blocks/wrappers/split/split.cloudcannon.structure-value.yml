@@ -1,6 +1,6 @@
 label: Split
 icon: vertical_split
-description: Two-column layout for side-by-side content.
+description: Two columns of content side by side.
 value:
   _component: building-blocks/wrappers/split
   label: ""
@@ -8,8 +8,8 @@ value:
   secondColumnContentSections: []
   distributionMode: half
   fixedWidth: null
-  minSplitWidth: 760
-  alignmentVertical: center
+  minSplitWidth: 700
+  alignmentVertical: top
   reverse: false
   reverseOrderOnMobile: false
   gap: lg
@@ -18,9 +18,18 @@ preview:
     - Split
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/split.svg
   icon: vertical_split
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/split.svg
+    fit: cover
 picker_preview:
   text: Split
   subtext: Two-column layout for side-by-side content.
+  image: public/component-previews/building-blocks/wrappers/split.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/split.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/split/split.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

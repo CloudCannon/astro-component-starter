@@ -1,0 +1,117 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Image from "@core-elements/image/Image.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
+import Split from "@wrappers/split/Split.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  buttonSections = [],
+  imageSource = "",
+  imageAlt = "",
+  imageAspectRatio = "portrait",
+  imageRounded = true,
+  imageBleed = false,
+  reverse = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const minSplitWidth = 800;
+const bleedSide = imageBleed ? (reverse ? "inline-start" : "inline-end") : undefined;
+const imagePositionHorizontal = imageBleed ? (reverse ? "right" : "left") : "center";
+const imagePositionVertical = imageBleed ? "top" : "center";
+---
+
+<CustomSection
+  class:list={["feature-split", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <Split
+    class="feature-split-layout"
+    distributionMode={imageBleed ? "half" : "flexible-fixed"}
+    fixedWidth="400"
+    data-bleed={bleedSide}
+    minSplitWidth={minSplitWidth}
+    reverse={reverse}
+    alignmentVertical="center"
+    gap="2xl"
+    reverseOrderOnMobile={true}
+  >
+    <Fragment slot="first">
+      <SimpleText
+        class="eyebrow"
+        data-prop="eyebrow"
+        text={eyebrow}
+        size="sm"
+      />
+      <Heading
+        level={headingLevel}
+        size="lg"
+        data-prop="heading"
+      >
+        {heading}
+      </Heading>
+      <Text
+        class="subtext"
+        size="md"
+        data-prop="subtext"
+        text={subtext}
+      />
+      <ButtonGroup
+        class="feature-buttons"
+        buttonSections={buttonSections}
+        direction="row"
+        alignmentHorizontal="start"
+        data-children-prop="buttonSections"
+      />
+    </Fragment>
+    <Image
+      slot="second"
+      class="feature-split-image"
+      source={imageSource}
+      alt={imageAlt}
+      rounded={imageRounded}
+      aspectRatio={imageAspectRatio}
+      positionHorizontal={imagePositionHorizontal}
+      positionVertical={imagePositionVertical}
+      sizes={imageBleed ? "(max-width: 800px) 100vw, 60vw" : undefined}
+      widths={imageBleed ? [640, 1280, 1920, 2560] : undefined}
+      data-prop-src="imageSource"
+      data-prop-alt="imageAlt"
+    />
+  </Split>
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .feature-split-layout {
+      container-type: inline-size;
+    }
+  }
+</style>

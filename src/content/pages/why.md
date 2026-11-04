@@ -1,235 +1,325 @@
 ---
 _schema: default
 title: Why
-description: Learn why this Astro component starter was built and how it helps teams create fast, flexible static sites.
+description: >-
+  Why this Astro component starter was built, and how it helps teams ship fast,
+  editable static sites.
 pageSections:
   - _component: page-sections/heroes/hero-split
-    eyebrow:
-    heading: Why build an Astro component starter?
+    headingLevel: h1
+    eyebrow: Why this starter exists
+    heading: For teams who ship real client sites
     subtext: >-
       At CloudCannon, we're big fans of the static web. And we love what the
-      Astro team is building!
+      Astro team is building.
 
 
-      As more and more <a href="https://cloudcannon.com/partner-program/"
-      target="_blank" rel="noopener">partner agencies</a> are building client
-      sites with CloudCannon, we wanted to help out by providing the foundations
-      for Astro components that output static HTML and CSS, for the fastest
-      delivery possible —&nbsp;all unbranded and adaptable for any project.
+      As more [partner agencies](https://cloudcannon.com/partner-program/)
+      build client sites with CloudCannon, we wanted foundations for Astro
+      components that output static HTML and CSS for the fastest delivery
+      possible, all unbranded and adaptable for any project.
     imageSource: /src/assets/images/component-docs/sunset.jpg
-    imageAlt: Sunset
+    imageAlt: Coastal cliffs at dusk
     imageAspectRatio: portrait
     buttonSections: []
     reverse: true
     colorScheme: inherit
     backgroundColor: base
+  - _component: page-sections/builders/custom-section
+    label: Scroll deck demo
+    contentSections:
+      - _component: building-blocks/wrappers/scroll-deck
+        label: ''
+        stickyOffset: md
+        cardColorScheme: light
+        showRail: true
+        cards:
+          - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+            label: Build
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Build the page from blocks
+                level: h3
+                size: xl
+              - _component: building-blocks/core-elements/text
+                text: Every section in the library is a block an editor can drop in, reorder, and fill.
+              - _component: building-blocks/wrappers/button-group
+                buttonSections:
+                  - _component: building-blocks/core-elements/button
+                    text: See the library
+                    link: /component-docs/
+                    variant: primary
+          - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+            label: Brand
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Set the brand in one file
+                level: h3
+                size: xl
+              - _component: building-blocks/core-elements/text
+                text: Colors, type and spacing are tokens. Change them once and every block follows.
+              - _component: building-blocks/wrappers/button-group
+                buttonSections:
+                  - _component: building-blocks/core-elements/button
+                    text: Read about theming
+                    link: /component-docs/
+                    variant: secondary
+          - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
+            label: Ship
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Hand it over and ship
+                level: h3
+                size: xl
+              - _component: building-blocks/core-elements/text
+                text: The team edits real pages in the browser, inside the guardrails you shipped.
+              - _component: building-blocks/wrappers/button-group
+                buttonSections:
+                  - _component: building-blocks/core-elements/button
+                    text: Get started
+                    link: /start/
+                    variant: primary
+    maxContentWidth: lg
+    paddingHorizontal: lg
     paddingVertical: 4xl
-  - _component: page-sections/info-blocks/faq-section
+    colorScheme: inherit
+    backgroundColor: surface
+    rounded: false
+  - _component: page-sections/explainers/timeline-section
+    eyebrow: History
+    heading: How the starter grew
+    subtext: The public releases, not a fictional company story.
+    layout: vertical
+    entries:
+      - year: '2025'
+        date: October
+        title: First public starter
+        body: >-
+          CloudCannon published an Astro component starter for partner agencies
+          building client sites: unbranded, static, and visually editable.
+      - year: '2026'
+        date: March
+        title: 1.0 and 1.0.1
+        body: >-
+          The first versioned release: the component library, its CloudCannon
+          editing setup, and docs for every component. 1.0.1 followed the same
+          month with Bento Box, Modal, and font setup in a single file.
+      - year: '2026'
+        date: April
+        title: 1.0.2
+        body: >-
+          Light and dark themes, blog tags, page transitions, Video Modal, Image
+          Carousel, and a custom 404 page.
+      - year: '2026'
+        date: October
+        title: '2.0'
+        body: >-
+          A browsable reference for every component, site search, privacy and
+          consent, share cards, and a much larger library of page sections.
+    colorScheme: inherit
+    backgroundColor: base
+  - _component: page-sections/builders/custom-section
+    label: Scroll stepper demo
+    contentSections:
+      - _component: building-blocks/wrappers/scroll-stepper
+        label: ''
+        steps:
+          - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+            mediaSections:
+              - _component: building-blocks/core-elements/image
+                source: /src/assets/images/component-docs/website-step-build.svg
+                alt: >-
+                  A page open in the editor, with its heading being edited in place
+                  under a formatting toolbar and a slot below for adding a section
+                rounded: true
+                aspectRatio: landscape
+            contentSections:
+              - _component: building-blocks/core-elements/simple-text
+                text: Step one
+                size: sm
+              - _component: building-blocks/core-elements/heading
+                text: Build visually
+                level: h3
+                size: lg
+              - _component: building-blocks/core-elements/text
+                text: Start with the pieces of the page and shape the first draft in the editor.
+          - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+            mediaSections:
+              - _component: building-blocks/core-elements/image
+                source: /src/assets/images/component-docs/website-step-brand.svg
+                alt: >-
+                  A theme panel with brand colors, a typeface, and corner radius
+                  beside a page preview in the new purple brand, shared with three
+                  reviewers
+                rounded: true
+                aspectRatio: landscape
+            contentSections:
+              - _component: building-blocks/core-elements/simple-text
+                text: Step two
+                size: sm
+              - _component: building-blocks/core-elements/heading
+                text: Make it yours
+                level: h3
+                size: lg
+              - _component: building-blocks/core-elements/text
+                text: Set the brand, arrange the content, and share a preview with the people reviewing it.
+          - _component: building-blocks/wrappers/scroll-stepper/scroll-stepper-step
+            mediaSections:
+              - _component: building-blocks/core-elements/image
+                source: /src/assets/images/component-docs/website-step-publish.svg
+                alt: >-
+                  The live site in a browser beside an approved review, with a
+                  confirmation that the page is published
+                rounded: true
+                aspectRatio: landscape
+            contentSections:
+              - _component: building-blocks/core-elements/simple-text
+                text: Step three
+                size: sm
+              - _component: building-blocks/core-elements/heading
+                text: Publish with confidence
+                level: h3
+                size: lg
+              - _component: building-blocks/core-elements/text
+                text: Finish the page and ship the same polished experience your reviewers approved.
+        mediaWidth: half
+        reverse: false
+        mediaAspectRatio: none
+        progressStyle: bar
+        stepHeight: content
+        gap: 2xl
+        spaceBefore: default
+    maxContentWidth: xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
+    colorScheme: inherit
+    backgroundColor: surface
+    rounded: false
+  - _component: page-sections/builders/custom-section
+    label: ''
+    contentSections:
+      - _component: building-blocks/core-elements/heading
+        text: What you actually get
+        level: h2
+        size: default
+        alignmentHorizontal: center
+        iconName:
+        iconColor: default
+        iconPosition: before
+      - _component: building-blocks/core-elements/simple-text
+        text: Four pieces. Nothing hiding behind a private package.
+        alignmentHorizontal: center
+        size: md
+      - _component: building-blocks/wrappers/card-grid
+        label: ''
+        layout: grid
+        columns: 2
+        gap: lg
+        aspectRatio: none
+        items:
+          - image: ''
+            imageAlt: ''
+            link: ''
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Visual editing
+                level: h3
+                size: md
+                iconName: pencil
+                iconColor: purple
+                iconPosition: before
+              - _component: building-blocks/core-elements/simple-text
+                text: >-
+                  Every component ships its CloudCannon schema beside it. Add a section and it appears in the editor.
+                size: md
+          - image: ''
+            imageAlt: ''
+            link: ''
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Design tokens
+                level: h3
+                size: md
+                iconName: paintbrush
+                iconColor: pink
+                iconPosition: before
+              - _component: building-blocks/core-elements/simple-text
+                text: >-
+                  Colors, type, spacing, and radius live in token files. Rebrand without fighting component CSS.
+                size: md
+          - image: ''
+            imageAlt: ''
+            link: ''
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Static output
+                level: h3
+                size: md
+                iconName: zap
+                iconColor: yellow
+                iconPosition: before
+              - _component: building-blocks/core-elements/simple-text
+                text: >-
+                  Pages render to HTML and CSS. JavaScript only when CSS can't do the job.
+                size: md
+          - image: ''
+            imageAlt: ''
+            link: ''
+            contentSections:
+              - _component: building-blocks/core-elements/heading
+                text: Agent skills
+                level: h3
+                size: md
+                iconName: box
+                iconColor: blue
+                iconPosition: before
+              - _component: building-blocks/core-elements/simple-text
+                text: >-
+                  Playbooks in `.agents/skills/` for creating components, retheming, and migrating a site.
+                size: md
+    maxContentWidth: 2xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
+    colorScheme: dark
+    backgroundColor: surface
+    rounded: false
+  - _component: page-sections/explainers/faq-section
     heading: Frequently asked questions
-    headingLevel: h2
-    headingSize: lg
-    singleOpen: true
-    openFirst: false
     items:
-      - title: How does the Component Starter work?
+      - title: What is this, really?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              We give you [straightforward building blocks](/component-docs/)
-              without hiding anything behind layers of abstraction. You see
-              everything that's happening, and stay in control.
+              A starter you clone and own. There is no private component package
+              to version. [Browse the library](/component-docs/) to see what
+              ships.
             size: md
-      - title: What's included in the Component Starter?
+      - title: Do I need CloudCannon?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Lean HTML, CSS, and small touches of vanilla JavaScript. No dead
-              weight, no surprise dependencies, just the pieces you actually
-              need to build great pages.
+              No. The site is plain Astro. CloudCannon is how editors work
+              visually. Every component is born with that schema, so you don't
+              add it later.
             size: md
-      - title: How is the Component Starter so fast?
+      - title: Can I delete components I don't need?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Performance comes from keeping things lightweight. The framework
-              handles image optimization and responsive patterns so your site
-              stays quick without extra work.
+              Yes. Delete the component directory. The page builder only offers
+              what is on disk.
             size: md
-      - title: Can I customize the Component Starter?
+      - title: How do I make it look like our brand?
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Every part of the Component Starter is meant to be opened, read,
-              and edited. You shape it to fit your project instead of working
-              around someone else's opinions. Start by [browsing the
-              components](/component-docs/) to see how they're set up!
+              Start with [Customizing your
+              brand](/component-docs/customizing-your-brand/). Tokens, not
+              per-component CSS.
             size: md
     maxContentWidth: xl
     paddingHorizontal: xl
     paddingVertical: 4xl
     colorScheme: inherit
-    backgroundColor: none
-  - _component: page-sections/builders/custom-section
-    label: ''
-    contentSections:
-      - _component: building-blocks/core-elements/spacer
-        size: md
-      - _component: building-blocks/core-elements/heading
-        text: Mix and match your components
-        level: h2
-        size: default
-        alignmentHorizontal: center
-        iconName:
-        iconPosition: before
-      - _component: building-blocks/core-elements/text
-        text: >-
-          With custom sections, you can create components for almost any use
-          case.
-        alignmentHorizontal: center
-        size: md
-    maxContentWidth: 2xl
-    paddingHorizontal: md
-    paddingVertical: md
-    colorScheme: dark
     backgroundColor: surface
-    rounded: false
-  - _component: page-sections/features/feature-slider
-    slides:
-      - eyebrow: First slide demonstration
-        title: Welcome to the carousel component
-        description: >-
-          This initial slide introduces visitors to the rotating content
-          display. You'll notice how the text hierarchy works with the eyebrow,
-          headline, and body copy creating clear visual distinction. The
-          component is designed to guide users through multiple messages without
-          overwhelming the page.
-        imageSource: /src/assets/images/component-docs/quiet-street.jpg
-        imageAlt: High Performance
-      - eyebrow: Content transition example
-        title: Seamless navigation between slides
-        description: >-
-          As you move to the second position, observe how the previous content
-          gracefully exits while this new information appears. The navigation
-          controls below allow users to move at their own pace. This slide
-          exists purely to demonstrate the component's ability to handle
-          sequential content delivery.
-        imageSource: /src/assets/images/component-docs/sheep.jpg
-        imageAlt: Easy Maintenance
-      - eyebrow: Third position showcase
-        title: Maintaining consistent formatting
-        description: >-
-          By the third slide, the pattern becomes clear. Each rotation maintains
-          the same structural hierarchy and spacing, ensuring visual coherence
-          throughout the carousel. This consistency helps users understand what
-          to expect as they progress through the available content.
-        imageSource: /src/assets/images/component-docs/castle.jpg
-        imageAlt: Move Faster
-      - eyebrow: Final slide
-        title: Completing the carousel loop
-        description: >-
-          This fourth and final slide demonstrates how the component handles the
-          end of its sequence. Users can either cycle back to the beginning or
-          pause here to absorb the information. The carousel has now
-          successfully shown its capacity to present multiple content blocks in
-          a compact, navigable format.
-        imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
-        imageAlt: Long-Term Stability
-    colorScheme: dark
-    backgroundColor: surface
-    eyebrow: Why Carousel
-    heading: Why this approach works
-    subtext: Highlight the core reasons in a simple, swipeable format.
-    paddingVertical: 4xl
-  - _component: page-sections/people/testimonial-section
-    text: >-
-      This testimonial component has completely changed the way I present my
-      quotations on Astro sites. I couldn't be happier with the results.
-    authorName: John Convincingname
-    authorDescription: Founder
-    authorImage: /src/assets/images/component-docs/profile.jpg
-    alignmentHorizontal: center
-    maxContentWidth: xl
-    paddingHorizontal: xl
-    paddingVertical: 2xl
-    colorScheme: dark
-    backgroundColor: surface
-  - _component: page-sections/people/team-grid
-    eyebrow: Our Team
-    heading: Meet the people
-    subtext: We're a group of stock photography faces that fill out this team grid.
-    teamMembers:
-      - name: Alex Smith
-        role: Lead Developer
-        bio: >-
-          As a fictional representation of a real employee, I exist solely to
-          demonstrate how profile information appears in this layout. My
-          headshot is perfectly lit, and my description maintains the ideal
-          length for this component.
-        imageSource: /src/assets/images/component-docs/profile1.jpg
-        imageAlt: Alex Smith, CEO
-      - name: Tom Rodriguez
-        role: Chief Technology Officer
-        bio: >-
-          I'm here to show how multiple team members look when displayed
-          together. My expertise includes being professionally photographed and
-          having exactly two sentences of biographical text.
-        imageSource: /src/assets/images/component-docs/profile2.jpg
-        imageAlt: Tom Rodriguez, CTO
-      - name: Helen Kim
-        role: Head of Design
-        bio: >-
-          I demonstrate how the component handles a third profile entry. My
-          carefully crafted placeholder text ensures the layout remains
-          consistent, regardless of whether you're viewing on a tablet or
-          desktop display.
-        imageSource: /src/assets/images/component-docs/profile3.jpg
-        imageAlt: Helen Kim, Head of Design
-      - name: Emily Watson
-        role: Director of Operations
-        bio: >-
-          I round out the team grid to demonstrate how the layout adapts to a
-          fourth member. My presence here confirms that the component scales
-          appropriately, maintaining visual balance across different screen
-          sizes.
-        imageSource: /src/assets/images/component-docs/profile4.jpg
-        imageAlt: Emily Watson, Director of Operations
-    colorScheme: dark
-    backgroundColor: surface
-    paddingVertical: 2xl
-  - _component: page-sections/ctas/cta-form
-    heading: Form and function!
-    subtext: >-
-      This is a sample form component, so it's not wired up with a target inbox
-      yet, but it's all ready to <a
-      href="https://cloudcannon.com/documentation/articles/getting-started-with-forms-on-cloudcannon/"
-      target="_blank" rel="noopener">configure with CloudCannon forms</a>.
-    formAction: ./
-    formBlocks:
-      - _component: building-blocks/forms/input
-        label: Name
-        name: name
-        type: text
-        required: true
-      - _component: building-blocks/forms/input
-        label: Email
-        name: email
-        type: email
-        required: true
-      - _component: building-blocks/forms/textarea
-        label: Message
-        name: message
-        required: true
-      - _component: building-blocks/forms/submit
-        text: Send message
-        variant: primary
-        size: md
-        iconPosition: before
-        hideText: false
-        disabled: false
-    imageSource: /src/assets/images/component-docs/castle.jpg
-    imageAlt: Get in touch
-    reverse: false
-    colorScheme: dark
-    backgroundColor: surface
-    paddingVertical: 4xl
 ---

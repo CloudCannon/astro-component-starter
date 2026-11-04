@@ -1,34 +1,40 @@
 ---
-import { slugifyLabel } from "@components/utils/slugify";
+import { breadcrumbListJsonLd } from "@component-utils/breadcrumbTrail";
+import { slugifyLabel } from "@component-utils/slugify";
+import Badge from "@core-elements/badge/Badge.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Image from "@core-elements/image/Image.astro";
+import { ogCardPath } from "../../utils/og/paths";
 import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import breadcrumbsData from "@data/breadcrumbs.json";
 import Page from "@layouts/Page.astro";
 import CustomSection from "@page-sections/builders/custom-section/CustomSection.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
+import { loadBlogPageContext } from "../../utils/blog";
+import { formatPostDate } from "@component-utils/formatPostDate";
+import { hasCodeFence } from "@component-utils/markdown";
+import ProseCodeCopy from "@component-utils/prose-code-copy/ProseCodeCopy.astro";
 
-// Automatically import all components from building-blocks and page-sections for MDX
-const buildingBlocksImports = import.meta.glob("../../components/building-blocks/**/*.astro", {
-  eager: true,
-});
+const componentImports = {
+  ...import.meta.glob("../../components/building-blocks/**/*.astro", { eager: true }),
+  ...import.meta.glob("../../components/page-sections/**/*.astro", { eager: true }),
+};
 
-const pageSectionsImports = import.meta.glob("../../components/page-sections/**/*.astro", {
-  eager: true,
-});
-
-// Merge both import objects
-const componentImports = { ...buildingBlocksImports, ...pageSectionsImports };
-
-// Build components object with PascalCase names from file paths
 const mdxComponents: Record<string, any> = {};
+const sourceByName: Record<string, string> = {};
 
 Object.entries(componentImports).forEach(([path, module]) => {
-  const pathParts = path.split("/");
-  const fileName = pathParts[pathParts.length - 1].replace(".astro", "");
+  const componentName = path.split("/").pop()!.replace(".astro", "");
 
-  // Component name is already PascalCase from filename
-  const componentName = fileName;
+  if (sourceByName[componentName]) {
+    throw new Error(
+      `Two components are named ${componentName}.astro, so MDX cannot address both:\n` +
+        `  ${sourceByName[componentName]}\n  ${path}\n` +
+        `Rename the page-section one to ${componentName}Section.astro.`
+    );
+  }
 
+  sourceByName[componentName] = path;
   mdxComponents[componentName] = (module as any).default;
 });
 
@@ -51,17 +57,22 @@ interface Props {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const date = post.data.date.toLocaleDateString("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-});
+const { blogPage } = await loadBlogPageContext();
+const blogListingLabel = blogPage?.data?.title ?? "Blog";
+const date = formatPostDate(post.data.date);
 const dateIso = post.data.date.toISOString().slice(0, 10);
+const category = post.data.tags[0]?.trim() ?? "";
+const categoryHref = category ? `/blog/tag/${slugifyLabel(category)}/` : "";
 const article = {
   publishedTime: post.data.date.toISOString(),
   author: post.data.author,
   tags: post.data.tags,
 };
+
+const breadcrumbJsonLd = breadcrumbListJsonLd(
+  [{ label: blogListingLabel, url: "/blog/" }, { label: post.data.title }],
+  { homeLabel: breadcrumbsData.homeLabel, base: Astro.site ?? Astro.url }
+);
 ---
 
 <Page
@@ -69,9 +80,15 @@ const article = {
   description={post.data.description}
   keywords={post.data.keywords}
   image={post.data.image}
+  generatedImage={ogCardPath("blog", post)}
   type="article"
   article={article}
+  pagefindType="Article"
 >
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c")}
+  ></script>
   <CustomSection
     maxContentWidth="xl"
     paddingHorizontal="lg"
@@ -79,82 +96,82 @@ const article = {
     colorScheme="inherit"
     backgroundColor="base"
     class="post-container"
-    data-pagefind-filter="Type:Article"
   >
-    <SimpleText
-      size="sm"
-      class="post-meta"
-      data-prop="author"
-    >
-      <time
-        datetime={dateIso}
-        data-pagefind-meta={`published:${dateIso}`}
-        data-pagefind-sort={`date:${dateIso}`}
-      >
-        {date}
-      </time>
+    <div>
+      <header class="post-header">
+        <a
+          class="post-back"
+          href="/blog/"
+        >
+          ← {blogListingLabel}
+        </a>
 
-      •
-      <span
-        data-pagefind-filter="Author"
-        data-pagefind-meta="author"
-      >
-        {post.data.author}
-      </span>
-    </SimpleText>
+        <Heading
+          data-prop="title"
+          data-pagefind-meta="title"
+          level="h1"
+          size="2xl"
+          class="post-title"
+        >
+          {post.data.title}
+        </Heading>
 
-    <Heading
-      data-prop="title"
-      data-pagefind-meta="title"
-      level="h1"
-      size="2xl"
-      class="post-title"
-    >
-      {post.data.title}
-    </Heading>
+        {post.data.description && (
+          <SimpleText
+            data-prop="description"
+            data-pagefind-meta="description"
+            data-pagefind-weight="3"
+            size="lg"
+            class="post-description"
+          >
+            {post.data.description}
+          </SimpleText>
+        )}
 
-    {
-      post.data.description && (
         <SimpleText
-          data-prop="description"
-          data-pagefind-meta="description"
-          data-pagefind-weight="3"
-          size="lg"
-          class="post-description"
+          size="sm"
+          class="post-meta"
         >
-          {post.data.description}
-        </SimpleText>
-      )
-    }
-
-    {
-      post.data.tags.length > 0 && (
-        <p
-          class="post-tags"
-          data-editable="array"
-          data-prop="tags"
-          data-direction="row"
-        >
-          {post.data.tags.map((tag, i) => (
+          {category && (
             <>
-              {i > 0 && " • "}
               <a
-                class="post-tag-link"
-                href={`/blog/tag/${slugifyLabel(tag.trim())}/`}
-                data-pagefind-filter="Tag"
-                data-editable="array-item"
-                data-id={tag.trim()}
+                class="post-meta-category"
+                href={categoryHref}
               >
-                {tag.trim()}
+                {category}
               </a>
+              <span
+                class="post-meta-separator"
+                aria-hidden="true"
+              >
+                ·
+              </span>
             </>
-          ))}
-        </p>
-      )
-    }
+          )}
+          <time
+            datetime={dateIso}
+            data-pagefind-meta={`published:${dateIso}`}
+            data-pagefind-sort={`date:${dateIso}`}
+          >
+            {date}
+          </time>
+          <span
+            class="post-meta-separator"
+            aria-hidden="true"
+          >
+            ·
+          </span>
+          <span
+            data-prop="author"
+            data-pagefind-filter="Author"
+            data-pagefind-meta="author"
+          >
+            {post.data.author}
+          </span>
+        </SimpleText>
+      </header>
 
-    {
-      post.data.image && (
+      {post.data.image && (
         <Image
           source={post.data.image}
           alt={post.data.title}
@@ -162,21 +179,40 @@ const article = {
           data-prop-src="image"
           data-prop-alt="title"
           class="post-image"
-          aspectRatio="horizontal-strip"
+          aspectRatio="widescreen"
           positionVertical="center"
-          imageElementAttributes={{
-            "data-pagefind-meta": "image[src], image_alt[alt]",
-          }}
         />
-      )
-    }
+      )}
 
-    <div
-      class="post"
-      data-editable="text"
-      data-prop="@content"
-    >
-      <Content components={mdxComponents} />
+      <div
+        class="post prose"
+        data-editable="text"
+        data-prop="@content"
+      >
+        <Content components={mdxComponents} />
+      </div>
+      {hasCodeFence(post.body) && <ProseCodeCopy />}
+      {post.data.tags.length > 0 && (
+        <div
+          class="post-tags"
+          data-editable="array"
+          data-prop="tags"
+          data-direction="row"
+        >
+          {post.data.tags.map((tag) => (
+            <Badge
+              text={tag.trim()}
+              link={`/blog/tag/${slugifyLabel(tag.trim())}/`}
+              showArrow={false}
+              variant="plain"
+              size="sm"
+              data-pagefind-filter="Tag"
+              data-editable="array-item"
+              data-id={tag.trim()}
+            />
+          ))}
+        </div>
+      )}
     </div>
   </CustomSection>
 </Page>
@@ -186,26 +222,59 @@ const article = {
     padding-bottom: 0 !important;
   }
 
-  .post-meta {
+  .post-header {
+    margin-inline: auto;
+    max-width: 70ch;
+  }
+
+  .post-back {
     color: var(--color-text-muted);
-    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: color var(--animation-fast) var(--ease-out);
+  }
+
+  .post-back:hover {
+    color: var(--color-text);
   }
 
   .post-title {
-    margin-bottom: var(--spacing-xs);
+    margin-top: var(--spacing-lg);
   }
 
   .post-description {
     color: var(--color-text-muted);
-    margin-bottom: 0;
-    margin-top: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+  }
+
+  .post-meta {
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-lg);
+  }
+
+  .post-meta .post-meta-separator {
+    color: var(--color-border);
+    padding-inline: var(--spacing-sm);
+  }
+
+  .post-meta .post-meta-category {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--animation-fast) var(--ease-out);
+  }
+
+  .post-meta .post-meta-category:hover {
+    color: var(--color-text);
   }
 
   .post-tags {
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    margin-bottom: 0;
-    margin-top: var(--spacing-sm);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-inline: auto;
+    margin-top: var(--spacing-xl);
+    max-width: 70ch;
   }
 
   .post {
@@ -249,17 +318,5 @@ const article = {
 
   .post-image {
     margin-top: var(--spacing-xl);
-  }
-
-  .post-tags .post-tag-link {
-    color: inherit;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.15em;
-  }
-
-  .post-tags .post-tag-link:hover {
-    color: var(--color-text-strong);
-    text-decoration-thickness: 2px;
   }
 </style>

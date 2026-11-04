@@ -1,0 +1,160 @@
+label: Feature Grid
+icon: apps
+description: Grid of features with icons and short descriptions.
+value:
+  _component: page-sections/explainers/feature-grid
+  sectionLabel: ""
+  eyebrow: What you get
+  heading: Three things worth knowing
+  headingLevel: h2
+  subtext: One line that frames the points below.
+  alignmentHorizontal: center
+  features:
+    - title: Fast
+      description: Static HTML and CSS, so a page renders before any JavaScript runs.
+      iconName: zap
+      iconColor: yellow
+      iconBackground: true
+    - title: Brandable
+      description: Color, type, and spacing come from one token file you set once.
+      iconName: swatch-book
+      iconColor: blue
+      iconBackground: true
+    - title: Editable
+      description: Anyone on the team can update a page without opening the code.
+      iconName: square-pen
+      iconColor: green
+      iconBackground: true
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - Feature Grid
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/explainers/feature-grid.svg
+  icon: apps
+  gallery:
+    image: public/component-previews/page-sections/explainers/feature-grid.svg
+    fit: cover
+picker_preview:
+  text: Feature Grid
+  subtext: Grid of feature highlights with icons and descriptions.
+  image: public/component-previews/page-sections/explainers/feature-grid.svg
+  gallery:
+    image: public/component-previews/page-sections/explainers/feature-grid.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/feature-grid/feature-grid.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+_structures:
+  featureGridItems:
+    values:
+      - label: Feature
+        icon: apps
+        value:
+          title: Feature title
+          description: Feature description placeholder text that will be replaced with actual content.
+          iconName: zap
+          iconColor: yellow
+          iconBackground: true
+        preview:
+          text:
+            - key: title
+            - Feature
+          subtext:
+            - key: description
+          image:
+            - template: src/icons/{iconName}.svg
+        _inputs:
+          title:
+            type: text
+            comment: Name of the feature.
+          description:
+            type: markdown
+            comment: Supporting description for the feature.
+            options:
+              blockquote: false
+              bold: true
+              format:
+              italic: true
+              link: true
+              strike: false
+              subscript: true
+              superscript: true
+              underline: false
+              bulletedlist: false
+              numberedlist: false
+          iconName:
+            type: select
+            comment: Icon displayed with the feature. Sourced from [Lucide](https://lucide.dev/icons/).
+            options:
+              values: data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+          iconColor:
+            type: select
+            comment: Color accent applied to the icon.
+            hidden: "!iconName"
+            options:
+              values:
+                - id: default
+                  name: Default
+                - id: blue
+                  name: Blue
+                - id: green
+                  name: Green
+                - id: yellow
+                  name: Yellow
+                - id: orange
+                  name: Orange
+                - id: red
+                  name: Red
+                - id: purple
+                  name: Purple
+                - id: pink
+                  name: Pink
+                - id: cyan
+                  name: Cyan
+          iconBackground:
+            type: switch
+            comment: Draw a tinted plate behind the icon.
+            hidden: "!iconName"
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - alignmentHorizontal
+      - features
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

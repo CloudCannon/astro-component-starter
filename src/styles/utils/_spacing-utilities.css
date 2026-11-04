@@ -1,0 +1,191 @@
+/*
+ * Every selector requires the `.uses-spacing-utils` marker on the same element, so
+ * these don't leak onto components that reuse `.gap-*` names (BentoBox).
+ */
+@layer utils {
+  .uses-spacing-utils.pad-x-xs {
+    padding-inline: var(--spacing-xs);
+  }
+
+  .uses-spacing-utils.pad-x-sm {
+    padding-inline: var(--spacing-sm);
+  }
+
+  .uses-spacing-utils.pad-x-md {
+    padding-inline: var(--spacing-md);
+  }
+
+  .uses-spacing-utils.pad-x-lg {
+    padding-inline: var(--spacing-lg);
+  }
+
+  .uses-spacing-utils.pad-x-xl {
+    padding-inline: var(--spacing-xl);
+  }
+
+  .uses-spacing-utils.pad-x-2xl {
+    padding-inline: var(--spacing-2xl);
+  }
+
+  .uses-spacing-utils.pad-x-3xl {
+    padding-inline: var(--spacing-3xl);
+  }
+
+  .uses-spacing-utils.pad-x-4xl {
+    padding-inline: var(--spacing-4xl);
+  }
+
+  .uses-spacing-utils.pad-x-5xl {
+    padding-inline: var(--spacing-5xl);
+  }
+
+  .uses-spacing-utils.pad-x-6xl {
+    padding-inline: var(--spacing-6xl);
+  }
+
+  .uses-spacing-utils.pad-y-xs {
+    padding-block: var(--spacing-xs);
+  }
+
+  .uses-spacing-utils.pad-y-sm {
+    padding-block: var(--spacing-sm);
+  }
+
+  .uses-spacing-utils.pad-y-md {
+    padding-block: var(--spacing-md);
+  }
+
+  .uses-spacing-utils.pad-y-lg {
+    padding-block: var(--spacing-lg);
+  }
+
+  .uses-spacing-utils.pad-y-xl {
+    padding-block: var(--spacing-xl);
+  }
+
+  .uses-spacing-utils.pad-y-2xl {
+    padding-block: var(--spacing-2xl);
+  }
+
+  .uses-spacing-utils.pad-y-3xl {
+    padding-block: var(--spacing-3xl);
+  }
+
+  .uses-spacing-utils.pad-y-4xl {
+    padding-block: var(--spacing-4xl);
+  }
+
+  .uses-spacing-utils.pad-y-5xl {
+    padding-block: var(--spacing-5xl);
+  }
+
+  .uses-spacing-utils.pad-y-6xl {
+    padding-block: var(--spacing-6xl);
+  }
+
+  .uses-spacing-utils.gap-none {
+    gap: 0;
+  }
+
+  .uses-spacing-utils.gap-xs {
+    gap: var(--spacing-xs);
+  }
+
+  .uses-spacing-utils.gap-sm {
+    gap: var(--spacing-sm);
+  }
+
+  .uses-spacing-utils.gap-md {
+    gap: var(--spacing-md);
+  }
+
+  .uses-spacing-utils.gap-lg {
+    gap: var(--spacing-lg);
+  }
+
+  .uses-spacing-utils.gap-xl {
+    gap: var(--spacing-xl);
+  }
+
+  .uses-spacing-utils.gap-2xl {
+    gap: var(--spacing-2xl);
+  }
+
+  .uses-spacing-utils.gap-3xl {
+    gap: var(--spacing-3xl);
+  }
+
+  @media (width < 640px) {
+    .uses-spacing-utils.pad-y-xs {
+      padding-block: var(--spacing-xs);
+    }
+
+    .uses-spacing-utils.pad-y-sm {
+      padding-block: var(--spacing-xs);
+    }
+
+    .uses-spacing-utils.pad-y-md {
+      padding-block: var(--spacing-sm);
+    }
+
+    .uses-spacing-utils.pad-y-lg {
+      padding-block: var(--spacing-md);
+    }
+
+    .uses-spacing-utils.pad-y-xl {
+      padding-block: var(--spacing-md);
+    }
+
+    .uses-spacing-utils.pad-y-2xl {
+      padding-block: var(--spacing-lg);
+    }
+
+    .uses-spacing-utils.pad-y-3xl {
+      padding-block: var(--spacing-xl);
+    }
+
+    .uses-spacing-utils.pad-y-4xl {
+      padding-block: var(--spacing-2xl);
+    }
+
+    .uses-spacing-utils.pad-y-5xl {
+      padding-block: var(--spacing-3xl);
+    }
+
+    .uses-spacing-utils.pad-y-6xl {
+      padding-block: var(--spacing-4xl);
+    }
+
+    .uses-spacing-utils.gap-none {
+      gap: 0;
+    }
+
+    .uses-spacing-utils.gap-xs {
+      gap: var(--spacing-xs);
+    }
+
+    .uses-spacing-utils.gap-sm {
+      gap: var(--spacing-xs);
+    }
+
+    .uses-spacing-utils.gap-md {
+      gap: var(--spacing-sm);
+    }
+
+    .uses-spacing-utils.gap-lg {
+      gap: var(--spacing-md);
+    }
+
+    .uses-spacing-utils.gap-xl {
+      gap: var(--spacing-md);
+    }
+
+    .uses-spacing-utils.gap-2xl {
+      gap: var(--spacing-lg);
+    }
+
+    .uses-spacing-utils.gap-3xl {
+      gap: var(--spacing-xl);
+    }
+  }
+}

@@ -3,6 +3,10 @@ import { getImage } from "astro:assets";
 
 const VIDEO_POSTER_MAX_WIDTH = 1920;
 const VIDEO_POSTER_MAX_HEIGHT = 1080;
+const OG_IMAGE_WIDTH = 1200;
+const OG_IMAGE_HEIGHT = 630;
+const SEARCH_THUMBNAIL_WIDTH = 224;
+const SEARCH_THUMBNAIL_HEIGHT = 160;
 
 type ImageModule = string | ImageMetadata;
 
@@ -69,7 +73,23 @@ const getLocalImageAsset = (source: string) => {
   return imageKey ? imageFiles[imageKey] : null;
 };
 
-const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
+/** The native width earns its own variant only when this much larger than the biggest step. */
+const NATIVE_WIDTH_TOLERANCE = 1.1;
+
+/** The height that keeps the source's native ratio at `width`. */
+export const heightForWidth = (
+  nativeWidth: number,
+  nativeHeight: number,
+  requestedWidth: number
+): number => {
+  if (!Number.isFinite(nativeWidth) || nativeWidth <= 0) {
+    return Math.max(1, Math.round(nativeHeight));
+  }
+
+  return Math.max(1, Math.round((nativeHeight * requestedWidth) / nativeWidth));
+};
+
+export const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
   const normalizedWidths = Array.isArray(candidates)
     ? [
         ...new Set(
@@ -85,26 +105,103 @@ const getResponsiveWidths = (candidates: unknown, maxWidth?: number) => {
     return normalizedWidths;
   }
 
-  const maxCandidateWidth = Math.max(1, Math.round(maxWidth));
-  const filteredWidths = normalizedWidths.filter(
-    (candidateWidth) => candidateWidth <= maxCandidateWidth
-  );
+  const nativeWidth = Math.max(1, Math.round(maxWidth));
+  const filteredWidths = normalizedWidths.filter((candidateWidth) => candidateWidth <= nativeWidth);
 
-  return filteredWidths.length > 0 ? filteredWidths : [maxCandidateWidth];
+  if (filteredWidths.length === 0) {
+    return [nativeWidth];
+  }
+
+  // Without the native width a 1181px source caps at 640w. Above every step the cap is
+  // deliberate: a 6000px upload must not become a 6000px variant.
+  const largestCandidate = normalizedWidths[normalizedWidths.length - 1];
+  const largestStep = filteredWidths[filteredWidths.length - 1];
+  const fillsGapBetweenSteps =
+    nativeWidth < largestCandidate && nativeWidth > largestStep * NATIVE_WIDTH_TOLERANCE;
+
+  return fillsGapBetweenSteps ? [...filteredWidths, nativeWidth] : filteredWidths;
 };
 
 export function resolveImageSource(source: string) {
+  return resolveShareImage(source).src;
+}
+
+export type ShareImage = {
+  src: string;
+  width?: number;
+  height?: number;
+  /** Set for local raster assets so callers can produce a 1200×630 OG crop. */
+  metadata?: ImageMetadata;
+  isSvg: boolean;
+};
+
+export function resolveShareImage(source: string): ShareImage {
+  const isSvg = source.toLowerCase().endsWith(".svg");
+
   if (!source.startsWith("/src/")) {
-    return source;
+    return { src: source, isSvg };
   }
 
   const resolvedImage = getLocalImageAsset(source);
 
   if (!resolvedImage) {
-    return source;
+    return { src: source, isSvg };
   }
 
-  return typeof resolvedImage === "string" ? resolvedImage : resolvedImage.src;
+  if (typeof resolvedImage === "string") {
+    return { src: resolvedImage, isSvg };
+  }
+
+  return {
+    src: resolvedImage.src,
+    width: resolvedImage.width,
+    height: resolvedImage.height,
+    metadata: isSvg ? undefined : resolvedImage,
+    isSvg,
+  };
+}
+
+/** Site-relative src plus width/height for Open Graph. Local photos become a 1200×630 cover crop. */
+export async function resolveOpenGraphImage(source: string): Promise<{
+  src: string;
+  width?: number;
+  height?: number;
+}> {
+  const share = resolveShareImage(source);
+
+  if (share.metadata) {
+    const { src, attributes } = await getImage({
+      src: share.metadata,
+      width: OG_IMAGE_WIDTH,
+      height: OG_IMAGE_HEIGHT,
+      fit: "cover",
+    });
+
+    return {
+      src,
+      width: Number(attributes.width) || OG_IMAGE_WIDTH,
+      height: Number(attributes.height) || OG_IMAGE_HEIGHT,
+    };
+  }
+
+  return { src: share.src, width: share.width, height: share.height };
+}
+
+/** Small cover crop for the search result slot; `null` for SVGs, which read as glyphs, not pictures. */
+export async function resolveSearchThumbnail(source: string): Promise<string | null> {
+  const share = resolveShareImage(source);
+
+  if (share.isSvg) return null;
+  if (!share.metadata) return share.src;
+
+  const { src } = await getImage({
+    src: share.metadata,
+    width: SEARCH_THUMBNAIL_WIDTH,
+    height: SEARCH_THUMBNAIL_HEIGHT,
+    fit: "cover",
+  });
+
+  return src;
 }
 
 export async function resolveVideoPosterSource(source: string): Promise<string> {
@@ -165,7 +262,7 @@ export function prepareImageData({
   const isLocalSource = typeof source === "string" && source.startsWith("/src/");
   const isSvg = typeof source === "string" && source.toLowerCase().endsWith(".svg");
 
-  let imageSrc = source;
+  let imageSrc: string | ImageMetadata | undefined = source;
   let imageWidth = width;
   let imageHeight = height;
   let shouldRenderOptimizedPicture = false;
@@ -185,6 +282,17 @@ export function prepareImageData({
         imageWidth = imageWidth || resolvedImage.width;
         imageHeight = imageHeight || resolvedImage.height;
         shouldRenderOptimizedPicture = true;
+
+        // Skipped when a named crop is about to replace both edges.
+        if (
+          (!aspectRatio || aspectRatio === "none") &&
+          width &&
+          !height &&
+          resolvedImage.width &&
+          resolvedImage.height
+        ) {
+          imageHeight = heightForWidth(resolvedImage.width, resolvedImage.height, width);
+        }
       }
     } else {
       console.warn(`Local image not found for path: ${source}`);
@@ -244,7 +352,7 @@ export function prepareImageData({
       ? getResponsiveWidths(widths, finalWidth)
       : getResponsiveWidths(widths);
 
-  if (shouldRenderOptimizedPicture && typeof imageSrc !== "string") {
+  if (shouldRenderOptimizedPicture && typeof imageSrc === "object") {
     return {
       imageSrc,
       imageWidth,

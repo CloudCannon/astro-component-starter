@@ -1,0 +1,156 @@
+# Each structure value lists exactly the keys its type reads: `remove_extra_inputs`
+# drops any other key when an editor switches `type`.
+background:
+  type: object
+  comment: An image, video, or tiled pattern behind the content.
+  options:
+    preview:
+      icon: wallpaper
+      text:
+        - Background
+      subtext:
+        - key: type
+    structures:
+      id_key: type
+      reorder_inputs: true
+      remove_extra_inputs: true
+      values:
+        - label: Image
+          icon: image
+          value:
+            type: image
+            imageSource: ""
+            imageAlt: ""
+            positionVertical: top
+            positionHorizontal: center
+            fixed: false
+            priority: false
+            mask: none
+            overlay: 0
+        - label: Video
+          icon: videocam
+          value:
+            type: video
+            videoSource: ""
+            positionVertical: top
+            positionHorizontal: center
+            mask: none
+            overlay: 0
+        - label: Pattern
+          icon: texture
+          value:
+            type: pattern
+            imageSource: ""
+            patternSize: natural
+            mask: frame
+            overlay: 0
+background.type:
+  type: select
+  label: Background type
+  comment: A cover image, a muted autoplay video, or a repeating tiled pattern.
+  options:
+    values:
+      - id: image
+        name: Image
+      - id: video
+        name: Video
+      - id: pattern
+        name: Pattern
+background.positionVertical:
+  comment: Vertical focal point.
+  type: select
+  options:
+    values:
+      - id: top
+        name: Top
+      - id: center
+        name: Center
+      - id: bottom
+        name: Bottom
+background.positionHorizontal:
+  comment: Horizontal focal point.
+  type: select
+  options:
+    values:
+      - id: left
+        name: Left
+      - id: center
+        name: Center
+      - id: right
+        name: Right
+background.fixed:
+  type: switch
+  label: Fixed background (parallax)
+  comment: Pins the image in place while the page scrolls past.
+background.priority:
+  type: switch
+  label: Prioritize image load
+  comment: Loads the image eagerly. Use near the top of the page.
+background.imageSource:
+  comment: URL or path to the background or pattern image.
+  type: image
+  options:
+    paths:
+      uploads: src/assets/images
+      static: ""
+    resize_style: contain
+    width: 1920
+    height: 1280
+background.patternSize:
+  type: select
+  label: Pattern tile size
+  comment: Size of each repeated tile. Natural uses the image's own size.
+  options:
+    values:
+      - id: natural
+        name: Natural
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+background.imageAlt:
+  comment: Alt text for the background image.
+  type: textarea
+background.videoSource:
+  type: file
+  label: Video source
+  comment: Video file in public/videos. Same-named files in other formats are added too.
+  options:
+    accepts_mime_types:
+      - video/mp4
+      - video/webm
+      - video/ogg
+    paths:
+      uploads: public/videos
+      static: public
+background.overlay:
+  type: range
+  comment: Tints the background. -1 darkens, 1 lightens.
+  options:
+    min: -1
+    max: 1
+    step: 0.1
+background.mask:
+  type: select
+  label: Background fade
+  comment: Which part of the background fades into the background color.
+  options:
+    values:
+      - id: none
+        name: No fade
+      - id: frame
+        name: Fade the middle
+      - id: vignette
+        name: Fade the edges
+      - id: top
+        name: Fade the top
+      - id: bottom
+        name: Fade the bottom
+      - id: left
+        name: Fade the left
+      - id: right
+        name: Fade the right
+      - id: blend
+        name: Fade top and bottom

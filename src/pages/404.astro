@@ -12,6 +12,7 @@ const canonical = new URL("/404.html", Astro.site ?? seoData.url).href;
   title="Page not found"
   description="This URL does not exist on this site. Use the navigation or go home to find what you need."
   canonical={canonical}
+  noindex={true}
   mainNav={mainNavData}
   footer={footerData}
 >

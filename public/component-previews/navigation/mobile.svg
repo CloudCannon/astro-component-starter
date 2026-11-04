@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-mobile">
+  <title id="t-mobile">Mobile component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 150)">
+    <rect x="400" y="0" width="480" height="420" rx="10" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="806" y="32" width="42" height="42" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="432" y="110" width="150" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="172" width="190" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="234" width="160" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="296" width="200" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="432" y="358" width="130" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <polygon points="819,183 827,183 823,187" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
+    <polygon points="819,307 827,307 823,311" fill="var(--pv-subject, #A8A398)" stroke="var(--pv-subject, #A8A398)" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+</svg>

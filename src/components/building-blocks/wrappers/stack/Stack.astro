@@ -1,0 +1,168 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import Component from "@component-utils/renderBlock.astro";
+import { slugifyLabel } from "@component-utils/slugify";
+
+const {
+  contentSections,
+  direction = "column",
+  gap = "md",
+  distribution = "content",
+  alignmentHorizontal,
+  alignmentVertical,
+  wrap = true,
+  stackOnMobile = true,
+  label,
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const effectiveChildrenProp =
+  childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+      ...(direction === "row" ? { "data-direction": "row" } : {}),
+    }
+  : {};
+
+const stackGap = gap === "none" ? "0px" : `var(--spacing-${gap})`;
+
+const hasSections = contentSections?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasSections && !hasSlotContent) return;
+---
+
+<div
+  class:list={["stack", "stackable", className]}
+  {...htmlAttributes}
+>
+  <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    class:list={[
+      "stack-inner",
+      `direction-${direction}`,
+      direction === "row" && distribution === "equal" && "distribute-equal",
+      alignmentHorizontal && `align-h-${alignmentHorizontal}`,
+      alignmentVertical && `align-v-${alignmentVertical}`,
+      direction === "row" && !wrap && "no-wrap",
+      direction === "row" && stackOnMobile && "stack-on-mobile",
+    ]}
+    style={`--stack-gap: ${stackGap};`}
+    {...arrayDataAttributes}
+  >
+    <slot>
+      {contentSections && (
+        <Component
+          contentSections={contentSections}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
+    </slot>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .stack {
+      container-type: inline-size;
+      width: 100%;
+
+      > .stack-inner {
+        display: flex;
+        flex-direction: column;
+        gap: var(--stack-gap, var(--spacing-md));
+
+        &.direction-row {
+          flex-direction: row;
+          flex-wrap: wrap;
+
+          &.no-wrap {
+            flex-wrap: nowrap;
+          }
+
+          /* Inline-size containers (Card's content) have zero intrinsic width, so must be given one. */
+          &.distribute-equal {
+            flex-wrap: nowrap;
+
+            > * {
+              flex: 1 1 0;
+              min-width: 0;
+            }
+          }
+
+          &.align-h-start {
+            justify-content: flex-start;
+          }
+
+          &.align-h-center {
+            justify-content: center;
+          }
+
+          &.align-h-end {
+            justify-content: flex-end;
+          }
+
+          &.align-v-start {
+            align-items: flex-start;
+          }
+
+          &.align-v-center {
+            align-items: center;
+          }
+
+          &.align-v-end {
+            align-items: flex-end;
+          }
+
+          &.align-v-stretch {
+            align-items: stretch;
+          }
+        }
+
+        &.direction-column {
+          &.align-h-start {
+            align-items: flex-start;
+          }
+
+          &.align-h-center {
+            align-items: center;
+          }
+
+          &.align-h-end {
+            align-items: flex-end;
+          }
+
+          &.align-v-start {
+            justify-content: flex-start;
+          }
+
+          &.align-v-center {
+            justify-content: center;
+          }
+
+          &.align-v-end {
+            justify-content: flex-end;
+          }
+        }
+      }
+    }
+
+    @container (width < 640px) {
+      .stack > .stack-inner.direction-row.stack-on-mobile {
+        flex-direction: column;
+      }
+    }
+  }
+</style>

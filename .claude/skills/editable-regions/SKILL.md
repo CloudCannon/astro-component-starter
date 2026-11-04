@@ -1,0 +1,185 @@
+---
+name: editable-regions
+description: Use when wiring inline visual editing on a component so CloudCannon knows which prop an on-canvas element maps to — the useDefaultEditableBinding opt-in, custom data-prop / data-prop-src / data-prop-alt / data-children-prop, and array-item wiring. Start here for "make this text/image/list editable in the Visual Editor" or "field won't update when I edit it".
+---
+
+# Editable regions
+
+Editable regions connect an on-canvas element to the frontmatter prop that produced it, so an editor clicking it updates the right data. In this starter you almost never write raw `data-editable="…"` — you pass higher-level props on the **building block** and it emits the raw attribute for you.
+
+This skill owns the starter's editable-binding attribute tables (per `.agents/skills/STYLE.md`). For the underlying CloudCannon API — region lifecycle, the JS API, quirks — see [../references/editable-regions-api.md](../references/editable-regions-api.md). Read the raw attributes there to understand behaviour; write the building-block props documented here in practice.
+
+## When to use
+
+- Making a heading, body, label, image, or repeating list editable inline in the Visual Editor.
+- Overriding a component's default binding, or renaming which prop an element writes to.
+- A field renders but does not update when you edit it in the editor (see [Debugging](#debugging-a-binding-that-does-not-update)).
+
+## When not to use
+
+| Situation                                                       | Go instead to                                                                                                                               |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Building a brand-new component (`.astro` + YAML + registration) | [create-component](../create-component/SKILL.md)                                                                                            |
+| A section not appearing / picker or render pipeline broken      | [debug-cloudcannon](../debug-cloudcannon/SKILL.md)                                                                                          |
+| Understanding the raw region types, JS API, or lifecycle        | [../references/editable-regions-api.md](../references/editable-regions-api.md)                                                              |
+| Interactive JS that must also run in the editor                 | [create-component/component-templates.md](../create-component/component-templates.md#interactive-components-js-that-must-run-in-the-editor) |
+
+## Contents
+
+| File                       | Covers                                                                                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [patterns.md](patterns.md) | Multi-field text (`data-prop-author-*`), Card before/after slots, `@content` markdown body, page-level component region, mixed-type arrays |
+
+## The core rule: pass props, not raw attributes
+
+**MUST NOT:** put `data-editable` on a component's **root** element.
+**Why:** `renderBlock.astro` injects `data-editable="array-item"` on the root of every placed block — a hand-written `data-editable` collides with it. Building blocks always emit their region attribute on an **inner** node (`.heading-text`, `.text-inner`, the `<img>`), never the root. `npm run lint:roots` fails on a literal `data-editable` there.
+
+**MUST NOT:** use `display: contents` on a component root.
+**Why:** it removes the root box the array-item region binds to, so the item drops out of the editor.
+
+**MUST NOT:** put any **prop-driven attribute** (a class, `style`, or `data-*` whose value changes with a prop) on a component's **root** element.
+**Why:** when a prop changes, CloudCannon's editable-regions re-render keeps the region's root element and swaps only its contents — a prop-driven attribute on the root goes stale in the Visual Editor until a full reload (the header of `editor-live-sync.js` records this). Put it on a direct child instead and hoist with CSS where needed: `spaceBefore` rides as `data-space-before` on a direct child and `_flow.css` lifts it to the root with `:has()`; bento-box carries its spans as `data-*` on an inner node and `editor-live-sync.js` syncs them up. Static attributes (a fixed class like `stackable`) are fine on the root. `npm run lint:roots` enforces this.
+
+Editable web components (`<editable-text>`, `<editable-image>`, …) are **banned** — always standard HTML elements with `data-*` attributes. See the banned-elements callout in [../references/editable-regions-api.md](../references/editable-regions-api.md#custom-element-equivalents--banned-in-this-starter).
+
+## What you pass → what the DOM gets
+
+Building blocks translate these props internally. Prop paths are **camelCase**, matching the component's `.astro` destructure exactly.
+
+| Prop you pass on the building block                    | Attribute it emits on its inner node                                         | Region |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------- | ------ |
+| `data-prop="heading"`                                  | `data-editable="text" data-prop="heading"`                                   | text   |
+| `data-prop-src="imageSource" data-prop-alt="imageAlt"` | `data-editable="image" data-prop-src="imageSource" data-prop-alt="imageAlt"` | image  |
+| `data-children-prop="items"`                           | `data-editable="array" data-prop="items"`                                    | array  |
+
+The `data-prop` / `data-children-prop` value **must** match a real prop on the component whose frontmatter you are editing, or CloudCannon writes to a key that does not exist and the edit silently no-ops.
+
+## `useDefaultEditableBinding` — the opt-in switch
+
+Every building block accepts `useDefaultEditableBinding` (boolean, default `false`). When `true` **and** no explicit `data-prop` / `data-children-prop` is passed, the block binds to its **own default prop name** (table below). An explicit `data-prop` always wins over the default.
+
+**Cascade:** `renderBlock.astro` renders placed blocks with `useDefaultEditableBinding={true}` (its own default is `true`), so any component dropped into a page — or into a `contentSections` / `buttonSections` array — binds to its defaults automatically. **You only write `data-prop` / `data-children-prop` when a page-section wrapper composes a block directly** and you need a specific (or renamed) prop.
+
+```astro
+<!-- Uses the block's default ("text") because renderBlock set the flag -->
+<Heading />
+
+<!-- Custom override: bind this heading to the section's `heading` prop -->
+<Heading level="h2" data-prop="heading" text={heading} />
+```
+
+### Default binding prop names
+
+| Building block                                            | Default prop(s) when `useDefaultEditableBinding` is on                                                 |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `Heading`, `Text`, `SimpleText`, `Button`, `ListItem`     | `text`                                                                                                 |
+| `Testimonial`                                             | `text` + `authorName` + `authorDescription` (see [patterns.md](patterns.md))                           |
+| `Image`                                                   | `source` (src) / `alt` (alt)                                                                           |
+| `Grid`, `Accordion`, `Steps`, `List`, `DefinitionList`    | `items`                                                                                                |
+| `SocialLinks`                                             | `links`                                                                                                |
+| `Timeline`                                                | `entries`                                                                                              |
+| `ButtonGroup`                                             | `buttonSections`                                                                                       |
+| `Carousel`                                                | `slides`                                                                                               |
+| `Card`                                                    | `contentSections` (+ `beforeContentSections` / `afterContentSections`, see [patterns.md](patterns.md)) |
+| `GridItem`, `AccordionItem`, `CarouselSlide`, `StepsItem` | `contentSections`                                                                                      |
+| `TimelineItem`                                            | `date` / `title` / `body`                                                                              |
+
+Verify a default against the source before relying on it — each block computes `const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "<name>" : null)` in its frontmatter, where `customDataProp` is the passed `data-prop` (or `data-children-prop`) value.
+
+## Wire inline editing on an existing component
+
+Work inside a page-section wrapper that composes building blocks (model: `src/components/page-sections/explainers/feature-grid/FeatureGrid.astro`).
+
+### Text
+
+Put `data-prop` on the text block, pointing at the section prop:
+
+```astro
+<SimpleText data-prop="eyebrow" text={eyebrow} />
+<Heading level="h2" data-prop="heading" text={heading} />
+<Text data-prop="subtext" text={subtext} />
+```
+
+### Image
+
+Pass **both** src and alt bindings:
+
+```astro
+<Image source={imageSource} alt={imageAlt} data-prop-src="imageSource" data-prop-alt="imageAlt" />
+```
+
+**MUST:** pass `data-prop-src` and `data-prop-alt` together when the prop names differ from the `source` / `alt` defaults.
+**Why:** passing only `data-prop-src` still makes the image editable, but with no alt binding at all; the default keys `source`/`alt` apply only under `useDefaultEditableBinding`. (`isEditable` is true if _either_ is set.)
+
+### Array (repeating items)
+
+**MUST:** every repeating array the editor can add/remove/reorder has an array region on the **list** and an array-item region on **each row**. Heading chrome being editable is not enough — without the per-row region, tiles render but cannot be selected or reordered on the canvas.
+
+Three shapes, depending on how children are rendered. Prefer A, then B; C is the escape hatch when no wrapper's markup can host the layout.
+
+**A. Children rendered through `renderBlock`** (structured arrays: `buttonSections`, `contentSections`, accordion/carousel/card content). Only the wrapper needs the prop — `renderBlock` stamps `data-editable="array-item"` + `data-id={block._component}` on each row:
+
+```astro
+<ButtonGroup buttonSections={buttonSections} data-children-prop="buttonSections" />
+```
+
+**B. Fixed child component mapped manually** (a page section iterating its own `{Name}Item`). The wrapper owns the array container; you mark each child yourself:
+
+```astro
+<Grid gap="lg" minItemWidth="360" data-children-prop="features">
+  {features.map((feature) => (
+    <FeatureItem
+      data-editable="array-item"
+      data-id="page-sections/explainers/feature-grid/feature-item"
+      {...feature}
+    />
+  ))}
+</Grid>
+```
+
+**C. Plain object array mapped to custom markup** (no child `.astro` — Gallery Grid tiles, Logo Cloud logos, Stats figures). Stamp both attributes yourself: `data-editable="array"` + `data-prop` on the list, `data-editable="array-item"` on each row. Omit `data-id` — there is no component path. Nested fields bind relative to the item (`data-prop-src="image"` when the object key is `image`, not `source`).
+
+```astro
+<ul data-editable="array" data-prop="images" data-direction="row">
+  {images.map((item) => (
+    <li data-editable="array-item">
+      <Image source={item.image} alt={item.alt} data-prop-src="image" data-prop-alt="alt" />
+    </li>
+  ))}
+</ul>
+```
+
+**MUST NOT:** bind duplicate copies of the same items (lightbox photos, thumbnail strips). Those stay unbound so they do not compete with the on-canvas row.
+
+## Array-item wiring rules
+
+| Attribute                           | Goes on             | Value                                                                                                                                                                                                                                                        |
+| ----------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `data-editable="array"` `data-prop` | array **container** | Emitted by the wrapper from `data-children-prop` (shapes A/B). **Written by hand** for shape C.                                                                                                                                                              |
+| `data-editable="array-item"`        | each **item** root  | Injected by `renderBlock` for placed blocks; **written by hand** for shapes B and C.                                                                                                                                                                         |
+| `data-id`                           | each **item** root  | Shape B: the child's kebab component path (`.astro` PascalCase collapsed to kebab), e.g. `.../accordion/accordion-item`. Shape A: `renderBlock` sets it to `block._component`, and never adds `data-component` (see editable-regions-api.md). Shape C: omit. |
+
+**MUST NOT:** put `data-editable="array-item"` on the array container, or `data-editable="array"` on an item — the editor needs the container/item split to CRUD rows.
+
+For mixed-type arrays (items of different components in one list), the container also needs `data-component-key="_component"`. Every wrapper that renders content blocks through `renderBlock` is one. Without it the editor matches items by position, and inserting a block above another reuses that block's root element, so the new block keeps the old one's classes and loses its own styling. `npm run lint:cms` fails on a block array without it. See [patterns.md](patterns.md#mixed-type-arrays) and the [complex-array attributes in the reference](../references/editable-regions-api.md#complex-array-attributes-wrapper-vs-item).
+
+## Debugging a binding that does not update
+
+Follow the [debug-cloudcannon playbook](../debug-cloudcannon/SKILL.md) for the full pipeline. Binding-specific first checks:
+
+| Symptom                                          | Likely cause                                                                                         |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| Element not editable at all                      | No `data-prop` and `useDefaultEditableBinding` is false — nothing bound.                             |
+| Edit does nothing / writes nowhere               | `data-prop` value does not match a real frontmatter key (typo, wrong case — it is camelCase).        |
+| Image edits src but not alt (or vice versa)      | Only one of `data-prop-src` / `data-prop-alt` passed; the other fell back to a wrong default.        |
+| Whole item vanishes from the array editor        | `data-editable` or `display: contents` on the component root, colliding with the array-item region.  |
+| Item edits but reorder/add/remove misbehaves     | Missing or wrong `data-id` on the mapped child, or `data-editable="array"` and `array-item` swapped. |
+| Tiles render but clicking one has no card chrome | Shape C (or B) missing `data-editable="array-item"` on each row — only the section heading is bound. |
+
+## Verify your work
+
+| Command                          | What to look for                                                                                                                        |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run check`                  | Exit 0 — no lint/type errors, no skills drift.                                                                                          |
+| `npm run editor` (Visual Editor) | The element is selectable; editing it live-updates the field; array items add/remove/reorder; no "Component not found" console warning. |

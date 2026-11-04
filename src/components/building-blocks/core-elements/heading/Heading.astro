@@ -1,15 +1,19 @@
 ---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { renderMarkdownInline } from "@component-utils/markdown";
+import { slugifyLabel } from "@component-utils/slugify";
 import Icon from "@core-elements/icon/Icon.astro";
-import MarkdownIt from "markdown-it";
 
 const {
   text,
   level = "h2",
-  size,
+  size = "default",
   alignmentHorizontal = "start",
   iconName,
   iconColor = "default",
   iconPosition = "before",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -17,67 +21,112 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
+function plainTextFromHtml(html: string): string {
+  return html
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// `Astro.slots.has` is true for a slot passed `""`; only the rendered output tells them apart.
+const slotHtml = Astro.slots.has("default") ? await Astro.slots.render("default") : "";
+
+// The editor's re-render has no Astro.locals.
+const usedHeadingIds: Set<string> = Astro.locals
+  ? (Astro.locals.headingIds ??= new Set())
+  : new Set();
+
+if (htmlAttributes.id) {
+  usedHeadingIds.add(String(htmlAttributes.id));
+} else if (level === "h2" || level === "h3") {
+  const slugSource = isNonEmptyString(text) ? text : plainTextFromHtml(slotHtml);
+
+  const slug = slugSource ? slugifyLabel(slugSource) : "";
+
+  if (slug) {
+    let id = slug;
+    let n = 2;
+
+    while (usedHeadingIds.has(id)) {
+      id = `${slug}-${n++}`;
+    }
+
+    usedHeadingIds.add(id);
+    htmlAttributes.id = id;
+  }
+}
+
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-const md = MarkdownIt({ html: true });
-let MarkdownText = text ? md.renderInline(text) : "";
+let MarkdownText = renderMarkdownInline(text);
 
 MarkdownText = MarkdownText.replace(/\n/g, "<br />");
 const Tag = level;
 
-const hasText = text?.trim().length > 0;
-const hasSlotContent = Astro.slots.has("default");
+const hasText = isNonEmptyString(text);
+const hasSlotContent = slotHtml.trim().length > 0;
 
 if (!_component && !hasText && !hasSlotContent) return;
 ---
 
 <Tag
-  class:list={["heading", className]}
+  class:list={["heading", "stackable", className]}
   {...htmlAttributes}
 >
-  <span class:list={["heading-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}>
-    {
-      iconPosition == "before" && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="heading-icon"
-          aria-hidden="true"
-          role="presentation"
-        />
-      )
-    }
+  <span
+    class:list={[
+      "heading-inner",
+      size && size !== "default" && `size-${size}`,
+      `align-${alignmentHorizontal}`,
+    ]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    {iconPosition == "before" && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="heading-icon"
+        aria-hidden="true"
+      />
+    )}
     <span
       class="heading-text"
       {...textDataAttributes}
     >
-      <slot>
-        {text && <Fragment set:html={MarkdownText} />}
-      </slot>
+      {hasSlotContent ? (
+        <Fragment set:html={slotHtml} />
+      ) : (
+        hasText && <Fragment set:html={MarkdownText} />
+      )}
     </span>
-    {
-      iconPosition === "after" && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="heading-icon heading-icon-after"
-          aria-hidden="true"
-          role="presentation"
-        />
-      )
-    }
+    {iconPosition === "after" && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="heading-icon heading-icon-after"
+        aria-hidden="true"
+      />
+    )}
   </span>
 </Tag>
 
 <style is:global>
   @layer components {
     .heading {
-      margin-top: var(--spacing-lg);
+      --space-before: var(--space-before-loose);
+
+      margin-block: 0;
 
       > .heading-inner {
         display: block;
@@ -86,8 +135,13 @@ if (!_component && !hasText && !hasSlotContent) return;
           bottom: 0.1em;
           display: inline-block;
           font-size: 0.9em;
+          margin-inline-end: var(--spacing-em-xs);
           position: relative;
           vertical-align: middle;
+
+          &.heading-icon-after {
+            margin-inline: var(--spacing-em-xs) 0;
+          }
         }
 
         &.size-xs {

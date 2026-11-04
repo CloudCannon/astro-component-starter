@@ -1,0 +1,58 @@
+/*
+ * Space between siblings comes from the child's `--space-before`; first children get none.
+ * `.flow` goes on a `contentSections` parent, never a prose container (it would override
+ * prose em margins). `.prose` goes on markdown bodies; only `.stackable` roots space there.
+ * Use `gap` OR `.flow`, never both. A `display: contents` child silently loses its margin.
+ */
+@layer utils {
+  /* Stops a parent's `--space-before` inheriting into nested children. */
+  .flow,
+  .prose {
+    --space-before: initial;
+  }
+
+  /* A margin on a popover breaks its `margin: auto` top-layer centring. */
+  .flow > * + *:not([popover]) {
+    margin-block-start: var(--space-before, var(--space-before-default));
+  }
+
+  .flow > .spacer,
+  .flow > .spacer + * {
+    margin-block-start: 0;
+  }
+
+  .prose > .stackable {
+    margin-block-start: var(--space-before, var(--space-before-default));
+  }
+
+  .prose > .stackable:first-child,
+  .prose > .spacer + .stackable {
+    margin-block-start: 0;
+  }
+
+  /* :where keeps these at zero specificity so an explicit spaceBefore wins. */
+  :where(.eyebrow, .simple-text) + :where(.heading) {
+    --space-before: var(--space-before-tight);
+  }
+
+  :where(.text, .simple-text) + :where(.text, .simple-text) {
+    --space-before: var(--space-before-default);
+  }
+
+  /* The attribute sits on a direct child, since a prop-driven attribute on the root goes
+     stale in the editor. Bare selectors serve roots with no child (Video, Pagination). */
+  [data-space-before="none"],
+  .stackable:has(> [data-space-before="none"]) {
+    --space-before: var(--space-before-none);
+  }
+
+  [data-space-before="tight"],
+  .stackable:has(> [data-space-before="tight"]) {
+    --space-before: var(--space-before-tight);
+  }
+
+  [data-space-before="loose"],
+  .stackable:has(> [data-space-before="loose"]) {
+    --space-before: var(--space-before-loose);
+  }
+}

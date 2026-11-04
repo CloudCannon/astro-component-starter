@@ -5,6 +5,8 @@ blocks:
   _component: 'building-blocks/wrappers/card'
   paddingVertical: 2xl
   paddingHorizontal: sm
+  colorScheme: light
+  lockColorScheme: true
   background:
     type: image
     positionVertical: center

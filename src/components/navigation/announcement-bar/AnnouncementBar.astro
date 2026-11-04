@@ -1,0 +1,134 @@
+---
+import { renderMarkdownInline } from "@component-utils/markdown";
+import Icon from "@core-elements/icon/Icon.astro";
+
+const {
+  enabled = false,
+  text = "",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const message = typeof text === "string" ? text.trim() : "";
+
+if (!enabled || !message) return;
+---
+
+<aside
+  class:list={["announcement-bar", className]}
+  aria-label="Announcement"
+  {...htmlAttributes}
+>
+  <p
+    class="announcement-bar-text"
+    data-announcement={message}
+  >
+    <Fragment set:html={renderMarkdownInline(message)} />
+  </p>
+  <button
+    type="button"
+    class="announcement-bar-close tap-target"
+    aria-label="Dismiss announcement"
+  >
+    <Icon
+      name="x"
+      size="sm"
+    />
+  </button>
+</aside>
+
+<script
+  is:inline
+  data-astro-rerun
+>
+  // is:inline so it runs before paint. Deliberately inert in the editor, which strips inline scripts.
+  (function () {
+    var bar = document.querySelector(".announcement-bar:not([data-announcement-initialized])");
+
+    if (!bar) return;
+    bar.setAttribute("data-announcement-initialized", "");
+
+    var KEY = "announcement-bar-dismissed";
+    var text = bar.querySelector(".announcement-bar-text");
+    var message = (text && text.getAttribute("data-announcement")) || "";
+
+    // Stores the message itself, so a new announcement reappears. Storage can throw.
+    var dismissed = null;
+
+    try {
+      dismissed = localStorage.getItem(KEY);
+    } catch (e) {
+      dismissed = null;
+    }
+
+    if (dismissed === message) {
+      bar.remove();
+
+      return;
+    }
+
+    var close = bar.querySelector(".announcement-bar-close");
+
+    if (close) {
+      close.addEventListener("click", function () {
+        try {
+          localStorage.setItem(KEY, message);
+        } catch (e) {
+          // Dismissal just won't persist; closing still works.
+        }
+
+        bar.remove();
+      });
+    }
+  })();
+</script>
+
+<style is:global>
+  @layer page-sections {
+    .announcement-bar {
+      align-items: center;
+      background-color: var(--color-bg-brand);
+      color: var(--color-text-on-brand);
+      display: flex;
+      font-size: var(--font-size-sm);
+      justify-content: center;
+      padding-block: var(--spacing-sm);
+      padding-inline: var(--spacing-2xl);
+      position: relative;
+      text-align: center;
+
+      > .announcement-bar-text {
+        /* The base layer's `p` color would otherwise win over the inherited one. */
+        color: var(--color-text-on-brand);
+        margin: 0;
+
+        > a {
+          color: inherit;
+          font-weight: var(--font-weight-semibold);
+          text-decoration: underline;
+          text-underline-offset: 0.2em;
+        }
+      }
+
+      > .announcement-bar-close {
+        background: none;
+        border: none;
+        border-radius: var(--radius-sm);
+        color: inherit;
+        cursor: pointer;
+        display: flex;
+        inset-inline-end: var(--spacing-sm);
+        padding: var(--spacing-xs);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      > .announcement-bar-close:hover {
+        opacity: 0.75;
+      }
+    }
+  }
+</style>

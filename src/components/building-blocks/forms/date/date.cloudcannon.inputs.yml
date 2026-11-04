@@ -3,16 +3,31 @@ label:
   comment: The label text for the date field.
 name:
   type: text
-  comment: The name attribute for the date field.
+  comment: Name the field is submitted under. Must be unique in the form.
 required:
   type: switch
   comment: Whether the field is required.
 value:
   type: date
-  comment: The default value for the date field (ISO8601 format).
+  comment: The default value for the date field. Only the date part is used; any time is dropped.
 min:
   type: date
-  comment: The minimum date allowed (ISO8601 format).
+  comment: The earliest date that can be chosen.
 max:
   type: date
-  comment: The maximum date allowed (ISO8601 format).
+  comment: The latest date that can be chosen.
+hint:
+  type: text
+  comment: Help text shown between the label and the field.
+autocomplete:
+  type: select
+  options:
+    values: data.autocomplete_tokens
+    value_key: id
+    allow_create: true
+    preview:
+      text:
+        - key: name
+      subtext:
+        - key: id
+  comment: Autofill hint for browsers. Leave blank to derive it from the field's type and name.

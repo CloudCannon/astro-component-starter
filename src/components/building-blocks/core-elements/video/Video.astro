@@ -1,19 +1,56 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import { resolveVideoPosterSource } from "@component-utils/image";
 import type { VideoSource } from "@component-utils/discoverVideoSources";
 
 const {
   type,
   videoId,
-  title,
+  // Interpolated into attributes: undefined would render "undefined" as the accessible name.
+  title = "",
   source,
   thumbnail,
+  captions = "",
+  captionsLanguage = "en",
   background = false,
+  autoplay = background,
+  loop = background,
+  // The media elements are the roots, so live spaceBefore edits need a reload (see _flow.css).
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const VIDEO_TYPES = ["youtube", "vimeo", "local-source"];
+const isHosted = type === "youtube" || type === "vimeo";
+
+if (import.meta.env.DEV) {
+  if (!VIDEO_TYPES.includes(type)) {
+    console.warn(`[video] Unknown type "${type}". Expected one of: ${VIDEO_TYPES.join(", ")}.`);
+  } else if (isHosted && !title) {
+    console.warn(
+      `[video] ${type} video "${videoId}" has no title, so the player frame has no accessible name.`
+    );
+  }
+}
+
+// An unknown type must not fall through to a <video> with no sources.
+if (!_component && !VIDEO_TYPES.includes(type)) return;
+
+const captionsSrc = typeof captions === "string" ? captions.trim() : "";
+const captionsLabel = (() => {
+  if (!captionsSrc) return undefined;
+
+  try {
+    return (
+      new Intl.DisplayNames(["en"], { type: "language" }).of(captionsLanguage) ?? captionsLanguage
+    );
+  } catch {
+    return captionsLanguage;
+  }
+})();
 
 const trimmedThumbnail =
   typeof thumbnail === "string" && thumbnail.trim() !== "" ? thumbnail.trim() : "";
@@ -29,64 +66,45 @@ if (type === "local-source" && source) {
 }
 ---
 
-{
-  type === "vimeo" ? (
-    <lite-vimeo
-      class:list={["video", className]}
-      videotitle={`${title}`}
-      videoid={`${videoId}`}
-      {...htmlAttributes}
-    >
-      <a
-        class="lite-vimeo-fallback"
-        href={`https://vimeo.com/${videoId}`}
-      >
-        Watch on Vimeo: "{title}"
-      </a>
-    </lite-vimeo>
-  ) : type === "youtube" ? (
-    <lite-youtube
-      class:list={["video", className]}
-      videotitle={`${title}`}
-      videoid={`${videoId}`}
-      {...htmlAttributes}
-    >
-      <a
-        class="lite-youtube-fallback"
-        href={`https://www.youtube.com/watch?v=${videoId}`}
-      >
-        Watch on YouTube: "{title}"
-      </a>
-    </lite-youtube>
-  ) : background ? (
+{isHosted ? (
+  <div
+    class:list={["video", "stackable", "hosted-video", className]}
+    {...htmlAttributes}
+  >
     <div
-      class:list={["video", "background", className]}
-      aria-hidden="true"
-      {...htmlAttributes}
+      class="hosted-video-content"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      data-hosted-video
+      data-video-type={type}
+      data-video-id={videoId}
+      data-video-title={title}
+      data-video-autoplay={autoplay}
+      data-video-loop={loop}
     >
-      <video
-        preload="metadata"
-        autoplay
-        muted
-        loop
-        playsinline
-        poster={posterUrl}
+      <a
+        href={
+          type === "youtube"
+            ? `https://www.youtube.com/watch?v=${videoId}`
+            : `https://vimeo.com/${videoId}`
+        }
       >
-        {localVideoSources.map(({ src, type: sourceType }) => (
-          <source
-            src={src}
-            type={sourceType}
-          />
-        ))}
-      </video>
+        Watch on {type === "youtube" ? "YouTube" : "Vimeo"}: "{title}"
+      </a>
     </div>
-  ) : (
+  </div>
+) : background ? (
+  <div
+    class:list={["video", "background", className]}
+    aria-hidden="true"
+    {...htmlAttributes}
+  >
     <video
-      preload="none"
-      controls
+      preload="metadata"
+      autoplay={autoplay}
+      muted
+      loop={loop}
+      playsinline
       poster={posterUrl}
-      class:list={["video", className]}
-      {...htmlAttributes}
     >
       {localVideoSources.map(({ src, type: sourceType }) => (
         <source
@@ -94,16 +112,99 @@ if (type === "local-source" && source) {
           type={sourceType}
         />
       ))}
-      Your browser does not support the HTML5 video element.
     </video>
-  )
-}
+  </div>
+) : (
+  <video
+    preload={autoplay ? "auto" : "none"}
+    controls
+    autoplay={autoplay}
+    muted={autoplay}
+    playsinline={autoplay}
+    loop={loop}
+    poster={posterUrl}
+    class:list={["video", "stackable", className]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...htmlAttributes}
+  >
+    {localVideoSources.map(({ src, type: sourceType }) => (
+      <source
+        src={src}
+        type={sourceType}
+      />
+    ))}
+    {captionsSrc && (
+      <track
+        kind="captions"
+        src={captionsSrc}
+        srclang={captionsLanguage}
+        label={captionsLabel}
+        default
+      />
+    )}
+    Your browser does not support the HTML5 video element.
+  </video>
+)}
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllVideos } from "./setup";
+
+  onPageLoad(setupAllVideos);
+</script>
 
 <style is:global>
   @layer components {
     .video {
       display: block;
-      margin-top: var(--spacing-lg);
+
+      &.video-embed {
+        aspect-ratio: 16 / 9;
+        border: 0;
+        height: auto;
+        width: 100%;
+      }
+
+      &.hosted-video {
+        > .hosted-video-content {
+          align-items: center;
+          aspect-ratio: var(--ratio-widescreen);
+          background-color: var(--color-bg-surface);
+          display: flex;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+          justify-content: center;
+          padding: var(--spacing-md);
+          text-align: center;
+
+          p {
+            color: var(--color-text-muted);
+            margin: 0;
+          }
+
+          button {
+            background-color: var(--color-bg-brand);
+            border: var(--border-width-sm) solid var(--color-bg-brand);
+            border-radius: var(--radius-xs);
+            color: var(--color-brand-on);
+            cursor: pointer;
+            font: inherit;
+            font-weight: var(--font-weight-semibold);
+            padding: var(--spacing-em-sm);
+          }
+
+          iframe {
+            border: 0;
+            height: 100%;
+            width: 100%;
+          }
+
+          &[data-hosted-video-mounted] {
+            display: block;
+            padding: 0;
+          }
+        }
+      }
 
       &.background {
         inset: 0;

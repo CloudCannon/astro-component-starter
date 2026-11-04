@@ -1,17 +1,24 @@
 ---
+import { generateFieldId } from "@component-utils/formField";
+
 const {
   label,
+  /** Hidden from assistive tech: the switch is named by `label` alone. */
+  offLabel,
   name,
   checked = false,
   required = false,
   value = "on",
+  id: customId,
+  /** Attributes for the `<input>` itself; the rest go on the wrapper. */
+  inputAttributes = {},
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
+const fieldId = generateFieldId("toggle", customId, name || label);
 ---
 
 <div
@@ -22,34 +29,43 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
     class="toggle-container"
     for={fieldId}
   >
+    {offLabel && (
+      <span
+        class="toggle-off-label"
+        aria-hidden="true"
+      >
+        {offLabel}
+      </span>
+    )}
     <span class="toggle-switch">
       <input
         type="checkbox"
+        role="switch"
         name={name}
         id={fieldId}
         checked={checked}
         required={required}
-        aria-required={required}
+        aria-required={required ? "true" : undefined}
+        aria-label={label ? undefined : name}
         value={value}
         class="toggle-input"
+        {...inputAttributes}
       />
       <span class="toggle-track"></span>
     </span>
-    {
-      label && (
-        <span class="toggle-label">
-          {label}
-          {required && (
-            <span
-              class="toggle-required"
-              aria-label="required"
-            >
-              *
-            </span>
-          )}
-        </span>
-      )
-    }
+    {label && (
+      <span class="toggle-label">
+        <slot>{label}</slot>
+        {required && (
+          <span
+            class="toggle-required"
+            aria-hidden="true"
+          >
+            *
+          </span>
+        )}
+      </span>
+    )}
   </label>
 </div>
 
@@ -58,7 +74,6 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
     .toggle {
       display: flex;
       margin: 0;
-      margin-bottom: var(--spacing-md);
       width: 100%;
 
       .toggle-container {
@@ -73,8 +88,21 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
         flex: 1;
       }
 
+      .toggle-container:has(.toggle-off-label) {
+        width: auto;
+
+        .toggle-label {
+          flex: none;
+        }
+
+        &:has(.toggle-input:checked) .toggle-off-label,
+        &:not(:has(.toggle-input:checked)) .toggle-label {
+          color: var(--color-text-muted);
+        }
+      }
+
       .toggle-required {
-        color: red;
+        color: var(--color-error);
       }
 
       .toggle-switch {
@@ -96,20 +124,27 @@ const fieldId = htmlAttributes.id || `toggle-${crypto.randomUUID()}`;
         border-radius: var(--radius-full);
         inset: 0;
         position: absolute;
-        transition: var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--animation-normal) var(--ease-smooth);
       }
 
       .toggle-track::before {
         background-color: var(--color-bg);
         border-radius: var(--radius-full);
-        bottom: 3px;
+        inset-block-end: 3px;
+        /* Deliberately not an elevation shadow: tinted per theme via --color-state-active. */
         box-shadow: 0 2px 4px var(--color-state-active);
         content: "";
         height: 20px;
-        left: 3px;
+        inset-inline-start: 3px;
         position: absolute;
-        transition: var(--animation-normal) cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--animation-normal) var(--ease-smooth);
         width: 20px;
+      }
+
+      /* The input is `opacity: 0`, so its own ring is invisible. */
+      .toggle-input:focus-visible + .toggle-track {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       .toggle-input:checked + .toggle-track {

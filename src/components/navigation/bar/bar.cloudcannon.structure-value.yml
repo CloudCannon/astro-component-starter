@@ -1,16 +1,24 @@
 label: Bar Navigation
 icon: navigation
-description: "Horizontal navigation bar with dropdown menus."
+description: Horizontal navigation bar with dropdown menus.
 value:
   _component: navigation/bar
   navData: []
 preview:
   text:
     - Bar Navigation
+  image: public/component-previews/navigation/bar.svg
   icon: navigation
+  gallery:
+    image: public/component-previews/navigation/bar.svg
+    fit: cover
 picker_preview:
   text: Bar Navigation
   subtext: "Horizontal navigation bar with dropdown menus."
+  image: public/component-previews/navigation/bar.svg
   icon: navigation
+  gallery:
+    image: public/component-previews/navigation/bar.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/navigation/bar/bar.cloudcannon.inputs.yml

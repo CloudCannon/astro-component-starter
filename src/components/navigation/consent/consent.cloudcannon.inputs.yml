@@ -1,0 +1,74 @@
+label:
+  type: text
+  comment: Names the settings dialog. A second consent on the same page needs its own.
+privacy:
+  type: object
+  comment: Consent wording and lifetime. Real pages use the site's Privacy & Consent settings.
+privacy._schema:
+  type: text
+  comment: Internal schema discriminator. Keep this set to privacy.
+privacy.enabled:
+  type: switch
+  comment: Enable the privacy controls. Analytics stays blocked when this is off.
+privacy.policyRevision:
+  type: number
+  comment: Increase after a material change so visitors are asked to choose again.
+privacy.expiryDays:
+  type: number
+  comment: Days before a saved choice expires.
+privacy.policyUrl:
+  type: url
+  comment: Site-relative URL for the published privacy policy.
+privacy.bannerHeading:
+  type: text
+  comment: Heading shown in the first-visit banner.
+privacy.bannerText:
+  type: textarea
+  comment: Plain-language explanation shown in the first-visit banner.
+privacy.settingsLabel:
+  type: text
+  comment: Label for the footer's settings control and the settings dialog.
+privacy.necessaryLabel:
+  type: text
+  comment: Visitor-facing name for storage required to remember privacy choices.
+privacy.necessaryDescription:
+  type: textarea
+  comment: Explain the essential storage that cannot be switched off.
+privacy.analyticsLabel:
+  type: text
+  comment: Visitor-facing name for the analytics category.
+privacy.analyticsDescription:
+  type: textarea
+  comment: Explain what analytics does in language visitors can understand.
+privacy.externalMediaLabel:
+  type: text
+  comment: Visitor-facing name for the external-media category.
+privacy.externalMediaDescription:
+  type: textarea
+  comment: Explain that third-party videos, maps, and embeds may load after consent.
+privacy.honorGlobalPrivacyControl:
+  type: switch
+  comment: Treats a browser Global Privacy Control signal as a decline.
+privacy.externalMediaRequiresConsent:
+  type: switch
+  label: Ask before loading external media
+  comment: Ask before loading third-party videos, maps, and embeds. When off, they load straight away.
+analytics:
+  type: object
+  comment: Analytics integration. Real pages use the site's Analytics settings.
+analytics._schema:
+  type: text
+  comment: Internal schema discriminator. Keep this set to analytics.
+analytics.provider:
+  type: select
+  comment: Analytics provider. Scripts load only after the visitor grants analytics consent.
+  options:
+    values:
+      - value: none
+        label: Off
+      - value: plausible-hosted
+        label: Plausible (hosted)
+analytics.scriptUrl:
+  type: url
+  label: Plausible script URL
+  comment: Site-specific https://plausible.io/js/pa-….js URL from Plausible.

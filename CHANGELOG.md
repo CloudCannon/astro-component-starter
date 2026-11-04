@@ -4,13 +4,285 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [Unreleased]
+## [2.0.0] - Unreleased
 
-### Fixed
+A big release: a browsable reference site for every component, site-wide
+search, a privacy and consent workflow, automatic share cards, many new page
+sections and building blocks, tooling that catches editor problems before they
+ship, and a long list of accessibility fixes. If you have a site on this
+starter, read the **Heads-up** items under Changed before upgrading: several
+change how things look, and every page section moves to a new path.
+
+### Added
+
+#### Making the starter your own
+
+- `npm run reset:starter` clears the demo content out of a fresh copy and sets your site name and URL. `--dry-run` shows the plan first, and it only runs on a clean git tree.
+- `npm run check:placeholders` warns when starter placeholders are still in place, most importantly the `example.com` URL.
+- Guides: `docs/DEPLOYMENT.md` for going live on CloudCannon, and `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and `docs/ARCHITECTURE.md` for people and AI agents working on the project.
+- The Getting Started guides follow the order you'd build a site in: Project Tour, Editing a Page, Customizing Your Brand, Building a Page Section, Editing the Blog, and a new **Going Live** guide. How Visual Editing Works is now part of Building a Page Section, and its old URL redirects there. The Get Started page matches, with a section on working with an AI agent.
+- A `LICENSE` file (MIT), and recorded provenance for the icon set in `src/icons/README.md`.
+
+#### Privacy and consent
+
+- A site-wide privacy and consent workflow, edited in CloudCannon's **Privacy & Consent** and **Analytics** data panels. Analytics is strict opt-in: it stays off until the visitor allows it, and stays off when the workflow is disabled. The banner gives Accept All, Reject All and Customize equal weight, the settings dialog has a switch per optional category and opens fullscreen on phones, and the footer's **Privacy settings** link reopens it whenever there is a category to choose. A browser's Global Privacy Control signal counts as a decline.
+- Hosted video, maps and embeds load straight away by default. Turn on **Ask before loading external media** (`externalMediaRequiresConsent` in `privacy.json`) and they wait for the visitor's approval instead; sites with EU or UK visitors should. Video and Contact Split maps accept only their providers' embed URLs. An Embed loads iframes from any HTTPS address, sandboxed and with scripts removed. YouTube uses Privacy Enhanced Mode, including YouTube share code pasted into an Embed.
+- A default privacy policy at `src/content/pages/privacy.md`, a plain markdown page to rewrite for your site, and a Plausible analytics integration.
+
+#### A reference site for every component
+
+- Every component gets its own documentation page automatically, with a live example, a table of its options and a YAML snippet you can paste into a page. Longer notes and extra examples can be added on top, and a gallery at `/component-docs/gallery/` browses the whole library.
+- Preview thumbnails for every component in CloudCannon's Add menu, in light and dark.
+- The component catalog has a guide to choosing between Grid, Stack, Card Grid, Bento Box and Masonry, and authoring recipes for integration directories, trust metrics and product comparisons.
+
+#### Being found: search, feeds and sharing
+
+- Site search in the navigation bar: a button or Cmd/Ctrl+K opens a modal with results as you type, filters for pages and posts, and thumbnails. Turn it on with `search: true` in the main navigation data. It replaces the old `/search/` page and works locally after `npm run build` (`npm run search:dev` carries the index into `npm run dev`).
+- An RSS feed at `/rss.xml`, linked from every page.
+- `llms.txt` is generated at build time from the content collections, skipping `noindex` pages.
+- Pages and posts carry structured data (title, author, date, tags, breadcrumb trail), and search engines may show large image previews and full snippets.
+- Share cards are drawn at build time for every page and post, using the site's logo, fonts and colours, with the entry's own image as the background when it has one. **Share card generation** and **Share card theme** in `seo.json` scope and theme them, and **Share image** sets the site-wide fallback.
+
+#### Tools that catch mistakes before you ship
+
+Most of these catch problems that used to build cleanly while leaving the site
+quietly broken in the editor.
+
+- `npm run lint:cms` checks the editor configuration and page content against the components: renamed or missing props, missing files, scripted components that would be dead in the editor, block arrays the editor can't tell apart, page frontmatter that isn't valid YAML, and blog posts that use a component with no snippet (which the content editor can't edit).
+- `npm run lint:roots` fails on prop-driven attributes on a component's root element, which go stale when the editor re-renders.
+- `npm run lint:schema` checks the editor configuration against CloudCannon's own schema, plus the Add-menu preview icons the schema itself doesn't check.
+- `npm run lint:css-vars` checks that every design token you use exists. A mistyped token fails silently otherwise.
+- `npm run icons:sync` and `icons:check` keep the icon picker in step with the icon files, and `icons:check` fails on an icon id in content or code that names no icon, which would render nothing.
+- `npm run previews:check` catches a missing or stale preview thumbnail, and `npm run previews:montage` renders them all on one sheet.
+- `npm run docs:check` checks the documentation against the components.
+- Tests: `test:unit`, `test:render` (every component builds), `test:smoke` (a real browser over the built site) and `test:css-parity` (per-page CSS pruning changes no computed style).
+- `npm run check:quick` runs the three fastest, most useful checks while you work. `npm run check` is what a finished change has to pass.
+- `npm run editor` serves the real CloudCannon editor locally against `dist/`, with the CloudCannon CLI pinned, and `npm run new:component` scaffolds a new component.
+- A build fails if two components share a filename, since MDX addresses components by bare filename.
+- VS Code autocomplete for the CloudCannon config and the design tokens.
+- CI runs every check, including CSS parity and a blocking `npm audit`. Actions are pinned to commit SHAs, the workflow token is read-only, and Dependabot opens grouped weekly updates.
+
+#### New page sections
+
+- **Page Header:** a slim title block for inner pages, with an optional eyebrow, intro and, on nested pages, a breadcrumb trail from the URL.
+- **Stats:** a row of count-up numbers with labels.
+- **Steps Section** and **Timeline Section:** full-width versions of the new Steps and Timeline blocks.
+- **Logo Cloud:** a "trusted by" strip of client logos, optionally greyscale or scrolling as a marquee.
+- **Testimonial Wall:** quotes as cards in a masonry layout.
+- **Testimonial Bento:** quotes in a bento grid, each with its own size and tone, led by a featured quote.
+- **Pricing Tiers:** plan cards with features, a highlighted plan and an optional Monthly/Annual toggle.
+- **Pricing Comparison:** a feature-by-feature table comparing plans.
+- **Contact Split:** contact details beside a form, with an optional map.
+- **Latest Posts:** the newest blog posts as cards, optionally filtered by tag.
+- **Gallery Grid:** a captioned image grid or masonry, with a lightbox that supports keyboard, swipe and pinch-zoom.
+- **Card Collection:** a grid of linked cards with optional covers.
+- **Newsletter Signup:** an endpoint-agnostic email form that works without JavaScript.
+
+#### New building blocks
+
+- **Card Grid:** the fixed-column or masonry card layout that Card Collection, Latest Posts and Team Grid share.
+- **Masonry:** columns of mixed-height items that keep reading order.
+- **Stack:** a row or column of different blocks with one even gap.
+- **Steps:** a numbered how-it-works sequence, horizontal or vertical.
+- **Timeline:** a dated sequence on a rail, as a vertical list, alternating split or horizontal scroll.
+- **Scroll Deck:** cards that stack over each other as the page scrolls, with a rail of anchor links.
+- **Scroll Stepper:** steps of text beside sticky media that changes as each step scrolls past.
+- **Code Block:** syntax-highlighted code in tabs, with line numbers and a copy button.
+- **Alert**, **Badge**, **Rating**, **Table** and **Social Links**.
+
+#### New options
+
+- An announcement bar above the navigation on every page, edited in `src/data/announcementBar.json`. A dismissal lasts until the message changes.
+- Mega menus in the main navigation: a `megaMenu` on a top-level item renders a full-width panel on desktop and grouped links on mobile.
+- Backgrounds on Card, Custom Section and every page section can be a tiled pattern as well as an image or video, and a `mask` fades part of the background into the background colour. Card and Custom Section backgrounds can stay fixed while the page scrolls.
+- Video: autoplay, loop, and WebVTT captions for self-hosted video. Video Modal can open from a poster image.
+- Form fields take `hint`, `error` and `autocomplete`, and an invalid form explains itself under the field at fault. Form takes a **Method**, a **Honeypot name** and a **Success message**, shown as a success Alert when the page loads with `?success`.
+- A **Heading level** control on every page section with a heading, and on Modal.
+- `imageBleed` on Feature Split and Hero Split runs the image to the page edge.
+- A `spaceBefore` control on every stackable block, for the space above it.
+- Carousel: pause-on-hover, a starting slide, a thumbnail indicator and a slide-change event.
+- Divider: a **Line style** of solid, dashed or dotted.
+- Feature Slider: an **Image aspect ratio** (portrait, square or landscape) for every slide, so screenshots and wide artwork aren't cropped to portrait.
+- Toggle: an `offLabel` for a two-sided switch ("Monthly [switch] Annual"), and `inputAttributes` for attributes on the input itself.
+- Cards can lock their colour scheme against the visitor's theme toggle, as Custom Section already could.
+- Image `decorative`, Button `aria-pressed`, Textarea **Rows**, Testimonial **Avatar size**, Hero Split **Rounded image**, and Social Links **Landmark name**.
+- h2 and h3 headings get a linkable id from their text.
+- Tag pages show a Home › Blog › tag breadcrumb trail.
+- Every page has a "Skip to main content" link.
+- Warning status colour tokens, and thin and medium border-width tokens.
+- Code fences in blog posts and page bodies have a copy button.
 
 ### Changed
 
-### Added
+#### Page sections
+
+- **Heads-up:** page sections are grouped by the job they do: heroes, explainers (was features and info-blocks), proof (was social-proof and testimonials), conversion (was CTAs, pricing and contact), collections (was blog, galleries and team), and builders. The group is part of each section's path, so existing pages need a find-and-replace, e.g. `page-sections/ctas/cta-center` becomes `page-sections/conversion/cta-center`. The `@features` import alias is now `@explainers`.
+- **Heads-up:** Team Grid's start/center layout option is gone. It now uses Card Grid's layout, and a new Team Grid starts with three people.
+- Page-section editing panels put content fields first, with the shared settings (width, padding, colour scheme, background) in a collapsed group.
+
+#### Framework and dependencies
+
+- Upgraded to **Astro 7**, with every dependency on its latest release except TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`).
+- **Heads-up:** the starter needs Node 24 or later (`engines` is `>=24.0.0`), and `.nvmrc` pins `24.18.0`. The project scaffolder and the local editor already required it.
+- Icons are built in instead of coming from the unmaintained `astro-icon` package. A mistyped icon name warns instead of failing the build.
+- **Heads-up:** the icon set is [Lucide](https://lucide.dev/icons/) instead of Heroicons: 1,879 icons in place of 324, so the picker has icons for most trades rather than just app controls. A new `--icon-stroke-width` token (1.5) keeps the current line weight. Many ids changed, e.g. `x-mark` is `x`, `check-circle` is `circle-check`, `envelope` is `mail`, `magnifying-glass` is `search` and `bolt` is `zap` (Lucide's `bolt` is a hex nut). An unknown id renders nothing, so run `npm run icons:check`, which lists every id in your content that no longer exists. `npm run icons:lucide -- <version>` upgrades the set.
+- The icon and autocomplete lists are CloudCannon datasets under `.cloudcannon/data/`, which takes `cloudcannon.config.yml` from 951 lines to 216.
+- Accessibility, SEO, link and performance checks on the built site moved to a separate tool outside this repository, so this repository's CI no longer runs them.
+- Agent instructions live in `.agents/`, and `npm run agents:sync` copies them to `.claude/skills/` for Claude Code and `.cursor/rules/` for Cursor.
+
+#### Look and feel
+
+- **Heads-up:** spacing between blocks comes from a flow system: each block type has a default space above it, and first children sit flush. A Spacer now replaces the gap between its neighbours rather than adding to it, so existing Spacer gaps render tighter, and some section headings sit further from their content (48px, was 24px).
+- **Heads-up:** light-theme link colours are accessible blues that meet contrast requirements. Dark-theme links are unchanged.
+- **Heads-up:** the grey tokens are renamed from `--gray-0…12` to `--gray-50…950`, matching every other colour. The colours are identical, and `npm run lint:css-vars` finds any old names you miss.
+- **Heads-up:** the colour palette has a full range for all eight colours. Icon background tints, the green and yellow icon colours, and the dark theme's accent backgrounds shift slightly.
+- **Heads-up:** layout breakpoints are standardised on 640px and 768px, so a few layouts change shape at slightly different widths.
+- Hardcoded values in component CSS (border widths, media overlay colours, easing) are tokens, so re-skinning each is one edit.
+- Secondary buttons use the lighter surface fill, and tertiary buttons show a tint of their text colour on hover.
+- Focus outlines are consistent everywhere, and a mouse click no longer leaves one behind.
+- Video Modal's close control sits above the player, the player is centred, and clicking the overlay closes it. It defaults to extra-large.
+- The sticky main nav casts a subtle shadow once it pins, and publishes its height as `--main-nav-height` for anything else that sticks.
+- Blog posts open with a back link, title, subtitle and one line for category, date and author, with a 16:9 image, content in one centred column, and tags at the end. Blog listing headings name the list you're looking at.
+- The blog listing and tag pages show posts three to a row on wide screens.
+- Code in blog posts uses the theme's monospace font, and inline code renders as a subtle pill on any background.
+- Fonts are served from your own site instead of fetched from Google at build time.
+- The placeholder image is a photo glyph on a warm grey field, so it still reads as a stand-in when cropped.
+- Component descriptions, docs overviews and prop comments are shorter and worded consistently, in the component library and the editor.
+- Demo content is a small product site (home, why, get started), a demo blog, and example pages under `/examples/` written as one fictional web studio (services, portfolio, care-plan pricing, about and contact), with every page section in use on a real page.
+- Testimonial Section has the same vertical padding as other page sections, so its card no longer sits tight against the edges of its band.
+- Feature Grid lays out four features as two rows of two instead of three and one.
+- Grid's numbered columns respond to their container's width, not the viewport.
+- A linked Card uses a stretched link instead of wrapping its contents, so buttons, forms and links inside it stay clickable.
+- A page title drops the site-name suffix rather than running past the length search engines display.
+- The README leads with the live demo and screenshots, and documents the tooling and deployment.
+
+#### Performance
+
+- Each page ships only the component CSS its own markup uses, once. Inline CSS is 64% smaller on the homepage and 66% site-wide, and total HTML 57% smaller, which takes about 1.2s off first and largest contentful paint on a cold Slow 4G load.
+- Hosted YouTube and Vimeo videos load a click-to-play facade, so the full player is fetched only when someone presses play.
+
+#### Authoring and the editor
+
+- **Heads-up:** Grid takes `columns` (`auto`, or `2` to `6`) instead of `layout`. `minItemWidth` and `maxItemWidth` apply to auto columns only, and `maxItemWidth` now caps item width. Centred, content-sized rows (the old `layout: center`) are Stack's job.
+- **Heads-up:** Video Modal groups its props into two structures: `type`, `videoId` and `source` move into `media`, and `triggerStyle` and the button and poster fields move into `trigger`.
+- **Heads-up:** Input, Textarea, Select, Date, File Upload and Range share one field shell, so their label, hint and error classes are `form-field-*` instead of per-component classes like `input-hint`.
+- **Heads-up:** Range no longer takes `required`, which never did anything. Remove it from any content that sets it.
+- **Heads-up:** a List item's text is a `<span class="item-text">` rather than an invalid `<p>`. Nothing renders differently.
+- **Heads-up:** Hero Split's root class is `hero-split` (was `hero`).
+- **Heads-up:** Submit no longer takes `disabled`. Remove it from any content that sets it; `npm run lint:cms` lists them.
+- The editor shows only the fields that apply: a background shows its chosen type's fields, Video and Video Modal their source's, and a List item its icon colour once it has an icon.
+- Every slot is either wide (section content, split, stack, carousel slide, content selector panel), which takes everything, or narrow (card, grid item, modal body, accordion panel, step), which takes content blocks only. `npm run lint:nesting` keeps it consistent.
+- A freshly inserted block starts in the same state as a composed one, with plausible copy and working links instead of "Heading text" and an empty button.
+- Generated ids come from whatever names the thing they belong to instead of a fresh UUID, so builds are reproducible and ids survive an editor re-render.
+- In the content editor, component syntax inside a code block stays code instead of being read as a snippet, so a post can show an example.
+- Modal behaviour (focus trap, scroll lock) attaches to any popover with `data-modal`, and `.modal-popover` is styling only. `ModalShell` and `Modal` take `sheet={false}` for a custom full-screen overlay.
+- The Text block's toolbar no longer offers `h1`. Use the section's **Heading level** instead.
+- Team Grid's supporting copy and the footer's legal text accept markdown, the mobile menu's logo is an image picker, and the main nav and footer logos link home.
+
+### Removed
+
+- The Component Builder at `/component-docs/component-builder/`. `npm run new:component` scaffolds a new section instead.
+- Unused dependencies (`@astrojs/node`, `ajv`, `jszip`, `shiki`, the `@rollup/rollup-*` pins), and the legacy `href` nav-button fallback.
+
+### Fixed
+
+#### Accessibility
+
+- The navigation menus are labelled and keyboard-operable. The hamburger, close button and dropdown arrows had no names, and the main, mobile and footer navigation now have distinct ones.
+- Enter and Space open navigation submenus and side nav groups, desktop dropdowns close when you tab out, and the open mobile menu traps focus and makes the page behind it `inert`.
+- Small icon-only controls (mobile menu, carousel arrows, theme toggle) have a 44px tap area.
+- Modals hold focus while open, including on embedded players, announce themselves as dialogs, and return focus to the control that opened them.
+- Carousels and image carousels announce themselves as carousels, a self-advancing carousel has a Pause control and stops while focused (WCAG 2.2.2), and its indicator dots are keyboard-operable buttons.
+- Reduced-motion support covers modal and accordion animations, carousel autoplay, counters and autoplaying video.
+- Segments can be operated from the keyboard, and a Toggle is announced as a switch and shows a focus ring.
+- Choice Group and Segments mark the group required, not the first checkbox.
+- A required field's asterisk is hidden from screen readers, and a field with no label falls back to its placeholder or name for its accessible name.
+- Pagination's current page is marked, and is never trimmed out of the visible window.
+- Focus rings, control borders and status text colours meet contrast requirements in both themes.
+- A Testimonial is a `<figure>` with a `<blockquote>` and `<figcaption>`, and drops empty author rows.
+- Content Selector tabs are a named tablist rather than a run of `h3`s, and respond to Enter and Space.
+- Range announces its unit with the value ("60 kg").
+- Icons are hidden from screen readers, which were announcing thousands of unlabelled graphics.
+- The footer's social links are a labelled list, toggles without a visible label fall back to their name, and cards with a background image get a solid backing in case the image fails.
+
+#### Images
+
+- Images offer their own full resolution. Sizes were rounded down to the nearest preset, so a 1181px image only offered 640px and looked soft.
+- Full-width section backgrounds loaded blurry in Firefox and Safari.
+- Blog listing images drop from 3.7MB to 0.42MB.
+- Testimonial author photos fill their circle and ship retina resolutions.
+- Images in a section with a locked colour scheme no longer swap to their alternate when the visitor toggles the theme.
+
+#### Forms
+
+- Form renders children passed as slot content. An inverted guard made `<Form><Input /></Form>` render nothing.
+- Forms are sent as `multipart/form-data` only when they contain a File Upload.
+- Date fields keep their default value and min/max limits.
+- Select shows its placeholder instead of preselecting the first option, which satisfied a required Select on load.
+- Textarea, Select, Date, File Upload and Toggle no longer emit a duplicate `id` when one is passed in.
+- A disabled Input with an icon is styled as disabled.
+
+#### The visual editor
+
+These all built and looked fine, but a field in CloudCannon was missing,
+unusable or wrong.
+
+- List fields that showed "not configured", options the editor offered but the component ignored, and options the component supported but the editor never offered, across many components. `lint:cms` now fails on each of these.
+- Controls that only appeared after saving (alternate-theme logos, grid alignment) show up on a freshly added block.
+- A component whose list was emptied in the editor renders instead of failing the build.
+- Following a link inside the Visual Editor does a full page load, so the editor knows which page is open.
+- Carousels, modals and tabs work in the component library inside the Visual Editor.
+- Content Selector items can be selected and dragged on the canvas, top tabs are centred, and a new tab shows its subtext and icon inputs.
+- More is editable on the canvas: Accordion item titles, Content Selector titles and subtext, and a Modal's trigger text.
+- A Video Modal with the default button trigger renders something to click, and plays in the editor.
+- Passing a `class` to Carousel, Accordion, Footer or a Content Selector panel no longer strips the component's own class.
+- A Card with its own colour scheme uses that scheme's text colour instead of the surrounding page's.
+- Split and Image Carousel survive the editor's re-render, and Image, List and Range no longer put prop-driven attributes on their root element.
+- Adding, duplicating, moving or deleting a Carousel slide, Image Carousel image or Feature Slider slide keeps every item's "2 of 4" label in order.
+- The add-section menu shows each component's preview thumbnail and correct icon, and uploads go to `src/assets/images`.
+- The move handle on the first page section is reachable again.
+- A Button's text stays visible when "Hide text" is on, since it is the icon-only button's accessible name.
+- The Embed and Icon pickers offer only what the component accepts, and Definition List items have one editable region per field.
+- Authoring warnings for an unknown Video type, an Image with no alt text, a hosted video with no title and a Button with no link.
+- Production builds no longer link to component-library guide pages that only exist in development.
+- Text and List size, alignment and layout changes show in the editor straight away instead of after a reload.
+- An Image bound only to its source no longer shows an error card for a missing alt field.
+- Wrappers rendered without an editable binding no longer mark their items as editable array items, which the editor rejected outside an array.
+- Content Selector's icon dropdown shows each icon's glyph and name instead of raw ids.
+- Heading's Icon Position, and Feature Grid's item Icon Color and Icon Background, stay hidden until an icon is chosen.
+- Embeds and Contact Split maps show in the editor as a label naming what they'll load, instead of an empty box, and an Embed says when it removed an iframe it can't load.
+- A block added above another in the editor keeps its own markup. The editor matched content blocks by position and reused the neighbouring block's element, so Social Links lost its styling anywhere but last.
+- A section added in the editor has its editable regions straight away. The editor drew it without them, so a Custom Section had nowhere to add blocks, and a heading added to it could show a "Failed to render text editable region" card.
+
+#### Visual and content
+
+- Nav dropdowns stay inside the viewport, close on a second click of their trigger, and no longer carry an invalid `role="button"`.
+- A side nav group holding the current page opens without animating, and an entry with no link renders as text.
+- The mobile menu binds its Escape handler once and uses the layer scale instead of `z-index: 9999`.
+- The theme toggle shows the right icon inside a dark section.
+- A background colour no longer paints over a background video.
+- Page sections default to the `base` background, so a dark section without one doesn't leave light text on the page colour.
+- Counters animate decimal targets at their own precision and no longer reflow on first paint.
+- Testimonial quote marks sit outside the quote, even when it starts or ends with formatting.
+- Heading icons have their gap back, and Hero Center's subtext size no longer leaks into Hero Split and Feature Split.
+- A Bento Box cell's column span is clamped to the grid's column count.
+- Content Selector's side tabs span the full width of the tab column, so the hover and selected backgrounds no longer stop at the end of the label.
+- Switching examples in the component library no longer jumps the page, and nested content no longer prints `[object Object]`.
+- Font weights are tokens, and 19 references to tokens that don't exist are fixed.
+- Content blocks with no component set log a warning instead of disappearing.
+- An invalid `DISABLE_COMPONENT_LIBRARY` value fails the build.
+- Nested page files at `src/content/pages/<section>/index.md` resolve to `/<section>/`.
+- Stale documentation and counts are corrected.
+- A heading left empty no longer renders an empty heading element that adds stray space.
+- Closing a modal or video modal keeps its layout for the whole fade.
+- Carousel arrows stay correct after a resize, wrap round when the row is too short for looping, and hide with the dots when every slide fits. A centred Carousel centres its first and last slides.
+- Code fences in Markdown and MDX follow the light/dark theme, matching the Code Block component.
+
+### Security
+
+- Live sites send browser security headers and a Content-Security-Policy whose `frame-ancestors` allowlist lets the CloudCannon editor embed the page.
+- Breadcrumb and blog JSON-LD escape `<`, so a CMS-authored title can't break out of the structured-data script.
+- `npm audit` reports 0 advisories, down from 8 (1 critical, 4 high, 3 moderate).
 
 ## [1.0.2] - 2026-04-13
 

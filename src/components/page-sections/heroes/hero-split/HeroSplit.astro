@@ -10,24 +10,32 @@ import Split from "@wrappers/split/Split.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h1",
   subtext = "",
   imageSource = "",
   imageAlt = "",
   imageAspectRatio = "none",
+  imageBleed = false,
   buttonSections = [],
   reverse = false,
+  imageRounded = true,
   sectionLabel,
   maxContentWidth = "xl",
   paddingHorizontal = "lg",
   paddingVertical = "4xl",
   colorScheme = "inherit",
-  backgroundColor,
+  lockColorScheme = false,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const bleedSide = imageBleed ? (reverse ? "inline-start" : "inline-end") : undefined;
+const imagePositionHorizontal = imageBleed ? (reverse ? "right" : "left") : "center";
+const imagePositionVertical = imageBleed ? "top" : "center";
 ---
 
 <CustomSection
@@ -36,33 +44,37 @@ const {
   paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
   backgroundColor={backgroundColor}
   background={background}
-  class:list={["hero", className]}
+  class:list={["hero-split", className]}
   useDefaultEditableBinding={useDefaultEditableBinding}
   {...htmlAttributes}
 >
   <Split
-    distributionMode="flexible-fixed"
+    distributionMode={imageBleed ? "half" : "flexible-fixed"}
     fixedWidth="400"
+    data-bleed={bleedSide}
     alignmentVertical="center"
     reverse={reverse}
     minSplitWidth={800}
     gap="2xl"
-    class="hero-split"
+    class="hero-split-layout"
   >
     <Fragment slot="first">
       <SimpleText
         class="eyebrow"
         data-prop="eyebrow"
         text={eyebrow}
+        size="sm"
       />
       <Heading
-        level="h1"
+        level={headingLevel}
         size="2xl"
         data-prop="heading"
-        >{heading}</Heading
       >
+        {heading}
+      </Heading>
       <Text
         class="subtext"
         data-prop="subtext"
@@ -78,8 +90,12 @@ const {
       <Image
         source={imageSource}
         alt={imageAlt}
-        rounded={true}
+        rounded={imageRounded}
         aspectRatio={imageAspectRatio}
+        positionHorizontal={imagePositionHorizontal}
+        positionVertical={imagePositionVertical}
+        sizes={imageBleed ? "(max-width: 800px) 100vw, 60vw" : undefined}
+        widths={imageBleed ? [640, 1280, 1920, 2560] : undefined}
         data-prop-src="imageSource"
         data-prop-alt="imageAlt"
         priority={true}

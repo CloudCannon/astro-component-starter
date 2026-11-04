@@ -1,12 +1,13 @@
 ---
-import markdownit from "markdown-it";
-
-const md = markdownit({ html: true });
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { renderMarkdown } from "@component-utils/markdown";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   text = "",
   size,
   alignmentHorizontal = "start",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
@@ -14,37 +15,40 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const markdownContent = text ? md.render(text) : "";
+const markdownContent = renderMarkdown(text);
 
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
-const hasText = text?.trim().length > 0;
+const hasText = isNonEmptyString(text);
 const hasSlotContent = Astro.slots.has("default");
 
 if (!_component && !hasText && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["text", className]}
+  class:list={["text", "stackable", className]}
   {...htmlAttributes}
 >
   <div
     class:list={["text-inner", size && `size-${size}`, `align-${alignmentHorizontal}`]}
-    {...textDataAttributes}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
   >
-    <slot>
-      {text && <Fragment set:html={markdownContent} />}
-    </slot>
+    <div
+      class="text-body"
+      {...textDataAttributes}
+    >
+      <slot>{text && <Fragment set:html={markdownContent} />}</slot>
+    </div>
   </div>
 </div>
 
 <style is:global>
   @layer components {
     .text {
-      margin-top: var(--spacing-lg);
+      --space-before: var(--space-before-tight);
 
       > .text-inner {
         &.size-xs {
@@ -72,24 +76,26 @@ if (!_component && !hasText && !hasSlotContent) return;
           --text-size: var(--font-size-4xl);
         }
 
-        > p {
-          font-size: var(--text-size, inherit);
-        }
+        > .text-body {
+          > p {
+            font-size: var(--text-size, inherit);
+          }
 
-        > ul {
-          font-size: var(--text-size, inherit);
-        }
+          > ul {
+            font-size: var(--text-size, inherit);
+          }
 
-        > ol {
-          font-size: var(--text-size, inherit);
-        }
+          > ol {
+            font-size: var(--text-size, inherit);
+          }
 
-        > *:first-child {
-          margin-top: 0 !important;
-        }
+          > *:first-child {
+            margin-top: 0 !important;
+          }
 
-        > *:last-child {
-          margin-bottom: 0 !important;
+          > *:last-child {
+            margin-bottom: 0 !important;
+          }
         }
 
         &.align-start {

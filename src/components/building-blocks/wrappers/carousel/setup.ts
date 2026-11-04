@@ -27,6 +27,8 @@ export function setupCarousel(carousel: CarouselElement): void {
   const controlsWrapper = inner?.querySelector<HTMLElement>(".controls-wrapper");
   const indicatorsContainer = controlsWrapper?.querySelector<HTMLElement>(".indicators");
   const fractionEl = controlsWrapper?.querySelector<HTMLElement>(".carousel-fraction");
+  // A sibling of .controls-wrapper, not a child — it's a full-width strip.
+  const thumbnailsContainer = inner?.querySelector<HTMLElement>(".carousel-thumbnails");
 
   if (!inner || !viewport || !track || !slides || !slides.length) {
     // Silently skip: in the CloudCannon editor the inner DOM can be
@@ -50,21 +52,46 @@ export function setupCarousel(carousel: CarouselElement): void {
 
   const plugins = [];
 
-  if (inner.hasAttribute("data-autoplay")) {
-    const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
+  // Embla moves slides with JS, so the global reduced-motion CSS rule can't stop it.
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    plugins.push(Autoplay({ delay: autoplayInterval, stopOnInteraction: false }));
+  if (inner.hasAttribute("data-autoplay") && !prefersReducedMotion) {
+    const autoplayInterval = Number(inner.getAttribute("data-autoplay")) * 1000 || 3000;
+    const pauseOnHover = inner.getAttribute("data-pause-on-hover") === "true";
+
+    plugins.push(
+      Autoplay({
+        delay: autoplayInterval,
+        stopOnInteraction: false,
+        stopOnMouseEnter: pauseOnHover,
+        stopOnFocusIn: true,
+      })
+    );
   }
 
   let watchDrag = true;
 
-  if (inner.hasAttribute("data-autoscroll")) {
+  if (inner.hasAttribute("data-autoscroll") && !prefersReducedMotion) {
     const scrollValue = parseFloat(inner.getAttribute("data-autoscroll") || "1");
     const speed = isNaN(scrollValue) ? 1 : scrollValue;
 
-    plugins.push(AutoScroll({ speed }));
+    plugins.push(AutoScroll({ speed, stopOnFocusIn: true }));
     watchDrag = false;
   }
+
+  const startIndex = Number(inner.getAttribute("data-start-index")) || 0;
+
+  // Slides carry the gap as leading padding and the track's negative margin takes the first one back.
+  const rowOverflows = (nodes: HTMLElement[]) => {
+    const total = nodes.reduce((sum, node) => sum + node.getBoundingClientRect().width, 0);
+    const lead = Number.parseFloat(getComputedStyle(track).marginInlineStart) || 0;
+
+    return total + lead - viewport.clientWidth > 1;
+  };
+
+  // Trimmed snaps never centre the end slides; untrimmed ones push a row that fits off-centre.
+  const containScrollFor = (nodes: HTMLElement[]) =>
+    align === "center" && rowOverflows(nodes) ? false : ("trimSnaps" as const);
 
   const embla = EmblaCarousel(
     viewport,
@@ -73,8 +100,9 @@ export function setupCarousel(carousel: CarouselElement): void {
       slidesToScroll,
       align,
       watchDrag,
+      containScroll: containScrollFor([...slides]),
       duration: 20,
-      startIndex: 0,
+      startIndex,
       skipSnaps: false,
       inViewThreshold: 0.7,
     },
@@ -84,32 +112,98 @@ export function setupCarousel(carousel: CarouselElement): void {
   carousel.setAttribute("data-embla-initialized", "true");
   carousel.__embla = embla;
 
+  embla.on("reInit", () => {
+    const containScroll = containScrollFor(embla.slideNodes());
+
+    if (embla.internalEngine().options.containScroll !== containScroll) {
+      embla.reInit({ containScroll });
+    }
+  });
+
+  // Consumers listen for this instead of reaching into Embla.
+  const emitSelect = () => {
+    carousel.dispatchEvent(
+      new CustomEvent("carousel:select", {
+        bubbles: true,
+        detail: { index: embla.selectedScrollSnap(), total: embla.scrollSnapList().length },
+      })
+    );
+  };
+
+  embla.on("select", emitSelect);
+  embla.on("reInit", emitSelect);
+  emitSelect();
+
   const prevButton = inner.querySelector<HTMLButtonElement>(".prev > .button-inner");
   const nextButton = inner.querySelector<HTMLButtonElement>(".next > .button-inner");
 
-  if (prevButton) prevButton.style.borderRadius = "9999px";
-  if (nextButton) nextButton.style.borderRadius = "9999px";
-
-  const updateButtons = () => {
-    if (prevButton) prevButton.disabled = !embla.canScrollPrev();
-    if (nextButton) nextButton.disabled = !embla.canScrollNext();
+  // Only a gesture should announce the fraction. The timeout clears the flag after a
+  // gesture that moves nothing, so it can't leak into the next autoplay tick.
+  let userDrivenNavigation = false;
+  const markUserDrivenNavigation = () => {
+    userDrivenNavigation = true;
+    window.setTimeout(() => {
+      userDrivenNavigation = false;
+    }, 1000);
   };
 
-  updateButtons();
-  embla.on("select", updateButtons);
-  if (prevButton) prevButton.addEventListener("click", () => embla.scrollPrev());
-  if (nextButton) nextButton.addEventListener("click", () => embla.scrollNext());
+  embla.on("pointerDown", markUserDrivenNavigation);
+
+  if (prevButton) prevButton.style.borderRadius = "var(--radius-full)";
+  if (nextButton) nextButton.style.borderRadius = "var(--radius-full)";
+
+  // Embla silently drops `loop` when the row overruns by less than a slide, so the arrows wrap instead.
+  const wrapsByHand = () => loop && !embla.internalEngine().options.loop;
+
+  const updateControls = () => {
+    const wrapping = wrapsByHand();
+    const idle = embla.slideNodes().length < 2 || !rowOverflows(embla.slideNodes());
+
+    if (prevButton) prevButton.disabled = !wrapping && !embla.canScrollPrev();
+    if (nextButton) nextButton.disabled = !wrapping && !embla.canScrollNext();
+    if (controlsWrapper) controlsWrapper.hidden = idle;
+    if (thumbnailsContainer) thumbnailsContainer.hidden = idle;
+  };
+
+  updateControls();
+  embla.on("select", updateControls);
+  embla.on("reInit", updateControls);
+  if (prevButton)
+    prevButton.addEventListener("click", () => {
+      markUserDrivenNavigation();
+      if (wrapsByHand() && !embla.canScrollPrev()) {
+        embla.scrollTo(embla.scrollSnapList().length - 1);
+      } else {
+        embla.scrollPrev();
+      }
+    });
+  if (nextButton)
+    nextButton.addEventListener("click", () => {
+      markUserDrivenNavigation();
+      if (wrapsByHand() && !embla.canScrollNext()) {
+        embla.scrollTo(0);
+      } else {
+        embla.scrollNext();
+      }
+    });
 
   if (indicatorsContainer) {
     const renderDots = () => {
       indicatorsContainer.innerHTML = "";
 
       embla.scrollSnapList().forEach((_, index) => {
-        const dot = document.createElement("div");
+        const dot = document.createElement("button");
+        const selected = index === embla.selectedScrollSnap();
 
+        dot.type = "button";
         dot.className = "indicator";
-        dot.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
-        dot.addEventListener("click", () => embla.scrollTo(index));
+        dot.setAttribute("aria-label", `Go to slide ${index + 1}`);
+        dot.setAttribute("data-selected", selected.toString());
+        if (selected) dot.setAttribute("aria-current", "true");
+        dot.addEventListener("click", () => {
+          markUserDrivenNavigation();
+          embla.scrollTo(index);
+        });
         indicatorsContainer.appendChild(dot);
       });
     };
@@ -119,6 +213,8 @@ export function setupCarousel(carousel: CarouselElement): void {
         const isSelected = index === embla.selectedScrollSnap();
 
         dot.setAttribute("data-selected", isSelected.toString());
+        if (isSelected) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
       });
     };
 
@@ -127,15 +223,89 @@ export function setupCarousel(carousel: CarouselElement): void {
     renderDots();
   }
 
+  const motion = embla.plugins().autoplay ?? embla.plugins().autoScroll;
+
+  if (motion && controlsWrapper) {
+    // WCAG 2.2.2 needs a stop control: hover and focus only pause, so neither counts.
+    const pause = document.createElement("button");
+    const setLabel = () => {
+      const playing = motion.isPlaying();
+
+      pause.textContent = playing ? "Pause" : "Play";
+      pause.setAttribute("aria-label", playing ? "Pause slideshow" : "Play slideshow");
+    };
+
+    pause.type = "button";
+    pause.className = "carousel-pause";
+    setLabel();
+    pause.addEventListener("click", () => {
+      if (motion.isPlaying()) motion.stop();
+      else motion.play();
+      setLabel();
+    });
+    controlsWrapper.appendChild(pause);
+  }
+
+  if (thumbnailsContainer) {
+    // A slide with no <img> falls back to a numbered button.
+    const renderThumbnails = () => {
+      thumbnailsContainer.innerHTML = "";
+
+      embla.scrollSnapList().forEach((_, index) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "carousel-thumbnail";
+        button.setAttribute("aria-label", `Go to slide ${index + 1}`);
+        button.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
+
+        const slideImg = slides[index]?.querySelector("img");
+
+        if (slideImg) {
+          const thumb = document.createElement("img");
+
+          thumb.src = slideImg.currentSrc || slideImg.src;
+          thumb.alt = "";
+          thumb.loading = "lazy";
+          button.appendChild(thumb);
+        } else {
+          button.textContent = String(index + 1);
+        }
+
+        button.addEventListener("click", () => {
+          markUserDrivenNavigation();
+          embla.scrollTo(index);
+        });
+        thumbnailsContainer.appendChild(button);
+      });
+    };
+
+    const updateSelectedThumbnail = () => {
+      thumbnailsContainer.querySelectorAll(".carousel-thumbnail").forEach((button, index) => {
+        button.setAttribute("data-selected", (index === embla.selectedScrollSnap()).toString());
+      });
+    };
+
+    embla.on("select", updateSelectedThumbnail);
+    embla.on("reInit", renderThumbnails);
+    renderThumbnails();
+  }
+
   if (fractionEl) {
+    const announcer = inner.querySelector<HTMLElement>(".carousel-fraction-announcer");
+
     const updateFraction = () => {
       const snaps = embla.scrollSnapList().length;
       const current = embla.selectedScrollSnap() + 1;
       const safeTotal = Math.max(snaps, 1);
       const safeCurrent = Math.min(current, safeTotal);
+      const announce = userDrivenNavigation;
 
+      userDrivenNavigation = false;
       fractionEl.textContent = `${safeCurrent}/${safeTotal}`;
-      fractionEl.setAttribute("aria-label", `Slide ${safeCurrent} of ${safeTotal}`);
+      if (announce && announcer) {
+        announcer.textContent = `Slide ${safeCurrent} of ${safeTotal}`;
+      }
     };
 
     embla.on("select", updateFraction);
@@ -160,5 +330,8 @@ export function destroyCarousel(carousel: CarouselElement): void {
     delete carousel.__embla;
   }
 
+  carousel
+    .querySelector(":scope > .carousel-inner > .controls-wrapper > .carousel-pause")
+    ?.remove();
   carousel.removeAttribute("data-embla-initialized");
 }

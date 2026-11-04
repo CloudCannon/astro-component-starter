@@ -1,10 +1,22 @@
 label: Image Carousel
 icon: gallery_thumbnail
-description: Displays images in a carousel with a thumbnail strip for navigation.
+description: Image carousel with a thumbnail strip.
 value:
   _component: building-blocks/wrappers/image-carousel
   label: ""
-  images: []
+  images:
+    - source: /src/assets/images/placeholder.jpg
+      alt: ""
+      positionVertical: center
+      positionHorizontal: center
+    - source: /src/assets/images/placeholder.jpg
+      alt: ""
+      positionVertical: center
+      positionHorizontal: center
+    - source: /src/assets/images/placeholder.jpg
+      alt: ""
+      positionVertical: center
+      positionHorizontal: center
   showArrows: true
   loop: true
   aspectRatio: landscape
@@ -18,12 +30,21 @@ preview:
     - Image Carousel
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/image-carousel.svg
   icon: gallery_thumbnail
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/image-carousel.svg
+    fit: cover
 picker_preview:
   text: Image Carousel
   subtext: Displays images in a carousel with a thumbnail strip for navigation.
+  image: public/component-previews/building-blocks/wrappers/image-carousel.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/image-carousel.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/image-carousel/image-carousel.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   imageCarouselImages:
     values:

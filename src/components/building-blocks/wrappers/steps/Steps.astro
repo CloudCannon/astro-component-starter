@@ -1,0 +1,283 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import StepsItem from "./StepsItem.astro";
+
+type ItemProps = Record<string, unknown>;
+
+const {
+  items = [],
+  orientation = "vertical",
+  imageAspectRatio = "landscape",
+  label,
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-direction": orientation === "horizontal" ? "row" : "column",
+    }
+  : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? { "data-id": "building-blocks/wrappers/steps/steps-item", "data-editable": "array-item" }
+  : {};
+
+const hasItems = items?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasItems && !hasSlotContent) return;
+---
+
+<div
+  class:list={["steps", "stackable", className]}
+  {...htmlAttributes}
+>
+  {/* `list-style: none` drops the list role in Safari; keep `role="list"` with it. */}
+  <ol
+    role="list"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    class:list={["steps-list", `orientation-${orientation}`]}
+    {...arrayDataAttributes}
+  >
+    <slot>
+      {items?.map((item: ItemProps) => (
+        <StepsItem
+          imageAspectRatio={imageAspectRatio}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          {...itemRegionAttributes}
+          {...item}
+        />
+      ))}
+    </slot>
+  </ol>
+</div>
+
+<style is:global>
+  @layer components {
+    .steps {
+      --step-marker-size: 1.75rem;
+
+      min-width: 0;
+
+      .steps-list {
+        counter-reset: step;
+        display: grid;
+        gap: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        /* Or overflow:hidden ancestors clip the half of the marker past the rail. */
+        padding-inline-start: calc(var(--step-marker-size) / 2);
+      }
+
+      /* No list gap: it would break the rail. :last-of-type, not an SSR is-last class,
+         which CloudCannon leaves on the original last item when inserting. */
+      .step {
+        border-inline-start: var(--border-width-sm) solid var(--color-border);
+        counter-increment: step;
+        padding-block-end: var(--spacing-2xl);
+        padding-inline-start: var(--spacing-xl);
+        position: relative;
+      }
+
+      .step:last-of-type {
+        border-inline-start-color: transparent;
+        padding-block-end: 0;
+      }
+
+      .step-band {
+        display: contents;
+      }
+
+      .step-marker {
+        align-items: center;
+        background-color: var(--color-bg-brand);
+        border-radius: var(--radius-full);
+        color: var(--color-text-on-brand);
+        display: flex;
+        flex: none;
+        font-family: var(--font-headings);
+        font-size: var(--font-size-xs);
+        /* Old-style figures (Raleway) drop 3/4/5/7/9 below the baseline. */
+        font-variant-numeric: lining-nums;
+        font-weight: var(--font-weight-bold);
+        height: var(--step-marker-size);
+        inset-inline-start: calc(var(--step-marker-size) / -2 - var(--border-width-sm) / 2);
+        justify-content: center;
+        line-height: 1;
+        position: absolute;
+        /* Glyphs sit ~0.1em below the line-box centre; top: 0 reads high. */
+        top: calc(0.1 * var(--font-size-heading-xs));
+        width: var(--step-marker-size);
+        z-index: var(--layer-1);
+
+        &::before {
+          content: counter(step);
+        }
+      }
+
+      .step-image {
+        margin: 0;
+
+        .image-inner.rounded {
+          border-radius: var(--radius-md);
+        }
+      }
+
+      .step-content .heading {
+        font-size: var(--font-size-heading-xs);
+        line-height: var(--step-marker-size);
+        margin: 0;
+      }
+
+      .step-content .heading-inner {
+        font-size: inherit;
+        line-height: inherit;
+        margin: 0;
+      }
+
+      .step-content .simple-text-content {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-tight);
+        text-wrap: pretty;
+      }
+
+      /* Not a prop class: it goes stale on the region root, and slotted items never set it. */
+      &:has(.step-image) {
+        --step-marker-size: 2.25rem;
+
+        .step {
+          padding-inline-start: var(--spacing-2xl);
+        }
+
+        .step-marker {
+          font-size: var(--font-size-sm);
+          inset-inline-start: calc(-1.125rem + var(--border-width-sm) / 2);
+        }
+
+        .step-body {
+          align-items: start;
+          column-gap: var(--spacing-xl);
+          display: flex;
+          flex-wrap: wrap;
+          row-gap: var(--spacing-sm);
+        }
+
+        .step-image {
+          flex: 0 1 16rem;
+          min-width: 11rem;
+        }
+
+        .step-content {
+          display: flex;
+          flex: 1 1 16rem;
+          flex-direction: column;
+          gap: var(--spacing-sm);
+          padding-top: calc(
+            (
+                var(--step-marker-size) - var(--font-size-heading-xs) *
+                  var(--line-height-heading-xs)
+              ) /
+              2
+          );
+        }
+
+        /* `gap`, not `.flow`: a container uses one or the other (see _flow.css). */
+        .step-content > * {
+          margin-block: 0;
+        }
+
+        .step-content .heading {
+          line-height: var(--line-height-heading-xs);
+        }
+      }
+
+      @media (width < 640px) {
+        &:has(.step-image) .step-image {
+          flex-basis: 100%;
+          min-width: 0;
+        }
+
+        &:has(.step-image) .step-content {
+          padding-top: 0;
+        }
+      }
+
+      @media (width >= 768px) {
+        .steps-list.orientation-horizontal {
+          gap: var(--spacing-xl);
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          padding-inline-start: 0;
+
+          > .step {
+            border-inline-start: none;
+            display: flex;
+            flex-direction: column;
+            padding-block-end: 0;
+            padding-inline-start: 0;
+          }
+
+          .step-body {
+            display: contents;
+          }
+
+          .step-image {
+            flex: none;
+            min-width: 0;
+            order: 1;
+          }
+
+          .step-band {
+            align-items: center;
+            display: flex;
+            height: var(--step-marker-size);
+            order: 2;
+            position: relative;
+
+            &::after {
+              background-color: var(--color-border);
+              content: "";
+              height: var(--border-width-sm);
+              inset-inline: calc(var(--step-marker-size) + var(--spacing-sm)) 0;
+              position: absolute;
+            }
+          }
+
+          .step-marker {
+            inset-inline-start: auto;
+            position: relative;
+            top: auto;
+          }
+
+          .step-content {
+            flex: none;
+            margin-top: var(--spacing-md);
+            order: 3;
+            padding-top: 0;
+          }
+        }
+
+        &:has(.step-image) .steps-list.orientation-horizontal {
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
+          .step-band {
+            margin-top: var(--spacing-md);
+          }
+        }
+      }
+    }
+  }
+</style>

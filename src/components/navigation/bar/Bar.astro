@@ -1,384 +1,185 @@
 ---
-import Icon from "@core-elements/icon/Icon.astro";
-import { itemHasSplitNavLink } from "@component-utils/navSplitLink";
+import Dropdown from "./Dropdown.astro";
+import MegaPanel from "./MegaPanel.astro";
+import { isCurrentPage, itemHasMegaMenu, type NavItem } from "./navState";
+import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
 
 const {
   navData = [],
   class: className,
+  "aria-label": ariaLabel = "Navigation",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const navInstanceId = crypto.randomUUID();
-
-function isCurrentPage(item) {
-  return Boolean(item.path && Astro.url.pathname === item.path);
-}
-
-function hasCurrentChild(item) {
-  if (isCurrentPage(item)) return true;
-  return Boolean(item.children?.some((child) => hasCurrentChild(child)));
-}
-
-// Helper function to create navigation item data
-function createNavItemData(item, level, parentGroupId) {
-  const hasChildren = Boolean(item.children?.length);
-
-  return {
-    ...item,
-    hasChildren,
-    hasSplitLink: itemHasSplitNavLink(item),
-    level,
-    dropdownId: `dropdown-toggle-${crypto.randomUUID()}`,
-    contentId: `dropdown-content-${crypto.randomUUID()}`,
-    isCurrent: isCurrentPage(item),
-    hasCurrent: hasCurrentChild(item),
-    groupName: level === "top" ? `bar-nav-top-${navInstanceId}` : `bar-nav-${parentGroupId}`,
-    parentGroupId: parentGroupId || crypto.randomUUID(),
-  };
-}
+// Unique per nav: two bars sharing an `aria-label` would share one radio group.
+const navGroupName = uniqueId(
+  Astro.request,
+  `bar-nav-top-${slugifyLabel(ariaLabel || "navigation")}`
+);
+const pathname = Astro.url.pathname;
 ---
 
 <nav
+  aria-label={ariaLabel}
   class:list={["bar", className]}
   {...htmlAttributes}
 >
   <ul class="bar-list">
-    {
-      navData.map((item) => {
-        const itemData = createNavItemData(item, "top");
-
-        if (!itemData.hasChildren) {
-          return (
-            <li class="nav-item">
-              <a
-                href={itemData.path}
-                aria-current={itemData.isCurrent ? "page" : undefined}
-              >
-                {itemData.name}
-              </a>
-            </li>
-          );
-        }
-
+    {navData?.map((item: NavItem) => {
+      if (itemHasMegaMenu(item)) {
         return (
-          <li class="nav-item has-children">
-            <input
-              type="checkbox"
-              name={itemData.groupName}
-              id={itemData.dropdownId}
-              class="nav-item-toggle"
-              aria-expanded="false"
-              aria-controls={itemData.contentId}
-              autocomplete="off"
-            />
-            {itemData.hasSplitLink ? (
-              <div class="nav-item-split">
-                <a
-                  href={itemData.path}
-                  class="nav-item-link"
-                  aria-current={itemData.isCurrent ? "page" : undefined}
-                >
-                  {itemData.name}
-                </a>
-                <label
-                  for={itemData.dropdownId}
-                  class="nav-item-trigger nav-item-toggle-btn"
-                  aria-controls={itemData.contentId}
-                  tabindex="0"
-                  aria-label={`Toggle ${itemData.name} submenu`}
-                >
-                  <span class="nav-item-icon">
-                    <Icon
-                      name="chevron-right"
-                      size="none"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </label>
-              </div>
-            ) : (
-              <label
-                for={itemData.dropdownId}
-                class="nav-item-trigger"
-                aria-controls={itemData.contentId}
-                tabindex="0"
-                aria-current={itemData.isCurrent ? "page" : undefined}
-              >
-                {itemData.name}
-                <span class="nav-item-icon">
-                  <Icon
-                    name="chevron-right"
-                    size="none"
-                    aria-hidden="true"
-                  />
-                </span>
-              </label>
-            )}
-            <div
-              id={itemData.contentId}
-              class="nav-item-content"
-              role="region"
-              aria-label={`${itemData.name} submenu`}
-              aria-hidden="true"
+          <MegaPanel
+            item={item}
+            groupName={navGroupName}
+          />
+        );
+      }
+
+      if (!item.children?.length) {
+        return (
+          <li class="nav-item">
+            <a
+              href={item.path}
+              aria-current={isCurrentPage(pathname, item) ? "page" : undefined}
             >
-              <ul class="nav-list">
-                {itemData.children!.map((child) => {
-                  const childData = createNavItemData(child, "child", itemData.parentGroupId);
-
-                  if (!childData.hasChildren) {
-                    return (
-                      <li class="nav-item">
-                        <a
-                          href={childData.path}
-                          aria-current={childData.isCurrent ? "page" : undefined}
-                        >
-                          {childData.name}
-                        </a>
-                      </li>
-                    );
-                  }
-
-                  return (
-                    <li class="nav-item has-children">
-                      <input
-                        type="radio"
-                        name={childData.groupName}
-                        id={childData.dropdownId}
-                        class="nav-item-toggle"
-                        aria-expanded="false"
-                        aria-controls={childData.contentId}
-                        autocomplete="off"
-                      />
-                      {childData.hasSplitLink ? (
-                        <div class="nav-item-split">
-                          <a
-                            href={childData.path}
-                            class="nav-item-link"
-                            aria-current={childData.isCurrent ? "page" : undefined}
-                          >
-                            {childData.name}
-                          </a>
-                          <label
-                            for={childData.dropdownId}
-                            class="nav-item-trigger nav-item-toggle-btn"
-                            aria-controls={childData.contentId}
-                            tabindex="0"
-                            aria-label={`Toggle ${childData.name} submenu`}
-                          >
-                            <span class="nav-item-icon">
-                              <Icon
-                                name="chevron-right"
-                                size="none"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </label>
-                        </div>
-                      ) : (
-                        <label
-                          for={childData.dropdownId}
-                          class="nav-item-trigger"
-                          aria-controls={childData.contentId}
-                          tabindex="0"
-                          aria-current={childData.isCurrent ? "page" : undefined}
-                        >
-                          {childData.name}
-                          <span class="nav-item-icon">
-                            <Icon
-                              name="chevron-right"
-                              size="none"
-                              aria-hidden="true"
-                            />
-                          </span>
-                        </label>
-                      )}
-                      <div
-                        id={childData.contentId}
-                        class="nav-item-nested"
-                        role="region"
-                        aria-label={`${childData.name} submenu`}
-                        aria-hidden="true"
-                      >
-                        <ul class="nav-list">
-                          {childData.children!.map((grandChild) => {
-                            const grandChildData = createNavItemData(
-                              grandChild,
-                              "child",
-                              childData.parentGroupId
-                            );
-
-                            return (
-                              <li class="nav-item">
-                                <a
-                                  href={grandChildData.path}
-                                  aria-current={grandChildData.isCurrent ? "page" : undefined}
-                                >
-                                  {grandChildData.name}
-                                </a>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
+              {item.name}
+            </a>
           </li>
         );
-      })
-    }
+      }
+
+      return (
+        <Dropdown
+          item={item}
+          groupName={navGroupName}
+        />
+      );
+    })}
   </ul>
 </nav>
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { bindToggleKeys, syncExpanded } from "./toggleState";
 
   let barGlobalHandlersBound = false;
 
-  function updateAriaStates(toggle, isExpanded) {
-    const contentId = toggle.getAttribute("aria-controls");
-    const content = document.getElementById(contentId || "");
-    const triggerId = toggle.getAttribute("id");
-    const barRoot = toggle.closest(".bar");
-    const toggleBtn = barRoot?.querySelector(`label.nav-item-toggle-btn[for="${triggerId}"]`);
-    const fullTrigger =
-      barRoot?.querySelector(
-        `label.nav-item-trigger:not(.nav-item-toggle-btn)[for="${triggerId}"]`
-      ) ?? null;
-
-    toggle.setAttribute("aria-expanded", isExpanded.toString());
-
-    if (content) {
-      content.setAttribute("aria-hidden", (!isExpanded).toString());
-      content.querySelectorAll(".nav-item-nested").forEach((nested) => {
-        nested.setAttribute("aria-hidden", (!isExpanded).toString());
-      });
-    }
-
-    if (toggleBtn) {
-      toggleBtn.setAttribute("aria-expanded", isExpanded.toString());
-    }
-    if (fullTrigger) {
-      fullTrigger.setAttribute("aria-expanded", isExpanded.toString());
-    }
+  function closeAll(root: ParentNode) {
+    root.querySelectorAll<HTMLInputElement>(".nav-item-toggle").forEach((toggle) => {
+      toggle.checked = false;
+    });
+    syncExpanded(root);
   }
 
-  // Handle toggle change events
-  function handleToggleChange(e) {
-    const target = e.target as HTMLInputElement;
-
-    // Only handle checkboxes closing other checkboxes
-    // Radio buttons handle themselves and don't affect parents
-    if (target.type !== "checkbox") {
-      updateAriaStates(target, target.checked);
-      return;
-    }
+  function handleToggleChange(e: Event) {
+    const target = e.target;
+    if (!(target instanceof HTMLInputElement)) return;
 
     const barNav = target.closest(".bar");
-    updateAriaStates(target, target.checked);
+    if (!barNav) return;
 
-    if (target.checked && barNav) {
-      // Close other open checkbox dropdowns
-      barNav.querySelectorAll(".nav-item-toggle[type='checkbox']").forEach((toggle) => {
-        const checkbox = toggle as HTMLInputElement;
-        if (checkbox !== target && checkbox.checked) {
-          checkbox.checked = false;
-          updateAriaStates(checkbox, false);
-        }
-      });
+    // Top-level toggles are checkboxes so they can close; only one may be open.
+    if (target.type === "checkbox" && target.checked) {
+      barNav
+        .querySelectorAll<HTMLInputElement>(".nav-item-toggle[type='checkbox']")
+        .forEach((checkbox) => {
+          if (checkbox !== target) checkbox.checked = false;
+        });
     }
+    syncExpanded(barNav);
+    clampOpenDropdowns(barNav);
   }
 
-  // Handle trigger click events
-  function handleTriggerClick(e) {
+  /** CSS alone can't express "centred on the trigger, but not past the viewport edge". */
+  function clampOpenDropdowns(barNav: Element) {
+    barNav
+      .querySelectorAll<HTMLElement>(".nav-item-toggle:checked ~ .nav-item-content")
+      .forEach((panel) => {
+        panel.style.removeProperty("--bar-dropdown-shift");
+
+        const gutter = 8;
+        const box = panel.getBoundingClientRect();
+        const overflowEnd = box.right - (window.innerWidth - gutter);
+        const overflowStart = gutter - box.left;
+        const shift = overflowEnd > 0 ? -overflowEnd : overflowStart > 0 ? overflowStart : 0;
+
+        if (shift !== 0) {
+          panel.style.setProperty("--bar-dropdown-shift", `${Math.round(shift)}px`);
+        }
+      });
+  }
+
+  function handleTriggerClick(e: Event) {
     const label = e.currentTarget as HTMLElement;
     const toggle = document.getElementById(label.getAttribute("for") || "") as HTMLInputElement;
 
     if (toggle?.checked) {
       e.preventDefault();
       toggle.checked = false;
-      toggle.dispatchEvent(new Event("change"));
+      toggle.dispatchEvent(new Event("change", { bubbles: true }));
     }
   }
 
-  // Handle keyboard events
-  function handleKeydown(e) {
-    if (e.key !== "Enter" && e.key !== " ") return;
-
-    e.preventDefault();
-    const label = e.currentTarget;
-    const toggle = document.getElementById(label.getAttribute("for") || "");
-
-    if (toggle) {
-      toggle.checked = !toggle.checked;
-      toggle.dispatchEvent(new Event("change"));
-    }
-  }
-
-  // Initialize bar navigation
   function initBarNavigation() {
     if (!barGlobalHandlersBound) {
-      // Handle clicks outside bar navigation to close dropdowns
       document.addEventListener("click", (e) => {
-        const target = e.target as HTMLElement;
-        if (!target) return;
+        const target = e.target;
+        if (!(target instanceof Element) || target.closest(".bar")) return;
 
-        const clickedBar = target.closest(".bar");
-
-        // Only close dropdowns if clicking completely outside the bar
-        if (!clickedBar) {
-          document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
-            const checkbox = toggle as HTMLInputElement;
-            if (checkbox.checked) {
-              checkbox.checked = false;
-              updateAriaStates(checkbox, false);
-            }
-          });
-        }
+        document.querySelectorAll(".bar").forEach(closeAll);
       });
 
-      // Handle escape key to close all dropdowns
       document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          document.querySelectorAll(".bar .nav-item-toggle").forEach((toggle) => {
-            if (toggle.checked) {
-              toggle.checked = false;
-              updateAriaStates(toggle, false);
-            }
-          });
-        }
+        if (e.key !== "Escape") return;
+
+        // Closing hides the focused link; hand focus back to the panel's toggle.
+        const bar = document.activeElement?.closest(".bar");
+        const returnTo = bar?.querySelector<HTMLInputElement>(
+          ".bar-list > .nav-item > .nav-item-toggle:checked"
+        );
+
+        document.querySelectorAll(".bar").forEach(closeAll);
+        returnTo?.focus();
       });
 
       barGlobalHandlersBound = true;
     }
 
-    // Initialize all bar navigation instances
-    document.querySelectorAll(".bar").forEach((barNav) => {
-      const navElement = barNav as HTMLElement;
-      if (navElement.dataset.barInitialized === "true") return;
-      navElement.dataset.barInitialized = "true";
+    document.querySelectorAll<HTMLElement>(".bar").forEach((barNav) => {
+      if (barNav.dataset.barInitialized === "true") return;
+      barNav.dataset.barInitialized = "true";
 
-      barNav.querySelectorAll(".nav-item-toggle").forEach((toggle) => {
-        const isChecked = toggle.checked;
-        updateAriaStates(toggle, isChecked);
-        toggle.addEventListener("change", handleToggleChange);
+      syncExpanded(barNav);
+      bindToggleKeys(barNav);
+      barNav.addEventListener("change", handleToggleChange);
+
+      barNav
+        .querySelectorAll(".nav-item-toggle-btn, .nav-item.has-children > .nav-item-trigger")
+        .forEach((trigger) => {
+          trigger.addEventListener("click", handleTriggerClick);
+        });
+
+      // A press moves focus outside the nav; closing on that focusout would make the
+      // trigger's own click reopen the panel, so presses are left to the click handlers.
+      let pressedInside = false;
+
+      barNav.addEventListener("pointerdown", () => {
+        pressedInside = true;
+      });
+      window.addEventListener("pointerup", () => setTimeout(() => (pressedInside = false)));
+
+      // Keyboard counterpart of the document click handler.
+      barNav.addEventListener("focusout", (e) => {
+        const next = (e as FocusEvent).relatedTarget;
+
+        if (pressedInside || (next instanceof Node && barNav.contains(next))) return;
+
+        closeAll(barNav);
       });
 
-      barNav.querySelectorAll(".nav-item-toggle-btn").forEach((trigger) => {
-        trigger.addEventListener("click", handleTriggerClick);
-        trigger.addEventListener("keydown", handleKeydown);
-      });
-
-      barNav.querySelectorAll(".nav-item.has-children > .nav-item-trigger").forEach((trigger) => {
-        trigger.addEventListener("click", handleTriggerClick);
-        trigger.addEventListener("keydown", handleKeydown);
-      });
-
-      // Prevent clicks inside dropdown content from bubbling to document handler
       barNav.querySelectorAll(".nav-item-content, .nav-item-nested").forEach((content) => {
         content.addEventListener("click", (e) => {
           const target = e.target as HTMLElement;
@@ -396,6 +197,10 @@ function createNavItemData(item, level, parentGroupId) {
 <style is:global>
   @layer components {
     .bar {
+      --bar-icon-size: 1.75em;
+      --bar-chevron-size: 0.8rem;
+      --bar-dropdown-min-width: 200px;
+
       font-weight: var(--font-weight-semibold);
       .bar-list {
         align-items: center;
@@ -422,10 +227,10 @@ function createNavItemData(item, level, parentGroupId) {
         color: var(--color-text-strong);
         cursor: pointer;
         display: block;
-        font-weight: var(--font-weight-medium);
+        font-weight: var(--font-weight-normal);
         padding: var(--spacing-sm) var(--spacing-md);
         text-decoration: none;
-        transition: background var(--animation-normal) ease-in-out;
+        transition: background var(--animation-normal) var(--ease-in-out);
         white-space: nowrap;
 
         &:hover {
@@ -439,7 +244,7 @@ function createNavItemData(item, level, parentGroupId) {
         display: flex;
         flex-wrap: nowrap;
         min-width: 0;
-        transition: background var(--animation-normal) ease-in-out;
+        transition: background var(--animation-normal) var(--ease-in-out);
 
         .nav-item-link {
           color: var(--color-text-strong);
@@ -449,27 +254,27 @@ function createNavItemData(item, level, parentGroupId) {
           min-width: 0;
           padding: var(--spacing-sm) var(--spacing-xs) var(--spacing-sm) var(--spacing-md);
           text-decoration: none;
-          transition: background var(--animation-normal) ease-in-out;
+          transition: background var(--animation-normal) var(--ease-in-out);
           white-space: nowrap;
         }
 
         .nav-item-toggle-btn {
           align-items: center;
           aspect-ratio: 1;
-          border-left: 1px solid transparent;
+          border-left: var(--border-width-sm) solid transparent;
           border-radius: var(--radius-xs);
           box-sizing: border-box;
           cursor: pointer;
           display: flex;
           flex: 0 0 auto;
-          height: 1.75em;
+          height: var(--bar-icon-size);
           justify-content: center;
-          margin-inline-end: 4px;
+          margin-inline-end: var(--spacing-xs);
           padding: 0;
-          width: 1.75em;
+          width: var(--bar-icon-size);
           transition:
-            background var(--animation-normal) ease-in-out,
-            border-color var(--animation-normal) ease-in-out;
+            background var(--animation-normal) var(--ease-in-out),
+            border-color var(--animation-normal) var(--ease-in-out);
         }
 
         &:hover {
@@ -489,7 +294,7 @@ function createNavItemData(item, level, parentGroupId) {
           align-items: center;
           display: flex;
           justify-content: center;
-          line-height: 0;
+          line-height: var(--line-height-none);
           top: 0;
         }
       }
@@ -512,9 +317,9 @@ function createNavItemData(item, level, parentGroupId) {
         color: var(--color-text-muted);
         display: inline-block;
         transition:
-          color var(--animation-normal) ease-in-out,
-          transform var(--animation-normal) ease-in-out;
-        width: 0.8rem;
+          color var(--animation-normal) var(--ease-in-out),
+          transform var(--animation-normal) var(--ease-in-out);
+        width: var(--bar-chevron-size);
         position: relative;
         top: 0.2rem;
       }
@@ -528,8 +333,11 @@ function createNavItemData(item, level, parentGroupId) {
         transform: rotate(90deg);
       }
 
-      .nav-item-toggle {
-        display: none;
+      /* The toggle is `.visually-hidden` so it stays tabbable; its ring is drawn on the trigger. */
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-trigger,
+      .nav-item:has(> .nav-item-toggle:focus-visible) > .nav-item-split .nav-item-trigger {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       .nav-item-toggle ~ .nav-item-content,
@@ -538,25 +346,26 @@ function createNavItemData(item, level, parentGroupId) {
       }
 
       .nav-item-toggle:checked ~ .nav-item-content {
-        animation: grow-out-centered var(--animation-normal) ease-out forwards;
+        animation: grow-out-centered var(--animation-normal) var(--ease-out) forwards;
         display: block;
       }
 
       .nav-item-toggle:checked ~ .nav-item-nested {
-        animation: grow-out var(--animation-normal) ease-out forwards;
+        animation: grow-out var(--animation-normal) var(--ease-out) forwards;
         display: block;
       }
 
       .nav-item > .nav-item-content {
         background: var(--color-bg);
-        border: 1px solid var(--color-border-subtle);
+        border: var(--border-width-sm) solid var(--color-border-subtle);
         border-radius: var(--radius-xs);
         left: 50%;
         margin-top: var(--spacing-xs);
-        min-width: 200px;
+        max-width: calc(100vw - var(--spacing-md) * 2);
+        min-width: var(--bar-dropdown-min-width);
         position: absolute;
         top: 100%;
-        transform: translateX(-50%);
+        transform: translateX(calc(-50% + var(--bar-dropdown-shift, 0px)));
         width: max-content;
         z-index: var(--layer-3);
       }
@@ -582,7 +391,7 @@ function createNavItemData(item, level, parentGroupId) {
         border-radius: 0;
         font-size: var(--font-size-sm);
         font-weight: var(--font-weight-normal);
-        padding-inline-end: 4px;
+        padding-inline-end: var(--spacing-xs);
         padding-left: var(--spacing-xl);
       }
 

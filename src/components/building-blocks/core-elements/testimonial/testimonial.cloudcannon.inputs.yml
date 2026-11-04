@@ -26,11 +26,18 @@ authorImage:
     paths:
       uploads: src/assets/images
       static: ""
-    resize_style: contain
-    width: 1920
-    height: 1280
+    resize_style: cover
+    width: 480
+    height: 480
+avatarSize:
+  comment: Diameter of the author photo in pixels.
+  type: number
+  options:
+    step: 4
+    min: 24
+    max: 160
 alignmentHorizontal:
-  comment: The horizontal alignment of the testimonial.
+  comment: Horizontal alignment of the testimonial.
   type: select
   options:
     values:

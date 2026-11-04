@@ -10,6 +10,48 @@ function hasSlotBlocks(value: unknown): boolean {
   return typeof value === "object";
 }
 
+/** Nested `_component` trees belong as JSX children, not `foo="[object Object]"`. */
+function isNestedBlockTree(value: unknown): boolean {
+  if (value == null) return false;
+
+  const items = Array.isArray(value) ? value : [value];
+
+  return items.some((item) => item !== null && typeof item === "object" && "_component" in item);
+}
+
+function formatAttribute(key: string, value: unknown, indent: string): string {
+  if (typeof value === "string") {
+    return `${key}="${value}"`;
+  }
+  if (typeof value === "boolean") {
+    return value ? key : "";
+  }
+  if (typeof value === "number") {
+    return `${key}={${value}}`;
+  }
+  if (Array.isArray(value)) {
+    const formattedArray = JSON.stringify(value, null, 2)
+      .split("\n")
+      .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
+      .join("\n");
+
+    return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
+  }
+  if (typeof value === "object" && value !== null) {
+    return `${key}={${JSON.stringify(value)}}`;
+  }
+
+  return `${key}="${String(value)}"`;
+}
+
+function formatAttributes(props: Record<string, unknown>, indent: string): string {
+  return Object.entries(props)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => formatAttribute(key, value, indent))
+    .filter(Boolean)
+    .join(" ");
+}
+
 function formatBlockArray(
   blocks: unknown,
   childIndentLevel: number,
@@ -27,6 +69,7 @@ function formatBlockArray(
         nestedBlockProperties
       )
     )
+    .filter(Boolean)
     .join("\n");
 }
 
@@ -36,6 +79,16 @@ export function formatComponentWithSlots(
   componentMetadata?: Map<string, ComponentMetadata>,
   nestedBlockProperties?: Set<string>
 ): string {
+  // Skip, don't throw: astroFormatter.ts wraps the whole sample in one try/catch.
+  if (!block || typeof block !== "object" || !block._component) {
+    console.warn(
+      "[componentFormatter] Skipping a block with no _component while generating an Astro code sample:",
+      block
+    );
+
+    return "";
+  }
+
   const componentPath = block._component;
   const componentName = getComponentDisplayName(componentPath);
   const props = { ...block };
@@ -57,6 +110,9 @@ export function formatComponentWithSlots(
   }
   const supportsSlots = metadata?.supportsSlots ?? false;
 
+  // A slot with a `childComponent` holds plain prop objects with no `_component`; recursing into them crashes.
+  const rawContentSlots = metadata?.slots?.filter((slot) => !slot.childComponent) ?? [];
+
   const isTextComponent =
     componentPath.includes("heading") ||
     componentPath.includes("text") ||
@@ -76,7 +132,8 @@ export function formatComponentWithSlots(
   if (supportsSlots) {
     if (nestedBlockProperties) {
       for (const prop of nestedBlockProperties) {
-        if (props[prop] !== undefined) {
+        // The set is global across components, so a name in it (Embed's scalar `html`) may not be block-shaped here.
+        if (hasSlotBlocks(props[prop])) {
           delete props[prop];
         }
       }
@@ -90,7 +147,10 @@ export function formatComponentWithSlots(
     delete props.slides;
     if (metadata?.slots) {
       for (const slot of metadata.slots) {
-        delete props[slot.fallbackFor];
+        // A scalar fallback (Embed's `html`) has no slot path; deleting it drops it from the snippet.
+        if (hasSlotBlocks(block[slot.fallbackFor])) {
+          delete props[slot.fallbackFor];
+        }
       }
     }
   } else if (componentPath.includes("split")) {
@@ -113,43 +173,20 @@ export function formatComponentWithSlots(
     delete props.options;
   }
 
-  const propsString = Object.entries(props)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => {
-      if (typeof value === "string") {
-        return `${key}="${value}"`;
-      } else if (typeof value === "boolean") {
-        return value ? key : "";
-      } else if (typeof value === "number") {
-        return `${key}={${value}}`;
-      } else if (Array.isArray(value)) {
-        const formattedArray = JSON.stringify(value, null, 2)
-          .split("\n")
-          .map((line, index) => (index === 0 ? line : `${indent}  ${line}`))
-          .join("\n");
-
-        return `${key}={\n${indent}  ${formattedArray}\n${indent}}`;
-      } else if (typeof value === "object" && value !== null) {
-        return `${key}={${JSON.stringify(value)}}`;
-      }
-      return `${key}="${String(value)}"`;
-    })
-    .filter(Boolean)
-    .join(" ");
+  const propsString = formatAttributes(props, indent);
 
   const items = block.items;
 
   const hasAnySlotContent =
     supportsSlots &&
-    metadata?.slots &&
     !componentPath.includes("content-selector") &&
-    metadata.slots.some((slot) => hasSlotBlocks(block[slot.fallbackFor]));
+    rawContentSlots.some((slot) => hasSlotBlocks(block[slot.fallbackFor]));
 
-  if (hasAnySlotContent && metadata?.slots) {
+  if (hasAnySlotContent) {
     const namedPieces: string[] = [];
     const defaultPieces: string[] = [];
 
-    for (const slot of metadata.slots) {
+    for (const slot of rawContentSlots) {
       if (!hasSlotBlocks(block[slot.fallbackFor])) continue;
 
       if (slot.name === "default") {
@@ -185,7 +222,7 @@ ${indent}</${componentName}>`;
     const FormComponentName = getComponentDisplayName("building-blocks/forms/form");
 
     const formChildren = formBlocksArray
-      .map((formBlock) =>
+      .map((formBlock: unknown) =>
         formatComponentWithSlots(
           formBlock,
           indentLevel + 2,
@@ -193,6 +230,7 @@ ${indent}</${componentName}>`;
           nestedBlockProperties
         )
       )
+      .filter(Boolean)
       .join("\n");
 
     return `${indent}<${componentName}${propsString ? ` ${propsString}` : ""}>
@@ -312,7 +350,7 @@ ${indent}</${componentName}>`;
 
         const itemContent = item.contentSections
           ? (Array.isArray(item.contentSections) ? item.contentSections : [item.contentSections])
-              .map((nestedBlock) =>
+              .map((nestedBlock: unknown) =>
                 formatComponentWithSlots(
                   nestedBlock,
                   indentLevel + 2,
@@ -320,6 +358,7 @@ ${indent}</${componentName}>`;
                   nestedBlockProperties
                 )
               )
+              .filter(Boolean)
               .join("\n")
           : "";
 
@@ -350,29 +389,23 @@ ${indent}</${componentName}>`;
     const itemsContent = itemsArray
       .map((item) => {
         const itemProps = { ...item };
+        const itemSlotProps = new Set(slotProps);
 
-        for (const slotProp of slotProps) {
+        for (const [key, value] of Object.entries(itemProps)) {
+          if (isNestedBlockTree(value)) {
+            itemSlotProps.add(key);
+          }
+        }
+
+        for (const slotProp of itemSlotProps) {
           delete itemProps[slotProp];
         }
 
-        const itemPropsString = Object.entries(itemProps)
-          .sort(([a], [b]) => a.localeCompare(b))
-          .map(([key, value]) => {
-            if (typeof value === "string") {
-              return `${key}="${value}"`;
-            } else if (typeof value === "boolean") {
-              return value ? key : "";
-            } else if (typeof value === "number") {
-              return `${key}={${value}}`;
-            }
-            return `${key}="${String(value)}"`;
-          })
-          .filter(Boolean)
-          .join(" ");
+        const itemPropsString = formatAttributes(itemProps, `${indent}  `);
 
         const slotContentParts: string[] = [];
 
-        for (const slotProp of slotProps) {
+        for (const slotProp of itemSlotProps) {
           if (item[slotProp]) {
             const nestedBlocks = Array.isArray(item[slotProp]) ? item[slotProp] : [item[slotProp]];
 
@@ -388,7 +421,7 @@ ${indent}</${componentName}>`;
             }
           }
         }
-        const slotContent = slotContentParts.join("\n");
+        const slotContent = slotContentParts.filter(Boolean).join("\n");
 
         if (slotContent) {
           return `${indent}  <${itemComponentName}${itemPropsString ? ` ${itemPropsString}` : ""}>

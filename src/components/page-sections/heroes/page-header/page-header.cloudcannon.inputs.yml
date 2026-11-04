@@ -1,0 +1,134 @@
+eyebrow:
+  type: text
+  comment: Short label above the heading.
+heading:
+  type: text
+  comment: The page title. Also names the last breadcrumb.
+headingLevel:
+  type: select
+  comment: Heading level for the title. Use h1 once per page, on the first section.
+  options:
+    values:
+      - h1
+      - h2
+      - h3
+subtext:
+  type: markdown
+  comment: One or two lines introducing the page.
+showBreadcrumbs:
+  type: switch
+  comment: Shows a breadcrumb trail above the title, built from the URL. Only on pages below the top level, since a top-level trail would just repeat the title.
+alignmentHorizontal:
+  type: select
+  comment: Alignment for the heading and supporting text.
+  options:
+    values:
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+
+# --- section wrapper inputs (CustomSection) ---
+# `new:component` and `docs:catalog` match the marker line above verbatim; keep it.
+sectionLabel:
+  type: text
+  comment: Names the section in the editor and sets its anchor id.
+maxContentWidth:
+  type: select
+  comment: Maximum width of the content.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+paddingHorizontal:
+  type: select
+  comment: Horizontal padding around the content.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+paddingVertical:
+  type: select
+  comment: Vertical padding around the content.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+      - id: 4xl
+        name: 4xl
+      - id: 5xl
+        name: 5xl
+      - id: 6xl
+        name: 6xl
+colorScheme:
+  type: select
+  comment: Light or dark scheme for the section. Inherit follows the page.
+  options:
+    values:
+      - id: inherit
+        name: Inherit
+      - id: light
+        name: Light
+      - id: dark
+        name: Dark
+lockColorScheme:
+  type: switch
+  label: Lock color scheme
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
+backgroundColor:
+  type: select
+  comment: Background color for the section.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: base
+        name: Base
+      - id: surface
+        name: Surface
+      - id: accent
+        name: Accent
+      - id: highlight
+        name: Highlight

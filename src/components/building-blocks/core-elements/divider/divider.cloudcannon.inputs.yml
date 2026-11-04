@@ -19,3 +19,14 @@ paddingVertical:
         name: 2xl
       - id: 3xl
         name: 3xl
+lineStyle:
+  comment: Whether the line is solid, dashed or dotted.
+  type: select
+  options:
+    values:
+      - id: solid
+        name: Solid
+      - id: dashed
+        name: Dashed
+      - id: dotted
+        name: Dotted

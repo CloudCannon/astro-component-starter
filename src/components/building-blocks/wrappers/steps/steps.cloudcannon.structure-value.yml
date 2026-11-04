@@ -1,0 +1,96 @@
+label: Steps
+icon: format_list_numbered
+description: Numbered how-it-works sequence with optional images.
+value:
+  _component: building-blocks/wrappers/steps
+  label: ""
+  orientation: vertical
+  imageAspectRatio: landscape
+  items:
+    - image: ""
+      imageAlt: ""
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Place your order
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Choose a size, add it to the cart, and check out in a couple of minutes.
+          size: sm
+    - image: ""
+      imageAlt: ""
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: We pack and ship
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: Orders placed before 2pm leave the warehouse the same day.
+          size: sm
+    - image: ""
+      imageAlt: ""
+      contentSections:
+        - _component: building-blocks/core-elements/heading
+          text: Track delivery
+          level: h3
+          size: xs
+        - _component: building-blocks/core-elements/simple-text
+          text: A tracking link arrives by email as soon as the parcel is scanned.
+          size: sm
+preview:
+  text:
+    - Steps
+  subtext:
+    - key: label
+  image: public/component-previews/building-blocks/wrappers/steps.svg
+  icon: format_list_numbered
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/steps.svg
+    fit: cover
+picker_preview:
+  text: Steps
+  subtext: A numbered how-it-works sequence. Each step owns its own rail.
+  image: public/component-previews/building-blocks/wrappers/steps.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/steps.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/wrappers/steps/steps.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
+_structures:
+  stepsItems:
+    values:
+      - label: Step
+        icon: format_list_numbered
+        value:
+          image: ""
+          imageAlt: ""
+          contentSections: []
+        preview:
+          text:
+            - key: contentSections.0.text
+            - Step
+          subtext:
+            - key: contentSections.1.text
+            - Add one or more content blocks
+          image:
+            - key: image
+        _inputs:
+          image:
+            type: image
+            comment: Optional featured photo. Every step in the list shares the parent’s image aspect ratio.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+          imageAlt:
+            type: text
+            comment: Accessible description of the featured image.
+          contentSections:
+            type: array
+            label: Step content
+            comment: Building blocks for this step — typically a heading and a short description.
+            options:
+              structures: _structures.stepsItemSections
+        _structures_from_glob:
+          - /.cloudcannon/structures/stepsItemSections.cloudcannon.structures.yml

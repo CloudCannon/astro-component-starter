@@ -1,0 +1,106 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Breadcrumbs from "@navigation/breadcrumbs/Breadcrumbs.astro";
+import { trailFromPathname } from "@component-utils/breadcrumbTrail";
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h1",
+  subtext = "",
+  showBreadcrumbs = true,
+  alignmentHorizontal = "start",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "2xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+// CloudCannon re-renders this in the browser, where `Astro.url` is undefined; the
+// shells stamp `<html data-pathname>` so the trail survives that render.
+const pathname =
+  Astro.url?.pathname ??
+  (typeof document === "undefined" ? "" : (document.documentElement.dataset.pathname ?? ""));
+const trail = showBreadcrumbs && pathname ? trailFromPathname(pathname, heading) : [];
+// A one-step trail is "Home › <this heading>", which only repeats the title below it.
+const hasTrail = trail.length > 1;
+---
+
+<CustomSection
+  class:list={["page-header", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  {hasTrail && (
+    <Breadcrumbs
+      class:list={["page-header-breadcrumbs", `align-${alignmentHorizontal}`]}
+      items={trail}
+    />
+  )}
+  <SimpleText
+    alignmentHorizontal={alignmentHorizontal}
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    class="page-header-heading"
+    level={headingLevel}
+    size="xl"
+    alignmentHorizontal={alignmentHorizontal}
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="page-header-subtext"
+    alignmentHorizontal={alignmentHorizontal}
+    data-prop="subtext"
+    text={subtext}
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .page-header {
+      /* `~`, not `+`: the breadcrumbs' JSON-LD script is the next sibling. */
+      .page-header-breadcrumbs ~ :is(.eyebrow, .page-header-heading) {
+        --space-before: var(--spacing-md);
+      }
+
+      .page-header-subtext {
+        max-width: 42rem;
+      }
+
+      /* Alignment is read off the children that carry it — a prop-driven class
+         on this region root goes stale in the editor. */
+      .page-header-breadcrumbs.align-center .breadcrumbs-trail {
+        justify-content: center;
+      }
+
+      .page-header-subtext:has(> .text-inner.align-center) {
+        margin-inline: auto;
+      }
+    }
+  }
+</style>

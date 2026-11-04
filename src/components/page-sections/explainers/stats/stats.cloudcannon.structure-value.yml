@@ -1,0 +1,114 @@
+label: Stats
+icon: monitoring
+description: Row of big numbers with labels.
+value:
+  _component: page-sections/explainers/stats
+  sectionLabel: ""
+  eyebrow: ""
+  heading: Numbers that hold up
+  headingLevel: h2
+  subtext: ""
+  stats:
+    - number: 12
+      prefix: ""
+      suffix: k+
+      label: Customers
+    - number: 99.95
+      prefix: ""
+      suffix: "%"
+      label: Uptime
+    - number: 1.4
+      prefix: ""
+      suffix: s
+      label: Median build
+    - number: 4.9
+      prefix: ""
+      suffix: ""
+      label: Support score
+  dividers: true
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - Stats
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/explainers/stats.svg
+  icon: monitoring
+  gallery:
+    image: public/component-previews/page-sections/explainers/stats.svg
+    fit: cover
+picker_preview:
+  text: Stats
+  subtext: A row of big numbers with labels — the confident-metrics section.
+  image: public/component-previews/page-sections/explainers/stats.svg
+  gallery:
+    image: public/component-previews/page-sections/explainers/stats.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/stats/stats.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+_structures:
+  statsItems:
+    values:
+      - label: Stat
+        icon: monitoring
+        value:
+          number: 100
+          prefix: ""
+          suffix: ""
+          label: Label
+        preview:
+          text:
+            - key: label
+            - Stat
+          subtext:
+            - key: number
+        _inputs:
+          number:
+            type: number
+            comment: The number that counts up when scrolled into view. Decimals are kept (e.g. 99.95).
+          prefix:
+            type: text
+            comment: Text shown before the number (e.g. $).
+          suffix:
+            type: text
+            comment: Text shown after the number (e.g. k+, %).
+          label:
+            type: text
+            comment: What the number measures.
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - stats
+      - dividers
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

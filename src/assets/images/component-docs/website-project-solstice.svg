@@ -1,0 +1,83 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="soBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ede9fe"/>
+      <stop offset="1" stop-color="#fdf4ff"/>
+    </linearGradient>
+    <linearGradient id="soSite" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e1036"/>
+      <stop offset="1" stop-color="#2b1250"/>
+    </linearGradient>
+    <linearGradient id="soCard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c026d3"/>
+      <stop offset="1" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="soCard2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#ec4899"/>
+    </linearGradient>
+    <linearGradient id="soCard3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4f46e5"/>
+      <stop offset="1" stop-color="#06b6d4"/>
+    </linearGradient>
+    <pattern id="soDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#ddd6fe" opacity=".6"/>
+    </pattern>
+    <clipPath id="soClip"><path d="m40 76h720v468a16 16 0 0 1 -16 16h-688a16 16 0 0 1 -16-16z"/></clipPath>
+    <filter id="soShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#3b0764" flood-opacity=".2"/>
+    </filter>
+  </defs>
+  <rect width="800" height="600" fill="url(#soBg)"/>
+  <rect width="800" height="600" fill="url(#soDots)"/>
+
+  <g filter="url(#soShadow)"><rect x="40" y="40" width="720" height="520" rx="16" fill="#fff"/></g>
+  <circle cx="66" cy="58" r="5.5" fill="#f87171"/>
+  <circle cx="84" cy="58" r="5.5" fill="#facc15"/>
+  <circle cx="102" cy="58" r="5.5" fill="#4ade80"/>
+  <rect x="290" y="48" width="220" height="20" rx="10" fill="#f1f0f7"/>
+
+  <g clip-path="url(#soClip)">
+    <rect x="40" y="76" width="720" height="484" fill="url(#soSite)"/>
+    <g fill="#fff">
+      <circle cx="120" cy="150" r="1.6" opacity=".7"/><circle cx="210" cy="118" r="1.2" opacity=".5"/>
+      <circle cx="330" cy="160" r="1.4" opacity=".6"/><circle cx="420" cy="112" r="1.8" opacity=".8"/>
+      <circle cx="520" cy="140" r="1.2" opacity=".5"/><circle cx="600" cy="196" r="1.5" opacity=".6"/>
+      <circle cx="700" cy="122" r="1.3" opacity=".6"/><circle cx="470" cy="226" r="1.1" opacity=".4"/>
+      <circle cx="90" cy="250" r="1.2" opacity=".5"/><circle cx="380" cy="250" r="1.4" opacity=".5"/>
+    </g>
+    <circle cx="640" cy="196" r="54" fill="#fde68a"/>
+    <circle cx="662" cy="182" r="50" fill="#2b1250"/>
+
+    <circle cx="80" cy="106" r="10" fill="#fbbf24"/>
+    <rect x="98" y="101" width="74" height="10" rx="5" fill="#f5f3ff"/>
+    <rect x="520" y="102" width="46" height="8" rx="4" fill="#c4b5fd" opacity=".8"/>
+    <rect x="578" y="102" width="46" height="8" rx="4" fill="#c4b5fd" opacity=".8"/>
+    <rect x="640" y="94" width="88" height="24" rx="12" fill="#fbbf24"/>
+    <rect x="660" y="102" width="48" height="8" rx="4" fill="#3b0764"/>
+
+    <rect x="80" y="160" width="96" height="22" rx="11" fill="#fbbf24" opacity=".2" stroke="#fbbf24"/>
+    <rect x="94" y="167" width="68" height="8" rx="4" fill="#fde68a"/>
+    <rect x="80" y="196" width="340" height="28" rx="8" fill="#fff"/>
+    <rect x="80" y="234" width="260" height="28" rx="8" fill="#fff"/>
+    <rect x="80" y="278" width="300" height="10" rx="5" fill="#c4b5fd" opacity=".7"/>
+    <rect x="80" y="308" width="120" height="34" rx="17" fill="#fbbf24"/>
+    <rect x="104" y="321" width="72" height="9" rx="4.5" fill="#3b0764"/>
+
+    <rect x="80" y="372" width="200" height="160" rx="12" fill="#3a1d63"/>
+    <rect x="80" y="372" width="200" height="96" rx="12" fill="url(#soCard)"/>
+    <rect x="80" y="456" width="200" height="12" fill="#3a1d63"/>
+    <rect x="96" y="480" width="120" height="10" rx="5" fill="#fff"/>
+    <rect x="96" y="500" width="70" height="8" rx="4" fill="#c4b5fd" opacity=".7"/>
+    <rect x="300" y="372" width="200" height="160" rx="12" fill="#3a1d63"/>
+    <rect x="300" y="372" width="200" height="96" rx="12" fill="url(#soCard2)"/>
+    <rect x="300" y="456" width="200" height="12" fill="#3a1d63"/>
+    <rect x="316" y="480" width="140" height="10" rx="5" fill="#fff"/>
+    <rect x="316" y="500" width="70" height="8" rx="4" fill="#c4b5fd" opacity=".7"/>
+    <rect x="520" y="372" width="200" height="160" rx="12" fill="#3a1d63"/>
+    <rect x="520" y="372" width="200" height="96" rx="12" fill="url(#soCard3)"/>
+    <rect x="520" y="456" width="200" height="12" fill="#3a1d63"/>
+    <rect x="536" y="480" width="104" height="10" rx="5" fill="#fff"/>
+    <rect x="536" y="500" width="70" height="8" rx="4" fill="#c4b5fd" opacity=".7"/>
+  </g>
+</svg>

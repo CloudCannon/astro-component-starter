@@ -1,8 +1,8 @@
 name:
   type: select
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
+  comment: Icon to display, from [Lucide](https://lucide.dev/icons/).
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name
@@ -14,7 +14,7 @@ size:
   options:
     values:
       - id: none
-        name: None
+        name: None (inherit the surrounding text size)
       - id: sm
         name: Small
       - id: md
@@ -53,14 +53,13 @@ color:
 background:
   type: switch
   comment: Show a background behind the icon.
-inline:
-  type: switch
-  comment: Display the icon inline instead of block.
 alignmentHorizontal:
   type: select
   comment: Horizontal alignment of the icon.
   options:
     values:
+      - id: none
+        name: None (in flow)
       - id: start
         name: Start
       - id: center

@@ -1,24 +1,32 @@
 label:
-  comment: Optional label for the grid to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
   type: text
-layout:
-  comment: Defines how grid items are arranged.
+columns:
+  comment: Columns from 640px up; one below. Auto fits as many items as space allows.
   type: select
   options:
     values:
-      - id: start
-        name: Left Aligned
-      - id: center
-        name: Center Aligned
+      - id: auto
+        name: Auto
+      - id: "2"
+        name: "2"
+      - id: "3"
+        name: "3"
+      - id: "4"
+        name: "4"
+      - id: "5"
+        name: "5"
+      - id: "6"
+        name: "6"
 minItemWidth:
-  comment: The minimum width for each grid item in pixels.
+  comment: Minimum item width in pixels. Auto columns only.
   type: number
 maxItemWidth:
-  comment: The maximum width for each grid item in pixels.
+  comment: Maximum item width in pixels; empty lets items stretch. Auto columns only.
   type: number
 items:
   label: Grid Items
-  comment: Array of grid items, each containing content blocks to render.
+  comment: Grid items, each holding content blocks.
   type: array
   options:
     structures: _structures.gridItems

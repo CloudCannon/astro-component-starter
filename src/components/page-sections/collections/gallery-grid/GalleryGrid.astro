@@ -1,0 +1,572 @@
+---
+import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Image from "@core-elements/image/Image.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Masonry from "@wrappers/masonry/Masonry.astro";
+import GalleryItem from "./GalleryItem.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  images = [],
+  columns = 3,
+  gap = "md",
+  aspectRatio = "square",
+  lightbox = true,
+  showThumbnails = false,
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const items = (images || []).filter((item: any) => item?.image);
+const columnCount = Math.min(5, Math.max(2, Math.round(Number(columns) || 3)));
+
+const masonry = aspectRatio === "natural";
+const tileRatio = masonry ? "none" : aspectRatio;
+
+const derivedLabel = sectionLabel || heading;
+const popoverId = uniqueId(
+  Astro.request,
+  `gallery-${derivedLabel ? slugifyLabel(derivedLabel) : "lightbox"}`
+);
+const lightboxLabel = heading ? `Gallery: ${heading}` : "Gallery";
+const hasLightbox = lightbox && items.length > 0;
+
+const Items = masonry ? Masonry : "div";
+const itemsAttributes = masonry
+  ? { class: "gallery-items", columns: columnCount, gap, "data-children-prop": "images" }
+  : {
+      class: "gallery-items grid",
+      style: `--gallery-columns: ${columnCount}; --gallery-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`};`,
+      "data-editable": "array",
+      "data-prop": "images",
+      "data-direction": "row",
+    };
+---
+
+<CustomSection
+  class:list={["gallery-grid", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level={headingLevel}
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="gallery-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  <Items {...itemsAttributes}>
+    {items.map((item: any, index: number) => (
+      <GalleryItem
+        data-editable="array-item"
+        image={item.image}
+        alt={item.alt}
+        caption={item.caption}
+        index={index}
+        aspectRatio={tileRatio}
+        lightbox={hasLightbox}
+      />
+    ))}
+  </Items>
+
+  {hasLightbox && (
+    <div
+      id={popoverId}
+      popover="auto"
+      data-modal
+      class="gallery-lightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-label={lightboxLabel}
+    >
+      {/* Frame shrink-wraps the photo so thumbnails don't become a viewport-width band.
+         Controls stay in the figure, never on this frame or the overlay. */}
+      <div class="gallery-lightbox-frame">
+        <figure class="gallery-lightbox-figure">
+          {items.map((item: any, index: number) => (
+            <Image
+              class="gallery-lightbox-photo"
+              data-active={index === 0 ? "true" : "false"}
+              data-caption={item.caption || ""}
+              aria-hidden={index !== 0}
+              source={item.image}
+              alt={item.alt}
+              sizes="min(1024px, calc(100vw - 4rem))"
+              widths={[640, 1280, 1920]}
+              width={1920}
+            />
+          ))}
+          <div
+            class="gallery-lightbox-scrim"
+            aria-hidden="true"
+          />
+          <div class="gallery-lightbox-chrome">
+            <span
+              class="gallery-lightbox-counter"
+              aria-live="polite"
+            >
+              1 / {items.length}
+            </span>
+            <button
+              type="button"
+              class="gallery-lightbox-close"
+              aria-label="Close"
+            >
+              <svg
+                viewBox="0 0 20 20"
+                width="17"
+                height="17"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <path d="M5 5l10 10M15 5L5 15" />
+              </svg>
+            </button>
+          </div>
+          {items.length > 1 && (
+            <>
+              <button
+                type="button"
+                class="gallery-lightbox-prev"
+                aria-label="Previous image"
+              >
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path d="M12 4l-6 6 6 6" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                class="gallery-lightbox-next"
+                aria-label="Next image"
+              >
+                <svg
+                  viewBox="0 0 20 20"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path d="M8 4l6 6-6 6" />
+                </svg>
+              </button>
+            </>
+          )}
+          <figcaption
+            class="gallery-lightbox-caption"
+            hidden={!items[0]?.caption}
+          >
+            {items[0]?.caption}
+          </figcaption>
+        </figure>
+        {showThumbnails && items.length > 1 && (
+          <div
+            class="gallery-lightbox-thumbs"
+            role="group"
+            aria-label="Gallery images"
+          >
+            {items.map((item: any, index: number) => (
+              <button
+                type="button"
+                class="gallery-lightbox-thumb"
+                data-selected={index === 0 ? "true" : "false"}
+                aria-label={`Go to image ${index + 1}`}
+                aria-current={index === 0 ? "true" : undefined}
+              >
+                <Image
+                  source={item.image}
+                  alt=""
+                  decorative
+                  sizes="64px"
+                  widths={[64, 128]}
+                  width={128}
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )}
+</CustomSection>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllGalleries } from "./setup";
+
+  onPageLoad(() => setupAllGalleries());
+</script>
+
+<style is:global>
+  @layer page-sections {
+    .gallery-grid {
+      .gallery-items.grid {
+        --space-before: var(--space-before-loose);
+
+        align-items: start;
+        display: grid;
+        gap: var(--gallery-gap, var(--spacing-md));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        @media (width >= 640px) {
+          grid-template-columns: repeat(var(--gallery-columns, 3), minmax(0, 1fr));
+        }
+      }
+
+      .gallery-figure {
+        margin: 0;
+      }
+
+      .gallery-tile {
+        background: none;
+        border: var(--border-width-sm) solid var(--color-border);
+        border-radius: var(--radius-sm);
+        display: block;
+        overflow: hidden;
+        padding: 0;
+        transition: border-color var(--animation-fast) var(--ease-out);
+        width: 100%;
+
+        .image,
+        img {
+          display: block;
+          height: auto;
+          margin: 0;
+          width: 100%;
+        }
+      }
+
+      button.gallery-tile {
+        cursor: pointer;
+
+        &:hover {
+          border-color: var(--color-border-strong);
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      .gallery-caption {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        margin: var(--spacing-sm) 0 0;
+        text-align: center;
+      }
+
+      /* Controls are positioned against the figure, never the viewport, so nothing
+         drifts onto the page behind. */
+      .gallery-lightbox {
+        background: var(--color-overlay-media-opaque);
+        border: 0;
+        height: 100%;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        overflow: hidden;
+        padding: var(--spacing-xl);
+        place-items: center;
+        position: fixed;
+        transition:
+          opacity var(--animation-normal) var(--ease-out),
+          overlay var(--animation-normal) var(--ease-out) allow-discrete,
+          display var(--animation-normal) var(--ease-out) allow-discrete;
+        width: 100%;
+        z-index: var(--layer-7);
+
+        &:popover-open {
+          display: grid;
+          opacity: 1;
+
+          @starting-style {
+            opacity: 0;
+          }
+        }
+      }
+
+      .gallery-lightbox-frame {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        max-width: 100%;
+      }
+
+      .gallery-lightbox-figure {
+        /* Definite vw/vh width: a shrink-to-fit figure with Image's `sizes: auto`
+           collapses to Chrome's ~300px default box. setup.ts sets the aspect. */
+        --gallery-photo-aspect: 1.5;
+
+        aspect-ratio: var(--gallery-photo-aspect);
+        margin: 0;
+        max-height: calc(100dvh - var(--spacing-xl) * 2);
+        overflow: hidden;
+        position: relative;
+        /* pan-y, not none: none also blocks pinch-zoom on the photo. setup.ts
+           widens it while zoomed so the zoomed photo can be panned sideways. */
+        touch-action: pan-y pinch-zoom;
+        transition: width var(--animation-normal) var(--ease-out);
+        width: min(
+          var(--content-width-xl),
+          calc(100vw - var(--spacing-xl) * 2),
+          calc((100dvh - var(--spacing-xl) * 2) * var(--gallery-photo-aspect))
+        );
+
+        &.is-zoomed {
+          touch-action: auto;
+        }
+
+        &.is-instant {
+          transition: none;
+
+          .gallery-lightbox-photo {
+            transition: none;
+          }
+        }
+      }
+
+      .gallery-lightbox-photo {
+        height: 100%;
+        inset: 0;
+        margin: 0;
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        transition: opacity var(--animation-normal) var(--ease-out);
+        width: 100%;
+
+        &[data-active="true"] {
+          opacity: 1;
+          pointer-events: auto;
+        }
+
+        .image-inner,
+        picture,
+        img {
+          display: block;
+          height: 100%;
+          object-fit: contain;
+          width: 100%;
+        }
+      }
+
+      .gallery-lightbox-scrim {
+        background: linear-gradient(
+          to top,
+          color-mix(in srgb, var(--color-media-scrim) 78%, transparent) 0%,
+          color-mix(in srgb, var(--color-media-scrim) 22%, transparent) 26%,
+          transparent 46%,
+          transparent 82%,
+          var(--color-overlay-media-strong) 100%
+        );
+        inset: 0;
+        pointer-events: none;
+        position: absolute;
+      }
+
+      .gallery-lightbox-chrome {
+        align-items: center;
+        display: flex;
+        inset-block-start: var(--spacing-sm);
+        inset-inline: var(--spacing-md) var(--spacing-sm);
+        justify-content: space-between;
+        pointer-events: none;
+        position: absolute;
+
+        > * {
+          pointer-events: auto;
+        }
+      }
+
+      .gallery-lightbox-counter {
+        color: var(--color-text-on-media);
+        font-family: var(--font-mono);
+        font-size: var(--font-size-xs);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .gallery-lightbox-close,
+      .gallery-lightbox-prev,
+      .gallery-lightbox-next {
+        /* 2.75rem is the 44px minimum tap target — do not shrink. */
+        border: 0;
+        cursor: pointer;
+        display: grid;
+        flex: none;
+        height: 2.75rem;
+        padding: 0;
+        place-items: center;
+        transition: background var(--animation-fast) var(--ease-smooth);
+        width: 2.75rem;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring-on-media);
+          outline-offset: var(--spacing-xs);
+        }
+      }
+
+      .gallery-lightbox-close {
+        background: transparent;
+        border-radius: var(--radius-sm);
+        color: var(--color-text-on-media);
+
+        &:hover {
+          background: var(--color-state-hover-on-media);
+          color: var(--color-text-on-media);
+        }
+      }
+
+      .gallery-lightbox-prev,
+      .gallery-lightbox-next {
+        background: var(--color-overlay-media);
+        border-radius: var(--radius-full);
+        color: var(--color-text-on-media);
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &:hover {
+          background: var(--color-overlay-media-strong);
+        }
+      }
+
+      .gallery-lightbox-prev {
+        inset-inline-start: var(--spacing-sm);
+      }
+
+      .gallery-lightbox-next {
+        inset-inline-end: var(--spacing-sm);
+      }
+
+      .gallery-lightbox-caption {
+        bottom: var(--spacing-md);
+        color: var(--color-text-on-media);
+        font-size: var(--font-size-md);
+        inset-inline: var(--spacing-md);
+        line-height: var(--line-height-tight);
+        margin: 0;
+        max-width: 32rem;
+        position: absolute;
+        text-align: start;
+        text-wrap: pretty;
+
+        &[hidden] {
+          display: none;
+        }
+      }
+
+      .gallery-lightbox-thumbs {
+        display: flex;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        max-width: 100%;
+        overflow-x: auto;
+      }
+
+      .gallery-lightbox-thumb {
+        background: none;
+        border: var(--border-width-sm) solid var(--color-border-on-media);
+        border-radius: var(--radius-xs);
+        cursor: pointer;
+        flex: none;
+        height: 3rem;
+        overflow: hidden;
+        padding: 0;
+        width: 4rem;
+
+        .image {
+          height: 100%;
+          margin: 0;
+          width: 100%;
+        }
+
+        img {
+          display: block;
+          height: 100%;
+          object-fit: cover;
+          width: 100%;
+        }
+
+        &[data-selected="false"] {
+          opacity: 0.6;
+        }
+
+        &[data-selected="true"] {
+          border-color: var(--color-text-on-media);
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring-on-media);
+          outline-offset: var(--spacing-xs);
+        }
+      }
+
+      @media (width < 640px) {
+        .gallery-lightbox-chrome {
+          inset-inline: var(--spacing-sm);
+        }
+
+        .gallery-lightbox-caption {
+          bottom: var(--spacing-sm);
+          font-size: var(--font-size-sm);
+          inset-inline: var(--spacing-sm);
+        }
+      }
+    }
+  }
+</style>

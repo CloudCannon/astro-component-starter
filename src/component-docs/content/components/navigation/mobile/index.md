@@ -1,7 +1,17 @@
 ---
 title: 'Mobile'
-overview: 'A mobile navigation component that opens as a full-screen overlay with expandable menu sections. Optimized for touch interactions. Commonly used inside [Main Nav](/component-docs/components/navigation/main-nav/) for mobile layouts.'
+defaultSize: 'xl'
+overview: A full-screen navigation overlay with expandable sections. [Main Nav](/component-docs/components/navigation/main-nav/) uses it on small screens.
+slots:
+  - title: logo
+    description: Custom overlay logo. Falls back to the logo image.
+    fallback_for: logoSource
+    child_component:
 examples:
-  - slugs:
+  - title: 'Dropdowns'
+    slugs:
       - link-and-children
+  - title: 'Mega menu'
+    slugs:
+      - mega-menu
 ---

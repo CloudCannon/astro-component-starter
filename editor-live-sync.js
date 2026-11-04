@@ -4,12 +4,14 @@
  * This works around two editor-only quirks:
  *
  *   1. CloudCannon cannot re-render props on a component's root element
- *      (handled via direct style sync, e.g. bento-box spans).
+ *      (handled via direct sync, e.g. bento-box spans, "N of M" item labels).
  *   2. CloudCannon's editable-regions uses React's `renderToStaticMarkup`
  *      to render Astro components, which strips inline `<script>` tags.
  *      That means components whose behaviour lives in a client `<script>`
  *      (e.g. Carousel / ImageCarousel Embla setup) never initialise in
  *      the editor, so we initialise them here instead.
+ *   3. Astro's ClientRouter swaps pages in place, which hides navigation
+ *      from CloudCannon, so it is switched off here.
  *
  * Logs editor mutations to the console in dev; silent in production.
  */
@@ -24,6 +26,37 @@ import {
   setupAllImageCarousels,
   setupImageCarousel,
 } from "./src/components/building-blocks/wrappers/image-carousel/setup";
+import {
+  MODAL_SELECTOR,
+  setupAllModals,
+  setupModalShell,
+} from "./src/components/building-blocks/wrappers/modal/setup";
+import {
+  setupAllVideoModals,
+  setupVideoModal,
+} from "./src/components/building-blocks/wrappers/video-modal/setup";
+import { setupAllForms, setupForm } from "./src/components/building-blocks/forms/form/setup";
+import { setupAllVideos } from "./src/components/building-blocks/core-elements/video/setup";
+import { setupAllCodeBlocks } from "./src/components/building-blocks/core-elements/code-block/setup";
+import { setupAllScrollSteppers } from "./src/components/building-blocks/wrappers/scroll-stepper/setup";
+import { setupAllTabs } from "./src/components/utils/tabs/setup";
+import { previewExternalMedia } from "./src/integrations/consent/editorPreview";
+import { setupAllMainNavs } from "./src/components/navigation/main-nav/setup";
+import { setupAllSearch, setupSearch } from "./src/components/navigation/search/setup";
+import {
+  setupAllGalleries,
+  setupGallery,
+} from "./src/components/page-sections/collections/gallery-grid/setup";
+import {
+  destroyMasonry,
+  setupAllMasonry,
+  setupMasonry,
+} from "./src/components/building-blocks/wrappers/masonry/setup";
+import {
+  destroyScrollDeck,
+  setupAllScrollDecks,
+  setupScrollDeck,
+} from "./src/components/building-blocks/wrappers/scroll-deck/setup";
 
 const DEBUG = import.meta.env.DEV;
 
@@ -45,6 +78,36 @@ function syncBentoBoxSpans(target) {
 
 const BENTO_BOX_ATTRS = ["data-col-span", "data-row-span"];
 
+// "Slide 2 of 3"-style labels sit on array items, which the editor keeps across an add, delete or move.
+const POSITION_LABEL = /^(.+) \d+ of \d+$/;
+
+function syncPositionLabels(array) {
+  const items = [...array.children].filter((el) => el.dataset.editable === "array-item");
+
+  items.forEach((item, index) => {
+    const match = POSITION_LABEL.exec(item.getAttribute("aria-label") ?? "");
+
+    if (match) item.setAttribute("aria-label", `${match[1]} ${index + 1} of ${items.length}`);
+  });
+}
+
+// A grouped Timeline shows each year only on its group's first entry, and the editor adds,
+// moves and retitles entries without re-rendering the list.
+function syncTimelineGroups(list) {
+  let previousYear = null;
+
+  for (const entry of list.children) {
+    const year = entry.querySelector(":scope > .timeline-year");
+
+    if (!year) continue;
+
+    const text = year.textContent.trim();
+
+    year.hidden = !text || text === previousYear;
+    previousYear = text;
+  }
+}
+
 /**
  * Carousel config is read from attributes on `.carousel-inner` at
  * Embla init time, so any change to those attributes, the inline
@@ -58,6 +121,7 @@ const CAROUSEL_INNER_ATTRS = [
   "data-align",
   "data-slides-to-scroll",
   "data-autoplay",
+  "data-pause-on-hover",
   "data-autoscroll",
   "style",
 ];
@@ -67,7 +131,7 @@ const CAROUSEL_INNER_ATTRS = [
  * Image list and arrow visibility are rendered conditionally, so those
  * are handled via childList mutations below.
  */
-const IMAGE_CAROUSEL_ROOT_ATTRS = ["data-loop"];
+const IMAGE_CAROUSEL_CONTENT_ATTRS = ["data-loop"];
 
 function makeResetScheduler({ destroy, init, label }) {
   const pending = new Set();
@@ -117,6 +181,20 @@ const queueImageCarouselReset = makeResetScheduler({
   label: "image-carousel",
 });
 
+// The re-render strips masonry's own attributes and replaces its items; patching
+// leaves observers on dead nodes, so rebuild from scratch.
+const queueMasonryReset = makeResetScheduler({
+  destroy: destroyMasonry,
+  init: setupMasonry,
+  label: "masonry",
+});
+
+const queueScrollDeckReset = makeResetScheduler({
+  destroy: destroyScrollDeck,
+  init: setupScrollDeck,
+  label: "scroll deck",
+});
+
 function initNewComponents(root) {
   if (root.nodeType !== Node.ELEMENT_NODE) return;
 
@@ -149,6 +227,131 @@ function initNewComponents(root) {
     log("initialising new image-carousel", el);
     setupImageCarousel(el);
   }
+
+  const newModals = [];
+
+  if (root.matches?.(MODAL_SELECTOR) && !root.hasAttribute("data-modal-initialized")) {
+    newModals.push(root);
+  }
+
+  root
+    .querySelectorAll(`${MODAL_SELECTOR}:not([data-modal-initialized])`)
+    .forEach((el) => newModals.push(el));
+
+  for (const el of newModals) {
+    log("initialising new modal", el);
+    setupModalShell(el);
+
+    if (el.closest(".video-modal")) {
+      log("initialising new video modal", el);
+      setupVideoModal(el);
+    }
+  }
+
+  const newSearch = [];
+
+  if (root.classList?.contains("search") && !root.hasAttribute("data-search-initialized")) {
+    newSearch.push(root);
+  }
+
+  root
+    .querySelectorAll(".search:not([data-search-initialized])")
+    .forEach((el) => newSearch.push(el));
+
+  for (const el of newSearch) {
+    log("initialising new search", el);
+    setupSearch(el);
+  }
+
+  const newGalleries = [];
+
+  // The editor keeps `.gallery-grid` and swaps its contents, so the added node
+  // holding a fresh lightbox is usually inside the gallery, not the gallery.
+  const enclosingGallery = root.closest?.(".gallery-grid");
+
+  if (enclosingGallery) {
+    newGalleries.push(enclosingGallery);
+  }
+
+  root.querySelectorAll(".gallery-grid").forEach((el) => newGalleries.push(el));
+
+  for (const el of newGalleries) {
+    log("initialising new gallery", el);
+    setupGallery(el);
+  }
+
+  const newMasonry = [];
+
+  if (root.classList?.contains("masonry") && !root.hasAttribute("data-masonry-initialized")) {
+    newMasonry.push(root);
+  }
+
+  root
+    .querySelectorAll(".masonry:not([data-masonry-initialized])")
+    .forEach((el) => newMasonry.push(el));
+
+  for (const el of newMasonry) {
+    log("initialising new masonry", el);
+    setupMasonry(el);
+  }
+
+  const newForms = [];
+
+  if (root.classList?.contains("form") && !root.hasAttribute("data-form-initialized")) {
+    newForms.push(root);
+  }
+
+  root
+    .querySelectorAll("form.form:not([data-form-initialized])")
+    .forEach((el) => newForms.push(el));
+
+  for (const el of newForms) {
+    log("initialising new form", el);
+    setupForm(el);
+  }
+
+  const newScrollDecks = [];
+
+  if (root.classList?.contains("scroll-deck")) {
+    newScrollDecks.push(root);
+  }
+
+  root.querySelectorAll(".scroll-deck").forEach((el) => newScrollDecks.push(el));
+
+  for (const el of newScrollDecks) {
+    log("initialising new scroll deck", el);
+    setupScrollDeck(el);
+  }
+
+  setupAllVideos(root);
+  setupAllTabs(root);
+  setupAllCodeBlocks(root);
+  setupAllScrollSteppers(root);
+  previewExternalMedia(root.parentElement ?? root);
+}
+
+// CloudCannon only sees real navigations. The router skips `data-astro-reload`
+// elements, and without its meta tag back/forward reload normally.
+function disableClientRouter() {
+  document.querySelector('meta[name="astro-view-transitions-enabled"]')?.remove();
+  document.addEventListener(
+    "click",
+    (event) => {
+      if (event.target instanceof Element) {
+        event.target.closest("a, area")?.setAttribute("data-astro-reload", "");
+      }
+    },
+    true
+  );
+  document.addEventListener(
+    "submit",
+    (event) => {
+      if (event.target instanceof HTMLFormElement) {
+        event.target.setAttribute("data-astro-reload", "");
+      }
+    },
+    true
+  );
 }
 
 const observer = new MutationObserver((mutations) => {
@@ -172,10 +375,10 @@ const observer = new MutationObserver((mutations) => {
       }
 
       if (
-        IMAGE_CAROUSEL_ROOT_ATTRS.includes(attributeName) &&
-        target.classList.contains("image-carousel")
+        IMAGE_CAROUSEL_CONTENT_ATTRS.includes(attributeName) &&
+        target.classList.contains("carousel-content")
       ) {
-        queueImageCarouselReset(target, `attr:${attributeName}`);
+        queueImageCarouselReset(target.closest(".image-carousel"), `attr:${attributeName}`);
         continue;
       }
     }
@@ -193,6 +396,24 @@ const observer = new MutationObserver((mutations) => {
         if (target.classList.contains("image-carousel")) {
           // showArrows toggles .arrow-prev / .arrow-next in/out
           queueImageCarouselReset(target, "arrows toggled");
+        }
+
+        const masonryRoot = target.closest(".masonry");
+
+        if (masonryRoot) {
+          queueMasonryReset(masonryRoot, "items changed");
+        }
+
+        if (target.dataset.editable === "array") {
+          syncPositionLabels(target);
+        }
+
+        const groupedTimeline = target.closest(".timeline-grouped");
+
+        if (groupedTimeline) syncTimelineGroups(groupedTimeline);
+
+        if (target.matches(".scroll-deck-track, .scroll-deck-rail")) {
+          queueScrollDeckReset(target.closest(".scroll-deck"), "cards changed");
         }
       }
 
@@ -215,17 +436,30 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, {
   attributes: true,
-  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS, ...IMAGE_CAROUSEL_ROOT_ATTRS],
+  attributeFilter: [...BENTO_BOX_ATTRS, ...CAROUSEL_INNER_ATTRS, ...IMAGE_CAROUSEL_CONTENT_ATTRS],
   childList: true,
   subtree: true,
 });
 
-// Initialise any components already in the editor DOM.
+disableClientRouter();
 setupAllCarousels();
 setupAllImageCarousels();
+setupAllMainNavs();
+setupAllModals();
+setupAllVideoModals();
+setupAllSearch();
+setupAllGalleries();
+setupAllMasonry();
+setupAllScrollDecks();
+setupAllVideos();
+setupAllTabs();
+setupAllCodeBlocks();
+setupAllScrollSteppers();
+setupAllForms();
+previewExternalMedia();
 
 log("observer active", {
   bentoAttrs: BENTO_BOX_ATTRS,
   carouselAttrs: CAROUSEL_INNER_ATTRS,
-  imageCarouselAttrs: IMAGE_CAROUSEL_ROOT_ATTRS,
+  imageCarouselAttrs: IMAGE_CAROUSEL_CONTENT_ATTRS,
 });

@@ -1,6 +1,9 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 const {
   paddingVertical = "md",
+  lineStyle = "solid",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -9,11 +12,14 @@ const {
 ---
 
 <div
-  class:list={["divider", className]}
+  class:list={["divider", "stackable", className]}
   {...htmlAttributes}
   aria-hidden="true"
 >
-  <div class:list={["divider-inner", `padding-y-${paddingVertical}`]}>
+  <div
+    class:list={["divider-inner", `padding-y-${paddingVertical}`, `line-${lineStyle}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     <hr class="rule" />
   </div>
 </div>
@@ -56,8 +62,16 @@ const {
 
         > .rule {
           border: 0;
-          border-top: 2px solid var(--color-border-subtle);
+          border-top: var(--border-width-md) solid var(--color-border-subtle);
           margin: 0;
+        }
+
+        &.line-dashed > .rule {
+          border-top-style: dashed;
+        }
+
+        &.line-dotted > .rule {
+          border-top-style: dotted;
         }
       }
     }

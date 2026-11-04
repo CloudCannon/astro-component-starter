@@ -1,6 +1,6 @@
 label: Heading
 icon: title
-description: Headings for content hierarchy.
+description: Heading from h1 to h6.
 value:
   _component: building-blocks/core-elements/heading
   text: My Heading
@@ -11,13 +11,22 @@ value:
   iconColor: default
   iconPosition: before
 preview:
+  image: public/component-previews/building-blocks/core-elements/heading.svg
   icon: title
   text:
     - Heading
   subtext:
     - key: text
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/heading.svg
+    fit: cover
 picker_preview:
   text: Heading
   subtext: Headings for content hierarchy.
+  image: public/component-previews/building-blocks/core-elements/heading.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/heading.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/heading/heading.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

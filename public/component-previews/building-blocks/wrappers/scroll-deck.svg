@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-scroll-deck">
+  <title id="t-scroll-deck">Scroll deck component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 160)">
+    <rect x="240" y="0" width="740" height="320" rx="10" fill="var(--pv-surface, #EBE9E3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="200" y="40" width="820" height="320" rx="10" fill="var(--pv-panel, #F7F6F3)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="160" y="80" width="900" height="320" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-line, #E4E1DA)" stroke-width="2"/>
+    <rect x="216" y="144" width="420" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="216" y="204" width="640" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="216" y="228" width="520" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="216" y="296" width="150" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <circle cx="1113" cy="150" r="7" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="1113" cy="182" r="7" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="1113" cy="214" r="7" fill="var(--pv-subject, #A8A398)"/>
+  </g>
+</svg>

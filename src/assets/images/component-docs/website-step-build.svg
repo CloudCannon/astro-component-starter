@@ -1,0 +1,83 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sbBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf4ff"/>
+      <stop offset="1" stop-color="#fafcff"/>
+    </linearGradient>
+    <linearGradient id="sbImg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#e9d5ff"/>
+    </linearGradient>
+    <pattern id="sbDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#bfdbfe" opacity=".55"/>
+    </pattern>
+    <clipPath id="sbImgClip"><rect x="110" y="410" width="580" height="90" rx="12"/></clipPath>
+    <filter id="sbShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#1e3a8a" flood-opacity=".14"/>
+    </filter>
+    <filter id="sbChip" x="-40%" y="-60%" width="180%" height="220%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#1e3a8a" flood-opacity=".22"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#sbBg)"/>
+  <rect width="800" height="600" fill="url(#sbDots)"/>
+
+  <!-- the page, open in the editor -->
+  <g filter="url(#sbShadow)">
+    <rect x="70" y="60" width="660" height="480" rx="18" fill="#fff"/>
+  </g>
+  <rect x="70" y="60" width="660" height="480" rx="18" fill="none" stroke="#e6e9ef"/>
+  <path d="m70 106h660" stroke="#e6e9ef"/>
+  <circle cx="100" cy="83" r="6.5" fill="#f87171"/>
+  <circle cx="121" cy="83" r="6.5" fill="#facc15"/>
+  <circle cx="142" cy="83" r="6.5" fill="#4ade80"/>
+  <rect x="250" y="71" width="300" height="24" rx="12" fill="#f1f3f7"/>
+  <rect x="350" y="79" width="100" height="8" rx="4" fill="#c3c9d4"/>
+
+  <!-- heading being edited in place -->
+  <rect x="110" y="146" width="96" height="12" rx="6" fill="#dbeafe"/>
+  <rect x="98" y="170" width="452" height="104" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="112" y="184" width="400" height="30" rx="8" fill="#2a2a2a"/>
+  <rect x="112" y="228" width="232" height="30" rx="8" fill="#2a2a2a"/>
+  <rect x="352" y="224" width="3.5" height="38" rx="1.75" fill="#2563eb"/>
+
+  <!-- formatting toolbar -->
+  <g filter="url(#sbChip)">
+    <rect x="390" y="122" width="168" height="40" rx="10" fill="#1f2937"/>
+  </g>
+  <text x="414" y="149" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#fff">B</text>
+  <text x="446" y="149" font-family="Georgia, 'Times New Roman', serif" font-size="19" font-style="italic" fill="#fff">I</text>
+  <path d="m474 136v18" stroke="#4b5563" stroke-width="2"/>
+  <g fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round">
+    <path d="m492 146.5 4.5-4.5a4.2 4.2 0 0 1 6 6l-3 3"/>
+    <path d="m501.5 137.5-4.5 4.5"/>
+    <path d="m497 151.5-3.5 3.5a4.2 4.2 0 0 1 -6-6l3-3"/>
+  </g>
+  <rect x="520" y="134" width="26" height="16" rx="4" fill="#2563eb"/>
+  <rect x="526" y="140" width="14" height="4" rx="2" fill="#fff"/>
+
+  <!-- cursor -->
+  <path d="m566 252v28l6.5-6.5 5.5 12 6-2.7-5.5-12 9.2-.6z" fill="#151515" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- body copy and buttons -->
+  <rect x="112" y="296" width="460" height="11" rx="5.5" fill="#e8eaef"/>
+  <rect x="112" y="318" width="400" height="11" rx="5.5" fill="#e8eaef"/>
+  <rect x="112" y="352" width="112" height="34" rx="9" fill="#2563eb"/>
+  <rect x="140" y="364" width="56" height="9" rx="4.5" fill="#fff" opacity=".9"/>
+  <rect x="236" y="352" width="112" height="34" rx="9" fill="#fff" stroke="#d4d8e0"/>
+  <rect x="264" y="364" width="56" height="9" rx="4.5" fill="#8a919e"/>
+
+  <!-- next section, with an add-section slot above it -->
+  <path d="m110 398h580" stroke="#93c5fd" stroke-width="2" stroke-dasharray="6 6"/>
+  <g filter="url(#sbChip)">
+    <rect x="352" y="383" width="96" height="30" rx="15" fill="#2563eb"/>
+  </g>
+  <path d="m370 398h12m-6-6v12" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>
+  <rect x="390" y="394" width="44" height="8" rx="4" fill="#fff" opacity=".9"/>
+  <rect x="110" y="410" width="580" height="90" rx="12" fill="url(#sbImg)"/>
+  <g clip-path="url(#sbImgClip)">
+    <circle cx="170" cy="440" r="13" fill="#fff" opacity=".85"/>
+    <path d="m110 500 110-60 90 46 80-34 300 48v20h-580z" fill="#fff" opacity=".55"/>
+  </g>
+</svg>

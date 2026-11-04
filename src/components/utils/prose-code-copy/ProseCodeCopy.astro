@@ -1,0 +1,47 @@
+---
+import Button from "@core-elements/button/Button.astro";
+---
+
+<template
+  class="prose-code-template"
+  data-pagefind-ignore
+  data-copy-label="Copy"
+  data-copied-label="Copied"
+  data-copy-failed-label="Copy failed"
+>
+  <div class="prose-code">
+    <Button
+      text="Copy"
+      variant="ghost"
+      size="sm"
+      class="prose-code-copy"
+    />
+  </div>
+</template>
+<span
+  class="prose-code-status visually-hidden"
+  aria-live="polite"
+></span>
+
+<style is:global>
+  @layer components {
+    .prose-code {
+      position: relative;
+
+      > .prose-code-copy {
+        background-color: var(--color-bg);
+        border-radius: var(--radius-sm);
+        inset-block-start: var(--spacing-sm);
+        inset-inline-end: var(--spacing-sm);
+        position: absolute;
+      }
+    }
+  }
+</style>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllProseCode } from "./setup";
+
+  onPageLoad(() => setupAllProseCode());
+</script>

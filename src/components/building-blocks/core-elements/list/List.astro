@@ -1,4 +1,5 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 import ListItem from "./ListItem.astro";
 
 type ItemProps = Record<string, unknown>;
@@ -9,6 +10,7 @@ const {
   alignmentHorizontal = "start",
   size = "md",
   listType = "icon",
+  spaceBefore = "default",
   class: className,
   "data-children-prop": childrenDataProp,
   useDefaultEditableBinding = false,
@@ -28,115 +30,120 @@ const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
   : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? { "data-id": "building-blocks/core-elements/list/list-item", "data-editable": "array-item" }
+  : {};
 ---
 
 <div
-  class:list={["list", className]}
+  class:list={["list", "stackable", className]}
   {...htmlAttributes}
 >
-  <ListTag
-    role="list"
+  <div
     class:list={[
+      "list-inner",
       `size-${size}`,
       `direction-${direction}`,
       `alignment-${alignmentHorizontal}`,
       `type-${listType}`,
     ]}
-    {...arrayDataAttributes}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
   >
-    <slot>
-      {
-        items?.map((item: ItemProps) => (
+    <ListTag
+      role="list"
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {items?.map((item: ItemProps) => (
           <ListItem
-            data-id="building-blocks/core-elements/list/list-item"
-            data-editable="array-item"
+            {...itemRegionAttributes}
             useDefaultEditableBinding={!!effectiveChildrenProp}
             showIcon={showIcons}
             {...item}
           />
-        ))
-      }
-    </slot>
-  </ListTag>
+        ))}
+      </slot>
+    </ListTag>
+  </div>
 </div>
 
 <style is:global>
   @layer components {
-    .list {
-      margin-top: var(--spacing-lg);
-
+    .list > .list-inner {
+      /* `inherit` takes the size class on `.list-inner`; the base `ul, ol` rule would override it. */
       > :where(ul, ol) {
         display: flex;
         flex-direction: column;
+        font-size: inherit;
         gap: var(--spacing-em-sm);
         margin: 0;
 
         padding-inline-start: var(--spacing-md);
+      }
 
-        &.direction-horizontal {
-          flex-flow: row wrap;
-          gap: var(--spacing-em-md);
-        }
+      &.direction-horizontal > :where(ul, ol) {
+        flex-flow: row wrap;
+        gap: var(--spacing-em-md);
+      }
 
-        &.type-bullet {
-          list-style: disc;
-        }
+      &.type-bullet > :where(ul, ol) {
+        list-style: disc;
+      }
 
-        &.type-numbered {
-          list-style: decimal;
-        }
+      &.type-numbered > :where(ul, ol) {
+        list-style: decimal;
+      }
 
-        &.type-bullet.direction-horizontal,
-        &.type-numbered.direction-horizontal {
-          gap: var(--spacing-em-2xl);
-        }
+      &.type-bullet.direction-horizontal > :where(ul, ol),
+      &.type-numbered.direction-horizontal > :where(ul, ol) {
+        gap: var(--spacing-em-2xl);
+      }
 
-        &.type-icon {
-          list-style: none;
-          padding: 0;
-        }
+      &.type-icon > :where(ul, ol) {
+        list-style: none;
+        padding: 0;
+      }
 
-        &.alignment-end {
-          align-items: flex-end;
-          justify-content: flex-end;
-        }
+      &.alignment-end > :where(ul, ol) {
+        align-items: flex-end;
+        justify-content: flex-end;
+      }
 
-        &.alignment-center {
-          align-items: center;
-          justify-content: center;
-        }
+      &.alignment-center > :where(ul, ol) {
+        align-items: center;
+        justify-content: center;
+      }
 
-        &.size-xs {
-          font-size: var(--font-size-xs);
-        }
+      &.size-xs {
+        font-size: var(--font-size-xs);
+      }
 
-        &.size-sm {
-          font-size: var(--font-size-sm);
-        }
+      &.size-sm {
+        font-size: var(--font-size-sm);
+      }
 
-        &.size-md {
-          font-size: var(--font-size-md);
-        }
+      &.size-md {
+        font-size: var(--font-size-md);
+      }
 
-        &.size-lg {
-          font-size: var(--font-size-lg);
-        }
+      &.size-lg {
+        font-size: var(--font-size-lg);
+      }
 
-        &.size-xl {
-          font-size: var(--font-size-xl);
-        }
+      &.size-xl {
+        font-size: var(--font-size-xl);
+      }
 
-        &.size-2xl {
-          font-size: var(--font-size-2xl);
-        }
+      &.size-2xl {
+        font-size: var(--font-size-2xl);
+      }
 
-        &.size-3xl {
-          font-size: var(--font-size-3xl);
-        }
+      &.size-3xl {
+        font-size: var(--font-size-3xl);
+      }
 
-        &.size-4xl {
-          font-size: var(--font-size-4xl);
-        }
+      &.size-4xl {
+        font-size: var(--font-size-4xl);
       }
     }
   }

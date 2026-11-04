@@ -1,5 +1,6 @@
 import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "zod";
 
 const contentBlockSchema = z.object({ _component: z.string() }).passthrough();
 const docsViewerSizeSchema = z.enum(["sm", "md", "lg", "xl"]);
@@ -10,6 +11,7 @@ const pageSchema = z.object({
   keywords: z.array(z.string()).optional(),
   image: z.string().optional(),
   canonical: z.string().optional(),
+  noindex: z.boolean().optional(),
   pageSections: z.array(contentBlockSchema),
 });
 
@@ -24,13 +26,12 @@ const docsComponentSchema = z.object({
   name: z.string().optional(),
   order: z.number().optional(),
   overview: z.string().optional(),
+  description: z.string().optional(),
   defaultSize: docsViewerSizeSchema.optional(),
+  // Spacing for the synthesized primary example (see ComponentLayout.astro).
   spacing: z.string().optional().nullable(),
   component: z.string().optional(),
   component_path: z.string().optional(),
-  blocks: z
-    .union([z.record(z.string(), z.any()), z.array(z.record(z.string(), z.any()))])
-    .optional(),
   slots: z
     .array(
       z.object({
@@ -39,7 +40,8 @@ const docsComponentSchema = z.object({
         fallback_for: z.string().optional().nullable(),
         child_component: z
           .object({
-            name: z.string(),
+            // Optional: derived from the component source (see slotDerivation.ts).
+            name: z.string().optional(),
             props: z.array(z.string()).optional(),
           })
           .optional()
@@ -75,6 +77,15 @@ const docsComponentSchema = z.object({
     }),
 });
 
+// `title` is required: ComponentViewer reads it unconditionally.
+const docsComponentExampleSchema = z.object({
+  title: z.string(),
+  spacing: z.string().optional().nullable(),
+  blocks: z
+    .union([z.record(z.string(), z.any()), z.array(z.record(z.string(), z.any()))])
+    .optional(),
+});
+
 const pagesCollection = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/pages" }),
   schema: pageSchema,
@@ -86,8 +97,13 @@ const docsPagesCollection = defineCollection({
 });
 
 const docsComponentsCollection = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/component-docs/content/components" }),
+  loader: glob({ pattern: "**/index.md", base: "./src/component-docs/content/components" }),
   schema: docsComponentSchema,
+});
+
+const docsComponentExamplesCollection = defineCollection({
+  loader: glob({ pattern: "**/examples/*.md", base: "./src/component-docs/content/components" }),
+  schema: docsComponentExampleSchema,
 });
 
 const blogPostSchema = z.object({
@@ -109,5 +125,6 @@ export const collections = {
   pages: pagesCollection,
   "docs-pages": docsPagesCollection,
   "docs-components": docsComponentsCollection,
+  "docs-component-examples": docsComponentExamplesCollection,
   blog: blogCollection,
 };

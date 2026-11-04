@@ -1,0 +1,203 @@
+import type { PrivacyConfig } from "./config";
+
+export const CONSENT_STORAGE_KEY = "site-consent";
+
+export const consentCategories = ["analytics", "externalMedia"] as const;
+export type ConsentCategory = (typeof consentCategories)[number];
+export type ConsentDecision = "unset" | "granted" | "denied";
+
+export type ConsentRecord = {
+  policyRevision: number;
+  decidedAt: number;
+  decisions: Record<ConsentCategory, ConsentDecision>;
+};
+
+export type ConsentChange = {
+  category?: ConsentCategory;
+  record: ConsentRecord;
+};
+
+type Subscriber = (change: ConsentChange) => void;
+
+const blankDecisions = (): Record<ConsentCategory, ConsentDecision> => ({
+  analytics: "unset",
+  externalMedia: "unset",
+});
+
+function emptyRecord(revision: number): ConsentRecord {
+  return { policyRevision: revision, decidedAt: 0, decisions: blankDecisions() };
+}
+
+function isDecision(value: unknown): value is ConsentDecision {
+  return value === "unset" || value === "granted" || value === "denied";
+}
+
+export function parseConsentRecord(
+  value: string | null,
+  config: PrivacyConfig,
+  now = Date.now()
+): ConsentRecord {
+  if (!value) return emptyRecord(config.policyRevision);
+
+  try {
+    const parsed = JSON.parse(value) as Partial<ConsentRecord>;
+    const maxAge = config.expiryDays * 24 * 60 * 60 * 1000;
+
+    if (
+      parsed.policyRevision !== config.policyRevision ||
+      typeof parsed.decidedAt !== "number" ||
+      parsed.decidedAt + maxAge < now
+    ) {
+      return emptyRecord(config.policyRevision);
+    }
+
+    return {
+      policyRevision: config.policyRevision,
+      decidedAt: parsed.decidedAt,
+      decisions: {
+        analytics: isDecision(parsed.decisions?.analytics) ? parsed.decisions.analytics : "unset",
+        externalMedia: isDecision(parsed.decisions?.externalMedia)
+          ? parsed.decisions.externalMedia
+          : "unset",
+      },
+    };
+  } catch {
+    return emptyRecord(config.policyRevision);
+  }
+}
+
+/** Strict opt-in: an undecided category is denied. External media is exempt unless the config requires consent for it. */
+export function isConsentAllowed(
+  record: ConsentRecord,
+  category: ConsentCategory,
+  config: PrivacyConfig
+): boolean {
+  if (category === "externalMedia" && !config.externalMediaRequiresConsent) return true;
+  if (!config.enabled) return false;
+
+  return record.decisions[category] === "granted";
+}
+
+function globalPrivacyControlEnabled(): boolean {
+  return (
+    (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl === true
+  );
+}
+
+export class ConsentManager {
+  #config: PrivacyConfig;
+  #record: ConsentRecord;
+  #subscribers = new Set<Subscriber>();
+  #channel?: BroadcastChannel;
+
+  constructor(config: PrivacyConfig) {
+    this.#config = config;
+    this.#record = this.read();
+
+    if (typeof BroadcastChannel !== "undefined") {
+      this.#channel = new BroadcastChannel(CONSENT_STORAGE_KEY);
+      this.#channel.addEventListener("message", () => this.sync());
+    }
+
+    window.addEventListener("storage", (event) => {
+      if (event.key === CONSENT_STORAGE_KEY) this.sync();
+    });
+
+    if (
+      config.enabled &&
+      config.honorGlobalPrivacyControl &&
+      globalPrivacyControlEnabled() &&
+      !this.hasDecision
+    ) {
+      this.rejectAll();
+    }
+  }
+
+  get record(): ConsentRecord {
+    return structuredClone(this.#record);
+  }
+
+  get hasDecision(): boolean {
+    return consentCategories.some((category) => this.#record.decisions[category] !== "unset");
+  }
+
+  isAllowed(category: ConsentCategory): boolean {
+    return isConsentAllowed(this.#record, category, this.#config);
+  }
+
+  setDecision(category: ConsentCategory, decision: Exclude<ConsentDecision, "unset">): void {
+    this.#record = {
+      policyRevision: this.#config.policyRevision,
+      decidedAt: Date.now(),
+      decisions: { ...this.#record.decisions, [category]: decision },
+    };
+    this.write();
+    this.notify({ category, record: this.record });
+  }
+
+  acceptAll(): void {
+    this.setOptionalDecisions("granted");
+  }
+
+  rejectAll(): void {
+    this.setOptionalDecisions("denied");
+  }
+
+  subscribe(subscriber: Subscriber): () => void {
+    this.#subscribers.add(subscriber);
+    return () => this.#subscribers.delete(subscriber);
+  }
+
+  private read(): ConsentRecord {
+    try {
+      return parseConsentRecord(localStorage.getItem(CONSENT_STORAGE_KEY), this.#config);
+    } catch {
+      return emptyRecord(this.#config.policyRevision);
+    }
+  }
+
+  private write(): void {
+    try {
+      localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(this.#record));
+      this.#channel?.postMessage("changed");
+    } catch {
+      // Storage can be unavailable; the in-memory record still covers this visit.
+    }
+  }
+
+  private setOptionalDecisions(decision: Exclude<ConsentDecision, "unset">): void {
+    this.#record = {
+      policyRevision: this.#config.policyRevision,
+      decidedAt: Date.now(),
+      decisions: Object.fromEntries(
+        consentCategories.map((category) => [category, decision])
+      ) as Record<ConsentCategory, Exclude<ConsentDecision, "unset">>,
+    };
+    this.write();
+    this.notify({ record: this.record });
+  }
+
+  private sync(): void {
+    const record = this.read();
+
+    if (JSON.stringify(record) === JSON.stringify(this.#record)) return;
+    this.#record = record;
+    this.notify({ record: this.record });
+  }
+
+  private notify(change: ConsentChange): void {
+    this.#subscribers.forEach((subscriber) => subscriber(change));
+    window.dispatchEvent(new CustomEvent("site-consent-change", { detail: change }));
+  }
+}
+
+declare global {
+  interface Window {
+    siteConsent?: ConsentManager;
+  }
+}
+
+export function getConsentManager(config: PrivacyConfig): ConsentManager {
+  window.siteConsent ??= new ConsentManager(config);
+  return window.siteConsent;
+}

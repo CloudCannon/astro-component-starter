@@ -5,6 +5,8 @@ blocks:
   _component: 'page-sections/builders/custom-section'
   paddingVertical: 2xl
   paddingHorizontal: md
+  colorScheme: light
+  lockColorScheme: true
   background:
     type: image
     positionVertical: center

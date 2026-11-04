@@ -1,6 +1,8 @@
 ---
-import Component from "@components/utils/renderBlock.astro";
-import { slugifyLabel } from "@components/utils/slugify";
+import { overlayColor } from "@component-utils/overlayColor";
+import Component from "@component-utils/renderBlock.astro";
+import { resolveImageSource } from "@component-utils/resolveImageSource";
+import { slugifyLabel } from "@component-utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
 
@@ -12,7 +14,7 @@ const {
   paddingVertical = "4xl",
   colorScheme = "inherit",
   lockColorScheme = false,
-  backgroundColor,
+  backgroundColor = "base",
   background,
   rounded = false,
   useDefaultEditableBinding = false,
@@ -31,7 +33,14 @@ const {
   imageAlt = "",
   videoSource = "",
   overlay = 0,
+  fixed = false,
+  patternSize = "natural",
+  mask = bgType === "pattern" ? "frame" : "none",
 } = background || {};
+
+const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
+const patternImageUrl =
+  bgType === "pattern" && imageSource ? resolveImageSource(imageSource) : null;
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -42,7 +51,11 @@ const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes =
   effectiveChildrenProp && hasContentSections
-    ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+    ? {
+        "data-editable": "array",
+        "data-prop": effectiveChildrenProp,
+        "data-component-key": "_component",
+      }
     : {};
 ---
 
@@ -51,53 +64,61 @@ const arrayDataAttributes =
   {...htmlAttributes}
 >
   <div
-    class:list={["outer-content", rounded && "rounded"]}
+    class:list={[
+      "outer-content",
+      rounded && "rounded",
+      usesFixedBackground && "background-fixed",
+      mask !== "none" && `background-mask-${mask}`,
+    ]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
     data-theme-lock={lockColorScheme || undefined}
   >
-    {
-      bgType === "image" && (
-        <Image
-          class:list={["background-image"]}
-          source={imageSource}
-          alt={imageAlt}
-          priority={priority}
-          positionVertical={positionVertical}
-          positionHorizontal={positionHorizontal}
-          background={true}
-        />
-      )
-    }
-    {
-      bgType === "video" && (
-        <Video
-          type="local-source"
-          source={videoSource}
-          background={true}
-          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
-        />
-      )
-    }
-    {
-      overlay !== 0 && (
-        <div
-          class="background-overlay"
-          aria-hidden="true"
-          style={{
-            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
-          }}
-        />
-      )
-    }
-    {
-      backgroundColor && (
-        <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
-      )
-    }
+    {bgType === "image" && (
+      <Image
+        class:list={["background-image"]}
+        source={imageSource}
+        alt={imageAlt}
+        priority={priority}
+        positionVertical={positionVertical}
+        positionHorizontal={positionHorizontal}
+        background={true}
+        sizes="100vw"
+        widths={[640, 1280, 1920, 2560]}
+      />
+    )}
+    {bgType === "video" && (
+      <Video
+        type="local-source"
+        source={videoSource}
+        background={true}
+        style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+      />
+    )}
+    {patternImageUrl && (
+      <div
+        class:list={["background-pattern", `pattern-size-${patternSize}`]}
+        aria-hidden="true"
+        style={{ backgroundImage: `url("${patternImageUrl}")` }}
+      />
+    )}
+    {overlay !== 0 && (
+      <div
+        class="background-overlay"
+        aria-hidden="true"
+        style={{
+          backgroundColor: overlayColor(overlay),
+        }}
+      />
+    )}
+    {backgroundColor && (
+      <div class:list={["background", backgroundColor && `bg-${backgroundColor}`]} />
+    )}
 
     <div
       class:list={[
         "content",
+        "flow",
+        "uses-spacing-utils",
         paddingHorizontal && `pad-x-${paddingHorizontal}`,
         paddingVertical && `pad-y-${paddingVertical}`,
         maxContentWidth && `max-width-${maxContentWidth}`,
@@ -105,14 +126,12 @@ const arrayDataAttributes =
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <Component
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <Component
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
   </div>
@@ -120,183 +139,146 @@ const arrayDataAttributes =
 
 <style is:global>
   @layer components {
+    @property --section-inline-size {
+      syntax: "<length>";
+      inherits: true;
+      initial-value: 0px;
+    }
+
     .custom-section {
+      /* Re-declared so a nested section never inherits an ancestor's mask. */
+      --bg-mask: none;
+
       > .outer-content {
+        container-type: inline-size;
         height: 100%;
         position: relative;
+
+        /* clip, not hidden: hidden makes a scroll container and kills sticky descendants. */
+        &:has([data-bleed]) {
+          overflow-x: clip;
+        }
 
         &.rounded {
           border-radius: var(--radius-xl);
           overflow: hidden;
         }
 
+        &.background-fixed {
+          clip-path: inset(0);
+
+          > .background-image {
+            position: fixed;
+          }
+
+          &.rounded {
+            clip-path: inset(0 round var(--radius-xl));
+          }
+        }
+
         > .content {
+          --section-inline-size: 100cqi;
+          --section-bleed: calc(
+            (
+                var(--section-inline-size) -
+                  min(
+                    var(--section-max-width, var(--section-inline-size)),
+                    var(--section-inline-size)
+                  )
+              ) /
+              2 + var(--section-pad-x, 0px)
+          );
+
           container-type: inline-size;
           height: 100%;
           margin-inline: auto;
           position: relative;
           z-index: var(--layer-1);
 
-          > *:first-child {
-            margin-top: 0 !important;
-          }
-
-          > *:last-child {
-            margin-bottom: 0 !important;
-          }
-
-          &.pad-x-xs {
-            padding-inline: var(--spacing-xs);
-          }
-
-          &.pad-x-sm {
-            padding-inline: var(--spacing-sm);
-          }
-
-          &.pad-x-md {
-            padding-inline: var(--spacing-md);
-          }
-
-          &.pad-x-lg {
-            padding-inline: var(--spacing-lg);
-          }
-
-          &.pad-x-xl {
-            padding-inline: var(--spacing-xl);
-          }
-
-          &.pad-x-2xl {
-            padding-inline: var(--spacing-2xl);
-          }
-
-          &.pad-x-3xl {
-            padding-inline: var(--spacing-3xl);
-          }
-
-          &.pad-x-4xl {
-            padding-inline: var(--spacing-4xl);
-          }
-
-          &.pad-x-5xl {
-            padding-inline: var(--spacing-5xl);
-          }
-
-          &.pad-x-6xl {
-            padding-inline: var(--spacing-6xl);
-          }
-
-          &.pad-y-xs {
-            padding-block: var(--spacing-xs);
-          }
-
-          &.pad-y-sm {
-            padding-block: var(--spacing-sm);
-          }
-
-          &.pad-y-md {
-            padding-block: var(--spacing-md);
-          }
-
-          &.pad-y-lg {
-            padding-block: var(--spacing-lg);
-          }
-
-          &.pad-y-xl {
-            padding-block: var(--spacing-xl);
-          }
-
-          &.pad-y-2xl {
-            padding-block: var(--spacing-2xl);
-          }
-
-          &.pad-y-3xl {
-            padding-block: var(--spacing-3xl);
-          }
-
-          &.pad-y-4xl {
-            padding-block: var(--spacing-4xl);
-          }
-
-          &.pad-y-5xl {
-            padding-block: var(--spacing-5xl);
-          }
-
-          &.pad-y-6xl {
-            padding-block: var(--spacing-6xl);
-          }
-
-          @media (width < 640px) {
-            &.pad-y-xs {
-              padding-block: var(--spacing-xs);
-            }
-
-            &.pad-y-sm {
-              padding-block: var(--spacing-xs);
-            }
-
-            &.pad-y-md {
-              padding-block: var(--spacing-sm);
-            }
-
-            &.pad-y-lg {
-              padding-block: var(--spacing-md);
-            }
-
-            &.pad-y-xl {
-              padding-block: var(--spacing-md);
-            }
-
-            &.pad-y-2xl {
-              padding-block: var(--spacing-lg);
-            }
-
-            &.pad-y-3xl {
-              padding-block: var(--spacing-xl);
-            }
-
-            &.pad-y-4xl {
-              padding-block: var(--spacing-2xl);
-            }
-
-            &.pad-y-5xl {
-              padding-block: var(--spacing-3xl);
-            }
-
-            &.pad-y-6xl {
-              padding-block: var(--spacing-4xl);
-            }
-          }
-
           &.max-width-none {
             max-width: none;
           }
 
           &.max-width-xs {
+            --section-max-width: var(--content-width-xs);
+
             max-width: var(--content-width-xs);
           }
 
           &.max-width-sm {
+            --section-max-width: var(--content-width-sm);
+
             max-width: var(--content-width-sm);
           }
 
           &.max-width-md {
+            --section-max-width: var(--content-width-md);
+
             max-width: var(--content-width-md);
           }
 
           &.max-width-lg {
+            --section-max-width: var(--content-width-lg);
+
             max-width: var(--content-width-lg);
           }
 
           &.max-width-xl {
+            --section-max-width: var(--content-width-xl);
+
             max-width: var(--content-width-xl);
           }
 
           &.max-width-2xl {
+            --section-max-width: var(--content-width-2xl);
+
             max-width: var(--content-width-2xl);
           }
 
           &.max-width-3xl {
+            --section-max-width: var(--content-width-3xl);
+
             max-width: var(--content-width-3xl);
+          }
+
+          &.pad-x-xs {
+            --section-pad-x: var(--spacing-xs);
+          }
+
+          &.pad-x-sm {
+            --section-pad-x: var(--spacing-sm);
+          }
+
+          &.pad-x-md {
+            --section-pad-x: var(--spacing-md);
+          }
+
+          &.pad-x-lg {
+            --section-pad-x: var(--spacing-lg);
+          }
+
+          &.pad-x-xl {
+            --section-pad-x: var(--spacing-xl);
+          }
+
+          &.pad-x-2xl {
+            --section-pad-x: var(--spacing-2xl);
+          }
+
+          &.pad-x-3xl {
+            --section-pad-x: var(--spacing-3xl);
+          }
+
+          &.pad-x-4xl {
+            --section-pad-x: var(--spacing-4xl);
+          }
+
+          &.pad-x-5xl {
+            --section-pad-x: var(--spacing-5xl);
+          }
+
+          &.pad-x-6xl {
+            --section-pad-x: var(--spacing-6xl);
           }
         }
 
@@ -315,8 +297,65 @@ const arrayDataAttributes =
           z-index: var(--layer-1);
         }
 
-        > .background-video {
+        > .background-pattern {
+          background-position: top left;
+          background-repeat: repeat;
+          inset: 0;
+          position: absolute;
           z-index: var(--layer-1);
+
+          &.pattern-size-natural {
+            background-size: auto;
+          }
+
+          &.pattern-size-sm {
+            background-size: 2rem auto;
+          }
+
+          &.pattern-size-md {
+            background-size: 4rem auto;
+          }
+
+          &.pattern-size-lg {
+            background-size: 8rem auto;
+          }
+        }
+
+        > .video.background {
+          z-index: var(--layer-1);
+        }
+
+        > :is(.background-image, .background-pattern, .background-overlay, .video.background) {
+          -webkit-mask-image: var(--bg-mask, none);
+          mask-image: var(--bg-mask, none);
+        }
+
+        &.background-mask-frame {
+          --bg-mask: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 30%, #000 80%);
+        }
+
+        &.background-mask-vignette {
+          --bg-mask: radial-gradient(ellipse 90% 90% at 50% 50%, #000 40%, transparent 88%);
+        }
+
+        &.background-mask-top {
+          --bg-mask: linear-gradient(to top, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-bottom {
+          --bg-mask: linear-gradient(to bottom, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-left {
+          --bg-mask: linear-gradient(to left, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-right {
+          --bg-mask: linear-gradient(to right, #000 30%, transparent 85%);
+        }
+
+        &.background-mask-blend {
+          --bg-mask: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent);
         }
 
         > .bg-base {
@@ -334,6 +373,12 @@ const arrayDataAttributes =
         > .bg-highlight {
           background-color: var(--color-bg-highlight);
         }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .custom-section > .outer-content.background-fixed > .background-image {
+        position: absolute;
       }
     }
   }

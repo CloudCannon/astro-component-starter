@@ -1,0 +1,123 @@
+<svg viewBox="0 0 1120 780" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="pbBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#edf4ff"/>
+      <stop offset="1" stop-color="#fafcff"/>
+    </linearGradient>
+    <linearGradient id="pbImg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#dbeafe"/>
+      <stop offset="1" stop-color="#e9d5ff"/>
+    </linearGradient>
+    <pattern id="pbDots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.7" fill="#bfdbfe" opacity=".55"/>
+    </pattern>
+    <filter id="pbWindowShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#1e3a8a" flood-opacity=".14"/>
+    </filter>
+    <filter id="pbCardShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#1e3a8a" flood-opacity=".22"/>
+    </filter>
+  </defs>
+
+  <rect x="20" y="10" width="1080" height="752" rx="32" fill="url(#pbBg)"/>
+  <rect x="20" y="10" width="1080" height="752" rx="32" fill="url(#pbDots)"/>
+
+  <!-- browser window: the page being assembled -->
+  <g filter="url(#pbWindowShadow)">
+    <rect x="100" y="50" width="600" height="660" rx="18" fill="#fff"/>
+  </g>
+  <rect x="100" y="50" width="600" height="660" rx="18" fill="none" stroke="#e6e9ef"/>
+  <path d="m100 98h600" stroke="#e6e9ef"/>
+  <circle cx="132" cy="74" r="6.5" fill="#f87171"/>
+  <circle cx="153" cy="74" r="6.5" fill="#facc15"/>
+  <circle cx="174" cy="74" r="6.5" fill="#4ade80"/>
+  <rect x="240" y="62" width="340" height="24" rx="12" fill="#f1f3f7"/>
+  <rect x="356" y="70" width="108" height="8" rx="4" fill="#c3c9d4"/>
+
+  <!-- section: hero -->
+  <rect x="345" y="122" width="110" height="14" rx="7" fill="#dbeafe"/>
+  <rect x="210" y="150" width="380" height="20" rx="6" fill="#2a2a2a"/>
+  <rect x="230" y="186" width="340" height="10" rx="5" fill="#e8eaef"/>
+  <rect x="270" y="204" width="260" height="10" rx="5" fill="#e8eaef"/>
+  <rect x="345" y="228" width="110" height="30" rx="8" fill="#2563eb"/>
+  <rect x="373" y="238" width="54" height="9" rx="4.5" fill="#fff" opacity=".9"/>
+
+  <!-- section: stats band -->
+  <rect x="100" y="282" width="600" height="100" fill="#f4f7fb"/>
+  <rect x="210" y="306" width="60" height="18" rx="5" fill="#2a2a2a"/>
+  <rect x="195" y="340" width="90" height="9" rx="4.5" fill="#9aa1ad"/>
+  <rect x="370" y="306" width="60" height="18" rx="5" fill="#2a2a2a"/>
+  <rect x="355" y="340" width="90" height="9" rx="4.5" fill="#9aa1ad"/>
+  <rect x="530" y="306" width="60" height="18" rx="5" fill="#2a2a2a"/>
+  <rect x="515" y="340" width="90" height="9" rx="4.5" fill="#9aa1ad"/>
+
+  <!-- drop slot -->
+  <rect x="140" y="398" width="520" height="54" rx="10" fill="#eff6ff" opacity=".7"/>
+  <rect x="140" y="398" width="520" height="54" rx="10" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="7 5"/>
+  <circle cx="330" cy="425" r="13" fill="#dbeafe"/>
+  <rect x="323" y="423" width="14" height="4" rx="2" fill="#2563eb"/>
+  <rect x="328" y="418" width="4" height="14" rx="2" fill="#2563eb"/>
+
+  <!-- section: feature split -->
+  <rect x="140" y="482" width="220" height="100" rx="10" fill="url(#pbImg)"/>
+  <circle cx="176" cy="512" r="11" fill="#fff" opacity=".85"/>
+  <rect x="390" y="490" width="200" height="14" rx="5" fill="#2a2a2a"/>
+  <rect x="390" y="516" width="270" height="9" rx="4.5" fill="#e8eaef"/>
+  <rect x="390" y="534" width="210" height="9" rx="4.5" fill="#e8eaef"/>
+  <rect x="390" y="558" width="90" height="9" rx="4.5" fill="#2563eb"/>
+
+  <!-- section: dark cta, cut off at the bottom -->
+  <path d="m100 612h600v80a18 18 0 0 1 -18 18h-564a18 18 0 0 1 -18 -18z" fill="#1f1f1f"/>
+  <rect x="290" y="636" width="220" height="14" rx="5" fill="#f4f4f4"/>
+  <rect x="355" y="668" width="90" height="24" rx="7" fill="#2563eb"/>
+
+  <!-- section picker panel -->
+  <g filter="url(#pbWindowShadow)">
+    <rect x="740" y="100" width="310" height="430" rx="16" fill="#fff"/>
+  </g>
+  <rect x="740" y="100" width="310" height="430" rx="16" fill="none" stroke="#e6e9ef"/>
+  <rect x="764" y="124" width="140" height="12" rx="6" fill="#2a2a2a"/>
+  <rect x="764" y="152" width="262" height="30" rx="15" fill="#f1f3f7"/>
+  <rect x="782" y="163" width="90" height="8" rx="4" fill="#c3c9d4"/>
+  <!-- picked row -->
+  <rect x="756" y="200" width="278" height="72" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="768" y="212" width="72" height="48" rx="8" fill="url(#pbImg)"/>
+  <rect x="854" y="222" width="120" height="10" rx="5" fill="#2a2a2a"/>
+  <rect x="854" y="242" width="80" height="8" rx="4" fill="#a7adb8"/>
+  <!-- other rows -->
+  <rect x="768" y="292" width="72" height="48" rx="8" fill="#eef1f5"/>
+  <rect x="778" y="304" width="52" height="7" rx="3.5" fill="#c3c9d4"/>
+  <rect x="778" y="318" width="36" height="7" rx="3.5" fill="#c3c9d4"/>
+  <rect x="854" y="302" width="120" height="10" rx="5" fill="#555"/>
+  <rect x="854" y="322" width="80" height="8" rx="4" fill="#c3c9d4"/>
+  <rect x="768" y="368" width="72" height="48" rx="8" fill="#eef1f5"/>
+  <rect x="778" y="380" width="24" height="24" rx="4" fill="#c3c9d4"/>
+  <rect x="810" y="380" width="22" height="7" rx="3.5" fill="#c3c9d4"/>
+  <rect x="810" y="394" width="22" height="7" rx="3.5" fill="#c3c9d4"/>
+  <rect x="854" y="378" width="110" height="10" rx="5" fill="#555"/>
+  <rect x="854" y="398" width="70" height="8" rx="4" fill="#c3c9d4"/>
+  <rect x="768" y="444" width="72" height="48" rx="8" fill="#eef1f5"/>
+  <rect x="778" y="456" width="16" height="24" rx="3" fill="#c3c9d4"/>
+  <rect x="800" y="456" width="16" height="24" rx="3" fill="#c3c9d4"/>
+  <rect x="822" y="456" width="12" height="24" rx="3" fill="#c3c9d4"/>
+  <rect x="854" y="454" width="130" height="10" rx="5" fill="#555"/>
+  <rect x="854" y="474" width="76" height="8" rx="4" fill="#c3c9d4"/>
+
+  <!-- section card mid-drag -->
+  <g transform="rotate(-3 690 405)">
+    <g filter="url(#pbCardShadow)">
+      <rect x="520" y="335" width="340" height="140" rx="14" fill="#fff"/>
+    </g>
+    <rect x="520" y="335" width="340" height="140" rx="14" fill="none" stroke="#3b82f6" stroke-width="1.5"/>
+    <circle cx="536" cy="398" r="2.2" fill="#c3c9d4"/>
+    <circle cx="536" cy="408" r="2.2" fill="#c3c9d4"/>
+    <circle cx="544" cy="398" r="2.2" fill="#c3c9d4"/>
+    <circle cx="544" cy="408" r="2.2" fill="#c3c9d4"/>
+    <rect x="560" y="355" width="88" height="66" rx="8" fill="url(#pbImg)"/>
+    <rect x="656" y="355" width="88" height="66" rx="8" fill="#cffafe"/>
+    <rect x="752" y="355" width="88" height="66" rx="8" fill="#e9d5ff"/>
+    <rect x="560" y="437" width="140" height="10" rx="5" fill="#2a2a2a"/>
+    <rect x="560" y="455" width="90" height="8" rx="4" fill="#a7adb8"/>
+  </g>
+  <path d="m840 356 0 26 6-6 5 11 5.5-2.5-5-11 8.5-.5z" fill="#151515" stroke="#fff" stroke-width="2" stroke-linejoin="round"/>
+</svg>

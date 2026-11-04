@@ -1,5 +1,5 @@
 label:
-  comment: Optional label for the bento box to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
   type: text
 columns:
   comment: The number of columns in the bento grid.
@@ -17,7 +17,7 @@ minRowHeight:
   type: number
 items:
   label: Bento Box Items
-  comment: Array of bento box items, each with configurable column and row spans.
+  comment: Bento items, each with its own column and row span.
   type: array
   options:
     structures: _structures.bentoBoxItems

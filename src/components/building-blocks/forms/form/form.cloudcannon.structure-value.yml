@@ -1,18 +1,30 @@
 label: Form
 icon: checklist_rtl
-description: Groups form fields into one submission area.
+description: Groups form fields into one submission.
 value:
   _component: building-blocks/forms/form
   action: ./
+  method: post
+  honeypotName: null
+  successMessage: null
   formBlocks: []
 preview:
   text:
     - Form
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/forms/form.svg
   icon: checklist_rtl
+  gallery:
+    image: public/component-previews/building-blocks/forms/form.svg
+    fit: cover
 picker_preview:
   text: Form
   subtext: Groups form fields into one submission area.
+  image: public/component-previews/building-blocks/forms/form.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/form.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/form/form.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

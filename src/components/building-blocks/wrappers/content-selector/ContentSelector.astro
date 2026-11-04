@@ -1,11 +1,14 @@
 ---
-import ContentSelectorPanel from "./ContentSelectorPanel.astro";
-import { slugifyLabel } from "@components/utils/slugify";
+import { slugifyLabel } from "@component-utils/slugify";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import Tabs from "@component-utils/tabs/Tabs.astro";
 import type { ContentSelectorItem } from "../../../../types";
+import ContentSelectorPanel from "./ContentSelectorPanel.astro";
 
 const {
   items = [] as ContentSelectorItem[],
   navigationPosition = "start",
+  spaceBefore = "default",
   class: className,
   label,
   useDefaultEditableBinding = false,
@@ -18,12 +21,20 @@ if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
 }
 
-const uniqueId = crypto.randomUUID();
-const groupName = `tabs-${uniqueId}`;
+const firstTitle = (items as ContentSelectorItem[])?.[0]?.title;
+const groupKey =
+  htmlAttributes.id || (firstTitle && slugifyLabel(firstTitle)) || crypto.randomUUID();
+const groupName = `tabs-${groupKey}`;
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/content-selector/content-selector-panel",
+      "data-editable": "array-item",
+    }
   : {};
 
 const hasItems = items?.length > 0;
@@ -33,141 +44,52 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <section
-  class:list={["content-selector", className]}
+  class:list={["content-selector", "stackable", className]}
   {...htmlAttributes}
 >
-  <div
+  <Tabs
     class:list={["content-selector-items", `nav-${navigationPosition}`]}
-    data-uid={uniqueId}
-    role="tablist"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        items?.map((item: ContentSelectorItem, index: number) => (
-          <ContentSelectorPanel
-            title={item.title}
-            subtext={item.subtext}
-            iconName={item.iconName}
-            iconColor={item.iconColor}
-            contentSections={item.contentSections}
-            _component={item._component}
-            checked={index === 0}
-            groupName={groupName}
-            navigationPosition={navigationPosition}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-            data-editable="array-item"
-          />
-        ))
-      }
+      {items?.map((item: ContentSelectorItem, index: number) => (
+        <ContentSelectorPanel
+          title={item.title}
+          subtext={item.subtext}
+          iconName={item.iconName}
+          iconColor={item.iconColor}
+          contentSections={item.contentSections}
+          _component={item._component}
+          selected={index === 0}
+          groupName={groupName}
+          navigationPosition={navigationPosition}
+          tablistLabel={label}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          {...itemRegionAttributes}
+        />
+      ))}
     </slot>
-  </div>
+  </Tabs>
 </section>
-
-<script>
-  import { onPageLoad } from "@components/utils/onPageLoad";
-
-  function updatePanelAriaState(input: HTMLInputElement, isSelected: boolean) {
-    const tab = input.nextElementSibling;
-    const panel = tab?.nextElementSibling;
-
-    if (!(tab instanceof HTMLElement) || !(panel instanceof HTMLElement)) return;
-
-    tab.setAttribute("aria-selected", isSelected.toString());
-    panel.setAttribute("aria-hidden", (!isSelected).toString());
-  }
-
-  function syncContentSelectorAriaState(contentSelector: HTMLElement) {
-    const inputs = Array.from(
-      contentSelector.querySelectorAll<HTMLInputElement>(".content-selector-input")
-    );
-
-    if (!inputs.length) return;
-
-    let selectedInput = inputs.find((input) => input.checked);
-
-    if (!selectedInput) {
-      [selectedInput] = inputs;
-      selectedInput.checked = true;
-    }
-
-    inputs.forEach((input) => {
-      updatePanelAriaState(input, input === selectedInput);
-    });
-  }
-
-  function handleInputChange(event: Event) {
-    const input = event.currentTarget;
-
-    if (!(input instanceof HTMLInputElement)) return;
-
-    const contentSelector = input.closest(".content-selector-items");
-
-    if (!(contentSelector instanceof HTMLElement)) return;
-
-    syncContentSelectorAriaState(contentSelector);
-  }
-
-  function handleTabKeydown(event: Event) {
-    if (!(event instanceof KeyboardEvent)) return;
-    if (event.key !== "Enter" && event.key !== " ") return;
-
-    event.preventDefault();
-
-    const tab = event.currentTarget;
-
-    if (!(tab instanceof HTMLLabelElement)) return;
-
-    const inputId = tab.getAttribute("for");
-    const input = inputId ? document.getElementById(inputId) : null;
-
-    if (!(input instanceof HTMLInputElement)) return;
-
-    input.checked = true;
-    input.dispatchEvent(new Event("change", { bubbles: true }));
-  }
-
-  function initContentSelectors() {
-    document.querySelectorAll(".content-selector-items").forEach((contentSelector) => {
-      if (!(contentSelector instanceof HTMLElement)) return;
-
-      syncContentSelectorAriaState(contentSelector);
-
-      if (contentSelector.dataset.contentSelectorInitialized === "true") return;
-
-      contentSelector.querySelectorAll(".content-selector-input").forEach((input) => {
-        input.addEventListener("change", handleInputChange);
-      });
-
-      contentSelector.querySelectorAll(".content-selector-tab").forEach((tab) => {
-        tab.addEventListener("keydown", handleTabKeydown);
-      });
-
-      contentSelector.dataset.contentSelectorInitialized = "true";
-    });
-  }
-
-  onPageLoad(initContentSelectors);
-</script>
 
 <style is:global>
   @layer components {
     .content-selector {
       --content-selector-border-width: 1px;
       container: content-selector / inline-size;
-      margin-top: var(--spacing-lg);
 
       > .content-selector-items {
-        border: 0 solid var(--color-bg-muted);
         width: 100%;
 
-        &:not(:has(.content-selector-item > .content-selector-input:checked))
+        &:not(:has(.content-selector-item .content-selector-tab[aria-selected="true"]))
           .content-selector-item:first-of-type
+          > .content-selector-tablist
           > .content-selector-tab::before {
           background: var(--color-border-strong);
         }
 
-        &:not(:has(.content-selector-item > .content-selector-input:checked))
+        &:not(:has(.content-selector-item .content-selector-tab[aria-selected="true"]))
           .content-selector-item:first-of-type
           > .content-selector-panel {
           display: block;
@@ -177,10 +99,18 @@ if (!_component && !hasItems && !hasSlotContent) return;
           column-gap: var(--spacing-em-lg);
           display: grid;
           grid-template-columns: minmax(min-content, max-content) minmax(0, 1fr);
+          /* The count is static because this is the array region root: an item-count
+             value would go stale when the editor adds one. Empty `auto` rows collapse. */
+          grid-template-rows: repeat(12, auto) 1fr;
+
+          .content-selector-tablist {
+            grid-column: 1;
+          }
 
           .content-selector-tab {
             border-inline-start: var(--content-selector-border-width) solid var(--color-bg-muted);
-            grid-column: 1;
+            text-align: start;
+            width: 100%;
 
             &::before {
               inset-block: 0;
@@ -189,9 +119,59 @@ if (!_component && !hasItems && !hasSlotContent) return;
             }
           }
 
+          /* Row from `:nth-of-type`, not a prop, so a reorder or single-item re-render
+             can't leave a stale index. */
+          .content-selector-item:nth-of-type(1) > .content-selector-tablist {
+            grid-row: 1;
+          }
+
+          .content-selector-item:nth-of-type(2) > .content-selector-tablist {
+            grid-row: 2;
+          }
+
+          .content-selector-item:nth-of-type(3) > .content-selector-tablist {
+            grid-row: 3;
+          }
+
+          .content-selector-item:nth-of-type(4) > .content-selector-tablist {
+            grid-row: 4;
+          }
+
+          .content-selector-item:nth-of-type(5) > .content-selector-tablist {
+            grid-row: 5;
+          }
+
+          .content-selector-item:nth-of-type(6) > .content-selector-tablist {
+            grid-row: 6;
+          }
+
+          .content-selector-item:nth-of-type(7) > .content-selector-tablist {
+            grid-row: 7;
+          }
+
+          .content-selector-item:nth-of-type(8) > .content-selector-tablist {
+            grid-row: 8;
+          }
+
+          .content-selector-item:nth-of-type(9) > .content-selector-tablist {
+            grid-row: 9;
+          }
+
+          .content-selector-item:nth-of-type(10) > .content-selector-tablist {
+            grid-row: 10;
+          }
+
+          .content-selector-item:nth-of-type(11) > .content-selector-tablist {
+            grid-row: 11;
+          }
+
+          .content-selector-item:nth-of-type(12) > .content-selector-tablist {
+            grid-row: 12;
+          }
+
           .content-selector-panel {
             grid-column: 2;
-            grid-row: 1 / span 999;
+            grid-row: 1 / -1;
             padding: 0 var(--spacing-md);
             width: 100%;
           }
@@ -199,26 +179,92 @@ if (!_component && !hasItems && !hasSlotContent) return;
 
         &.nav-top {
           display: grid;
-          grid-auto-columns: minmax(max-content, 1fr);
-          grid-auto-flow: column;
+          /* Flexible side tracks center the tabs; `justify-content` would move line 1,
+             which the `1 / -1` panel needs at the container's true edge. */
+          grid-template-columns: minmax(0, 1fr) repeat(12, minmax(max-content, auto)) minmax(
+              0,
+              1fr
+            );
           grid-template-rows: auto auto;
           overflow-x: auto;
           scroll-snap-type: x proximity;
 
-          .content-selector-tab {
+          /* No column-gap, so the tabs' underlines abut; this rail extends them to both edges. */
+          &::before {
+            align-self: end;
+            background: var(--color-bg-muted);
+            content: "";
+            grid-column: 1 / -1;
+            grid-row: 1;
+            height: var(--content-selector-border-width);
+          }
+
+          .content-selector-item:nth-of-type(1) > .content-selector-tablist {
+            grid-column: 2;
+          }
+
+          .content-selector-item:nth-of-type(2) > .content-selector-tablist {
+            grid-column: 3;
+          }
+
+          .content-selector-item:nth-of-type(3) > .content-selector-tablist {
+            grid-column: 4;
+          }
+
+          .content-selector-item:nth-of-type(4) > .content-selector-tablist {
+            grid-column: 5;
+          }
+
+          .content-selector-item:nth-of-type(5) > .content-selector-tablist {
+            grid-column: 6;
+          }
+
+          .content-selector-item:nth-of-type(6) > .content-selector-tablist {
+            grid-column: 7;
+          }
+
+          .content-selector-item:nth-of-type(7) > .content-selector-tablist {
+            grid-column: 8;
+          }
+
+          .content-selector-item:nth-of-type(8) > .content-selector-tablist {
+            grid-column: 9;
+          }
+
+          .content-selector-item:nth-of-type(9) > .content-selector-tablist {
+            grid-column: 10;
+          }
+
+          .content-selector-item:nth-of-type(10) > .content-selector-tablist {
+            grid-column: 11;
+          }
+
+          .content-selector-item:nth-of-type(11) > .content-selector-tablist {
+            grid-column: 12;
+          }
+
+          .content-selector-item:nth-of-type(12) > .content-selector-tablist {
+            grid-column: 13;
+          }
+
+          .content-selector-tablist {
             grid-row: 1;
             scroll-snap-align: start;
+          }
 
+          .content-selector-tab {
             &::before {
               background: var(--color-bg-muted);
               height: var(--content-selector-border-width);
-              inset-block: 100%;
+              /* `inset-block-end: 0`, not `inset-block: 100%`, which renders a pixel below
+                 the rail instead of over it. */
+              inset-block-end: 0;
               inset-inline-start: 0;
               width: 100%;
             }
           }
 
-          .content-selector-input:checked + .content-selector-tab::before {
+          .content-selector-tab[aria-selected="true"]::before {
             background: var(--color-border-strong);
           }
 
@@ -227,10 +273,13 @@ if (!_component && !hasItems && !hasSlotContent) return;
            * and letting its inner content (which has width: 100cqi and
            * position: sticky) render over the full visible container width.
            * This lets the tabs row size to its labels and scroll naturally.
+            * `contain: layout` is load-bearing: without it, track sizing still measures
+            * this item by its 100cqi child despite `width: 0`.
            */
           .content-selector-panel {
+            contain: layout;
             container-type: normal;
-            grid-column: 1;
+            grid-column: 1 / -1;
             grid-row: 2;
             overflow: visible;
             width: 0;
@@ -245,13 +294,24 @@ if (!_component && !hasItems && !hasSlotContent) return;
           }
         }
 
-        @container content-selector (width < 40rem) {
+        @container content-selector (width < 640px) {
           &.nav-start,
           &.nav-top {
             column-gap: 0;
             display: block;
             overflow-x: visible;
             scroll-snap-type: none;
+
+            /* Stacked, not overlaid: the item takes its own clicks again. */
+            .content-selector-item {
+              display: block;
+              pointer-events: auto;
+            }
+
+            /* The baseline grid item would add a line box of height in block layout. */
+            &::before {
+              content: none;
+            }
 
             .content-selector-tab {
               align-items: center;

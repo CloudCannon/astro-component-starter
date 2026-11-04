@@ -1,6 +1,6 @@
 ---
 title: Pagination
-overview: "Navigation for paginated content. Works directly with Astro's pagination object to render page links, and highlight the active page."
+overview: "Page links for content that spans multiple pages. Works with Astro's pagination object and highlights the current page."
 examples:
   - slugs:
       - with-arrows

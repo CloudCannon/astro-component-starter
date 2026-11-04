@@ -1,6 +1,6 @@
 label: Select
 icon: view_list
-description: Form field for selecting one option from a list.
+description: Dropdown for choosing one option.
 value:
   _component: building-blocks/forms/select
   label: My Select
@@ -17,15 +17,25 @@ value:
   value: null
   iconName: null
   iconColor: default
+  hint: null
+  autocomplete: null
 preview:
   text:
     - Select
   subtext:
     - key: name
+  image: public/component-previews/building-blocks/forms/select.svg
   icon: view_list
+  gallery:
+    image: public/component-previews/building-blocks/forms/select.svg
+    fit: cover
 picker_preview:
   text: Select
   subtext: Form field for selecting one option from a list.
+  image: public/component-previews/building-blocks/forms/select.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/select.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/select/select.cloudcannon.inputs.yml
 _structures:

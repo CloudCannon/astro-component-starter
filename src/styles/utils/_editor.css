@@ -1,0 +1,7 @@
+@layer utils {
+  /* `Page.astro`'s page-wide region exists only for re-rendering; its control duplicates the first
+     section's. `!important` is load-bearing: CloudCannon's hover rule is unlayered. */
+  [data-component="utils/main-component"] > editable-component-controls {
+    display: none !important;
+  }
+}

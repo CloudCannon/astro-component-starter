@@ -1,0 +1,562 @@
+---
+import { nextHeadingLevel } from "@component-utils/headingLevel";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { toText } from "@component-utils/toText";
+import TimelineItem from "./TimelineItem.astro";
+
+type EntryProps = {
+  year?: string;
+  date?: string;
+  title?: string;
+  body?: string;
+  iconName?: string;
+};
+
+const {
+  entries = [],
+  layout = "vertical",
+  label,
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-children-prop": childrenDataProp,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "entries" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-direction": layout === "horizontal" ? "row" : "column",
+    }
+  : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? { "data-id": "building-blocks/wrappers/timeline/timeline-item", "data-editable": "array-item" }
+  : {};
+
+const hasEntries = entries?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+const isHorizontal = layout === "horizontal";
+const isSplit = layout === "split";
+const YearTag = "h3";
+const entryHeadingLevel = nextHeadingLevel(YearTag);
+
+const isGrouped =
+  !isHorizontal &&
+  !isSplit &&
+  entries?.some((entry: EntryProps) => isNonEmptyString(toText(entry.year)));
+
+const groupStarts = (entries ?? []).map(
+  (entry: EntryProps, index: number) =>
+    index === 0 || toText(entry.year) !== toText((entries[index - 1] as EntryProps).year)
+);
+
+if (!_component && !hasEntries && !hasSlotContent) return;
+---
+
+<div
+  class:list={["timeline", "stackable", className]}
+  {...htmlAttributes}
+>
+  {isHorizontal ? (
+    <div
+      class="timeline-scroller"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      role="region"
+      tabindex="0"
+      aria-label={label || "Timeline"}
+    >
+      <ol
+        role="list"
+        class="timeline-list"
+        {...arrayDataAttributes}
+      >
+        <slot>
+          {entries?.map((entry: EntryProps) => (
+            <TimelineItem
+              layout={layout}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              {...itemRegionAttributes}
+              {...entry}
+            />
+          ))}
+        </slot>
+      </ol>
+    </div>
+  ) : isSplit ? (
+    <ol
+      role="list"
+      class="timeline-list timeline-split"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {entries?.map((entry: EntryProps) => (
+          <TimelineItem
+            layout={layout}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...itemRegionAttributes}
+            {...entry}
+          />
+        ))}
+      </slot>
+    </ol>
+  ) : isGrouped ? (
+    <ol
+      role="list"
+      class="timeline-list timeline-grouped"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {entries.map((entry: EntryProps, index: number) => (
+          <TimelineItem
+            layout={layout}
+            grouped={true}
+            groupStart={groupStarts[index]}
+            yearTag={YearTag}
+            headingLevel={isNonEmptyString(toText(entry.year)) ? entryHeadingLevel : YearTag}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...itemRegionAttributes}
+            {...entry}
+          />
+        ))}
+      </slot>
+    </ol>
+  ) : (
+    <ol
+      role="list"
+      class="timeline-list"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {entries?.map((entry: EntryProps) => (
+          <TimelineItem
+            layout={layout}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...itemRegionAttributes}
+            {...entry}
+          />
+        ))}
+      </slot>
+    </ol>
+  )}
+</div>
+
+<style is:global>
+  @layer components {
+    .timeline {
+      --timeline-dot-size: 0.625rem;
+      --timeline-dot-size-horizontal: 0.75rem;
+      --timeline-date-col: 5.5rem;
+      --timeline-phase-width: 15rem;
+
+      min-width: 0;
+
+      /* This `<ol>` carries `role="list"`: `list-style: none` drops the role in Safari. */
+      .timeline-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .timeline-dot {
+        background-color: var(--color-bg-brand);
+        border-radius: var(--radius-full);
+        display: block;
+        flex: none;
+        height: var(--timeline-dot-size);
+        width: var(--timeline-dot-size);
+      }
+
+      .timeline-title {
+        font-size: var(--font-size-heading-xs);
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-heading-xs);
+        margin: 0;
+      }
+
+      .timeline-title .heading-inner {
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        margin: 0;
+      }
+
+      .timeline-body {
+        margin-top: var(--spacing-xs);
+      }
+
+      .timeline-body .simple-text-content {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-tight);
+        text-wrap: pretty;
+      }
+
+      /* Split's `<ol>` is also `.timeline-list`; without the split exclusion this more
+         specific rule clobbers split's columns. :last-of-type, not an is-last class:
+         CloudCannon inserts array items without re-rendering the parent. */
+      &:has(> .timeline-list):not(:has(> .timeline-grouped)):not(:has(> .timeline-split)) {
+        .timeline-list {
+          display: grid;
+          gap: 0;
+        }
+
+        .timeline-entry {
+          display: grid;
+          gap: var(--spacing-xl);
+          grid-template-columns: var(--timeline-date-col) 1fr;
+        }
+
+        .timeline-date {
+          color: var(--color-text-muted);
+          font-family: var(--font-headings);
+          font-size: var(--font-size-lg);
+          font-variant-numeric: lining-nums;
+          font-weight: var(--font-weight-bold);
+          line-height: calc(var(--font-size-heading-xs) * var(--line-height-heading-xs));
+        }
+
+        .timeline-content {
+          border-inline-start: var(--border-width-sm) solid var(--color-border);
+          padding-block-end: var(--spacing-xl);
+          padding-inline-start: var(--spacing-xl);
+          position: relative;
+        }
+
+        .timeline-dot {
+          inset-block-start: calc(
+            (
+                var(--font-size-heading-xs) * var(--line-height-heading-xs) -
+                  var(--timeline-dot-size)
+              ) /
+              2
+          );
+          inset-inline-start: calc(-0.3125rem - var(--border-width-sm) / 2);
+          position: absolute;
+        }
+
+        .timeline-entry:last-of-type .timeline-content {
+          padding-block-end: 0;
+
+          &::after {
+            background-color: var(--color-bg);
+            content: "";
+            inset-block-end: 0;
+            inset-block-start: calc(
+              var(--font-size-heading-xs) * var(--line-height-heading-xs) / 2
+            );
+            inset-inline-start: calc(-1 * var(--border-width-sm));
+            position: absolute;
+            width: var(--border-width-sm);
+            z-index: var(--layer-1);
+          }
+        }
+
+        .timeline-entry:last-of-type .timeline-dot {
+          z-index: var(--layer-2);
+        }
+
+        @media (width < 640px) {
+          .timeline-entry {
+            grid-template-columns: 1fr;
+          }
+        }
+      }
+
+      /* Entries abut so the rail doesn't break. Only a group's first year shows, and
+         `editor-live-sync.js` re-marks it: the editor changes entries without re-rendering. */
+      &:has(> .timeline-grouped) {
+        --timeline-year-line: calc(var(--font-size-lg) * var(--line-height-heading-sm));
+
+        .timeline-list {
+          display: grid;
+          gap: 0;
+        }
+
+        > .timeline-grouped > .timeline-entry {
+          align-items: start;
+          column-gap: var(--spacing-xl);
+          display: grid;
+          grid-template-columns: var(--timeline-date-col) 1fr;
+        }
+
+        .timeline-year {
+          color: var(--color-text-muted);
+          font-family: var(--font-headings);
+          font-size: var(--font-size-lg);
+          font-variant-numeric: lining-nums;
+          font-weight: var(--font-weight-bold);
+          grid-column: 1;
+          grid-row: 1;
+          line-height: var(--timeline-year-line);
+          margin: 0;
+        }
+
+        .timeline-group-rail {
+          border-inline-start: var(--border-width-sm) solid var(--color-border);
+          grid-column: 2;
+          grid-row: 1;
+          padding-block-end: var(--spacing-xl);
+          padding-inline-start: var(--spacing-xl);
+        }
+
+        .timeline-entry:has(+ .timeline-entry > .timeline-year:not([hidden])) .timeline-group-rail {
+          padding-block-end: var(--spacing-2xl);
+        }
+
+        .timeline-entry:last-of-type .timeline-group-rail {
+          padding-block-end: 0;
+        }
+
+        .timeline-group-entry {
+          position: relative;
+        }
+
+        /* Nudged off the line box's centre to the glyphs' optical centre. */
+        .timeline-dot {
+          inset-block-start: calc(
+            (var(--timeline-year-line) - var(--timeline-dot-size)) / 2 + 0.1 * var(--font-size-lg)
+          );
+          inset-inline-start: calc(-1 * var(--spacing-xl) - 0.3125rem - var(--border-width-sm) / 2);
+          position: absolute;
+        }
+
+        .timeline-entry:last-of-type .timeline-group-entry::after {
+          background-color: var(--color-bg);
+          content: "";
+          inset-block-end: 0;
+          inset-block-start: calc(var(--timeline-year-line) / 2 + 0.1 * var(--font-size-lg));
+          inset-inline-start: calc(-1 * var(--spacing-xl) - var(--border-width-sm));
+          position: absolute;
+          width: var(--border-width-sm);
+          z-index: var(--layer-1);
+        }
+
+        .timeline-entry:last-of-type .timeline-dot {
+          z-index: var(--layer-2);
+        }
+
+        .timeline-month {
+          color: var(--color-text-muted);
+          font-family: var(--font-mono);
+          font-size: var(--font-size-xs);
+          letter-spacing: 0.08em;
+          line-height: var(--timeline-year-line);
+          text-transform: uppercase;
+        }
+
+        @media (width < 640px) {
+          > .timeline-grouped > .timeline-entry {
+            grid-template-columns: 1fr;
+            row-gap: var(--spacing-xl);
+          }
+
+          .timeline-year,
+          .timeline-group-rail {
+            grid-column: 1;
+            grid-row: auto;
+          }
+        }
+      }
+
+      &:has(> .timeline-split) {
+        --timeline-split-marker: 2.75rem;
+
+        .timeline-split {
+          display: grid;
+          gap: var(--spacing-2xl);
+          position: relative;
+
+          &::before {
+            background-color: var(--color-border);
+            content: "";
+            inset-block: var(--timeline-split-marker) var(--timeline-split-marker);
+            inset-inline-start: 50%;
+            position: absolute;
+            transform: translateX(-50%);
+            width: var(--border-width-sm);
+          }
+        }
+
+        .timeline-entry {
+          align-items: start;
+          display: grid;
+          gap: var(--spacing-xl);
+          grid-template-columns: minmax(0, 1fr) var(--timeline-split-marker) minmax(0, 1fr);
+          position: relative;
+        }
+
+        .timeline-split-content {
+          min-width: 0;
+
+          /* Heading and SimpleText stamp their own align-start, which beats the
+             side's inherited text-align: end below. */
+          :is(.heading-inner, .simple-text-content) {
+            text-align: inherit;
+          }
+        }
+
+        .timeline-entry:nth-child(odd) .timeline-split-content {
+          grid-column: 1;
+          justify-self: end;
+          text-align: end;
+        }
+
+        .timeline-entry:nth-child(even) .timeline-split-content {
+          grid-column: 3;
+          justify-self: start;
+        }
+
+        .timeline-split-marker {
+          align-items: center;
+          background-color: var(--color-bg);
+          border: var(--border-width-sm) solid var(--color-bg-brand);
+          border-radius: var(--radius-full);
+          display: flex;
+          grid-column: 2;
+          grid-row: 1;
+          height: var(--timeline-split-marker);
+          justify-content: center;
+          position: relative;
+          width: var(--timeline-split-marker);
+          z-index: var(--layer-1);
+        }
+
+        .timeline-split-marker .icon {
+          color: var(--color-bg-brand);
+        }
+
+        .timeline-split-marker .timeline-dot {
+          height: var(--timeline-dot-size);
+          width: var(--timeline-dot-size);
+        }
+
+        .timeline-date {
+          color: var(--color-bg-brand);
+          display: block;
+          font-family: var(--font-mono);
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-semibold);
+          letter-spacing: 0.08em;
+          margin-block-end: var(--spacing-sm);
+          text-transform: uppercase;
+        }
+
+        @media (width < 640px) {
+          .timeline-split {
+            gap: var(--spacing-xl);
+
+            &::before {
+              inset-block-end: var(--timeline-split-marker);
+              inset-block-start: var(--timeline-split-marker);
+              inset-inline-start: calc(var(--timeline-split-marker) / 2);
+            }
+          }
+
+          .timeline-entry {
+            grid-template-columns: var(--timeline-split-marker) minmax(0, 1fr);
+          }
+
+          .timeline-entry:nth-child(odd) .timeline-split-content,
+          .timeline-entry:nth-child(even) .timeline-split-content {
+            grid-column: 2;
+            justify-self: start;
+            text-align: start;
+          }
+
+          .timeline-split-marker {
+            grid-column: 1;
+          }
+        }
+      }
+
+      &:has(> .timeline-scroller) {
+        .timeline-scroller {
+          margin-inline-end: calc(-1 * var(--timeline-gutter, 0px));
+          min-width: 0;
+          overflow-x: auto;
+
+          /* Focusable so the pan is reachable without a pointer. */
+          &:focus-visible {
+            outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+            outline-offset: 2px;
+          }
+          overscroll-behavior-x: contain;
+          padding-block-end: var(--spacing-sm);
+          padding-inline-end: var(--timeline-gutter, 0px);
+          scroll-snap-type: x proximity;
+        }
+
+        .timeline-list {
+          display: flex;
+          gap: 0;
+        }
+
+        .timeline-entry {
+          flex: 0 0 var(--timeline-phase-width);
+          padding-inline-end: var(--spacing-lg);
+          scroll-snap-align: start;
+        }
+
+        .timeline-label {
+          color: var(--color-text-muted);
+          display: flex;
+          flex-wrap: wrap;
+          font-family: var(--font-mono);
+          font-size: var(--font-size-xs);
+          font-weight: var(--font-weight-semibold);
+          gap: var(--spacing-xs);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+        }
+
+        .timeline-band {
+          align-items: center;
+          display: flex;
+          height: 1.5rem;
+          margin-block-start: var(--spacing-sm);
+          margin-inline-end: calc(-1 * var(--spacing-lg));
+          position: relative;
+
+          &::after {
+            background-color: var(--color-border);
+            content: "";
+            height: var(--border-width-sm);
+            inset-inline: 1.25rem 0;
+            position: absolute;
+          }
+        }
+
+        .timeline-dot {
+          height: var(--timeline-dot-size-horizontal);
+          position: relative;
+          width: var(--timeline-dot-size-horizontal);
+          z-index: var(--layer-1);
+        }
+
+        .timeline-title {
+          margin-block-start: var(--spacing-md);
+        }
+
+        .timeline-entry:last-of-type .timeline-band {
+          margin-inline-end: 0;
+
+          &::after {
+            background: linear-gradient(to right, var(--color-border), transparent);
+          }
+        }
+      }
+    }
+  }
+</style>

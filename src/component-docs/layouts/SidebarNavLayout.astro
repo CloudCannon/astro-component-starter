@@ -1,19 +1,29 @@
 ---
-import Side from "@components/navigation/side/Side.astro";
-import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
+import Side from "@navigation/side/Side.astro";
+import ThemeToggle from "@navigation/theme-toggle/ThemeToggle.astro";
 import Button from "@core-elements/button/Button.astro";
+import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
 import navData from "../data/nav.json";
+import analyticsData from "@data/analytics.json";
+import privacyData from "@data/privacy.json";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../integrations/consent/config";
 import { generateNavData } from "../utils/navGenerator.js";
 
 const sideNavData = await generateNavData(navData);
+const privacy = parsePrivacyConfig(privacyData);
+const showPrivacySettings = hasOptionalServices(privacy, parseAnalyticsConfig(analyticsData));
 ---
 
 <div class="library-sidebar">
   <div class="sidebar-logo-container">
     <Image
-      source="/src/assets/images/component-docs/acs-logo.svg"
-      alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"
+      source="/src/assets/images/brand/astro-component-starter-mark.svg"
+      alternateSource="/src/assets/images/brand/astro-component-starter-mark-reversed.svg"
       alt="Astro Component Starter"
       class="sidebar-logo"
     />
@@ -29,10 +39,27 @@ const sideNavData = await generateNavData(navData);
   <Side navData={sideNavData} />
   <div class="sidebar-footer">
     <ThemeToggle />
+    {showPrivacySettings && (
+      <button
+        type="button"
+        class="privacy-settings-toggle tap-target"
+        aria-label={privacy.settingsLabel}
+        data-consent-open
+      >
+        <Icon
+          name="shield-check"
+          size="none"
+        />
+      </button>
+    )}
   </div>
 </div>
 
 <style is:global>
+  .library-sidebar > .side {
+    margin-top: var(--spacing-lg);
+  }
+
   .sidebar-logo-container {
     align-items: center;
     display: flex;
@@ -57,6 +84,9 @@ const sideNavData = await generateNavData(navData);
   }
 
   .sidebar-footer {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
     margin-top: auto;
     padding-block: var(--spacing-md);
   }

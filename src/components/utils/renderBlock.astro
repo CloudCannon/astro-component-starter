@@ -1,5 +1,5 @@
 ---
-import { pascalToKebab } from "@components/utils/pascalToKebab";
+import { componentKeyFromPath } from "@component-utils/componentKey.mjs";
 import type { ContentBlock } from "../../types";
 
 export interface Props {
@@ -9,52 +9,58 @@ export interface Props {
 
 type AstroComponent = (_props: Record<string, unknown>) => unknown;
 
-const components: Record<string, AstroComponent> = {};
-const componentImports = import.meta.glob("../**/*.{jsx,astro}", {
-  eager: true,
-});
+type ComponentLoader = () => Promise<Record<string, AstroComponent>>;
 
-Object.entries(componentImports).forEach(([path, obj]) => {
-  const parts = path.replace("../", "").split(".")[0].split("/");
-  const filename = parts[parts.length - 1];
+const loaders: Record<string, ComponentLoader> = {};
+// `utils/` holds helpers, not placeable components.
+const componentImports = import.meta.glob(["../**/*.{jsx,astro}", "!../utils/**"]);
 
-  const kebabFilename = pascalToKebab(filename);
+Object.entries(componentImports).forEach(([path, loader]) => {
+  const componentName = componentKeyFromPath(path.replace("../", ""));
 
-  if (parts.length > 1 && kebabFilename === parts[parts.length - 2]) {
-    parts.pop();
-    parts[parts.length - 1] = kebabFilename;
-  } else {
-    parts[parts.length - 1] = kebabFilename;
-  }
-
-  const componentName = parts.join("/");
-
-  components[componentName] = (obj as Record<string, AstroComponent>).default;
+  loaders[componentName] = loader as ComponentLoader;
 });
 
 const { contentSections, useDefaultEditableBinding = true } = Astro.props;
+
+const resolved = await Promise.all(
+  (contentSections ?? []).map(async (block) => {
+    const loader = block._component ? loaders[block._component] : undefined;
+
+    if (!loader) {
+      if (block._component) {
+        console.warn(
+          `Component not found: ${block._component}. Available components:`,
+          Object.keys(loaders)
+        );
+      } else {
+        console.warn(
+          "Skipping content block with no _component key:",
+          JSON.stringify(block).slice(0, 200)
+        );
+      }
+      return { block, Component: null as AstroComponent | null };
+    }
+
+    const module = await loader();
+
+    return { block, Component: module.default };
+  })
+);
 ---
 
 {
   // Array-level editable attributes are owned by the caller's container element.
-  // This utility only resolves blocks and marks each rendered block as an array item.
-  contentSections?.map((block) => {
-    const Component = components[block._component];
-
-    if (!Component && block._component) {
-      console.warn(
-        `Component not found: ${block._component}. Available components:`,
-        Object.keys(components)
-      );
-    }
-
-    return Component ? (
+  resolved.map(({ block, Component }) =>
+    Component ? (
+      // No `data-component`: the editor would re-render the item from its bare data, dropping
+      // `useDefaultEditableBinding` and stripping every nested region at page load.
       <Component
         data-editable={useDefaultEditableBinding ? "array-item" : undefined}
         data-id={block._component}
         {...block}
         useDefaultEditableBinding={useDefaultEditableBinding}
       />
-    ) : null;
-  })
+    ) : null
+  )
 }

@@ -1,0 +1,119 @@
+label: Timeline Section
+icon: timeline
+description: Dated timeline for a company story, funding history, or what comes next.
+value:
+  _component: page-sections/explainers/timeline-section
+  sectionLabel: ""
+  eyebrow: Our story
+  heading: How we got here
+  headingLevel: h2
+  subtext: ""
+  layout: vertical
+  entries:
+    - date: "2019"
+      title: Founded
+      body: Opened the studio and shipped the first client project.
+    - date: "2022"
+      title: First hires
+      body: The team grew to eight and moved into a permanent office.
+    - date: "2025"
+      title: New markets
+      body: Took on the first clients outside the country.
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - Timeline Section
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/explainers/timeline-section.svg
+  icon: timeline
+  gallery:
+    image: public/component-previews/page-sections/explainers/timeline-section.svg
+    fit: cover
+picker_preview:
+  text: Timeline Section
+  subtext: A dated sequence on a rail. Vertical, split, or horizontal.
+  image: public/component-previews/page-sections/explainers/timeline-section.svg
+  gallery:
+    image: public/component-previews/page-sections/explainers/timeline-section.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/timeline-section/timeline-section.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+_structures:
+  explainerTimelineEntries:
+    values:
+      - label: Entry
+        icon: timeline
+        value:
+          year: ""
+          date: "2024"
+          title: Entry title
+          body: ""
+          iconName: ""
+        preview:
+          text:
+            - key: title
+            - Entry
+          subtext:
+            - key: date
+        _inputs:
+          year:
+            type: text
+            comment: Optional. Set the same year on consecutive entries to group them (month goes in Date).
+          date:
+            type: text
+            comment: The date shown beside the rail — a year (`2019`), a quarter (`Q3 2026`), or a month when Year is set.
+          title:
+            type: text
+            comment: What happened.
+          body:
+            type: textarea
+            comment: Optional supporting copy. Title-only entries are valid.
+          iconName:
+            type: select
+            label: Split icon
+            comment: Optional icon shown in Split layout. Leave blank for a dot.
+            options:
+              values: data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
+groups:
+  - heading: Content
+    inputs:
+      - eyebrow
+      - heading
+      - subtext
+      - layout
+      - entries
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

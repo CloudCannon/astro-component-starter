@@ -1,0 +1,156 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import Icon from "@core-elements/icon/Icon.astro";
+
+type SocialLink = { icon?: string; link?: string; label?: string };
+
+const {
+  links = [],
+  ariaLabel = "Social",
+  variant = "ghost",
+  size = "md",
+  alignmentHorizontal = "none",
+  spaceBefore = "default",
+  class: className,
+  "data-children-prop": childrenDataProp,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!_component && !links?.length) return;
+
+// Author-supplied labels still need the new-tab announcement.
+const linkLabel = (social: SocialLink) =>
+  `${social.label || `Visit our ${social.icon?.replace(/^.*\//, "")} page`} (opens in a new tab)`;
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "links" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
+  : {};
+---
+
+<nav
+  class:list={["social-links", "stackable", className]}
+  aria-label={ariaLabel}
+  {...htmlAttributes}
+>
+  <ul
+    class:list={[
+      "social-links-list",
+      `variant-${variant}`,
+      `size-${size}`,
+      alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
+    ]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...arrayDataAttributes}
+  >
+    {links?.map((social: SocialLink) => (
+      <li data-editable={effectiveChildrenProp ? "array-item" : undefined}>
+        <a
+          class="social-link"
+          href={social.link}
+          aria-label={linkLabel(social)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon
+            name={social.icon}
+            size="none"
+          />
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style is:global>
+  @layer components {
+    .social-links {
+      .social-links-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-xs);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .social-link {
+        align-items: center;
+        border-radius: var(--radius-sm);
+        color: var(--color-text-muted);
+        display: flex;
+        justify-content: center;
+        text-decoration: none;
+        transition-duration: var(--animation-normal);
+        transition-property: background-color, color, opacity;
+        transition-timing-function: var(--ease-in-out);
+
+        &:hover {
+          background-color: var(--color-bg-muted);
+          color: var(--color-text);
+        }
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      /* Variant classes ride on the list: a prop-driven class on a region root goes stale. */
+
+      /* md is the 44px touch-target minimum. */
+      > .social-links-list.size-md .social-link {
+        font-size: var(--font-size-lg);
+        height: 2.75rem;
+        width: 2.75rem;
+      }
+
+      > .social-links-list.size-sm .social-link {
+        font-size: var(--font-size-md);
+        height: 2.25rem;
+        width: 2.25rem;
+      }
+
+      > .social-links-list.size-lg .social-link {
+        font-size: var(--font-size-xl);
+        height: 3.25rem;
+        width: 3.25rem;
+      }
+
+      > .social-links-list.size-xl .social-link {
+        font-size: var(--font-size-2xl);
+        height: 3.75rem;
+        width: 3.75rem;
+      }
+
+      > .social-links-list.variant-solid {
+        gap: var(--spacing-sm);
+
+        .social-link {
+          background-color: var(--color-bg-brand);
+          color: var(--color-text-on-brand);
+
+          &:hover {
+            background-color: var(--color-bg-brand);
+            color: var(--color-text-on-brand);
+            opacity: 0.85;
+          }
+        }
+      }
+
+      > .social-links-list.align-start {
+        justify-content: flex-start;
+      }
+
+      > .social-links-list.align-center {
+        justify-content: center;
+      }
+
+      > .social-links-list.align-end {
+        justify-content: flex-end;
+      }
+    }
+  }
+</style>

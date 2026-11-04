@@ -1,6 +1,6 @@
 ---
 title: Spacer
-overview: 'A layout utility for adding adjustable vertical spacing between content. Supports predefined sizes for consistent spacing across layouts.'
+overview: An exact vertical gap between two blocks. It replaces the automatic spacing rather than adding to it.
 examples:
   - slugs:
       - size

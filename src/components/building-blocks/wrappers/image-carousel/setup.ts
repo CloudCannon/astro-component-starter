@@ -35,7 +35,7 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
 
   syncThumbnailSources(mainSlides, thumbButtons);
 
-  const loop = carousel.getAttribute("data-loop") !== "false";
+  const loop = carousel.querySelector<HTMLElement>(".carousel-content")?.dataset.loop !== "false";
 
   const mainEmbla = EmblaCarousel(mainViewport, {
     loop,
@@ -50,16 +50,36 @@ export function setupImageCarousel(carousel: ImageCarouselElement): void {
 
   let isInitialUpdate = true;
 
+  const status = carousel.querySelector<HTMLElement>(".carousel-status");
+
   const updateSelectedThumb = () => {
     const selected = mainEmbla.selectedScrollSnap();
+
+    if (status) {
+      status.textContent = `Image ${selected + 1} of ${thumbButtons.length}`;
+    }
 
     thumbButtons.forEach((btn, i) => {
       const isSelected = i === selected;
 
       btn.setAttribute("data-selected", isSelected.toString());
 
+      if (isSelected) {
+        btn.setAttribute("aria-current", "true");
+      } else {
+        btn.removeAttribute("aria-current");
+      }
+
       if (isSelected && !isInitialUpdate) {
-        btn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        // `scroll-behavior: auto !important` in the reduced-motion reset does
+        // not override a behaviour passed to scrollIntoView.
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        btn.scrollIntoView({
+          behavior: reduceMotion ? "auto" : "smooth",
+          block: "nearest",
+          inline: "center",
+        });
       }
     });
 

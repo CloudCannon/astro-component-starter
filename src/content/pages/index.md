@@ -2,121 +2,203 @@
 _schema: default
 title: Home
 description: >-
-  Astro Component Starter: fast, visually editable components for Astro and CloudCannon—docs,
-  blog, and patterns for shipping real sites.
+  A library of brandable page sections for Astro, visually editable in
+  CloudCannon. Clone it, swap the design tokens, and ship a static site.
 pageSections:
   - _component: page-sections/heroes/hero-center
-    eyebrow:
-    heading: The Astro Component Starter for building any site
+    eyebrow: Astro + CloudCannon
+    heading: Components already built. Pages anyone can edit.
     subtext: >-
-      Built on web fundamentals. Easy to customize, fast to use, and simple to
-      maintain.
+      Built on web fundamentals. Yours to brand, simple to maintain, and fast
+      by default.
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
+        text: Get started
         hideText: false
-        link: /component-docs/
+        link: /start/
         iconName: ''
+        iconColor: default
         iconPosition: before
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: View in GitHub
+        text: Browse components
         hideText: false
-        link: https://github.com/CloudCannon/astro-component-starter
+        link: /component-docs/
         iconName: ''
+        iconColor: default
         iconPosition: before
         variant: secondary
         size: md
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-split
-    eyebrow: Built for Astro
-    heading: Fast, modern, and easy to work with
+    background:
+      type: pattern
+      patternSize: natural
+      imageSource: /src/assets/images/component-docs/pattern-plus.svg
+      mask: frame
+      overlay: 0
+  - _component: page-sections/explainers/feature-split
+    eyebrow: Visual editing
+    heading: Edit on the page. Commit to the repo.
     subtext: >-
-      The Component Starter takes full advantage of Astro's zero-JS-by-default
-      approach. You get fast pages, simple routing, and a component system that
-      stays easy to use as your site grows.
-    buttonSections: []
-    imageSource: /src/assets/images/component-docs/website-feature.svg
-    imageAlt: Website Feature
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: false
-    colorScheme: inherit
-    backgroundColor: base
-  - _component: page-sections/features/feature-split
-    eyebrow: CloudCannon Ready
-    heading: Easy visual editing
-    subtext: >-
-      Every component is built to work seamlessly in CloudCannon's Visual
-      Editor. Developers can create and style custom Page Sections with Astro.
-      Editors can click, change, and rearrange content right on the page without
-      touching the code or guessing where anything lives.
-    buttonSections: []
-    imageSource: /src/assets/images/component-docs/website-split.svg
-    imageAlt: Website Split
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: true
-    colorScheme: inherit
-    backgroundColor:
-    paddingVertical: lg
-  - _component: page-sections/features/feature-split
-    eyebrow: Performance
-    heading: Fast by architecture, not by accident
-    subtext: >-
-      Your components render to static HTML, keeping bundles lean and pages
-      instant. Your users get instant page loads. You get a modern developer
-      experience.
-    buttonSections: []
-    imageSource: /src/assets/images/component-docs/website-hero.svg
-    imageAlt: Website Hero
-    imageAspectRatio: none
-    imageRounded: false
-    reverse: false
-    colorScheme: inherit
-    backgroundColor: base
-  - _component: page-sections/features/feature-split
-    eyebrow: Documentation
-    heading: Every component, clearly documented
-    subtext: >-
-      Each component comes with straightforward docs, real examples, full
-      descriptions of every property, and clear guidance without having to dig
-      through source files.
-    buttonSections: []
-    imageSource: /src/assets/images/component-docs/website-documented.svg
-    imageAlt: Website Hero
+      Click a heading and type, drag sections into a new order, or add new
+      ones from the library. Every edit lands in the same Markdown files
+      developers see in git.
+    buttonSections:
+      - _component: building-blocks/core-elements/button
+        text: See how editing works
+        hideText: false
+        link: /component-docs/editing-a-page/
+        iconName: ''
+        iconColor: default
+        iconPosition: before
+        variant: secondary
+        size: md
+    imageSource: /src/assets/images/component-docs/website-edit-commit.svg
+    imageAlt: >-
+      A heading being edited on a webpage, with the change arriving as a
+      highlighted line and a commit in a Markdown file
     imageAspectRatio: none
     imageRounded: false
     reverse: true
     colorScheme: inherit
     backgroundColor: base
-  - _component: page-sections/features/feature-grid
+  - _component: page-sections/explainers/stats
+    eyebrow: What's in the box
+    heading: Big library. Tiny payload.
+    subtext: Every component renders to static HTML and CSS.
+    stats:
+      - number: 26
+        prefix: ''
+        suffix: ''
+        label: Page sections
+      - number: 51
+        prefix: ''
+        suffix: ''
+        label: Building blocks
+      - number: 343
+        prefix: ''
+        suffix: ''
+        label: Icons in the picker
+      - number: 0
+        prefix: ''
+        suffix: ' KB'
+        label: JS on most sections
+    dividers: true
+    colorScheme: dark
+    backgroundColor: surface
+    background:
+      type: pattern
+      patternSize: natural
+      imageSource: /src/assets/images/component-docs/pattern-dot-grid.svg
+      mask: frame
+      overlay: 0
+  - _component: page-sections/explainers/feature-split
+    eyebrow: Page building
+    heading: Pages are lists of sections
+    subtext: >-
+      Stack sections in a Markdown file and you have a page. They all draw
+      from the same design tokens, so a page assembled in an afternoon still
+      reads as one site. This page is eight of them.
+    buttonSections:
+      - _component: building-blocks/core-elements/button
+        text: Browse the full library
+        hideText: false
+        link: /component-docs/
+        iconName: ''
+        iconColor: default
+        iconPosition: before
+        variant: secondary
+        size: md
+    imageSource: /src/assets/images/component-docs/website-page-building.svg
+    imageAlt: >-
+      A section card being dragged from a component library into a dashed drop
+      slot on a page assembled from stacked sections
+    imageAspectRatio: none
+    imageRounded: false
+    reverse: false
+    colorScheme: inherit
+    backgroundColor: base
+  - _component: page-sections/collections/card-collection
+    eyebrow: Examples
+    heading: See it put together
+    subtext: >-
+      Four template pages built from the same library. Copy one as a starting
+      point, or [browse the full set](/examples/).
+    items:
+      - image: /src/assets/images/component-docs/website-example-pricing.svg
+        imageAlt: Three pricing plan cards with a highlighted middle tier
+        link: /examples/pricing/
+        contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Pricing
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/simple-text
+            text: Care plans, a comparison table, and billing FAQ.
+            size: sm
+      - image: /src/assets/images/component-docs/website-example-about.svg
+        imageAlt: An about page with a hero, a timeline, and a team card
+        link: /examples/about/
+        contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: About
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/simple-text
+            text: Story, values, timeline, team, and posts from the demo blog.
+            size: sm
+      - image: /src/assets/images/component-docs/website-example-services.svg
+        imageAlt: Service cards above process steps and a customer quote
+        link: /examples/services/
+        contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Services
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/simple-text
+            text: Services, tabbed engagement detail, a process, and an FAQ.
+            size: sm
+      - image: /src/assets/images/component-docs/website-example-portfolio.svg
+        imageAlt: A masonry image gallery with a featured tile and caption
+        link: /examples/portfolio/
+        contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Portfolio
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/simple-text
+            text: A case study, client sites, results, and a photo gallery.
+            size: sm
+    layout: grid
+    columns: 4
+    gap: lg
+    aspectRatio: landscape
+    colorScheme: inherit
+    backgroundColor: base
+  - _component: page-sections/explainers/feature-grid
     eyebrow: Principles
-    heading: Built for real-world web projects
+    heading: Choices that age well
     subtext: No trends. No noise. Just reliability.
-    gap: xl
-    minItemWidth: 280
-    maxItemWidth: 360
     features:
       - title: Web fundamentals
         description: >-
-          Semantic HTML. Lean CSS. JavaScript only when it's needed. The stack
-          is boring by design, and that’s exactly why it works.
-        iconName: cube
+          Semantic HTML, lean CSS, and JavaScript only when it's needed.
+          Boring by design, which is exactly why it works.
+        iconName: box
         iconColor: blue
       - title: Built for speed
         description: >-
           Static-rendered, minimal payloads, zero waste. Built to be extremely
           fast from the first byte.
-        iconName: bolt
+        iconName: zap
         iconColor: yellow
       - title: Everything just fits
         description: >-
-          Simple, predictable components that play nice together. Build bigger
-          pieces without creating a maintenance mess.
-        iconName: puzzle-piece
+          Small, predictable components that snap together cleanly, so bigger
+          pieces never become a maintenance mess.
+        iconName: puzzle
         iconColor: green
       - title: Controlled editing
         description: >-
@@ -126,37 +208,97 @@ pageSections:
         iconColor: purple
       - title: Adaptable
         description: >-
-          Purposefully plain styling. The whole component starter adapts to your
-          designs without a fight.
-        iconName: paint-brush
+          Deliberately plain styling that takes on your design without a
+          fight.
+        iconName: paintbrush
         iconColor: pink
+      - title: AI ready
+        description: >-
+          Everything is a file in the repo, so agents build with full context.
+          Skills for the common jobs come included.
+        iconName: sparkles
+        iconColor: cyan
     colorScheme: inherit
     backgroundColor: surface
+    background:
+      type: pattern
+      patternSize: natural
+      imageSource: /src/assets/images/component-docs/pattern-dot-grid.svg
+      mask: frame
+      overlay: 0
     alignmentHorizontal: center
-  - _component: page-sections/ctas/cta-center
-    heading: Ready to start building?
+  - _component: page-sections/explainers/steps-section
+    eyebrow: How it works
+    heading: Clone, rebrand, assemble, ship
+    subtext: Four steps from a blank folder to a live site.
+    items:
+      - contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Clone
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/text
+            text: 'One command scaffolds a working site: `npx create-astro-component-starter my-site`.'
+            size: sm
+      - contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Rebrand
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/text
+            text: Change `--color-brand` in one token file. Every component follows.
+            size: sm
+      - contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Assemble
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/text
+            text: "Add `- _component: page-sections/heroes/hero-center` to a page. That's a section."
+            size: sm
+      - contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Ship
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/text
+            text: Run `npm run build` and deploy `dist/` to any host. Nothing to patch, nothing to babysit.
+            size: sm
+    orientation: horizontal
+    imageAspectRatio: landscape
+    colorScheme: inherit
+    backgroundColor: base
+  - _component: page-sections/conversion/cta-center
+    heading: Every file is yours
     subtext: >-
-      Browse the complete Astro Component Starter and see live examples of every
-      component in action. All components are ready to use in CloudCannon and
-      are fully customizable.
+      Built at CloudCannon, MIT licensed, and the clone is the whole site:
+      pages, blog, docs, and every component.
     buttonSections:
       - _component: building-blocks/core-elements/button
-        text: Explore Components
+        text: Get started
         hideText: false
-        link: /component-docs/
+        link: /start/
         iconName: ''
+        iconColor: default
         iconPosition: before
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
-        text: View in GitHub
+        text: View on GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
         iconName: ''
+        iconColor: default
         iconPosition: before
         variant: tertiary
         size: md
     colorScheme: dark
+    lockColorScheme: true
     backgroundColor: surface
-    rounded: false
+    background:
+      type: pattern
+      patternSize: natural
+      imageSource: /src/assets/images/component-docs/pattern-grid.svg
+      mask: frame
+      overlay: 0
 ---

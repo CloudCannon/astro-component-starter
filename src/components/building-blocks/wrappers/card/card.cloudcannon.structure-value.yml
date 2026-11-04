@@ -1,6 +1,6 @@
 label: Card
 icon: crop_square
-description: Groups related content within a section.
+description: Groups related content in a card.
 value:
   _component: building-blocks/wrappers/card
   label: null
@@ -9,15 +9,16 @@ value:
   paddingHorizontal: sm
   paddingVertical: sm
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
-    positionVertical: top
-    positionHorizontal: center
-    priority: false
     imageSource: ""
     imageAlt: ""
-    videoSource: null
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
     overlay: 0
   link: null
   rounded: false
@@ -30,9 +31,18 @@ preview:
     - Card
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/card.svg
   icon: crop_square
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/card.svg
+    fit: cover
 picker_preview:
   text: Card
   subtext: Groups related content within a section.
+  image: public/component-previews/building-blocks/wrappers/card.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/card.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/card/card.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

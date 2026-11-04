@@ -1,10 +1,12 @@
 label: Choice Group
 icon: check_box
-description: Form field for selecting one or more options.
+description: Checkboxes or radio buttons for choosing options.
 value:
   _component: building-blocks/forms/choice-group
   title: My Choice Group
   name: my_choice_group
+  hint: null
+  error: null
   required: false
   options:
     - value: item 1
@@ -14,16 +16,24 @@ value:
       label: Item 2
       checked: false
   orientation: vertical
-  multiple: true
+  multiple: false
 preview:
   text:
     - Choice Group
   subtext:
     - key: title
+  image: public/component-previews/building-blocks/forms/choice-group.svg
   icon: check_box
+  gallery:
+    image: public/component-previews/building-blocks/forms/choice-group.svg
+    fit: cover
 picker_preview:
   text: Choice Group
   subtext: Form field for selecting one or more options.
+  image: public/component-previews/building-blocks/forms/choice-group.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/choice-group.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/choice-group/choice-group.cloudcannon.inputs.yml
 _structures:

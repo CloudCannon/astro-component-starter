@@ -1,4 +1,7 @@
 ---
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts, toDateInputValue } from "@component-utils/formField";
+
 const {
   label,
   name,
@@ -6,64 +9,40 @@ const {
   value,
   min,
   max,
+  hint,
+  error,
+  autocomplete,
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = htmlAttributes.id || `date-${crypto.randomUUID()}`;
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "date",
+  id: customId,
+  name,
+  label,
+  autocomplete,
+  required,
+  hint,
+  error,
+});
 ---
 
-<div
+<FormField
   class:list={["date", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  {
-    label && (
-      <label
-        for={fieldId}
-        class="label"
-      >
-        {label}
-        {required && (
-          <span
-            class="date-required"
-            aria-label="required"
-          >
-            *
-          </span>
-        )}
-      </label>
-    )
-  }
   <input
     type="date"
     name={name}
-    id={fieldId}
-    required={required}
-    aria-required={required}
-    value={value}
-    min={min}
-    max={max}
+    value={toDateInputValue(value)}
+    min={toDateInputValue(min)}
+    max={toDateInputValue(max)}
     class="field"
+    {...controlAttributes}
   />
-</div>
-
-<style is:global>
-  @layer components {
-    .date {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-
-      .date-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
-      }
-    }
-  }
-</style>
+</FormField>

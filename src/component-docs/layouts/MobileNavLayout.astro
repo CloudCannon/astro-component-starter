@@ -1,31 +1,54 @@
 ---
+import Icon from "@core-elements/icon/Icon.astro";
 import Image from "@core-elements/image/Image.astro";
-import Mobile from "@components/navigation/mobile/Mobile.astro";
-import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
+import Mobile from "@navigation/mobile/Mobile.astro";
+import ThemeToggle from "@navigation/theme-toggle/ThemeToggle.astro";
 import navData from "../data/nav.json";
+import analyticsData from "@data/analytics.json";
+import privacyData from "@data/privacy.json";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../integrations/consent/config";
 import { generateNavData } from "../utils/navGenerator.js";
 
 const generatedNavData = await generateNavData(navData);
 const mobileNavData = [{ name: "← Back to site", path: "/", children: [] }, ...generatedNavData];
+const privacy = parsePrivacyConfig(privacyData);
+const showPrivacySettings = hasOptionalServices(privacy, parseAnalyticsConfig(analyticsData));
 ---
 
 <div class="library-mobile-nav">
   <Image
-    source="/src/assets/images/component-docs/acs-logo.svg"
-    alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"
+    source="/src/assets/images/brand/astro-component-starter-mark.svg"
+    alternateSource="/src/assets/images/brand/astro-component-starter-mark-reversed.svg"
     alt="Astro Component Starter"
     class="sidebar-logo"
   />
   <div class="library-mobile-nav-actions">
     <ThemeToggle />
+    {showPrivacySettings && (
+      <button
+        type="button"
+        class="privacy-settings-toggle tap-target"
+        aria-label={privacy.settingsLabel}
+        data-consent-open
+      >
+        <Icon
+          name="shield-check"
+          size="none"
+        />
+      </button>
+    )}
     <Mobile navData={mobileNavData}>
       <span
         slot="logo"
         class="component-docs-mobile-logo"
       >
         <Image
-          source="/src/assets/images/component-docs/acs-logo.svg"
-          alternateSource="/src/assets/images/component-docs/acs-logo-dark.svg"
+          source="/src/assets/images/brand/astro-component-starter-mark.svg"
+          alternateSource="/src/assets/images/brand/astro-component-starter-mark-reversed.svg"
           alt="Astro Component Starter"
         />
       </span>

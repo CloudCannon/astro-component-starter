@@ -1,0 +1,15 @@
+---
+/**
+ * Every shell that renders finished pages mounts this (`BaseLayout`, `LibraryLayout`):
+ * their external-media placeholders need it to grant consent.
+ */
+import Consent from "@navigation/consent/Consent.astro";
+import analyticsData from "@data/analytics.json";
+import privacyData from "@data/privacy.json";
+import { parseAnalyticsConfig, parsePrivacyConfig } from "../../integrations/consent/config";
+---
+
+<Consent
+  privacy={parsePrivacyConfig(privacyData)}
+  analytics={parseAnalyticsConfig(analyticsData)}
+/>

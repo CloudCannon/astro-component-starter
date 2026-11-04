@@ -1,0 +1,142 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import Masonry from "@wrappers/masonry/Masonry.astro";
+import MasonryItem from "@wrappers/masonry/MasonryItem.astro";
+import CardGridItem from "./CardGridItem.astro";
+
+type ItemProps = Record<string, unknown>;
+
+const {
+  label,
+  layout = "grid",
+  columns = 3,
+  gap = "lg",
+  aspectRatio = "landscape",
+  items = [],
+  spaceBefore = "default",
+  class: className,
+  style: userStyle,
+  useDefaultEditableBinding = false,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const masonry = layout === "masonry";
+const columnCount = Math.min(4, Math.max(2, Math.round(Number(columns) || 3)));
+
+const cardRatio = masonry ? "none" : aspectRatio;
+const gapValue = gap === "none" ? "0px" : `var(--spacing-${gap})`;
+
+const gridStyles = [
+  `--card-grid-columns: ${columnCount}`,
+  `--card-grid-gap: ${gapValue}`,
+  userStyle,
+]
+  .filter(Boolean)
+  .join("; ");
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
+  : {};
+
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/card-grid/card-grid-item",
+      "data-editable": "array-item",
+    }
+  : {};
+const itemContentProp = effectiveChildrenProp ? "contentSections" : undefined;
+
+const hasItems = items?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasItems && !hasSlotContent) return;
+---
+
+{masonry ? (
+  <div
+    class:list={["card-grid", "stackable", className]}
+    {...htmlAttributes}
+  >
+    <Masonry
+      class="card-grid-masonry"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      columns={columnCount}
+      gap={gap}
+      data-children-prop={effectiveChildrenProp}
+    >
+      <slot>
+        {/* CardGridItem can't be the measured grid child: its overflow:hidden flex column collapses to 8px. */}
+        {items?.map((item: ItemProps) => (
+          <MasonryItem {...itemRegionAttributes}>
+            <CardGridItem
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+              {...item}
+              aspectRatio={cardRatio}
+              data-children-prop={itemContentProp}
+            />
+          </MasonryItem>
+        ))}
+      </slot>
+    </Masonry>
+  </div>
+) : (
+  <div
+    class:list={["card-grid", "stackable", className]}
+    {...htmlAttributes}
+  >
+    <div
+      class="card-grid-inner"
+      data-space-before={spaceBeforeAttr(spaceBefore)}
+      style={gridStyles}
+      {...arrayDataAttributes}
+    >
+      <slot>
+        {items?.map((item: ItemProps) => (
+          <CardGridItem
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...item}
+            {...itemRegionAttributes}
+            aspectRatio={cardRatio}
+            data-children-prop={itemContentProp}
+          />
+        ))}
+      </slot>
+    </div>
+  </div>
+)}
+
+<style is:global>
+  @layer components {
+    .card-grid {
+      --space-before: var(--space-before-loose);
+      width: 100%;
+
+      > .card-grid-inner {
+        display: grid;
+        gap: var(--card-grid-gap, var(--spacing-lg));
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+
+        @media (width >= 640px) {
+          grid-template-columns: repeat(var(--card-grid-columns, 3), minmax(0, 1fr));
+        }
+
+        > * {
+          min-width: 0;
+        }
+      }
+
+      > .masonry {
+        margin-top: 0;
+      }
+    }
+  }
+</style>

@@ -1,15 +1,14 @@
 text:
   type: text
-  comment: The text that goes inside the button.
-  hidden: hideText
+  comment: Button text. Still required with Hide Text on, as the accessible name.
 link:
   type: url
   comment: The URL to which the button should link.
 iconName:
   type: select
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  comment: Icon to display, from [Lucide](https://lucide.dev/icons/).
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name
@@ -52,10 +51,10 @@ iconPosition:
 hideText:
   type: switch
   hidden: "!iconName"
-  comment: Whether to hide the button text and show only the icon.
+  comment: Shows only the icon and hides the text.
 variant:
   type: select
-  comment: The presentation of button.
+  comment: The presentation of the button.
   options:
     values:
       - id: primary

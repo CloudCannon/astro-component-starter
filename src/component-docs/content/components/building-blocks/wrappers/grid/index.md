@@ -1,23 +1,26 @@
 ---
 title: Grid
 order: 4
-overview: 'A responsive grid layout for displaying multiple items in rows and columns. Supports adjustable spacing, layouts, and width bounds.'
+overview: A responsive grid of similar items, with a set column count or Auto to fit as many as the space allows. For a few different blocks, use [Stack](/component-docs/components/building-blocks/wrappers/stack/).
 slots:
   - title: default
-    description: The contents for the the Grid.
-    fallback_for: items
+    description: Grid items.
     child_component:
-      name: GridItem
       props:
         - 'contentSections/slot'
 examples:
-  - title: Layouts
+  - title: Columns
     slugs:
-      - start
-      - center
+      - auto
+      - two-columns
+      - three-columns
+      - four-columns
+      - five-columns
+      - six-columns
 
   - title: Spacing
     slugs:
+      - spacing-none
       - spacing-xs
       - spacing-sm
       - spacing-md

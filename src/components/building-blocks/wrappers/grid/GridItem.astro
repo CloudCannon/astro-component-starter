@@ -1,5 +1,5 @@
 ---
-import RenderBlock from "@components/utils/renderBlock.astro";
+import RenderBlock from "@component-utils/renderBlock.astro";
 
 const {
   contentSections,
@@ -13,7 +13,11 @@ const {
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
   : {};
 ---
 
@@ -22,18 +26,16 @@ const arrayDataAttributes = effectiveChildrenProp
   {...htmlAttributes}
 >
   <div
-    class="grid-item-content"
+    class="grid-item-content flow"
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        contentSections && (
-          <RenderBlock
-            contentSections={contentSections}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {contentSections && (
+        <RenderBlock
+          contentSections={contentSections}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
 </div>
@@ -48,10 +50,6 @@ const arrayDataAttributes = effectiveChildrenProp
 
       > .grid-item-content > *:only-child {
         height: 100%;
-      }
-
-      > .grid-item-content > *:first-child {
-        margin-top: 0 !important;
       }
     }
   }

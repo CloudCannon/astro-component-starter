@@ -1,12 +1,10 @@
 ---
 title: Simple Text
-overview: 'A semantic `<p>` component for plain text sections with inline markdown formatting. Supports size and alignment controls. For more complex content with headings and lists, use [Text](/component-docs/components/building-blocks/core-elements/text) instead.'
+overview: A single paragraph with optional bold, italic, and links. For headings and lists, use [Text](/component-docs/components/building-blocks/core-elements/text) instead.
 slots:
   - title: default
-    description: The content inside the Simple Text component (used when text prop is empty).
+    description: Paragraph content. Falls back to the text prop.
 examples:
-  - slugs:
-      - primary
   - slugs:
       - align
   - slugs:

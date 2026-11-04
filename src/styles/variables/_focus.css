@@ -1,0 +1,5 @@
+:where(:root) {
+  /* The ring colour is per-theme: `--color-focus-ring` in themes/. */
+  --focus-ring-width: 3px;
+  --focus-ring-style: solid;
+}

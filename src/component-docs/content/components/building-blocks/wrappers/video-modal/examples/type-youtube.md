@@ -1,0 +1,18 @@
+---
+title: 'YouTube'
+spacing: 'all'
+blocks:
+  _component: 'building-blocks/wrappers/video-modal'
+  label: 'Astro in 100 seconds'
+  media:
+    type: 'youtube'
+    videoId: 'ZoXyK96nyCg'
+  trigger:
+    style: 'button'
+    text: 'Watch on YouTube'
+    variant: 'primary'
+    size: 'md'
+    iconName: 'circle-play'
+  title: 'Astro in 100 Seconds'
+  size: 'xl'
+---

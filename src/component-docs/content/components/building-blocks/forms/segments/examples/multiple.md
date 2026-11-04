@@ -9,26 +9,18 @@ blocks:
   options:
     - value: 'analytics'
       label: 'Analytics'
-      icon: 'chart-bar'
-      iconSize: 'sm'
-      iconBackground: 'none'
+      icon: 'chart-column'
       checked: true
     - value: 'notifications'
       label: 'Notifications'
       icon: 'bell'
-      iconSize: 'sm'
-      iconBackground: 'none'
       checked: false
     - value: 'api'
       label: 'API Access'
-      icon: 'code-bracket'
-      iconSize: 'sm'
-      iconBackground: 'none'
+      icon: 'code'
       checked: true
     - value: 'support'
       label: 'Support'
-      icon: 'lifebuoy'
-      iconSize: 'sm'
-      iconBackground: 'none'
+      icon: 'life-buoy'
       checked: false
 ---

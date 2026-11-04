@@ -1,0 +1,80 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Steps from "@wrappers/steps/Steps.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  items = [],
+  orientation = "horizontal",
+  imageAspectRatio = "landscape",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["steps-section", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level={headingLevel}
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="section-subtext steps-section-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+  <Steps
+    items={items}
+    spaceBefore="loose"
+    orientation={orientation}
+    imageAspectRatio={imageAspectRatio}
+    data-children-prop="items"
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .steps-section {
+      min-width: 0;
+    }
+  }
+</style>
