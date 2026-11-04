@@ -136,7 +136,8 @@ quietly broken in the editor.
 - **Heads-up:** light-theme link colours are accessible blues that meet contrast requirements. Dark-theme links are unchanged.
 - **Heads-up:** the grey tokens are renamed from `--gray-0…12` to `--gray-50…950`, matching every other colour. The colours are identical, and `npm run lint:css-vars` finds any old names you miss.
 - **Heads-up:** the colour palette has a full range for all eight colours. Icon background tints, the green and yellow icon colours, and the dark theme's accent backgrounds shift slightly.
-- **Heads-up:** layout breakpoints are standardised on 640px and 768px, so a few layouts change shape at slightly different widths.
+- **Heads-up:** layout breakpoints are standardised on 640px and 768px, so a few layouts change shape at slightly different widths. The main nav switches to its menu button when it is narrower than 960px, to make room for the wider logo.
+- A new starter logo, mark and favicon, in `src/assets/images/brand/`, plus a `favicon.ico` for browsers that can't use the SVG one.
 - Hardcoded values in component CSS (border widths, media overlay colours, easing) are tokens, so re-skinning each is one edit.
 - Secondary buttons use the lighter surface fill, and tertiary buttons show a tint of their text colour on hover.
 - Focus outlines are consistent everywhere, and a mouse click no longer leaves one behind.
