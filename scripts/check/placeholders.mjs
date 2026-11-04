@@ -11,7 +11,7 @@ const strict = process.argv.includes("--strict");
 
 const PLACEHOLDER_URL = "https://example.com";
 const STARTER_NAME = "Astro Component Starter";
-const STARTER_LOGO = "acs-logo";
+const STARTER_LOGO = "astro-component-starter-logo";
 
 // A missing file is tolerated; one that exists but can't be read or parsed must fail loudly.
 function fatal(relativePath, reason) {

@@ -1,4 +1,4 @@
 /* No tokens: var() can't go in @media, so breakpoints are literal px (no PostCSS).
- * 640px: stacking switch. 768px: mobile/desktop nav switch. Use range syntax
+ * 640px: stacking switch. 960px: mobile/desktop nav switch (container width). Use range syntax
  * (`width < 640px`), not 40rem, which only equals 640px at the default root size.
  */
