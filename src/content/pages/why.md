@@ -62,7 +62,7 @@ pageSections:
                 buttonSections:
                   - _component: building-blocks/core-elements/button
                     text: Read about theming
-                    link: /component-docs/
+                    link: /component-docs/customizing-your-brand/
                     variant: secondary
           - _component: building-blocks/wrappers/scroll-deck/scroll-deck-card
             label: Ship
@@ -111,7 +111,7 @@ pageSections:
           Light and dark themes, blog tags, page transitions, Video Modal, Image
           Carousel, and a custom 404 page.
       - year: '2026'
-        date: October
+        date: November
         title: '2.0'
         body: >-
           A browsable reference for every component, site search, privacy and
@@ -306,8 +306,9 @@ pageSections:
         contentSections:
           - _component: building-blocks/core-elements/text
             text: >-
-              Yes. Delete the component directory. The page builder only offers
-              what is on disk.
+              Yes. Remove it from your pages, delete its folder and its preview
+              thumbnail, then run `npm run check` to catch anything left behind.
+              Keep any building block a page section still uses.
             size: md
       - title: How do I make it look like our brand?
         contentSections:

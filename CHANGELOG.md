@@ -17,7 +17,7 @@ change how things look, and every page section moves to a new path.
 
 #### Making the starter your own
 
-- `npm run reset:starter` clears the demo content out of a fresh copy and sets your site name and URL. `--dry-run` shows the plan first, and it only runs on a clean git tree.
+- `npm run reset:starter` clears the demo content out of a fresh copy and sets your site name and URL. `--dry-run` shows the plan first, and with uncommitted changes it stops and asks before going on.
 - `npm run check:placeholders` warns when starter placeholders are still in place, most importantly the `example.com` URL.
 - Guides: `docs/DEPLOYMENT.md` for going live on CloudCannon, and `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and `docs/ARCHITECTURE.md` for people and AI agents working on the project.
 - The Getting Started guides follow the order you'd build a site in: Project Tour, Editing a Page, Customizing Your Brand, Building a Page Section, Editing the Blog, a new **Creating Snippets** guide to making your own components insertable in blog posts, and a new **Going Live** guide. How Visual Editing Works is now part of Building a Page Section, and its old URL redirects there. The Get Started page matches, with a section on working with an AI agent.
@@ -141,6 +141,7 @@ quietly broken in the editor.
 - A new starter logo, mark and favicon, in `src/assets/images/brand/`, plus a `favicon.ico` for browsers that can't use the SVG one.
 - Hardcoded values in component CSS (border widths, media overlay colours, easing) are tokens, so re-skinning each is one edit.
 - Secondary buttons use the lighter surface fill, and tertiary buttons show a tint of their text colour on hover.
+- Buttons with an icon leave more room between the icon and the label (0.4em, was 0.15em).
 - Focus outlines are consistent everywhere, and a mouse click no longer leaves one behind.
 - Video Modal's close control sits above the player, the player is centred, and clicking the overlay closes it. It defaults to extra-large.
 - The sticky main nav casts a subtle shadow once it pins, and publishes its height as `--main-nav-height` for anything else that sticks.

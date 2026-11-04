@@ -112,7 +112,7 @@ Post text sits in a `70ch` column. Add `class="wide"` to let a component use the
 <Image source="/src/assets/images/banner.jpg" alt="Banner" class="wide" />
 ```
 
-Code blocks, images and videos are wide automatically.
+Markdown code fences, images and videos are wide automatically. A Code Block component needs `class="wide"` like any other.
 
 ## Next up
 

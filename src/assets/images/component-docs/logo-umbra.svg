@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 32" role="img" aria-label="Umbra">
-  <path d="M26 16 A10 10 0 1 1 16 6 A8 8 0 0 0 26 16 Z" fill="#E11D48"/>
-  <text x="34" y="21.5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="600" fill="#E11D48">Umbra</text>
-</svg>
+<svg viewBox="0 0 138 32" xmlns="http://www.w3.org/2000/svg"><g fill="#e11d48"><path d="m26 16a10 10 0 1 1 -10-10 8 8 0 0 0 10 10z"/><text font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="600" x="34" y="21.5">Umbra</text></g></svg>

@@ -64,10 +64,10 @@ src/components/.../button/
 ```yaml
 text:
   type: text
-  comment: The text that goes inside the button.
+  comment: Button text. Still required with Hide Text on, as the accessible name.
 variant:
   type: select
-  comment: The presentation of button.
+  comment: The presentation of the button.
   options:
     values:
       - id: primary
@@ -81,7 +81,7 @@ variant:
 ```yaml
 label: Button
 icon: variables
-description: Clickable button for calls-to-action and navigation.
+description: Clickable button for actions and links.
 value:
   _component: building-blocks/core-elements/button
   text: My Button
@@ -152,9 +152,9 @@ Here's a quick map of where things live:
 | `src/content/blog/`     | Blog posts in MDX                                                                       |
 | `src/styles/variables/` | Design tokens: colors, fonts, spacing, widths                                           |
 | `src/styles/themes/`    | Light and dark theme definitions                                                        |
-| `src/styles/base/`      | CSS reset, typography defaults, form styles                                             |
+| `src/styles/base/`      | Typography, form, table and element defaults (the reset is `src/styles/_reset.css`)     |
 | `src/data/`             | Site-wide data: navigation, footer, SEO, privacy, and analytics                         |
-| `.cloudcannon/`         | Shared editor config: structures, input groups, datasets, schemas                       |
+| `.cloudcannon/`         | Shared editor config: structures, shared inputs, datasets, schemas and build settings   |
 | `.agents/`              | Instructions and playbooks for AI coding agents                                         |
 | `src/component-docs/`   | These docs. `npm run build` leaves them out; `npm run build:with-library` includes them |
 
@@ -164,7 +164,7 @@ The starter is written to be worked on by AI coding agents as well as people. `A
 
 ## Removing components you don't need
 
-Every component is independent. To remove one, first search `src/content/` for its `_component` path (for example `page-sections/proof/logo-cloud`) and remove or replace every use. Then delete:
+Page sections don't depend on each other, but they do import building blocks, so keep any building block a page section still uses. To remove a component, first search `src/content/` for its `_component` path (for example `page-sections/proof/logo-cloud`) and remove or replace every use. Then delete:
 
 - its folder in `src/components/`
 - its thumbnail in `public/component-previews/`

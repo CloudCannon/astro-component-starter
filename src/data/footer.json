@@ -31,7 +31,23 @@
   "socials": [
     {
       "icon": "social/github",
-      "link": "https://github.com/CloudCannon/astro-component-starter"
+      "link": "https://github.com/CloudCannon/astro-component-starter",
+      "label": "Astro Component Starter on GitHub"
+    },
+    {
+      "icon": "social/linkedin",
+      "link": "https://nz.linkedin.com/company/cloudcannon",
+      "label": "CloudCannon on LinkedIn"
+    },
+    {
+      "icon": "social/youtube",
+      "link": "https://www.youtube.com/c/CloudCannon",
+      "label": "CloudCannon on YouTube"
+    },
+    {
+      "icon": "social/x",
+      "link": "https://x.com/CloudCannon",
+      "label": "CloudCannon on X"
     }
   ],
   "footerText": "© 2026 All rights reserved."

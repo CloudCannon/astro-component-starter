@@ -20,6 +20,7 @@ pageSections:
         size: md
       - _component: building-blocks/core-elements/button
         text: Browse components
+        iconName: blocks
         link: /component-docs/
         variant: secondary
         size: md
@@ -123,7 +124,7 @@ pageSections:
         prefix: ''
         suffix: ''
         label: Pages
-      - number: 41
+      - number: 42
         prefix: ''
         suffix: ''
         label: Components in use
@@ -209,6 +210,7 @@ pageSections:
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Browse components
+        iconName: blocks
         link: /component-docs/
         variant: primary
         size: md

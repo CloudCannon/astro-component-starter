@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 32" role="img" aria-label="Northwind">
-  <path d="M6 26 L16 6 L26 26 Z" fill="none" stroke="#0D9488" stroke-width="2.5"/>
-  <text x="34" y="21.5" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="600" fill="#0D9488">Northwind</text>
-</svg>
+<svg viewBox="0 0 150 32" xmlns="http://www.w3.org/2000/svg"><path d="m6 26 10-20 10 20z" fill="none" stroke="#0d9488" stroke-width="2.5"/><text fill="#0d9488" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="600" x="34" y="21.5">Northwind</text></svg>

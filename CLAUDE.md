@@ -36,7 +36,7 @@ Astro component starter: brandable base components for informational websites, v
 Two staleness traps, both silent:
 
 - **A CSS edit isn't showing.** The Astro dev daemon can serve stale `is:global` styles: `npx astro dev stop`, then restart.
-- **The editor is showing old content.** `npm run editor` serves `dist/`, not the dev server — rerun `npm run build` after every change (the running editor picks it up; no restart). Open pages by file path (`/about/index.html`): folder URLs return a 500.
+- **The editor is showing old content.** `npm run editor` serves `dist/`, not the dev server — rerun `npm run build` after every change (the running editor picks it up; no restart). Open pages by file path (`/why/index.html`): folder URLs return a 500.
 
 ## Detailed workflow guides
 

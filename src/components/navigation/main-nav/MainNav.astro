@@ -132,7 +132,6 @@ const mobileNavData = [
         align-items: center;
         container-type: inline-size;
         display: flex;
-        flex-wrap: wrap;
         gap: var(--spacing-md);
         height: var(--main-nav-height);
 
@@ -145,6 +144,7 @@ const mobileNavData = [
           align-items: center;
           display: flex;
           flex: 0 1 min(13rem, 100%);
+          /* On a narrow phone the logo shrinks to fit; letting the row wrap drops the menu button below it. */
           min-width: 0;
           width: min(13rem, 100%);
         }

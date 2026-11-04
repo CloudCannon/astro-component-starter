@@ -52,7 +52,7 @@ console.log(
     `  Serving dist/ built ${builtAt.toLocaleString()}`,
     "  The editor reads dist/, not the dev server. Run `npm run build` in another terminal",
     "  after a change; the open preview picks it up without restarting this.",
-    "  Open pages by file path (/about/index.html): folder URLs like /about/ return a 500.",
+    "  Open pages by file path (/why/index.html): folder URLs like /why/ return a 500.",
     "",
   ].join("\n")
 );

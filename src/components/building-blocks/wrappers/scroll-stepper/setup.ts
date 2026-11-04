@@ -79,15 +79,20 @@ function activationPoint(stepper: HTMLElement, scene: HTMLElement): number {
     : mediaCenter(stepper);
 }
 
-function updateActive(stepper: HTMLElement, scenes: HTMLElement[]): void {
+function scenePosition(stepper: HTMLElement, scene: HTMLElement): number | undefined {
   const track = stepper.querySelector<HTMLElement>(".scroll-stepper-steps");
-  const activeIndex = scenes.reduce((currentIndex, scene, index) => {
-    const content = scene.querySelector<HTMLElement>(".scroll-stepper-step-content");
+  const bounds = scene
+    .querySelector<HTMLElement>(".scroll-stepper-step-content")
+    ?.getBoundingClientRect();
 
-    const contentBounds = content?.getBoundingClientRect();
-    const position = track?.classList.contains("height-screen")
-      ? contentBounds?.top
-      : contentBounds && contentBounds.top + contentBounds.height / 2;
+  if (!bounds) return undefined;
+
+  return track?.classList.contains("height-screen") ? bounds.top : bounds.top + bounds.height / 2;
+}
+
+function updateActive(stepper: HTMLElement, scenes: HTMLElement[]): void {
+  const activeIndex = scenes.reduce((currentIndex, scene, index) => {
+    const position = scenePosition(stepper, scene);
 
     return position !== undefined && position <= activationPoint(stepper, scene)
       ? index
@@ -97,27 +102,33 @@ function updateActive(stepper: HTMLElement, scenes: HTMLElement[]): void {
   setActive(stepper, activeIndex);
 }
 
+// Empty with the first step on its mark, full as the last step activates. The start isn't
+// `activationPoint`: in `height-content` that counts the first step active from the outset.
+function startMark(stepper: HTMLElement, scene: HTMLElement): number {
+  const track = stepper.querySelector<HTMLElement>(".scroll-stepper-steps");
+
+  return track?.classList.contains("height-screen")
+    ? activationPoint(stepper, scene)
+    : mediaCenter(stepper);
+}
+
 function updateProgress(stepper: HTMLElement, scenes: HTMLElement[]): void {
   const first = scenes[0];
   const last = scenes[scenes.length - 1];
 
   if (!first || !last) return;
 
-  const firstContent = first.querySelector<HTMLElement>(".scroll-stepper-step-content");
-  const lastContent = last.querySelector<HTMLElement>(".scroll-stepper-step-content");
+  const firstPosition = scenePosition(stepper, first);
+  const lastPosition = scenePosition(stepper, last);
 
-  if (!firstContent || !lastContent) return;
+  if (firstPosition === undefined || lastPosition === undefined) return;
 
-  const firstBounds = firstContent.getBoundingClientRect();
-  const lastBounds = lastContent.getBoundingClientRect();
-  const firstCenter = firstBounds.top + firstBounds.height / 2;
-  const lastCenter = lastBounds.top + lastBounds.height / 2;
-  const start = stepper.__scrollStepperProgressStart ?? firstCenter;
-  const end = activationPoint(stepper, last) - (lastCenter - firstCenter);
-  const distance = start - end;
-  const progress = distance ? Math.max(0, Math.min(1, (start - firstCenter) / distance)) : 0;
+  // Sticky media snaps to whole pixels, so a centred first step can still read up to 1px past its mark.
+  const scrolledPastFirst = Math.max(0, startMark(stepper, first) - firstPosition - 1);
+  const scrollToLast = lastPosition - activationPoint(stepper, last);
+  const distance = scrolledPastFirst + scrollToLast;
+  const progress = distance > 0 ? Math.min(1, scrolledPastFirst / distance) : 0;
 
-  stepper.__scrollStepperProgressStart = start;
   stepper.style.setProperty("--scroll-stepper-progress", String(progress));
 }
 
@@ -179,10 +190,6 @@ function setTrailingRunway(stepper: HTMLElement, scenes: HTMLElement[]): void {
     contentOffset = Math.max(0, mediaHeight / 2 + mediaStartPush - contentCentre);
   }
 
-  if (contentOffset !== stepper.__scrollStepperContentOffset) {
-    stepper.__scrollStepperProgressStart = undefined;
-  }
-  stepper.__scrollStepperContentOffset = contentOffset;
   stepper.style.setProperty("--scroll-stepper-trailing-runway", `${runway}px`);
   stepper.style.setProperty("--scroll-stepper-content-offset", `${contentOffset}px`);
   stepper.style.setProperty("--scroll-stepper-sticky-top", `${stickyTop}px`);
@@ -195,14 +202,12 @@ function showStaticGallery(stepper: HTMLElement): void {
     stepper.__scrollStepperOnScroll = undefined;
   }
   stepper.removeAttribute("data-scroll-stepper-initialized");
-  stepper.__scrollStepperProgressStart = undefined;
   stepper.style.removeProperty("--scroll-stepper-progress");
   stepper.style.removeProperty("--scroll-stepper-trailing-runway");
   stepper.style.removeProperty("--scroll-stepper-content-offset");
   stepper.style.removeProperty("--scroll-stepper-viewport-height");
   stepper.style.removeProperty("--scroll-stepper-sticky-top");
   stepper.style.removeProperty("--scroll-stepper-sticky-translate");
-  stepper.__scrollStepperContentOffset = undefined;
   stepper
     .querySelectorAll(
       ".scroll-stepper-media-panel, .scroll-stepper-steps > .scroll-stepper-step, .scroll-stepper-progress-dot"
@@ -309,7 +314,5 @@ declare global {
     __scrollStepperOnScroll?: () => void;
     __scrollStepperOnMediaChange?: () => void;
     __scrollStepperResizeObserver?: ResizeObserver;
-    __scrollStepperProgressStart?: number;
-    __scrollStepperContentOffset?: number;
   }
 }

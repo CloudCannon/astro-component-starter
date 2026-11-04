@@ -175,7 +175,7 @@ Next steps:
      Material Symbols icon (currently "extension"), and fix the label if the
      Title Case guess ("${label}") is wrong. Inline editing is opt-in — see the
      editable-regions skill before adding data-editable/data-prop.
-  2. author {slug}.preview.mjs (a kit recipe), then npm run previews:build
+  2. author ${slug}.preview.mjs (a kit recipe), then npm run previews:build
      Compiles the preview SVG this component's YAML already points at
      (public/component-previews/${componentKey}.svg). Until it exists,
      "npm run previews:check" (part of npm run check) fails on the missing recipe/SVG.

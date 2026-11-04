@@ -25,7 +25,7 @@ pageSections:
         text: Browse components
         hideText: false
         link: /component-docs/
-        iconName: ''
+        iconName: blocks
         iconColor: default
         iconPosition: before
         variant: secondary
@@ -67,7 +67,7 @@ pageSections:
   - _component: page-sections/explainers/stats
     eyebrow: What's in the box
     heading: Big library. Tiny payload.
-    subtext: Every component renders to static HTML and CSS.
+    subtext: Every component renders to static HTML and CSS. Most ship no JavaScript at all.
     stats:
       - number: 26
         prefix: ''
@@ -77,7 +77,7 @@ pageSections:
         prefix: ''
         suffix: ''
         label: Building blocks
-      - number: 343
+      - number: 1898
         prefix: ''
         suffix: ''
         label: Icons in the picker
@@ -246,7 +246,7 @@ pageSections:
             level: h3
             size: xs
           - _component: building-blocks/core-elements/text
-            text: Change `--color-brand` in one token file. Every component follows.
+            text: Change `--color-brand` in the light and dark theme files. Every component follows.
             size: sm
       - contentSections:
           - _component: building-blocks/core-elements/heading
@@ -287,7 +287,7 @@ pageSections:
         text: View on GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
-        iconName: ''
+        iconName: social/github
         iconColor: default
         iconPosition: before
         variant: tertiary

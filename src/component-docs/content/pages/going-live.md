@@ -19,7 +19,7 @@ It asks for your site name and production URL, then asks before each of these:
 - **Demo pages:** deletes the Why and Get Started pages and everything under `/examples/`, and resets the homepage to a blank hero.
 - **Branding:** clears the logos, cuts the nav and footer down to Home and Blog, and turns off the announcement bar.
 
-It deletes files, so it only runs on a clean git tree, and `git checkout .` undoes it. Add `--dry-run` to see the plan without changing anything. Work through the earlier guides first: they use the demo pages as examples.
+It deletes files, so with uncommitted changes it stops and asks before going on, and `git checkout .` undoes it. Add `--dry-run` to see the plan without changing anything. Work through the earlier guides first: they use the demo pages as examples.
 
 ## Set your production URL
 

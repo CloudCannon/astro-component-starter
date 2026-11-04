@@ -56,7 +56,7 @@ errors. `npm run check` warns until it's set.
   menu with a preview.
 - **Design lives in tokens, not components.** The same 85 components render as a law firm, a SaaS
   product, or a university department by swapping token files. No component CSS to fight.
-- **It's built to be operated by AI.** Eleven skills in `.agents/skills/` encode the workflows —
+- **It's built to be operated by AI.** Twelve skills in `.agents/skills/` encode the workflows —
   create a component, turn a screenshot into one, migrate an existing site, retheme — as
   playbooks your coding agent can follow. The conventions are what make its output predictable.
 - **The output is boring, excellent Astro.** Static, no client-framework runtime, tiny JS payload, inlined CSS,
@@ -65,23 +65,24 @@ errors. `npm run check` warns until it's set.
 ## Components
 
 85 components across three tiers — 26 page sections, 51 building blocks, and 8 navigation
-components — plus 343 icons.
+components — plus 1,898 icons.
 
 [![Every component in the library](docs/images/components.png)](https://astro-component-starter.cc/component-docs/)
 
-## The Three-File Pattern
+## The Four-File Pattern
 
-Every component in this starter ships with three files. This is what makes the system work:
+Every component in this starter ships with four files. This is what makes the system work:
 developers build components, editors visually manage content.
 
 ```
 src/components/.../button/
 ├── Button.astro                          # The component
 ├── button.cloudcannon.inputs.yml         # What editors see and can change
-└── button.cloudcannon.structure-value.yml # Defaults and picker metadata
+├── button.cloudcannon.structure-value.yml # Defaults and picker metadata
+└── button.preview.mjs                     # Draws its thumbnail for the Add menu
 ```
 
-Scaffold all three, wired up correctly:
+Scaffold the first three, wired up correctly; the preview recipe comes next:
 
 ```bash
 npm run new:component building-blocks/core-elements/my-thing
@@ -148,12 +149,12 @@ For privacy, consent, and when embeds ask first, see
 
 ## Updating Dependencies
 
-Plain `npm install` is all you need when adding, removing or updating packages. The Linux and
-Windows native binaries CI needs (`sharp`, `pagefind`) are declared in
+Plain `npm install` is all you need when adding, removing or updating packages. The Linux native
+binaries CI needs (`sharp`, `pagefind`) are declared in
 `optionalDependencies`, so the lockfile keeps them whatever platform you install on.
 
-If CI reports that `package-lock.json` is out of sync, regenerate it for every target platform
-(Linux, Windows, macOS) and install from it:
+If CI reports that `package-lock.json` is out of sync, re-resolve it for Linux, then install
+from it:
 
 ```bash
 npm run deps:sync

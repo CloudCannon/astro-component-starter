@@ -15,11 +15,13 @@ pageSections:
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: View on GitHub
+        iconName: social/github
         link: https://github.com/CloudCannon/astro-component-starter
         variant: primary
         size: md
       - _component: building-blocks/core-elements/button
         text: Browse components
+        iconName: blocks
         link: /component-docs/
         variant: secondary
         size: md
@@ -132,7 +134,7 @@ pageSections:
   - _component: page-sections/collections/card-collection
     eyebrow: Guides
     heading: Follow the learning path
-    subtext: Six short guides, from the project tour to putting your site live.
+    subtext: Seven short guides, from the project tour to putting your site live.
     items:
       - image: ''
         imageAlt: ''
@@ -193,6 +195,18 @@ pageSections:
           - _component: building-blocks/core-elements/simple-text
             text: >-
               Reference for posts, the listing page, and components inside a post.
+            size: sm
+      - image: ''
+        imageAlt: ''
+        link: /component-docs/creating-snippets/
+        contentSections:
+          - _component: building-blocks/core-elements/heading
+            text: Creating snippets
+            level: h3
+            size: xs
+          - _component: building-blocks/core-elements/simple-text
+            text: >-
+              Let editors insert your own components inside blog posts.
             size: sm
       - image: ''
         imageAlt: ''
@@ -292,7 +306,7 @@ pageSections:
         text: View on GitHub
         hideText: false
         link: https://github.com/CloudCannon/astro-component-starter
-        iconName: ''
+        iconName: social/github
         iconColor: default
         iconPosition: before
         variant: primary
