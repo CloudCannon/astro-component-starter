@@ -9,6 +9,7 @@ const {
   navData = [],
   class: className,
   "aria-label": ariaLabel = "Navigation",
+  "data-children-prop": childrenDataProp,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -20,6 +21,12 @@ const navGroupName = uniqueId(
   `bar-nav-top-${slugifyLabel(ariaLabel || "navigation")}`
 );
 const pathname = Astro.url.pathname;
+
+const arrayDataAttributes = childrenDataProp
+  ? { "data-editable": "array", "data-prop": childrenDataProp, "data-direction": "row" }
+  : {};
+const itemDataAttributes = childrenDataProp ? { "data-editable": "array-item" } : {};
+const nameDataAttributes = childrenDataProp ? { "data-editable": "text", "data-prop": "name" } : {};
 ---
 
 <nav
@@ -27,23 +34,31 @@ const pathname = Astro.url.pathname;
   class:list={["bar", className]}
   {...htmlAttributes}
 >
-  <ul class="bar-list">
+  <ul
+    class="bar-list"
+    {...arrayDataAttributes}
+  >
     {navData?.map((item: NavItem) => {
       if (itemHasMegaMenu(item)) {
         return (
           <MegaPanel
             item={item}
             groupName={navGroupName}
+            {...itemDataAttributes}
           />
         );
       }
 
       if (!item.children?.length) {
         return (
-          <li class="nav-item">
+          <li
+            class="nav-item"
+            {...itemDataAttributes}
+          >
             <a
               href={item.path}
               aria-current={isCurrentPage(pathname, item) ? "page" : undefined}
+              {...nameDataAttributes}
             >
               {item.name}
             </a>
@@ -55,6 +70,7 @@ const pathname = Astro.url.pathname;
         <Dropdown
           item={item}
           groupName={navGroupName}
+          {...itemDataAttributes}
         />
       );
     })}

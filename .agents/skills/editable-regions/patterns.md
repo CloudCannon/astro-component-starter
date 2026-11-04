@@ -63,3 +63,12 @@ When one array holds items of **different** component types, the container decla
 - `data-id` on each item — its resolved identity (kebab component path).
 
 In this starter every array whose items come from `renderBlock` carries it: `MainComponent.astro` and each wrapper's content arrays (`contentSections`, a Split's columns, a Card's slots). Add it to any new one; without it an insert above an item reuses that item's root element. Full attribute semantics: [complex-array attributes in the reference](../references/editable-regions-api.md#complex-array-attributes-wrapper-vs-item).
+
+## Binding to a data file (`@file`)
+
+A region outside any page's frontmatter (the site footer) can bind to another file with an absolute path: `data-prop="@file[/src/data/footer.json].footerText"`. Children of an array region bound this way stay relative (`data-prop="name"`). `@data[key]` works the same for a file registered in `data_config`.
+
+**MUST:** start the path with `/`.
+**Why:** the editor API resolves `@file[src/data/footer.json]` to `undefined`, and every region renders an error card.
+
+`Footer.astro` takes the `@file[...]` prefix as its own `data-prop` from `Page.astro` and joins it onto each region's key, so the same component binds to its own props when placed as a block. The file's input config comes from its collection, not the component's `inputs.yml`, so a field needing a rich text editor (`footerText`) needs its input under that collection.

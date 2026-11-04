@@ -26,9 +26,9 @@ This skill owns the starter's editable-binding attribute tables (per `.agents/sk
 
 ## Contents
 
-| File                       | Covers                                                                                                                                     |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| [patterns.md](patterns.md) | Multi-field text (`data-prop-author-*`), Card before/after slots, `@content` markdown body, page-level component region, mixed-type arrays |
+| File                       | Covers                                                                                                                                                                       |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [patterns.md](patterns.md) | Multi-field text (`data-prop-author-*`), Card before/after slots, `@content` markdown body, page-level component region, mixed-type arrays, binding to a data file (`@file`) |
 
 ## The core rule: pass props, not raw attributes
 

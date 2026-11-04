@@ -24,10 +24,14 @@ const {
   logoAlternateSource,
   logoAlt,
   class: className,
-  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  useDefaultEditableBinding = false,
+  "data-prop": bindingBase = useDefaultEditableBinding ? "" : undefined,
   _component,
   ...htmlAttributes
 } = Astro.props;
+
+const bindTo = (key: string) =>
+  bindingBase === undefined ? undefined : bindingBase ? `${bindingBase}.${key}` : key;
 ---
 
 <footer
@@ -52,6 +56,8 @@ const {
               alternateSource={logoAlternateSource}
               alt={logoAlt}
               class="footer-logo"
+              data-prop-src={bindTo("logoSource")}
+              data-prop-alt={bindTo("logoAlt")}
               useDefaultEditableBinding={false}
             />
           </a>
@@ -60,6 +66,7 @@ const {
       <div class="content-container">
         <Bar
           navData={links}
+          data-children-prop={bindTo("links")}
           useDefaultEditableBinding={false}
           aria-label="Footer"
         />
@@ -73,6 +80,7 @@ const {
         <Text
           class="footer-legal-text"
           text={footerText || ""}
+          data-prop={bindTo("footerText")}
           useDefaultEditableBinding={false}
         />
         {showPrivacySettings && (
@@ -92,6 +100,7 @@ const {
           variant="ghost"
           size="md"
           alignmentHorizontal="end"
+          data-children-prop={bindTo("socials")}
           useDefaultEditableBinding={false}
         />
       </div>

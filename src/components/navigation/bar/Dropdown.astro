@@ -6,15 +6,19 @@ import { createNavItemData, isCurrentPage, type NavItem } from "./navState";
 interface Props {
   item: NavItem;
   groupName: string;
+  "data-editable"?: string;
 }
 
-const { item, groupName } = Astro.props;
+const { item, groupName, "data-editable": dataEditable } = Astro.props;
 const pathname = Astro.url.pathname;
 
 const itemData = createNavItemData(pathname, item, groupName);
 ---
 
-<li class="nav-item has-children">
+<li
+  class="nav-item has-children"
+  data-editable={dataEditable}
+>
   <NavItemTrigger
     item={itemData}
     inputType="checkbox"

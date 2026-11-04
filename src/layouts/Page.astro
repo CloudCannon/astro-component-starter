@@ -145,5 +145,8 @@ const primaryHeading = sections.find(
       />
     )}
   </main>
-  <Footer {...footer} />
+  <Footer
+    {...footer}
+    data-prop={footer === footerData ? "@file[/src/data/footer.json]" : undefined}
+  />
 </Layout>

@@ -165,7 +165,7 @@ Real excerpt (`src/data/footer.json`):
 | `logoSource` / `logoAlternateSource` / `logoAlt` | string | Same conventions as nav.                                                                                                                                                                                                               |
 | `links`                                          | array  | Flat `{ name, path }` — **no nesting/children field**, unlike `navData`. Rendered through the same `Bar` component but items are always flat links (dropdowns only trigger when an item has `children`, which footer links never set). |
 | `socials`                                        | array  | `{ icon, link, label }`. `label` (optional) overrides the auto-generated `aria-label` (`Visit our {icon-name} page`); leave it empty to keep the default.                                                                              |
-| `footerText`                                     | string | Legal/copyright text, rendered as-is (plain text, not markdown).                                                                                                                                                                       |
+| `footerText`                                     | string | Legal/copyright text, rendered as markdown (bold, italic, links). Its `markdown` input is under `collections_config.data._inputs`.                                                                                                     |
 
 **Social icon values:** `icon` must be one of the `social/*` ids in `.cloudcannon/data/icons.yml`, matching an SVG in `src/icons/social/` (`bluesky`, `discord`, `facebook`, `github`, `gitlab`, `gitter`, `google`, `instagram`, `linkedin`, `medium`, `pinterest`, `reddit`, `tiktok`, `twitch`, `x`, `yelp`, `youtube`). A non-`social/`-prefixed icon still renders but loses the filled-icon styling `Icon.astro` applies via `name?.includes("social/")`. To add a network that isn't listed, drop the SVG into `src/icons/social/` and run `npm run icons:sync` — the icon dataset is generated from disk, not hand-maintained.
 
@@ -177,6 +177,8 @@ Real excerpt (`src/data/footer.json`):
 - `Divider`.
 - Bottom row: `footerText` (via `Text`) + `socials` as ghost icon-only `Button`s, each `target="_blank" rel="noopener noreferrer"`.
 - When `privacy.json` has `enabled: true`, a separate underlined button using `settingsLabel` reopens the global privacy dialog. It is controlled by privacy data, not `footer.json`.
+
+`Page.astro` passes `data-prop="@file[/src/data/footer.json]"`, and `Footer.astro` prefixes every editable region with it, so clicking the footer in the Visual Editor edits `footer.json` from any page. The leading slash is required: the editor API resolves `src/data/footer.json` without it to nothing, and every region shows an error card. Placed as a block instead (`_component: navigation/footer`), the footer binds to its own props.
 
 ---
 
