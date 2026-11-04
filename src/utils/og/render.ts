@@ -1,5 +1,4 @@
 import { Renderer } from "@takumi-rs/core";
-import { fromHtml } from "@takumi-rs/helpers/html";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -126,7 +125,7 @@ async function wrapTitle(
     `<p style="font-family:${fontStacks.heading};font-weight:700;font-size:${size}px;` +
     `line-height:1.3;margin:0;width:${width}px">${escapeHtml(title)}</p></div>`;
 
-  const measured = await renderer.measure(fromHtml(html).node, { width, height: CARD_HEIGHT, css });
+  const measured = await renderer.measure(html, { width, height: CARD_HEIGHT, css });
   const lines: string[] = [];
 
   const collect = (node: { runs?: { text: string }[]; children?: unknown[] }) => {
@@ -247,27 +246,24 @@ export async function renderCard(request: CardRequest, root = process.cwd()): Pr
     ? await wrapTitle(renderer, request.title, fontStacks, [])
     : undefined;
 
-  const { node, css } = fromHtml(
-    cardHtml({
-      title: request.title,
-      description: request.description,
-      siteName: request.siteName,
-      siteUrl: request.siteUrl,
-      logoDataUri: background ? plateLogo : plainLogo,
-      colors,
-      fontStacks,
-      backgroundDataUri: background,
-      titleLines,
-    })
-  );
+  const html = cardHtml({
+    title: request.title,
+    description: request.description,
+    siteName: request.siteName,
+    siteUrl: request.siteUrl,
+    logoDataUri: background ? plateLogo : plainLogo,
+    colors,
+    fontStacks,
+    backgroundDataUri: background,
+    titleLines,
+  });
 
   const format = request.format ?? "png";
-  const png = await renderer.render(node, {
+  const png = await renderer.render(html, {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     format,
     ...(format === "jpeg" ? { quality: 82 } : {}),
-    css,
   });
 
   writeCache(root, key, png);

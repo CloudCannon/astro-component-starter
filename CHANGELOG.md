@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [2.0.0] - Unreleased
+## [2.0.0] - 2026-11-04
 
 A big release: a browsable reference site for every component, site-wide
 search, a privacy and consent workflow, automatic share cards, many new page
@@ -123,7 +123,7 @@ quietly broken in the editor.
 
 #### Framework and dependencies
 
-- Upgraded to **Astro 7**, with every dependency on its latest release except TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`).
+- Upgraded to **Astro 7**, with every dependency on its latest release except TypeScript (held at 6.x for `@typescript-eslint` and `@astrojs/check`). Stylelint is on 18, whose stricter rules may flag CSS you've added.
 - **Heads-up:** the starter needs Node 24 or later (`engines` is `>=24.0.0`), and `.nvmrc` pins `24.18.0`. The project scaffolder and the local editor already required it.
 - Icons are built in instead of coming from the unmaintained `astro-icon` package. A mistyped icon name warns instead of failing the build.
 - **Heads-up:** the icon set is [Lucide](https://lucide.dev/icons/) instead of Heroicons: 1,879 icons in place of 324, so the picker has icons for most trades rather than just app controls. A new `--icon-stroke-width` token (1.5) keeps the current line weight. Many ids changed, e.g. `x-mark` is `x`, `check-circle` is `circle-check`, `envelope` is `mail`, `magnifying-glass` is `search` and `bolt` is `zap` (Lucide's `bolt` is a hex nut). An unknown id renders nothing, so run `npm run icons:check`, which lists every id in your content that no longer exists. `npm run icons:lucide -- <version>` upgrades the set.
@@ -224,6 +224,7 @@ quietly broken in the editor.
 - Select shows its placeholder instead of preselecting the first option, which satisfied a required Select on load.
 - Textarea, Select, Date, File Upload and Toggle no longer emit a duplicate `id` when one is passed in.
 - A disabled Input with an icon is styled as disabled.
+- A file input's Choose button shows its hover colour. The hover rule was nested in a way browsers ignore.
 
 #### The visual editor
 

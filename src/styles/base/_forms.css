@@ -50,10 +50,10 @@
         margin-inline-end: var(--spacing-em-sm);
         padding: var(--spacing-em-xs) var(--spacing-em-sm);
         transition: background-color var(--animation-normal) var(--ease-in-out);
+      }
 
-        &:hover {
-          background-color: var(--color-bg-muted);
-        }
+      &::file-selector-button:hover {
+        background-color: var(--color-bg-muted);
       }
     }
 
