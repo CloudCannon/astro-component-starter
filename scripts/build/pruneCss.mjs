@@ -16,6 +16,7 @@ import { join, relative, sep } from "node:path";
 const FULL_CSS_REF = "/_astro/components-full.css";
 
 const PRUNABLE_LAYERS = new Set(["components", "page-sections"]);
+const NAME_REFERENCED = new Set(["keyframes", "property", "font-face"]);
 const SELECTOR_ALT_CAP = 32;
 
 async function filesWithExtension(dir, extension) {
@@ -80,13 +81,46 @@ function containerIsLive(container, alts, present) {
     } else if (node.type === "rule") {
       if (containerIsLive(node, extendAlternatives(alts, node), present)) return true;
     } else if (node.type === "atrule") {
-      // Referenced by name, not selector, so no class test can prove them dead.
-      if (node.name === "keyframes" || node.name === "property" || node.name === "font-face")
-        return true;
+      // Referenced by name, not selector: `reviveNameReferenced` keeps them when still used.
+      if (NAME_REFERENCED.has(node.name)) continue;
       if (containerIsLive(node, alts, present)) return true;
     }
   }
   return false;
+}
+
+function definedNames(block) {
+  const names = [];
+
+  block.walkAtRules((rule) => {
+    if (rule.name === "keyframes" || rule.name === "property") names.push(rule.params.trim());
+    else if (rule.name === "font-face") {
+      rule.walkDecls("font-family", (decl) => names.push(decl.value.replace(/["']/g, "").trim()));
+    }
+  });
+  return names.filter(Boolean);
+}
+
+const mentions = (text, name) =>
+  new RegExp(`(?<![\\w-])${name.replace(/[^\w-]/g, "\\$&")}(?![\\w-])`).test(text);
+
+/** Keeps a dead block whose `@property`/`@keyframes`/`@font-face` name the rest of the page uses. */
+function reviveNameReferenced(decisions, pageText) {
+  let kept = decisions.filter((d) => !d.live).reduce((t, d) => t.split(d.text).join(""), pageText);
+  let changed = true;
+
+  while (changed) {
+    changed = false;
+    for (const d of decisions) {
+      if (d.live) continue;
+      d.names ??= definedNames(d.node);
+      if (d.names.some((name) => mentions(kept, name))) {
+        d.live = true;
+        kept += d.text;
+        changed = true;
+      }
+    }
+  }
 }
 
 function classesFromMarkup(html) {
@@ -120,6 +154,7 @@ export default function pruneCss({
           logger.info("PRUNE_CSS=0 - leaving every page's CSS intact");
           return;
         }
+        const started = performance.now();
         const root = fileURLToPath(dir);
         const pages = await filesWithExtension(root, ".html");
 
@@ -141,6 +176,8 @@ export default function pruneCss({
 
           for (const className of alwaysKeep) present.add(className);
 
+          let pageText = html;
+
           for (const m of html.matchAll(/<script[^>]*\ssrc="([^"]+)"[^>]*>/g)) {
             const src = m[1];
 
@@ -156,6 +193,7 @@ export default function pruneCss({
               }
             }
             classesFromScript(scriptCache.get(src), present);
+            pageText += scriptCache.get(src);
           }
           for (const m of html.matchAll(/<script(?![^>]*\ssrc=)[^>]*>([\s\S]*?)<\/script>/g)) {
             classesFromScript(m[1], present);
@@ -200,18 +238,25 @@ export default function pruneCss({
           // Only the last of duplicate blocks wins the cascade; keeping the first would reorder it.
           const lastIndex = new Map();
 
+          const decisions = [];
+
           blocks.forEach(({ text }, i) => lastIndex.set(text, i));
           blocks.forEach(({ node, text }, i) => {
             if (!fullBlocks.has(text)) fullBlocks.set(text, node.params.trim());
             if (lastIndex.get(text) !== i) {
               dedupedBlocks++;
               node.remove();
-            } else if (containerIsLive(node, [new Set()], present)) keptBlocks++;
+            } else
+              decisions.push({ node, text, live: containerIsLive(node, [new Set()], present) });
+          });
+          reviveNameReferenced(decisions, pageText);
+          for (const { node, live } of decisions) {
+            if (live) keptBlocks++;
             else {
               droppedBlocks++;
               node.remove();
             }
-          });
+          }
 
           let tagIndex = 0;
 
@@ -281,7 +326,8 @@ export default function pruneCss({
             alwaysKeep.length ? `alwaysKeep: ${alwaysKeep.join(", ")}\n` : ""
           }pruned ${droppedBlocks} of ${droppedBlocks + keptBlocks} component style blocks and ${dedupedBlocks} duplicates across ${pages.length} pages ` +
             `(${(before / 1024).toFixed(0)}KB → ${(after / 1024).toFixed(0)}KB inline, ` +
-            `-${((saved / before) * 100).toFixed(1)}%); full sheet ${(full.length / 1024).toFixed(0)}KB for the editor`
+            `-${((saved / before) * 100).toFixed(1)}%); full sheet ${(full.length / 1024).toFixed(0)}KB for the editor, ` +
+            `in ${Math.round(performance.now() - started)}ms`
         );
       },
     },
