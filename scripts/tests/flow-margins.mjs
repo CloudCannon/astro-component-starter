@@ -1,7 +1,7 @@
 // `@layer utils` `.flow > * + *` beats any page-sections top margin on a flow child; this finds
 // those dead declarations in the real CSSOM. `auto` is exempt (a flex push).
 import { execSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { launchBrowser, serveDist } from "./lib/servedDist.mjs";
 
@@ -16,6 +16,8 @@ if (!existsSync(distDir)) {
 const pages = execSync("find dist -name index.html", { cwd: root, encoding: "utf8" })
   .trim()
   .split("\n")
+  // A meta-refresh redirect navigates away mid-evaluate and crashes the run.
+  .filter((file) => !/<meta http-equiv="refresh"/i.test(readFileSync(join(root, file), "utf8")))
   .map((file) => file.replace(/^dist/, "").replace(/index\.html$/, ""))
   .sort();
 
