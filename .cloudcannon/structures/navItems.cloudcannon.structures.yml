@@ -1,0 +1,133 @@
+# Must live here: `_structures` is invalid in an `_inputs_from_glob` file, and these
+# names are global, so per-component copies collide. `side` must not offer the mega
+# variant: it silently drops the panel. `navData.cloudcannon.structures.yml` copies the
+# mega item (anchors can't cross files); keep its inputs in step with this one.
+navItemLevel1:
+  values:
+    - &plain-nav-item-l1
+      label: Navigation Item (Level 1)
+      icon: link
+      value:
+        name: ""
+        path: ""
+        children: []
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the navigation item."
+        path:
+          type: url
+          comment: "URL path for the navigation item."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        children:
+          type: array
+          comment: "Child navigation items for dropdown menus."
+          options:
+            structures: _structures.navItemLevel2
+navItemLevel1MegaMenu:
+  values:
+    - *plain-nav-item-l1
+    - label: Mega Menu Item
+      icon: menu_open
+      value:
+        name: ""
+        path: ""
+        megaMenu:
+          feature:
+            image: ""
+            imageAlt: ""
+            heading: ""
+            link: ""
+          columns: []
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the navigation item."
+        path:
+          type: url
+          comment: "Optional destination for the item itself. Leave empty so the whole row toggles the panel."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        megaMenu:
+          type: object
+          label: Mega Menu
+          comment: "Full-width panel content. Only rendered by the bar and mobile navigation components."
+        feature:
+          type: object
+          label: Feature Card
+          comment: "Optional promotional card shown beside the link columns. Leave the heading and image empty to hide it."
+        image:
+          type: image
+          comment: "Feature card image."
+          options:
+            paths:
+              uploads: src/assets/images
+            resize_style: contain
+            width: 1920
+            height: 1280
+        imageAlt:
+          type: text
+          comment: "Alt text for the feature card image."
+        heading:
+          type: text
+          comment: "Feature card heading."
+        link:
+          type: url
+          comment: "Destination for the feature card."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        columns:
+          type: array
+          label: Columns
+          comment: "Columns of grouped links in the panel."
+          options:
+            structures: _structures.megaMenuColumns
+navItemLevel2:
+  values:
+    - label: Navigation Item (Level 2)
+      icon: link
+      value:
+        name: ""
+        path: ""
+        children: []
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the child navigation item."
+        path:
+          type: url
+          comment: "URL path for the child navigation item."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+        children:
+          type: array
+          comment: "Grandchild navigation items for nested dropdowns."
+          options:
+            structures: _structures.navItemLevel3
+navItemLevel3:
+  values:
+    - label: Navigation Item (Level 3)
+      icon: link
+      value:
+        name: ""
+        path: ""
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the grandchild navigation item."
+        path:
+          type: url
+          comment: "URL path for the grandchild navigation item."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true

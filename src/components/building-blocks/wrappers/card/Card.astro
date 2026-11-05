@@ -1,6 +1,9 @@
 ---
-import Component from "@components/utils/renderBlock.astro";
-import { slugifyLabel } from "@components/utils/slugify";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { overlayColor } from "@component-utils/overlayColor";
+import Component from "@component-utils/renderBlock.astro";
+import { resolveImageSource } from "@component-utils/resolveImageSource";
+import { slugifyLabel } from "@component-utils/slugify";
 import Image from "@core-elements/image/Image.astro";
 import Video from "@core-elements/video/Video.astro";
 
@@ -13,12 +16,15 @@ const {
   paddingHorizontal,
   paddingVertical,
   colorScheme = "inherit",
+  lockColorScheme = false,
   backgroundColor,
   background,
   link,
-  showBeforeAfter = true,
+  // Editor-only: gates the before/after inputs. Rendering follows content presence.
+  showBeforeAfter: _showBeforeAfter = false,
   rounded = false,
   border = false,
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   _component,
@@ -37,7 +43,13 @@ const {
   imageAlt = "",
   videoSource = "",
   overlay = 0,
+  fixed = false,
+  patternSize = "natural",
 } = background || {};
+
+const usesFixedBackground = bgType === "image" && fixed && !!imageSource;
+const patternImageUrl =
+  bgType === "pattern" && imageSource ? resolveImageSource(imageSource) : null;
 
 if (!htmlAttributes.id && label) {
   htmlAttributes.id = slugifyLabel(label);
@@ -46,105 +58,128 @@ if (!htmlAttributes.id && label) {
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
   : {};
 
 const effectiveBeforeProp =
   childrenDataPropBefore ?? (useDefaultEditableBinding ? "beforeContentSections" : null);
 const arrayDataAttributesBefore = effectiveBeforeProp
-  ? { "data-editable": "array", "data-prop": effectiveBeforeProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveBeforeProp,
+      "data-component-key": "_component",
+    }
   : {};
 
 const effectiveAfterProp =
   childrenDataPropAfter ?? (useDefaultEditableBinding ? "afterContentSections" : null);
 const arrayDataAttributesAfter = effectiveAfterProp
-  ? { "data-editable": "array", "data-prop": effectiveAfterProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveAfterProp,
+      "data-component-key": "_component",
+    }
   : {};
 
 const isPopoverLink = link?.startsWith("^");
-const Tag = link ? (isPopoverLink ? "button" : "a") : "div";
+// A stretched overlay, not a wrapping <a>: `cardSections` admits buttons,
+// forms and modal triggers, and an anchor may not contain interactive content.
+const hasHit = Boolean(link);
+const HitTag = isPopoverLink ? "button" : "a";
+const hitHeading = (Array.isArray(contentSections) ? contentSections : []).find(
+  (block: { _component?: string }) => block?._component === "building-blocks/core-elements/heading"
+)?.text;
+const hitLabel = typeof hitHeading === "string" && hitHeading.trim() ? hitHeading : "View";
 const hasBeforeSlot = Astro.slots.has("before");
 const hasAfterSlot = Astro.slots.has("after");
-const usesBeforeContentSections = !hasBeforeSlot && showBeforeAfter && beforeContentSections;
-const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterContentSections;
+const usesBeforeContentSections = !hasBeforeSlot && beforeContentSections;
+const usesAfterContentSections = !hasAfterSlot && afterContentSections;
 ---
 
 <div
-  class:list={["card", className]}
+  class:list={["card", "stackable", className]}
   {...htmlAttributes}
 >
-  <Tag
-    {...isPopoverLink
-      ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
-      : link && { href: link }}
-    class:list={["card-inner", rounded && "rounded", border && "border"]}
+  <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    class:list={[
+      "card-inner",
+      rounded && "rounded",
+      border && "border",
+      usesFixedBackground && "background-fixed",
+    ]}
     data-theme={colorScheme && colorScheme !== "inherit" ? colorScheme : undefined}
+    data-theme-lock={lockColorScheme || undefined}
   >
-    {
-      bgType === "image" && (
-        <Image
-          class:list={["background-image"]}
-          source={imageSource}
-          alt={imageAlt}
-          priority={priority}
-          positionVertical={positionVertical}
-          positionHorizontal={positionHorizontal}
-          background={true}
-        />
-      )
-    }
-    {
-      bgType === "video" && (
-        <Video
-          type="local-source"
-          source={videoSource}
-          background={true}
-          style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
-        />
-      )
-    }
-    {
-      overlay !== 0 && (
-        <div
-          class="background-overlay"
-          aria-hidden="true"
-          style={{
-            backgroundColor: `rgba(${overlay < 0 ? "0, 0, 0" : "255, 255, 255"}, ${Math.abs(overlay)})`,
-          }}
-        />
-      )
-    }
-    {
-      backgroundColor && (
-        <div
-          aria-hidden="true"
-          class:list={["background", backgroundColor && `bg-${backgroundColor}`]}
-        />
-      )
-    }
+    {bgType === "image" && (
+      <Image
+        class:list={["background-image"]}
+        source={imageSource}
+        alt={imageAlt}
+        priority={priority}
+        positionVertical={positionVertical}
+        positionHorizontal={positionHorizontal}
+        background={true}
+        sizes="100vw"
+      />
+    )}
+    {bgType === "video" && (
+      <Video
+        type="local-source"
+        source={videoSource}
+        background={true}
+        style={{ "--background-position": `${positionHorizontal} ${positionVertical}` }}
+      />
+    )}
+    {patternImageUrl && (
+      <div
+        class:list={["background-pattern", `pattern-size-${patternSize}`]}
+        aria-hidden="true"
+        style={{ backgroundImage: `url("${patternImageUrl}")` }}
+      />
+    )}
+    {overlay !== 0 && (
+      <div
+        class="background-overlay"
+        aria-hidden="true"
+        style={{
+          backgroundColor: overlayColor(overlay),
+        }}
+      />
+    )}
+    {backgroundColor && (
+      <div
+        aria-hidden="true"
+        class:list={["background", backgroundColor && `bg-${backgroundColor}`]}
+      />
+    )}
 
-    {
-      (usesBeforeContentSections || hasBeforeSlot) && (
-        <div
-          class="before-content"
-          {...arrayDataAttributesBefore}
-        >
-          <slot name="before">
-            {beforeContentSections && (
-              <Component
-                contentSections={beforeContentSections}
-                useDefaultEditableBinding={!!effectiveBeforeProp}
-              />
-            )}
-          </slot>
-        </div>
-      )
-    }
+    {(usesBeforeContentSections || hasBeforeSlot) && (
+      <div
+        class="before-content flow"
+        {...arrayDataAttributesBefore}
+      >
+        <slot name="before">
+          {beforeContentSections && (
+            <Component
+              contentSections={beforeContentSections}
+              useDefaultEditableBinding={!!effectiveBeforeProp}
+            />
+          )}
+        </slot>
+      </div>
+    )}
 
     <div class="card-outer-content">
       <div
         class:list={[
           "card-content",
+          "flow",
+          "uses-spacing-utils",
           paddingHorizontal && `pad-x-${paddingHorizontal}`,
           paddingVertical && `pad-y-${paddingVertical}`,
           maxContentWidth && `max-width-${maxContentWidth}`,
@@ -152,57 +187,88 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         {...arrayDataAttributes}
       >
         <slot>
-          {
-            contentSections && (
-              <Component
-                contentSections={contentSections}
-                useDefaultEditableBinding={!!effectiveChildrenProp}
-              />
-            )
-          }
+          {contentSections && (
+            <Component
+              contentSections={contentSections}
+              useDefaultEditableBinding={!!effectiveChildrenProp}
+            />
+          )}
         </slot>
       </div>
     </div>
 
-    {
-      (usesAfterContentSections || hasAfterSlot) && (
-        <div
-          class="after-content"
-          {...arrayDataAttributesAfter}
-        >
-          <slot name="after">
-            {afterContentSections && (
-              <Component
-                contentSections={afterContentSections}
-                useDefaultEditableBinding={!!effectiveAfterProp}
-              />
-            )}
-          </slot>
-        </div>
-      )
-    }
-  </Tag>
+    {(usesAfterContentSections || hasAfterSlot) && (
+      <div
+        class="after-content flow"
+        {...arrayDataAttributesAfter}
+      >
+        <slot name="after">
+          {afterContentSections && (
+            <Component
+              contentSections={afterContentSections}
+              useDefaultEditableBinding={!!effectiveAfterProp}
+            />
+          )}
+        </slot>
+      </div>
+    )}
+    {hasHit && (
+      <HitTag
+        class="card-hit"
+        {...(isPopoverLink
+          ? { type: "button", popovertarget: link.slice(1), popovertargetaction: "show" }
+          : { href: link })}
+      >
+        <span class="visually-hidden">{hitLabel}</span>
+      </HitTag>
+    )}
+  </div>
 </div>
 
 <style is:global>
   @layer components {
     .card {
       display: block;
-      margin-top: var(--spacing-lg);
 
-      > a.card-inner:hover,
-      > button.card-inner:hover {
+      > .card-inner:has(> .card-hit):hover {
         transform: scale(1.05);
       }
 
-      > button.card-inner {
+      /* A transform would become the fixed background's containing block. */
+      > .card-inner.background-fixed:has(> .card-hit):hover {
+        transform: none;
+      }
+
+      /* The global reset only kills the transition, not the scale itself. */
+      @media (prefers-reduced-motion: reduce) {
+        > .card-inner:has(> .card-hit):hover {
+          transform: none;
+        }
+      }
+
+      .card-hit {
         appearance: none;
         background: none;
+        border: 0;
         cursor: pointer;
         font: inherit;
+        inset: 0;
         padding: 0;
-        text-align: inherit;
-        width: 100%;
+        position: absolute;
+        text-decoration: none;
+        z-index: var(--layer-0);
+      }
+
+      /* Clicks pass through the body to the hit, except on nested controls. Not in
+         the editor, where clicks must reach the editable regions. */
+      :root:not([data-in-editor]) & .card-inner:has(> .card-hit) {
+        > :not(.card-hit) {
+          pointer-events: none;
+        }
+
+        :is(a, button, input, select, textarea, label, summary):not(.card-hit) {
+          pointer-events: auto;
+        }
       }
 
       > .card-inner {
@@ -212,16 +278,41 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         overflow: hidden;
         position: relative;
         text-decoration: none;
+
+        /* `inherit` would keep the outer scheme's text colour in a themed card. */
+        &[data-theme] {
+          color: var(--color-text);
+        }
+
+        /* Keeps text legible while the media loads or if it fails. */
+        &[data-theme]:has(> .background-image),
+        &[data-theme]:has(> .background-pattern),
+        &[data-theme]:has(> .video.background) {
+          background-color: var(--color-bg);
+        }
         transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
+          transform var(--animation-normal) var(--ease-default),
+          box-shadow var(--animation-normal) var(--ease-default);
 
         &.rounded {
           border-radius: var(--radius-md);
         }
 
         &.border {
-          border: 1px solid var(--color-border);
+          border: var(--border-width-sm) solid var(--color-border);
+        }
+
+        /* clip-path, because overflow and border-radius don't clip a fixed child. */
+        &.background-fixed {
+          clip-path: inset(0);
+
+          > .background-image {
+            position: fixed;
+          }
+
+          &.rounded {
+            clip-path: inset(0 round var(--radius-md));
+          }
         }
 
         > .card-outer-content {
@@ -235,62 +326,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             margin-inline: auto;
             position: relative;
             z-index: var(--layer-1);
-
-            > *:first-child {
-              margin-top: 0 !important;
-            }
-
-            > *:last-child {
-              margin-bottom: 0 !important;
-            }
-
-            &.pad-x-xs {
-              padding-inline: var(--spacing-xs);
-            }
-
-            &.pad-x-sm {
-              padding-inline: var(--spacing-sm);
-            }
-
-            &.pad-x-md {
-              padding-inline: var(--spacing-md);
-            }
-
-            &.pad-x-lg {
-              padding-inline: var(--spacing-lg);
-            }
-
-            &.pad-x-xl {
-              padding-inline: var(--spacing-xl);
-            }
-
-            &.pad-x-2xl {
-              padding-inline: var(--spacing-2xl);
-            }
-
-            &.pad-y-xs {
-              padding-block: var(--spacing-xs);
-            }
-
-            &.pad-y-sm {
-              padding-block: var(--spacing-sm);
-            }
-
-            &.pad-y-md {
-              padding-block: var(--spacing-md);
-            }
-
-            &.pad-y-lg {
-              padding-block: var(--spacing-lg);
-            }
-
-            &.pad-y-xl {
-              padding-block: var(--spacing-xl);
-            }
-
-            &.pad-y-2xl {
-              padding-block: var(--spacing-2xl);
-            }
 
             &.max-width-none {
               max-width: none;
@@ -323,32 +358,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
             &.max-width-3xl {
               max-width: var(--content-width-3xl);
             }
-
-            @media (width < 640px) {
-              &.pad-y-xs {
-                padding-block: var(--spacing-xs);
-              }
-
-              &.pad-y-sm {
-                padding-block: var(--spacing-xs);
-              }
-
-              &.pad-y-md {
-                padding-block: var(--spacing-sm);
-              }
-
-              &.pad-y-lg {
-                padding-block: var(--spacing-md);
-              }
-
-              &.pad-y-xl {
-                padding-block: var(--spacing-md);
-              }
-
-              &.pad-y-2xl {
-                padding-block: var(--spacing-lg);
-              }
-            }
           }
         }
 
@@ -356,14 +365,6 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         > .after-content {
           position: relative;
           z-index: var(--layer-2);
-
-          > *:first-child {
-            margin-top: 0 !important;
-          }
-
-          > *:last-child {
-            margin-bottom: 0 !important;
-          }
         }
 
         > .background-overlay {
@@ -381,7 +382,31 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
           z-index: var(--layer-1);
         }
 
-        > .background-video {
+        > .background-pattern {
+          background-position: top left;
+          background-repeat: repeat;
+          inset: 0;
+          position: absolute;
+          z-index: var(--layer-1);
+
+          &.pattern-size-natural {
+            background-size: auto;
+          }
+
+          &.pattern-size-sm {
+            background-size: 2rem auto;
+          }
+
+          &.pattern-size-md {
+            background-size: 4rem auto;
+          }
+
+          &.pattern-size-lg {
+            background-size: 8rem auto;
+          }
+        }
+
+        > .video.background {
           z-index: var(--layer-1);
         }
 
@@ -400,6 +425,12 @@ const usesAfterContentSections = !hasAfterSlot && showBeforeAfter && afterConten
         > .bg-highlight {
           background-color: var(--color-bg-highlight);
         }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card > .card-inner.background-fixed > .background-image {
+        position: absolute;
       }
     }
   }

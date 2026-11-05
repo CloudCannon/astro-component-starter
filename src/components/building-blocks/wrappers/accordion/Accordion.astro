@@ -1,5 +1,6 @@
 ---
-import { slugifyLabel } from "@components/utils/slugify";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
 import AccordionItem from "./AccordionItem.astro";
 
 type ItemProps = Record<string, unknown>;
@@ -9,23 +10,33 @@ const {
   openFirst,
   singleOpen = false,
   label,
+  spaceBefore = "default",
+  class: className,
   useDefaultEditableBinding = false,
   "data-children-prop": childrenDataProp,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || `Accordion-${crypto.randomUUID()}`;
-
-if (!htmlAttributes.id) {
-  htmlAttributes.id = slugifyLabel(generatedLabel);
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
 }
 
-const accordionName = singleOpen ? `accordion-${crypto.randomUUID()}` : undefined;
+// The exclusive-group name must be unique per accordion on the page.
+const firstTitle = (items as ItemProps[])?.[0]?.title;
+const accordionName = singleOpen
+  ? `accordion-${htmlAttributes.id || (firstTitle && slugifyLabel(String(firstTitle))) || crypto.randomUUID()}`
+  : undefined;
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
 const arrayDataAttributes = effectiveChildrenProp
   ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? {
+      "data-id": "building-blocks/wrappers/accordion/accordion-item",
+      "data-editable": "array-item",
+    }
   : {};
 
 const hasItems = items?.length > 0;
@@ -35,35 +46,27 @@ if (!_component && !hasItems && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["accordion"]}
+  class:list={["accordion", "stackable", className]}
   {...htmlAttributes}
 >
-  <div {...arrayDataAttributes}>
+  <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...arrayDataAttributes}
+  >
     <slot>
-      {
-        items?.map((item: ItemProps, index: number) => {
-          const isFirst = index === 0 && openFirst;
+      {items?.map((item: ItemProps, index: number) => {
+        const isFirst = index === 0 && openFirst;
 
-          return (
-            <AccordionItem
-              isOpen={isFirst}
-              accordionName={accordionName}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-              data-editable="array-item"
-              data-id="building-blocks/wrappers/accordion/accordion-item"
-              {...item}
-            />
-          );
-        })
-      }
+        return (
+          <AccordionItem
+            isOpen={isFirst}
+            accordionName={accordionName}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+            {...itemRegionAttributes}
+            {...item}
+          />
+        );
+      })}
     </slot>
   </div>
 </div>
-
-<style is:global>
-  @layer components {
-    .accordion {
-      margin-top: var(--spacing-lg);
-    }
-  }
-</style>

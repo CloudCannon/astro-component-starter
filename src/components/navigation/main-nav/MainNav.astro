@@ -1,26 +1,27 @@
 ---
 import CustomSection from "@builders/custom-section/CustomSection.astro";
-import Bar from "@components/navigation/bar/Bar.astro";
-import Mobile from "@components/navigation/mobile/Mobile.astro";
-import ThemeToggle from "@components/navigation/theme-toggle/ThemeToggle.astro";
+import Bar from "@navigation/bar/Bar.astro";
+import Mobile from "@navigation/mobile/Mobile.astro";
+import Search from "@navigation/search/Search.astro";
+import ThemeToggle from "@navigation/theme-toggle/ThemeToggle.astro";
 import Image from "@core-elements/image/Image.astro";
 import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 
 type NavButton = {
   text?: string;
-  /** Button schema uses `link`; legacy entries may use `href`. */
   link?: string;
-  href?: string;
   [key: string]: unknown;
 };
 
 const {
   logoSource,
   logoAlternateSource,
-  logoAlt = "logo",
+  logoAlt = "Logo",
   navData = [],
   buttonSections = [] as NavButton[],
   themeToggle = false,
+  search = false,
+  searchPlaceholder,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -31,7 +32,7 @@ const mobileNavData = [
   ...navData,
   ...buttonSections.map((button: NavButton) => ({
     name: button.text || "Button",
-    path: button.link || button.href || "#",
+    path: button.link || "#",
     children: [],
   })),
 ];
@@ -45,24 +46,31 @@ const mobileNavData = [
   {...htmlAttributes}
   useDefaultEditableBinding={false}
 >
-  <a
-    href="/"
-    class="main-nav-logo-link"
-  >
-    <Image
-      source={logoSource}
-      alternateSource={logoAlternateSource}
-      class="main-nav-logo"
-      alt={logoAlt}
-      useDefaultEditableBinding={false}
-    />
-  </a>
+  {
+    /* An <a> wrapping nothing is an unnamed link (Image renders nothing for an empty source). */
+    logoSource && (
+      <a
+        href="/"
+        class="main-nav-logo-link"
+      >
+        <Image
+          source={logoSource}
+          alternateSource={logoAlternateSource}
+          class="main-nav-logo"
+          alt={logoAlt}
+          useDefaultEditableBinding={false}
+        />
+      </a>
+    )
+  }
   <div class="nav-end">
     <Bar
       navData={navData}
       class="desktop-main-nav"
+      aria-label="Main Navigation"
     />
 
+    {search && <Search placeholder={searchPlaceholder} />}
     {themeToggle && <ThemeToggle />}
     <ButtonGroup
       direction="row"
@@ -79,27 +87,43 @@ const mobileNavData = [
     navData={mobileNavData}
     class="mobile-main-nav"
     useDefaultEditableBinding={false}
+    aria-label="Main Mobile Navigation"
   />
 </CustomSection>
 
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllMainNavs } from "./setup";
+
+  onPageLoad(setupAllMainNavs);
+</script>
+
 <style is:global>
   @layer page-sections {
+    :root {
+      --main-nav-height: 5rem;
+    }
+
     .main-nav {
-      background-color: var(--color-bg);
+      transition: box-shadow var(--animation-normal) var(--ease-in-out);
+
+      &.is-stuck {
+        box-shadow: var(--shadow-sm);
+      }
       padding-block: 0;
       position: sticky;
       top: 0;
-      z-index: var(--layer-2);
+      z-index: var(--layer-4);
 
       .desktop-main-nav,
       .desktop-button-group.button-group {
-        @container (max-width: 768px) {
+        @container (width < 960px) {
           display: none;
         }
       }
 
       .nav-hamburger.mobile-button {
-        @container (min-width: 769px) {
+        @container (width >= 960px) {
           display: none;
         }
       }
@@ -108,21 +132,25 @@ const mobileNavData = [
         align-items: center;
         container-type: inline-size;
         display: flex;
-        flex-wrap: wrap;
         gap: var(--spacing-md);
-        height: 5rem;
+        height: var(--main-nav-height);
+
+        /* CustomSection makes this a `.flow`, whose top margin would offset every item after the logo. */
+        > * {
+          --space-before: var(--space-before-none);
+        }
 
         > .main-nav-logo-link {
           align-items: center;
           display: flex;
-          flex: 0 1 min(11rem, 100%);
+          flex: 0 1 min(13rem, 100%);
+          /* On a narrow phone the logo shrinks to fit; letting the row wrap drops the menu button below it. */
           min-width: 0;
-          width: min(11rem, 100%);
+          width: min(13rem, 100%);
         }
 
         > .main-nav-logo-link > .main-nav-logo {
           display: flex;
-          margin-top: 0 !important;
           max-width: none;
           width: 100%;
         }

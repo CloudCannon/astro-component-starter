@@ -6,6 +6,7 @@ blocks:
   paddingVertical: 2xl
   paddingHorizontal: md
   colorScheme: dark
+  lockColorScheme: true
   background:
     type: image
     positionVertical: center
@@ -16,7 +17,8 @@ blocks:
     overlay: -0.3
   contentSections:
     - _component: building-blocks/core-elements/heading
-      alignmentHorizontal: end
       text: Build bold. Launch fast.
       level: h3
+    - _component: building-blocks/core-elements/text
+      text: 'The background image is centered both horizontally and vertically, keeping the middle of the image in view as the section crops.'
 ---

@@ -3,7 +3,6 @@ title: Medium Spacing
 spacing:
 blocks:
   _component: 'building-blocks/wrappers/grid'
-  layout: center
   gap: md
   minItemWidth: 200
   maxItemWidth: 300

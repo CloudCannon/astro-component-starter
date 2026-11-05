@@ -1,0 +1,82 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Timeline from "@wrappers/timeline/Timeline.astro";
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  entries = [],
+  layout = "vertical",
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const gutter =
+  paddingHorizontal && paddingHorizontal !== "none" ? `var(--spacing-${paddingHorizontal})` : "0px";
+---
+
+<CustomSection
+  class:list={["timeline-section", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level={headingLevel}
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="section-subtext timeline-section-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+  <Timeline
+    entries={entries}
+    spaceBefore="loose"
+    layout={layout}
+    data-children-prop="entries"
+    style={`--timeline-gutter: ${gutter}`}
+  />
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .timeline-section {
+      min-width: 0;
+    }
+  }
+</style>

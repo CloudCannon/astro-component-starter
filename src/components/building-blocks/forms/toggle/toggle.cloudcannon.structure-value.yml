@@ -1,6 +1,6 @@
 label: Toggle
 icon: toggle_on
-description: Toggle switch form field for binary choices.
+description: On/off switch.
 value:
   _component: building-blocks/forms/toggle
   label: My toggle
@@ -13,9 +13,17 @@ preview:
     - Toggle
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/forms/toggle.svg
   icon: toggle_on
+  gallery:
+    image: public/component-previews/building-blocks/forms/toggle.svg
+    fit: cover
 picker_preview:
   text: Toggle
   subtext: Toggle switch form field for binary choices.
+  image: public/component-previews/building-blocks/forms/toggle.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/toggle.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/toggle/toggle.cloudcannon.inputs.yml

@@ -1,34 +1,51 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
 const {
   number = 0,
   prefix,
   suffix,
   alignmentHorizontal = "start",
-  size,
+  size = "2xl",
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const startNumber = Math.floor(number * 0.2);
+const parsedTarget = Number(number);
+const target = Number.isFinite(parsedTarget) ? parsedTarget : 0;
+// A target of 0 would start at 0 and never move.
+const startNumber = target === 0 ? 20 : Math.floor(target * 0.2);
 const duration = 500;
+
+const decimals = (String(number).split(".")[1] || "").length;
+// Must group like the script does, or the number reflows on the first frame.
+const formattedTarget = target.toLocaleString(undefined, {
+  minimumFractionDigits: decimals,
+  maximumFractionDigits: decimals,
+});
 ---
 
 <div
-  class:list={["counter", className]}
+  class:list={["counter", "stackable", className]}
   {...htmlAttributes}
 >
-  <span class:list={["counter-inner", `alignment-${alignmentHorizontal}`, size && `size-${size}`]}>
+  <span
+    class:list={["counter-inner", `alignment-${alignmentHorizontal}`, size && `size-${size}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
     {prefix && <span class="prefix">{prefix}</span>}
     <span
       class="number"
-      data-target={`${number}`}
+      data-target={`${target}`}
       data-start={`${startNumber}`}
       data-duration={`${duration}`}
+      data-decimals={`${decimals}`}
       aria-live="off"
-      >{number}</span
     >
+      {formattedTarget}
+    </span>
     {suffix && <span class="suffix">{suffix}</span>}
   </span>
 </div>
@@ -62,6 +79,20 @@ const duration = 500;
       const start = parseFloat(element.dataset.start || "0");
       const target = parseFloat(element.dataset.target || "0");
       const duration = parseInt(element.dataset.duration || "2000", 10);
+      const decimals = parseInt(element.dataset.decimals || "0", 10);
+
+      const format = (value: number) =>
+        value.toLocaleString(undefined, {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals,
+        });
+
+      // rAF is invisible to the global reduced-motion CSS reset.
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        element.textContent = format(target);
+
+        return;
+      }
 
       let startTime: number | null = null;
 
@@ -69,7 +100,7 @@ const duration = 500;
         if (!startTime) startTime = ts;
         const progress = Math.min((ts - startTime) / duration, 1);
         const value = start + (target - start) * progress;
-        element.textContent = Math.floor(value).toLocaleString();
+        element.textContent = format(decimals > 0 ? value : Math.floor(value));
         if (progress < 1) requestAnimationFrame(step);
       }
 
@@ -83,13 +114,11 @@ const duration = 500;
 <style is:global>
   @layer components {
     .counter {
-      margin-top: var(--spacing-lg);
-
       > .counter-inner {
         align-items: flex-start;
         display: flex;
         font-size: var(--font-size-heading-2xl);
-        font-variant-numeric: tabular-nums;
+        font-variant-numeric: lining-nums tabular-nums;
         font-weight: var(--font-weight-bold);
 
         &.alignment-end {

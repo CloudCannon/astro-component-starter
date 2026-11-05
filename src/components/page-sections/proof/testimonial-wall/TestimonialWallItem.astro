@@ -1,0 +1,40 @@
+---
+import Testimonial from "@core-elements/testimonial/Testimonial.astro";
+import MasonryItem from "@wrappers/masonry/MasonryItem.astro";
+
+const {
+  text = "",
+  authorName = "",
+  authorDescription = "",
+  authorImage = "",
+  class: className,
+  _component,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<MasonryItem {...htmlAttributes}>
+  <Testimonial
+    class:list={["testimonial-wall-item", className]}
+    text={text}
+    authorName={authorName}
+    authorDescription={authorDescription}
+    authorImage={authorImage}
+    alignmentHorizontal="start"
+    avatarSize={48}
+    data-prop="text"
+    data-prop-author-name="authorName"
+    data-prop-author-description="authorDescription"
+    data-prop-author-image="authorImage"
+  />
+</MasonryItem>
+
+<style is:global>
+  @layer page-sections {
+    .testimonial-wall-item {
+      /* Height must stay content-driven: it feeds the masonry span measurement. */
+      margin-top: 0;
+    }
+  }
+</style>

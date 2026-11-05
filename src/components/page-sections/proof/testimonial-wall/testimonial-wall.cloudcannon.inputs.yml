@@ -1,0 +1,135 @@
+eyebrow:
+  type: text
+  comment: Short label above the heading.
+heading:
+  type: text
+  comment: Main heading for the section.
+headingLevel:
+  type: select
+  comment: Heading level for the title. Use h1 once per page, on the first section.
+  options:
+    values:
+      - h1
+      - h2
+      - h3
+subtext:
+  type: markdown
+  comment: Supporting copy beneath the heading.
+testimonials:
+  type: array
+  label: Testimonials
+  comment: The quotes, in reading order.
+  options:
+    structures: _structures.testimonialWallItems
+columns:
+  type: range
+  comment: Number of columns on screens 640px and up (small screens always show two).
+  options:
+    min: 2
+    max: 4
+    step: 1
+
+# --- section wrapper inputs (CustomSection) ---
+# `new:component` and `docs:catalog` match the marker line above verbatim; keep it.
+sectionLabel:
+  type: text
+  comment: Names the section in the editor and sets its anchor id.
+maxContentWidth:
+  type: select
+  comment: Maximum width of the content.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+paddingHorizontal:
+  type: select
+  comment: Horizontal padding around the content.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+paddingVertical:
+  type: select
+  comment: Vertical padding around the content.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+      - id: 4xl
+        name: 4xl
+      - id: 5xl
+        name: 5xl
+      - id: 6xl
+        name: 6xl
+colorScheme:
+  type: select
+  comment: Light or dark scheme for the section. Inherit follows the page.
+  options:
+    values:
+      - id: inherit
+        name: Inherit
+      - id: light
+        name: Light
+      - id: dark
+        name: Dark
+lockColorScheme:
+  type: switch
+  label: Lock color scheme
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
+backgroundColor:
+  type: select
+  comment: Background color for the section.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: base
+        name: Base
+      - id: surface
+        name: Surface
+      - id: accent
+        name: Accent
+      - id: highlight
+        name: Highlight

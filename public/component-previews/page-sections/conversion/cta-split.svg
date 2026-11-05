@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-cta-split">
+  <title id="t-cta-split">Cta split component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 160)">
+    <rect x="160" y="120" width="316" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="160" y="178" width="354" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="202" width="212" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="160" y="246" width="167" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="214" y="264" width="60" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+    <rect x="343" y="246" width="167" height="44" rx="10" fill="var(--pv-paper, #FFFFFF)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="2"/>
+    <rect x="397" y="264" width="60" height="8" rx="4" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="774" y="0" width="346" height="400" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="1053" cy="96" r="20" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="827,312 885,235 927,312" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="930,313 982,247 1038,313" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="14" stroke-linejoin="round"/>
+  </g>
+</svg>

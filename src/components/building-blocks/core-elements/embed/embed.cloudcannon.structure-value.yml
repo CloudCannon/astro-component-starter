@@ -1,6 +1,6 @@
 label: Embed
 icon: data_object
-description: Responsive wrapper for third-party embeds and raw HTML content.
+description: Trusted third-party HTML. Use Video for YouTube or Vimeo.
 value:
   _component: building-blocks/core-elements/embed
   html: ""
@@ -8,9 +8,18 @@ value:
 preview:
   text:
     - Embed
+  image: public/component-previews/building-blocks/core-elements/embed.svg
   icon: data_object
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/embed.svg
+    fit: cover
 picker_preview:
   text: Embed
-  subtext: Responsive wrapper for third-party embeds.
+  subtext: Sanitized trusted HTML; hosted video belongs in Video.
+  image: public/component-previews/building-blocks/core-elements/embed.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/embed.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/embed/embed.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

@@ -1,91 +1,55 @@
-import { getCollection } from "astro:content";
-
-const DISPLAY_NAME_OVERRIDES = {
-  ctas: "CTAs",
-  cta: "CTA",
-};
-
-const formatDisplayName = (value = "") => {
-  const lower = value.toLowerCase();
-
-  if (DISPLAY_NAME_OVERRIDES[lower]) {
-    return DISPLAY_NAME_OVERRIDES[lower];
-  }
-
-  return value
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
+import { getComponentIndex, formatDisplayName } from "@component-docs/shared/componentIndex";
 
 export async function generateNavData(navData) {
-  const allComponents = await getCollection("docs-components");
+  const componentIndex = await getComponentIndex();
 
   const componentsByCategory = {};
 
-  allComponents.forEach((component) => {
-    const slug = component.id.replace(/^components\//, "").replace(/\/index$/, "");
-    const parts = slug.split("/").filter(Boolean);
+  componentIndex.forEach((entry) => {
+    const { key, parts, title, order } = entry;
+    const path = `/component-docs/components/${key}/`;
 
-    if (slug.includes("/examples/") || (!component.data.title && !component.data.name)) {
-      return;
-    }
+    if (parts.length >= 2) {
+      const topCategory = parts[0];
+      const subCategory = parts[1];
 
-    if (parts.length >= 1) {
-      const path = `/component-docs/components/${slug}/`;
-      const componentName = parts[parts.length - 1];
+      if (!componentsByCategory[topCategory]) {
+        componentsByCategory[topCategory] = {};
+      }
 
-      if (parts.length >= 2) {
-        const topCategory = parts[0];
-        const subCategory = parts[1];
-
-        if (!componentsByCategory[topCategory]) {
-          componentsByCategory[topCategory] = {};
+      if (topCategory === "navigation" || parts.length === 2) {
+        if (!componentsByCategory[topCategory]["default"]) {
+          componentsByCategory[topCategory]["default"] = [];
         }
-
-        if (topCategory === "navigation") {
-          if (!componentsByCategory[topCategory]["default"]) {
-            componentsByCategory[topCategory]["default"] = [];
-          }
-          componentsByCategory[topCategory]["default"].push({
-            name: component.data.title || componentName.replace(/-/g, " "),
-            path,
-            order: Number(component.data.order) || 999,
-          });
-        } else if (parts.length === 2) {
-          if (!componentsByCategory[topCategory]["default"]) {
-            componentsByCategory[topCategory]["default"] = [];
-          }
-          componentsByCategory[topCategory]["default"].push({
-            name: component.data.title || componentName.replace(/-/g, " "),
-            path,
-            order: Number(component.data.order) || 999,
-          });
-        } else {
-          if (!componentsByCategory[topCategory][subCategory]) {
-            componentsByCategory[topCategory][subCategory] = [];
-          }
-          componentsByCategory[topCategory][subCategory].push({
-            name: component.data.title || componentName.replace(/-/g, " "),
-            path,
-            order: Number(component.data.order) || 999,
-          });
-        }
-      } else if (parts.length === 1) {
-        const category = parts[0];
-
-        if (!componentsByCategory[category]) {
-          componentsByCategory[category] = {};
-        }
-        if (!componentsByCategory[category]["default"]) {
-          componentsByCategory[category]["default"] = [];
-        }
-        componentsByCategory[category]["default"].push({
-          name: component.data.title || componentName.replace(/-/g, " "),
+        componentsByCategory[topCategory]["default"].push({
+          name: title,
           path,
-          order: Number(component.data.order) || 999,
+          order,
+        });
+      } else {
+        if (!componentsByCategory[topCategory][subCategory]) {
+          componentsByCategory[topCategory][subCategory] = [];
+        }
+        componentsByCategory[topCategory][subCategory].push({
+          name: title,
+          path,
+          order,
         });
       }
+    } else if (parts.length === 1) {
+      const category = parts[0];
+
+      if (!componentsByCategory[category]) {
+        componentsByCategory[category] = {};
+      }
+      if (!componentsByCategory[category]["default"]) {
+        componentsByCategory[category]["default"] = [];
+      }
+      componentsByCategory[category]["default"].push({
+        name: title,
+        path,
+        order,
+      });
     }
   });
 

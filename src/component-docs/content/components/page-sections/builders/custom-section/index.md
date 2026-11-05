@@ -1,12 +1,10 @@
 ---
 title: Custom Section
 order: 1
-overview: 'Defines the primary sections of a page and manages their appearance. Controls background, padding, and overall page width to keep layouts consistent.'
+overview: The main building block for a page section. Sets background, padding, and width so layouts stay consistent.
 slots:
   - title: default
-    description: The contents of the Custom Section.
-    fallback_for: contentSections
-    child_component:
+    description: Section content.
 examples:
   - title: Background color
     slugs:
@@ -20,9 +18,29 @@ examples:
       - bg-image-position-top-left
       - bg-image-position-center-center
       - bg-image-position-bottom-right
+  - title: Fixed background image
+    slugs:
+      - bg-image-fixed
   - title: Background video
     slugs:
       - bg-video
+  - title: Background pattern
+    slugs:
+      - bg-pattern-natural
+      - bg-pattern-sm
+      - bg-pattern-md
+      - bg-pattern-lg
+  - title: Background fade
+    slugs:
+      - bg-mask-frame
+      - bg-mask-none
+      - bg-mask-vignette
+      - bg-mask-fade-top
+      - bg-mask-fade-bottom
+      - bg-mask-fade-left
+      - bg-mask-fade-right
+      - bg-mask-video-bottom
+      - bg-mask-video-blend
   - title: Background overlay
     slugs:
       - bg-overlay-darken

@@ -14,7 +14,7 @@ export const siteFonts = [
   {
     name: "Inter",
     cssVariable: "--font-body",
-    provider: fontProviders.google(),
+    provider: fontProviders.fontsource(),
     weights: ["100 900"],
     styles: ["normal"],
     subsets: ["latin"],
@@ -22,7 +22,7 @@ export const siteFonts = [
   {
     name: "Raleway",
     cssVariable: "--font-headings",
-    provider: fontProviders.google(),
+    provider: fontProviders.fontsource(),
     weights: ["100 900"],
     styles: ["normal"],
     subsets: ["latin"],

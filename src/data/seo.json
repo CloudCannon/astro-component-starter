@@ -1,8 +1,13 @@
 {
   "_schema": "seo",
   "name": "Astro Component Starter",
-  "url": "https://example.com",
+  "url": "https://astro-component-starter.cc",
   "description": "Build fast, customizable Astro sites with a modern component starter that is easy to edit and maintain.",
-  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
-  "titleFormat": "{title} | Astro Component Starter"
+  "logoSource": "/src/assets/images/brand/astro-component-starter-logo.svg",
+  "logoAlternateSource": "/src/assets/images/brand/astro-component-starter-logo-reversed.svg",
+  "shareImage": "",
+  "shareImageGeneration": "all",
+  "shareImageTheme": "light",
+  "titleFormat": "{title} | Astro Component Starter",
+  "twitterSite": ""
 }

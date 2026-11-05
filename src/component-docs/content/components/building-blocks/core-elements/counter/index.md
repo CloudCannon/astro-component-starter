@@ -1,7 +1,18 @@
 ---
 title: Counter
-overview: 'Displays animated numeric values for key stats or figures, with support for prefix and suffix text, sizing, and alignment. For a unanimated version use [Heading](/component-docs/components/building-blocks/core-elements/heading/).'
+overview: A number that counts to its target when scrolled into view. A target of 0 counts down. For a static number, use [Heading](/component-docs/components/building-blocks/core-elements/heading/).
 examples:
+  - slugs:
+      - size-xs
+      - size-sm
+      - size-md
+      - size-lg
+      - size-xl
+      - size-2xl
+      - size-3xl
+      - size-4xl
+    title: Sizes
+    size: sm
   - slugs:
       - alignment-start
       - alignment-center
@@ -10,8 +21,11 @@ examples:
     size: sm
   - slugs:
       - prefix
+      - suffix
+    title: Prefix and Suffix
     size: sm
   - slugs:
-      - suffix
+      - count-down
+    title: Count Down
     size: sm
 ---

@@ -6,7 +6,11 @@ embed:
       - Embed
     subtext:
       - key: html
+    image: public/component-previews/building-blocks/core-elements/embed.svg
     icon: data_object
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/embed.svg
+      fit: cover
   definitions:
     component_name: Embed
     content_key: html

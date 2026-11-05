@@ -1,0 +1,59 @@
+label: __LABEL__
+icon: extension # Material Symbols, snake_case — not a kebab-case icon id from src/icons/
+description: TODO — one-line description shown in the component picker.
+value:
+  _component: __KEY__
+  sectionLabel: ""
+  heading: Heading text
+  maxContentWidth: lg
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - __LABEL__
+  subtext:
+    - key: heading
+  image: public/component-previews/__KEY__.svg
+  icon: extension
+  gallery:
+    image: public/component-previews/__KEY__.svg
+    fit: cover
+picker_preview:
+  text: __LABEL__
+  subtext: TODO — one-line description shown in the component picker.
+  image: public/component-previews/__KEY__.svg
+  gallery:
+    image: public/component-previews/__KEY__.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/__KEY__/__SLUG__.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+groups:
+  # Every key under value: (except _component) must appear in exactly one
+  # group — lint:cms fails otherwise. Add new content props to Content.
+  - heading: Content
+    inputs:
+      - heading
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - backgroundColor
+      - background

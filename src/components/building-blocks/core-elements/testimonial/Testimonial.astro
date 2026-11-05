@@ -1,23 +1,33 @@
 ---
-import Image from "@core-elements/image/Image.astro";
-import MarkdownIt from "markdown-it";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import Avatar from "@component-utils/Avatar.astro";
+import { renderMarkdown } from "@component-utils/markdown";
 const {
   text,
   authorName,
   authorDescription,
   alignmentHorizontal = "center",
   authorImage = "",
+  avatarSize = 80,
+  spaceBefore = "default",
   class: className,
   useDefaultEditableBinding = false,
   "data-prop": customDataProp,
   "data-prop-author-name": customDataPropAuthorName,
   "data-prop-author-description": customDataPropAuthorDescription,
+  "data-prop-author-image": customDataPropAuthorImage,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const md = MarkdownIt({ html: true });
-const MarkdownText = text ? md.render(text) : "";
+const hasQuote = Boolean(text) || Astro.slots.has("default");
+const hasAuthor = Boolean(authorName || authorDescription || authorImage);
+
+if (!_component && !hasQuote) return;
+
+const avatarPx = Math.max(1, Math.round(Number(avatarSize) || 80));
+
+const MarkdownText = renderMarkdown(text);
 
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
@@ -35,40 +45,55 @@ const effectiveAuthorDescProp =
 const authorDescriptionDataAttributes = effectiveAuthorDescProp
   ? { "data-editable": "text", "data-prop": effectiveAuthorDescProp }
   : {};
+
+const effectiveAuthorImageProp =
+  customDataPropAuthorImage ?? (useDefaultEditableBinding ? "authorImage" : null);
+// The avatar's alt *is* the author name, so alt edits write to that same prop.
+const authorImageDataAttributes = effectiveAuthorImageProp
+  ? {
+      "data-prop-src": effectiveAuthorImageProp,
+      ...(effectiveAuthorNameProp ? { "data-prop-alt": effectiveAuthorNameProp } : {}),
+    }
+  : {};
 ---
 
-<blockquote
-  class:list={["testimonial", className]}
+<div
+  class:list={["testimonial", "stackable", className]}
   {...htmlAttributes}
 >
-  <div class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}>
-    <div
+  {/* Not the root: <figcaption> must be a direct child of its <figure>, and the
+      root must stay a plain wrapper the alignment class is hoisted off. */}
+  <figure
+    class:list={["testimonial-inner", `alignment-${alignmentHorizontal}`]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    <blockquote
       class="quote"
       {...textDataAttributes}
     >
-      <slot>
-        {text && <Fragment set:html={MarkdownText} />}
-      </slot>
-    </div>
-    <div class="author">
-      <Image
-        source={authorImage}
-        alt={authorName}
-        width={100}
-        height={100}
-        class="author-image"
-        data-prop-src="authorImage"
-        data-prop-alt="authorName"
-      />
-      <cite class="author-content">
-        <strong
-          class="name"
-          {...authorNameDataAttributes}
-        >
-          {authorName}
-        </strong>
-        {
-          authorDescription && (
+      <slot>{text && <Fragment set:html={MarkdownText} />}</slot>
+    </blockquote>
+    {hasAuthor && (
+      <figcaption class="author">
+        {authorImage && (
+          <Avatar
+            image={authorImage}
+            alt={authorName}
+            border={false}
+            class="author-image"
+            displaySize={avatarPx}
+            style={`--avatar-size: ${avatarPx}px;`}
+            {...authorImageDataAttributes}
+          />
+        )}
+        <div class="author-content">
+          <strong
+            class="name"
+            {...authorNameDataAttributes}
+          >
+            {authorName}
+          </strong>
+          {authorDescription && (
             <>
               <br />
               <span
@@ -78,28 +103,24 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
                 {authorDescription}
               </span>
             </>
-          )
-        }
-      </cite>
-    </div>
-  </div>
-</blockquote>
+          )}
+        </div>
+      </figcaption>
+    )}
+  </figure>
+</div>
 
 <style is:global>
   @layer components {
     .testimonial {
-      border-inline-start: 0;
-      margin: 0;
-      margin-top: var(--spacing-lg);
-      padding-inline-start: 0;
-
       > .testimonial-inner {
         background: var(--color-bg);
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-md);
         display: flex;
         flex-direction: column;
         gap: var(--spacing-em-sm);
+        margin: 0;
         padding: var(--spacing-lg);
 
         &.alignment-center {
@@ -109,25 +130,29 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
         }
 
         > .quote {
+          border-inline-start: 0;
           margin: 0;
+          padding-inline-start: 0;
 
-          * {
+          /* Direct children only: a descendant selector puts a quote mark on
+             every nested leaf, so a quote starting with bold renders ““Bold”. */
+          > * {
             font-size: var(--font-size-2xl);
           }
 
-          *:first-child {
+          > *:first-child {
             margin-top: 0;
           }
 
-          *:last-child {
+          > *:last-child {
             margin-bottom: 0;
           }
 
-          *:first-child::before {
+          > *:first-child::before {
             content: "\201C";
           }
 
-          *:last-child::after {
+          > *:last-child::after {
             content: "\201D";
           }
         }
@@ -139,23 +164,7 @@ const authorDescriptionDataAttributes = effectiveAuthorDescProp
           margin-top: var(--spacing-md);
 
           > .author-content {
-            font-style: normal;
             text-align: start;
-          }
-
-          > .author-image {
-            aspect-ratio: var(--ratio-square);
-            height: 80px;
-            width: 80px;
-
-            picture {
-              border-radius: var(--radius-full);
-              overflow: hidden;
-            }
-
-            img {
-              height: 100%;
-            }
           }
         }
       }

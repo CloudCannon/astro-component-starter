@@ -1,8 +1,9 @@
 {
-  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
-  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoSource": "/src/assets/images/brand/astro-component-starter-logo.svg",
+  "logoAlternateSource": "/src/assets/images/brand/astro-component-starter-logo-reversed.svg",
   "logoAlt": "Astro Component Starter",
   "themeToggle": true,
+  "search": true,
   "navData": [
     {
       "name": "Home",
@@ -15,26 +16,56 @@
       "children": []
     },
     {
-      "name": "Components",
-      "path": "/component-docs/",
+      "name": "Get started",
+      "path": "/start/",
       "children": []
     },
     {
-      "name": "Blog",
-      "path": "/blog/",
+      "name": "Examples",
+      "path": "",
+      "children": [
+        {
+          "name": "Overview",
+          "path": "/examples/",
+          "children": []
+        },
+        {
+          "name": "Pricing",
+          "path": "/examples/pricing/",
+          "children": []
+        },
+        {
+          "name": "About",
+          "path": "/examples/about/",
+          "children": []
+        },
+        {
+          "name": "Services",
+          "path": "/examples/services/",
+          "children": []
+        },
+        {
+          "name": "Portfolio",
+          "path": "/examples/portfolio/",
+          "children": []
+        },
+        {
+          "name": "Contact",
+          "path": "/examples/contact/",
+          "children": []
+        },
+        {
+          "name": "Blog",
+          "path": "/blog/",
+          "children": []
+        }
+      ]
+    },
+    {
+      "name": "Components",
+      "path": "/component-docs/",
       "children": []
     }
   ],
-  "buttonSections": [
-    {
-      "_component": "building-blocks/core-elements/button",
-      "text": "Search",
-      "hideText": true,
-      "link": "/search/",
-      "iconName": "magnifying-glass",
-      "iconPosition": "before",
-      "variant": "ghost",
-      "size": "lg"
-    }
-  ]
+  "buttonSections": []
 }

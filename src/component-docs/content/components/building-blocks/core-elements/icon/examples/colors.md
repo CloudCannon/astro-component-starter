@@ -3,47 +3,47 @@ title: 'Colors'
 spacing: 'all'
 blocks:
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: default
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: blue
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: cyan
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: green
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: yellow
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: orange
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: red
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: purple
     style: 'margin-inline-end: .5rem;'
   - _component: 'building-blocks/core-elements/icon'
-    name: cube
+    name: box
     size: lg
     color: pink
     style: 'margin-inline-end: .5rem;'

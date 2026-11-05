@@ -8,20 +8,14 @@ blocks:
   options:
     - value: 'grid'
       label: 'Grid'
-      icon: 'squares-2x2'
-      iconSize: 'sm'
-      iconBackground: 'none'
+      icon: 'layout-grid'
       checked: true
     - value: 'list'
       label: 'List'
-      icon: 'list-bullet'
-      iconSize: 'sm'
-      iconBackground: 'none'
+      icon: 'list'
       checked: false
     - value: 'card'
       label: 'Card'
-      icon: 'rectangle-stack'
-      iconSize: 'sm'
-      iconBackground: 'none'
+      icon: 'layers'
       checked: false
 ---

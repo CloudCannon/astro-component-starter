@@ -1,0 +1,140 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import MasonryItem from "./MasonryItem.astro";
+
+type ItemProps = Record<string, unknown>;
+
+const {
+  label,
+  columns = "3",
+  gap = "md",
+  items = [],
+  spaceBefore = "default",
+  class: className,
+  style: userStyle,
+  useDefaultEditableBinding = false,
+  _component,
+  "data-children-prop": childrenDataProp,
+  ...htmlAttributes
+} = Astro.props;
+
+if (!htmlAttributes.id && label) {
+  htmlAttributes.id = slugifyLabel(label);
+}
+
+const columnCount = Number(columns);
+const masonryStyles = [
+  `--masonry-columns: ${columnCount}`,
+  `--masonry-gap: ${gap === "none" ? "0px" : `var(--spacing-${gap})`}`,
+  userStyle,
+]
+  .filter(Boolean)
+  .join("; ");
+
+const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "items" : null);
+const arrayDataAttributes = effectiveChildrenProp
+  ? { "data-editable": "array", "data-prop": effectiveChildrenProp, "data-direction": "row" }
+  : {};
+const itemRegionAttributes = effectiveChildrenProp
+  ? { "data-id": "building-blocks/wrappers/masonry/masonry-item", "data-editable": "array-item" }
+  : {};
+
+const hasItems = items?.length > 0;
+const hasSlotContent = Astro.slots.has("default");
+
+if (!_component && !hasItems && !hasSlotContent) return;
+---
+
+<div
+  class:list={["masonry", "stackable", className]}
+  {...htmlAttributes}
+>
+  <div
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...arrayDataAttributes}
+    class="masonry-inner"
+    style={masonryStyles}
+  >
+    <slot>
+      {items?.map((item: ItemProps) => (
+        <MasonryItem
+          {...itemRegionAttributes}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+          {...item}
+        />
+      ))}
+    </slot>
+  </div>
+</div>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllMasonry } from "./setup";
+
+  onPageLoad(() => setupAllMasonry());
+</script>
+
+<style is:global>
+  @layer components {
+    .masonry {
+      --space-before: var(--space-before-loose);
+
+      /* Named container, not the viewport: a masonry in a narrow pane must not read the window. */
+      container: masonry / inline-size;
+      width: 100%;
+
+      /* Layer 1 — no-JS baseline: multi-column, reading order down each column. */
+      > .masonry-inner {
+        column-gap: var(--masonry-gap, var(--spacing-md));
+        columns: 2;
+
+        > * {
+          break-inside: avoid;
+          margin-bottom: var(--masonry-gap, var(--spacing-md));
+        }
+
+        @container masonry (width >= 640px) {
+          columns: var(--masonry-columns, 3);
+        }
+      }
+
+      /* JS enhancement: `grid-auto-rows` must match ROW_UNIT in masonryEnhance.ts. */
+      &[data-masonry-enhanced] > .masonry-inner {
+        column-gap: var(--masonry-gap, var(--spacing-md));
+        columns: auto;
+        display: grid;
+        grid-auto-rows: 8px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        > * {
+          break-inside: auto;
+          margin-bottom: 0;
+        }
+
+        @container masonry (width >= 640px) {
+          grid-template-columns: repeat(var(--masonry-columns, 3), minmax(0, 1fr));
+        }
+      }
+
+      /* Native handoff; the util no-ops behind the same check. */
+      @supports (display: masonry) {
+        > .masonry-inner,
+        &[data-masonry-enhanced] > .masonry-inner {
+          columns: auto;
+          display: masonry;
+          gap: var(--masonry-gap, var(--spacing-md));
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+
+          > * {
+            margin-bottom: 0;
+          }
+
+          @container masonry (width >= 640px) {
+            grid-template-columns: repeat(var(--masonry-columns, 3), minmax(0, 1fr));
+          }
+        }
+      }
+    }
+  }
+</style>

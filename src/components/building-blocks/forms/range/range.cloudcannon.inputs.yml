@@ -3,7 +3,7 @@ label:
   comment: The label text for the range field.
 name:
   type: text
-  comment: The name attribute for the range field.
+  comment: Name the field is submitted under. Must be unique in the form.
 min:
   type: number
   comment: The minimum value of the range.
@@ -16,9 +16,26 @@ step:
 value:
   type: number
   comment: The default value for the range field.
-required:
-  type: switch
-  comment: Whether the field is required.
+unit:
+  type: text
+  comment: Unit suffix shown next to the value, e.g. % or px.
 showValue:
   type: switch
-  comment: Whether to display the current value next to the label.
+  comment: Shows the current value next to the label.
+hint:
+  type: text
+  comment: Help text shown between the label and the field.
+tickStyle:
+  type: select
+  comment: How the decorative scale marks below the track behave.
+  options:
+    values:
+      - id: uniform
+        name: Uniform
+      - id: nearest
+        name: Highlight nearest
+      - id: none
+        name: Hidden
+tickCount:
+  type: number
+  comment: Number of decorative scale marks below the track.

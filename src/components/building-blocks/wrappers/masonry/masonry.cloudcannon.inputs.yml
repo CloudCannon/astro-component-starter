@@ -1,0 +1,43 @@
+label:
+  type: text
+  comment: Names this block in the editor and sets its anchor id.
+columns:
+  type: select
+  comment: Columns from 640px up; two below.
+  options:
+    values:
+      - id: "2"
+        name: 2 Columns
+      - id: "3"
+        name: 3 Columns
+      - id: "4"
+        name: 4 Columns
+      - id: "5"
+        name: 5 Columns
+gap:
+  comment: The gap between masonry items.
+  type: select
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+items:
+  label: Masonry Items
+  comment: Masonry items, each holding content blocks. Order reads left to right.
+  type: array
+  options:
+    structures: _structures.masonryItems

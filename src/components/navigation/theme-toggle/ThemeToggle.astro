@@ -1,25 +1,25 @@
 ---
-import { Icon as AstroIcon } from "astro-icon/components";
+import Icon from "@core-elements/icon/Icon.astro";
 
 const { class: className, ...htmlAttributes } = Astro.props;
 ---
 
 <button
   type="button"
-  class:list={["theme-toggle", className]}
+  class:list={["theme-toggle", "tap-target", className]}
   aria-label="Toggle dark mode"
   {...htmlAttributes}
 >
   <span class="theme-toggle-icon theme-toggle-sun">
-    <AstroIcon
+    <Icon
       name="sun"
-      is:inline
+      size="none"
     />
   </span>
   <span class="theme-toggle-icon theme-toggle-moon">
-    <AstroIcon
+    <Icon
       name="moon"
-      is:inline
+      size="none"
     />
   </span>
 </button>
@@ -27,6 +27,10 @@ const { class: className, ...htmlAttributes } = Astro.props;
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
 
+  const darkQuery = matchMedia("(prefers-color-scheme: dark)");
+  let systemThemeBound = false;
+
+  // Keep in step with the pre-paint copy in ThemeToggleScript.astro, which cannot import.
   const themedSelector =
     '[data-theme="light"]:not([data-theme-lock]), [data-theme="dark"]:not([data-theme-lock])';
 
@@ -58,10 +62,7 @@ const { class: className, ...htmlAttributes } = Astro.props;
   }
 
   function getPreferredTheme(): string {
-    return (
-      localStorage.getItem("theme") ||
-      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")
-    );
+    return localStorage.getItem("theme") || (darkQuery.matches ? "dark" : "light");
   }
 
   function initThemeToggle() {
@@ -95,11 +96,15 @@ const { class: className, ...htmlAttributes } = Astro.props;
       });
     });
 
-    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-      if (!localStorage.getItem("theme")) {
-        setTheme(e.matches ? "dark" : "light");
-      }
-    });
+    // Bound once: init re-runs after every view transition.
+    if (!systemThemeBound) {
+      systemThemeBound = true;
+      darkQuery.addEventListener("change", (e) => {
+        if (localStorage.getItem("theme")) return;
+
+        applyTheme(document, e.matches ? "dark" : "light");
+      });
+    }
   }
 
   onPageLoad(initThemeToggle);
@@ -123,19 +128,20 @@ const { class: className, ...htmlAttributes } = Astro.props;
       flex-shrink: 0;
       font-size: var(--font-size-xl);
       justify-content: center;
-      line-height: 0;
+      line-height: var(--line-height-none);
       padding: var(--spacing-em-xs);
+      position: relative;
       transition-duration: var(--animation-normal);
       transition-property: background-color, color;
-      transition-timing-function: ease-in-out;
+      transition-timing-function: var(--ease-in-out);
 
       &:hover {
         background-color: var(--color-state-hover);
       }
 
       &:focus-visible {
-        box-shadow: 0 0 2px 2px var(--color-focus-ring) inset;
-        outline: none;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
       }
 
       svg {
@@ -146,14 +152,15 @@ const { class: className, ...htmlAttributes } = Astro.props;
 
     .theme-toggle-icon {
       display: none;
-      line-height: 0;
+      line-height: var(--line-height-none);
     }
 
-    [data-theme="light"] .theme-toggle-moon {
+    /* Scoped to `html`, or a themed section would pick the icon instead of the site. */
+    html[data-theme="light"] .theme-toggle-moon {
       display: block;
     }
 
-    [data-theme="dark"] .theme-toggle-sun {
+    html[data-theme="dark"] .theme-toggle-sun {
       display: block;
     }
   }

@@ -1,4 +1,5 @@
 ---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
@@ -23,6 +24,22 @@ const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
   : {};
 
+// `Astro.url` is absent in CloudCannon's editable-regions re-render.
+const isLibraryPage = Astro.url?.pathname?.startsWith("/component-docs") ?? false;
+
+if (
+  import.meta.env.DEV &&
+  !isLibraryPage &&
+  _component &&
+  !link &&
+  !element &&
+  !htmlAttributes.popovertarget
+) {
+  console.warn(
+    `[button] "${text ?? ""}" has no link, element or popover target, so it renders a button that does nothing when clicked.`
+  );
+}
+
 const isPopoverLink = link?.startsWith("^");
 const Tag = (element ?? (isPopoverLink || !link ? "button" : "a")) as any;
 
@@ -45,6 +62,10 @@ const tagKeys = new Set<string>([
   "tabIndex",
   "popovertarget",
   "popovertargetaction",
+  "aria-pressed",
+  // `aria-expanded` is flipped by modal/setup.ts.
+  "aria-haspopup",
+  "aria-expanded",
 ]);
 
 if (Tag === "a" && link) {
@@ -79,9 +100,9 @@ for (const key of tagKeys) {
   }
 }
 
-const hasText = text?.trim().length > 0;
+const hasText = isNonEmptyString(text);
 const hasSlotContent = Astro.slots.has("default");
-const hasIcon = iconName?.trim().length > 0;
+const hasIcon = isNonEmptyString(iconName);
 
 if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
 ---
@@ -97,6 +118,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
       `size-${size}`,
       iconPosition === "after" && "icon-after",
       hideText && "icon-only",
+      hideText && "tap-target",
     ]}
     {...tagProps}
   >
@@ -105,22 +127,22 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
       color={iconColor}
       size="none"
     />
-    {
-      !hideText && (
-        <span
-          class="label-text"
-          {...textDataAttributes}
-        >
-          <slot>{text}</slot>
-        </span>
-      )
-    }
+    {!hideText && (
+      <span
+        class="label-text"
+        {...textDataAttributes}
+      >
+        <slot>{text}</slot>
+      </span>
+    )}
   </Tag>
 </span>
 
 <style is:global>
   @layer components {
     .button {
+      --button-icon-gap: 0.4em;
+
       display: inline-flex;
       max-width: 100%;
       vertical-align: middle;
@@ -128,23 +150,21 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
       > .button-inner {
         align-items: center;
         background-color: var(--color-bg-surface);
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-radius: var(--radius-xs);
         color: var(--color-text-strong);
         display: inline-flex;
         flex-shrink: 0;
         font-weight: var(--font-weight-semibold);
-        gap: 0.15em;
+        gap: var(--button-icon-gap);
         justify-content: center;
-        min-height: 10px;
-        min-width: 10px;
         padding-block: var(--spacing-em-sm);
         padding-inline: var(--spacing-em-sm);
         text-align: center;
         text-decoration: none;
         transition-duration: var(--animation-normal);
         transition-property: background-color, color, border-color;
-        transition-timing-function: ease-in-out;
+        transition-timing-function: var(--ease-in-out);
 
         &:hover {
           background-color: var(--color-bg-muted);
@@ -153,13 +173,15 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           cursor: pointer;
         }
 
-        &:focus {
-          box-shadow: 0 0 2px 2px var(--color-focus-ring) inset;
-          outline: none;
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
 
+        /* Positioning context for the `tap-target` overlay. */
         &.icon-only {
           padding: var(--spacing-em-xs);
+          position: relative;
         }
 
         &.icon-after {
@@ -180,13 +202,13 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
         }
 
         &.variant-secondary {
-          background-color: var(--color-bg-muted);
+          background-color: var(--color-bg-surface);
           border-color: transparent;
           color: var(--color-text-strong);
 
           &:hover,
           &:focus {
-            background-color: var(--color-state-hover);
+            background-color: var(--color-bg-muted);
             border-color: transparent;
             color: var(--color-text-strong);
           }
@@ -197,9 +219,10 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           border-color: var(--color-border-strong);
           color: var(--color-text-strong);
 
+          /* Not a surface token: it has to read on any backing. */
           &:hover,
           &:focus {
-            background-color: var(--color-bg-surface);
+            background-color: color-mix(in srgb, var(--color-text-strong) 12%, transparent);
             border-color: var(--color-border-strong);
             color: var(--color-text-strong);
           }
@@ -223,7 +246,7 @@ if (!_component && !hasText && !hasSlotContent && !hasIcon) return;
           border-color: transparent;
           color: var(--color-brand);
           font-size: var(--font-size-lg);
-          font-weight: 600;
+          font-weight: var(--font-weight-semibold);
           padding: 0;
 
           &:hover,

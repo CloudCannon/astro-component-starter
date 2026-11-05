@@ -1,0 +1,77 @@
+label:
+  comment: Names this block in the editor and sets its anchor id.
+  type: text
+contentSections:
+  type: array
+  comment: Content blocks in the stack.
+  options:
+    structures: _structures.stackSections
+direction:
+  comment: Lay children out vertically (column) or side by side (row).
+  type: select
+  options:
+    values:
+      - id: column
+        name: Column
+      - id: row
+        name: Row
+distribution:
+  comment: Rows only. Content fits each child; Equal gives each the same width (use for cards).
+  type: select
+  options:
+    values:
+      - id: content
+        name: Content
+      - id: equal
+        name: Equal
+gap:
+  comment: The gap between children.
+  type: select
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+alignmentHorizontal:
+  comment: Horizontal alignment of children.
+  type: select
+  options:
+    values:
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+      - id: end
+        name: End
+alignmentVertical:
+  comment: Vertical alignment of children.
+  type: select
+  options:
+    values:
+      - id: start
+        name: Start
+      - id: center
+        name: Center
+      - id: end
+        name: End
+      - id: stretch
+        name: Stretch
+wrap:
+  comment: Allow a row to wrap onto new lines when it runs out of space.
+  type: switch
+stackOnMobile:
+  comment: Stack a row vertically on small screens.
+  type: switch

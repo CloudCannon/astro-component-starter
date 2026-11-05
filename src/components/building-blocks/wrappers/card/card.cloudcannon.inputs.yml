@@ -1,26 +1,26 @@
 label:
   type: text
-  comment: Optional label for the card to help identify it in the editor.
+  comment: Names this block in the editor and sets its anchor id.
 contentSections:
   type: array
-  comment: Content inside the main area of the card, with padding.
+  comment: Card body content, inside the padding.
   options:
     structures: _structures.cardSections
 beforeContentSections:
   type: array
-  comment: Content that appears above the main card area, without padding.
+  comment: Content above the card body, outside the padding.
   hidden: "!showBeforeAfter"
   options:
     structures: _structures.cardSections
 afterContentSections:
   type: array
-  comment: Content that appears below the main card area, without padding.
+  comment: Content below the card body, outside the padding.
   hidden: "!showBeforeAfter"
   options:
     structures: _structures.cardSections
 maxContentWidth:
   type: select
-  comment: Maximum width constraint for the card content.
+  comment: Maximum width of the content.
   options:
     values:
       - id: none
@@ -42,10 +42,10 @@ maxContentWidth:
 showBeforeAfter:
   type: switch
   label: Show Before / After Content Sections
-  comment: Whether to show the before/after content blocks used to add content outside the card's padding.
+  comment: Shows content areas above and below the card body, outside the padding.
 paddingHorizontal:
   type: select
-  comment: Horizontal padding applied to the card content.
+  comment: Horizontal padding around the content.
   options:
     values:
       - id: xs
@@ -62,7 +62,7 @@ paddingHorizontal:
         name: 2xl
 paddingVertical:
   type: select
-  comment: Vertical padding applied to the card content.
+  comment: Vertical padding around the content.
   options:
     values:
       - id: xs
@@ -79,7 +79,7 @@ paddingVertical:
         name: 2xl
 colorScheme:
   type: select
-  comment: Color scheme theme for the card.
+  comment: Light or dark scheme for the card. Inherit follows its container.
   options:
     values:
       - id: inherit
@@ -88,6 +88,10 @@ colorScheme:
         name: Light
       - id: dark
         name: Dark
+lockColorScheme:
+  type: switch
+  label: Lock color scheme
+  comment: Ignores the site theme toggle. Only applies when Color Scheme is Light or Dark.
 backgroundColor:
   type: select
   comment: Background color for the card.
@@ -105,7 +109,7 @@ backgroundColor:
         name: Highlight
 background:
   type: object
-  comment: Optional background still image or looping HTML5 video (self-hosted). Shared positioning applies to whichever type you choose. Video is hidden when the user prefers reduced motion.
+  comment: An image, video, or tiled pattern behind the content.
   options:
     preview:
       icon: wallpaper
@@ -113,18 +117,51 @@ background:
         - Background
       subtext:
         - key: type
+    structures:
+      id_key: type
+      reorder_inputs: true
+      remove_extra_inputs: true
+      values:
+        - label: Image
+          icon: image
+          value:
+            type: image
+            imageSource: ""
+            imageAlt: ""
+            positionVertical: top
+            positionHorizontal: center
+            fixed: false
+            priority: false
+            overlay: 0
+        - label: Video
+          icon: videocam
+          value:
+            type: video
+            videoSource: ""
+            positionVertical: top
+            positionHorizontal: center
+            overlay: 0
+        - label: Pattern
+          icon: texture
+          value:
+            type: pattern
+            imageSource: ""
+            patternSize: natural
+            overlay: 0
 background.type:
   type: select
   label: Background type
-  comment: A cover image or a muted autoplay video.
+  comment: A cover image, a muted autoplay video, or a repeating tiled pattern.
   options:
     values:
       - id: image
         name: Image
       - id: video
         name: Video
+      - id: pattern
+        name: Pattern
 background.positionVertical:
-  comment: Vertical focal point (object-position for video; image position for pictures).
+  comment: Vertical focal point.
   type: select
   options:
     values:
@@ -135,7 +172,7 @@ background.positionVertical:
       - id: bottom
         name: Bottom
 background.positionHorizontal:
-  comment: Horizontal focal point (object-position for video; image position for pictures).
+  comment: Horizontal focal point.
   type: select
   options:
     values:
@@ -145,15 +182,17 @@ background.positionHorizontal:
         name: Center
       - id: right
         name: Right
+background.fixed:
+  type: switch
+  label: Fixed background (parallax)
+  comment: Pins the image in place while the page scrolls past.
 background.priority:
   type: switch
   label: Prioritize image load
-  comment: When using a background image, load it eagerly (use for above-the-fold sections).
-  hidden: "background.type !== 'image'"
+  comment: Loads the image eagerly. Use near the top of the page.
 background.imageSource:
-  comment: URL or path to the background image.
+  comment: URL or path to the background or pattern image.
   type: image
-  hidden: "background.type !== 'image'"
   options:
     paths:
       uploads: src/assets/images
@@ -161,15 +200,27 @@ background.imageSource:
     resize_style: contain
     width: 1920
     height: 1280
+background.patternSize:
+  type: select
+  label: Pattern tile size
+  comment: Size of each repeated tile. Natural uses the image's own size.
+  options:
+    values:
+      - id: natural
+        name: Natural
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
 background.imageAlt:
   comment: Alt text for the background image.
   type: text
-  hidden: "background.type !== 'image'"
 background.videoSource:
   type: file
   label: Video source
-  comment: Path to a video under public/videos. Sibling formats with the same basename are added automatically when present.
-  hidden: "background.type !== 'video'"
+  comment: Video file in public/videos. Same-named files in other formats are added too.
   options:
     accepts_mime_types:
       - video/mp4
@@ -180,7 +231,7 @@ background.videoSource:
       static: public
 background.overlay:
   type: range
-  comment: "Overlay in front of the background (-1.0 to 1.0). Negative values darken, positive values lighten."
+  comment: Tints the background. -1 darkens, 1 lightens.
   options:
     min: -1
     max: 1
@@ -190,7 +241,7 @@ link:
   comment: URL to make the entire card clickable. Leave empty for a non-clickable card.
 rounded:
   type: switch
-  comment: Whether to apply rounded corners to the card.
+  comment: Rounds the card's corners.
 border:
   type: switch
-  comment: Whether to apply a border to the card.
+  comment: Adds a border to the card.

@@ -1,11 +1,18 @@
 ---
+import type { SegmentOption } from "../../../../types";
+import { generateFieldId } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
 const {
   name,
   options = [],
   title,
+  hint,
+  error,
   orientation = "vertical",
   required = false,
   multiple = false,
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
@@ -14,58 +21,83 @@ const {
 
 const inputType = multiple ? "checkbox" : "radio";
 const inputName = multiple ? `${name}[]` : name;
+
+// Native `required` on a checkbox means "tick this box", not "pick at least one".
+const requireEachInput = required && !multiple;
+
+const groupId = generateFieldId("choice-group", customId, name || title);
+const hintId = isNonEmptyString(hint) ? `${groupId}-hint` : undefined;
+const errorId = isNonEmptyString(error) ? `${groupId}-error` : undefined;
+const describedBy = [hintId, errorId].filter(Boolean).join(" ") || undefined;
 ---
 
 <div
   class:list={["choice-group", className]}
   {...htmlAttributes}
 >
+  {/* A <fieldset> already maps to `group`, so only the radio case needs a role
+      — and a `radiogroup` with no legend has no name, hence the fallback. */}
   <fieldset
+    id={groupId}
     class="choice-group-fieldset"
-    role={multiple ? "group" : "radiogroup"}
+    role={multiple ? undefined : "radiogroup"}
+    aria-label={title ? undefined : name || undefined}
+    aria-required={required ? "true" : undefined}
+    aria-describedby={describedBy}
+    aria-invalid={errorId ? "true" : undefined}
   >
-    {
-      title && (
-        <legend class="legend">
-          {title}
-          {required && (
-            <span
-              class="choice-group-required"
-              aria-label="required"
-            >
-              *
-            </span>
-          )}
-        </legend>
-      )
-    }
+    {title && (
+      <legend class="legend">
+        {title}
+        {required && (
+          <span
+            class="choice-group-required"
+            aria-hidden="true"
+          >
+            *
+          </span>
+        )}
+      </legend>
+    )}
+    {hintId && (
+      <p
+        class="choice-group-hint"
+        id={hintId}
+      >
+        {hint}
+      </p>
+    )}
     <div
       class:list={["choice-group-options", `orientation-${orientation}`, multiple && "multiple"]}
     >
-      {
-        options.map((option, index) => (
-          <label class="choice-group-option">
-            <input
-              type={inputType}
-              name={inputName}
-              value={option.value}
-              checked={option.checked || false}
-              required={required && index === 0}
-              aria-required={required && index === 0}
-              class="choice-group-field"
-            />
-            <span class="choice-group-label-text">{option.label}</span>
-          </label>
-        ))
-      }
+      {options?.map((option: SegmentOption, index: number) => (
+        <label class="choice-group-option">
+          <input
+            type={inputType}
+            name={inputName}
+            value={option.value}
+            checked={option.checked || false}
+            required={requireEachInput && index === 0}
+            class="choice-group-field"
+          />
+          <span class="choice-group-label-text">{option.label}</span>
+        </label>
+      ))}
     </div>
+    {errorId && (
+      <p
+        class="choice-group-error"
+        id={errorId}
+      >
+        {error}
+      </p>
+    )}
   </fieldset>
 </div>
 
 <style is:global>
   @layer components {
     .choice-group {
-      margin-bottom: var(--spacing-md);
       width: 100%;
     }
 
@@ -82,6 +114,18 @@ const inputName = multiple ? `${name}[]` : name;
         margin-inline-end: var(--spacing-em-xs);
       }
 
+      .choice-group-hint {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
+      .choice-group-error {
+        color: var(--color-error);
+        font-size: var(--font-size-sm);
+        margin: 0;
+      }
+
       .choice-group-options {
         display: flex;
         flex-direction: column;
@@ -91,6 +135,17 @@ const inputName = multiple ? `${name}[]` : name;
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         }
+      }
+
+      .choice-group-option {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        gap: var(--spacing-sm);
+      }
+
+      .choice-group-field {
+        margin: 0;
       }
     }
   }

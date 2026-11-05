@@ -3,7 +3,7 @@ label:
   comment: The label text for the select field.
 name:
   type: text
-  comment: A unique name attribute for the select field.
+  comment: Name the field is submitted under. Must be unique in the form.
   options:
     required: true
     required_message: Only form elements with a name will have their values passed when submitting a form.
@@ -23,11 +23,26 @@ placeholder:
 value:
   type: text
   comment: The default selected value.
+hint:
+  type: text
+  comment: Help text shown between the label and the field.
+autocomplete:
+  type: select
+  options:
+    values: data.autocomplete_tokens
+    value_key: id
+    allow_create: true
+    preview:
+      text:
+        - key: name
+      subtext:
+        - key: id
+  comment: Autofill hint for browsers. Leave blank to derive it from the field's type and name.
 iconName:
   type: select
-  comment: The name of an optional leading icon. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  comment: Leading icon, from [Lucide](https://lucide.dev/icons/).
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name

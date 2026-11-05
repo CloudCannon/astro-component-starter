@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-team-grid">
+  <title id="t-team-grid">Team grid component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 76)">
+    <rect x="592" y="0" width="97" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="466" y="36" width="349" height="40" rx="20" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="475" y="98" width="330" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="260" y="158" width="233" height="280" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="423" cy="248" r="14" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="314,370 357,309 390,370" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="12" stroke-linejoin="round"/>
+    <polygon points="375,371 413,323 450,371" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="10" stroke-linejoin="round"/>
+    <rect x="279" y="458" width="145" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="279" y="508" width="87" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="279" y="532" width="194" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="279" y="556" width="136" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="524" y="158" width="233" height="280" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="687" cy="248" r="14" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="578,370 621,309 654,370" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="12" stroke-linejoin="round"/>
+    <polygon points="639,371 677,323 714,371" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="10" stroke-linejoin="round"/>
+    <rect x="543" y="458" width="145" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="543" y="508" width="87" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="543" y="532" width="194" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="543" y="556" width="136" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="787" y="158" width="233" height="280" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <circle cx="950" cy="248" r="14" fill="var(--pv-glyph, #CFCBC2)"/>
+    <polygon points="841,370 884,309 917,370" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="12" stroke-linejoin="round"/>
+    <polygon points="902,371 940,323 977,371" fill="var(--pv-glyph, #CFCBC2)" stroke="var(--pv-glyph, #CFCBC2)" stroke-width="10" stroke-linejoin="round"/>
+    <rect x="807" y="458" width="145" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="807" y="508" width="87" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="807" y="532" width="194" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="807" y="556" width="136" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+  </g>
+</svg>

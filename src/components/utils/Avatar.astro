@@ -1,0 +1,155 @@
+---
+/**
+ * Internal util, deliberately with no CloudCannon YAML. When overriding
+ * `--avatar-size`, pass `displaySize` in CSS pixels so the srcset matches.
+ */
+import Image from "@core-elements/image/Image.astro";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+
+const {
+  image = "",
+  alt = "",
+  size = "md",
+  displaySize,
+  radius = "full",
+  border = true,
+  class: className,
+  "data-prop-src": dataPropSrc,
+  "data-prop-alt": dataPropAlt,
+  ...htmlAttributes
+} = Astro.props;
+
+// CSS display size (1x): getResponsiveWidths drops srcset steps above `width`,
+// so passing a small pixel width would leave retina one blurry variant.
+const TOKEN_DISPLAY_PX: Record<string, number> = { sm: 32, md: 44, lg: 64 };
+const TOKEN_SIZES: Record<string, string> = { sm: "2rem", md: "2.75rem", lg: "4rem" };
+const hasDisplaySize = Number(displaySize) > 0;
+const displayPx = hasDisplaySize
+  ? Math.round(Number(displaySize))
+  : (TOKEN_DISPLAY_PX[size] ?? TOKEN_DISPLAY_PX.md);
+const renderWidth = displayPx * 3;
+const srcWidths = [displayPx, displayPx * 2, renderWidth];
+const sizes = hasDisplaySize ? `${displayPx}px` : (TOKEN_SIZES[size] ?? TOKEN_SIZES.md);
+
+const hasImage = isNonEmptyString(image);
+const initials = String(alt || "")
+  .trim()
+  .split(/\s+/)
+  .slice(0, 2)
+  .map((word) => word[0]?.toUpperCase() ?? "")
+  .join("");
+---
+
+<span
+  class:list={[
+    "avatar",
+    `size-${size}`,
+    `radius-${radius}`,
+    border && "bordered",
+    !hasImage && "fallback",
+    className,
+  ]}
+  {...htmlAttributes}
+>
+  {hasImage ? (
+    <Image
+      source={image}
+      alt={alt}
+      width={renderWidth}
+      height={renderWidth}
+      widths={srcWidths}
+      sizes={sizes}
+      aspectRatio="square"
+      data-prop-src={dataPropSrc}
+      data-prop-alt={dataPropAlt}
+    />
+  ) : (
+    /* No alt: the initials are decorative (the name is beside them), and a
+       nameless role="img" is announced as an unlabelled image. */
+    <span
+      class="avatar-initials"
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
+      aria-hidden={alt ? undefined : "true"}
+    >
+      {initials}
+    </span>
+  )}
+</span>
+
+<style is:global>
+  @layer components {
+    .avatar {
+      display: inline-flex;
+      flex-shrink: 0;
+      height: var(--avatar-size);
+      overflow: hidden;
+      vertical-align: middle;
+      width: var(--avatar-size);
+
+      &.size-sm {
+        --avatar-size: 2rem;
+      }
+
+      &.size-md {
+        --avatar-size: 2.75rem;
+      }
+
+      &.size-lg {
+        --avatar-size: 4rem;
+      }
+
+      &.radius-full {
+        border-radius: var(--radius-full);
+      }
+
+      &.radius-md {
+        border-radius: var(--radius-md);
+      }
+
+      /* An edge so a light-background headshot still reads on --color-bg. */
+      &.bordered {
+        border: var(--border-width-sm) solid var(--color-border);
+      }
+
+      /* Must out-specify Image.astro's top margin and `height: auto`, which would
+         shift or clip the headshot. */
+      .image,
+      .image-inner,
+      picture,
+      img {
+        display: block;
+        height: 100%;
+        margin: 0;
+        width: 100%;
+      }
+
+      img {
+        object-fit: cover;
+      }
+
+      > .avatar-initials {
+        align-items: center;
+        background-color: var(--color-bg-muted);
+        color: var(--color-text-muted);
+        display: flex;
+        font-weight: var(--font-weight-semibold);
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
+
+      &.size-sm > .avatar-initials {
+        font-size: var(--font-size-xs);
+      }
+
+      &.size-md > .avatar-initials {
+        font-size: var(--font-size-sm);
+      }
+
+      &.size-lg > .avatar-initials {
+        font-size: var(--font-size-xl);
+      }
+    }
+  }
+</style>

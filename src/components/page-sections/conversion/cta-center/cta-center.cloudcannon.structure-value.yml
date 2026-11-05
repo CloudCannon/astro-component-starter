@@ -1,0 +1,74 @@
+label: CTA Center
+icon: call_to_action
+description: Centered call to action with a headline, supporting text, and buttons.
+value:
+  _component: page-sections/conversion/cta-center
+  sectionLabel: ""
+  heading: Ready to get started?
+  headingLevel: h2
+  subtext: One line that makes the next step obvious.
+  buttonSections:
+    - _component: building-blocks/core-elements/button
+      text: Get started
+      hideText: false
+      link: /
+      iconName: ""
+      iconColor: default
+      iconPosition: before
+      variant: primary
+      size: md
+  maxContentWidth: lg
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - CTA Center
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/conversion/cta-center.svg
+  icon: call_to_action
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-center.svg
+    fit: cover
+picker_preview:
+  text: CTA Center
+  subtext: Centered CTA with stacked text and buttons.
+  image: public/component-previews/page-sections/conversion/cta-center.svg
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-center.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/cta-center/cta-center.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+groups:
+  - heading: Content
+    inputs:
+      - heading
+      - subtext
+      - buttonSections
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

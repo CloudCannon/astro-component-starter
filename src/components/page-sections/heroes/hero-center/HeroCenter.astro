@@ -8,6 +8,7 @@ import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
 const {
   eyebrow = "",
   heading = "",
+  headingLevel = "h1",
   subtext = "",
   buttonSections = [],
   sectionLabel,
@@ -15,7 +16,8 @@ const {
   paddingHorizontal = "lg",
   paddingVertical = "4xl",
   colorScheme = "inherit",
-  backgroundColor,
+  lockColorScheme = false,
+  backgroundColor = "base",
   background,
   class: className,
   useDefaultEditableBinding = false,
@@ -31,6 +33,7 @@ const {
   paddingHorizontal={paddingHorizontal}
   paddingVertical={paddingVertical}
   colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
   backgroundColor={backgroundColor}
   background={background}
   useDefaultEditableBinding={useDefaultEditableBinding}
@@ -41,9 +44,10 @@ const {
     class="eyebrow"
     data-prop="eyebrow"
     text={eyebrow}
+    size="sm"
   />
   <Heading
-    level="h1"
+    level={headingLevel}
     size="2xl"
     alignmentHorizontal="center"
     data-prop="heading"
@@ -53,21 +57,13 @@ const {
   <Text
     alignmentHorizontal="center"
     class="subtext"
+    size="lg"
     data-prop="subtext"
     text={subtext}
   />
   <ButtonGroup
-    class="buttonSections"
     buttonSections={buttonSections}
     alignmentHorizontal="center"
     data-children-prop="buttonSections"
   />
 </CustomSection>
-
-<style is:global>
-  @layer page-sections {
-    .subtext p {
-      font-size: var(--font-size-lg);
-    }
-  }
-</style>

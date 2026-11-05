@@ -10,7 +10,7 @@ source:
     height: 1280
 alternateSource:
   type: image
-  comment: Optional alternate image shown when the site theme is toggled. The main source is shown by default.
+  comment: Alternate image shown when the site theme is toggled.
   options:
     paths:
       uploads: src/assets/images
@@ -21,6 +21,9 @@ alternateSource:
 alt:
   type: textarea
   comment: Alternative text for accessibility.
+decorative:
+  type: switch
+  comment: Marks the image as decorative so screen readers skip it. Alt text is ignored.
 sizes:
   type: text
   comment: Responsive sizes attribute for the image.
@@ -31,15 +34,15 @@ widths:
   hidden: true
 width:
   type: number
-  comment: Optional explicit image width in pixels.
+  comment: Explicit image width in pixels.
   hidden: true
 height:
   type: number
-  comment: Optional explicit image height in pixels.
+  comment: Explicit image height in pixels.
   hidden: true
 rounded:
   type: switch
-  comment: Whether to apply rounded corners to the image.
+  comment: Rounds the image's corners.
 aspectRatio:
   type: select
   comment: Set a fixed aspect ratio for the image.

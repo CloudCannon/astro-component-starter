@@ -1,0 +1,209 @@
+---
+import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { toText } from "@component-utils/toText";
+
+const {
+  year: rawYear,
+  date: rawDate,
+  title: rawTitle,
+  body: rawBody,
+  iconName = "",
+  layout = "vertical",
+  grouped = false,
+  groupStart = true,
+  yearTag = "h3",
+  headingLevel = "h3",
+  useDefaultEditableBinding = false,
+  class: className,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const year = toText(rawYear);
+const date = toText(rawDate);
+const title = toText(rawTitle);
+const body = toText(rawBody);
+
+const hasTitle = isNonEmptyString(title);
+const hasBody = isNonEmptyString(body);
+const hasDate = isNonEmptyString(date);
+const isHorizontal = layout === "horizontal";
+const isSplit = layout === "split";
+
+const YearTag = yearTag;
+const yearHidden = !groupStart || !isNonEmptyString(year);
+const yearBinding = useDefaultEditableBinding
+  ? { "data-editable": "text", "data-prop": "year" }
+  : {};
+const dateBinding =
+  useDefaultEditableBinding && hasDate ? { "data-editable": "text", "data-prop": "date" } : {};
+---
+
+<li
+  class:list={["timeline-entry", className]}
+  {...htmlAttributes}
+>
+  {isSplit ? (
+    <>
+      <div class="timeline-split-content">
+        {hasDate && (
+          <span
+            class="timeline-date"
+            {...dateBinding}
+          >
+            {date}
+          </span>
+        )}
+        {hasTitle && (
+          <Heading
+            class="timeline-title"
+            level={headingLevel}
+            size="xs"
+            data-prop={useDefaultEditableBinding ? "title" : undefined}
+          >
+            {title}
+          </Heading>
+        )}
+        {hasBody && (
+          <SimpleText
+            class="timeline-body"
+            size="sm"
+            data-prop={useDefaultEditableBinding ? "body" : undefined}
+            text={body}
+          />
+        )}
+      </div>
+      <span
+        class="timeline-split-marker"
+        aria-hidden="true"
+      >
+        {isNonEmptyString(iconName) ? (
+          <Icon
+            name={iconName}
+            size="sm"
+          />
+        ) : (
+          <span class="timeline-dot" />
+        )}
+      </span>
+    </>
+  ) : isHorizontal ? (
+    hasDate && (
+      <div
+        class="timeline-label"
+        {...dateBinding}
+      >
+        {date}
+      </div>
+    )
+  ) : grouped ? (
+    <>
+      <YearTag
+        class="timeline-year"
+        hidden={yearHidden}
+        {...(yearHidden ? { "data-pagefind-ignore": "" } : {})}
+        {...yearBinding}
+      >
+        {year}
+      </YearTag>
+      <div class="timeline-group-rail">
+        <div class="timeline-group-entry">
+          {hasDate && (
+            <span
+              class="timeline-month"
+              {...dateBinding}
+            >
+              {date}
+            </span>
+          )}
+          <span
+            class="timeline-dot"
+            aria-hidden="true"
+          />
+          {hasTitle && (
+            <Heading
+              class="timeline-title"
+              level={headingLevel}
+              size="xs"
+              data-prop={useDefaultEditableBinding ? "title" : undefined}
+            >
+              {title}
+            </Heading>
+          )}
+          {hasBody && (
+            <SimpleText
+              class="timeline-body"
+              size="sm"
+              data-prop={useDefaultEditableBinding ? "body" : undefined}
+              text={body}
+            />
+          )}
+        </div>
+      </div>
+    </>
+  ) : (
+    <span
+      class="timeline-date"
+      {...dateBinding}
+    >
+      {date}
+    </span>
+  )}
+  {!isSplit && isHorizontal ? (
+    <div
+      class="timeline-band"
+      aria-hidden="true"
+    >
+      <span class="timeline-dot" />
+    </div>
+  ) : (
+    !isSplit &&
+    !grouped && (
+      <div class="timeline-content">
+        <span
+          class="timeline-dot"
+          aria-hidden="true"
+        />
+        {hasTitle && (
+          <Heading
+            class="timeline-title"
+            level={headingLevel}
+            size="xs"
+            data-prop={useDefaultEditableBinding ? "title" : undefined}
+          >
+            {title}
+          </Heading>
+        )}
+        {hasBody && (
+          <SimpleText
+            class="timeline-body"
+            size="sm"
+            data-prop={useDefaultEditableBinding ? "body" : undefined}
+            text={body}
+          />
+        )}
+      </div>
+    )
+  )}
+  {isHorizontal && hasTitle && (
+    <Heading
+      class="timeline-title"
+      level={headingLevel}
+      size="xs"
+      data-prop={useDefaultEditableBinding ? "title" : undefined}
+    >
+      {title}
+    </Heading>
+  )}
+  {isHorizontal && hasBody && (
+    <SimpleText
+      class="timeline-body"
+      size="sm"
+      data-prop={useDefaultEditableBinding ? "body" : undefined}
+      text={body}
+    />
+  )}
+</li>

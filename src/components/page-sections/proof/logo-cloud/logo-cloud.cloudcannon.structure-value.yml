@@ -1,0 +1,112 @@
+label: Logo Cloud
+icon: workspaces
+description: Row of client logos, with an optional heading.
+value:
+  _component: page-sections/proof/logo-cloud
+  sectionLabel: ""
+  heading: Trusted by teams shipping every day
+  logos:
+    - image: /src/assets/images/component-docs/logo-acme.svg
+      alt: Acme
+      url: ""
+    - image: /src/assets/images/component-docs/logo-northwind.svg
+      alt: Northwind
+      url: ""
+    - image: /src/assets/images/component-docs/logo-globex.svg
+      alt: Globex
+      url: ""
+    - image: /src/assets/images/component-docs/logo-vertex.svg
+      alt: Vertex
+      url: ""
+    - image: /src/assets/images/component-docs/logo-umbra.svg
+      alt: Umbra
+      url: ""
+  grayscale: true
+  scrolling: false
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 2xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - Logo Cloud
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/proof/logo-cloud.svg
+  icon: workspaces
+  gallery:
+    image: public/component-previews/page-sections/proof/logo-cloud.svg
+    fit: cover
+picker_preview:
+  text: Logo Cloud
+  subtext: A "trusted by" strip of client logos with an optional muted lead line.
+  image: public/component-previews/page-sections/proof/logo-cloud.svg
+  gallery:
+    image: public/component-previews/page-sections/proof/logo-cloud.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/proof/logo-cloud/logo-cloud.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+_structures:
+  logoCloudLogos:
+    values:
+      - label: Logo
+        icon: workspaces
+        value:
+          image: ""
+          alt: Company name
+          url: ""
+        preview:
+          text:
+            - key: alt
+            - Logo
+          image:
+            - key: image
+        _inputs:
+          image:
+            type: image
+            comment: The logo image. Constrained by height, so any aspect ratio works.
+            options:
+              paths:
+                static: ""
+                uploads: src/assets/images
+          alt:
+            type: text
+            comment: Accessible name for the logo (the company name).
+            options:
+              required: true
+              required_message: A linked logo with no alt text is a link with no name.
+          url:
+            type: url
+            comment: Optional link to the company's site. Linked logos show a hover affordance — color restore in grayscale, a slight scale in full color.
+groups:
+  - heading: Content
+    inputs:
+      - heading
+      - logos
+      - grayscale
+      - scrolling
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

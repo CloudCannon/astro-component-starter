@@ -1,6 +1,6 @@
 label: Accordion
 icon: expand_all
-description: Interactive component for showing and hiding content panels.
+description: Expandable panels that show or hide content.
 value:
   _component: building-blocks/wrappers/accordion
   label: null
@@ -12,12 +12,21 @@ preview:
     - Accordion
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/accordion.svg
   icon: expand_all
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/accordion.svg
+    fit: cover
 picker_preview:
   text: Accordion
   subtext: Interactive component for showing and hiding content panels.
+  image: public/component-previews/building-blocks/wrappers/accordion.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/accordion.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/accordion/accordion.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   accordionItems:
     values:

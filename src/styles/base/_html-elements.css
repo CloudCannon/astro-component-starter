@@ -27,6 +27,10 @@
       width: 100%;
     }
 
+    svg[data-icon][stroke] {
+      stroke-width: var(--icon-stroke-width);
+    }
+
     code[class*="language-"],
     pre[class*="language-"] {
       border-radius: var(--radius-sm);
@@ -41,22 +45,36 @@
       }
     }
 
+    .astro-code-themes {
+      background-color: var(--color-bg);
+      border: var(--border-width-sm) solid var(--color-border);
+      color: var(--color-text);
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+    }
+
     p,
     ul,
-    ol {
-      code {
-        background: var(--color-bg);
-        border-radius: 0.25rem;
-        padding: 0.1rem 0.2rem;
+    ol,
+    td,
+    th {
+      code:not(pre code) {
+        background: var(--color-bg-code);
+        border-radius: var(--radius-xs);
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+        font-size: 0.925em;
+        padding: 0.125em 0.375em;
       }
     }
 
     blockquote {
-      border-left: 3px solid var(--color-border);
+      border-left: var(--border-width-lg) solid var(--color-border);
       padding-left: var(--spacing-sm);
     }
 
-    main > :first-child.hero,
+    main > :first-child.hero-center,
+    main > :first-child.hero-split,
     main > :first-child.blog-block,
     main > :first-child.container,
     main > :first-child.carousel,
@@ -67,5 +85,15 @@
     main > :first-child.card {
       margin-top: 0;
     }
+  }
+
+  /* Fence tokens carry only `--shiki-*` (`defaultColor: false`). Kept outside `:where(:root)`,
+     whose descendant selector would miss the `data-theme` on the root itself. */
+  [data-theme="light"] .astro-code-themes span {
+    color: color-mix(in srgb, var(--shiki-light, var(--color-text)) 82%, var(--color-text-muted));
+  }
+
+  [data-theme="dark"] .astro-code-themes span {
+    color: var(--shiki-dark, currentcolor);
   }
 }

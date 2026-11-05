@@ -1,11 +1,12 @@
 label: Carousel
 icon: image
-description: Displays multiple items in a sliding gallery.
+description: Sliding gallery of items.
 value:
   _component: building-blocks/wrappers/carousel
   label: ""
   slides: []
   autoPlay: false
+  pauseOnHover: false
   autoScroll: false
   loop: true
   showIndicators: true
@@ -21,12 +22,21 @@ preview:
     - Carousel
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/carousel.svg
   icon: image
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/carousel.svg
+    fit: cover
 picker_preview:
   text: Carousel
   subtext: Displays multiple items in a sliding gallery.
+  image: public/component-previews/building-blocks/wrappers/carousel.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/carousel.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/carousel/carousel.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   slides:
     values:
@@ -43,4 +53,4 @@ _structures:
           text: Carousel Slide
           subtext:
             - template: Contains {contentSections|array_length} content {"block"|pluralize=contentSections}
-            - Add one or more content blocks to the grid item
+            - Add one or more content blocks to the slide

@@ -9,7 +9,7 @@ blocks:
       iconColor: green
       link: /component-docs/
     - text: External URL (e.g. a third-party service)
-      iconName: arrow-top-right-on-square
+      iconName: external-link
       iconColor: green
       link: 'https://example.com/'
     - text: Plain row with no link

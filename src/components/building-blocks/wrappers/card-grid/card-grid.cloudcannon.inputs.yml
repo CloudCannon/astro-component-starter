@@ -1,0 +1,61 @@
+label:
+  type: text
+  comment: Names this block in the editor and sets its anchor id.
+layout:
+  type: select
+  comment: Grid crops covers to one shape in even rows. Masonry keeps each cover's shape.
+  options:
+    values:
+      - id: grid
+        name: Grid
+      - id: masonry
+        name: Masonry
+columns:
+  type: range
+  comment: Columns from 640px up; one below in Grid layout.
+  options:
+    min: 2
+    max: 4
+    step: 1
+gap:
+  type: select
+  comment: The gap between cards.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl
+aspectRatio:
+  type: select
+  comment: How every card cover is cropped. Grid layout only.
+  options:
+    values:
+      - id: landscape
+        name: Landscape (4:3)
+      - id: widescreen
+        name: Widescreen (16:9)
+      - id: square
+        name: Square (1:1)
+      - id: portrait
+        name: Portrait (3:4)
+      - id: none
+        name: Natural
+items:
+  type: array
+  label: Cards
+  comment: The cards in the grid, in display order.
+  options:
+    structures: _structures.cardGridItems

@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Changelog
 
-When making functional changes to the project (bug fixes, new features, enhancements, breaking changes), add an entry to the `[Unreleased]` section of `CHANGELOG.md`.
+When making functional changes to the project (bug fixes, new features, enhancements, breaking changes), add an entry to the unreleased section at the top of `CHANGELOG.md`: `[Unreleased]`, or a version heading dated `Unreleased` (e.g. `## [2.0.0] - Unreleased`). Never open a second one above it.
 
 Use the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format with these categories:
 
@@ -17,6 +17,6 @@ Use the [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format with the
 - **Fixed** — bug fixes
 - **Security** — vulnerability fixes
 
-**Never create duplicate category headers.** Before adding an entry, read the existing `[Unreleased]` section and append to the matching `###` heading that already exists. Only create a new `###` heading if one doesn't exist yet for that category.
+**Never create duplicate category headers.** Before adding an entry, read the existing unreleased section and append to the matching `###` heading that already exists. Only create a new `###` heading if one doesn't exist yet for that category.
 
 Skip changelog entries for refactors, code style changes, or other internal-only changes with no user-facing impact.

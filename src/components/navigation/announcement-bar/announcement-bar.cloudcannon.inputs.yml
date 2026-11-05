@@ -1,0 +1,10 @@
+enabled:
+  type: switch
+  comment: Show the announcement bar at the top of every page.
+text:
+  type: markdown
+  comment: The announcement message. Add a Markdown link for an optional call to action.
+  options:
+    bold: true
+    italic: true
+    link: true

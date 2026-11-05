@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-bento-box">
+  <title id="t-bento-box">Bento box component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -40)">
+    <rect x="260" y="180" width="499" height="208" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="282" y="214" width="181" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="282" y="246" width="434" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="282" y="270" width="326" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="781" y="180" width="239" height="440" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="803" y="214" width="127" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="803" y="246" width="195" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="803" y="270" width="163" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="803" y="294" width="181" height="12" rx="6" fill="var(--pv-glyph, #CFCBC2)"/>
+    <rect x="260" y="412" width="239" height="208" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="282" y="446" width="127" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="521" y="412" width="239" height="208" rx="10" fill="var(--pv-surface, #EBE9E3)"/>
+    <rect x="542" y="446" width="127" height="16" rx="8" fill="var(--pv-subject, #A8A398)"/>
+  </g>
+</svg>

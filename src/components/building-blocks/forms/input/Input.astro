@@ -1,5 +1,8 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   label,
@@ -8,9 +11,12 @@ const {
   placeholder,
   required = false,
   value,
+  hint,
+  error,
   iconName,
   iconColor = "default",
   iconPosition = "before",
+  autocomplete,
   id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
@@ -18,99 +24,77 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = customId || `input-${crypto.randomUUID()}`;
-const hasIcon = iconName?.trim().length > 0;
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "input",
+  id: customId,
+  name,
+  label,
+  placeholder,
+  type,
+  autocomplete,
+  required,
+  hint,
+  error,
+});
+const hasIcon = isNonEmptyString(iconName);
 ---
 
-<div
+<FormField
   class:list={["input", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  {
-    label && (
-      <label
-        for={fieldId}
-        class="label"
-      >
-        {label}
-        {required && (
-          <span
-            class="input-required"
-            aria-label="required"
-          >
-            *
-          </span>
-        )}
-      </label>
-    )
-  }
-  {
-    hasIcon ? (
-      <span class:list={["field-shell", iconPosition === "after" && "icon-after"]}>
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="input-icon"
-          aria-hidden="true"
-          role="presentation"
-        />
-        <input
-          type={type}
-          name={name}
-          id={fieldId}
-          placeholder={placeholder}
-          required={required}
-          aria-required={required}
-          value={value}
-          class="field"
-        />
-      </span>
-    ) : (
-      <input
-        type={type}
-        name={name}
-        id={fieldId}
-        placeholder={placeholder}
-        required={required}
-        aria-required={required}
-        value={value}
-        class="field"
+  {/* The shell renders with or without an icon: it reproduces the base input's
+      box exactly, so one branch is enough. */}
+  <span class:list={["field-shell", hasIcon && iconPosition === "after" && "icon-after"]}>
+    {hasIcon && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="input-icon"
+        aria-hidden="true"
       />
-    )
-  }
-</div>
+    )}
+    <input
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      class="field"
+      {...controlAttributes}
+    />
+  </span>
+</FormField>
 
 <style is:global>
   @layer components {
     .input {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
+      .field-shell:has(> .field[aria-invalid="true"]) {
+        border-color: var(--color-error);
+      }
 
-      .input-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
+      .field-shell:has(> .field:disabled) {
+        background-color: var(--color-bg-muted);
+        cursor: not-allowed;
       }
 
       .field-shell {
         align-items: center;
         background-color: var(--color-bg);
-        border: 1px solid var(--color-border-inputs);
+        border: var(--border-width-sm) solid var(--color-border-inputs);
         border-radius: var(--radius-xs);
         display: flex;
         gap: var(--spacing-em-sm);
         padding-inline: var(--spacing-em-sm);
         transition:
-          border-color var(--animation-normal) ease-in-out,
-          box-shadow var(--animation-normal) ease-in-out;
+          border-color var(--animation-normal) var(--ease-in-out),
+          box-shadow var(--animation-normal) var(--ease-in-out);
 
-        &:focus-within {
+        &:has(:focus-visible) {
           border-color: var(--color-brand);
-          box-shadow: 0 0 0 3px var(--color-focus-ring);
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
 
         &.icon-after {
@@ -132,8 +116,8 @@ const hasIcon = iconName?.trim().length > 0;
           min-width: 0;
           padding-inline: 0;
 
-          &:focus {
-            box-shadow: none;
+          &:focus-visible {
+            outline: none;
           }
         }
       }

@@ -1,9 +1,10 @@
 ---
-import RenderBlock from "@components/utils/renderBlock.astro";
+import RenderBlock from "@component-utils/renderBlock.astro";
 
 const {
   colSpan = 1,
   rowSpan = 1,
+  columns = 3,
   contentSections,
   useDefaultEditableBinding = false,
   class: className,
@@ -15,11 +16,19 @@ const {
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
   : {};
 
+// An over-wide span silently takes the whole row, so clamp it to the grid.
+const columnCount = Math.max(1, Math.round(Number(columns) || 3));
+const span = Math.min(Math.max(1, Math.round(Number(colSpan) || 1)), columnCount);
+
 const cellStyles = [
-  Number(colSpan) > 1 && `grid-column: span ${colSpan}`,
+  span > 1 && `grid-column: span ${span}`,
   Number(rowSpan) > 1 && `grid-row: span ${rowSpan}`,
 ]
   .filter(Boolean)
@@ -32,20 +41,18 @@ const cellStyles = [
   {...htmlAttributes}
 >
   <div
-    class="bento-box-item-content"
-    data-col-span={colSpan}
+    class="bento-box-item-content flow"
+    data-col-span={span}
     data-row-span={rowSpan}
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        contentSections && (
-          <RenderBlock
-            contentSections={contentSections}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {contentSections && (
+        <RenderBlock
+          contentSections={contentSections}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
 </div>
@@ -61,10 +68,6 @@ const cellStyles = [
 
       > .bento-box-item-content > *:only-child {
         height: 100%;
-      }
-
-      > .bento-box-item-content > *:first-child {
-        margin-top: 0 !important;
       }
     }
   }

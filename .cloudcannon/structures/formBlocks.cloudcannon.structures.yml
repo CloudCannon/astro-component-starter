@@ -1,3 +1,4 @@
+# Exclusions: `form` must not nest in itself; `segments` stays usable in content, just unpicked.
 formBlocks:
   id_key: _component
   style: modal
@@ -5,4 +6,3 @@ formBlocks:
     - /src/components/building-blocks/forms/**/*.cloudcannon.structure-value.yml
     - "!/src/components/building-blocks/forms/form/form.cloudcannon.structure-value.yml"
     - "!/src/components/building-blocks/forms/segments/segments.cloudcannon.structure-value.yml"
-    - "!/src/components/building-blocks/forms/slider/slider.cloudcannon.structure-value.yml"

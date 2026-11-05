@@ -1,19 +1,34 @@
 label: Definition List
 icon: dns
-description: Lists term/definition pairs for structured content.
+description: List of terms and their definitions.
 value:
   _component: building-blocks/core-elements/definition-list
-  items: []
+  items:
+    - title: Lead time
+      text: Two to four weeks from signed brief to a live site.
+    - title: What you own
+      text: The repository, the content, and every component in it.
+    - title: Support
+      text: A month of changes included, then an hourly retainer.
   alignmentHorizontal: start
 preview:
   text:
     - Definition List
+  image: public/component-previews/building-blocks/core-elements/definition-list.svg
   icon: dns
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/definition-list.svg
+    fit: cover
 picker_preview:
   text: Definition List
   subtext: Lists term/definition pairs for structured content.
+  image: public/component-previews/building-blocks/core-elements/definition-list.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/definition-list.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/definition-list/definition-list.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   definitionListItems:
     values:
@@ -33,5 +48,15 @@ _structures:
             type: text
             comment: A bolded title for the list item.
           text:
-            type: textarea
+            type: markdown
             comment: The text content of the list item.
+            options:
+              blockquote: false
+              bold: true
+              format:
+              italic: true
+              link: true
+              strike: false
+              subscript: true
+              superscript: true
+              underline: false

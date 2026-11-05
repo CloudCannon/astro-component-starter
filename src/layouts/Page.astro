@@ -1,8 +1,11 @@
 ---
-import Footer from "@components/navigation/footer/Footer.astro";
-import MainNavigation from "@components/navigation/main-nav/MainNav.astro";
-import ThemeToggleScript from "@components/navigation/theme-toggle/ThemeToggleScript.astro";
-import MainComponent from "@components/utils/MainComponent.astro";
+import AnnouncementBar from "@navigation/announcement-bar/AnnouncementBar.astro";
+import Footer from "@navigation/footer/Footer.astro";
+import MainNavigation from "@navigation/main-nav/MainNav.astro";
+import ThemeToggleScript from "@navigation/theme-toggle/ThemeToggleScript.astro";
+import MainComponent from "@component-utils/MainComponent.astro";
+import { resolveSearchThumbnail } from "@component-utils/image";
+import announcementBarData from "@data/announcementBar.json";
 import footerData from "@data/footer.json";
 import mainNavData from "@data/mainNav.json";
 import Layout from "@layouts/BaseLayout.astro";
@@ -39,9 +42,13 @@ type Props = {
     tags?: string[];
   };
   noindex?: boolean;
+  generatedImage?: string | null;
   disablePagefind?: boolean;
+  /** The search's `Type` filter value; the tabs in `Search.astro` must name it. */
+  pagefindType?: string;
   mainNav?: Record<string, unknown>;
   footer?: Record<string, unknown>;
+  announcementBar?: Record<string, unknown>;
 };
 
 const {
@@ -54,9 +61,12 @@ const {
   type: typeProp,
   article: articleProp,
   noindex: noindexProp,
+  generatedImage,
   disablePagefind = false,
+  pagefindType = "Page",
   mainNav = mainNavData,
   footer = footerData,
+  announcementBar = announcementBarData,
 } = Astro.props as Props;
 
 const title = frontmatter?.title ?? titleProp ?? "";
@@ -68,36 +78,82 @@ const type = frontmatter?.type ?? typeProp;
 const article = frontmatter?.article ?? articleProp;
 const noindex = frontmatter?.noindex ?? noindexProp ?? false;
 const sections = frontmatter?.pageSections ?? [];
+const indexed = !disablePagefind && !noindex;
+
+// Unnamed, Pagefind thumbnails the first <img> in the body, decorative or not.
+const heroWithImage = sections.find(
+  (section: any) =>
+    String(section?._component ?? "").startsWith("page-sections/heroes/") &&
+    typeof section?.imageSource === "string" &&
+    section.imageSource.trim()
+) as { imageSource: string; imageAlt?: string } | undefined;
+const thumbnailSource = image || heroWithImage?.imageSource;
+const thumbnail = indexed && thumbnailSource ? await resolveSearchThumbnail(thumbnailSource) : null;
+const thumbnailAlt = (image ? title : heroWithImage?.imageAlt) || title;
+
+const primaryHeading = sections.find(
+  (section: any) => typeof section?.heading === "string" && section.heading.trim()
+)?.heading as string | undefined;
 ---
 
 <Layout
+  heading={primaryHeading}
   title={title}
   description={description}
   keywords={keywords}
   image={image}
+  generatedImage={generatedImage}
   canonical={canonical}
   type={type}
   article={article}
   noindex={noindex}
 >
   {mainNav.themeToggle && <ThemeToggleScript slot="head" />}
+  <a
+    class="skip-link"
+    href="#main-content"
+  >
+    Skip to main content
+  </a>
+  <AnnouncementBar {...announcementBar} />
   <MainNavigation {...mainNav} />
 
-  <main {...disablePagefind ? { "data-pagefind-ignore": "all" } : {}}>
-    {
-      sections.length > 0 && (
-        <div
-          data-editable="component"
-          data-component="utils/main-component"
-          data-prop-sections="pageSections"
-        >
-          <MainComponent sections={sections} />
-        </div>
-      )
-    }
-    <div {...disablePagefind ? {} : { "data-pagefind-body": true }}>
+  <main
+    id="main-content"
+    {...(indexed
+      ? { "data-pagefind-body": true, "data-pagefind-filter": `Type:${pagefindType}` }
+      : { "data-pagefind-ignore": "all" })}
+  >
+    {sections.length > 0 && (
+      <div
+        data-editable="component"
+        data-component="utils/main-component"
+        data-prop-sections="pageSections"
+      >
+        <MainComponent sections={sections} />
+      </div>
+    )}
+    <div>
       <slot />
     </div>
+    {indexed && (
+      <span
+        hidden
+        data-pagefind-meta={thumbnail ? "image[data-src], image_alt[data-alt]" : "image:"}
+        data-src={thumbnail}
+        data-alt={thumbnail ? thumbnailAlt : undefined}
+      />
+    )}
   </main>
-  <Footer {...footer} />
+  {footer === footerData ? (
+    <div
+      data-editable="component"
+      data-component="navigation/footer"
+      data-prop="@file[/src/data/footer.json]"
+    >
+      <Footer {...footer} />
+    </div>
+  ) : (
+    <Footer {...footer} />
+  )}
 </Layout>

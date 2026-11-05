@@ -1,21 +1,29 @@
 label: Icon
 icon: star
-description: SVG icon component.
+description: Icon from the icon library.
 value:
   _component: building-blocks/core-elements/icon
-  name: bolt
+  name: zap
   size: lg
   color: default
-  background: true
-  alignmentHorizontal: start
+  background: false
+  alignmentHorizontal: ""
 preview:
   text:
     - Icon
   subtext:
     - key: name
+  image: public/component-previews/building-blocks/core-elements/icon.svg
   icon: star
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/icon.svg
+    fit: cover
 picker_preview:
   text: Icon
   subtext: SVG icon component.
+  image: public/component-previews/building-blocks/core-elements/icon.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/icon.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/icon/icon.cloudcannon.inputs.yml

@@ -1,12 +1,10 @@
 ---
 title: Heading
 order: 1
-overview: 'A heading component for establishing content hierarchy. Supports semantic levels (`<h1>` to `<h6>`), and controls for size, alignment, and icons.'
+overview: A heading for page structure. Choose a level from h1 to h6, plus size, alignment, and optional icons.
 slots:
   - title: default
-    description: The content inside the Heading.
-    fallback_for: text
-    child_component:
+    description: Heading text.
 examples:
   - slugs:
       - types

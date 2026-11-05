@@ -7,7 +7,7 @@ blocks:
   items:
     - title: Getting Started
       subtext: Quick setup guide
-      iconName: rocket-launch
+      iconName: rocket
       iconColor: blue
       contentSections:
         - _component: building-blocks/core-elements/text
@@ -25,7 +25,7 @@ blocks:
           size: md
     - title: Support
       subtext: Get help
-      iconName: lifebuoy
+      iconName: life-buoy
       iconColor: green
       contentSections:
         - _component: building-blocks/core-elements/text

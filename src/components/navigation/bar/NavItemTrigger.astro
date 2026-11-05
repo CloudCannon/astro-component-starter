@@ -1,0 +1,64 @@
+---
+import Icon from "@core-elements/icon/Icon.astro";
+import type { NavItemData } from "./navState";
+
+// The toggle is CSS-only so it works in the editor, where inline scripts don't run.
+// `aria-expanded` is invalid on `radio`, so only the checkbox gets it.
+interface Props {
+  item: NavItemData;
+  inputType?: "checkbox" | "radio";
+  expanded?: boolean;
+}
+
+const { item, inputType = "checkbox", expanded = false } = Astro.props;
+---
+
+<input
+  type={inputType}
+  name={item.groupName}
+  id={item.dropdownId}
+  class="nav-item-toggle visually-hidden"
+  aria-label={`Toggle ${item.name} submenu`}
+  aria-expanded={inputType === "checkbox" ? expanded : undefined}
+  aria-controls={item.contentId}
+  autocomplete="off"
+  checked={expanded}
+/>
+{item.hasSplitLink ? (
+  <div class="nav-item-split">
+    <a
+      href={item.path}
+      class="nav-item-link"
+      aria-current={item.isCurrent ? "page" : undefined}
+    >
+      {item.name}
+    </a>
+    <label
+      for={item.dropdownId}
+      class="nav-item-trigger nav-item-toggle-btn"
+    >
+      <span class="nav-item-icon">
+        <Icon
+          name="chevron-right"
+          size="none"
+          aria-hidden="true"
+        />
+      </span>
+    </label>
+  </div>
+) : (
+  <label
+    for={item.dropdownId}
+    class="nav-item-trigger"
+    aria-current={item.isCurrent ? "page" : undefined}
+  >
+    {item.name}
+    <span class="nav-item-icon">
+      <Icon
+        name="chevron-right"
+        size="none"
+        aria-hidden="true"
+      />
+    </span>
+  </label>
+)}

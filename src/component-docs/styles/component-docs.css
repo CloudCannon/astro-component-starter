@@ -51,10 +51,12 @@
       z-index: var(--layer-2);
 
       > .sidebar-logo {
-        height: auto;
         margin-top: 0;
-        max-width: 130px;
-        width: 100%;
+
+        img {
+          height: 2rem;
+          width: auto;
+        }
       }
 
       > .library-mobile-nav-actions {
@@ -64,16 +66,54 @@
       }
     }
 
+    & .component-docs-mobile-logo img {
+      display: block;
+      height: 2rem;
+      width: auto;
+    }
+
+    & .privacy-settings-toggle {
+      align-items: center;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-xs);
+      color: var(--color-text-strong);
+      cursor: pointer;
+      display: inline-flex;
+      flex-shrink: 0;
+      font-size: var(--font-size-xl);
+      justify-content: center;
+      line-height: var(--line-height-none);
+      padding: var(--spacing-em-xs);
+      position: relative;
+      transition-duration: var(--animation-normal);
+      transition-property: background-color, color;
+      transition-timing-function: var(--ease-in-out);
+
+      &:hover {
+        background-color: var(--color-state-hover);
+      }
+
+      &:focus-visible {
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
+      }
+
+      svg {
+        height: 1em;
+        width: 1em;
+      }
+    }
+
     & .heading-anchor {
-      color: var(--color-text-subtle);
+      color: var(--color-text-muted);
       font-weight: var(--font-weight-normal);
-      margin-inline-start: 0.25em;
       opacity: 0;
       text-decoration: none;
       transition: opacity var(--animation-normal) ease;
 
       &:hover {
-        color: var(--color-text-link);
+        color: var(--color-link);
       }
     }
 
@@ -100,13 +140,13 @@
             color: var(--color-text-strong);
             content: "Copied!";
             font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-medium);
+            font-weight: var(--font-weight-normal);
             left: 50%;
             padding: var(--spacing-xs) var(--spacing-sm);
             position: absolute;
             transform: translateX(-50%);
             white-space: nowrap;
-            z-index: var(--layer-10);
+            z-index: var(--layer-5);
           }
         }
       }

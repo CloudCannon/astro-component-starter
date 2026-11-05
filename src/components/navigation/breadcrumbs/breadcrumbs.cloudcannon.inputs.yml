@@ -1,0 +1,5 @@
+items:
+  type: array
+  comment: Crumbs after Home, in order. Give each a URL except the last, the current page.
+  options:
+    structures: _structures.breadcrumbItems

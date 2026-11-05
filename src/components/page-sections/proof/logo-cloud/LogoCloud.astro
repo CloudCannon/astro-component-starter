@@ -1,0 +1,195 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Image from "@core-elements/image/Image.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Carousel from "@wrappers/carousel/Carousel.astro";
+import CarouselSlide from "@wrappers/carousel/CarouselSlide.astro";
+
+type LogoProps = { image?: string; alt?: string; url?: string };
+
+const {
+  heading = "",
+  logos = [],
+  grayscale = true,
+  scrolling = false,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "2xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["logo-cloud", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    class="eyebrow"
+    size="sm"
+    alignmentHorizontal="center"
+    data-prop="heading"
+    text={heading}
+  />
+  {logos?.length > 0 &&
+    (scrolling ? (
+      <Carousel
+        class:list={["logo-cloud-marquee", grayscale && "grayscale"]}
+        label={sectionLabel || heading || "Client logos"}
+        autoScroll={true}
+        loop={true}
+        slideWidthPercent={20}
+        minSlideWidth={150}
+        alignmentHorizontal="start"
+        data-children-prop="logos"
+      >
+        {logos?.map((logo: LogoProps) => {
+          const LogoWrapper = logo.url ? "a" : "span";
+          const wrapperProps = logo.url ? { href: logo.url } : {};
+
+          return (
+            <CarouselSlide
+              class="logo-cloud-item"
+              data-editable="array-item"
+            >
+              <LogoWrapper
+                class="logo-cloud-logo"
+                {...wrapperProps}
+              >
+                <Image
+                  source={logo.image}
+                  alt={logo.alt}
+                  widths={[320]}
+                  sizes="320px"
+                  data-prop-src="image"
+                  data-prop-alt="alt"
+                />
+              </LogoWrapper>
+            </CarouselSlide>
+          );
+        })}
+      </Carousel>
+    ) : (
+      <ul
+        class:list={["logo-cloud-grid", grayscale && "grayscale"]}
+        data-editable="array"
+        data-prop="logos"
+        data-direction="row"
+      >
+        {logos?.map((logo: LogoProps) => {
+          const LogoWrapper = logo.url ? "a" : "span";
+          const wrapperProps = logo.url ? { href: logo.url } : {};
+
+          return (
+            <li
+              class="logo-cloud-item"
+              data-editable="array-item"
+            >
+              <LogoWrapper
+                class="logo-cloud-logo"
+                {...wrapperProps}
+              >
+                <Image
+                  source={logo.image}
+                  alt={logo.alt}
+                  widths={[320]}
+                  sizes="320px"
+                  data-prop-src="image"
+                  data-prop-alt="alt"
+                />
+              </LogoWrapper>
+            </li>
+          );
+        })}
+      </ul>
+    ))}
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .logo-cloud {
+      .logo-cloud-grid {
+        align-items: center;
+        display: grid;
+        gap: var(--spacing-lg) var(--spacing-xl);
+        grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .logo-cloud-item {
+        display: flex;
+        justify-content: center;
+      }
+
+      .logo-cloud-marquee {
+        .slide__content {
+          display: flex;
+          justify-content: center;
+        }
+      }
+
+      .logo-cloud-logo {
+        display: block;
+
+        img {
+          height: var(--spacing-2xl);
+          max-width: 100%;
+          object-fit: contain;
+          width: auto;
+        }
+      }
+
+      /* Not on the root: a prop-driven class on a region root goes stale in the editor. */
+      .grayscale .logo-cloud-logo {
+        filter: grayscale(1);
+        opacity: 0.75;
+      }
+
+      .grayscale a.logo-cloud-logo {
+        transition:
+          filter var(--animation-normal) var(--ease-in-out),
+          opacity var(--animation-normal) var(--ease-in-out);
+
+        &:hover,
+        &:focus-visible {
+          filter: none;
+          opacity: 1;
+        }
+      }
+
+      &:not(:has(> .grayscale)) a.logo-cloud-logo {
+        transition: transform var(--animation-normal) var(--ease-in-out);
+
+        &:hover,
+        &:focus-visible {
+          transform: scale(1.08);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          &:hover,
+          &:focus-visible {
+            transform: none;
+          }
+        }
+      }
+    }
+  }
+</style>

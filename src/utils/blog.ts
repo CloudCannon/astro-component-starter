@@ -7,6 +7,25 @@ export async function getBlogPostsSortedByDate() {
   return posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 
+/** Every blog listing renders the hero from `blog.md`; without this they all share one h1. */
+export function withListingHeading(heroSections: any[], heading: string) {
+  let replaced = false;
+
+  return heroSections.map((section) => {
+    if (replaced || typeof section?.heading !== "string") return section;
+    replaced = true;
+
+    return { ...section, heading };
+  });
+}
+
+/** Tag archives render their own trail; the hero's would make two Breadcrumb landmarks. */
+export function withoutHeroBreadcrumbs(heroSections: any[]) {
+  return heroSections.map((section) =>
+    section?.showBreadcrumbs ? { ...section, showBreadcrumbs: false } : section
+  );
+}
+
 /** CMS `pages` entry with id `blog` and its hero `pageSections`. */
 export async function loadBlogPageContext() {
   let blogPage: any;

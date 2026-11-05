@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="1280" height="720" role="img" aria-labelledby="t-cta-center">
+  <title id="t-cta-center">Cta center component preview</title>
+  <style>
+    @media (prefers-color-scheme: dark) {
+      svg {
+        --pv-paper: #151515;
+        --pv-panel: #1D1D1B;
+        --pv-surface: #232320;
+        --pv-line: #2E2D29;
+        --pv-glyph: #45443E;
+        --pv-body: #3A3934;
+        --pv-subject: #6E6A62;
+        --pv-ink: #F5F3EE;
+        --pv-on-ink: #6B6B6B;
+      }
+    }
+  </style>
+  <rect x="0" y="0" width="1280" height="720" fill="var(--pv-paper, #FFFFFF)"/>
+  <g transform="translate(0 -50)">
+    <rect x="410" y="330" width="460" height="26" rx="13" fill="var(--pv-subject, #A8A398)"/>
+    <rect x="360" y="378" width="560" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="440" y="402" width="400" height="12" rx="6" fill="var(--pv-body, #DAD7D0)"/>
+    <rect x="565" y="446" width="150" height="44" rx="10" fill="var(--pv-ink, #151515)"/>
+    <rect x="608" y="464" width="64" height="8" rx="4" fill="var(--pv-on-ink, #9A9A9A)"/>
+  </g>
+</svg>

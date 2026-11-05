@@ -1,15 +1,25 @@
 label: Divider
 icon: horizontal_rule
-description: Visual separator for dividing content sections.
+description: Horizontal line that separates content.
 value:
   _component: building-blocks/core-elements/divider
-  paddingVertical: lg
+  paddingVertical: md
+  lineStyle: solid
 preview:
   text:
     - Divider
+  image: public/component-previews/building-blocks/core-elements/divider.svg
   icon: horizontal_rule
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/divider.svg
+    fit: cover
 picker_preview:
   text: Divider
   subtext: Visual separator for dividing content sections.
+  image: public/component-previews/building-blocks/core-elements/divider.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/divider.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/divider/divider.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

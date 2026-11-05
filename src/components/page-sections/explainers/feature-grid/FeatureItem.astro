@@ -1,0 +1,83 @@
+---
+import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
+import Text from "@core-elements/text/Text.astro";
+import Card from "@wrappers/card/Card.astro";
+import GridItem from "@wrappers/grid/GridItem.astro";
+
+const {
+  title = "",
+  headingLevel = "h3",
+  description = "",
+  iconName = "",
+  iconColor = "default",
+  iconBackground = true,
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<GridItem
+  class="feature-grid-item"
+  {...htmlAttributes}
+>
+  <Card
+    class:list={["feature-item", className]}
+    paddingHorizontal="lg"
+    paddingVertical="lg"
+    rounded
+    border
+    backgroundColor="base"
+  >
+    <div class="feature-item-heading">
+      <Icon
+        class="feature-icon"
+        name={iconName}
+        size="lg"
+        color={iconColor}
+        background={iconBackground}
+        alignmentHorizontal="start"
+      />
+      <Heading
+        class="feature-title"
+        level={headingLevel}
+        size="md"
+        alignmentHorizontal="start"
+        data-prop="title"
+      >
+        {title}
+      </Heading>
+    </div>
+    <Text
+      class="feature-description"
+      alignmentHorizontal="start"
+      data-prop="description"
+      text={description}
+    />
+  </Card>
+</GridItem>
+
+<style is:global>
+  @layer page-sections {
+    .feature-item-heading {
+      align-items: start;
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .feature-item-heading .feature-icon {
+      flex-shrink: 0;
+    }
+
+    .feature-title {
+      flex: 1;
+      margin-block: 0;
+      min-width: 0;
+    }
+
+    .feature-description {
+    }
+  }
+</style>

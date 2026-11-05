@@ -1,35 +1,57 @@
 ---
-import Component from "@components/utils/renderBlock.astro";
-import { slugifyLabel } from "@components/utils/slugify";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import Component from "@component-utils/renderBlock.astro";
+import { slugifyLabel } from "@component-utils/slugify";
+import { uniqueId } from "@component-utils/uniqueId";
 import Button from "@core-elements/button/Button.astro";
+import ModalShell from "./ModalShell.astro";
 
 const {
   label,
   heading,
+  headingLevel = "h2",
   triggerText,
   triggerVariant = "primary",
   triggerSize = "md",
   triggerIconName,
+  popoverId: providedPopoverId,
   size = "md",
+  sheet = true,
   contentSections,
   useDefaultEditableBinding = false,
+  spaceBefore = "default",
   class: className,
   "data-children-prop": childrenDataProp,
+  "data-prop-heading": customDataPropHeading,
+  "data-prop-trigger-text": customDataPropTriggerText,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const generatedLabel = label || heading || `Modal-${crypto.randomUUID()}`;
-const popoverId = `modal-${slugifyLabel(generatedLabel)}`;
+// Must be unique: two modals sharing a heading or trigger text derive the same base.
+const HeadingTag = headingLevel;
+const derivedLabel = label || heading || triggerText;
+const popoverId =
+  providedPopoverId ||
+  uniqueId(Astro.request, `modal-${derivedLabel ? slugifyLabel(derivedLabel) : "dialog"}`);
 
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
   : {};
-const headingDataAttributes = useDefaultEditableBinding
-  ? { "data-editable": "text", "data-prop": "heading" }
+const effectiveHeadingProp =
+  customDataPropHeading ?? (useDefaultEditableBinding ? "heading" : null);
+const headingDataAttributes = effectiveHeadingProp
+  ? { "data-editable": "text", "data-prop": effectiveHeadingProp }
   : {};
+
+const effectiveTriggerTextProp =
+  customDataPropTriggerText ?? (useDefaultEditableBinding ? "triggerText" : null);
 
 const hasHeading = heading?.trim().length > 0;
 const hasContentSections = contentSections?.length > 0;
@@ -40,11 +62,13 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
 ---
 
 <div
-  class:list={["modal", className]}
+  class:list={["modal", "stackable", className]}
   {...htmlAttributes}
 >
   {
-    hasTrigger && (
+    /* Branch on the trigger props, not `Astro.slots.has`: a falsy conditional slot still
+       reports present. A slotted trigger must render inside this root or it leaves the array item. */
+    hasTrigger ? (
       <Button
         text={triggerText}
         variant={triggerVariant}
@@ -52,32 +76,35 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
         iconName={triggerIconName}
         link={`^${popoverId}`}
         class="modal-trigger"
+        data-prop={effectiveTriggerTextProp}
+        aria-haspopup="dialog"
+        aria-expanded="false"
       />
+    ) : (
+      <slot name="trigger" />
     )
   }
 
-  <div
-    id={popoverId}
-    popover="auto"
-    class:list={["modal-popover", `size-${size}`]}
-    role="dialog"
-    aria-label={hasHeading ? undefined : label}
-    aria-labelledby={hasHeading ? `${popoverId}-header` : undefined}
+  <ModalShell
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    popoverId={popoverId}
+    size={size}
+    sheet={sheet}
+    label={hasHeading ? undefined : label}
+    labelledby={hasHeading ? `${popoverId}-header` : undefined}
   >
     <div class:list={["modal-header", hasHeading ? "has-header" : "no-header"]}>
-      {
-        hasHeading && (
-          <h2
-            id={`${popoverId}-header`}
-            class="modal-title"
-            {...headingDataAttributes}
-          >
-            {heading}
-          </h2>
-        )
-      }
+      {hasHeading && (
+        <HeadingTag
+          id={`${popoverId}-header`}
+          class="modal-title"
+          {...headingDataAttributes}
+        >
+          {heading}
+        </HeadingTag>
+      )}
       <Button
-        iconName="x-mark"
+        iconName="x"
         hideText
         text="Close"
         variant="ghost"
@@ -88,133 +115,32 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
       />
     </div>
     <div
-      class="modal-body"
+      class="modal-body flow"
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <Component
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <Component
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
-  </div>
+  </ModalShell>
 </div>
 
 <script>
   import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllModals } from "./setup";
 
-  function updateModalScrollLock() {
-    const openPopovers = Array.from(
-      document.querySelectorAll<HTMLElement>(".modal-popover")
-    ).filter((popover) => popover.matches(":popover-open"));
-    const hasOpenModal = openPopovers.length > 0;
-
-    document.body.toggleAttribute("data-modal-scroll-lock", hasOpenModal);
-  }
-
-  function setupModals() {
-    document.querySelectorAll<HTMLElement>(".modal").forEach((modal) => {
-      if (modal.hasAttribute("data-modal-initialized")) return;
-      modal.setAttribute("data-modal-initialized", "");
-
-      const trigger = modal.querySelector<HTMLButtonElement>(".modal-trigger .button-inner");
-      const popover = modal.querySelector<HTMLElement>(".modal-popover");
-      if (!popover) return;
-
-      popover.addEventListener("toggle", (e) => {
-        const { newState } = e as ToggleEvent;
-        trigger?.setAttribute("aria-expanded", String(newState === "open"));
-        updateModalScrollLock();
-
-        if (newState === "closed" && trigger) {
-          trigger.focus();
-        }
-      });
-    });
-
-    updateModalScrollLock();
-  }
-
-  onPageLoad(setupModals);
+  onPageLoad(() => setupAllModals());
 </script>
 
 <style is:global>
   @layer components {
     .modal {
       display: inline-flex;
-      margin-top: var(--spacing-lg);
-    }
-
-    .modal-popover {
-      background-color: var(--color-bg);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-xs);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
-      color: var(--color-text);
-      inset: 0;
-      margin: auto;
-      max-height: 85vh;
-      overflow: hidden;
-      padding: 0;
-      width: 90vw;
-
-      opacity: 0;
-      transform: translateY(16px);
-      transition:
-        opacity var(--animation-normal) ease-out,
-        transform var(--animation-normal) ease-out,
-        overlay var(--animation-normal) ease-out allow-discrete,
-        display var(--animation-normal) ease-out allow-discrete;
-
-      &:popover-open {
-        display: flex;
-        flex-direction: column;
-        opacity: 1;
-        transform: translateY(0);
-
-        @starting-style {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-      }
-
-      &::backdrop {
-        background-color: var(--color-overlay);
-        opacity: 0;
-        transition:
-          opacity var(--animation-normal) ease-out,
-          overlay var(--animation-normal) ease-out allow-discrete,
-          display var(--animation-normal) ease-out allow-discrete;
-      }
-
-      &:popover-open::backdrop {
-        opacity: 1;
-
-        @starting-style {
-          opacity: 0;
-        }
-      }
-
-      &.size-sm {
-        max-width: var(--content-width-sm);
-      }
-
-      &.size-md {
-        max-width: var(--content-width-md);
-      }
-
-      &.size-lg {
-        max-width: var(--content-width-lg);
-      }
-
-      &.size-xl {
-        max-width: var(--content-width-xl);
-      }
     }
 
     .modal-header {
@@ -256,14 +182,6 @@ if (!_component && !hasContentSections && !hasSlotContent) return;
     .modal-body {
       flex: 1;
       overflow-y: auto;
-
-      > *:first-child {
-        margin-top: 0 !important;
-      }
-
-      > *:last-child {
-        margin-bottom: 0 !important;
-      }
     }
   }
 </style>

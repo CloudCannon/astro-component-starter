@@ -1,7 +1,41 @@
 label:
   type: text
   comment: Accessible label for the video modal dialog.
-type:
+title:
+  type: text
+  comment: Video title for accessibility and display.
+media:
+  type: object
+  label: Video
+  comment: "The video to play: a YouTube or Vimeo ID, or a local file."
+  options:
+    preview:
+      icon: videocam
+      text:
+        - Video
+      subtext:
+        - key: type
+    structures:
+      id_key: type
+      reorder_inputs: true
+      remove_extra_inputs: true
+      values:
+        - label: YouTube
+          icon: smart_display
+          value:
+            type: youtube
+            videoId: ""
+        - label: Vimeo
+          icon: smart_display
+          value:
+            type: vimeo
+            videoId: ""
+        - label: Local Source
+          icon: video_file
+          value:
+            type: local-source
+            source: ""
+media.type:
   type: select
   comment: Video source type.
   options:
@@ -12,18 +46,13 @@ type:
         name: Vimeo
       - id: local-source
         name: Local Source
-title:
+media.videoId:
   type: text
-  comment: Video title for accessibility and display.
-videoId:
-  type: text
-  comment: Used for externally hosted videos — enter the YouTube or Vimeo video ID.
-  hidden: type=local-source
-source:
+  comment: The YouTube or Vimeo video ID.
+media.source:
   type: file
   label: Video Source
-  comment: Used for locally hosted videos — select a video file.
-  hidden: type!=local-source
+  comment: A locally hosted video file.
   options:
     accepts_mime_types:
       - video/mp4
@@ -32,11 +61,78 @@ source:
     paths:
       uploads: public/videos
       static: public
-triggerText:
-  type: text
-  comment: Text displayed on the button that opens the video modal.
-triggerVariant:
+trigger:
+  type: object
+  comment: Open the video from a button, or from a poster image with a play disc over it.
+  options:
+    preview:
+      icon: play_circle
+      text:
+        - Trigger
+      subtext:
+        - key: style
+    structures:
+      id_key: style
+      reorder_inputs: true
+      remove_extra_inputs: true
+      values:
+        - label: Button
+          icon: touch_app
+          value:
+            style: button
+            text: Watch video
+            variant: primary
+            size: md
+            iconName: circle-play
+        - label: Poster image
+          icon: image
+          value:
+            style: poster
+            image: ""
+            alt: ""
+            aspectRatio: widescreen
+trigger.style:
   type: select
+  label: Trigger style
+  options:
+    values:
+      - id: button
+        name: Button
+      - id: poster
+        name: Poster image
+trigger.image:
+  type: image
+  label: Poster image
+  comment: Still frame shown before playback. Without one, the trigger is a play button.
+  options:
+    paths:
+      uploads: src/assets/images
+      static: ""
+trigger.alt:
+  type: text
+  label: Poster alt
+  comment: Accessible description of the poster image. Leave empty for a decorative still.
+trigger.aspectRatio:
+  type: select
+  label: Poster aspect ratio
+  comment: Crop of the poster image.
+  options:
+    values:
+      - id: widescreen
+        name: Widescreen (16:9)
+      - id: landscape
+        name: Landscape (4:3)
+      - id: square
+        name: Square (1:1)
+      - id: none
+        name: Natural
+trigger.text:
+  type: text
+  label: Button text
+  comment: Text displayed on the button that opens the video modal.
+trigger.variant:
+  type: select
+  label: Button variant
   comment: Visual style of the trigger button.
   options:
     values:
@@ -50,8 +146,9 @@ triggerVariant:
         name: Ghost
       - id: text
         name: Text
-triggerSize:
+trigger.size:
   type: select
+  label: Button size
   comment: Size of the trigger button.
   options:
     values:
@@ -61,11 +158,12 @@ triggerSize:
         name: Medium
       - id: lg
         name: Large
-triggerIconName:
+trigger.iconName:
   type: select
-  comment: Optional icon for the trigger button. Sourced from [Heroicons](https://heroicons.com/).
+  label: Button icon
+  comment: Icon on the trigger button.
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name

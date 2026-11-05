@@ -1,5 +1,5 @@
 ---
-import RenderBlock from "@components/utils/renderBlock.astro";
+import RenderBlock from "@component-utils/renderBlock.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
@@ -8,26 +8,42 @@ const {
   useDefaultEditableBinding = false,
   isOpen = false,
   accordionName,
+  class: className,
   _component,
   "data-children-prop": childrenDataProp,
+  "data-prop-title": customDataPropTitle,
   ...htmlAttributes
 } = Astro.props;
 
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
+  : {};
+
+const effectiveTitleProp = customDataPropTitle ?? (useDefaultEditableBinding ? "title" : null);
+const titleDataAttributes = effectiveTitleProp
+  ? { "data-editable": "text", "data-prop": effectiveTitleProp }
   : {};
 ---
 
 <details
-  class="accordion-item"
+  class:list={["accordion-item", className]}
   open={isOpen}
   name={accordionName}
   {...htmlAttributes}
 >
   <summary class="accordion-item-title">
-    <span class="accordion-item-title-text">{title}</span>
+    <span
+      class="accordion-item-title-text"
+      {...titleDataAttributes}
+    >
+      {title}
+    </span>
     <Icon
       name="chevron-down"
       size="none"
@@ -35,18 +51,16 @@ const arrayDataAttributes = effectiveChildrenProp
     />
   </summary>
   <div
-    class="accordion-item-detail"
+    class="accordion-item-detail flow"
     {...arrayDataAttributes}
   >
     <slot>
-      {
-        contentSections && (
-          <RenderBlock
-            contentSections={contentSections}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {contentSections && (
+        <RenderBlock
+          contentSections={contentSections}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
 </details>
@@ -54,7 +68,7 @@ const arrayDataAttributes = effectiveChildrenProp
 <style is:global>
   @layer components {
     .accordion-item {
-      border-bottom: 1px solid var(--color-border-subtle);
+      border-bottom: var(--border-width-sm) solid var(--color-border-subtle);
       container-type: inline-size;
 
       > .accordion-item-title {
@@ -64,15 +78,13 @@ const arrayDataAttributes = effectiveChildrenProp
         font-size: var(--font-size-xl);
         font-weight: var(--font-weight-bold);
         justify-content: space-between;
-        padding: var(--spacing-md);
-        transition: background-color var(--animation-normal) ease-out;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
 
-        &:first-of-type {
-          list-style-type: none;
-        }
+        /* Firefox's disclosure marker (summary is display: list-item). */
+        list-style-type: none;
+        padding: var(--spacing-md);
+        transition: background-color var(--animation-normal) var(--ease-out);
+        -webkit-user-select: none;
+        user-select: none;
 
         &:hover {
           background-color: var(--color-bg-surface);
@@ -83,17 +95,13 @@ const arrayDataAttributes = effectiveChildrenProp
         }
 
         .accordion-item-icon {
-          transition: transform var(--animation-normal) ease-out;
+          transition: transform var(--animation-normal) var(--ease-out);
         }
       }
 
       > .accordion-item-detail {
         padding-inline: var(--spacing-md);
         padding-bottom: var(--spacing-md);
-
-        > *:first-child {
-          margin-top: 0 !important;
-        }
       }
     }
 
@@ -103,12 +111,13 @@ const arrayDataAttributes = effectiveChildrenProp
       }
 
       &::details-content {
-        animation: grow-out var(--animation-normal) ease-out;
+        animation: grow-out var(--animation-normal) var(--ease-out);
       }
     }
 
     @supports (interpolate-size: allow-keywords) and selector(::details-content) {
-      :root {
+      /* Not on :root: `interpolate-size` is inherited, so scoping it here is enough. */
+      .accordion-item {
         interpolate-size: allow-keywords;
       }
 
@@ -116,8 +125,8 @@ const arrayDataAttributes = effectiveChildrenProp
         height: 0;
         overflow: clip;
         transition:
-          height var(--animation-normal) ease-out,
-          content-visibility var(--animation-normal) ease-out allow-discrete;
+          height var(--animation-normal) var(--ease-out),
+          content-visibility var(--animation-normal) var(--ease-out) allow-discrete;
       }
 
       .accordion-item[open]::details-content {

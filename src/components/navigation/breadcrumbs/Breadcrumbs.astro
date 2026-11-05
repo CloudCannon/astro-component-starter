@@ -1,0 +1,161 @@
+---
+import { breadcrumbListJsonLd } from "@component-utils/breadcrumbTrail";
+import Icon from "@core-elements/icon/Icon.astro";
+import breadcrumbsData from "@data/breadcrumbs.json";
+
+const { items = [], class: className, ...htmlAttributes } = Astro.props;
+
+const homeLabel = String(breadcrumbsData.homeLabel ?? "").trim() || "Home";
+const trail = [{ label: homeLabel, url: "/" }, ...items];
+
+const backTarget = trail
+  .slice(0, -1)
+  .reverse()
+  .find((item) => item.url);
+
+// Both are undefined in CloudCannon's re-render, where `new URL` throwing would blank the section.
+const base = Astro.site ?? Astro.url;
+const structuredData = base ? breadcrumbListJsonLd(items, { homeLabel, base }) : null;
+---
+
+<nav
+  class:list={["breadcrumbs", className]}
+  aria-label="Breadcrumb"
+  data-pagefind-ignore
+  {...htmlAttributes}
+>
+  <ol class="breadcrumbs-trail">
+    {trail.map((item, index) => {
+      const isCurrent = index === trail.length - 1;
+
+      return (
+        <li class="breadcrumbs-item">
+          {index > 0 && (
+            <Icon
+              name="chevron-right"
+              size="none"
+              class="breadcrumbs-separator"
+            />
+          )}
+          {item.url && !isCurrent ? (
+            <a
+              class="breadcrumbs-link"
+              href={item.url}
+            >
+              {item.label}
+            </a>
+          ) : (
+            <span
+              class="breadcrumbs-current"
+              aria-current={isCurrent ? "page" : undefined}
+            >
+              {item.label}
+            </span>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+
+  {backTarget && (
+    <a
+      class="breadcrumbs-back"
+      href={backTarget.url}
+    >
+      <Icon
+        name="chevron-left"
+        size="none"
+      />
+      {backTarget.label}
+    </a>
+  )}
+</nav>
+
+{structuredData && (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData).replace(/</g, "\\u003c")}
+  ></script>
+)}
+<style is:global>
+  @layer components {
+    .breadcrumbs {
+      color: var(--color-text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .breadcrumbs .breadcrumbs-trail {
+      align-items: center;
+      display: flex;
+      gap: var(--spacing-xs);
+      list-style: none;
+      margin: 0;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .breadcrumbs .breadcrumbs-item {
+      align-items: center;
+      display: flex;
+      gap: var(--spacing-xs);
+      min-width: 0;
+    }
+
+    /* A shrinking ancestor squeezes its nowrap link under the separator. */
+    .breadcrumbs .breadcrumbs-item:not(:last-child) {
+      flex-shrink: 0;
+    }
+
+    .breadcrumbs .breadcrumbs-separator {
+      flex-shrink: 0;
+      font-size: 0.75em;
+      transform: translateY(0.09em);
+    }
+
+    .breadcrumbs .breadcrumbs-link {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.15em;
+      white-space: nowrap;
+    }
+
+    .breadcrumbs .breadcrumbs-link:hover {
+      color: var(--color-text-strong);
+      text-decoration-thickness: 2px;
+    }
+
+    .breadcrumbs .breadcrumbs-current {
+      color: var(--color-text-strong);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .breadcrumbs .breadcrumbs-back {
+      align-items: center;
+      color: inherit;
+      display: none;
+      gap: var(--spacing-xs);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.15em;
+      width: fit-content;
+    }
+
+    .breadcrumbs .breadcrumbs-back:hover {
+      color: var(--color-text-strong);
+      text-decoration-thickness: 2px;
+    }
+
+    @media (max-width: 639px) {
+      .breadcrumbs .breadcrumbs-trail {
+        display: none;
+      }
+
+      .breadcrumbs .breadcrumbs-back {
+        display: flex;
+      }
+    }
+  }
+</style>

@@ -1,5 +1,7 @@
 <script is:inline>
   (function () {
+    // Pre-paint copy of ThemeToggle.astro's theme algorithm (inline, so it can't import it):
+    // keep both in sync or the first paint flashes the wrong theme.
     function flipTheme(theme) {
       return theme === "dark" ? "light" : "dark";
     }

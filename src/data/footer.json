@@ -1,6 +1,6 @@
 {
-  "logoSource": "/src/assets/images/component-docs/acs-logo.svg",
-  "logoAlternateSource": "/src/assets/images/component-docs/acs-logo-dark.svg",
+  "logoSource": "/src/assets/images/brand/astro-component-starter-logo.svg",
+  "logoAlternateSource": "/src/assets/images/brand/astro-component-starter-logo-reversed.svg",
   "logoAlt": "Astro Component Starter",
   "links": [
     {
@@ -10,6 +10,14 @@
     {
       "name": "Why",
       "path": "/why/"
+    },
+    {
+      "name": "Get started",
+      "path": "/start/"
+    },
+    {
+      "name": "Examples",
+      "path": "/examples/"
     },
     {
       "name": "Components",
@@ -23,15 +31,23 @@
   "socials": [
     {
       "icon": "social/github",
-      "link": "https://github.com"
-    },
-    {
-      "icon": "social/x",
-      "link": "https://x.com"
+      "link": "https://github.com/CloudCannon/astro-component-starter",
+      "label": "Astro Component Starter on GitHub"
     },
     {
       "icon": "social/linkedin",
-      "link": "https://linkedin.com"
+      "link": "https://nz.linkedin.com/company/cloudcannon",
+      "label": "CloudCannon on LinkedIn"
+    },
+    {
+      "icon": "social/youtube",
+      "link": "https://www.youtube.com/c/CloudCannon",
+      "label": "CloudCannon on YouTube"
+    },
+    {
+      "icon": "social/x",
+      "link": "https://x.com/CloudCannon",
+      "label": "CloudCannon on X"
     }
   ],
   "footerText": "© 2026 All rights reserved."

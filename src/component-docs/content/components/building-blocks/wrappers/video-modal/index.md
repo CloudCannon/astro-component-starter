@@ -1,9 +1,27 @@
 ---
 title: Video Modal
-overview: 'A dialog overlay containing an embedded video that autoplays when opened and pauses when closed. Supports YouTube, Vimeo, and local video sources. Any Button or Card on the page can also open a video modal by setting its link to `^modal-{label}`, where `{label}` is the slugified modal label (e.g. `^modal-my-video`).'
+overview: A video in a popup, opened from a button, poster image, or `^modal-{label}` link. YouTube and Vimeo load when it opens, or wait for the visitor's permission if the site [asks before loading external media](/component-docs/components/navigation/consent/).
 examples:
+  - title: 'Video source'
+    slugs:
+      - type-youtube
+      - type-vimeo
+      - type-local-source
+  - title: 'Trigger button'
+    slugs:
+      - trigger-variants
+      - trigger-sizes
+      - trigger-icons
+  - title: 'Poster trigger'
+    slugs:
+      - poster-trigger
+      - poster-crop-landscape
+      - poster-crop-square
+      - poster-crop-natural
   - title: 'Sizes'
     slugs:
+      - size-sm
       - size-md
+      - size-lg
       - size-xl
 ---

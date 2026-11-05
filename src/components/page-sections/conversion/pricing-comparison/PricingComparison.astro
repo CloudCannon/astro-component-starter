@@ -1,0 +1,334 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Button from "@core-elements/button/Button.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Icon from "@core-elements/icon/Icon.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+
+type Plan = {
+  name?: string;
+  price?: string;
+  highlight?: boolean;
+  buttonText?: string;
+  buttonLink?: string;
+};
+type Row = { feature?: string; values?: (string | null)[] };
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  plans = [],
+  rows = [],
+  striped = true,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+// Not filtered: a row's `values` are positional, so dropping an unnamed plan
+// would shift every later column's cells onto the wrong plan.
+const planList = (plans ?? []) as Plan[];
+
+const cellFor = (row: Row, index: number) => {
+  const raw = row?.values?.[index];
+
+  return raw == null ? "" : String(raw).trim();
+};
+
+// Blank is not "excluded": an unfilled cell must not tell customers a feature is absent.
+const markFor = (value: string) => {
+  const token = value.toLowerCase();
+
+  if (token === "yes" || token === "true" || token === "✓") return "included";
+  if (token === "no" || token === "false" || token === "-") return "excluded";
+  return "text";
+};
+
+const hasTable = planList.length > 0 && rows?.length > 0;
+---
+
+<CustomSection
+  class:list={["pricing-comparison", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level={headingLevel}
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="section-subtext pricing-comparison-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+
+  {hasTable && (
+    <div class:list={["pricing-comparison-frame", striped && "striped"]}>
+      <p
+        class="pricing-comparison-hint"
+        aria-hidden="true"
+      >
+        Scroll →
+      </p>
+      <div
+        class="pricing-comparison-scroller"
+        role="region"
+        tabindex="0"
+        aria-label={heading || "Plan comparison"}
+      >
+        <table>
+          <thead>
+            {/* The only `plans` binding: duplicate bindings on the body and footer
+                  cells compete for the same rows on the canvas. */}
+            <tr
+              data-editable="array"
+              data-prop="plans"
+              data-direction="row"
+            >
+              <td />
+              {planList.map((plan) => (
+                <th
+                  scope="col"
+                  data-editable="array-item"
+                >
+                  <span
+                    class="pricing-comparison-plan"
+                    data-editable="text"
+                    data-prop="name"
+                  >
+                    {plan.name}
+                  </span>
+                  {plan.price && (
+                    <span
+                      class="pricing-comparison-price"
+                      data-editable="text"
+                      data-prop="price"
+                    >
+                      {plan.price}
+                    </span>
+                  )}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody
+            data-editable="array"
+            data-prop="rows"
+          >
+            {rows?.map((row: Row) => (
+              <tr data-editable="array-item">
+                <th
+                  scope="row"
+                  data-editable="text"
+                  data-prop="feature"
+                >
+                  {row?.feature}
+                </th>
+                {planList.map((_plan, index) => {
+                  const value = cellFor(row, index);
+                  const mark = markFor(value);
+
+                  return (
+                    <td class:list={[`mark-${mark}`]}>
+                      {mark === "text" ? (
+                        value
+                      ) : (
+                        <>
+                          <Icon
+                            name={mark === "included" ? "check" : "minus"}
+                            size="sm"
+                          />
+                          <span class="visually-hidden">
+                            {mark === "included" ? "Included" : "Not included"}
+                          </span>
+                        </>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+          {/* In `tfoot`, not `tbody`: the CTA row is not one of `rows`, and a
+                non-item child inside the array region confuses row insertion. */}
+          {planList.some((plan) => plan.buttonText) && (
+            <tfoot>
+              <tr class="pricing-comparison-actions">
+                <td />
+                {planList.map((plan) => (
+                  <td>
+                    {plan.buttonText && (
+                      <Button
+                        text={plan.buttonText}
+                        link={plan.buttonLink}
+                        variant={plan.highlight ? "primary" : "tertiary"}
+                        size="sm"
+                      />
+                    )}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+    </div>
+  )}
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    .pricing-comparison {
+      /* The solid twin keeps the sticky column opaque while the table pans. */
+      --pricing-stripe: color-mix(in srgb, var(--gray-500) 10%, transparent);
+      --pricing-stripe-solid: color-mix(in srgb, var(--gray-500) 10%, var(--color-bg));
+      .pricing-comparison-frame {
+        --space-before: var(--space-before-loose);
+      }
+
+      .pricing-comparison-hint {
+        color: var(--color-text-muted);
+        display: none;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        margin: 0 0 var(--spacing-xs);
+        text-transform: uppercase;
+      }
+
+      .pricing-comparison-scroller {
+        overflow-x: auto;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      table {
+        border-collapse: collapse;
+        min-width: 34rem;
+        width: 100%;
+      }
+
+      thead th {
+        background: none;
+        border: 0;
+        border-bottom: var(--border-width-md) solid var(--color-border-strong);
+        padding: var(--spacing-md);
+        text-align: center;
+        vertical-align: bottom;
+      }
+
+      .pricing-comparison-plan {
+        display: block;
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-bold);
+      }
+
+      .pricing-comparison-price {
+        color: var(--color-text-muted);
+        display: block;
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-normal);
+      }
+
+      tbody th,
+      tbody td,
+      tfoot td {
+        border: 0;
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-md);
+        text-align: center;
+      }
+
+      tbody th,
+      tbody td {
+        border-bottom: var(--border-width-sm) solid var(--color-border);
+      }
+
+      tbody th[scope="row"] {
+        font-weight: var(--font-weight-semibold);
+        text-align: start;
+      }
+
+      .mark-included .icon {
+        color: var(--color-success);
+      }
+
+      .mark-excluded .icon {
+        color: var(--color-text-muted);
+        opacity: 0.6;
+      }
+
+      /* Highlight a plan by its CTA, not a tinted column: it fights the row stripe. */
+      .pricing-comparison-actions td {
+        padding-top: var(--spacing-lg);
+
+        .button {
+          margin-top: 0;
+        }
+      }
+
+      /* The striped class rides on the frame — a prop-driven class on a region
+         root goes stale in the editor. */
+      .pricing-comparison-frame.striped tbody tr:nth-child(2n) th,
+      .pricing-comparison-frame.striped tbody tr:nth-child(2n) td {
+        background-color: var(--pricing-stripe);
+      }
+
+      @media (width < 640px) {
+        .pricing-comparison-hint {
+          display: block;
+        }
+
+        .pricing-comparison-scroller {
+          mask-image: linear-gradient(90deg, #000 calc(100% - var(--spacing-xl)), transparent);
+        }
+
+        tbody th[scope="row"] {
+          background-color: var(--color-bg);
+          border-inline-end: var(--border-width-sm) solid var(--color-border);
+          inset-inline-start: 0;
+          position: sticky;
+        }
+
+        .pricing-comparison-frame.striped tbody tr:nth-child(2n) th[scope="row"] {
+          background-color: var(--pricing-stripe-solid);
+        }
+      }
+    }
+  }
+</style>

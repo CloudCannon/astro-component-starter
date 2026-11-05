@@ -1,0 +1,37 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+
+const {
+  text = "__LABEL__",
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding: _useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<div
+  class:list={["__SLUG__", "stackable", className]}
+  {...htmlAttributes}
+>
+  {/* Never on the root: the editor's re-render keeps it, so the attribute goes stale.
+      _flow.css hoists it via :has(). */}
+  <span
+    class="__SLUG__-text"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+  >
+    {text}
+  </span>
+</div>
+
+<style is:global>
+  @layer components {
+    /* Tokens only: src/styles/variables/* (primitive), src/styles/themes/* (semantic). */
+    .__SLUG__ {
+      /* No root margin: sibling spacing comes from the flow system (`--space-before`). */
+      /* TODO: replace with real styles for __PASCAL__. */
+      color: var(--color-text);
+    }
+  }
+</style>
