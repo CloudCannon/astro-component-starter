@@ -4,8 +4,8 @@
  */
 export default {
   // TODO: replace with the real domain. Until then own-domain absolute links
-  // are graded as external, and `src/data/seo.json` says the same thing.
-  siteUrl: "https://example.com",
+  // are graded as external; it must match `url` in `src/data/seo.json`.
+  siteUrl: "https://astro-component-starter.cc",
   offline: true,
   // A fixture `npm run test:render` leaves in dist/; it never ships.
   ignorePaths: ["kitchen-sink-render-test/**"],

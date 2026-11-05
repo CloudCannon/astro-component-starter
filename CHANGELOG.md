@@ -18,7 +18,7 @@ change how things look, and every page section moves to a new path.
 #### Making the starter your own
 
 - `npm run reset:starter` clears the demo content out of a fresh copy and sets your site name and URL. `--dry-run` shows the plan first, and with uncommitted changes it stops and asks before going on.
-- `npm run check:placeholders` warns when starter placeholders are still in place, most importantly the `example.com` URL.
+- `npm run check:placeholders` warns when starter placeholders are still in place, most importantly the starter's own production URL.
 - Guides: `docs/DEPLOYMENT.md` for going live on CloudCannon, and `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md` and `docs/ARCHITECTURE.md` for people and AI agents working on the project.
 - The Getting Started guides follow the order you'd build a site in: Project Tour, Editing a Page, Customizing Your Brand, Building a Page Section, Editing the Blog, a new **Creating Snippets** guide to making your own components insertable in blog posts, and a new **Going Live** guide. How Visual Editing Works is now part of Building a Page Section, and its old URL redirects there. The Get Started page matches, with a section on working with an AI agent.
 - A `LICENSE` file (MIT), and recorded provenance for the icon set in `src/icons/README.md`.

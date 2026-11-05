@@ -31,7 +31,7 @@ const watchIgnored = [
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com", // TODO: Update to your production URL
+  site: "https://astro-component-starter.cc", // TODO: Update to your production URL
   fonts: siteFonts,
   build: {
     // A shared stylesheet measured ~190ms FCP / ~240ms LCP slower on cold Slow-4G.

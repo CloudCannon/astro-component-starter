@@ -34,7 +34,7 @@ the account-side details — organisations, permissions, custom domains, and sta
 
 This is the one thing a fresh clone will get wrong, and it fails silently. `site` in
 `astro.config.mjs` is the base for every absolute URL Astro emits — canonical tags, the
-sitemap, RSS links, and the JSON-LD `@id` graph. Left at `https://example.com` the build
+sitemap, RSS links, and the JSON-LD `@id` graph. Left at the starter's own URL the build
 still succeeds and the pages still look right, while every one of those URLs points at a
 domain you don't own.
 

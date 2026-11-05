@@ -1,4 +1,4 @@
-// `site` left at example.com fails silently: every canonical, sitemap and RSS URL
+// `site` left at the starter's URL fails silently: every canonical, sitemap and RSS URL
 // points at a domain the site doesn't own. Warns by default because this repo
 // holds the placeholders; a real site should use --strict.
 //   node scripts/check/placeholders.mjs [--strict]
@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const strict = process.argv.includes("--strict");
 
-const PLACEHOLDER_URL = "https://example.com";
+const STARTER_URLS = ["https://example.com", "https://astro-component-starter.cc"];
 const STARTER_NAME = "Astro Component Starter";
 const STARTER_LOGO = "astro-component-starter-logo";
 
@@ -47,20 +47,22 @@ const branding = [];
 
 const astroConfig = read("astro.config.mjs");
 
-if (astroConfig?.includes(`site: "${PLACEHOLDER_URL}"`)) {
+const configSite = astroConfig?.match(/site: "([^"]*)"/)?.[1];
+
+if (STARTER_URLS.includes(configSite)) {
   breaking.push({
     file: "astro.config.mjs",
-    detail: `site is still ${PLACEHOLDER_URL}`,
-    why: "every canonical, sitemap entry, RSS link and JSON-LD @id points at example.com",
+    detail: `site is still the starter's ${configSite}`,
+    why: "every canonical, sitemap entry, RSS link and JSON-LD @id points at the starter's domain",
   });
 }
 
 const seo = readJson("src/data/seo.json");
 
-if (seo?.url === PLACEHOLDER_URL) {
+if (STARTER_URLS.includes(seo?.url)) {
   breaking.push({
     file: "src/data/seo.json",
-    detail: `url is still ${PLACEHOLDER_URL}`,
+    detail: `url is still the starter's ${seo.url}`,
     why: "Organization and WebSite structured data advertise the wrong domain",
   });
 }

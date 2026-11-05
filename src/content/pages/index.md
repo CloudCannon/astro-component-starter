@@ -1,6 +1,6 @@
 ---
 _schema: default
-title: Home
+title: Components already built. Pages anyone can edit.
 description: >-
   A library of brandable page sections for Astro, visually editable in
   CloudCannon. Clone it, swap the design tokens, and ship a static site.

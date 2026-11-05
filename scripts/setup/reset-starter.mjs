@@ -187,7 +187,7 @@ const resetBranding = await confirm("Reset nav/footer/SEO branding?");
 
 const configPath = "astro.config.mjs";
 const config = readFileSync(abs(configPath), "utf8");
-const nextConfig = config.replace(/site: "https:\/\/example\.com",.*$/m, `site: ${yaml(siteUrl)},`);
+const nextConfig = config.replace(/site: "[^"]*",.*$/m, `site: ${yaml(siteUrl)},`);
 
 if (nextConfig !== config) {
   writeText(configPath, nextConfig);
@@ -199,7 +199,7 @@ const sitereadyPath = "siteready.config.js";
 const siteready = readFileSync(abs(sitereadyPath), "utf8");
 const nextSiteready = siteready
   .replace(/^[ \t]*\/\/ TODO: replace with the real domain\.[^\n]*\n[ \t]*\/\/[^\n]*\n/m, "")
-  .replace(/siteUrl: "https:\/\/example\.com",/, `siteUrl: ${yaml(siteUrl)},`);
+  .replace(/siteUrl: "[^"]*",/, `siteUrl: ${yaml(siteUrl)},`);
 
 if (nextSiteready !== siteready) {
   writeText(sitereadyPath, nextSiteready);
