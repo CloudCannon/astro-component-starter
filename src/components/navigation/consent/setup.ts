@@ -1,0 +1,258 @@
+import { setupAllModals } from "@wrappers/modal/setup";
+import { setupAnalytics } from "../../../integrations/consent/analytics";
+import {
+  analyticsConfigSchema,
+  privacyConfigSchema,
+  type AnalyticsConfig,
+  type PrivacyConfig,
+} from "../../../integrations/consent/config";
+import {
+  allowedExternalMediaUrl,
+  sanitizeEmbed,
+} from "../../../integrations/consent/externalMedia";
+import { getConsentManager, type ConsentCategory } from "../../../integrations/consent/runtime";
+
+let initialized = false;
+let controlsBound = false;
+
+// The docs example must not touch the live consent singleton, storage, or analytics loader.
+function setupPreview(root: HTMLElement): void {
+  if (root.hasAttribute("data-consent-preview-initialized")) return;
+
+  root.setAttribute("data-consent-preview-initialized", "");
+  root.hidden = false;
+  setupAllModals();
+
+  const finishChoice = (): void => {
+    root.setAttribute("data-consent-decided", "");
+    const banner = root.querySelector<HTMLElement>("[data-consent-banner]");
+
+    if (banner) banner.hidden = true;
+  };
+
+  root.querySelectorAll<HTMLElement>("[data-consent-action]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const action = control.dataset.consentAction;
+
+      if (action === "accept-all" || action === "reject-all") {
+        finishChoice();
+        control.closest<HTMLElement>(".consent-popover")?.hidePopover();
+      }
+      if (action === "save") {
+        finishChoice();
+        root.querySelector<HTMLElement>(".consent-popover")?.hidePopover();
+      }
+    });
+  });
+}
+
+function parseConfig(
+  root: HTMLElement
+): { privacy: PrivacyConfig; analytics: AnalyticsConfig } | null {
+  try {
+    const config = root.querySelector<HTMLElement>("[data-consent-config]");
+
+    return {
+      privacy: privacyConfigSchema.parse(JSON.parse(config?.dataset.consentConfig || "{}")),
+      analytics: analyticsConfigSchema.parse(JSON.parse(config?.dataset.analyticsConfig || "{}")),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function refresh(root: HTMLElement, privacy: PrivacyConfig): void {
+  const manager = getConsentManager(privacy);
+  const hasAnalytics =
+    root.querySelector<HTMLElement>("[data-has-analytics]")?.dataset.hasAnalytics === "true";
+  const banner = root.querySelector<HTMLElement>("[data-consent-banner]");
+
+  root.toggleAttribute("data-consent-decided", manager.hasDecision);
+  if (banner) {
+    banner.hidden =
+      manager.record.decisions.analytics !== "unset" || !hasAnalytics || !privacy.enabled;
+  }
+
+  root.querySelectorAll<HTMLInputElement>("[data-consent-category]").forEach((input) => {
+    const category = input.dataset.consentCategory as ConsentCategory;
+
+    input.checked = manager.isAllowed(category);
+    if (category === "externalMedia") {
+      input.closest<HTMLElement>(".consent-category")!.hidden =
+        !privacy.externalMediaRequiresConsent;
+    }
+  });
+
+  hydrateExternalMedia();
+
+  if (!privacy.enabled) lockExternalMedia();
+}
+
+// With the workflow off, the enable button would write a decision that changes nothing.
+function lockExternalMedia(): void {
+  document.querySelectorAll<HTMLElement>("[data-external-media-enable]").forEach((button) => {
+    const message = button.previousElementSibling;
+
+    if (message instanceof HTMLElement) {
+      message.textContent = "External content is unavailable on this site.";
+    }
+
+    button.remove();
+  });
+}
+
+function externalMediaHosts(): HTMLElement[] {
+  const templateHosts = Array.from(
+    document.querySelectorAll<HTMLTemplateElement>("template[data-unsafe-external-media]")
+  ).map((template) => template.nextElementSibling);
+
+  return [
+    ...document.querySelectorAll<HTMLElement>("[data-external-media-src]"),
+    ...templateHosts.filter((host): host is HTMLElement => host instanceof HTMLElement),
+  ];
+}
+
+function hydrateExternalMedia(): void {
+  if (!window.siteConsent?.isAllowed("externalMedia")) {
+    externalMediaHosts().forEach((host) => {
+      if (host.hasAttribute("data-external-media-prompt")) return;
+      host.replaceChildren(
+        externalMediaFallback("Allow external media across this site to view this content.")
+      );
+      host.removeAttribute("data-external-media-mounted");
+      host.setAttribute("data-external-media-prompt", "");
+    });
+    return;
+  }
+
+  externalMediaHosts().forEach((host) => {
+    if (host.hasAttribute("data-external-media-mounted")) return;
+
+    if (host.matches("[data-external-media-src]")) {
+      const src = allowedExternalMediaUrl(host.dataset.externalMediaSrc ?? "");
+
+      if (!src) return;
+
+      const iframe = document.createElement("iframe");
+
+      iframe.src = src;
+      iframe.title = host.dataset.externalMediaTitle || "External content";
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+      host.replaceChildren(iframe);
+    } else {
+      const { content, rejected } = sanitizeEmbed(
+        host.previousElementSibling as HTMLTemplateElement
+      );
+
+      if (rejected.length) console.warn(`Embed: removed iframe(s) from ${rejected.join(", ")}`);
+      host.replaceChildren(content);
+    }
+    host.setAttribute("data-external-media-mounted", "");
+    host.removeAttribute("data-external-media-prompt");
+  });
+}
+
+function externalMediaFallback(message: string): DocumentFragment {
+  const content = document.createDocumentFragment();
+  const paragraph = document.createElement("p");
+  const button = document.createElement("button");
+
+  paragraph.textContent = message;
+  button.type = "button";
+  button.textContent = "Allow all external media";
+  button.setAttribute("data-external-media-enable", "");
+  content.append(paragraph, button);
+
+  return content;
+}
+
+function bind(root: HTMLElement, privacy: PrivacyConfig): void {
+  const manager = getConsentManager(privacy);
+
+  if (!controlsBound) {
+    controlsBound = true;
+    document.addEventListener("click", (event) => {
+      const target = event.target as Element;
+
+      if (target.closest("[data-external-media-enable]")) {
+        manager.setDecision("externalMedia", "granted");
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>("[data-consent-open]").forEach((control) => {
+    if (control.hasAttribute("data-consent-bound")) return;
+    control.setAttribute("data-consent-bound", "");
+    control.addEventListener("click", () => {
+      root.querySelector<HTMLElement>(".consent-popover")?.showPopover();
+    });
+  });
+
+  if (root.hasAttribute("data-consent-initialized")) return;
+  root.setAttribute("data-consent-initialized", "");
+
+  // Not a click handler: Customize opens via `popovertarget`. Resets boxes left ticked by an unsaved close.
+  root.querySelector<HTMLElement>(".consent-popover")?.addEventListener("beforetoggle", (event) => {
+    if ((event as ToggleEvent).newState === "open") refresh(root, privacy);
+  });
+
+  root.querySelectorAll<HTMLElement>("[data-consent-action]").forEach((control) => {
+    control.addEventListener("click", () => {
+      const action = control.dataset.consentAction;
+
+      if (action === "accept-all" || action === "reject-all") {
+        if (action === "accept-all") manager.acceptAll();
+        if (action === "reject-all") manager.rejectAll();
+        control.closest<HTMLElement>(".consent-popover")?.hidePopover();
+      }
+      if (action === "save") {
+        root.querySelectorAll<HTMLInputElement>("[data-consent-category]").forEach((input) => {
+          if (input.closest<HTMLElement>(".consent-category")?.hidden) return;
+          manager.setDecision(
+            input.dataset.consentCategory as ConsentCategory,
+            input.checked ? "granted" : "denied"
+          );
+        });
+        root.querySelector<HTMLElement>(".consent-popover")?.hidePopover();
+      }
+    });
+  });
+}
+
+export function setupAllConsent(): void {
+  const roots = document.querySelectorAll<HTMLElement>(".consent");
+
+  if (!roots.length || window.inEditorMode) return;
+
+  roots.forEach((root) => {
+    const config = parseConfig(root);
+
+    if (!config) return;
+
+    if (root.closest(".component-viewer")) {
+      setupPreview(root);
+      return;
+    }
+
+    root.hidden = !config.privacy.enabled;
+    bind(root, config.privacy);
+    setupAllModals();
+
+    if (!initialized) {
+      initialized = true;
+      const manager = getConsentManager(config.privacy);
+
+      manager.subscribe(() => {
+        document.querySelectorAll<HTMLElement>(".consent").forEach((activeRoot) => {
+          if (activeRoot.closest(".component-viewer")) return;
+          refresh(activeRoot, config.privacy);
+        });
+      });
+      setupAnalytics(config.analytics, config.privacy);
+    }
+
+    refresh(root, config.privacy);
+  });
+}

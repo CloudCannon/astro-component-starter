@@ -1,5 +1,5 @@
 ---
 title: 'Footer'
-description: 'A footer component with logo, navigation links, social media links, and legal text.'
-overview: 'A comprehensive footer block with logo, navigation links, social media icons, and legal information. Supports multiple link columns and copyright text.'
+description: Footer with a logo, links, and legal information.
+overview: Site footer with a logo, link columns, social icons, and copyright text. The Privacy settings link comes from `src/data/privacy.json`, not these props.
 ---

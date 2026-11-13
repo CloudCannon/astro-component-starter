@@ -1,0 +1,39 @@
+---
+/**
+ * Rendered once into an inert `<template>` and cloned per result by setup.ts. The
+ * thumbnail stays a plain `<img>`: search-time URLs can't go through Astro's asset pipeline.
+ */
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+---
+
+<li class="search-result">
+  <div class="search-result-media">
+    <img
+      class="search-result-image"
+      alt=""
+      loading="lazy"
+    />
+  </div>
+  <div class="search-result-content">
+    <a class="search-result-link">
+      {/* Not a heading: results in a modal aren't part of the page outline. */}
+      <Heading
+        text="Result title"
+        level="span"
+        size="xs"
+        class="search-result-title"
+      />
+    </a>
+    <SimpleText
+      text="Published"
+      size="xs"
+      class="search-result-lead"
+    />
+    <SimpleText
+      text="Excerpt"
+      size="sm"
+      class="search-result-excerpt"
+    />
+  </div>
+</li>

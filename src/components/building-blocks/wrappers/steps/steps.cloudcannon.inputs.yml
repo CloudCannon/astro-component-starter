@@ -1,0 +1,31 @@
+label:
+  comment: Names this block in the editor and sets its anchor id.
+  type: text
+items:
+  type: array
+  label: Steps
+  comment: The steps, in order. Images are all-or-none.
+  options:
+    structures: _structures.stepsItems
+orientation:
+  type: select
+  comment: Horizontal columns or a vertical list. Horizontal stacks vertically on small screens.
+  options:
+    values:
+      - id: vertical
+        name: Vertical
+      - id: horizontal
+        name: Horizontal
+imageAspectRatio:
+  type: select
+  comment: Crop for every step's image.
+  options:
+    values:
+      - id: landscape
+        name: Landscape (4:3)
+      - id: portrait
+        name: Portrait (3:4)
+      - id: square
+        name: Square (1:1)
+      - id: widescreen
+        name: Widescreen (16:9)

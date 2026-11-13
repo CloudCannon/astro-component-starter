@@ -46,12 +46,12 @@ blocks:
       size: lg
       text: Search
       hideText: true
-      iconName: magnifying-glass
+      iconName: search
     - _component: building-blocks/core-elements/button
       link: '#'
       text: 'Careers'
       variant: 'ghost'
-      iconName: 'arrow-top-right-on-square'
+      iconName: 'external-link'
       iconPosition: 'after'
       _target: 'blank'
       rel: 'noopener noreferrer'

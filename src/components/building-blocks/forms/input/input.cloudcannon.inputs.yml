@@ -3,7 +3,7 @@ label:
   comment: The label text for the input field.
 name:
   type: text
-  comment: The name attribute for the input field.
+  comment: Name the field is submitted under. Must be unique in the form.
 type:
   type: select
   options:
@@ -24,11 +24,26 @@ required:
 value:
   type: text
   comment: The default value for the input field.
+hint:
+  type: text
+  comment: Help text shown between the label and the field.
+autocomplete:
+  type: select
+  options:
+    values: data.autocomplete_tokens
+    value_key: id
+    allow_create: true
+    preview:
+      text:
+        - key: name
+      subtext:
+        - key: id
+  comment: Autofill hint for browsers. Leave blank to derive it from the field's type and name.
 iconName:
   type: select
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  comment: Icon to display, from [Lucide](https://lucide.dev/icons/).
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name

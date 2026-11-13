@@ -1,0 +1,160 @@
+---
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import { slugifyLabel } from "@component-utils/slugify";
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import SimpleText from "@core-elements/simple-text/SimpleText.astro";
+import Text from "@core-elements/text/Text.astro";
+import Toggle from "@forms/toggle/Toggle.astro";
+import PricingTiersItem from "@page-sections/conversion/pricing-tiers/PricingTiersItem.astro";
+import Grid from "@wrappers/grid/Grid.astro";
+import { nextHeadingLevel } from "@component-utils/headingLevel";
+
+type TierProps = Record<string, unknown>;
+
+const {
+  eyebrow = "",
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  showAnnualPricing = false,
+  monthlyLabel = "Monthly",
+  annualLabel = "Annual",
+  annualBadge = "",
+  defaultInterval = "monthly",
+  tiers = [],
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const itemHeadingLevel = nextHeadingLevel(headingLevel);
+
+// Radio names must be unique per page, so an unnamed section still needs a generated suffix.
+const billingLabel = sectionLabel || heading;
+const billingName = `pricing-billing-${billingLabel ? slugifyLabel(billingLabel) : crypto.randomUUID()}`;
+const annualSelected = defaultInterval === "annual";
+---
+
+<CustomSection
+  class:list={["pricing-tiers", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <SimpleText
+    alignmentHorizontal="center"
+    class="eyebrow"
+    data-prop="eyebrow"
+    text={eyebrow}
+    size="sm"
+  />
+  <Heading
+    level={headingLevel}
+    size="lg"
+    alignmentHorizontal="center"
+    data-prop="heading"
+  >
+    {heading}
+  </Heading>
+  <Text
+    class="pricing-tiers-subtext"
+    alignmentHorizontal="center"
+    data-prop="subtext"
+    text={subtext}
+  />
+  {showAnnualPricing && (
+    <div class="pricing-tiers-billing">
+      <Toggle
+        class="pricing-tiers-billing-toggle"
+        name={billingName}
+        value="annual"
+        offLabel={monthlyLabel}
+        label={annualLabel}
+        checked={annualSelected}
+      >
+        {annualLabel}
+        {isNonEmptyString(annualBadge) && (
+          <>
+            {" "}
+            <span
+              class="pricing-tiers-billing-saving"
+              data-prop="annualBadge"
+            >
+              ({annualBadge})
+            </span>
+          </>
+        )}
+      </Toggle>
+    </div>
+  )}
+  <Grid
+    gap="lg"
+    minItemWidth={272}
+    class="pricing-tiers-grid"
+    spaceBefore="loose"
+    data-children-prop="tiers"
+  >
+    {tiers?.map((tier: TierProps) => (
+      <PricingTiersItem
+        data-id="page-sections/conversion/pricing-tiers/pricing-tiers-item"
+        data-editable="array-item"
+        {...tier}
+        headingLevel={itemHeadingLevel}
+        showAnnualPricing={showAnnualPricing}
+      />
+    ))}
+  </Grid>
+</CustomSection>
+
+<style is:global>
+  @layer page-sections {
+    /* Not Grid's maxItemWidth: auto-fill counts tracks at the max, so three
+       420px-capped cards wrapped 2 + 1 until ~1300px. The cap is on the row. */
+    .pricing-tiers-grid > .grid-inner.columns-auto {
+      --pricing-tier-max-width: 420px;
+
+      grid-template-columns: repeat(auto-fit, minmax(min(var(--min-item-width), 100%), 1fr));
+      margin-inline: auto;
+      max-width: calc(var(--pricing-tier-max-width) * 3 + var(--grid-spacing) * 2);
+
+      &:not(:has(> :nth-child(3))) {
+        max-width: calc(var(--pricing-tier-max-width) * 2 + var(--grid-spacing));
+      }
+
+      &:not(:has(> :nth-child(2))) {
+        max-width: var(--pricing-tier-max-width);
+      }
+    }
+
+    .pricing-tiers-billing {
+      display: flex;
+      justify-content: center;
+
+      > .pricing-tiers-billing-toggle {
+        width: auto;
+      }
+
+      .pricing-tiers-billing-saving {
+        color: var(--color-success);
+        font-weight: var(--font-weight-semibold);
+      }
+    }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Testimonial from "@core-elements/testimonial/Testimonial.astro";
+
+const {
+  text = "",
+  authorName = "",
+  authorDescription = "",
+  authorImage = "",
+  sectionLabel,
+  maxContentWidth = "xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "surface",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  {...htmlAttributes}
+  class:list={["testimonial-section", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+>
+  <Testimonial
+    text={text}
+    authorName={authorName}
+    authorDescription={authorDescription}
+    authorImage={authorImage}
+    alignmentHorizontal="center"
+    data-prop="text"
+    data-prop-author-name="authorName"
+    data-prop-author-description="authorDescription"
+    data-prop-author-image="authorImage"
+  />
+</CustomSection>

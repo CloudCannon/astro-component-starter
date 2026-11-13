@@ -1,0 +1,90 @@
+label: CTA Form
+icon: call_to_action
+description: Call to action with a form on one side and an image on the other.
+value:
+  _component: page-sections/conversion/cta-form
+  sectionLabel: ""
+  heading: Get in touch
+  headingLevel: h2
+  subtext: Fill out the form below and we'll get back to you as soon as possible.
+  formAction: ./
+  formBlocks:
+    - _component: building-blocks/forms/input
+      label: Name
+      name: name
+      type: text
+      required: true
+    - _component: building-blocks/forms/input
+      label: Email
+      name: email
+      type: email
+      required: true
+    - _component: building-blocks/forms/textarea
+      label: Message
+      name: message
+      required: true
+    - _component: building-blocks/forms/submit
+      text: Send message
+      variant: primary
+  imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+  imageAlt: Sea cliffs above a bay
+  reverse: false
+  maxContentWidth: 2xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+preview:
+  text:
+    - CTA Form
+  subtext:
+    - key: heading
+  image: public/component-previews/page-sections/conversion/cta-form.svg
+  icon: call_to_action
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-form.svg
+    fit: cover
+picker_preview:
+  text: CTA Form
+  subtext: Split layout CTA with form and image.
+  image: public/component-previews/page-sections/conversion/cta-form.svg
+  gallery:
+    image: public/component-previews/page-sections/conversion/cta-form.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/page-sections/conversion/cta-form/cta-form.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+groups:
+  - heading: Content
+    inputs:
+      - heading
+      - subtext
+      - formAction
+      - formBlocks
+      - imageSource
+      - imageAlt
+      - reverse
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - headingLevel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

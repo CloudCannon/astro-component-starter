@@ -1,0 +1,20 @@
+label:
+  comment: Names this block in the editor and for screen readers. Sets its anchor id.
+  type: text
+layout:
+  type: select
+  comment: Vertical list, alternating split story, or a horizontal row that scrolls.
+  options:
+    values:
+      - id: vertical
+        name: Vertical
+      - id: horizontal
+        name: Horizontal
+      - id: split
+        name: Split
+entries:
+  type: array
+  label: Entries
+  comment: Events in chronological order. Title-only entries are valid.
+  options:
+    structures: _structures.timelineEntries

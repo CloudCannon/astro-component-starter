@@ -1,12 +1,10 @@
 ---
 title: Definition List
-overview: 'A semantic `<dl>` component for displaying term/definition pairs. Ideal for glossaries, FAQs, and other label–description content. Supports markdown formatting in definitions.'
+overview: A list of terms and their definitions. Good for glossaries and other label and description pairs. Definitions can use markdown.
 slots:
   - title: default
-    description: The content inside the DefinitionList.
-    fallback_for: items
+    description: Terms and definitions.
     child_component:
-      name: DefinitionListItem
       props:
         - title
         - text

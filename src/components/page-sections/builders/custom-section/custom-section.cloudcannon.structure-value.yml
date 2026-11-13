@@ -1,34 +1,61 @@
 label: Custom Section
 icon: star
-description: Used to group and style large sections of a page.
+description: Groups and styles a large section of a page.
 value:
   _component: page-sections/builders/custom-section
   label: ""
   contentSections: []
   maxContentWidth: 2xl
   paddingHorizontal: md
-  paddingVertical: md
+  paddingVertical: 4xl
   colorScheme: inherit
+  lockColorScheme: false
   backgroundColor: base
   background:
     type: image
-    positionVertical: top
-    positionHorizontal: center
-    priority: false
     imageSource: ""
     imageAlt: ""
-    videoSource: null
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
     overlay: 0
   rounded: false
-  useDefaultEditableBinding: true
 preview:
   text:
     - Custom Section
   subtext:
     - key: label
+  image: public/component-previews/page-sections/builders/custom-section.svg
   icon: width_full
+  gallery:
+    image: public/component-previews/page-sections/builders/custom-section.svg
+    fit: cover
 picker_preview:
   text: Custom Section
   subtext: Used to group and style large sections of a page.
+  image: public/component-previews/page-sections/builders/custom-section.svg
+  gallery:
+    image: public/component-previews/page-sections/builders/custom-section.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/page-sections/builders/custom-section/custom-section.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+groups:
+  - heading: Content
+    inputs:
+      - contentSections
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - label
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background
+      - rounded

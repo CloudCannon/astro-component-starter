@@ -1,0 +1,42 @@
+label: Social Links
+icon: share
+description: Row of social media icon links.
+value:
+  _component: building-blocks/core-elements/social-links
+  links:
+    - icon: social/github
+      link: https://github.com
+      label: Visit us on GitHub
+    - icon: social/x
+      link: https://x.com
+      label: Visit us on X
+    - icon: social/linkedin
+      link: https://linkedin.com
+      label: Visit us on LinkedIn
+    - icon: social/youtube
+      link: https://youtube.com
+      label: Visit us on YouTube
+  ariaLabel: Social
+  variant: ghost
+  size: md
+  alignmentHorizontal: none
+preview:
+  text:
+    - Social Links
+  subtext:
+    - key: variant
+  image: public/component-previews/building-blocks/core-elements/social-links.svg
+  icon: share
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/social-links.svg
+    fit: cover
+picker_preview:
+  text: Social Links
+  subtext: A row of social-media icon links — ghost icons or solid brand tiles.
+  image: public/component-previews/building-blocks/core-elements/social-links.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/social-links.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/social-links/social-links.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml

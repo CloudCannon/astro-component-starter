@@ -1,6 +1,6 @@
 ---
 title: Embed
-overview: 'A responsive component for embedding iframes, maps, forms, videos, and any raw HTML content. Maintains consistent aspect ratios with presets for square, landscape, portrait, and widescreen layouts. Can also be used for raw HTML content including scripts and styles.'
+overview: Trusted HTML that no other component covers. It waits for the visitor's permission if the site [asks before loading external media](/component-docs/components/navigation/consent/). Scripts are removed. For YouTube or Vimeo, use [Video](/component-docs/components/building-blocks/core-elements/video/).
 examples:
   - title: Aspect Ratios
     slugs:

@@ -1,0 +1,83 @@
+label:
+  type: text
+  comment: Names this block in the editor and sets its anchor id.
+steps:
+  type: array
+  label: Steps
+  comment: Steps, each with its own message and media.
+  options:
+    structures: _structures.scrollStepperSteps
+mediaWidth:
+  type: select
+  label: Media width
+  comment: How much of the row the sticky media column takes on desktop.
+  options:
+    values:
+      - id: half
+        name: Half
+      - id: wide
+        name: Wide
+      - id: narrow
+        name: Narrow
+reverse:
+  type: switch
+  comment: Puts the media column on the end side on desktop.
+mediaAspectRatio:
+  type: select
+  label: Media canvas ratio
+  comment: Minimum shape of each media panel. Panels grow to fit content.
+  options:
+    values:
+      - id: none
+        name: Natural
+      - id: square
+        name: Square
+      - id: landscape
+        name: Landscape (4:3)
+      - id: portrait
+        name: Portrait (3:4)
+      - id: widescreen
+        name: Widescreen (16:9)
+progressStyle:
+  type: select
+  label: Progress indicator
+  comment: A bar or dots below the sticky media. Hidden on mobile.
+  options:
+    values:
+      - id: bar
+        name: Bar
+      - id: dots
+        name: Dots
+      - id: none
+        name: None
+stepHeight:
+  type: select
+  label: Scroll state height
+  comment: Scroll distance per step. Content is about a third of a screen; Screen is a full one.
+  options:
+    values:
+      - id: screen
+        name: Screen
+      - id: content
+        name: Content
+gap:
+  type: select
+  comment: The gap between the media and content on desktop.
+  options:
+    values:
+      - id: none
+        name: None
+      - id: xs
+        name: Extra Small
+      - id: sm
+        name: Small
+      - id: md
+        name: Medium
+      - id: lg
+        name: Large
+      - id: xl
+        name: Extra Large
+      - id: 2xl
+        name: 2xl
+      - id: 3xl
+        name: 3xl

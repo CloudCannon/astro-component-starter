@@ -1,5 +1,8 @@
 ---
-import RenderBlock from "@components/utils/renderBlock.astro";
+import RenderBlock from "@component-utils/renderBlock.astro";
+import { slugifyLabel } from "@component-utils/slugify";
+import Tab from "@component-utils/tabs/Tab.astro";
+import TabPanel from "@component-utils/tabs/TabPanel.astro";
 import Heading from "@core-elements/heading/Heading.astro";
 import Icon from "@core-elements/icon/Icon.astro";
 
@@ -10,108 +13,123 @@ const {
   iconColor,
   contentSections,
   useDefaultEditableBinding = false,
-  checked = false,
+  selected = false,
   groupName = "content-selector-tabs",
   navigationPosition = "start",
+  tablistLabel,
+  class: className,
   _component,
   "data-children-prop": childrenDataProp,
+  "data-prop-title": customDataPropTitle,
+  "data-prop-subtext": customDataPropSubtext,
   ...htmlAttributes
 } = Astro.props;
 
-const uniqueId = crypto.randomUUID();
-const tabId = `tab-${uniqueId}`;
+const uniqueId = title ? `${groupName}-${slugifyLabel(title)}` : crypto.randomUUID();
 const panelId = `panel-${uniqueId}`;
 const tabLabelId = `tablabel-${uniqueId}`;
 
 const effectiveChildrenProp =
   childrenDataProp ?? (useDefaultEditableBinding ? "contentSections" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
+  : {};
+
+const effectiveTitleProp = customDataPropTitle ?? (useDefaultEditableBinding ? "title" : null);
+const effectiveSubtextProp =
+  customDataPropSubtext ?? (useDefaultEditableBinding ? "subtext" : null);
+const subtextDataAttributes = effectiveSubtextProp
+  ? { "data-editable": "text", "data-prop": effectiveSubtextProp }
   : {};
 ---
 
 <div
-  class="content-selector-item"
+  class:list={["content-selector-item", className]}
   {...htmlAttributes}
 >
-  <input
-    type="radio"
-    name={groupName}
-    id={tabId}
-    class="content-selector-input"
-    checked={checked}
-    autocomplete="off"
-  />
-  <label
-    class="content-selector-tab"
-    id={tabLabelId}
-    for={tabId}
-    role="tab"
-    aria-controls={panelId}
-    aria-selected={checked ? "true" : "false"}
-    tabindex="0"
+  {/* One tablist per tab: a tablist may hold only tabs. setup.ts stamps aria-posinset/setsize. */}
+  <div
+    class="content-selector-tablist"
+    role="tablist"
+    aria-label={tablistLabel || "Content sections"}
+    aria-orientation={navigationPosition === "start" ? "vertical" : "horizontal"}
   >
-    <Heading
-      text={title}
-      level="h3"
-      size="sm"
-      iconName={iconName}
-      iconColor={iconColor}
-      alignmentHorizontal={navigationPosition === "top" ? "center" : "start"}
-      class="content-selector-tab-heading"
-    />
-    {
-      subtext && (
+    <Tab
+      class="content-selector-tab"
+      id={tabLabelId}
+      controls={panelId}
+      selected={selected}
+    >
+      {/* Not a real heading: an h3 per tab injects the tab strip into the page outline. */}
+      <Heading
+        text={title}
+        level="span"
+        size="sm"
+        iconName={iconName}
+        iconColor={iconColor}
+        alignmentHorizontal={navigationPosition === "top" ? "center" : "start"}
+        class="content-selector-tab-heading"
+        data-prop={effectiveTitleProp}
+      />
+      {subtext && (
         <span
           class:list={[
             "content-selector-tab-subtext",
             `align-${navigationPosition === "top" ? "center" : "start"}`,
           ]}
+          {...subtextDataAttributes}
         >
           {subtext}
         </span>
-      )
-    }
-    <Icon
-      name="chevron-down"
-      size="none"
-      class="content-selector-tab-chevron"
-      aria-hidden="true"
-    />
-  </label>
-  <div
+      )}
+      <Icon
+        name="chevron-down"
+        size="none"
+        class="content-selector-tab-chevron"
+        aria-hidden="true"
+      />
+    </Tab>
+  </div>
+  <TabPanel
     class="content-selector-panel"
     id={panelId}
-    role="tabpanel"
-    aria-labelledby={tabLabelId}
-    aria-hidden={checked ? "false" : "true"}
+    labelledBy={tabLabelId}
+    selected={selected}
   >
     <div
-      class="content-selector-panel-content"
+      class="content-selector-panel-content flow"
       {...arrayDataAttributes}
     >
       <slot>
-        {
-          contentSections && (
-            <RenderBlock
-              contentSections={contentSections}
-              useDefaultEditableBinding={!!effectiveChildrenProp}
-            />
-          )
-        }
+        {contentSections && (
+          <RenderBlock
+            contentSections={contentSections}
+            useDefaultEditableBinding={!!effectiveChildrenProp}
+          />
+        )}
       </slot>
     </div>
-  </div>
+  </TabPanel>
 </div>
 
 <style is:global>
   @layer components {
+    /* Not `display: contents`: this is the array-item region root and the editor needs a box.
+       Items overlap via subgrid, so pointer-events pass through to the children. */
     .content-selector-item {
-      display: contents;
-    }
+      display: grid;
+      grid-area: 1 / 1 / -1 / -1;
+      grid-template-columns: subgrid;
+      grid-template-rows: subgrid;
+      pointer-events: none;
 
-    .content-selector-input {
-      display: none;
+      > * {
+        pointer-events: auto;
+      }
     }
 
     .content-selector-tab {
@@ -121,7 +139,7 @@ const arrayDataAttributes = effectiveChildrenProp
       display: block;
       padding: var(--spacing-md);
       position: relative;
-      transition: background-color var(--animation-normal) ease-in-out;
+      transition: background-color var(--animation-normal) var(--ease-in-out);
 
       &::before {
         background: transparent;
@@ -144,9 +162,9 @@ const arrayDataAttributes = effectiveChildrenProp
     .content-selector-tab-subtext {
       color: var(--color-text-muted);
       display: block;
-      font-size: var(--font-size-body-xs);
+      font-size: var(--font-size-xs);
       font-weight: var(--font-weight-normal);
-      margin-top: var(--spacing-2xs);
+      margin-top: var(--spacing-xs);
 
       &.align-center {
         text-align: center;
@@ -160,25 +178,21 @@ const arrayDataAttributes = effectiveChildrenProp
     .content-selector-tab-chevron {
       display: none;
       flex: 0 0 auto;
-      transition: transform var(--animation-normal) ease-out;
+      transition: transform var(--animation-normal) var(--ease-out);
     }
 
-    .content-selector-input:checked + .content-selector-tab::before {
+    .content-selector-tab[aria-selected="true"]::before {
       background: var(--color-border-strong);
     }
 
-    .content-selector-input:checked + .content-selector-tab + .content-selector-panel {
-      display: block;
-    }
-
     .content-selector-panel {
-      animation: fade-in var(--animation-slow) ease-in-out forwards;
+      animation: fade-in var(--animation-slow) var(--ease-in-out) forwards;
       container-type: inline-size;
-      display: none;
-    }
+      display: block;
 
-    .content-selector-panel-content > *:first-child {
-      margin-top: 0 !important;
+      &[hidden] {
+        display: none;
+      }
     }
   }
 </style>

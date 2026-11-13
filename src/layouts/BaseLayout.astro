@@ -1,18 +1,21 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import { fade } from "astro:transitions";
-import SeoHead from "@components/utils/SeoHead.astro";
-import StructuredData from "@components/utils/StructuredData.astro";
+import SeoHead from "@component-utils/SeoHead.astro";
+import StructuredData from "@component-utils/StructuredData.astro";
 import seoData from "@data/seo.json";
+import { ogCardPath } from "../utils/og/paths";
 import "@styles/style.css";
 import SiteFonts from "@layouts/SiteFonts.astro";
-import VideoElements from "@components/utils/VideoElements.astro";
+import SiteConsent from "@component-utils/SiteConsent.astro";
 
 export interface Props {
   title: string;
+  heading?: string | null;
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
+  generatedImage?: string | null;
   canonical?: string | null;
   type?: "website" | "article";
   article?: {
@@ -25,18 +28,25 @@ export interface Props {
 }
 
 const props = Astro.props;
+const generatedImage = props.generatedImage ?? ogCardPath("site");
 ---
 
 <!doctype html>
 <html
   lang="en"
   data-theme="light"
+  data-pathname={Astro.url.pathname}
 >
   <head>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <link
+      rel="icon"
+      href="/favicon.ico"
+      sizes="32x32"
     />
     <link
       rel="icon"
@@ -48,46 +58,68 @@ const props = Astro.props;
       content={Astro.generator}
     />
     <style is:inline>
-      @layer reset, base, components, page-sections, utils, overrides;
+      /* `pagefind` must stay below `components` so component styles win over Pagefind's UI. */
+      @layer reset, base, pagefind, components, page-sections, utils, overrides;
     </style>
 
     <SiteFonts />
 
-    {
-      import.meta.env.DEV ? (
-        <script
-          type="module"
-          src="/@vite/client"
-        />
-      ) : null
-    }
+    {import.meta.env.DEV ? (
+      <script
+        type="module"
+        src="/@vite/client"
+      ></script>
+    ) : null}
 
     <script>
       if (window.inEditorMode) {
+        document.documentElement.dataset.inEditor = "";
+
+        // Pages ship pruned CSS; the editor renders components the page never had.
+        const full = document.createElement("style");
+        full.textContent = '@import url("/_astro/components-full.css");';
+        document.head.append(full);
+
         import("../../live-editing");
         import("../../editor-live-sync");
       }
     </script>
-
     <SeoHead
       site={seoData}
       title={props.title}
       description={props.description}
       keywords={props.keywords}
       image={props.image}
+      generatedImage={generatedImage}
       canonical={props.canonical}
       type={props.type}
       article={props.article}
       noindex={props.noindex}
     />
 
-    <StructuredData site={seoData} />
+    <StructuredData
+      site={seoData}
+      heading={props.heading}
+      title={props.title}
+      description={props.description}
+      image={props.image}
+      canonical={props.canonical}
+      type={props.type}
+      article={props.article}
+    />
 
     <link
       rel="sitemap"
       type="application/xml"
       title="Sitemap"
       href="/sitemap-index.xml"
+    />
+
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${seoData.name} — Blog`}
+      href="/rss.xml"
     />
 
     <slot name="head" />
@@ -97,6 +129,6 @@ const props = Astro.props;
     <div transition:animate={fade({ duration: "0.2s" })}>
       <slot />
     </div>
-    <VideoElements />
+    <SiteConsent />
   </body>
 </html>

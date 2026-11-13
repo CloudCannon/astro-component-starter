@@ -1,0 +1,35 @@
+---
+import Component from "@component-utils/renderBlock.astro";
+import type { ContentBlock } from "../../../../types";
+
+const {
+  mediaSections: _mediaSections = [],
+  contentSections = [],
+  useDefaultEditableBinding = false,
+  class: className,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const contentBlocks: ContentBlock[] = Array.isArray(contentSections) ? contentSections : [];
+const contentDataAttributes = useDefaultEditableBinding
+  ? { "data-editable": "array", "data-prop": "contentSections", "data-component-key": "_component" }
+  : {};
+---
+
+<div
+  class:list={["scroll-stepper-step", className]}
+  role="group"
+  aria-roledescription="step"
+  {...htmlAttributes}
+>
+  <div
+    class="scroll-stepper-step-content flow"
+    {...contentDataAttributes}
+  >
+    <Component
+      contentSections={contentBlocks}
+      useDefaultEditableBinding={useDefaultEditableBinding}
+    />
+  </div>
+</div>

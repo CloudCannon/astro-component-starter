@@ -1,7 +1,8 @@
 html:
   type: code
-  comment: The raw HTML content to render.
-  syntax: html
+  comment: Trusted HTML to embed, such as a map, form, calendar or podcast share code. Scripts are removed, and iframes must use HTTPS. Video suits YouTube better.
+  options:
+    syntax: html
 aspectRatio:
   type: select
   comment: The aspect ratio of the embed.
@@ -15,3 +16,5 @@ aspectRatio:
         name: Portrait (3:4)
       - id: widescreen
         name: Widescreen (16:9)
+      - id: none
+        name: None (the embed sets its own height)

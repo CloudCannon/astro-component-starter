@@ -1,0 +1,30 @@
+label: Rating
+icon: star_rate
+description: Star rating out of five, with half stars and an optional number.
+value:
+  _component: building-blocks/core-elements/rating
+  value: 4.5
+  max: 5
+  size: md
+  color: default
+  showValue: false
+  alignmentHorizontal: none
+preview:
+  text:
+    - Rating
+  subtext:
+    - key: value
+  image: public/component-previews/building-blocks/core-elements/rating.svg
+  icon: star_rate
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/rating.svg
+    fit: cover
+picker_preview:
+  text: Rating
+  subtext: Star rating out of five, with half-star support and an optional value label.
+  image: public/component-previews/building-blocks/core-elements/rating.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/rating.svg
+    fit: cover
+_inputs_from_glob:
+  - /src/components/building-blocks/core-elements/rating/rating.cloudcannon.inputs.yml

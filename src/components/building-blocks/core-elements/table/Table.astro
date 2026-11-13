@@ -1,0 +1,221 @@
+---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { slugifyLabel } from "@component-utils/slugify";
+import { columnCount, normalizeRow } from "@component-utils/tableCells";
+
+type RowProps = { cells?: string[] };
+
+const {
+  caption = "",
+  headerCells = [],
+  rows = [],
+  firstColumnHeader = true,
+  striped = false,
+  compact = false,
+  spaceBefore = "default",
+  class: className,
+  useDefaultEditableBinding = false,
+  "data-prop-caption": customDataPropCaption,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+
+const width = columnCount(headerCells, rows);
+const normalizedHeader = normalizeRow(headerCells, width);
+const normalizedRows = ((rows ?? []) as RowProps[]).map((row) => normalizeRow(row?.cells, width));
+
+const effectiveCaptionProp =
+  customDataPropCaption ?? (useDefaultEditableBinding ? "caption" : null);
+const captionDataAttributes = effectiveCaptionProp
+  ? { "data-editable": "text", "data-prop": effectiveCaptionProp }
+  : {};
+
+// The scroll region borrows the caption's name so a screen reader doesn't read it twice.
+const captionId = caption
+  ? `table-caption-${slugifyLabel(caption) || crypto.randomUUID()}`
+  : undefined;
+
+if (!_component && width === 0) return;
+---
+
+<div
+  class:list={["table", "stackable", className]}
+  {...htmlAttributes}
+>
+  <p
+    class="table-scroll-hint"
+    aria-hidden="true"
+  >
+    Scroll →
+  </p>
+  <div
+    class:list={[
+      "table-scroller",
+      striped && "striped",
+      compact && "compact",
+      firstColumnHeader && "first-col-header",
+    ]}
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    role="region"
+    tabindex="0"
+    aria-labelledby={captionId}
+    aria-label={captionId ? undefined : "Table"}
+    style={`--table-columns: ${width};`}
+  >
+    <table>
+      {caption && (
+        <caption
+          id={captionId}
+          {...captionDataAttributes}
+        >
+          {caption}
+        </caption>
+      )}
+      {headerCells?.length > 0 && (
+        <thead>
+          <tr>
+            {normalizedHeader.map((cell) => (
+              <th scope="col">{cell}</th>
+            ))}
+          </tr>
+        </thead>
+      )}
+      <tbody>
+        {normalizedRows.map((cells) => (
+          <tr>
+            {cells.map((cell, cellIndex) =>
+              cellIndex === 0 && firstColumnHeader ? <th scope="row">{cell}</th> : <td>{cell}</td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style is:global>
+  @layer components {
+    .table {
+      --table-column-min: 8rem;
+
+      .table-scroll-hint {
+        color: var(--color-text-muted);
+        display: none;
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.08em;
+        margin: 0 0 var(--spacing-xs);
+        text-transform: uppercase;
+      }
+
+      .table-scroller {
+        overflow-x: auto;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      table {
+        /* Scales with the column count, capped at 100% so a narrow table never forces a pan. */
+        border-collapse: collapse;
+        min-width: min(calc(var(--table-columns, 3) * var(--table-column-min)), 100%);
+        width: 100%;
+      }
+
+      caption {
+        caption-side: top;
+        color: var(--color-text-muted);
+        font-size: var(--font-size-sm);
+        padding-block-end: var(--spacing-sm);
+        text-align: start;
+      }
+
+      th,
+      td {
+        text-align: start;
+      }
+
+      /* Resets the boxed look the base layer gives markdown-content tables. */
+      thead th {
+        background: none;
+        border: 0;
+        border-bottom: var(--border-width-md) solid var(--color-border-strong);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 0.06em;
+        padding: var(--spacing-sm) var(--spacing-md);
+        text-transform: uppercase;
+      }
+
+      tbody th,
+      tbody td {
+        border: 0;
+        border-bottom: var(--border-width-sm) solid var(--color-border);
+        font-size: var(--font-size-md);
+        padding: var(--spacing-md);
+      }
+
+      tbody tr:last-child th,
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+
+      tbody th[scope="row"] {
+        font-weight: var(--font-weight-semibold);
+      }
+
+      /* These classes ride on the scroller: a prop-driven class on a region root goes stale. */
+      > .table-scroller.striped {
+        tbody th,
+        tbody td {
+          border-bottom: none;
+        }
+
+        tbody tr:nth-child(2n) th,
+        tbody tr:nth-child(2n) td {
+          /* A tint of the text, not a named surface: a surface stripe vanishes on a surface band. */
+          background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+        }
+      }
+
+      > .table-scroller.compact {
+        thead th {
+          font-size: var(--font-size-xs);
+          padding: var(--spacing-xs) var(--spacing-sm);
+        }
+
+        tbody th,
+        tbody td {
+          font-size: var(--font-size-sm);
+          padding: var(--spacing-xs) var(--spacing-sm);
+        }
+      }
+
+      @media (width < 640px) {
+        .table-scroll-hint {
+          display: block;
+        }
+
+        .table-scroller {
+          mask-image: linear-gradient(90deg, #000 calc(100% - var(--spacing-xl)), transparent);
+        }
+
+        > .table-scroller.first-col-header {
+          thead th:first-child,
+          tbody th[scope="row"] {
+            background-color: var(--color-bg);
+            border-inline-end: var(--border-width-sm) solid var(--color-border);
+            inset-inline-start: 0;
+            position: sticky;
+          }
+
+          &.striped tbody tr:nth-child(2n) th[scope="row"] {
+            background-color: var(--color-bg-surface);
+          }
+        }
+      }
+    }
+  }
+</style>

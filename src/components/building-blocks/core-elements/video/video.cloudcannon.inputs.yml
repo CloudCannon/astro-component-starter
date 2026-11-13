@@ -10,14 +10,17 @@ type:
         name: Local Source
 title:
   type: text
-  comment: Used for externally hosted videos - The video title provides accessibility information for assistive technologies (like screen readers) and can display a tooltip when a user hovers over the video.
+  hidden: source
+  comment: Accessible title for the YouTube or Vimeo video.
 videoId:
   type: text
-  comment: Used for externally hosted videos - Enter the YouTube or Vimeo video ID.
+  hidden: source
+  comment: YouTube or Vimeo video ID.
 source:
   type: file
+  hidden: videoId
   label: Video Source
-  comment: Used for locally hosted videos - Select a video file; matching sibling formats with the same filename are added as additional sources automatically.
+  comment: Self-hosted video file. Same-named files in other formats are added automatically.
   options:
     accepts_mime_types:
       - video/mp4
@@ -26,9 +29,29 @@ source:
     paths:
       uploads: public/videos
       static: public
+autoplay:
+  type: switch
+  comment: Plays automatically, muted. YouTube and Vimeo load when scrolled into view.
+loop:
+  type: switch
+  comment: Restart the video from the beginning when it ends.
+captions:
+  type: file
+  hidden: "!source"
+  label: Captions
+  comment: WebVTT (.vtt) captions for a self-hosted video, shown by default.
+  options:
+    paths:
+      uploads: public/videos
+      static: public
+captionsLanguage:
+  type: text
+  hidden: "!captions"
+  comment: Language tag for the captions, e.g. en or fr-CA.
 thumbnail:
   type: image
-  comment: Poster image before the video plays. Use /src/assets/images/... like the Image component (optimized at build time), or a public or absolute URL.
+  hidden: "!source"
+  comment: Poster image shown before a self-hosted video plays.
   options:
     accepts_mime_types:
       - image/jpeg

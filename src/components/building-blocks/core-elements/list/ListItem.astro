@@ -1,6 +1,6 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
-import MarkdownIt from "markdown-it";
+import { renderMarkdownInline } from "@component-utils/markdown";
 
 const {
   text = "",
@@ -15,8 +15,6 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const md = new MarkdownIt({ html: true });
-
 const effectiveDataProp = customDataProp ?? (useDefaultEditableBinding ? "text" : null);
 const textDataAttributes = effectiveDataProp
   ? { "data-editable": "text", "data-prop": effectiveDataProp }
@@ -26,35 +24,40 @@ const hasIcon = showIcon && iconName;
 ---
 
 <li
-  class:list={["item", className, hasIcon && "list-item-has-icon"]}
+  class:list={["item", className]}
   {...htmlAttributes}
 >
+  {hasIcon && (
+    <Icon
+      name={iconName}
+      color={iconColor}
+      size="none"
+      class="list-icon"
+      aria-hidden="true"
+    />
+  )}
   {
-    hasIcon && (
-      <Icon
-        name={iconName}
-        color={iconColor}
-        size="none"
-        class="list-icon"
-        aria-hidden="true"
-      />
-    )
-  }
-  {
+    /* A <span>, not a <p>: a <p> inside the non-link branch's <span> is invalid. */
     link ? (
       <a
         href={link}
         class="item-inner"
       >
-        <p {...textDataAttributes}>
-          {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
-        </p>
+        <span
+          class="item-text"
+          {...textDataAttributes}
+        >
+          {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
+        </span>
       </a>
     ) : (
       <span class="item-inner">
-        <p {...textDataAttributes}>
-          {text ? <Fragment set:html={md.renderInline(text)} /> : <slot />}
-        </p>
+        <span
+          class="item-text"
+          {...textDataAttributes}
+        >
+          {text ? <Fragment set:html={renderMarkdownInline(text)} /> : <slot />}
+        </span>
       </span>
     )
   }
@@ -63,9 +66,9 @@ const hasIcon = showIcon && iconName;
 <style is:global>
   @layer components {
     .item {
-      &.list-item-has-icon {
-        display: flex;
+      &:has(> .list-icon) {
         align-items: baseline;
+        display: flex;
       }
 
       > .list-icon {
@@ -85,21 +88,15 @@ const hasIcon = showIcon && iconName;
 
       > .item-inner {
         min-width: 0;
-
-        > p {
-          display: inline;
-          font-size: inherit;
-          margin: 0;
-        }
       }
 
-      > a.item-inner:any-link > p {
+      > a.item-inner:any-link > .item-text {
         color: inherit;
       }
 
       > a.item-inner:any-link:focus-visible {
         border-radius: var(--radius-sm);
-        outline: 2px solid currentColor;
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
         outline-offset: 2px;
       }
     }

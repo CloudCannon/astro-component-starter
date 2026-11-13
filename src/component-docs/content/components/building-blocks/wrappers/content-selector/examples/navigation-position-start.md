@@ -7,7 +7,7 @@ blocks:
   items:
     - title: FAQ
       subtext: Common questions
-      iconName: question-mark-circle
+      iconName: circle-question-mark
       contentSections:
         - _component: building-blocks/core-elements/heading
           text: 'Frequently asked questions'
@@ -35,13 +35,13 @@ blocks:
             - text: 'NZ & AU: 2–5 days'
               iconName: clock
             - text: 'US & EU: 5–10 days'
-              iconName: globe-alt
+              iconName: globe
           direction: vertical
           alignmentHorizontal: start
           size: md
     - title: Returns
       subtext: Easy and fair
-      iconName: arrow-path
+      iconName: refresh-cw
       contentSections:
         - _component: building-blocks/core-elements/text
           text: '30‑day returns. Unused items only. Full refund once received.'
@@ -49,7 +49,5 @@ blocks:
           size: md
         - _component: building-blocks/core-elements/text
           text: Start a return
-          link: #
-          variant: secondary
           size: md
 ---

@@ -1,6 +1,6 @@
 label: List
 icon: list
-description: Lists items with icons, bullets, or numbers as markers.
+description: List with icons, bullets, or numbers.
 value:
   _component: building-blocks/core-elements/list
   items:
@@ -9,7 +9,7 @@ value:
       iconColor: default
       link:
     - text: List item 2
-      iconName: lock-closed
+      iconName: lock
       iconColor: default
       link:
     - text: List item 3
@@ -23,19 +23,28 @@ value:
 preview:
   text:
     - List
+  image: public/component-previews/building-blocks/core-elements/list.svg
   icon: list
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/list.svg
+    fit: cover
 picker_preview:
   text: List
   subtext: Lists items with icons, bullets, or numbers as markers.
+  image: public/component-previews/building-blocks/core-elements/list.svg
+  gallery:
+    image: public/component-previews/building-blocks/core-elements/list.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/core-elements/list/list.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   listItems:
     values:
       - label: List Item
         value:
           text: "List item"
-          iconName: ""
+          iconName: check
           iconColor: default
           link:
         preview:
@@ -64,10 +73,9 @@ _structures:
               removeformat: true
           iconName:
             type: select
-            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
-            hidden: "listType !== 'icon'"
+            comment: Icon lists only. The name of the icon to display. Sourced from [Lucide](https://lucide.dev/icons/).
             options:
-              values: _select_data.icons
+              values: data.icons
               preview:
                 text:
                   - key: name
@@ -76,7 +84,7 @@ _structures:
           iconColor:
             type: select
             comment: The color of the icon.
-            hidden: "listType !== 'icon'"
+            hidden: "!iconName"
             options:
               values:
                 - id: default

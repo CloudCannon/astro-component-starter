@@ -1,6 +1,6 @@
 ---
 title: Icon
-overview: 'Used to add icons to other components including buttons and headings. Icon artwork is sourced from [Heroicons](https://heroicons.com/) and loaded from `/src/icons/`. Icons are optimized with SVGO and deduplicated when reused across a page for improved performance. Supports configurable sizes.'
+overview: An icon for buttons, headings, and other components, from [Lucide](https://lucide.dev/icons/) or your own SVGs in `src/icons/`.
 examples:
   - title: Sizes
     slugs:

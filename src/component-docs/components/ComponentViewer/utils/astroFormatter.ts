@@ -1,8 +1,13 @@
+import { pascalToKebab } from "@component-utils/componentKey.mjs";
 import { removeStyleField } from "../../../shared/blockDataUtils";
-import { getChildComponentPath } from "../../../shared/componentPath";
 import { getComponentMetadataMap, getNestedBlockProperties } from "../../../shared/metadata";
 import { formatComponentWithSlots } from "./componentFormatter";
 import { getComponentDisplayName } from "./componentUtils";
+
+/** "typography/list" + "ListItem" -> "typography/list/list-item" */
+function getChildComponentPath(parentPath: string, childName: string): string {
+  return `${parentPath}/${pascalToKebab(childName)}`;
+}
 
 function getImportAliasPath(componentPath: string): string {
   const aliasMappings: Array<{ prefix: string; alias: string }> = [
@@ -10,10 +15,9 @@ function getImportAliasPath(componentPath: string): string {
     { prefix: "building-blocks/forms/", alias: "@forms/" },
     { prefix: "building-blocks/wrappers/", alias: "@wrappers/" },
     { prefix: "page-sections/builders/", alias: "@builders/" },
-    { prefix: "page-sections/features/", alias: "@features/" },
+    { prefix: "page-sections/explainers/", alias: "@explainers/" },
     { prefix: "page-sections/", alias: "@page-sections/" },
     { prefix: "navigation/", alias: "@navigation/" },
-    { prefix: "sections/", alias: "@sections/" },
   ];
 
   for (const { prefix, alias } of aliasMappings) {
@@ -59,14 +63,13 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
       ? blocksWithoutStyle
       : [blocksWithoutStyle];
 
-    // Get unique components and generate imports
     const uniqueComponents = new Set<string>();
     const addComponentToSet = (block: any) => {
       if (block._component) {
         uniqueComponents.add(block._component);
       }
 
-      // Recursively check for nested components in properties that can contain blocks
+      // Recurse into properties that can contain blocks
       for (const prop of nestedBlockProperties) {
         if (block[prop]) {
           const nestedBlocks = Array.isArray(block[prop]) ? block[prop] : [block[prop]];
@@ -102,7 +105,6 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
         if (metadata?.childComponent && metadata?.fallbackFor) {
           const fallbackProp = metadata.fallbackFor;
 
-          // Check if the fallback property exists and might need child components
           if (block[fallbackProp]) {
             const childComponentPath = getChildComponentPath(
               block._component,
@@ -113,14 +115,12 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
               uniqueComponents.add(childComponentPath);
             }
 
-            // If the property contains items with nested content, discover those components too
             const items = Array.isArray(block[fallbackProp])
               ? block[fallbackProp]
               : [block[fallbackProp]];
 
             items.forEach((item: any) => {
               if (item && typeof item === "object") {
-                // Check all block properties in items
                 for (const prop of nestedBlockProperties) {
                   if (item[prop]) {
                     const nestedBlocks = Array.isArray(item[prop]) ? item[prop] : [item[prop]];
@@ -137,7 +137,6 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
 
     blocksArray.forEach(addComponentToSet);
 
-    // Generate import statements
     const imports = Array.from(uniqueComponents)
       .sort((a, b) => a.localeCompare(b))
       .map((componentPath) => {
@@ -156,6 +155,7 @@ export async function formatBlocksAstro(blocks: any): Promise<string> {
       .map((block) => {
         return formatComponentWithSlots(block, 0, metadataMap, nestedBlockProperties);
       })
+      .filter(Boolean)
       .join("\n\n");
 
     if (imports) {

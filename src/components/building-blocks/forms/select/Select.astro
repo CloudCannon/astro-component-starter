@@ -1,6 +1,10 @@
 ---
 import Icon from "@core-elements/icon/Icon.astro";
 import SelectOption from "./SelectOption.astro";
+import FormField from "@component-utils/FormField.astro";
+import { formFieldParts } from "@component-utils/formField";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
+import type { SelectOptionData } from "../../../../types";
 
 const {
   label,
@@ -9,123 +13,105 @@ const {
   placeholder,
   required = false,
   value,
+  hint,
+  error,
   iconName,
   iconColor = "default",
+  autocomplete,
+  id: customId,
   class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
 
-const fieldId = htmlAttributes.id || `select-${crypto.randomUUID()}`;
-const hasLeadingIcon = iconName?.trim().length > 0;
+const { controlAttributes, shellAttributes } = formFieldParts({
+  prefix: "select",
+  id: customId,
+  name,
+  label,
+  placeholder,
+  autocomplete,
+  required,
+  hint,
+  error,
+});
+const hasLeadingIcon = isNonEmptyString(iconName);
+
+// An unselected disabled placeholder never shows: the browser falls through to the first option.
+const placeholderSelected = !options?.some((option: SelectOptionData) => option.value === value);
 ---
 
-<div
+<FormField
   class:list={["select", className]}
+  {...shellAttributes}
   {...htmlAttributes}
 >
-  {
-    label && (
-      <label
-        for={fieldId}
-        class="label"
-      >
-        {label}
-        {required && (
-          <span
-            class="select-required"
-            aria-label="required"
-          >
-            *
-          </span>
-        )}
-      </label>
-    )
-  }
   <div class:list={["field-shell", { "has-leading-icon": hasLeadingIcon }]}>
-    {
-      hasLeadingIcon && (
-        <Icon
-          name={iconName}
-          color={iconColor}
-          size="none"
-          class="select-icon select-leading-icon"
-          aria-hidden="true"
-          role="presentation"
-        />
-      )
-    }
+    {hasLeadingIcon && (
+      <Icon
+        name={iconName}
+        color={iconColor}
+        size="none"
+        class="select-icon select-leading-icon"
+        aria-hidden="true"
+      />
+    )}
     <select
       name={name}
-      id={fieldId}
-      required={required}
-      aria-required={required}
       class="field"
+      {...controlAttributes}
     >
-      {
-        placeholder && (
-          <option
-            value=""
-            disabled
-          >
-            {placeholder}
-          </option>
-        )
-      }
-      {
-        options.length > 0 ? (
-          options.map((option) => (
-            <SelectOption
-              value={option.value}
-              label={option.label}
-              selected={option.value === value}
-            />
-          ))
-        ) : (
-          <slot />
-        )
-      }
+      {placeholder && (
+        <option
+          value=""
+          disabled
+          selected={placeholderSelected}
+        >
+          {placeholder}
+        </option>
+      )}
+      {options?.length > 0 ? (
+        options?.map((option: SelectOptionData) => (
+          <SelectOption
+            value={option.value}
+            label={option.label}
+            selected={option.value === value}
+          />
+        ))
+      ) : (
+        <slot />
+      )}
     </select>
     <Icon
       name="chevron-down"
       size="none"
       class="select-icon select-chevron"
       aria-hidden="true"
-      role="presentation"
     />
   </div>
-</div>
+</FormField>
 
 <style is:global>
   @layer components {
-    .select {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-xs);
-      margin: 0;
-      margin-bottom: var(--spacing-md);
-      width: 100%;
-
-      .select-required {
-        color: var(--color-error);
-        margin-inline-end: var(--spacing-em-xs);
-      }
-    }
-
     .select .field-shell {
       background-color: var(--color-bg);
-      border: 1px solid var(--color-border-inputs);
+      border: var(--border-width-sm) solid var(--color-border-inputs);
       border-radius: var(--radius-xs);
       display: block;
       position: relative;
       transition:
-        border-color var(--animation-normal) ease-in-out,
-        box-shadow var(--animation-normal) ease-in-out;
+        border-color var(--animation-normal) var(--ease-in-out),
+        box-shadow var(--animation-normal) var(--ease-in-out);
 
-      &:focus-within {
+      &:has(:focus-visible) {
         border-color: var(--color-brand);
-        box-shadow: 0 0 0 3px var(--color-focus-ring);
+        outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+        outline-offset: 2px;
+      }
+
+      &:has(> .field[aria-invalid="true"]) {
+        border-color: var(--color-error);
       }
 
       .select-icon {
@@ -158,8 +144,7 @@ const hasLeadingIcon = iconName?.trim().length > 0;
         padding-inline-start: var(--spacing-em-sm);
         width: 100%;
 
-        &:focus {
-          box-shadow: none;
+        &:focus-visible {
           outline: none;
         }
       }

@@ -1,6 +1,6 @@
 ---
 title: 'Side'
-overview: 'Displays a vertical sidebar with expandable sections for organizing navigation links. Commonly used in documentation sites with nested menus.'
+overview: A vertical sidebar with expandable sections for navigation links. Common on documentation sites with nested menus.
 examples:
   - slugs:
       - link-and-children

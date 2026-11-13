@@ -1,0 +1,119 @@
+label: Feature Slider
+icon: view_carousel
+description: Carousel of features, one slide at a time.
+value:
+  _component: page-sections/explainers/feature-slider
+  sectionLabel: ""
+  slides:
+    - _component: page-sections/explainers/feature-slider/feature-slider-item
+      eyebrow: Northwind
+      title: A site the marketing team runs
+      description: Campaign pages go out weekly without a design ticket or a deploy.
+      imageSource: /src/assets/images/component-docs/sunset.jpg
+      imageAlt: Sun setting over a headland
+    - _component: page-sections/explainers/feature-slider/feature-slider-item
+      eyebrow: Globex
+      title: One system, four brands
+      description: Shared components, separate token files, so each brand keeps its own look.
+      imageSource: /src/assets/images/component-docs/dunedin-cliff.jpg
+      imageAlt: Sea cliffs above a bay
+    - _component: page-sections/explainers/feature-slider/feature-slider-item
+      eyebrow: Fieldnote
+      title: From brief to launch in three weeks
+      description: The component library did the layout work, so the time went into content.
+      imageSource: /src/assets/images/component-docs/quiet-street.jpg
+      imageAlt: A quiet residential street
+  maxContentWidth: xl
+  paddingHorizontal: lg
+  paddingVertical: 4xl
+  colorScheme: inherit
+  lockColorScheme: false
+  backgroundColor: base
+  background:
+    type: image
+    imageSource: ""
+    imageAlt: ""
+    positionVertical: top
+    positionHorizontal: center
+    fixed: false
+    priority: false
+    mask: none
+    overlay: 0
+  imageAspectRatio: portrait
+preview:
+  text:
+    - Feature Slider
+  image: public/component-previews/page-sections/explainers/feature-slider.svg
+  icon: view_carousel
+  gallery:
+    image: public/component-previews/page-sections/explainers/feature-slider.svg
+    fit: cover
+picker_preview:
+  text: Feature Slider
+  subtext: Carousel of feature-focused cards.
+  image: public/component-previews/page-sections/explainers/feature-slider.svg
+  gallery:
+    image: public/component-previews/page-sections/explainers/feature-slider.svg
+    fit: cover
+_structures:
+  featureSlides:
+    values:
+      - label: Feature slide
+        icon: view_carousel
+        value:
+          _component: page-sections/explainers/feature-slider/feature-slider-item
+          eyebrow: ""
+          title: Slide title
+          description: Short description for this slide.
+          imageSource: /src/assets/images/component-docs/sunset.jpg
+          imageAlt: Slide image alt text
+        preview:
+          text:
+            - key: title
+            - Feature slide
+          subtext:
+            - key: description
+            - Add description for this slide
+        _inputs:
+          eyebrow:
+            type: text
+            comment: Optional eyebrow text displayed above the title.
+          title:
+            type: text
+            comment: Heading text shown on the slide.
+          description:
+            type: markdown
+            comment: Supporting body copy shown on the slide.
+          imageSource:
+            type: image
+            comment: Image shown on the side of the slide.
+            options:
+              paths:
+                uploads: src/assets/images
+                static: ""
+              resize_style: contain
+              width: 1920
+              height: 1280
+          imageAlt:
+            type: text
+            comment: Alt text describing the slide image.
+_inputs_from_glob:
+  - /src/components/page-sections/explainers/feature-slider/feature-slider.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/background.yml
+groups:
+  - heading: Content
+    inputs:
+      - slides
+      - imageAspectRatio
+  - heading: Section settings
+    comment: Width, spacing, color scheme, and background for this section.
+    collapsed: true
+    inputs:
+      - sectionLabel
+      - maxContentWidth
+      - paddingHorizontal
+      - paddingVertical
+      - colorScheme
+      - lockColorScheme
+      - backgroundColor
+      - background

@@ -1,6 +1,6 @@
 ---
 title: Rounded Corners
-spacing:
+spacing: 'all'
 blocks:
   _component: 'building-blocks/wrappers/card'
   backgroundColor: surface

@@ -30,9 +30,9 @@ size:
         name: Large
 iconName:
   type: select
-  comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/). See the Icon component documentation for more information.
+  comment: Icon to display, from [Lucide](https://lucide.dev/icons/).
   options:
-    values: _select_data.icons
+    values: data.icons
     preview:
       text:
         - key: name
@@ -74,8 +74,5 @@ iconPosition:
         name: After
 hideText:
   type: switch
-  comment: Whether to hide the button text and show only the icon.
+  comment: Shows only the icon and hides the text.
   hidden: "!iconName"
-disabled:
-  type: switch
-  comment: Whether the submit button is disabled.

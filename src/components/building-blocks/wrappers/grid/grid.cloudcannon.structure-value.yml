@@ -1,12 +1,12 @@
 label: Grid
 icon: grid_on
-description: Arranges content into a grid that adapts to screen size.
+description: Many items of the same kind, in as many columns as fit.
 value:
   _component: building-blocks/wrappers/grid
   label: ""
-  layout: center
-  minItemWidth: 280
-  maxItemWidth: 400
+  columns: auto
+  minItemWidth: 200
+  maxItemWidth: null
   items: []
   gap: md
 preview:
@@ -14,12 +14,21 @@ preview:
     - Grid
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/grid.svg
   icon: grid_on
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/grid.svg
+    fit: cover
 picker_preview:
   text: Grid
-  subtext: Arranges content into a grid that adapts to screen size.
+  subtext: Many items of the same kind, in as many columns as fit.
+  image: public/component-previews/building-blocks/wrappers/grid.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/grid.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/grid/grid.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   gridItems:
     values:

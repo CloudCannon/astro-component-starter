@@ -1,21 +1,40 @@
 import sitemap from "@astrojs/sitemap";
 import editableRegions from "@cloudcannon/editable-regions/astro-integration";
-import icon from "astro-icon";
 import { defineConfig } from "astro/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import mdx from "@astrojs/mdx";
 
+import pruneCss from "./scripts/build/pruneCss.mjs";
+import pruneOgCache from "./scripts/build/pruneOgCache.mjs";
 import { siteFonts } from "./site-fonts.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Anchored to __dirname: a bare `**/.claude/**` matches every file in an agent
+// worktree (its own path contains `.claude/`) and silently disables HMR.
+const watchIgnored = [
+  ...[
+    ".claude",
+    "dist",
+    ".astro",
+    ".local",
+    ".preview-screenshots",
+    "public/pagefind",
+    "public/_astro",
+  ].map((dir) => path.join(__dirname, dir, "**")),
+  ...[".preview-montage.png", ".siteready-*.json", "siteready-report.*"].map((file) =>
+    path.join(__dirname, file)
+  ),
+];
+
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com", // TODO: Update to your production URL
+  site: "https://astro-component-starter.cc", // TODO: Update to your production URL
   fonts: siteFonts,
   build: {
+    // A shared stylesheet measured ~190ms FCP / ~240ms LCP slower on cold Slow-4G.
     inlineStylesheets: "always",
   },
   devToolbar: {
@@ -24,55 +43,32 @@ export default defineConfig({
   server: {
     port: 4321,
   },
+  redirects: {
+    "/component-docs/visually-edit-components":
+      "/component-docs/building-a-page-section/#how-visual-editing-works",
+  },
   image: {
     domains: [],
   },
-  integrations: [
-    {
-      name: "builder-preview-dev-only",
-      hooks: {
-        "astro:config:setup": ({ command, injectRoute, updateConfig }) => {
-          if (command === "dev") {
-            injectRoute({
-              pattern: "/component-docs/builder-preview",
-              entrypoint: "./src/component-docs/pages/builder-preview.astro",
-              prerender: false,
-            });
-            updateConfig({
-              adapter: {
-                name: "dev-only-server-preview",
-                serverEntrypoint: "",
-                supportedAstroFeatures: {
-                  serverOutput: "stable",
-                  staticOutput: "stable",
-                  hybridOutput: "stable",
-                  sharpImageService: "stable",
-                },
-              },
-            });
-          }
-        },
-      },
+  markdown: {
+    // Same pair as CodeBlock.astro; `_html-elements.css` picks the theme from `data-theme`.
+    shikiConfig: {
+      themes: { light: "github-light", dark: "github-dark" },
+      defaultColor: false,
     },
+  },
+  integrations: [
     editableRegions(),
-    icon({
-      iconDir: path.resolve(__dirname, "src/icons"),
-      svgoOptions: {
-        plugins: [
-          {
-            name: "preset-default",
-            params: {
-              overrides: {
-                cleanupIds: false,
-              },
-            },
-          },
-        ],
-      },
-    }),
+    pruneOgCache(),
+    // Reads built HTML: list runtime-assembled or third-party-injected classes in `alwaysKeep`.
+    pruneCss({ alwaysKeep: [] }),
     sitemap({
       filter: (page) => {
         if (page.endsWith("/404") || page.endsWith("/404.html")) {
+          return false;
+        }
+        // `search.md` is noindex; listing it in the sitemap would contradict that.
+        if (page.endsWith("/search/") || page.endsWith("/search")) {
           return false;
         }
         if (page.includes("/component-docs")) {
@@ -86,6 +82,15 @@ export default defineConfig({
   vite: {
     build: {
       minify: "esbuild",
+      // lightningcss (Vite's default) merges same-name `@layer` blocks, fusing
+      // unrelated components into one block that `pruneCss` can only keep whole.
+      cssMinify: "esbuild",
+      chunkSizeWarningLimit: 1024,
+    },
+    server: {
+      watch: {
+        ignored: watchIgnored,
+      },
     },
     plugins: [
       {
@@ -121,22 +126,18 @@ export default defineConfig({
         },
       },
     ],
-    build: {
-      chunkSizeWarningLimit: 1024,
-    },
     css: {
       devSourcemap: true,
     },
     resolve: {
       alias: {
         "@components": path.resolve(__dirname, "src/components"),
-        "@building-blocks": path.resolve(__dirname, "src/components/building-blocks"),
         "@core-elements": path.resolve(__dirname, "src/components/building-blocks/core-elements"),
         "@forms": path.resolve(__dirname, "src/components/building-blocks/forms"),
         "@wrappers": path.resolve(__dirname, "src/components/building-blocks/wrappers"),
         "@navigation": path.resolve(__dirname, "src/components/navigation"),
         "@page-sections": path.resolve(__dirname, "src/components/page-sections"),
-        "@features": path.resolve(__dirname, "src/components/page-sections/features"),
+        "@explainers": path.resolve(__dirname, "src/components/page-sections/explainers"),
         "@builders": path.resolve(__dirname, "src/components/page-sections/builders"),
         "@data": path.resolve(__dirname, "src/data"),
         "@content": path.resolve(__dirname, "src/content"),

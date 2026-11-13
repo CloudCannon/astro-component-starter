@@ -1,9 +1,17 @@
 ---
-import RenderBlock from "@components/utils/renderBlock.astro";
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import RenderBlock from "@component-utils/renderBlock.astro";
+import Alert from "@core-elements/alert/Alert.astro";
+
+type FormBlock = { _component?: string };
 
 const {
   action,
+  method = "post",
+  honeypotName,
+  successMessage,
   formBlocks = [],
+  spaceBefore = "default",
   class: className,
   _component,
   useDefaultEditableBinding = false,
@@ -13,42 +21,96 @@ const {
 
 const effectiveChildrenProp = childrenDataProp ?? (useDefaultEditableBinding ? "formBlocks" : null);
 const arrayDataAttributes = effectiveChildrenProp
-  ? { "data-editable": "array", "data-prop": effectiveChildrenProp }
+  ? {
+      "data-editable": "array",
+      "data-prop": effectiveChildrenProp,
+      "data-component-key": "_component",
+    }
   : {};
 
 const hasFormBlocks = formBlocks?.length > 0;
 const hasSlotContent = Astro.slots.has("default");
-const usesFormBlocks = !hasSlotContent;
 
-if (!_component && !hasFormBlocks && !usesFormBlocks) return;
+if (!_component && !hasFormBlocks && !hasSlotContent) return;
+
+// A slot-built form can't be inspected; pass `enctype` to override.
+const hasFileUpload = (formBlocks as FormBlock[])?.some((block) =>
+  String(block?._component ?? "").endsWith("/file-upload")
+);
 ---
 
 <form
-  class:list={["form", className]}
+  class:list={["form", "stackable", className]}
   action={action}
-  method="post"
-  enctype="multipart/form-data"
+  method={method}
+  enctype={hasFileUpload ? "multipart/form-data" : undefined}
   {...htmlAttributes}
 >
-  <div {...arrayDataAttributes}>
+  {successMessage && (
+    <Alert
+      variant="success"
+      text={successMessage}
+      class="form-success"
+      role="status"
+      tabindex="-1"
+      hidden
+    />
+  )}
+  <div
+    class="form-fields"
+    data-space-before={spaceBeforeAttr(spaceBefore)}
+    {...arrayDataAttributes}
+  >
     <slot>
-      {
-        formBlocks && (
-          <RenderBlock
-            contentSections={formBlocks}
-            useDefaultEditableBinding={!!effectiveChildrenProp}
-          />
-        )
-      }
+      {formBlocks && (
+        <RenderBlock
+          contentSections={formBlocks}
+          useDefaultEditableBinding={!!effectiveChildrenProp}
+        />
+      )}
     </slot>
   </div>
+  {honeypotName && (
+    <div class="form-honeypot">
+      <label for={`${honeypotName}-field`}>Leave this field empty</label>
+      <input
+        type="text"
+        id={`${honeypotName}-field`}
+        name={honeypotName}
+        tabindex="-1"
+        autocomplete="off"
+      />
+    </div>
+  )}
 </form>
+
+<script>
+  import { onPageLoad } from "@component-utils/onPageLoad";
+  import { setupAllForms } from "./setup";
+
+  onPageLoad(() => setupAllForms());
+</script>
 
 <style is:global>
   @layer components {
     .form {
-      margin-top: var(--spacing-lg);
       width: 100%;
+
+      > .form-fields {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+      }
+
+      /* Not `hidden`: `display: none` drops it from the tab order and accessibility tree. */
+      > .form-honeypot {
+        display: none;
+      }
+
+      > .form-success {
+        margin: 0 0 var(--spacing-md);
+      }
     }
   }
 </style>

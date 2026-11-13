@@ -7,7 +7,11 @@ video:
       - Video
     subtext:
       - key: title
+    image: public/component-previews/building-blocks/core-elements/video.svg
     icon: videocam
+    gallery:
+      image: public/component-previews/building-blocks/core-elements/video.svg
+      fit: cover
   definitions:
     component_name: Video
     named_args:
@@ -27,6 +31,12 @@ video:
         type: string
         optional: true
         remove_empty: true
+      - editor_key: autoplay
+        type: boolean
+        optional: true
+      - editor_key: loop
+        type: boolean
+        optional: true
       - editor_key: thumbnail
         type: string
         optional: true

@@ -1,13 +1,11 @@
 ---
 title: Bento Box
 order: 8
-overview: 'A grid layout where items can span multiple columns and rows, creating asymmetric, magazine-style arrangements. Supports configurable columns, spacing, and row height.'
+overview: A grid where items can span more than one column or row, for uneven magazine-style layouts. Set columns, spacing, and row height.
 slots:
   - title: default
-    description: The contents for the Bento Box.
-    fallback_for: items
+    description: Bento cells.
     child_component:
-      name: BentoBoxItem
       props:
         - 'contentSections/slot'
 examples:

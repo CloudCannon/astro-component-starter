@@ -1,0 +1,82 @@
+---
+import CustomSection from "@builders/custom-section/CustomSection.astro";
+import Heading from "@core-elements/heading/Heading.astro";
+import Image from "@core-elements/image/Image.astro";
+import Text from "@core-elements/text/Text.astro";
+import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
+import Split from "@wrappers/split/Split.astro";
+
+const {
+  heading = "",
+  headingLevel = "h2",
+  subtext = "",
+  buttonSections = [],
+  imageSource = "",
+  imageAlt = "",
+  reverse = false,
+  sectionLabel,
+  maxContentWidth = "2xl",
+  paddingHorizontal = "lg",
+  paddingVertical = "4xl",
+  colorScheme = "inherit",
+  lockColorScheme = false,
+  backgroundColor = "base",
+  background,
+  class: className,
+  useDefaultEditableBinding = false,
+  _component,
+  ...htmlAttributes
+} = Astro.props;
+---
+
+<CustomSection
+  class:list={["cta-split", className]}
+  label={sectionLabel}
+  maxContentWidth={maxContentWidth}
+  paddingHorizontal={paddingHorizontal}
+  paddingVertical={paddingVertical}
+  colorScheme={colorScheme}
+  lockColorScheme={lockColorScheme}
+  backgroundColor={backgroundColor}
+  background={background}
+  useDefaultEditableBinding={useDefaultEditableBinding}
+  {...htmlAttributes}
+>
+  <Split
+    distributionMode="fixed-flexible"
+    fixedWidth="400"
+    alignmentVertical="center"
+    reverse={reverse}
+    minSplitWidth={640}
+  >
+    <Fragment slot="first">
+      <Heading
+        level={headingLevel}
+        size="xl"
+        data-prop="heading"
+      >
+        {heading}
+      </Heading>
+      <Text
+        data-prop="subtext"
+        text={subtext}
+      />
+      <ButtonGroup
+        buttonSections={buttonSections}
+        direction="row"
+        alignmentHorizontal="start"
+        data-children-prop="buttonSections"
+      />
+    </Fragment>
+    <Fragment slot="second">
+      <Image
+        source={imageSource}
+        rounded={true}
+        alt={imageAlt}
+        aspectRatio="landscape"
+        data-prop-src="imageSource"
+        data-prop-alt="imageAlt"
+      />
+    </Fragment>
+  </Split>
+</CustomSection>

@@ -1,0 +1,44 @@
+# Not in the footer's inputs.yml: `_structures` is not a valid key in an `_inputs_from_glob` file.
+linkItems:
+  values:
+    - label: Navigation Link
+      icon: link
+      value:
+        name: ""
+        path: ""
+      _inputs:
+        name:
+          type: text
+          comment: "Display text for the navigation link."
+        path:
+          type: url
+          comment: "URL path for the navigation link."
+          options:
+            hide_link_to_file: true
+            hide_link_to_email_address: true
+            hide_link_to_telephone: true
+socialItems:
+  values:
+    - label: Social Link
+      icon: share
+      value:
+        icon: ""
+        link: ""
+        label: ""
+      _inputs:
+        icon:
+          type: select
+          comment: "Icon for the social media platform. Pick a `social/` mark from the icon library."
+          options:
+            values: data.icons
+            preview:
+              text:
+                - key: name
+              image:
+                - template: src/icons/{id}.svg
+        link:
+          type: text
+          comment: "URL link to the social media profile."
+        label:
+          type: text
+          comment: 'Optional accessible label for the link (e.g. "Visit us on X"). Defaults to "Visit our <icon> page".'

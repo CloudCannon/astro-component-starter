@@ -1,5 +1,6 @@
 ---
-import { Icon as AstroIcon } from "astro-icon/components";
+import { getIcon, suggestIconNames } from "@component-utils/icons";
+import { isNonEmptyString } from "@component-utils/isNonEmptyString";
 
 const {
   name,
@@ -13,9 +14,19 @@ const {
   ...htmlAttributes
 } = Astro.props;
 
-const isValidName = name && typeof name === "string" && name.trim();
+const isValidName = isNonEmptyString(name);
+const icon = isValidName ? getIcon(String(name)) : null;
 
-if (!_component && !isValidName) {
+// Ids come from editable content, so warn while authoring rather than failing
+// the build — same as renderBlock.astro does for an unknown `_component`.
+if (isValidName && !icon && import.meta.env.DEV) {
+  const suggestions = suggestIconNames(String(name));
+  const hint = suggestions.length ? ` Did you mean: ${suggestions.join(", ")}?` : "";
+
+  console.warn(`[icon] Unknown icon "${String(name).trim()}".${hint}`);
+}
+
+if (!icon) {
   return;
 }
 ---
@@ -30,13 +41,12 @@ if (!_component && !isValidName) {
       `size-${size}`,
       `color-${color}`,
       background && "background",
-      alignmentHorizontal && `align-${alignmentHorizontal}`,
-      name?.includes("social/") && "fill",
+      alignmentHorizontal && alignmentHorizontal !== "none" && `align-${alignmentHorizontal}`,
     ]}
   >
-    <AstroIcon
-      name={String(name).trim()}
-      is:inline
+    <svg
+      {...icon.attributes}
+      set:html={icon.body}
     />
   </span>
 </span>
@@ -45,96 +55,65 @@ if (!_component && !isValidName) {
   @layer components {
     .icon {
       display: block;
-      line-height: 0;
+      line-height: var(--line-height-none);
       vertical-align: middle;
 
       > .icon-inner {
         border-radius: var(--radius-xs);
-        color: inherit;
+        color: var(--icon-accent, inherit);
         display: block;
-        line-height: 0;
+        line-height: var(--line-height-none);
         vertical-align: middle;
 
-        &.flip-rtl {
-          transform: scaleX(-1);
-        }
-
-        &.background-subtle {
-          padding: 0.15em;
-        }
-
-        &.fill {
-          fill: currentcolor;
-        }
-
         &.background {
-          background-color: var(--color-bg-surface);
+          background-color: var(--icon-accent-bg, var(--color-bg-surface));
           padding: var(--spacing-em-xs);
           width: fit-content;
         }
 
         &.color-blue {
-          color: var(--blue-dark);
-
-          &.background {
-            background-color: var(--blue-light);
-          }
+          --icon-accent: var(--blue-500);
+          --icon-accent-bg: var(--blue-100);
         }
 
         &.color-green {
-          color: var(--green-dark);
-
-          &.background {
-            background-color: var(--green-light);
-          }
+          --icon-accent: var(--green-500);
+          --icon-accent-bg: var(--green-100);
         }
 
         &.color-yellow {
-          color: var(--yellow-dark);
-
-          &.background {
-            background-color: var(--yellow-light);
-          }
+          --icon-accent: var(--yellow-400);
+          --icon-accent-bg: var(--yellow-100);
         }
 
         &.color-orange {
-          color: var(--orange-dark);
-
-          &.background {
-            background-color: var(--orange-light);
-          }
+          --icon-accent: var(--orange-500);
+          --icon-accent-bg: var(--orange-100);
         }
 
         &.color-red {
-          color: var(--red-dark);
-
-          &.background {
-            background-color: var(--red-light);
-          }
+          --icon-accent: var(--red-500);
+          --icon-accent-bg: var(--red-100);
         }
 
         &.color-purple {
-          color: var(--purple-dark);
-
-          &.background {
-            background-color: var(--purple-light);
-          }
+          --icon-accent: var(--purple-500);
+          --icon-accent-bg: var(--purple-100);
         }
 
         &.color-pink {
-          color: var(--pink-dark);
-
-          &.background {
-            background-color: var(--pink-light);
-          }
+          --icon-accent: var(--pink-500);
+          --icon-accent-bg: var(--pink-100);
         }
 
         &.color-cyan {
-          color: var(--cyan-dark);
+          --icon-accent: var(--cyan-500);
+          --icon-accent-bg: var(--cyan-100);
+        }
 
-          &.background {
-            background-color: var(--cyan-light);
-          }
+        /* Not dead: the picker's "None" option emits this class. */
+        &.size-none {
+          font-size: inherit;
         }
 
         &.size-sm {

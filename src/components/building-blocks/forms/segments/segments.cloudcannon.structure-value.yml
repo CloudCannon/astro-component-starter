@@ -1,24 +1,40 @@
 label: Segments
 icon: radio_button_partial
-description: Segmented control form field with connected buttons.
+description: Connected buttons for choosing one or more options.
 value:
   _component: building-blocks/forms/segments
   title: My Segments
   name: my_segments
   required: false
-  options: []
+  options:
+    - value: item-1
+      label: Item 1
+      checked: true
+      icon: ""
+    - value: item-2
+      label: Item 2
+      checked: false
+      icon: ""
   iconOnly: false
   multiple: false
-  keepStateOnRefresh: true
+  keepStateOnRefresh: false
 preview:
   text:
     - Segments
   subtext:
     - key: title
+  image: public/component-previews/building-blocks/forms/segments.svg
   icon: radio_button_partial
+  gallery:
+    image: public/component-previews/building-blocks/forms/segments.svg
+    fit: cover
 picker_preview:
   text: Segments
   subtext: Segmented control form field with connected buttons.
+  image: public/component-previews/building-blocks/forms/segments.svg
+  gallery:
+    image: public/component-previews/building-blocks/forms/segments.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/forms/segments/segments.cloudcannon.inputs.yml
 _structures:
@@ -28,7 +44,7 @@ _structures:
           value: null
           label: Item
           checked: null
-          icon: bolt
+          icon: zap
         preview:
           icon: radio_button_partial
           image:
@@ -51,9 +67,9 @@ _structures:
             comment: Whether the field is checked by default.
           icon:
             type: select
-            comment: Icon next to the segment option. Sourced from [Heroicons](https://heroicons.com/).
+            comment: Icon next to the segment option. Sourced from [Lucide](https://lucide.dev/icons/).
             options:
-              values: _select_data.icons
+              values: data.icons
               preview:
                 text:
                   - key: name

@@ -1,6 +1,6 @@
 ---
 title: Rounded Corners
-spacing:
+spacing: 'all'
 blocks:
   _component: 'page-sections/builders/custom-section'
   backgroundColor: surface

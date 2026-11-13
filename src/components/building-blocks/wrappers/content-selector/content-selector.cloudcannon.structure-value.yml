@@ -1,6 +1,6 @@
 label: Content Selector
 icon: view_sidebar
-description: Lets users switch between different content panels using tabs.
+description: Tabs that switch between content panels.
 value:
   _component: building-blocks/wrappers/content-selector
   label: ""
@@ -11,12 +11,21 @@ preview:
     - Content Selector
   subtext:
     - key: label
+  image: public/component-previews/building-blocks/wrappers/content-selector.svg
   icon: view_sidebar
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/content-selector.svg
+    fit: cover
 picker_preview:
   text: Content Selector
   subtext: Lets users switch between different content panels using tabs.
+  image: public/component-previews/building-blocks/wrappers/content-selector.svg
+  gallery:
+    image: public/component-previews/building-blocks/wrappers/content-selector.svg
+    fit: cover
 _inputs_from_glob:
   - /src/components/building-blocks/wrappers/content-selector/content-selector.cloudcannon.inputs.yml
+  - /.cloudcannon/inputs/space-before.yml
 _structures:
   contentSelectorItems:
     values:
@@ -24,6 +33,9 @@ _structures:
         icon: place_item
         value:
           title: Section Title
+          subtext: ""
+          iconName: ""
+          iconColor: default
           contentSections: []
         preview:
           text:
@@ -40,10 +52,15 @@ _structures:
             type: text
             comment: Optional supporting text shown beneath the item heading.
           iconName:
-            comment: The name of the icon to display. Sourced from [Heroicons](https://heroicons.com/).
+            comment: The name of the icon to display. Sourced from [Lucide](https://lucide.dev/icons/).
             type: select
             options:
-              values: _select_data.icons
+              values: data.icons
+              preview:
+                text:
+                  - key: name
+                image:
+                  - template: src/icons/{id}.svg
           iconColor:
             type: select
             comment: The color of the icon.

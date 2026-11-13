@@ -1,0 +1,104 @@
+# Architecture
+
+How the load-bearing machinery fits together. For workflows (adding components, theming, content authoring), see the skills in `.agents/skills/` (canonical; `.claude/skills/` is a generated copy for Claude Code).
+
+## The one-paragraph version
+
+Pages are markdown files whose frontmatter holds a `pageSections` array of component data blocks. A catch-all route renders each block through a component registry that auto-discovers every `.astro` file under `src/components/`. Each component ships its own CloudCannon editor config as sibling YAML files, aggregated by glob so the CMS page builder always matches the component library. Design lives in CSS custom properties (primitive → semantic → component tiers), so rebranding is a token change, not a component change.
+
+## Content → HTML pipeline
+
+1. **Content**: `src/content/pages/*.md` — frontmatter validated by `src/content.config.ts` (`pageSchema`). `pageSections` is an array of blocks; each block has a `_component` path (e.g. `page-sections/heroes/hero-center`) plus that component's props. The markdown body below the frontmatter is also rendered (after the sections).
+2. **Routing**: `src/pages/[...slug].astro` — `getStaticPaths` over the `pages` collection (excluding `blog`, which has its own routes under `src/pages/blog/`).
+3. **Page shell**: `src/layouts/Page.astro` — merges frontmatter with props, wires SEO into `BaseLayout.astro`, renders `MainNav.astro` (from `src/data/mainNav.json`), the sections, the markdown body, and `Footer` (from `src/data/footer.json`). `BaseLayout.astro` also validates `privacy.json` / `analytics.json` and renders one global `Consent.astro` instance after the page content.
+4. **Component resolution**: `src/components/utils/renderBlock.astro` — the registry. `import.meta.glob(["../**/*.{jsx,astro}", "!../utils/**"])` discovers every component (the `utils/` exclusion is load-bearing: those are composition helpers, not placeable components, and without it they appear as registry keys); paths are normalized via `pascalToKebab` (a `button/Button.astro` file collapses to the key `building-blocks/core-elements/button`). Each block's `_component` is looked up here; misses log a warning listing all available keys (that warning is your first stop when a section doesn't render).
+
+**Implication**: adding a `.astro` file under `src/components/` in the right directory automatically registers it — there is no manual registry. The `_component` string in content must exactly match the kebab-case directory path.
+
+## CloudCannon editing layer
+
+Two co-operating systems:
+
+### Structured editing (page builder / data panels)
+
+- `cloudcannon.config.yml` (root) defines collections and pulls structures from `.cloudcannon/structures/*.yml`.
+- Each `.cloudcannon/structures/*.yml` aggregates per-component files by glob, e.g. `pageSections` ← `/src/components/page-sections/**/*.cloudcannon.structure-value.yml`.
+- Form fields are scoped to their own picker by the same mechanism: `formBlocks` ← `/src/components/building-blocks/forms/**/*.cloudcannon.structure-value.yml`, consumed only by the `formBlocks` array inputs on `form` and `cta-form`. They cannot appear in the page-sections picker (that glob matches `page-sections/**` only). Two components are deliberately excluded from the picker — `form` itself (no nested forms) and `segments` — see the comment in `.cloudcannon/structures/formBlocks.cloudcannon.structures.yml`.
+- Per component (sibling files, same directory as the `.astro`):
+  - `<name>.cloudcannon.inputs.yml` — editor field definitions (`_inputs` syntax).
+  - `<name>.cloudcannon.structure-value.yml` — label/icon/description, default `value` (including `_component`), previews, and `_inputs_from_glob` pointing back at the inputs file.
+  - `<name>.cloudcannon.snippets.yml` — MDX snippet definition (only the 15 components usable inside markdown/blog bodies).
+
+### Visual (inline) editing
+
+- `@cloudcannon/editable-regions` is wired in `astro.config.mjs`; `live-editing.js` registers every component with the editor using its own `import.meta.glob("./src/components/**/*.astro")`. The kebab-case key derivation is shared with `renderBlock.astro` and `scripts/cms/lint.mjs` via `src/components/utils/componentKey.mjs` — one source of truth, so the registries can't drift.
+- Components opt into inline editing via data attributes: `data-editable="text" data-prop="heading"` (single field), `data-editable="array" data-prop="contentSections"` on a container + `data-editable="array-item"` on children (managed by renderBlock), `data-editable="component"` for whole-component bindings. The `useDefaultEditableBinding` prop toggles a component's default binding; `renderBlock` passes it down.
+- `editor-live-sync.js` handles presentation-only re-initialization inside the CloudCannon editor (Embla carousels, bento-box grid spans) because the editor's renderer doesn't execute inline scripts — component setup logic that must also run in the editor lives in importable modules (see `carousel/setup.ts` for the pattern).
+
+## Consent and optional third parties
+
+`src/data/privacy.json` and `src/data/analytics.json` are schema-backed CloudCannon data files. `BaseLayout.astro` parses them through `src/integrations/consent/config.ts`, so an invalid policy URL, expiry, provider, or Plausible script URL fails the build instead of silently weakening the runtime policy. `Consent.astro` is site chrome, not a page-builder section: it renders once on every page and stays inert in the CloudCannon editor. Its component-doc example has a deliberately isolated preview that neither writes browser storage nor loads analytics.
+
+`src/integrations/consent/runtime.ts` owns the `ConsentManager` singleton exposed as `window.siteConsent`. The `site-consent` record contains a policy revision, decision timestamp, and `analytics` / `externalMedia` decisions. Reads invalidate a record when its revision differs or `expiryDays` has passed; writes synchronize through `BroadcastChannel` and the storage event. Effective permission requires an explicit grant and the workflow's `enabled` flag, except for external media when `externalMediaRequiresConsent` is off, which is always allowed; a browser sending Global Privacy Control has its decline recorded on the first visit, so the banner never asks. The manager publishes changes to subscribers and the `site-consent-change` window event; consumers call `isAllowed(category)` rather than reading storage themselves.
+
+The first-visit banner exists only when analytics is configured. It offers equal-prominence **Accept All**, **Reject All**, and **Customize** actions; the dialog shows necessary preference storage as **Always on** and permits bulk or granular changes. With analytics off, external media asks only at the blocked video, map, or embed, and only when `externalMediaRequiresConsent` is on; the prompt is rendered at runtime, so the built HTML holds an empty placeholder either way. The footer's Privacy settings control appears only when there is a category to choose. Disabling the workflow hides those controls and fails closed for analytics.
+
+Two consumers implement the optional categories:
+
+- `src/integrations/consent/analytics.ts` creates the Plausible queue and script only after analytics permission, disables automatic capture, and queues one manual pageview for the current Astro page plus one per later `astro:page-load`. Revocation stops future events but cannot reliably unload a fetched third-party script or clear provider-domain storage.
+- External-media components emit inert placeholders or templates. `Consent.astro`'s setup hydrates `data-external-media-src` and `template[data-unsafe-external-media]`; Video and Video Modal have consent-aware setup modules for their player lifecycle. YouTube uses `youtube-nocookie.com`. `externalMedia.ts` restricts the typed components' HTTPS hosts and paths to YouTube, Vimeo, Google Maps, and OpenStreetMap. Embed removes active elements/event handlers and sandboxes its iframes, which may load any HTTPS page. Authors still use Video/Video Modal—not Embed—for YouTube and Vimeo. Revocation replaces mounted content rather than merely hiding it.
+
+Astro view transitions reuse the document, so every setup path is idempotent and listens to `astro:page-load` without duplicating managers, subscriptions, or provider scripts. Adding a provider or category crosses config, runtime, UI, CloudCannon schemas, policy text, component docs, and tests; follow `.agents/skills/privacy-consent/SKILL.md` rather than modifying one layer in isolation.
+
+## Share cards (`og:image`)
+
+- `src/pages/og/[...slug].ts` renders a 1200x630 PNG per page and per blog post at build time, via Takumi (Rust, no browser, no network). One `/og/site.png` covers every route with no collection entry of its own: listings, tag archives, 404, docs.
+- **Every page and post gets a card.** An entry's own `image` becomes the card's full-bleed background, with each line of text drawn on its own solid plate so it stays legible over any photo. The `og:image` chain in `SeoHead.astro` is generated card → page `image` → `seo.json` `shareImage` → `logoSource`; turn cards off with `shareImageGeneration` to share raw images again.
+- **Photo cards are JPEG, plain cards PNG**, and the URL's extension decides which the endpoint encodes (`cardFormat` in `paths.ts`), so the bytes can never disagree with what was advertised. PNG stores a photograph at roughly seven times the size; JPEG rings around the crisp text of a flat card. sharp cover-crops the source to 1200x630 before Takumi sees it, and Takumi's `measure` supplies the title's wrap points so each line gets its own plate. The plate **inverts** the card theme (`platePaint`): light gives a black plate with white text, dark gives a white plate with black text, both from theme tokens. The logo therefore follows the plate, not the theme, so the two layouts want opposite logos in the same theme.
+- `src/utils/og/paths.ts` is the single source of truth for _which_ entries get a card and at _what_ URL. The endpoint's `getStaticPaths` and the layouts both call `ogCardPath`, because a route that emits a URL the endpoint never built is a 404 nothing reports.
+- Colours come from `_light.css` or `_dark.css` at build time (`theme.ts`, per `shareImageTheme`), so a rebrand reaches the cards. A dark card uses `logoAlternateSource`, and substitutes `--color-text` for the description because the dark theme sets `--color-text-muted` to the same white as headings. Fonts come from `site-fonts.mjs` (`fonts.ts`), plus a vendored COLR emoji font — Takumi silently draws **nothing** for a bitmap emoji font, and a coverage subset needs a unique `name` with a shared `subsetOf` or the subsets overwrite each other. `src/utils/og/fonts/README.md` has the detail.
+- Rendered cards are cached by content hash under `node_modules/.astro/og-cache/`, pruned by the `prune-og-cache` integration. The key includes `template.ts`'s own source, so a layout edit invalidates every card with nothing to remember to bump. A host cache is opt-in and best-effort (CloudCannon "Preserved Paths"), so cold-build cost is the design target: about 9ms per card.
+
+## Theming
+
+- **Tiers**: `src/styles/variables/*` (primitive tokens: palette, spacing, radius, shadows, fonts, z-layers, animation durations) → `src/styles/themes/_light.css` / `_dark.css` (semantic tokens like `--color-text`, `--color-bg-brand`) → components consume only semantic/primitive tokens in their `<style is:global>` blocks.
+- **Layers**: `@layer reset, base, pagefind, components, page-sections, utils, overrides` — declared in `BaseLayout.astro` before any component CSS. Component styles go in `@layer components`. That one statement is load-bearing and fails silently: lose it and layers order by first appearance instead, which puts `reset` and `base` last and inverts the whole cascade.
+- **Delivery**: pages inline their CSS (`build.inlineStylesheets: "always"`), and `scripts/build/pruneCss.mjs` drops from each page the component style blocks its markup never uses — every page is built by one catch-all route, so Astro otherwise inlines the union of the whole library into all of them. It prunes whole per-component blocks, never individual rules, so a component that IS on the page keeps all its variant and state rules. The unpruned sheet is written to `_astro/components-full.<hash>.css` and loaded when `window.inEditorMode` is set, because the CloudCannon editor renders components that were never in the page's HTML. `npm run test:css-parity` is the proof that nothing else went with it.
+- **Dark mode**: inline script (`ThemeToggleScript.astro`) sets `data-theme` on `<html>` pre-paint (no FOUC); sections can pin a scheme via `data-theme` + `data-theme-lock`.
+- **Fonts**: `site-fonts.mjs` (root) is the single source of truth — feeds Astro's fonts config in `astro.config.mjs` and the `<Font>` preloads in `src/layouts/SiteFonts.astro`. Provider is `fontProviders.fontsource()` (self-hosted via the installed `@fontsource/*` packages).
+- **Reduced motion**: `src/styles/base/_animations.css` globally disables animations/transitions (including `::backdrop` / `::details-content`); JS-driven motion (Embla autoplay/auto-scroll) checks `prefers-reduced-motion` in `carousel/setup.ts`.
+
+## Flow spacing
+
+- Space **between sibling blocks** is the flow system (`src/styles/utils/_flow.css`): a `.flow` parent margins each child by the child's `--space-before`, first children sit flush, and a Spacer _replaces_ the adjacent gap (its size is the whole gap). Every stackable building block declares a type default in its component CSS (heading loose, text tight, collection wrappers loose); the four role tokens live in `variables/_spacing.css` (`--space-before-{none,tight,default,loose}`) — retune those four lines to retune all page rhythm. Blocks carry no root margins of their own.
+- The per-block `spaceBefore` prop rides as `data-space-before` on a **direct child** of the block's root, hoisted to the root by `_flow.css`'s `:has()` rules. Never on the root: CloudCannon's editable-regions re-render keeps the region's root element, so a prop-driven attribute there goes stale in the Visual Editor (the same constraint behind `editor-live-sync.js`'s bento-box span sync). Roots with no child to carry it (Video's media elements, Pagination, Card Grid's grid mode) keep root placement as a documented fallback.
+
+## Popovers and the top layer
+
+Modals, the search overlay and nav dropdowns are the native Popover API (`popover="auto"`), so an open panel renders in the browser's **top layer**: outside normal flow and stacking, unclipped by an ancestor's `overflow` and unaffected by its `z-index`. Three consequences are load-bearing.
+
+- **Centering is `inset: 0` + `margin: auto`** on the popover itself (`ModalShell.astro`), not a flex wrapper — the top layer sizes the containing block to the viewport, so auto margins split the leftover space. Any real margin on that element therefore _replaces_ one of those autos and pushes the panel off centre: a `.flow` gap of 2rem moves a centred 640px modal from 80px down to 32px. That is why `_flow.css` spaces `.flow > * + *:not([popover])` — a popover is a DOM sibling of the blocks around it, but it is not laid out with them.
+- **Scroll lock is counted, not toggled.** `modal/setup.ts` sets `data-modal-scroll-lock` on `<body>` from the number of currently open `[data-modal]` popovers, so closing one modal while another is open does not unlock the page.
+- **Behaviour and look are separate hooks.** `data-modal` opts a popover into the focus trap and scroll-lock count; `.modal-popover` is only the sheet styles. A full-bleed overlay takes `data-modal` without the class, rather than inheriting the sheet and overriding it: the gallery lightbox sets it directly, and Video Modal passes `sheet={false}` through Modal to `ModalShell`.
+- **Focus is moved and restored by hand.** The Popover API leaves focus on the invoker, so `setupModalShell` moves it to the first focusable element inside on `toggle`, and returns it to the element that actually opened the panel — several triggers can target one modal, and Search opens on Ctrl+K with no invoker at all.
+
+For the editor, a popover is also a **nesting boundary**: `lint:nesting` computes reachability with modal as a cut, because a block placed inside a modal is not visually inside whatever holds the trigger.
+
+## Component library docs (`/component-docs`)
+
+`src/component-docs/` is a self-documenting library UI (pure Astro, no React) with its own content collections and a component viewer. It is excluded from production builds: `npm run build` sets `DISABLE_COMPONENT_LIBRARY=true`, which the component-docs routes check in `getStaticPaths`; `npm run build:with-library` includes it. The sitemap excludes it either way.
+
+## Protected patterns (don't "refactor" these)
+
+These are load-bearing decisions, not accidents. Fix problems around them with tooling, not by restructuring them:
+
+- **The three-file component convention** (`.astro` + `inputs.yml` + `structure-value.yml`) and glob aggregation — it scales; fix drift with tooling, not by restructuring.
+- **The three-tier token hierarchy** (primitive → semantic → component) and semantic naming.
+- **Dark-mode architecture** — the `is:inline` script, `data-theme`, and theme-lock (FOUC-free by construction).
+- **CSS-first interactivity** — Popover API modal, `<details>` accordion, `:has()`, `@layer` organization, and the `onPageLoad` + `setup.ts` script lifecycle.
+- **Bar navigation's keyboard/ARIA implementation** — treat it as the reference for new interactive components.
+- **`site-fonts.mjs`** as the font single-source-of-truth.
+
+## Checks
+
+`npm run check` chains 13 steps in order: `lint` (ESLint on JS/TS/Astro + YAML, Stylelint on CSS), `format` (Prettier), `typecheck` (`astro check`), `previews:check` (thumbnail coverage), `docs:catalog:check`, `agents:check` (generated `.claude/skills/` + `.cursor/rules/` drift), `icons:check`, `lint:cms` (prop/YAML drift, `_component` resolution), `lint:roots`, `lint:nesting`, `docs:check`, `lint:schema`, and `check:placeholders`. Test suites: `test:render` (every structure default builds), `test:unit` (shared utilities plus consent config/runtime/allowlist behavior) and `test:smoke` (headless-Chrome interaction tests including consent persistence, analytics gating, external-media hydration/revocation, modal focus, carousel, mobile nav, and theme toggle) — the last runs against a `build:with-library` `dist/`. CI (`.github/workflows/test.yml`) runs lockfile verification + `npm run check` + unit tests, plus a "Smoke tests" browser job. Plain `npm install` works; if CI reports the lockfile out of sync, regenerate it with `npm run deps:sync` — it re-resolves for Linux/x64 first, then installs from the lockfile — since CI needs the Linux-only optional binaries (`sharp`, `pagefind`).

@@ -1,12 +1,15 @@
 ---
-import { resolveImageSource } from "@component-utils/resolveImageSource";
+import { resolveOpenGraphImage } from "@component-utils/image";
 
 interface SiteSeoData {
   name: string;
   url: string;
   logoSource: string;
+  /** 1200×630 raster for social cards. Falls back to the logo when unset. */
+  shareImage?: string | null;
   description: string;
   titleFormat: string;
+  twitterSite?: string | null;
 }
 
 interface ArticleSeoData {
@@ -22,6 +25,9 @@ export interface Props {
   description?: string | null;
   keywords?: string[] | null;
   image?: string | null;
+  /** Path to a build-time generated card, used when the page has no `image`. */
+  generatedImage?: string | null;
+  imageAlt?: string | null;
   canonical?: string | null;
   type?: "website" | "article";
   article?: ArticleSeoData | null;
@@ -34,17 +40,44 @@ const {
   description,
   keywords,
   image,
+  generatedImage,
+  imageAlt,
   canonical,
   type: pageType = "website",
   article,
   noindex = false,
 } = Astro.props;
-const formattedTitle = site.titleFormat.replace("{title}", title);
+// Past this, the `titleFormat` suffix is dropped rather than truncating the page title.
+const TITLE_LENGTH_BUDGET = 60;
+const decoratedTitle = site.titleFormat.replace("{title}", title);
+const formattedTitle =
+  decoratedTitle.length > TITLE_LENGTH_BUDGET && title.length <= TITLE_LENGTH_BUDGET
+    ? title
+    : decoratedTitle;
+
+if (import.meta.env.DEV && title.length > TITLE_LENGTH_BUDGET) {
+  console.warn(
+    `[seo] "${title}" is ${title.length} characters; search engines truncate around ${TITLE_LENGTH_BUDGET}.`
+  );
+}
 const pageDescription = description || site.description;
-const pageImage = resolveImageSource(image || site.logoSource);
+const shareSource = generatedImage || image || site.shareImage || site.logoSource;
+const isGeneratedCard = Boolean(generatedImage) && shareSource === generatedImage;
+
+if (import.meta.env.DEV && !isGeneratedCard && shareSource?.toLowerCase().endsWith(".svg")) {
+  console.warn(
+    `[seo] og:image resolves to "${shareSource}". Social crawlers do not render SVG — set "shareImage" in src/data/seo.json to a 1200×630 raster.`
+  );
+}
+const share = isGeneratedCard
+  ? { src: shareSource!, width: 1200, height: 630 }
+  : shareSource
+    ? await resolveOpenGraphImage(shareSource)
+    : undefined;
 const canonicalUrl = canonical || Astro.url.href;
 const siteUrl = Astro.site || new URL(site.url);
-const pageImageUrl = pageImage ? new URL(pageImage, siteUrl).href : undefined;
+const pageImageUrl = share ? new URL(share.src, siteUrl).href : undefined;
+const pageImageAlt = imageAlt || (image || isGeneratedCard ? title : site.name);
 const keywordContent = keywords?.filter(Boolean).join(", ");
 const articleAuthors = Array.isArray(article?.author)
   ? article.author.filter(Boolean)
@@ -52,17 +85,20 @@ const articleAuthors = Array.isArray(article?.author)
     ? [article.author]
     : [];
 const articleTags = article?.tags?.filter(Boolean) ?? [];
+// Opt-in: without these Google caps image previews and snippet length.
+const robotsContent = noindex
+  ? "noindex"
+  : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+// X falls back to the og:* tags, so only the card type and handle need their own.
+const twitterCard = pageImageUrl ? "summary_large_image" : "summary";
+const twitterSite = site.twitterSite?.trim();
 ---
 
 <title>{formattedTitle}</title>
-{
-  noindex ? (
-    <meta
-      name="robots"
-      content="noindex"
-    />
-  ) : null
-}
+<meta
+  name="robots"
+  content={robotsContent}
+/>
 <link
   rel="canonical"
   href={canonicalUrl}
@@ -83,65 +119,85 @@ const articleTags = article?.tags?.filter(Boolean) ?? [];
   property="og:site_name"
   content={site.name}
 />
-{
-  pageDescription ? (
-    <>
-      <meta
-        name="description"
-        content={pageDescription}
-      />
-      <meta
-        property="og:description"
-        content={pageDescription}
-      />
-    </>
-  ) : null
-}
-{
-  keywordContent ? (
+{pageDescription ? (
+  <>
     <meta
-      name="keywords"
-      content={keywordContent}
+      name="description"
+      content={pageDescription}
     />
-  ) : null
-}
-{
-  pageImageUrl ? (
-    <>
+    <meta
+      property="og:description"
+      content={pageDescription}
+    />
+  </>
+) : null}
+{keywordContent ? (
+  <meta
+    name="keywords"
+    content={keywordContent}
+  />
+) : null}
+{pageImageUrl ? (
+  <>
+    <meta
+      property="og:image"
+      content={pageImageUrl}
+    />
+    {share?.width ? (
       <meta
-        property="og:image"
-        content={pageImageUrl}
+        property="og:image:width"
+        content={String(share.width)}
       />
-    </>
-  ) : null
-}
-{
-  pageType === "article" ? (
-    <>
-      {article?.publishedTime ? (
-        <meta
-          property="article:published_time"
-          content={article.publishedTime}
-        />
-      ) : null}
-      {article?.modifiedTime ? (
-        <meta
-          property="article:modified_time"
-          content={article.modifiedTime}
-        />
-      ) : null}
-      {articleAuthors.map((author) => (
-        <meta
-          property="article:author"
-          content={author}
-        />
-      ))}
-      {articleTags.map((tag) => (
-        <meta
-          property="article:tag"
-          content={tag}
-        />
-      ))}
-    </>
-  ) : null
-}
+    ) : null}
+    {share?.height ? (
+      <meta
+        property="og:image:height"
+        content={String(share.height)}
+      />
+    ) : null}
+    {pageImageAlt ? (
+      <meta
+        property="og:image:alt"
+        content={pageImageAlt}
+      />
+    ) : null}
+  </>
+) : null}
+<meta
+  name="twitter:card"
+  content={twitterCard}
+/>
+{twitterSite ? (
+  <meta
+    name="twitter:site"
+    content={twitterSite}
+  />
+) : null}
+{pageType === "article" ? (
+  <>
+    {article?.publishedTime ? (
+      <meta
+        property="article:published_time"
+        content={article.publishedTime}
+      />
+    ) : null}
+    {article?.modifiedTime ? (
+      <meta
+        property="article:modified_time"
+        content={article.modifiedTime}
+      />
+    ) : null}
+    {articleAuthors.map((author) => (
+      <meta
+        property="article:author"
+        content={author}
+      />
+    ))}
+    {articleTags.map((tag) => (
+      <meta
+        property="article:tag"
+        content={tag}
+      />
+    ))}
+  </>
+) : null}

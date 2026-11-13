@@ -9,7 +9,7 @@ const {
 ---
 
 <div
-  class:list={["spacer", className]}
+  class:list={["spacer", "stackable", className]}
   {...htmlAttributes}
   aria-hidden="true"
 >
@@ -18,6 +18,10 @@ const {
 
 <style is:global>
   @layer components {
+    .spacer {
+      --space-before: var(--space-before-none);
+    }
+
     .spacer > .spacer-inner {
       height: 0;
 

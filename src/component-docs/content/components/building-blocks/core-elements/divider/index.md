@@ -1,7 +1,11 @@
 ---
 title: Divider
-overview: 'A simple visual separator for dividing content sections. Renders a horizontal line with configurable spacing above and below to control layout flow.'
+overview: A horizontal line that separates content, solid, dashed or dotted. Set the space above and below.
 examples:
-  - slugs:
+  - title: 'Line styles'
+    slugs:
+      - line-styles
+  - title: 'Padding'
+    slugs:
       - padding
 ---

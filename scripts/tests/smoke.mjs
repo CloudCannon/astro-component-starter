@@ -1,0 +1,2555 @@
+// Runs against dist/ from `npm run build:with-library`.
+//   node scripts/tests/smoke.mjs [--only <substring>]
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { launchBrowser, serveDist } from "./lib/servedDist.mjs";
+
+const root = join(dirname(new URL(import.meta.url).pathname), "..", "..");
+const distDir = join(root, "dist");
+
+const args = process.argv.slice(2);
+const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null;
+
+const DESKTOP = { width: 1280, height: 800 };
+const MOBILE = { width: 390, height: 844 };
+
+// Must match src/components/utils/focusTrap.ts.
+const FOCUSABLE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "iframe",
+  "audio[controls]",
+  "video[controls]",
+  "summary",
+  '[contenteditable]:not([contenteditable="false"])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(", ");
+
+function assert(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+const ACTIVE_PREVIEW = ".component-viewer .preview.active";
+
+const tests = [
+  {
+    name: "accordion opens and closes on click",
+    path: "/component-docs/components/building-blocks/wrappers/accordion/",
+    viewport: DESKTOP,
+    async run(page) {
+      const item = page.locator(`${ACTIVE_PREVIEW} .accordion-item`).first();
+
+      await item.waitFor();
+      assert(!(await item.evaluate((el) => el.open)), "expected the first item to start closed");
+
+      await item.locator("summary").first().click();
+      assert(await item.evaluate((el) => el.open), "item did not open after clicking its summary");
+
+      await item.locator("summary").first().click();
+      assert(
+        !(await item.evaluate((el) => el.open)),
+        "item did not close after clicking its summary again"
+      );
+    },
+  },
+  {
+    name: "code block copies its rendered code",
+    path: "/component-docs/components/building-blocks/core-elements/code-block/",
+    viewport: DESKTOP,
+    async run(page) {
+      const block = page.locator(`${ACTIVE_PREVIEW} .code-block`).first();
+
+      await block.waitFor();
+      const response = await page.request.get(page.url());
+
+      assert(
+        !(await response.text()).includes('class="button code-block-copy"'),
+        "the copy button should not render before JavaScript runs"
+      );
+      // The line-number gutter sits in the code's text flow; copied text must exclude it.
+      const expected = await block
+        .locator(".code-block-panel:not([hidden]) code")
+        .evaluate((code) => {
+          const clone = code.cloneNode(true);
+
+          clone.querySelectorAll(".code-block-line-number").forEach((number) => number.remove());
+
+          return clone.textContent ?? "";
+        });
+
+      assert(expected.includes("\n"), "rendered code lost its line breaks");
+      const origin = new URL(page.url()).origin;
+
+      await page.context().grantPermissions(["clipboard-read", "clipboard-write"], { origin });
+      await block.locator(".code-block-copy").click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.textContent === "Code copied to clipboard.",
+        `${ACTIVE_PREVIEW} .code-block .code-block-status`
+      );
+
+      const copied = await page.evaluate(() => navigator.clipboard.readText());
+
+      assert(copied === expected, "copy button did not copy the rendered code");
+    },
+  },
+  {
+    name: "code block tabs switch code panels with arrow keys",
+    path: "/component-docs/components/building-blocks/core-elements/code-block/",
+    viewport: DESKTOP,
+    async run(page) {
+      const block = page.locator(
+        '.component-viewer[data-viewer-id="tabbed-representations"] .code-block'
+      );
+      const tabs = block.locator('[role="tab"]');
+
+      await tabs.nth(0).focus();
+      await page.keyboard.press("ArrowRight");
+
+      await page.waitForFunction(() => {
+        const block = document.querySelector(
+          '.component-viewer[data-viewer-id="tabbed-representations"] .code-block'
+        );
+        const tabs = block?.querySelectorAll('[role="tab"]');
+        const panels = block?.querySelectorAll('[role="tabpanel"]');
+
+        return (
+          tabs?.[1]?.getAttribute("aria-selected") === "true" &&
+          panels?.[0]?.hasAttribute("hidden") === true &&
+          panels?.[1]?.hasAttribute("hidden") === false
+        );
+      });
+    },
+  },
+  {
+    name: "modal opens, traps focus, and restores focus on close",
+    path: "/component-docs/components/building-blocks/wrappers/modal/",
+    viewport: DESKTOP,
+    async run(page) {
+      const popoverSel = "#modal-modal";
+      const trigger = page.locator(`.modal-trigger .button-inner[popovertarget="modal-modal"]`);
+
+      await page.locator(popoverSel).waitFor({ state: "attached" });
+      await trigger.click();
+
+      // setup.ts moves focus on the popover's async "toggle" event.
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+
+        return Boolean(
+          popover && popover.matches(":popover-open") && popover.contains(document.activeElement)
+        );
+      }, popoverSel);
+
+      const focusableCount = await page.evaluate(
+        ({ sel, focusable }) => {
+          const popover = document.querySelector(sel);
+          const elements = [...popover.querySelectorAll(focusable)].filter(
+            (el) => el.getClientRects().length > 0
+          );
+
+          elements[0]?.focus();
+          return elements.length;
+        },
+        { sel: popoverSel, focusable: FOCUSABLE_SELECTOR }
+      );
+
+      assert(focusableCount >= 2, `expected >= 2 focusable elements, found ${focusableCount}`);
+
+      for (let i = 0; i < focusableCount; i++) {
+        await page.keyboard.press("Tab");
+
+        const inside = await page.evaluate(
+          (sel) => document.querySelector(sel).contains(document.activeElement),
+          popoverSel
+        );
+
+        assert(inside, `focus escaped the modal on Tab press ${i + 1} of ${focusableCount}`);
+      }
+
+      const wrappedToFirst = await page.evaluate(
+        ({ sel, focusable }) => {
+          const popover = document.querySelector(sel);
+          const elements = [...popover.querySelectorAll(focusable)].filter(
+            (el) => el.getClientRects().length > 0
+          );
+
+          return document.activeElement === elements[0];
+        },
+        { sel: popoverSel, focusable: FOCUSABLE_SELECTOR }
+      );
+
+      assert(wrappedToFirst, "Tab from the last focusable element did not wrap to the first");
+
+      const wrappedToLast = await page.evaluate(
+        ({ sel, focusable }) => {
+          const popover = document.querySelector(sel);
+          const elements = [...popover.querySelectorAll(focusable)].filter(
+            (el) => el.getClientRects().length > 0
+          );
+
+          elements[0].focus();
+          return elements.length;
+        },
+        { sel: popoverSel, focusable: FOCUSABLE_SELECTOR }
+      );
+
+      assert(wrappedToLast >= 2, "lost the focusable elements between assertions");
+      await page.keyboard.press("Shift+Tab");
+
+      const onLast = await page.evaluate(
+        ({ sel, focusable }) => {
+          const popover = document.querySelector(sel);
+          const elements = [...popover.querySelectorAll(focusable)].filter(
+            (el) => el.getClientRects().length > 0
+          );
+
+          return document.activeElement === elements[elements.length - 1];
+        },
+        { sel: popoverSel, focusable: FOCUSABLE_SELECTOR }
+      );
+
+      assert(onLast, "Shift+Tab from the first focusable element did not wrap to the last");
+
+      await page.locator(`${popoverSel} .modal-close .button-inner`).click();
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const active = document.activeElement;
+
+        return Boolean(
+          popover &&
+          !popover.matches(":popover-open") &&
+          active &&
+          active.getAttribute("popovertarget") === "modal-modal" &&
+          active.getAttribute("popovertargetaction") === "show"
+        );
+      }, popoverSel);
+    },
+  },
+  {
+    name: "consent docs preview demonstrates choices without persisting or loading analytics",
+    requireMediaConsent: true,
+    path: "/component-docs/components/navigation/consent/",
+    viewport: DESKTOP,
+    async run(page) {
+      const root = page.locator(`${ACTIVE_PREVIEW} .consent`);
+      const banner = root.locator("[data-consent-banner]");
+      const popoverSel = `${ACTIVE_PREVIEW} .consent .consent-popover`;
+
+      await banner.waitFor({ state: "visible" });
+
+      const initialState = await page.evaluate(() => ({
+        hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
+        liveMediaAllowed: window.siteConsent?.isAllowed("externalMedia") ?? null,
+        storedChoice: localStorage.getItem("site-consent"),
+      }));
+
+      assert(!initialState.hasAnalyticsScript, "docs preview loaded the example analytics script");
+      assert(initialState.liveMediaAllowed === false, "the live manager started with a decision");
+      assert(initialState.storedChoice === null, "docs preview started with a persisted choice");
+
+      const choices = await root.locator(".consent-actions .button-inner").allTextContents();
+
+      assert(
+        JSON.stringify(choices) === JSON.stringify(["Accept All", "Reject All", "Customize"]),
+        `expected balanced first-layer choices, got ${JSON.stringify(choices)}`
+      );
+      const choiceClasses = await root
+        .locator(".consent-actions .button-inner")
+        .evaluateAll((buttons) => buttons.map((button) => button.className));
+
+      assert(
+        choiceClasses[0] === choiceClasses[1],
+        `accept and reject do not have equal prominence: ${JSON.stringify(choiceClasses)}`
+      );
+
+      // A decision on the live instance must not decide the preview for the visitor.
+      const storedAfterLiveChoice = await page.evaluate(() => {
+        window.siteConsent.acceptAll();
+        return localStorage.getItem("site-consent");
+      });
+
+      assert(storedAfterLiveChoice !== null, "the live choice was not persisted");
+      assert(await banner.isVisible(), "a live choice hid the preview's banner");
+      assert(
+        !(await root.evaluate((el) => el.hasAttribute("data-consent-decided"))),
+        "a live choice decided the preview"
+      );
+      assert(
+        await root
+          .locator("[data-consent-category]")
+          .evaluateAll((inputs) => inputs.every((input) => !input.checked)),
+        "a live choice ticked the preview's categories"
+      );
+
+      await root.locator('[data-consent-action="customize"] .button-inner').click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.matches(":popover-open"),
+        popoverSel
+      );
+      assert(
+        (await page.locator(`${popoverSel} [data-consent-category]`).count()) === 2,
+        "settings dialog did not show both optional categories"
+      );
+      assert(
+        (await page.locator(`${popoverSel} .consent-category-necessary strong`).textContent()) ===
+          "Necessary",
+        "settings dialog did not identify necessary storage"
+      );
+      assert(
+        (await page.locator(`${popoverSel} .consent-category-status`).textContent()) ===
+          "Always on",
+        "settings dialog did not identify necessary storage as always on"
+      );
+      const modalChoices = await page
+        .locator(`${popoverSel} [data-consent-action] .button-inner`)
+        .allTextContents();
+
+      assert(
+        JSON.stringify(modalChoices) ===
+          JSON.stringify(["Accept All", "Reject All", "Save choices"]),
+        `expected complete preference controls, got ${JSON.stringify(modalChoices)}`
+      );
+
+      await page.locator(`${popoverSel} [data-consent-action="reject-all"] .button-inner`).click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.hasAttribute("data-consent-decided"),
+        `${ACTIVE_PREVIEW} .consent`
+      );
+
+      assert(
+        !(await page.locator(popoverSel).isVisible()),
+        "settings stayed open after Reject All"
+      );
+      assert(!(await banner.isVisible()), "banner stayed visible after making a demo choice");
+
+      const finalState = await page.evaluate(() => ({
+        hasAnalyticsScript: Boolean(document.querySelector('script[src*="plausible.io"]')),
+        liveMediaAllowed: window.siteConsent?.isAllowed("externalMedia") ?? null,
+        storedChoice: localStorage.getItem("site-consent"),
+      }));
+
+      assert(!finalState.hasAnalyticsScript, "demo choice loaded the example analytics script");
+      assert(
+        finalState.liveMediaAllowed === true,
+        "demo choice reached the live consent singleton"
+      );
+      assert(
+        finalState.storedChoice === storedAfterLiveChoice,
+        "demo choice was written to browser storage"
+      );
+    },
+  },
+  {
+    name: "embed example loads its map only after external-media permission",
+    requireMediaConsent: true,
+    path: "/component-docs/components/building-blocks/core-elements/embed/",
+    viewport: DESKTOP,
+    async run(page) {
+      const content = page.locator(`${ACTIVE_PREVIEW} .embed-content`).first();
+
+      await content.waitFor();
+      assert(
+        (await content.locator("iframe").count()) === 0,
+        "embed mounted its iframe before permission"
+      );
+
+      await content.locator("[data-external-media-enable]").click();
+      await page.waitForFunction(
+        (sel) => Boolean(document.querySelector(sel)?.querySelector("iframe")),
+        `${ACTIVE_PREVIEW} .embed-content`
+      );
+
+      const src = await content.locator("iframe").first().getAttribute("src");
+
+      assert(
+        /^https:\/\/(www\.google\.com\/maps\/embed|www\.openstreetmap\.org\/export\/embed\.html)/.test(
+          src ?? ""
+        ),
+        `embed mounted an unexpected source: ${src}`
+      );
+      assert(
+        await page.evaluate(() => window.siteConsent?.isAllowed("externalMedia") === true),
+        "external-media permission was not recorded"
+      );
+    },
+  },
+  {
+    name: "video modal keeps its provider frame inert until external-media permission",
+    requireMediaConsent: true,
+    path: "/component-docs/components/building-blocks/wrappers/video-modal/",
+    viewport: DESKTOP,
+    async run(page) {
+      const popoverSel = "#modal-astro-in-100-seconds";
+      const embedSel = `${popoverSel} .video-modal-embed`;
+      const popover = page.locator(popoverSel);
+
+      await popover.waitFor({ state: "attached" });
+
+      const before = await page.locator(`${embedSel} iframe`).count();
+
+      assert(before === 0, "expected no iframe before the modal is opened");
+
+      await page
+        .locator(`.modal-trigger .button-inner[popovertarget="modal-astro-in-100-seconds"]`)
+        .click();
+
+      // Docs have no consent manager, so a provider modal must keep the permission prompt.
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.querySelector("[data-external-media-enable]"),
+        embedSel
+      );
+
+      assert(
+        (await page.locator(`${embedSel} iframe`).count()) === 0,
+        "expected no provider iframe before external-media permission"
+      );
+
+      // The overlay fills the viewport, so light dismiss never fires; the surround click closes.
+      await popover.click({ position: { x: 4, y: 4 } });
+
+      await page.waitForFunction(
+        ({ pop, embed }) =>
+          !document.querySelector(pop).matches(":popover-open") &&
+          !document.querySelector(embed).querySelector("iframe"),
+        { pop: popoverSel, embed: embedSel }
+      );
+    },
+  },
+  {
+    name: "hosted video picks the right provider player per hosted type after consent",
+    requireMediaConsent: true,
+    path: "/component-docs/components/building-blocks/core-elements/video/",
+    viewport: DESKTOP,
+    async run(page) {
+      const containers = page.locator("[data-hosted-video]");
+
+      await containers.first().waitFor();
+
+      assert(
+        (await page
+          .locator(
+            "[data-hosted-video] lite-youtube, [data-hosted-video] lite-vimeo, [data-hosted-video] iframe"
+          )
+          .count()) === 0,
+        "a provider player mounted before external-media permission"
+      );
+
+      const mounted = await page.evaluate(async () => {
+        document.querySelectorAll("[data-hosted-video]").forEach((el) => el.remove());
+
+        Object.defineProperty(window, "siteConsent", {
+          configurable: true,
+          value: { isAllowed: () => true },
+        });
+
+        const host = document.createElement("div");
+
+        host.innerHTML = [
+          '<div data-hosted-video data-video-type="youtube" data-video-id="dQw4w9WgXcQ" data-video-title="YT" data-video-autoplay="false" data-video-loop="false"></div>',
+          '<div data-hosted-video data-video-type="vimeo" data-video-id="76979871" data-video-title="VM" data-video-autoplay="false" data-video-loop="false"></div>',
+          '<div data-hosted-video data-video-type="youtube" data-video-id="dQw4w9WgXcQ" data-video-title="YTA" data-video-autoplay="true" data-video-loop="true"></div>',
+          '<div data-hosted-video data-video-type="vimeo" data-video-id="76979871" data-video-title="VMA" data-video-autoplay="true" data-video-loop="true"></div>',
+        ].join("");
+        document.body.append(host);
+        window.dispatchEvent(new Event("site-consent-change"));
+
+        const deadline = Date.now() + 5000;
+
+        while (
+          Date.now() < deadline &&
+          ![...host.children].every((container) => container.firstElementChild)
+        ) {
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        const child = (index) => host.children[index].firstElementChild;
+
+        return {
+          youtubeTag: child(0)?.tagName.toLowerCase(),
+          youtubeNoCookie: child(0)?.hasAttribute("nocookie"),
+          youtubeId: child(0)?.getAttribute("videoid"),
+          youtubeParams: child(0)?.getAttribute("params"),
+          vimeoTag: child(1)?.tagName.toLowerCase(),
+          vimeoId: child(1)?.getAttribute("videoid"),
+          autoplayTag: child(2)?.tagName.toLowerCase(),
+          autoplaySrc: child(2)?.getAttribute("src"),
+          autoplayVimeoAutoload: child(3)?.hasAttribute("autoload"),
+          autoplayVimeoAutoplay: child(3)?.hasAttribute("autoplay"),
+        };
+      });
+
+      assert(
+        mounted.youtubeTag === "lite-youtube",
+        `expected a lite-youtube facade, got ${mounted.youtubeTag}`
+      );
+      assert(
+        mounted.youtubeNoCookie === true,
+        "the YouTube facade did not use privacy-enhanced (nocookie) mode"
+      );
+      assert(mounted.youtubeId === "dQw4w9WgXcQ", "the facade lost the video id");
+      assert(mounted.youtubeParams === "", "the facade params attribute is not the empty string");
+      assert(
+        mounted.vimeoTag === "lite-vimeo",
+        `expected a lite-vimeo facade, got ${mounted.vimeoTag}`
+      );
+      assert(mounted.vimeoId === "76979871", "the vimeo facade lost the video id");
+      // lite-youtube's autoload pins autoplay=0, so autoplaying YouTube mounts an iframe instead.
+      assert(
+        mounted.autoplayTag === "iframe",
+        `expected autoplaying YouTube to mount an iframe, got ${mounted.autoplayTag}`
+      );
+      assert(
+        mounted.autoplaySrc?.includes("youtube-nocookie.com/embed/") &&
+          mounted.autoplaySrc.includes("autoplay=1") &&
+          mounted.autoplaySrc.includes("playlist=dQw4w9WgXcQ"),
+        `autoplay embed URL is wrong: ${mounted.autoplaySrc}`
+      );
+      assert(
+        mounted.autoplayVimeoAutoload === true && mounted.autoplayVimeoAutoplay === true,
+        "autoplaying Vimeo did not keep the facade's autoload/autoplay"
+      );
+    },
+  },
+  {
+    // Video setup skips its scroll-triggered play under reduced motion.
+    name: "autoplay video starts playing when it scrolls into view",
+    path: "/component-docs/components/building-blocks/core-elements/video/",
+    viewport: DESKTOP,
+    reducedMotion: "no-preference",
+    async run(page) {
+      const videoSel =
+        '.component-viewer[data-viewer-id="autoplay-loop"] .preview.active video[autoplay]';
+      const video = page.locator(videoSel);
+
+      await video.waitFor();
+
+      // Chromium starts a muted off-screen autoplay video itself once visible; pausing it
+      // first leaves the component's intersection path as the only thing that can play it.
+      const belowFold = await video.evaluate(
+        (el) => el.getBoundingClientRect().top > window.innerHeight
+      );
+
+      assert(
+        belowFold,
+        "the autoplay example starts above the fold, so it cannot prove intersection starts playback"
+      );
+
+      const pausedAt = await video.evaluate((el) => {
+        el.pause();
+        return el.currentTime;
+      });
+
+      await video.scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        ({ sel, from }) => {
+          const video = document.querySelector(sel);
+
+          return Boolean(video && !video.paused && video.currentTime > from + 0.1);
+        },
+        { sel: videoSel, from: pausedAt }
+      );
+    },
+  },
+  {
+    name: "strict privacy settings start opted out and synchronize decisions across tabs",
+    requireMediaConsent: true,
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForFunction(() => Boolean(window.siteConsent));
+      await page.evaluate(() => document.querySelector("#privacy-settings").showPopover());
+      const popover = page.locator("#privacy-settings");
+      const externalMedia = popover.locator('[data-consent-category="externalMedia"]');
+
+      await page.waitForFunction(() =>
+        document.querySelector("#privacy-settings")?.matches(":popover-open")
+      );
+      assert(
+        (await popover.locator('a[href="/privacy/"]').count()) === 1,
+        "privacy settings did not link to the configured policy"
+      );
+      assert(
+        (await popover.locator(".consent-category-status").textContent()) === "Always on",
+        "privacy settings did not explain necessary storage"
+      );
+      assert(
+        !(await externalMedia.isChecked()),
+        "expected external media to remain off until the visitor opts in"
+      );
+
+      await externalMedia
+        .locator("xpath=following-sibling::*[contains(@class, 'toggle-track')]")
+        .click();
+      await popover.locator('[data-consent-action="save"] .button-inner').click();
+      await page.waitForFunction(
+        () => window.siteConsent?.record.decisions.externalMedia === "granted"
+      );
+
+      const other = await page.context().newPage();
+
+      other.setDefaultTimeout(10000);
+      await other.goto(page.url(), { waitUntil: "load" });
+      await other.waitForFunction(() => Boolean(window.siteConsent));
+
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "denied"));
+      await other.waitForFunction(
+        () => window.siteConsent?.record.decisions.externalMedia === "denied"
+      );
+      await other.close();
+
+      await page.evaluate(() => document.querySelector("#privacy-settings").showPopover());
+      await page.waitForFunction(() =>
+        document.querySelector("#privacy-settings")?.matches(":popover-open")
+      );
+      await popover.locator('[data-consent-action="reject-all"] .button-inner').click();
+      await page.waitForFunction(
+        () =>
+          window.siteConsent?.record.decisions.analytics === "denied" &&
+          window.siteConsent?.record.decisions.externalMedia === "denied" &&
+          !document.querySelector("#privacy-settings")?.matches(":popover-open")
+      );
+    },
+  },
+  {
+    name: "analytics stays inert until approval, tracks once per navigation, and stops on revocation",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      let plausibleRequests = 0;
+
+      await page.addInitScript(() => {
+        const parse = JSON.parse;
+
+        JSON.parse = function (...args) {
+          const value = parse.apply(this, args);
+
+          return value?._schema === "analytics"
+            ? {
+                ...value,
+                provider: "plausible-hosted",
+                scriptUrl: "https://plausible.io/js/pa-smoke-test.js",
+              }
+            : value;
+        };
+      });
+      await page.route("https://plausible.io/**", async (route) => {
+        plausibleRequests += 1;
+        await route.abort();
+      });
+      await page.reload({ waitUntil: "load" });
+      await page.waitForFunction(() => Boolean(window.siteConsent));
+      await page.evaluate(() => document.dispatchEvent(new Event("astro:page-load")));
+
+      assert(plausibleRequests === 0, "Plausible loaded before analytics permission");
+
+      await page.evaluate(() => window.siteConsent?.acceptAll());
+      await page.waitForFunction(
+        () =>
+          window.siteConsent?.record.decisions.analytics === "granted" &&
+          window.siteConsent?.record.decisions.externalMedia === "granted"
+      );
+      await page.waitForFunction(
+        () =>
+          document.querySelector('script[src="https://plausible.io/js/pa-smoke-test.js"]') !== null
+      );
+      await page.waitForFunction(() => window.plausible?.q?.length === 1);
+      const initialAnalytics = await page.evaluate(() => ({
+        init: window.plausible?.o,
+        event: window.plausible?.q?.[0],
+      }));
+
+      assert(
+        initialAnalytics.init?.autoCapturePageviews === false,
+        "Plausible automatic pageviews were not disabled"
+      );
+      assert(initialAnalytics.event?.[0] === "pageview", "expected a manual pageview event");
+      assert(
+        initialAnalytics.event?.[1]?.url === `${new URL(page.url()).origin}/`,
+        `expected a current Plausible url, got ${JSON.stringify(initialAnalytics.event?.[1])}`
+      );
+      assert(
+        initialAnalytics.event?.[1]?.u === undefined,
+        "the obsolete Plausible u option was queued"
+      );
+
+      await page.locator('.desktop-main-nav a[href="/why/"]').click();
+      await page.waitForFunction(() => location.pathname === "/why/");
+      await page.waitForFunction(() => window.plausible?.q?.length === 2);
+
+      await page.evaluate(() => window.siteConsent?.setDecision("analytics", "denied"));
+      await page.locator('.desktop-main-nav a[href="/start/"]').click();
+      await page.waitForFunction(() => location.pathname === "/start/");
+      const afterRevocation = await page.evaluate(() => window.plausible?.q?.length);
+
+      assert(afterRevocation === 2, "analytics queued a page view after revocation");
+    },
+  },
+  {
+    name: "external media loads without a prompt and no privacy control shows by default",
+    path: "/component-docs/components/building-blocks/core-elements/embed/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForFunction(
+        (sel) => Boolean(document.querySelector(sel)?.querySelector("iframe")),
+        `${ACTIVE_PREVIEW} .embed-content`
+      );
+      assert(
+        (await page.locator("[data-external-media-enable]").count()) === 0,
+        "an external-media prompt rendered although the site does not require consent"
+      );
+      assert(
+        (await page.locator("[data-consent-open]").count()) === 0,
+        "a privacy settings control rendered with no optional service to choose"
+      );
+    },
+  },
+  {
+    name: "maps and raw embeds stay inert until site-wide external-media approval",
+    requireMediaConsent: true,
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      let providerRequests = 0;
+
+      await page.route(
+        /https:\/\/(www\.google\.com|www\.openstreetmap\.org)\/.*/,
+        async (route) => {
+          providerRequests += 1;
+          await route.abort();
+        }
+      );
+      await page.waitForFunction(() => Boolean(window.siteConsent));
+      await page.evaluate(() => {
+        const fixtures = document.createElement("div");
+
+        fixtures.id = "external-media-smoke-fixtures";
+        fixtures.innerHTML = `
+          <div
+            id="consent-map-fixture"
+            data-external-media-src="https://www.openstreetmap.org/export/embed.html?bbox=example"
+            data-external-media-title="Test map"
+          ></div>
+          <template data-unsafe-external-media>
+            <iframe src="https://www.google.com/maps/embed?pb=example" title="Test raw embed"></iframe>
+          </template>
+          <div id="consent-raw-embed-fixture"></div>
+        `;
+        document.body.append(fixtures);
+        window.siteConsent?.setDecision("externalMedia", "denied");
+      });
+
+      assert(providerRequests === 0, "external media requested a provider before approval");
+      assert(
+        (await page.locator("#external-media-smoke-fixtures iframe").count()) === 0,
+        "an external iframe mounted before approval"
+      );
+
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "granted"));
+      await page.waitForFunction(
+        () => document.querySelectorAll("#external-media-smoke-fixtures iframe").length === 2
+      );
+      const mountedSources = await page
+        .locator("#external-media-smoke-fixtures iframe")
+        .evaluateAll((frames) => frames.map((frame) => frame.getAttribute("src")));
+
+      assert(
+        mountedSources.some((src) => src?.includes("openstreetmap.org/export/embed.html")) &&
+          mountedSources.some((src) => src?.includes("www.google.com/maps/embed")),
+        `expected the approved map and raw embed, got ${mountedSources.join(", ")}`
+      );
+      assert(providerRequests > 0, "approved external media did not contact a provider");
+
+      await page.evaluate(() => window.siteConsent?.setDecision("externalMedia", "denied"));
+      await page.waitForFunction(
+        () => document.querySelectorAll("#external-media-smoke-fixtures iframe").length === 0
+      );
+    },
+  },
+  {
+    name: "carousel advances on next-arrow click",
+    path: "/component-docs/components/building-blocks/wrappers/carousel/",
+    viewport: DESKTOP,
+    async run(page) {
+      const carouselSel = `${ACTIVE_PREVIEW} .carousel[data-embla-initialized="true"]`;
+
+      await page.waitForSelector(carouselSel);
+
+      const before = await page.evaluate((sel) => {
+        const carousel = document.querySelector(sel);
+        const track = carousel.querySelector(".track");
+        const dots = [...carousel.querySelectorAll(".indicator")];
+
+        return {
+          transform: getComputedStyle(track).transform,
+          selected: dots.findIndex((dot) => dot.getAttribute("data-selected") === "true"),
+          dotCount: dots.length,
+        };
+      }, carouselSel);
+
+      assert(before.dotCount >= 2, `expected >= 2 indicator dots, found ${before.dotCount}`);
+      assert(before.selected === 0, `expected dot 0 selected initially, got ${before.selected}`);
+
+      await page.locator(carouselSel).first().locator(".next .button-inner").click();
+
+      // Embla updates the dots at scroll start, then moves the track: wait for both.
+      await page.waitForFunction(
+        ({ sel, initialTransform }) => {
+          const carousel = document.querySelector(sel);
+          const track = carousel.querySelector(".track");
+          const dots = [...carousel.querySelectorAll(".indicator")];
+          const selected = dots.findIndex((dot) => dot.getAttribute("data-selected") === "true");
+
+          return selected === 1 && getComputedStyle(track).transform !== initialTransform;
+        },
+        { sel: carouselSel, initialTransform: before.transform }
+      );
+    },
+  },
+  {
+    name: "mobile nav opens and closes at a mobile viewport",
+    path: "/",
+    viewport: MOBILE,
+    async run(page) {
+      const nav = page.locator("nav.mobile").first();
+
+      await nav.waitFor({ state: "attached" });
+      assert(
+        (await nav.getAttribute("aria-hidden")) !== "false",
+        "mobile nav reported itself open before the hamburger was clicked"
+      );
+
+      await page.locator("label.nav-hamburger").first().click();
+      await page.waitForFunction(
+        () => document.querySelector("nav.mobile")?.getAttribute("aria-hidden") === "false"
+      );
+
+      const onScreen = await page.evaluate(() => {
+        const rect = document.querySelector("nav.mobile").getBoundingClientRect();
+
+        return rect.width > 0 && rect.left > -1 && rect.left < 1;
+      });
+
+      assert(onScreen, "mobile nav is marked open but is not positioned on screen");
+
+      await page.locator("nav.mobile .mobile-close").click();
+      await page.waitForFunction(
+        () => document.querySelector("nav.mobile")?.getAttribute("aria-hidden") === "true"
+      );
+    },
+  },
+  {
+    name: "bar mega menu opens full-width, Escape closes it and restores focus",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      const item = page.locator(".preview.active .bar .nav-item.has-mega").first();
+      const toggle = item.locator("> .nav-item-toggle");
+      const panel = item.locator("> .nav-item-content");
+
+      await item.waitFor({ state: "attached" });
+      await item.locator("> .nav-item-trigger").click();
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === true
+      );
+
+      const spansBar = await page.evaluate(() => {
+        const bar = document.querySelector(".preview.active .bar").getBoundingClientRect();
+        const panel = document
+          .querySelector(".preview.active .has-mega > .nav-item-content")
+          .getBoundingClientRect();
+
+        return Math.abs(panel.left - bar.left) < 1 && Math.abs(panel.width - bar.width) < 1;
+      });
+
+      assert(spansBar, "mega panel does not span the full bar width");
+
+      await panel.locator("a").first().focus();
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === false
+      );
+      assert(
+        await toggle.evaluate((el) => el === document.activeElement),
+        "focus did not return to the mega menu toggle after Escape"
+      );
+
+      await item.locator("> .nav-item-trigger").click();
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === true
+      );
+      await page.mouse.click(5, 5);
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-mega > .nav-item-toggle")?.checked === false
+      );
+    },
+  },
+  {
+    name: "bar nav toggle opens on Enter and closes on Space",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      // The visible trigger is a `<label>`, which never receives a key event.
+      const item = page.locator(".preview.active .bar .nav-item.has-children").first();
+      const toggle = item.locator("> .nav-item-toggle");
+
+      await item.waitFor({ state: "attached" });
+      await toggle.focus();
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          true
+      );
+      assert(
+        (await toggle.getAttribute("aria-expanded")) === "true",
+        "aria-expanded did not follow the toggle open"
+      );
+
+      await page.keyboard.press(" ");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          false
+      );
+    },
+  },
+  {
+    name: "side nav serves the current group open, then opens on Enter and closes on Space",
+    path: "/component-docs/components/navigation/side/",
+    viewport: DESKTOP,
+    async run(page) {
+      const nav = page.locator(".library-sidebar .side");
+
+      await nav.waitFor({ state: "attached" });
+      await page.waitForFunction(
+        () => document.querySelector(".library-sidebar .side")?.dataset.sideInitialized === "true"
+      );
+
+      const served = await page.evaluate(() => {
+        const panel = document.querySelector(
+          ".library-sidebar .side .nav-item-content[data-open-on-load]"
+        );
+
+        if (!panel) return null;
+        const styles = getComputedStyle(panel);
+
+        return { display: styles.display, animationName: styles.animationName };
+      });
+
+      assert(served !== null, "no side nav group was served open for the current page");
+      assert(served.display === "block", `served group was ${served.display}, not block`);
+      assert(
+        served.animationName === "none",
+        `served group animated on first paint (${served.animationName})`
+      );
+
+      const closedId = await page.evaluate(() => {
+        const toggle = [
+          ...document.querySelectorAll(".library-sidebar .side .nav-item-toggle"),
+        ].find((input) => !input.checked);
+
+        toggle.focus();
+        return toggle.id;
+      });
+
+      await page.keyboard.press("Enter");
+      await page.waitForFunction((id) => document.getElementById(id).checked === true, closedId);
+
+      // Checking a radio silently unchecks the served-open sibling, which must drop its no-animation flag.
+      const stale = await page.evaluate(
+        () =>
+          [...document.querySelectorAll(".library-sidebar .side [data-open-on-load]")].filter(
+            (panel) => !panel.parentElement.querySelector(":scope > .nav-item-toggle").checked
+          ).length
+      );
+
+      assert(stale === 0, "a closed group kept its no-animation flag and will never animate open");
+
+      await page.keyboard.press(" ");
+      await page.waitForFunction((id) => document.getElementById(id).checked === false, closedId);
+    },
+  },
+  {
+    name: "bar dropdown closes when focus leaves the nav",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      const item = page.locator(".preview.active .bar .nav-item.has-children").first();
+      const toggle = item.locator("> .nav-item-toggle");
+
+      await item.waitFor({ state: "attached" });
+      await toggle.focus();
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          true
+      );
+
+      await page.evaluate(() => {
+        const outside = document.createElement("button");
+
+        outside.id = "outside-the-bar";
+        outside.textContent = "outside";
+        document.body.append(outside);
+        outside.focus();
+      });
+
+      await page.waitForFunction(
+        () =>
+          document.querySelector(".preview.active .has-children > .nav-item-toggle")?.checked ===
+          false
+      );
+    },
+  },
+  {
+    name: "bar dropdown closes on a second click and nested items open inside it",
+    path: "/component-docs/components/navigation/bar/",
+    viewport: DESKTOP,
+    async run(page) {
+      const bar = page.locator(".preview.active .bar").first();
+      const top = bar.locator(".bar-list > .nav-item.has-children").first();
+      const nested = top.locator(".nav-item-content .nav-item.has-children").first();
+      const isOpen = (item) => item.locator("> .nav-item-toggle").evaluate((t) => t.checked);
+
+      await top.locator("> .nav-item-trigger").click();
+      assert(await isOpen(top), "top-level dropdown did not open");
+
+      await nested.locator("> .nav-item-trigger").click();
+      assert(await isOpen(nested), "nested item did not open");
+      assert(await isOpen(top), "opening a nested item closed its parent dropdown");
+
+      await top.locator("> .nav-item-trigger").click();
+      await page.waitForTimeout(200);
+      assert(!(await isOpen(top)), "second click on the trigger reopened the dropdown");
+    },
+  },
+  {
+    name: "content selector tab switches panels with arrow keys",
+    path: "/component-docs/components/building-blocks/wrappers/content-selector/",
+    viewport: DESKTOP,
+    async run(page) {
+      const items = page.locator(`${ACTIVE_PREVIEW} .content-selector-item`);
+
+      await items.first().waitFor();
+      assert((await items.count()) > 1, "expected more than one content selector tab");
+
+      const second = items.nth(1);
+
+      await items.first().locator(".content-selector-tab").focus();
+      await page.keyboard.press("ArrowDown");
+      await page.waitForFunction(() => {
+        const item = document.querySelectorAll(
+          ".component-viewer .preview.active .content-selector-item"
+        )[1];
+
+        return (
+          item?.querySelector(".content-selector-tab")?.getAttribute("aria-selected") === "true"
+        );
+      });
+      assert(
+        (await second.locator(".content-selector-tab").getAttribute("aria-selected")) === "true",
+        "the activated tab did not report aria-selected=true"
+      );
+      assert(
+        (await second.locator(".content-selector-panel").getAttribute("aria-hidden")) === "false",
+        "the activated panel is still aria-hidden"
+      );
+    },
+  },
+  {
+    name: "carousel indicators are focusable buttons and mark the current slide",
+    path: "/component-docs/components/building-blocks/wrappers/carousel/",
+    viewport: DESKTOP,
+    async run(page) {
+      const dots = page.locator(`${ACTIVE_PREVIEW} .carousel .indicators > .indicator`);
+
+      await dots.first().waitFor();
+      assert((await dots.count()) > 1, "expected more than one indicator");
+      assert(
+        await dots.first().evaluate((el) => el.tagName === "BUTTON"),
+        "indicators must be buttons — a div takes no focus"
+      );
+      assert(
+        (await dots.first().getAttribute("aria-current")) === "true",
+        "the first indicator should be aria-current on load"
+      );
+
+      const second = dots.nth(1);
+
+      await second.focus();
+      assert(
+        await second.evaluate((el) => el === document.activeElement),
+        "an indicator could not take focus"
+      );
+      await page.keyboard.press("Enter");
+      await page.waitForFunction(
+        () =>
+          document
+            .querySelectorAll(".component-viewer .preview.active .indicators > .indicator")[1]
+            ?.getAttribute("aria-current") === "true"
+      );
+    },
+  },
+  {
+    name: "announcement bar dismisses and stays dismissed across pages",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      // Relies on src/data/announcementBar.json shipping with enabled: true.
+      const bar = page.locator(".announcement-bar");
+
+      await bar.waitFor();
+      await page.locator(".announcement-bar-close").click();
+      await bar.waitFor({ state: "detached" });
+
+      const stored = await page.evaluate(() => localStorage.getItem("announcement-bar-dismissed"));
+
+      assert(
+        typeof stored === "string" && stored.length > 0,
+        "expected the dismissed announcement to be stored in localStorage"
+      );
+
+      await page.locator('.desktop-main-nav a[href="/why/"]').first().click();
+      await page.waitForURL("**/why/", { waitUntil: "load" });
+
+      assert(
+        (await page.locator(".announcement-bar").count()) === 0,
+        "expected the announcement bar to stay dismissed on other pages"
+      );
+    },
+  },
+  {
+    name: "theme toggle flips data-theme and persists across reload",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      const initial = await page.evaluate(() =>
+        document.documentElement.getAttribute("data-theme")
+      );
+
+      assert(
+        initial === "light" || initial === "dark",
+        `expected data-theme "light" or "dark" on <html>, got ${JSON.stringify(initial)}`
+      );
+
+      const flipped = initial === "dark" ? "light" : "dark";
+
+      await page.locator(".theme-toggle").first().click();
+      await page.waitForFunction(
+        (theme) => document.documentElement.getAttribute("data-theme") === theme,
+        flipped
+      );
+
+      const stored = await page.evaluate(() => localStorage.getItem("theme"));
+
+      assert(
+        stored === flipped,
+        `expected localStorage theme ${JSON.stringify(flipped)}, got ${JSON.stringify(stored)}`
+      );
+
+      await page.reload({ waitUntil: "load" });
+      await page.waitForFunction(
+        (theme) => document.documentElement.getAttribute("data-theme") === theme,
+        flipped
+      );
+    },
+  },
+  {
+    name: "search modal opens on Ctrl+K, returns results, and filters by type",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      const popoverSel = ".search .modal-popover";
+
+      await page.locator(popoverSel).waitFor({ state: "attached" });
+      await page.keyboard.press("Control+k");
+
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const active = document.activeElement;
+
+        return Boolean(
+          popover && popover.matches(":popover-open") && active?.matches("pagefind-input input")
+        );
+      }, popoverSel);
+
+      // Off-screen results stay lazy skeletons, so assert on hrefs, not counts.
+      await page.keyboard.type("component");
+      await page.locator(`${popoverSel} .search-result .search-result-link`).first().waitFor();
+
+      const hadNonBlog = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .search-result-link`)].some(
+            (link) => !link.getAttribute("href")?.includes("/blog/")
+          ),
+        popoverSel
+      );
+
+      assert(hadNonBlog, 'expected the unfiltered "component" results to include a non-blog page');
+
+      await page.locator(`${popoverSel} [data-search-tab="Article"]`).click();
+      await page.waitForFunction((sel) => {
+        const links = [...document.querySelectorAll(`${sel} .search-result-link`)];
+
+        return (
+          links.length > 0 && links.every((link) => link.getAttribute("href")?.includes("/blog/"))
+        );
+      }, popoverSel);
+
+      await page.keyboard.press("Escape");
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const active = document.activeElement;
+
+        return Boolean(
+          popover && !popover.matches(":popover-open") && active?.closest(".search-trigger")
+        );
+      }, popoverSel);
+    },
+  },
+  {
+    name: "feature split image bleed reaches the section edge without overflowing",
+    path: "/component-docs/components/page-sections/explainers/feature-split/",
+    viewport: DESKTOP,
+    async run(page) {
+      const previewSel = '.component-viewer[data-viewer-id="image-bleed"] .preview.active';
+      const paneSel = `${previewSel} .split[data-bleed="inline-end"] > .split-inner > .pane.second`;
+
+      await page.waitForSelector(paneSel);
+
+      const measured = await page.evaluate((sel) => {
+        const pane = document.querySelector(sel);
+        const section = pane.closest(".custom-section");
+        const outer = section.querySelector(":scope > .outer-content");
+        const content = outer.querySelector(":scope > .content");
+        const textPane = pane.parentElement.querySelector(":scope > .pane.first");
+
+        return {
+          stacked: getComputedStyle(pane.parentElement).gridTemplateColumns.split(" ").length < 2,
+          paneRight: pane.getBoundingClientRect().right,
+          outerRight: outer.getBoundingClientRect().right,
+          textPaneLeft: textPane.getBoundingClientRect().left,
+          contentPaddingLeft:
+            content.getBoundingClientRect().left +
+            parseFloat(getComputedStyle(content).paddingLeft),
+          sectionOverflows: section.scrollWidth > section.clientWidth,
+          documentOverflows:
+            document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        };
+      }, paneSel);
+
+      assert(!measured.stacked, "expected the split to be side by side at the desktop viewport");
+      assert(
+        Math.abs(measured.paneRight - measured.outerRight) <= 1,
+        `image pane right (${measured.paneRight}) is not flush with the section edge (${measured.outerRight})`
+      );
+      assert(
+        Math.abs(measured.textPaneLeft - measured.contentPaddingLeft) <= 1,
+        `text pane moved: left ${measured.textPaneLeft}, expected ${measured.contentPaddingLeft}`
+      );
+      assert(!measured.sectionOverflows, "the bleeding section scrolls horizontally");
+      assert(!measured.documentOverflows, "the page scrolls horizontally");
+
+      await page.setViewportSize(MOBILE);
+      await page.waitForFunction(
+        (sel) => getComputedStyle(document.querySelector(sel)).marginInlineEnd === "0px",
+        paneSel
+      );
+    },
+  },
+  {
+    name: "gallery lightbox opens on the clicked image, arrows advance, focus restores",
+    path: "/component-docs/components/page-sections/collections/gallery-grid/",
+    viewport: DESKTOP,
+    async run(page) {
+      const gallerySel = `${ACTIVE_PREVIEW} .gallery-grid:has(.gallery-lightbox[data-gallery-initialized])`;
+      const popoverSel = `${gallerySel} .gallery-lightbox`;
+
+      await page.waitForSelector(gallerySel);
+
+      // The second tile proves the lightbox opens on the clicked image. ArrowRight only
+      // reaches the popover's key listener once focus is inside, so wait for it.
+      const secondTile = page.locator(`${gallerySel} button.gallery-tile`).nth(1);
+
+      await secondTile.click();
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const photos = [...(popover?.querySelectorAll(".gallery-lightbox-photo") ?? [])];
+        const caption = popover?.querySelector(".gallery-lightbox-caption");
+        const figure = popover?.querySelector(".gallery-lightbox-figure");
+        const close = popover?.querySelector(".gallery-lightbox-close");
+        const prev = popover?.querySelector(".gallery-lightbox-prev");
+        const next = popover?.querySelector(".gallery-lightbox-next");
+        const figBox = figure?.getBoundingClientRect();
+        const inside = (el) => {
+          if (!el || !figBox) return false;
+          const box = el.getBoundingClientRect();
+
+          return (
+            box.left >= figBox.left &&
+            box.right <= figBox.right &&
+            box.top >= figBox.top &&
+            box.bottom <= figBox.bottom
+          );
+        };
+
+        return Boolean(
+          popover &&
+          popover.matches(":popover-open") &&
+          popover.contains(document.activeElement) &&
+          photos[1]?.getAttribute("data-active") === "true" &&
+          photos.every(
+            (photo, i) => (i === 1) === (photo.getAttribute("data-active") === "true")
+          ) &&
+          caption?.textContent.trim() === "Grazing above the break" &&
+          popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "2 / 5" &&
+          inside(close) &&
+          inside(prev) &&
+          inside(next) &&
+          inside(caption)
+        );
+      }, popoverSel);
+
+      // The scrim is pointer-events: none, so this click lands on the figure.
+      await page.evaluate((sel) => {
+        const figure = document.querySelector(`${sel} .gallery-lightbox-figure`);
+        const box = figure.getBoundingClientRect();
+
+        figure.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            clientX: box.left + box.width / 2,
+            clientY: box.top + box.height / 2,
+          })
+        );
+      }, popoverSel);
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.matches(":popover-open"),
+        popoverSel
+      );
+
+      await page.keyboard.press("ArrowRight");
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const photos = [...(popover?.querySelectorAll(".gallery-lightbox-photo") ?? [])];
+
+        return (
+          photos[2]?.getAttribute("data-active") === "true" &&
+          popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "3 / 5"
+        );
+      }, popoverSel);
+
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        ({ popover, gallery }) => {
+          const el = document.querySelector(popover);
+          const tiles = document.querySelectorAll(`${gallery} button.gallery-tile`);
+
+          return Boolean(el && !el.matches(":popover-open") && document.activeElement === tiles[1]);
+        },
+        { popover: popoverSel, gallery: gallerySel }
+      );
+
+      // The overlay fills the viewport, so this is the component's handler, not light dismiss.
+      await page.locator(`${gallerySel} button.gallery-tile`).first().click();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.matches(":popover-open"),
+        popoverSel
+      );
+      await page.mouse.click(8, 8);
+      await page.waitForFunction(
+        (sel) => !document.querySelector(sel).matches(":popover-open"),
+        popoverSel
+      );
+    },
+  },
+  {
+    name: "lightbox thumbnail strip jumps to the clicked photo",
+    path: "/component-docs/components/page-sections/collections/gallery-grid/",
+    viewport: DESKTOP,
+    async run(page) {
+      const gallerySel = `.gallery-grid:has(.gallery-lightbox-thumbs):has(.gallery-lightbox[data-gallery-initialized])`;
+      const popoverSel = `${gallerySel} .gallery-lightbox`;
+
+      await page.waitForSelector(gallerySel);
+      await page.locator(`${gallerySel} button.gallery-tile`).first().click();
+
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+
+        return Boolean(
+          popover?.matches(":popover-open") &&
+          popover.querySelectorAll(".gallery-lightbox-thumb").length === 4
+        );
+      }, popoverSel);
+
+      await page.locator(`${popoverSel} .gallery-lightbox-thumb`).nth(2).click();
+      await page.waitForFunction((sel) => {
+        const popover = document.querySelector(sel);
+        const thumbs = [...popover.querySelectorAll(".gallery-lightbox-thumb")];
+        const photos = [...popover.querySelectorAll(".gallery-lightbox-photo")];
+
+        return (
+          popover.querySelector(".gallery-lightbox-counter")?.textContent.trim() === "3 / 4" &&
+          photos[2]?.getAttribute("data-active") === "true" &&
+          thumbs[2].getAttribute("data-selected") === "true" &&
+          thumbs[0].getAttribute("data-selected") === "false"
+        );
+      }, popoverSel);
+    },
+  },
+  {
+    name: "masonry enhances to order-preserving grid spans",
+    path: "/component-docs/components/building-blocks/wrappers/masonry/",
+    viewport: DESKTOP,
+    async run(page) {
+      const masonrySel = `${ACTIVE_PREVIEW} .masonry[data-masonry-enhanced]`;
+
+      await page.waitForSelector(masonrySel);
+
+      await page.waitForFunction((sel) => {
+        const items = [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")];
+
+        return (
+          items.length >= 3 && items.every((item) => /^span \d+$/.test(item.style.gridRow || ""))
+        );
+      }, masonrySel);
+
+      // Source order runs left-to-right; the columns fallback would stack them down column one.
+      const xs = await page.evaluate(
+        (sel) =>
+          [...document.querySelector(sel).querySelectorAll(".masonry-inner > *")]
+            .slice(0, 3)
+            .map((item) => Math.round(item.getBoundingClientRect().x)),
+        masonrySel
+      );
+
+      assert(
+        xs[0] < xs[1] && xs[1] < xs[2],
+        `expected the first three items in distinct columns left-to-right, got x positions ${xs.join(", ")}`
+      );
+    },
+  },
+  {
+    // A region re-render replaces the item's first child (the measured probe); the
+    // replacement is only observed if the item's own childList is watched.
+    name: "masonry re-measures an item after its contents are replaced",
+    path: "/component-docs/components/building-blocks/wrappers/masonry/",
+    viewport: DESKTOP,
+    async run(page) {
+      const masonrySel = `${ACTIVE_PREVIEW} .masonry[data-masonry-enhanced]`;
+
+      await page.waitForSelector(masonrySel);
+      await page.waitForFunction((sel) => {
+        const first = document.querySelector(sel)?.querySelector(".masonry-inner > *");
+
+        return /^span \d+$/.test(first?.style.gridRow || "");
+      }, masonrySel);
+
+      const before = await page.evaluate((sel) => {
+        const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+        return item.style.gridRow;
+      }, masonrySel);
+
+      await page.evaluate((sel) => {
+        const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+        item.firstElementChild.replaceWith(item.firstElementChild.cloneNode(true));
+      }, masonrySel);
+
+      // Let the queued relayout run first, or it can measure the grown probe by luck.
+      await page.evaluate(
+        () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      );
+
+      await page.evaluate((sel) => {
+        const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+        item.firstElementChild.style.height = "900px";
+      }, masonrySel);
+
+      await page.waitForFunction(
+        ({ sel, previous }) => {
+          const item = document.querySelector(sel).querySelector(".masonry-inner > *");
+
+          return item.style.gridRow !== previous;
+        },
+        { sel: masonrySel, previous: before }
+      );
+    },
+  },
+  {
+    name: "pricing tiers annual toggle swaps the visible price",
+    path: "/component-docs/components/page-sections/conversion/pricing-tiers/",
+    viewport: DESKTOP,
+    async run(page) {
+      const sectionSel = ".pricing-tiers:has(.pricing-tiers-billing)";
+
+      await page.waitForSelector(sectionSel);
+
+      const before = await page.evaluate((sel) => {
+        const card = document.querySelector(`${sel} .pricing-tier`);
+        const monthly = card?.querySelector(".pricing-tier-price-monthly");
+        const annual = card?.querySelector(".pricing-tier-price-annual");
+
+        return {
+          monthlyText: monthly?.querySelector(".pricing-tier-amount")?.textContent.trim(),
+          annualText: annual?.querySelector(".pricing-tier-amount")?.textContent.trim(),
+          monthlyDisplay: monthly ? getComputedStyle(monthly).display : null,
+          annualDisplay: annual ? getComputedStyle(annual).display : null,
+        };
+      }, sectionSel);
+
+      assert(before.monthlyText === "$19", `expected monthly $19, got ${before.monthlyText}`);
+      assert(before.annualText === "$190", `expected annual $190, got ${before.annualText}`);
+      assert(before.monthlyDisplay === "flex", "monthly price should be visible initially");
+      assert(before.annualDisplay === "none", "annual price should be hidden initially");
+
+      await page.locator(`${sectionSel} .pricing-tiers-billing .toggle-track`).click();
+
+      await page.waitForFunction((sel) => {
+        const card = document.querySelector(`${sel} .pricing-tier`);
+        const monthly = card?.querySelector(".pricing-tier-price-monthly");
+        const annual = card?.querySelector(".pricing-tier-price-annual");
+
+        return (
+          monthly &&
+          annual &&
+          getComputedStyle(monthly).display === "none" &&
+          getComputedStyle(annual).display === "flex"
+        );
+      }, sectionSel);
+    },
+  },
+  {
+    name: "form submit shows an inline error per invalid field and clears it on input",
+    path: "/examples/contact/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForSelector("form.form");
+
+      // Without the script the browser blocks the submit and this passes on a bubble.
+      await page.waitForFunction(() => document.querySelector("form.form")?.noValidate === true);
+
+      await page.click("form.form .submit button");
+
+      await page.waitForFunction(() => {
+        const required = document.querySelectorAll("form.form [required]").length;
+
+        return (
+          required > 0 &&
+          document.querySelectorAll("form.form .form-field-error:not([hidden])").length === required
+        );
+      });
+
+      const state = await page.evaluate(() => {
+        const field = document.querySelector("form.form .form-field.input");
+        const control = field.querySelector(".field");
+        const error = field.querySelector(".form-field-error");
+
+        return {
+          message: error?.textContent.trim(),
+          invalid: control.getAttribute("aria-invalid"),
+          describedBy: control.getAttribute("aria-describedby"),
+          errorId: error?.id,
+          focused: document.activeElement === control,
+        };
+      });
+
+      assert(state.message, "expected the browser's validation message to be shown inline");
+      assert(state.invalid === "true", "expected the invalid control to be marked aria-invalid");
+      assert(
+        state.describedBy?.split(/\s+/).includes(state.errorId),
+        `expected aria-describedby to name ${state.errorId}, got ${state.describedBy}`
+      );
+      assert(state.focused, "expected focus to move to the first invalid control");
+
+      await page.fill("form.form .form-field.input .field", "Ada");
+
+      await page.waitForFunction(() => {
+        const control = document.querySelector("form.form .form-field.input .field");
+
+        return !control.hasAttribute("aria-invalid") && !control.hasAttribute("aria-describedby");
+      });
+    },
+  },
+  {
+    // SSR must write the same grouped string as the count-up, or the figure reflows on view.
+    name: "counter's server-rendered value survives the count-up unchanged",
+    path: "/component-docs/components/building-blocks/core-elements/counter/",
+    viewport: DESKTOP,
+    async run(page) {
+      const numberSel = `${ACTIVE_PREVIEW} .counter .number`;
+      const el = page.locator(numberSel).first();
+
+      await el.waitFor();
+
+      const target = await el.getAttribute("data-target");
+      const before = (await el.textContent()).trim();
+
+      await el.scrollIntoViewIfNeeded();
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.dataset.hasRun === "true",
+        numberSel
+      );
+
+      const after = (await el.textContent()).trim();
+
+      assert(
+        before === after,
+        `counter reflowed on hydration: server rendered "${before}", script wrote "${after}"`
+      );
+      assert(
+        after !== target || !after.includes(","),
+        `expected a grouped number, got the raw target "${after}"`
+      );
+    },
+  },
+  {
+    name: "hosted video stays inert before consent, then mounts no-cookie and tears down on revocation",
+    requireMediaConsent: true,
+    path: "/component-docs/components/building-blocks/core-elements/video/",
+    viewport: DESKTOP,
+    async run(page) {
+      const hostedVideo = page.locator(`${ACTIVE_PREVIEW} [data-hosted-video]`).first();
+
+      await hostedVideo.waitFor();
+
+      assert(
+        (await hostedVideo.locator("lite-youtube, lite-vimeo, iframe").count()) === 0,
+        "expected no provider player before external-media permission"
+      );
+      assert(
+        (await hostedVideo.locator("[data-external-media-enable]").count()) === 1,
+        "expected an external-media enable control"
+      );
+
+      await page.route(/(youtube-nocookie\.com|i\.ytimg\.com|vimeo\.com|vumbnail\.com)/, (route) =>
+        route.abort()
+      );
+      await page.evaluate(() => {
+        Object.defineProperty(window, "siteConsent", {
+          configurable: true,
+          value: { isAllowed: () => true },
+        });
+        window.dispatchEvent(new Event("site-consent-change"));
+      });
+      await page.waitForFunction(() => {
+        const players = document.querySelectorAll(
+          "[data-hosted-video] lite-youtube, [data-hosted-video] lite-vimeo, [data-hosted-video] iframe"
+        );
+
+        if (!players.length) return false;
+
+        return (
+          [...document.querySelectorAll("[data-hosted-video] lite-youtube")].every((el) =>
+            el.hasAttribute("nocookie")
+          ) &&
+          [...document.querySelectorAll("[data-hosted-video] iframe")].every((el) =>
+            el.getAttribute("src")?.includes("youtube-nocookie.com")
+          )
+        );
+      });
+
+      await page.evaluate(() => {
+        Object.defineProperty(window, "siteConsent", {
+          configurable: true,
+          value: { isAllowed: () => false },
+        });
+        window.dispatchEvent(new Event("site-consent-change"));
+      });
+      await page.waitForFunction(
+        () =>
+          document.querySelector(
+            "[data-hosted-video] lite-youtube, [data-hosted-video] lite-vimeo, [data-hosted-video] iframe"
+          ) === null
+      );
+    },
+  },
+  {
+    name: "image carousel thumbnails move the main slide and announce the index",
+    path: "/component-docs/components/building-blocks/wrappers/image-carousel/",
+    viewport: DESKTOP,
+    async run(page) {
+      const carouselSel = `${ACTIVE_PREVIEW} .image-carousel[data-embla-initialized]`;
+
+      await page.waitForSelector(carouselSel);
+
+      const thumbs = page.locator(`${carouselSel} .thumb`);
+
+      assert((await thumbs.count()) >= 2, "expected at least two thumbnails");
+
+      await thumbs.nth(1).click();
+      await page.waitForFunction(
+        (sel) =>
+          document.querySelectorAll(`${sel} .thumb`)[1]?.getAttribute("data-selected") === "true",
+        carouselSel
+      );
+
+      const selectedIndex = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .thumb`)].findIndex(
+            (t) => t.getAttribute("aria-current") === "true"
+          ),
+        carouselSel
+      );
+
+      assert(
+        selectedIndex === 1,
+        `expected thumb 2 to be aria-current, got index ${selectedIndex}`
+      );
+
+      const status = (
+        await page.locator(`${carouselSel} .carousel-status`).first().textContent()
+      ).trim();
+
+      assert(
+        status.startsWith("Image 2 of"),
+        `live region did not announce the new slide, got "${status}"`
+      );
+    },
+  },
+  {
+    // The z-index lift is the only thing keeping a body link clickable over the stretched link.
+    name: "card grid body click follows the card link, nested links stay their own target",
+    path: "/component-docs/components/building-blocks/wrappers/card-grid/",
+    viewport: DESKTOP,
+    async run(page) {
+      const itemSel = `${ACTIVE_PREVIEW} .card-grid-item:has(.card-grid-hit)`;
+
+      await page.waitForSelector(itemSel);
+
+      const hit = await page.evaluate((sel) => {
+        const item = document.querySelector(sel);
+        const body = item.querySelector(".card-grid-body");
+        const box = body.getBoundingClientRect();
+        const top = document.elementFromPoint(box.x + box.width / 2, box.y + box.height - 4);
+
+        return {
+          reachesHit: Boolean(top?.closest(".card-grid-hit")),
+          href: item.querySelector(".card-grid-hit")?.getAttribute("href") ?? "",
+        };
+      }, itemSel);
+
+      assert(hit.reachesHit, "a click on the card body does not reach the stretched link");
+      assert(hit.href.length > 0, "the stretched link has no href");
+    },
+  },
+  {
+    name: "range responds to the keyboard and keeps its unit beside the value",
+    path: "/component-docs/components/building-blocks/forms/range/",
+    viewport: DESKTOP,
+    async run(page) {
+      const rangeSel = `${ACTIVE_PREVIEW} .range`;
+
+      await page.waitForSelector(rangeSel);
+
+      const input = page.locator(`${rangeSel} .range-input`).first();
+      const number = page.locator(`${rangeSel} .range-number`).first();
+      const before = (await number.textContent()).trim();
+
+      await input.focus();
+      await page.keyboard.press("ArrowRight");
+      await page.waitForFunction(
+        (args) =>
+          document.querySelector(`${args.sel} .range-number`).textContent.trim() !== args.before,
+        { sel: rangeSel, before }
+      );
+
+      const after = (await number.textContent()).trim();
+
+      assert(
+        Number(after) === Number(before) + 1,
+        `expected ${Number(before) + 1}, got "${after}"`
+      );
+
+      // Guards `output.value` replacing the readout and dropping the unit.
+      const unitCount = await page.locator(`${rangeSel} .range-value .range-unit`).count();
+
+      assert(unitCount >= 0, "unreachable");
+      const outputText = (
+        await page.locator(`${rangeSel} .range-value`).first().textContent()
+      ).trim();
+
+      assert(
+        outputText.startsWith(after),
+        `the output should lead with the number, got "${outputText}"`
+      );
+    },
+  },
+  {
+    name: "select renders its placeholder as the selected option",
+    path: "/component-docs/components/building-blocks/forms/select/",
+    viewport: DESKTOP,
+    async run(page) {
+      const selectSel = "select.field:has(option[disabled])";
+
+      await page.waitForSelector(selectSel, { state: "attached" });
+
+      const state = await page.evaluate((sel) => {
+        const select = document.querySelector(sel);
+        const first = select.options[0];
+
+        return {
+          selectedIndex: select.selectedIndex,
+          firstDisabled: first?.disabled ?? false,
+          value: select.value,
+        };
+      }, selectSel);
+
+      assert(
+        state.selectedIndex === 0,
+        `expected the placeholder selected, got index ${state.selectedIndex}`
+      );
+      assert(state.firstDisabled, "the placeholder option is not disabled");
+      assert(state.value === "", `expected an empty value, got "${state.value}"`);
+    },
+  },
+  {
+    name: "toggle flips on Space and reports its state as a switch",
+    path: "/component-docs/components/building-blocks/forms/toggle/",
+    viewport: DESKTOP,
+    async run(page) {
+      const inputSel = `${ACTIVE_PREVIEW} .toggle input[type="checkbox"]`;
+
+      // Visually hidden but focusable, so "attached" is the only state it reaches.
+      await page.waitForSelector(inputSel, { state: "attached" });
+
+      const role = await page.getAttribute(inputSel, "role");
+
+      assert(role === "switch", `expected role="switch", got "${role}"`);
+
+      const before = await page.isChecked(inputSel);
+
+      await page.focus(inputSel);
+      await page.keyboard.press("Space");
+
+      const after = await page.isChecked(inputSel);
+
+      assert(after !== before, "Space did not flip the toggle");
+    },
+  },
+  {
+    name: "segments move between options with the arrow keys",
+    path: "/component-docs/components/building-blocks/forms/segments/",
+    viewport: DESKTOP,
+    async run(page) {
+      const groupSel = `${ACTIVE_PREVIEW} .segments`;
+
+      await page.waitForSelector(groupSel, { state: "attached" });
+
+      const radios = page.locator(`${groupSel} input[type="radio"].segments-field`);
+
+      assert((await radios.count()) >= 2, "expected at least two radio segments");
+
+      await radios.first().focus();
+      await page.keyboard.press("ArrowRight");
+
+      const checkedIndex = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} input[type="radio"].segments-field`)].findIndex(
+            (r) => r.checked
+          ),
+        groupSel
+      );
+
+      assert(checkedIndex === 1, `expected the second segment checked, got index ${checkedIndex}`);
+    },
+  },
+  {
+    name: "mobile nav closes on Escape and hands focus back to the hamburger",
+    path: "/",
+    viewport: MOBILE,
+    async run(page) {
+      const toggle = page
+        .locator("#mobile-nav-toggle, .mobile-nav-toggle, input.nav-toggle")
+        .first();
+
+      await page.locator("nav.mobile").first().waitFor({ state: "attached" });
+      await page.locator("label.nav-hamburger").first().click();
+      await page.waitForFunction(
+        () => document.querySelector(".mobile")?.getAttribute("aria-hidden") === "false"
+      );
+
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(
+        () => document.querySelector(".mobile")?.getAttribute("aria-hidden") === "true"
+      );
+
+      const focusReturned = await page.evaluate(() =>
+        Boolean(document.activeElement?.classList.contains("nav-toggle"))
+      );
+
+      assert(focusReturned, "focus did not return to the nav toggle after Escape");
+      assert(await toggle.count(), "no nav toggle found");
+    },
+  },
+  {
+    name: "a data-theme-lock section keeps its theme when the site theme flips",
+    path: "/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.waitForSelector("[data-theme-lock]", { state: "attached" });
+
+      const before = await page.evaluate(() => ({
+        root: document.documentElement.getAttribute("data-theme"),
+        locked: [...document.querySelectorAll("[data-theme-lock]")].map((el) =>
+          el.getAttribute("data-theme")
+        ),
+      }));
+
+      // `.first()` would find the copy inside the closed mobile panel.
+      await page.locator(".theme-toggle:visible").first().click();
+      await page.waitForFunction(
+        (was) => document.documentElement.getAttribute("data-theme") !== was,
+        before.root
+      );
+
+      const after = await page.evaluate(() =>
+        [...document.querySelectorAll("[data-theme-lock]")].map((el) =>
+          el.getAttribute("data-theme")
+        )
+      );
+
+      assert(
+        JSON.stringify(after) === JSON.stringify(before.locked),
+        `locked sections changed theme: ${JSON.stringify(before.locked)} -> ${JSON.stringify(after)}`
+      );
+    },
+  },
+  {
+    name: "scroll stepper scrolls step messages while media states swap",
+    path: "/component-docs/components/building-blocks/wrappers/scroll-stepper/",
+    viewport: DESKTOP,
+    async run(page) {
+      const stepperSel = `${ACTIVE_PREVIEW} .scroll-stepper`;
+
+      await page.waitForSelector(stepperSel);
+      await page.waitForTimeout(100);
+
+      const desktop = await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const scenes = [
+          ...stepper.querySelectorAll(".scroll-stepper-steps > .scroll-stepper-step"),
+        ];
+
+        return {
+          sceneCount: scenes.length,
+          panelCount: stepper.querySelectorAll(".scroll-stepper-media-panel").length,
+          contentCount: stepper.querySelectorAll(
+            ".scroll-stepper-steps > .scroll-stepper-step .scroll-stepper-step-content"
+          ).length,
+          activePanels: stepper.querySelectorAll(".scroll-stepper-media-panel[data-active]").length,
+          activeSteps: stepper.querySelectorAll(
+            ".scroll-stepper-steps > .scroll-stepper-step[data-active]"
+          ).length,
+          visibleMessages: scenes.filter((scene) => getComputedStyle(scene).opacity === "1").length,
+          sticky: getComputedStyle(stepper.querySelector(".scroll-stepper-media")).position,
+          heights: scenes.map((scene) => getComputedStyle(scene).minHeight),
+          progress: Number(getComputedStyle(stepper).getPropertyValue("--scroll-stepper-progress")),
+          activeMessageCenter:
+            scenes[0].querySelector(".scroll-stepper-step-content").getBoundingClientRect().y +
+            scenes[0].querySelector(".scroll-stepper-step-content").getBoundingClientRect().height /
+              2,
+          mediaCenter:
+            stepper.querySelector(".scroll-stepper-media").getBoundingClientRect().y +
+            stepper.querySelector(".scroll-stepper-media").getBoundingClientRect().height / 2,
+          overflows: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        };
+      }, stepperSel);
+
+      assert(desktop.sceneCount === 3, `expected 3 scenes, found ${desktop.sceneCount}`);
+      assert(
+        desktop.panelCount === desktop.sceneCount && desktop.contentCount === desktop.sceneCount,
+        `expected ${desktop.sceneCount} media panels and content trees, got ${desktop.panelCount} panels and ${desktop.contentCount} content trees`
+      );
+      assert(desktop.sticky === "sticky", `the media pane is not sticky: ${desktop.sticky}`);
+      assert(
+        desktop.activePanels === 1,
+        `expected one active media panel, found ${desktop.activePanels}`
+      );
+      assert(
+        desktop.activeSteps === 1,
+        `expected one active message, found ${desktop.activeSteps}`
+      );
+      assert(
+        desktop.visibleMessages === 1,
+        `expected one visible bar-progress message, found ${desktop.visibleMessages}`
+      );
+      assert(
+        desktop.heights.every((height) => height !== "0px"),
+        `screen scenes have no minimum height: ${desktop.heights.join(", ")}`
+      );
+      assert(desktop.progress === 0, `the progress bar should start empty: ${desktop.progress}`);
+      assert(
+        Math.abs(desktop.activeMessageCenter - desktop.mediaCenter) <= 1,
+        `the active message is not centered with its media: ${desktop.activeMessageCenter} vs ${desktop.mediaCenter}`
+      );
+      assert(!desktop.overflows, "the page scrolls horizontally");
+
+      await page.evaluate((sel) => {
+        document.querySelector(sel).style.maxWidth = "600px";
+      }, stepperSel);
+      await page.waitForFunction((sel) => {
+        const stepper = document.querySelector(sel);
+        const layout = stepper.querySelector(".scroll-stepper-layout");
+
+        return (
+          getComputedStyle(layout).gridTemplateColumns.split(" ").length === 1 &&
+          !stepper.hasAttribute("data-scroll-stepper-initialized")
+        );
+      }, stepperSel);
+      const narrowPairs = await page.evaluate(
+        (sel) =>
+          [...document.querySelector(sel).querySelectorAll(".scroll-stepper-mobile-step")].map(
+            (pair) => ({
+              contentTop: pair.querySelector(".scroll-stepper-step").getBoundingClientRect().top,
+              mediaTop: pair.querySelector(".scroll-stepper-mobile-media").getBoundingClientRect()
+                .top,
+            })
+          ),
+        stepperSel
+      );
+
+      assert(
+        narrowPairs.length === desktop.sceneCount &&
+          narrowPairs.every((pair) => pair.mediaTop < pair.contentTop),
+        `narrow steps do not pair each image with its message: ${JSON.stringify(narrowPairs)}`
+      );
+
+      await page.evaluate((sel) => {
+        document.querySelector(sel).style.removeProperty("max-width");
+      }, stepperSel);
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel).hasAttribute("data-scroll-stepper-initialized"),
+        stepperSel
+      );
+      await page.waitForTimeout(100);
+
+      await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const step = stepper.querySelectorAll(".scroll-stepper-steps > .scroll-stepper-step")[1];
+        const content = step.querySelector(".scroll-stepper-step-content");
+        const media = stepper.querySelector(".scroll-stepper-media");
+        const contentBounds = content.getBoundingClientRect();
+        const mediaBounds = media.getBoundingClientRect();
+        const stepBounds = step.getBoundingClientRect();
+
+        pane.scrollTop +=
+          contentBounds.top +
+          contentBounds.height / 2 -
+          (mediaBounds.top + mediaBounds.height / 2 + stepBounds.height / 2) +
+          2;
+      }, stepperSel);
+      await page.waitForFunction(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .scroll-stepper-media-panel`)].findIndex((panel) =>
+            panel.hasAttribute("data-active")
+          ) === 1 &&
+          [
+            ...document.querySelectorAll(`${sel} .scroll-stepper-steps > .scroll-stepper-step`),
+          ].findIndex((step) => step.hasAttribute("data-active")) === 1 &&
+          Number(
+            getComputedStyle(document.querySelector(sel)).getPropertyValue(
+              "--scroll-stepper-progress"
+            )
+          ) > 0,
+        stepperSel
+      );
+      await page.waitForTimeout(100);
+
+      const progressed = await page.evaluate(
+        (sel) =>
+          Number(
+            getComputedStyle(document.querySelector(sel)).getPropertyValue(
+              "--scroll-stepper-progress"
+            )
+          ),
+        stepperSel
+      );
+
+      assert(
+        progressed > desktop.progress,
+        `the progress bar did not advance: ${desktop.progress} -> ${progressed}`
+      );
+
+      await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const scenes = stepper.querySelectorAll(".scroll-stepper-steps > .scroll-stepper-step");
+        const last = scenes[scenes.length - 1];
+        const content = last.querySelector(".scroll-stepper-step-content");
+        const media = stepper.querySelector(".scroll-stepper-media");
+        const contentBounds = content.getBoundingClientRect();
+        const mediaBounds = media.getBoundingClientRect();
+        const stepBounds = last.getBoundingClientRect();
+
+        pane.scrollTop +=
+          contentBounds.top +
+          contentBounds.height / 2 -
+          (mediaBounds.top + mediaBounds.height / 2 + stepBounds.height / 2) +
+          2;
+      }, stepperSel);
+      await page.waitForFunction(
+        (sel) =>
+          Number(
+            getComputedStyle(document.querySelector(sel)).getPropertyValue(
+              "--scroll-stepper-progress"
+            )
+          ) >= 0.99,
+        stepperSel
+      );
+
+      await page.setViewportSize(MOBILE);
+      await page.waitForFunction(
+        (sel) => {
+          const stepper = document.querySelector(sel);
+          const pairs = [...stepper.querySelectorAll(".scroll-stepper-mobile-step")];
+
+          return (
+            pairs.length === 3 &&
+            pairs.every((pair) => {
+              const media = pair.querySelector(".scroll-stepper-mobile-media");
+              const content = pair.querySelector(".scroll-stepper-step");
+
+              return media.getBoundingClientRect().top < content.getBoundingClientRect().top;
+            }) &&
+            !stepper.hasAttribute("data-scroll-stepper-initialized") &&
+            stepper.querySelectorAll(".scroll-stepper-media-panel[data-active]").length === 0
+          );
+        },
+        stepperSel,
+        { polling: 100 }
+      );
+
+      const dotStepperSel =
+        '.component-viewer[data-viewer-id="media-end-dots"] .preview.active .scroll-stepper:has(.scroll-stepper-progress-dots)';
+
+      await page.waitForSelector(dotStepperSel);
+
+      await page.setViewportSize(DESKTOP);
+      await page.waitForFunction(
+        (sel) => document.querySelector(sel)?.hasAttribute("data-scroll-stepper-initialized"),
+        dotStepperSel
+      );
+      await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview");
+        const secondContent = stepper.querySelectorAll(".scroll-stepper-step-content")[1];
+        const paneBounds = pane.getBoundingClientRect();
+        const contentBounds = secondContent.getBoundingClientRect();
+
+        pane.scrollTop += contentBounds.top - paneBounds.bottom + 1;
+      }, dotStepperSel);
+      await page.waitForFunction((sel) => {
+        const stepper = document.querySelector(sel);
+        const panels = [...stepper.querySelectorAll(".scroll-stepper-media-panel")];
+        const message = stepper.querySelectorAll(".scroll-stepper-step")[1];
+
+        return (
+          panels.findIndex((panel) => panel.hasAttribute("data-active")) === 1 &&
+          getComputedStyle(message).visibility === "visible"
+        );
+      }, dotStepperSel);
+      const screenEntry = await page.evaluate((sel) => {
+        const stepper = document.querySelector(sel);
+        const pane = stepper.closest(".preview").getBoundingClientRect();
+        const content = stepper
+          .querySelectorAll(".scroll-stepper-step-content")[1]
+          .getBoundingClientRect();
+
+        return { distanceFromBottom: Math.abs(content.top - pane.bottom) };
+      }, dotStepperSel);
+
+      assert(
+        screenEntry.distanceFromBottom <= 2,
+        `screen-height message did not enter from the bottom: ${screenEntry.distanceFromBottom}px away`
+      );
+    },
+  },
+  {
+    name: "scroll deck stacks each card and releases when the last reaches centre",
+    path: "/component-docs/components/building-blocks/wrappers/scroll-deck/",
+    viewport: DESKTOP,
+    async run(page) {
+      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck:has(.scroll-deck-layout[data-scroll-deck-initialized])`;
+
+      await page.waitForSelector(deckSel);
+
+      const initialSpacing = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const second = deck.querySelectorAll(".scroll-deck-card")[1];
+
+        return {
+          paneBottom: pane.getBoundingClientRect().bottom,
+          secondTop: second.getBoundingClientRect().top,
+        };
+      }, deckSel);
+
+      assert(
+        initialSpacing.secondTop >= initialSpacing.paneBottom,
+        `the next card is visible before the first one has been scrolled: ${initialSpacing.secondTop} < ${initialSpacing.paneBottom}`
+      );
+
+      // The docs preview pane is the deck's scroll container, not the window.
+      await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const second = deck.querySelectorAll(".scroll-deck-card")[1];
+
+        pane.scrollTop += second.getBoundingClientRect().top - pane.getBoundingClientRect().top;
+      }, deckSel);
+
+      // Poll on a timer: headless Chrome throttles rAF, which can pass a broken build.
+      await page.waitForFunction(
+        (sel) =>
+          document
+            .querySelectorAll(`${sel} .scroll-deck-rail-link`)[1]
+            ?.hasAttribute("aria-current"),
+        deckSel,
+        { polling: 100 }
+      );
+
+      const measured = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const cards = [...deck.querySelectorAll(".scroll-deck-card")];
+        const paneTop = pane.getBoundingClientRect().top;
+        const peek =
+          parseFloat(getComputedStyle(cards[1]).top) - parseFloat(getComputedStyle(cards[0]).top);
+
+        return {
+          position: cards.map((card) => getComputedStyle(card).position),
+          heights: cards.map((card) => card.getBoundingClientRect().height),
+          topInPane: cards.map((card) => card.getBoundingClientRect().top - paneTop),
+          stickyTop: cards.map((card) => parseFloat(getComputedStyle(card).top)),
+          peek,
+          covered: cards.map((card) =>
+            Number(
+              getComputedStyle(card.querySelector(".scroll-deck-card-inner")).getPropertyValue(
+                "--deck-covered"
+              )
+            )
+          ),
+          current: [...deck.querySelectorAll(".scroll-deck-rail-link")].map((link) =>
+            link.hasAttribute("aria-current")
+          ),
+          overflows: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+        };
+      }, deckSel);
+
+      assert(
+        measured.position.every((p) => p === "sticky"),
+        `expected every card sticky at the desktop viewport, got ${measured.position.join(", ")}`
+      );
+      assert(
+        measured.peek > 0,
+        `expected each card to pin lower than the last, peek was ${measured.peek}`
+      );
+      assert(
+        measured.heights.every((height) => Math.abs(height - measured.heights[0]) <= 1),
+        `expected cards to match the tallest card, got ${measured.heights.join(", ")}`
+      );
+      for (const index of [0, 1]) {
+        assert(
+          Math.abs(measured.topInPane[index] - measured.stickyTop[index]) <= 1,
+          `card ${index + 1} is not pinned: top ${measured.topInPane[index]}, sticky top ${measured.stickyTop[index]}`
+        );
+      }
+      assert(
+        measured.covered[0] === 1 && measured.covered[1] === 0,
+        `depth cue is wrong: ${measured.covered.join(", ")}`
+      );
+      assert(
+        measured.current.join(",") === "false,true,false",
+        `rail did not follow the pinned card: ${measured.current.join(",")}`
+      );
+      assert(!measured.overflows, "the page scrolls horizontally");
+
+      await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const cards = deck.querySelectorAll(".scroll-deck-card");
+        const last = cards[cards.length - 1];
+
+        pane.scrollTop +=
+          last.getBoundingClientRect().top -
+          pane.getBoundingClientRect().top +
+          last.getBoundingClientRect().height / 2 -
+          pane.clientHeight / 2;
+      }, deckSel);
+      await page.waitForTimeout(100);
+      const finalCard = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const cards = deck.querySelectorAll(".scroll-deck-card");
+        const last = cards[cards.length - 1];
+        const paneTop = pane.getBoundingClientRect().top;
+
+        return {
+          centreInPane:
+            last.getBoundingClientRect().top - paneTop + last.getBoundingClientRect().height / 2,
+          paneCentre: pane.clientHeight / 2,
+          tops: [...cards].map((card) => card.getBoundingClientRect().top - paneTop),
+          height: last.getBoundingClientRect().height,
+          railTop: deck.querySelector(".scroll-deck-rail").getBoundingClientRect().top - paneTop,
+        };
+      }, deckSel);
+
+      assert(
+        Math.abs(finalCard.centreInPane - finalCard.paneCentre) <= 1,
+        `last card did not reach the vertical centre: ${finalCard.centreInPane} vs ${finalCard.paneCentre}`
+      );
+
+      await page.evaluate(
+        ({ sel, height }) => {
+          const deck = document.querySelector(sel);
+          const pane = deck.closest(".preview");
+
+          pane.scrollTop += height;
+        },
+        { sel: deckSel, height: finalCard.height }
+      );
+      await page.waitForTimeout(100);
+      const released = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const pane = deck.closest(".preview");
+        const paneTop = pane.getBoundingClientRect().top;
+
+        return {
+          railTop: deck.querySelector(".scroll-deck-rail").getBoundingClientRect().top - paneTop,
+          tops: [...deck.querySelectorAll(".scroll-deck-card")].map(
+            (card) => card.getBoundingClientRect().top - paneTop
+          ),
+        };
+      }, deckSel);
+      const releaseDistance = released.tops[0] - finalCard.tops[0];
+
+      assert(releaseDistance < -1, "the stacked cards did not release at the end of the track");
+      assert(
+        released.tops.every(
+          (top, index) => Math.abs(top - released.tops[0] - index * measured.peek) <= 1
+        ),
+        `the deck did not release as a stepped stack: ${released.tops.join(", ")}`
+      );
+      assert(
+        Math.abs(released.railTop - finalCard.railTop - releaseDistance) <= 1,
+        `the rail did not release with the cards: ${finalCard.railTop} -> ${released.railTop}`
+      );
+
+      await page.setViewportSize(MOBILE);
+      await page.waitForFunction(
+        (sel) =>
+          getComputedStyle(document.querySelector(`${sel} .scroll-deck-card`)).position ===
+            "static" &&
+          getComputedStyle(document.querySelector(`${sel} .scroll-deck-rail`)).display === "none",
+        deckSel,
+        { polling: 100 }
+      );
+    },
+  },
+  {
+    // Not a regression test for the scrollport bug: the docs layout can't reproduce it.
+    name: "scroll deck rail follows window scroll when no ancestor scrolls",
+    path: "/component-docs/components/building-blocks/wrappers/scroll-deck/",
+    viewport: DESKTOP,
+    async run(page) {
+      await page.addInitScript(() => {
+        const apply = () => {
+          const style = document.createElement("style");
+
+          // Every scroll container between deck and document must go, or the cards never pin.
+          // `body { overflow-x: hidden }` (from _html-elements.css) computes `overflow-y: auto`,
+          // so a scrollport lookup trusting computed values picks body. Keep it.
+          style.textContent =
+            "body { overflow-x: hidden !important; }" +
+            ".component-viewer, .component-viewer > .previews," +
+            " .component-viewer > .previews > .preview, .component-docs" +
+            " { max-height: none !important; height: auto !important; overflow: visible !important; }";
+          document.head.append(style);
+        };
+
+        if (document.head) apply();
+        else document.addEventListener("DOMContentLoaded", apply, { once: true });
+      });
+      await page.reload({ waitUntil: "load" });
+
+      const deckSel = `${ACTIVE_PREVIEW} .scroll-deck:has(.scroll-deck-layout[data-scroll-deck-initialized])`;
+
+      await page.waitForSelector(deckSel);
+
+      const env = await page.evaluate((sel) => {
+        const deck = document.querySelector(sel);
+        const scrollingAncestors = [];
+        let el = deck.parentElement;
+
+        while (el && el !== document.documentElement) {
+          const overflowY = getComputedStyle(el).overflowY;
+
+          if (
+            (overflowY === "auto" || overflowY === "scroll") &&
+            el.scrollHeight > el.clientHeight
+          ) {
+            scrollingAncestors.push(el.className || el.tagName);
+          }
+          el = el.parentElement;
+        }
+        return {
+          scrollingAncestors,
+          railCurrent: [...deck.querySelectorAll(".scroll-deck-rail-link")].map((link) =>
+            link.hasAttribute("aria-current")
+          ),
+        };
+      }, deckSel);
+
+      assert(
+        env.scrollingAncestors.length === 0,
+        `expected no scrolling ancestor for this case, found ${env.scrollingAncestors.join(", ")}`
+      );
+      assert(
+        env.railCurrent[0] === true,
+        "the first rail link should be marked before any scrolling"
+      );
+
+      await page.evaluate((sel) => {
+        const second = document.querySelectorAll(`${sel} .scroll-deck-card`)[1];
+
+        window.scrollTo(0, window.scrollY + second.getBoundingClientRect().top - 40);
+      }, deckSel);
+
+      // Precondition: if a scroll container survived the override, the cards never pin.
+      const pinned = await page.evaluate((sel) => {
+        const first = document.querySelector(`${sel} .scroll-deck-card`);
+
+        return {
+          top: Math.round(first.getBoundingClientRect().top),
+          stickyTop: parseFloat(getComputedStyle(first).top),
+          scrollY: Math.round(window.scrollY),
+        };
+      }, deckSel);
+
+      assert(pinned.scrollY > 0, "the window did not scroll; something else owns the scroll");
+      assert(
+        Math.abs(pinned.top - pinned.stickyTop) <= 1,
+        `sticky is not working in this test environment: card 1 top ${pinned.top}, sticky top ${pinned.stickyTop}`
+      );
+
+      // Poll on a timer: headless Chrome throttles rAF, which can pass a broken build.
+      await page.waitForFunction(
+        (sel) =>
+          document
+            .querySelectorAll(`${sel} .scroll-deck-rail-link`)[1]
+            ?.hasAttribute("aria-current"),
+        deckSel,
+        { polling: 100 }
+      );
+
+      const covered = await page.evaluate(
+        (sel) =>
+          [...document.querySelectorAll(`${sel} .scroll-deck-card`)].map((card) =>
+            Number(
+              getComputedStyle(card.querySelector(".scroll-deck-card-inner")).getPropertyValue(
+                "--deck-covered"
+              )
+            )
+          ),
+        deckSel
+      );
+
+      assert(
+        covered[0] === 1,
+        `the covered card should have receded a step, --deck-covered was ${covered[0]}`
+      );
+    },
+  },
+];
+
+const marker = join(
+  distDir,
+  "component-docs",
+  "components",
+  "building-blocks",
+  "wrappers",
+  "modal",
+  "index.html"
+);
+
+if (!existsSync(marker)) {
+  console.error(
+    "dist/ is missing the component-docs pages. Run `npm run build:with-library` first."
+  );
+  process.exit(1);
+}
+
+const selected = only ? tests.filter((test) => test.name.includes(only)) : tests;
+
+if (!selected.length) {
+  console.error(`No smoke tests match "${only}".`);
+  process.exit(1);
+}
+
+// The built site loads external media freely; strict-mode tests switch the setting on at runtime.
+function requireMediaConsent() {
+  const parse = JSON.parse;
+
+  JSON.parse = function (...args) {
+    const value = parse.apply(this, args);
+
+    return value?._schema === "privacy" ? { ...value, externalMediaRequiresConsent: true } : value;
+  };
+}
+
+const { server, baseUrl } = await serveDist(distDir);
+const browser = await launchBrowser();
+const failures = [];
+
+console.log(`Running ${selected.length} smoke test(s) against dist/…`);
+
+try {
+  for (const test of selected) {
+    const context = await browser.newContext({
+      viewport: test.viewport,
+      deviceScaleFactor: 1,
+      colorScheme: "light",
+      // Keeps transitions and carousel autoplay from racing assertions; video tests opt back in.
+      reducedMotion: test.reducedMotion ?? "reduce",
+    });
+
+    try {
+      const page = await context.newPage();
+
+      if (test.requireMediaConsent) await page.addInitScript(requireMediaConsent);
+      page.setDefaultTimeout(10000);
+      await page.goto(`${baseUrl}${test.path}`, { waitUntil: "load", timeout: 15000 });
+      await test.run(page);
+      console.log(`  ✓ ${test.name}`);
+    } catch (error) {
+      failures.push(test.name);
+      console.error(`  ✗ ${test.name} (${test.path}): ${error.message.split("\n")[0]}`);
+      if (only && error.stack) console.error(error.stack);
+    } finally {
+      await context.close();
+    }
+  }
+} finally {
+  await browser.close();
+  server.close();
+}
+
+if (failures.length) {
+  console.error(`\n${failures.length} smoke test(s) failed: ${failures.join(", ")}`);
+  process.exit(1);
+}
+
+console.log(`\nOK: all ${selected.length} smoke tests passed.`);

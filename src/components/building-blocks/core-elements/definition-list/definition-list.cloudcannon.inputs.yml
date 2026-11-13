@@ -5,7 +5,7 @@ items:
     structures: _structures.definitionListItems
 alignmentHorizontal:
   type: select
-  comment: The horizontal alignment of the definition list items.
+  comment: Horizontal alignment of the items.
   options:
     values:
       - id: start

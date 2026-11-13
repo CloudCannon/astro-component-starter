@@ -1,13 +1,21 @@
 ---
 import CustomSection from "@builders/custom-section/CustomSection.astro";
-import Bar from "@components/navigation/bar/Bar.astro";
-import Button from "@core-elements/button/Button.astro";
+import Bar from "@navigation/bar/Bar.astro";
 import Divider from "@core-elements/divider/Divider.astro";
 import Image from "@core-elements/image/Image.astro";
+import SocialLinks from "@core-elements/social-links/SocialLinks.astro";
 import Text from "@core-elements/text/Text.astro";
-import ButtonGroup from "@wrappers/button-group/ButtonGroup.astro";
-import type { SocialLink } from "../../../../types";
+import type { SocialLink } from "../../../types";
+import analyticsData from "@data/analytics.json";
+import privacyData from "@data/privacy.json";
+import {
+  hasOptionalServices,
+  parseAnalyticsConfig,
+  parsePrivacyConfig,
+} from "../../../integrations/consent/config";
 
+const privacy = parsePrivacyConfig(privacyData);
+const showPrivacySettings = hasOptionalServices(privacy, parseAnalyticsConfig(analyticsData));
 const {
   links = [],
   socials = [] as SocialLink[],
@@ -15,6 +23,7 @@ const {
   logoSource,
   logoAlternateSource,
   logoAlt,
+  class: className,
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
@@ -22,7 +31,7 @@ const {
 ---
 
 <footer
-  class="footer"
+  class:list={["footer", className]}
   {...htmlAttributes}
 >
   <CustomSection
@@ -33,18 +42,26 @@ const {
   >
     <div class="footer-content">
       <div class="content-container">
-        <Image
-          source={logoSource}
-          alternateSource={logoAlternateSource}
-          alt={logoAlt}
-          class="footer-logo"
-          useDefaultEditableBinding={false}
-        />
+        {logoSource && (
+          <a
+            href="/"
+            class="footer-logo-link"
+          >
+            <Image
+              source={logoSource}
+              alternateSource={logoAlternateSource}
+              alt={logoAlt}
+              class="footer-logo"
+              useDefaultEditableBinding={false}
+            />
+          </a>
+        )}
       </div>
       <div class="content-container">
         <Bar
           navData={links}
           useDefaultEditableBinding={false}
+          aria-label="Footer"
         />
       </div>
     </div>
@@ -56,31 +73,27 @@ const {
         <Text
           class="footer-legal-text"
           text={footerText || ""}
-          data-prop=""
           useDefaultEditableBinding={false}
         />
+        {showPrivacySettings && (
+          <button
+            type="button"
+            class="footer-privacy-settings"
+            data-consent-open
+          >
+            {privacy.settingsLabel}
+          </button>
+        )}
       </div>
       <div class="content-container">
-        <ButtonGroup
+        <SocialLinks
+          class="footer-socials"
+          links={socials}
+          variant="ghost"
+          size="md"
           alignmentHorizontal="end"
           useDefaultEditableBinding={false}
-        >
-          {
-            socials.map((social) => (
-              <Button
-                variant="ghost"
-                size="lg"
-                iconName={social.icon}
-                link={social.link}
-                hideText="true"
-                aria-label={social.label || `Visit our ${social.icon.replace(/^.*\//, "")} page`}
-                target="_blank"
-                rel="noopener noreferrer"
-                useDefaultEditableBinding={false}
-              />
-            ))
-          }
-        </ButtonGroup>
+        />
       </div>
     </div>
   </CustomSection>
@@ -91,16 +104,16 @@ const {
     .footer {
       container-type: inline-size;
 
-      .button-group {
-        &.align-end {
-          @container (max-width: 599px) {
+      .footer-socials {
+        @container (max-width: 639px) {
+          .social-links-list {
             justify-content: center;
           }
         }
       }
 
       .footer-content {
-        @container (min-width: 600px) {
+        @container (min-width: 640px) {
           align-items: center;
           display: flex;
           flex-wrap: wrap;
@@ -115,14 +128,38 @@ const {
       .footer-legal-text {
         color: var(--color-text-muted);
         text-align: center;
-        @container (min-width: 600px) {
+        @container (min-width: 640px) {
           text-align: start;
+        }
+      }
+
+      .footer-privacy-settings {
+        background: transparent;
+        border: 0;
+        color: var(--color-text-muted);
+        cursor: pointer;
+        font: inherit;
+        margin-top: var(--spacing-xs);
+        padding: 0;
+        text-decoration: underline;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
+        }
+      }
+
+      .footer-logo-link {
+        display: inline-block;
+
+        &:focus-visible {
+          outline: var(--focus-ring-width) var(--focus-ring-style) var(--color-focus-ring);
+          outline-offset: 2px;
         }
       }
 
       .footer-logo {
         flex-shrink: 0;
-        margin-top: 0 !important;
 
         img {
           margin-inline: auto;
@@ -130,7 +167,7 @@ const {
           max-height: 2em;
           max-width: min(20em, 100%);
           width: auto;
-          @container (min-width: 600px) {
+          @container (min-width: 640px) {
             margin: 0;
           }
         }
@@ -138,7 +175,7 @@ const {
 
       .bar .bar-list {
         flex-flow: column wrap;
-        @container (min-width: 600px) {
+        @container (min-width: 640px) {
           flex-direction: row;
           justify-content: end;
         }

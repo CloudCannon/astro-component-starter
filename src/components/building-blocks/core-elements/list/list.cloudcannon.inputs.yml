@@ -25,7 +25,7 @@ direction:
   comment: The direction in which list items are arranged.
 alignmentHorizontal:
   type: select
-  comment: The horizontal alignment of the list items.
+  comment: Horizontal alignment of the list items.
   options:
     values:
       - id: start

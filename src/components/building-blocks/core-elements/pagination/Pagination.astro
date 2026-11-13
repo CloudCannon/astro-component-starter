@@ -1,15 +1,19 @@
 ---
+import { spaceBeforeAttr } from "@component-utils/spaceBefore.mjs";
+import { paginationWindow } from "@component-utils/paginationWindow";
 import Icon from "@core-elements/icon/Icon.astro";
 
 const {
   page,
+  // Rides the root (no stable child), so live spaceBefore edits need a reload.
+  spaceBefore = "default",
   class: className,
   showArrows = false,
+  basePath = "/blog",
   useDefaultEditableBinding: _useDefaultEditableBinding = false,
   _component,
   ...htmlAttributes
 } = Astro.props;
-const maxVisiblePages = 5;
 
 if (!page || page.lastPage <= 1) {
   return null;
@@ -17,132 +21,91 @@ if (!page || page.lastPage <= 1) {
 
 const currentPage = page.currentPage;
 const totalPages = page.lastPage;
-const lastPage = totalPages - 1;
+const { pages, showFirst, showLast, gapBefore } = paginationWindow(currentPage, totalPages);
 
-const maxVisible = maxVisiblePages - 1; // Convert to 0-based
-let startPage = Math.max(0, currentPage - 2);
-let endPage = Math.min(lastPage, startPage + maxVisible);
-
-// Adjust if we're near the end
-if (endPage === lastPage && startPage > 0) {
-  startPage = Math.max(0, lastPage - maxVisible);
-}
-
-// Calculate how many pages we'll show in total (including first/last if they're separate)
-const showFirst = startPage > 0;
-const showLast = endPage < lastPage;
-const visibleRange = endPage - startPage + 1;
-const totalVisible = visibleRange + (showFirst ? 1 : 0) + (showLast ? 1 : 0);
-
-// If we're showing too many pages, reduce the range
-if (totalVisible > maxVisiblePages) {
-  const excess = totalVisible - maxVisiblePages;
-
-  if (showFirst && showLast) {
-    // If showing both first and last, reduce the middle range
-    endPage = Math.max(startPage, endPage - excess);
-  } else if (showFirst || showLast) {
-    // If showing one of first/last, reduce the range
-    endPage = Math.max(startPage, endPage - excess);
-  }
-}
-
-// Helper function to generate page URL
 const getPageUrl = (pageNum: number) => {
-  // Always use first page URL for page 1
   if (pageNum === 1) {
-    return page.url.first || page.url.current?.replace(/\/\d+\/?$/, "") || "/blog";
+    return page.url.first || page.url.current?.replace(/\/\d+\/?$/, "") || basePath;
   }
 
-  // For other pages, construct from the first page URL
   if (page.url && page.url.first) {
     const baseUrl = page.url.first.replace(/\/$/, "");
 
     return `${baseUrl}/${pageNum}`;
   }
 
-  // Fallback: extract base from current URL
   if (page.url && page.url.current) {
     const baseUrl = page.url.current.replace(/\/\d+\/?$/, "").replace(/\/$/, "");
 
     return `${baseUrl}/${pageNum}`;
   }
 
-  // Final fallback
-  return pageNum === 1 ? "/blog" : `/blog/${pageNum}`;
+  return pageNum === 1 ? basePath : `${basePath.replace(/\/$/, "")}/${pageNum}`;
 };
 ---
 
 <nav
-  class:list={["pagination", className]}
+  class:list={["pagination", "stackable", className]}
+  data-space-before={spaceBeforeAttr(spaceBefore)}
   aria-label="Pagination Navigation"
   {...htmlAttributes}
 >
-  {
-    showArrows && currentPage > 1 && (
-      <a
-        href={getPageUrl(currentPage - 1)}
-        class="pagination-arrow pagination-prev"
-        aria-label="Go to previous page"
+  {showArrows && currentPage > 1 && (
+    <a
+      href={getPageUrl(currentPage - 1)}
+      class="pagination-arrow pagination-prev"
+      aria-label="Go to previous page"
+    >
+      <Icon
+        name="chevron-left"
+        size="sm"
+      />
+    </a>
+  )}
+
+  {showFirst && <a href={getPageUrl(1)}>1</a>}
+
+  {gapBefore && <span aria-hidden="true">…</span>}
+
+  {pages.map((pageNum) => {
+    // A bare `<span>` can't carry an `aria-label`, hence the visually hidden text.
+    return pageNum === currentPage ? (
+      <span
+        class="current"
+        aria-current="page"
       >
-        <Icon
-          name="chevron-left"
-          size="sm"
-        />
-      </a>
-    )
-  }
-
-  {startPage > 0 && <a href={getPageUrl(1)}>1</a>}
-
-  {startPage > 1 && <span aria-hidden="true">…</span>}
-
-  {
-    Array.from({ length: endPage - startPage + 1 }, (_, i) => {
-      const pageNum = startPage + i + 1;
-
-      return pageNum === currentPage ? (
-        <span
-          class="current"
-          aria-current="page"
-          aria-label={`Page ${pageNum}, current page`}
-        >
-          {pageNum}
-        </span>
-      ) : (
-        <a
-          href={getPageUrl(pageNum)}
-          aria-label={`Go to page ${pageNum}`}
-        >
-          {pageNum}
-        </a>
-      );
-    })
-  }
-
-  {
-    endPage < lastPage && (
-      <>
-        <span aria-hidden="true">…</span>
-        <a href={getPageUrl(totalPages)}>{totalPages}</a>
-      </>
-    )
-  }
-
-  {
-    showArrows && currentPage < totalPages && (
+        <span class="visually-hidden">Page </span>
+        {pageNum}
+      </span>
+    ) : (
       <a
-        href={getPageUrl(currentPage + 1)}
-        class="pagination-arrow pagination-next"
-        aria-label="Go to next page"
+        href={getPageUrl(pageNum)}
+        aria-label={`Go to page ${pageNum}`}
       >
-        <Icon
-          name="chevron-right"
-          size="sm"
-        />
+        {pageNum}
       </a>
-    )
-  }
+    );
+  })}
+
+  {showLast && (
+    <>
+      <span aria-hidden="true">…</span>
+      <a href={getPageUrl(totalPages)}>{totalPages}</a>
+    </>
+  )}
+
+  {showArrows && currentPage < totalPages && (
+    <a
+      href={getPageUrl(currentPage + 1)}
+      class="pagination-arrow pagination-next"
+      aria-label="Go to next page"
+    >
+      <Icon
+        name="chevron-right"
+        size="sm"
+      />
+    </a>
+  )}
 </nav>
 
 <style is:global>
@@ -151,18 +114,17 @@ const getPageUrl = (pageNum: number) => {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      margin-top: var(--spacing-lg);
 
       > a,
       > span {
         background-color: var(--color-bg);
-        border: 1px solid var(--color-border);
+        border: var(--border-width-sm) solid var(--color-border);
         border-inline-start: none;
         color: var(--color-text-strong);
         font-weight: var(--font-weight-semibold);
         padding: var(--spacing-sm) var(--spacing-md);
         text-decoration: none;
-        transition: background-color var(--animation-normal) ease-in-out;
+        transition: background-color var(--animation-normal) var(--ease-in-out);
 
         &:hover {
           background-color: var(--color-state-hover);
@@ -170,14 +132,14 @@ const getPageUrl = (pageNum: number) => {
         }
 
         &:first-child {
-          border-bottom-left-radius: var(--radius-sm);
-          border-inline-start: 1px solid var(--color-border);
-          border-top-left-radius: var(--radius-sm);
+          border-end-start-radius: var(--radius-sm);
+          border-inline-start: var(--border-width-sm) solid var(--color-border);
+          border-start-start-radius: var(--radius-sm);
         }
 
         &:last-child {
-          border-bottom-right-radius: var(--radius-sm);
-          border-top-right-radius: var(--radius-sm);
+          border-end-end-radius: var(--radius-sm);
+          border-start-end-radius: var(--radius-sm);
         }
 
         &[aria-hidden="true"] {
