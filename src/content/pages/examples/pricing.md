@@ -1,17 +1,18 @@
 ---
 _schema: default
 title: Pricing
-description: >-
-  Example pricing page for a web studio's care plans: plan cards with a
-  monthly/annual switch, a comparison table, client quotes, and billing FAQ.
+description: "Example pricing page for a web studio's care plans: plan cards
+  with a monthly/annual switch, a comparison table, client quotes, and billing
+  FAQ."
+keywords: []
 pageSections:
   - _component: page-sections/conversion/pricing-tiers
-    headingLevel: h1
-    eyebrow: Care plans
+    sectionLabel: ''
+    eyebrow: Example Pricing
     heading: Keep your site sharp after launch
-    subtext: >-
-      A set number of studio hours each month, plus updates, fixes, and people
-      who already know your site. New builds are quoted separately.
+    headingLevel: h1
+    subtext: A set number of studio hours each month, plus updates, fixes, and
+      people who already know your site. New builds are quoted separately.
     showAnnualPricing: true
     monthlyLabel: Monthly
     annualLabel: Annual
@@ -87,11 +88,27 @@ pageSections:
         buttonLink: /examples/contact/
         highlight: false
         badgeText: ''
+    maxContentWidth: 2xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
     colorScheme: inherit
+    lockColorScheme: false
     backgroundColor: base
+    background:
+      type: image
+      imageSource: ''
+      imageAlt: ''
+      positionVertical: top
+      positionHorizontal: center
+      fixed: false
+      priority: false
+      mask: none
+      overlay: 0
   - _component: page-sections/conversion/pricing-comparison
+    sectionLabel: ''
     eyebrow: Compare
     heading: Plan by plan
+    headingLevel: h2
     subtext: ''
     plans:
       - name: Essentials
@@ -122,22 +139,22 @@ pageSections:
           - '24'
       - feature: Security and dependency updates
         values:
-          - 'yes'
-          - 'yes'
-          - 'yes'
+          - yes
+          - yes
+          - yes
       - feature: Monthly health check
         values:
-          - 'yes'
-          - 'yes'
-          - 'yes'
+          - yes
+          - yes
+          - yes
       - feature: New sections
         values:
-          - 'no'
+          - no
           - One a quarter
           - On request
       - feature: Performance reviews
         values:
-          - 'no'
+          - no
           - Quarterly
           - Monthly
       - feature: Fix response time
@@ -147,21 +164,35 @@ pageSections:
           - Four hours
       - feature: Named studio lead
         values:
-          - 'no'
-          - 'no'
-          - 'yes'
+          - no
+          - no
+          - yes
     striped: true
+    maxContentWidth: 2xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
     colorScheme: inherit
+    lockColorScheme: false
     backgroundColor: surface
+    background:
+      type: image
+      imageSource: ''
+      imageAlt: ''
+      positionVertical: top
+      positionHorizontal: center
+      fixed: false
+      priority: false
+      mask: none
+      overlay: 0
   - _component: page-sections/proof/testimonial-bento
+    sectionLabel: ''
     eyebrow: Clients
     heading: Why they stayed on a plan
     headingLevel: h2
     subtext: ''
     testimonials:
-      - text: >-
-          Growth pays for itself in the hours we don't spend chasing developers.
-          The new section each quarter means the site keeps up with whatever
+      - text: Growth pays for itself in the hours we don't spend chasing developers. The
+          new section each quarter means the site keeps up with whatever
           marketing wants to try next.
         authorName: Priya Raman
         authorDescription: Head of Marketing, Northwind Coastal Trust
@@ -180,8 +211,7 @@ pageSections:
         authorImage: ''
         size: standard
         tone: inverse
-      - text: >-
-          The four-hour fix window on Partner is what got our procurement team to
+      - text: The four-hour fix window on Partner is what got our procurement team to
           sign. Everything else was already there.
         authorName: Jordan Hale
         authorDescription: Brand Lead, Globex Travel
@@ -195,55 +225,108 @@ pageSections:
         size: standard
         tone: accent
     columns: '3'
+    maxContentWidth: 2xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
     colorScheme: dark
+    lockColorScheme: false
     backgroundColor: surface
+    background:
+      type: image
+      imageSource: ''
+      imageAlt: ''
+      positionVertical: top
+      positionHorizontal: center
+      fixed: false
+      priority: false
+      mask: none
+      overlay: 0
   - _component: page-sections/explainers/faq-section
+    sectionLabel: ''
     heading: Billing questions
+    headingLevel: h2
     items:
       - title: Can we change plans later?
         contentSections:
           - _component: building-blocks/core-elements/text
-            text: >-
-              Yes. Move up or down at the end of any billing period, and unused
-              time on the old plan is credited to the new one.
+            text: Yes. Move up or down at the end of any billing period, and unused time on
+              the old plan is credited to the new one.
+            alignmentHorizontal: start
+            size: md
       - title: What can we use our hours for?
         contentSections:
           - _component: building-blocks/core-elements/text
-            text: >-
-              Any design or development work: a new layout, an integration, a
-              performance fix, or a change that runs across the whole site.
+            text: 'Any design or development work: a new layout, an integration, a
+              performance fix, or a change that runs across the whole site.'
+            alignmentHorizontal: start
+            size: md
       - title: Do unused hours roll over?
         contentSections:
           - _component: building-blocks/core-elements/text
-            text: >-
-              For one month. Save them up for a bigger change, or let them go in
-              a quiet month.
+            text: For one month. Save them up for a bigger change, or let them go in a quiet
+              month.
+            alignmentHorizontal: start
+            size: md
       - title: Do you offer annual billing?
         contentSections:
           - _component: building-blocks/core-elements/text
-            text: >-
-              Yes, use the monthly and annual switch on the plans above. Paying
-              annually gets you two months free.
+            text: Yes, use the monthly and annual switch on the plans above. Paying annually
+              gets you two months free.
+            alignmentHorizontal: start
+            size: md
       - title: Is there a contract?
         contentSections:
           - _component: building-blocks/core-elements/text
-            text: >-
-              Essentials and Growth are month to month. Partner can be monthly or
-              a twelve-month term if you want the response times in writing.
+            text: Essentials and Growth are month to month. Partner can be monthly or a
+              twelve-month term if you want the response times in writing.
+            alignmentHorizontal: start
+            size: md
     maxContentWidth: xl
+    paddingHorizontal: lg
+    paddingVertical: 4xl
     colorScheme: inherit
+    lockColorScheme: false
     backgroundColor: surface
+    background:
+      type: image
+      imageSource: ''
+      imageAlt: ''
+      positionVertical: top
+      positionHorizontal: center
+      fixed: false
+      priority: false
+      mask: none
+      overlay: 0
   - _component: page-sections/conversion/cta-center
+    sectionLabel: ''
     heading: Not sure which plan fits?
-    subtext: >-
-      Tell us what your site needs from month to month. We'll point you at the
-      right plan.
+    headingLevel: h2
+    subtext: Tell us what your site needs from month to month. We'll point you at
+      the right plan.
     buttonSections:
       - _component: building-blocks/core-elements/button
         text: Talk to us
+        hideText: false
         link: /examples/contact/
+        iconName: ''
+        iconColor: default
+        iconPosition: before
         variant: primary
         size: md
+    maxContentWidth: lg
+    paddingHorizontal: lg
+    paddingVertical: 4xl
     colorScheme: dark
+    lockColorScheme: false
     backgroundColor: surface
+    background:
+      type: image
+      imageSource: ''
+      imageAlt: ''
+      positionVertical: top
+      positionHorizontal: center
+      fixed: false
+      priority: false
+      mask: none
+      overlay: 0
 ---
